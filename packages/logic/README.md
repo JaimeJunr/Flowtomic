@@ -1,17 +1,17 @@
-# @zoo/logic
+# flowtomic/logic
 
 Biblioteca de hooks headless e lógica reutilizável para React.
 
 ## Instalação
 
 ```bash
-bunx @zoo/cli add useThemeToggle
+bunx flowtomic add useThemeToggle
 ```
 
 ## Uso
 
 ```tsx
-import { useThemeToggle } from '@zoo/logic'
+import { useThemeToggle } from 'flowtomic/logic'
 
 function MyComponent() {
   const { theme, toggleTheme, isDark } = useThemeToggle()

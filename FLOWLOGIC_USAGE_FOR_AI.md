@@ -1,19 +1,22 @@
-# 🦁 Regras de Uso do Zoo UI e Logic
+# ⚛️ Regras de Uso do Flowtomic UI e Logic
 
 ## Visão Geral
 
-O **Zoo** é um sistema de design system modular que fornece:
+O **Flowtomic** é um sistema de design system modular que fornece:
 
-- **`@zoo/ui`**: Componentes UI reutilizáveis (atoms, molecules, organisms)
-- **`@zoo/logic`**: Hooks headless e lógica reutilizável
+- **`flowtomic/ui`**: Componentes UI reutilizáveis (atoms, molecules, organisms)
+- **`flowtomic/logic`**: Hooks headless e lógica reutilizável
+- **`flowtomic`**: CLI para instalação de componentes em projetos externos
 
 ## Instalação via CLI
 
 ### Inicialização
 
 ```bash
-# Inicializar configuração do projeto
-bunx github:JaimeJunr/Zoo/cli init
+# Via npm (Recomendado)
+npx flowtomic@latest init
+# ou
+bunx flowtomic@latest init
 ```
 
 Isso cria o arquivo `components.json` na raiz do projeto.
@@ -22,21 +25,35 @@ Isso cria o arquivo `components.json` na raiz do projeto.
 
 ```bash
 # Adicionar um componente
-bunx github:JaimeJunr/Zoo/cli add button
+npx flowtomic@latest add button
+# ou
+bunx flowtomic@latest add button
 
 # Adicionar múltiplos componentes
-bunx github:JaimeJunr/Zoo/cli add button card input badge
+npx flowtomic@latest add button card input badge
+# ou
+bunx flowtomic@latest add button card input badge
+
+# Modo interativo (sem especificar componentes)
+npx flowtomic@latest add
+# ou
+bunx flowtomic@latest add
 
 # Listar componentes disponíveis
-bunx github:JaimeJunr/Zoo/cli list
+npx flowtomic@latest list
+# ou
+bunx flowtomic@latest list
 ```
 
 ### Adicionar Hooks
 
 ```bash
 # Adicionar um hook
-bunx github:JaimeJunr/Zoo/cli add use-stat-card
+npx flowtomic@latest add use-stat-card
+# ou
+bunx flowtomic@latest add use-stat-card
 ```
+
 
 ## Como Funciona
 
@@ -47,7 +64,7 @@ bunx github:JaimeJunr/Zoo/cli add use-stat-card
 
 ## Estrutura de Componentes
 
-### Atoms (Componentes Básicos)
+### Atoms (13 Componentes Básicos)
 
 Componentes fundamentais e indivisíveis:
 
@@ -65,14 +82,14 @@ Componentes fundamentais e indivisíveis:
 - `dropdown-menu` - Menu dropdown
 - `sonner` - Toast notifications
 
-### Molecules (Componentes Compostos)
+### Molecules (10 Componentes Compostos)
 
 Componentes que combinam atoms:
 
 - `button-group` - Grupo de botões
 - `password-input` - Input de senha
 - `image-dropzone` - Upload de imagem
-- `stat-card` - Card de estatística
+- `stat-card` - Card de estatística (usa `use-stat-card` hook)
 - `data-table` - Tabela avançada
 - `menu-dock` - Dock de menu
 - `theme-toggle-button` - Botão de toggle de tema
@@ -80,7 +97,7 @@ Componentes que combinam atoms:
 - `auth-form-error-message` - Mensagem de erro de formulário
 - `social-login-buttons` - Botões de login social
 
-### Organisms (Componentes Complexos)
+### Organisms (5 Componentes Complexos)
 
 Componentes de alto nível que combinam molecules:
 
@@ -90,11 +107,11 @@ Componentes de alto nível que combinam molecules:
 - `dashboard-header-actions` - Ações do header
 - `dashboard-movements-section` - Seção de movimentações
 
-### Hooks (Lógica Headless)
+### Hooks (1 Hook Headless)
 
 Hooks que fornecem apenas lógica, sem UI:
 
-- `use-stat-card` - Hook para StatCard
+- `use-stat-card` - Hook headless para StatCard (formatação de valores, cálculo de tendências, props de acessibilidade)
 
 ## Uso dos Componentes
 
@@ -148,14 +165,23 @@ import { useStatCard } from "@/hooks/use-stat-card";
 import { useStatCard } from "@/hooks/use-stat-card";
 
 function MyComponent() {
-  const { value, formattedValue, isLoading } = useStatCard({
-    value: 1234.56,
-    currency: "BRL",
+  const { formattedValue, trend, getCardProps } = useStatCard({
+    value: 122380,
+    delta: 15.1,
+    lastMonth: 105922,
+    prefix: "R$ ",
   });
 
-  return <div>{formattedValue}</div>;
+  return (
+    <div {...getCardProps()}>
+      <span>{formattedValue}</span>
+      <Badge variant={trend.variant}>{trend.percentage}</Badge>
+    </div>
+  );
 }
 ```
+
+**Nota**: O hook `useStatCard` é headless - fornece apenas lógica, formatação e props de acessibilidade. Você controla o markup e styles.
 
 ## Configuração (components.json)
 
@@ -163,7 +189,7 @@ O arquivo `components.json` gerado pelo `init`:
 
 ```json
 {
-  "$schema": "https://zoo.dev/schema.json",
+  "$schema": "https://flowtomic.dev/schema.json",
   "style": "default",
   "rsc": false,
   "tsx": true,
@@ -180,8 +206,8 @@ O arquivo `components.json` gerado pelo `init`:
     "hooks": "@/hooks"
   },
   "packages": {
-    "ui": "@zoo/ui",
-    "logic": "@zoo/logic"
+    "ui": "flowtomic/ui",
+    "logic": "flowtomic/logic"
   }
 }
 ```
@@ -194,12 +220,22 @@ Você pode editar o `components.json` para ajustar os caminhos conforme sua estr
 
 Os componentes podem requerer:
 
-- **React** 18+ ou 19+
+- **React** 18+ ou 19+ (peer dependency)
 - **Tailwind CSS** configurado
-- **Radix UI** (para componentes interativos)
+- **Radix UI** (para componentes interativos):
+  - `@radix-ui/react-slot` (button)
+  - `@radix-ui/react-label` (input)
+  - `@radix-ui/react-checkbox` (checkbox)
+  - `@radix-ui/react-tabs` (tabs)
+  - `@radix-ui/react-alert-dialog` (alert-dialog)
+  - `@radix-ui/react-dialog` (dialog)
+  - `@radix-ui/react-dropdown-menu` (dropdown-menu)
 - **lucide-react** (para ícones)
 - **class-variance-authority** (para variantes)
 - **clsx** e **tailwind-merge** (para classes CSS)
+- **sonner** (para toast notifications)
+- **@tanstack/react-table** (para data-table)
+- **flowtomic/logic** (para stat-card)
 
 ## Padrões Importantes
 
@@ -214,22 +250,33 @@ Os componentes podem requerer:
 ### Erro: "components.json não encontrado"
 
 ```bash
-bunx github:JaimeJunr/Zoo/cli init
+npx flowtomic@latest init
+# ou
+bunx flowtomic@latest init
 ```
 
-### Erro: "Não foi possível encontrar o repositório Zoo"
+### Erro: "Não foi possível encontrar o repositório Flowtomic"
+
+Este erro geralmente ocorre quando o repositório não pode ser encontrado. O CLI tenta encontrar o repositório de várias formas:
+
+- **Variável de ambiente** `FLOWTOMIC_REPO_PATH`:
 
 ```bash
-# Definir variável de ambiente
-export ZOO_REPO_PATH=/caminho/para/zoo
-bunx github:JaimeJunr/Zoo/cli add button
+export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
+npx flowtomic add button
 ```
+
+- **Caminho relativo** (se executado do repositório)
+
+- **Caminhos padrão** (desenvolvimento local)
 
 ### Erro: "Componente não encontrado"
 
 ```bash
 # Ver lista de componentes disponíveis
-bunx github:JaimeJunr/Zoo/cli list
+npx flowtomic@latest list
+# ou
+bunx flowtomic@latest list
 ```
 
 ## Quando Usar Cada Tipo
@@ -242,7 +289,39 @@ bunx github:JaimeJunr/Zoo/cli list
 ## Boas Práticas
 
 1. **Sempre** verificar se o componente já existe antes de criar um novo
-2. **Sempre** usar os componentes do Zoo quando disponíveis
+2. **Sempre** usar os componentes do Flowtomic quando disponíveis
 3. **Modificar** componentes copiados conforme necessário para seu projeto
 4. **Manter** consistência visual usando os componentes do sistema
 5. **Usar** hooks headless para lógica reutilizável sem acoplamento de UI
+6. **Componentes são copiados localmente**: Você pode e deve modificar conforme necessário
+7. **Hooks são headless**: Fornecem apenas lógica, sem UI - você controla o markup e styles
+8. **TypeScript**: Todos os componentes têm tipos exportados
+9. **Tailwind CSS**: Todos os componentes usam Tailwind para estilização
+10. **Acessibilidade**: Componentes interativos usam Radix UI para acessibilidade
+
+## Resolução do Repositório
+
+Quando usando npm (`npx flowtomic@latest`), o repositório é resolvido automaticamente através do pacote publicado.
+
+O CLI resolve o repositório na seguinte ordem:
+
+1. Variável de ambiente `FLOWTOMIC_REPO_PATH`
+2. Caminho relativo (se executado do repositório)
+3. Caminhos padrão para desenvolvimento local
+4. Download automático do GitHub quando necessário
+
+## Aliases Suportados
+
+O CLI suporta aliases comuns para componentes:
+
+- `btn` → `button`
+- `input-field` → `input`
+- `stat` → `stat-card`
+- `table` → `data-table`
+- `menu` → `menu-dock`
+- `theme-toggle` → `theme-toggle-button`
+- `layout` → `dashboard-layout`
+- `grid` → `stats-grid`
+- `summary` → `monthly-summary`
+- `header-actions` → `dashboard-header-actions`
+- `movements` → `dashboard-movements-section`

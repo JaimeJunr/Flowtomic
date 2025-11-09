@@ -1,49 +1,51 @@
-# 🦁 Zoo Monorepo
+# ⚛️ Flowtomic Monorepo
 
 Biblioteca de componentes UI e hooks reutilizáveis para projetos React/TypeScript.
 
 ## 📦 Estrutura
 
-```
-zoo/
+```text
+flowtomic/
 ├── packages/
-│   ├── ui/          # Componentes UI (@zoo/ui)
-│   └── logic/       # Hooks e lógica (@zoo/logic)
-└── cli/             # CLI para instalação (@jaimejunior/zoo-cli)
+│   ├── ui/          # Componentes UI (flowtomic/ui)
+│   └── logic/       # Hooks e lógica (flowtomic/logic)
+└── cli/             # CLI para instalação (flowtomic)
 ```
 
 ## 🚀 Instalação via CLI
 
-### Via npm (Recomendado)
+### Uso Direto (Recomendado)
 
 ```bash
 # Inicializar configuração
-npx @jaimejunior/zoo-cli init
+npx flowtomic@latest init
 # ou
-bunx @jaimejunior/zoo-cli init
+bunx flowtomic@latest init
 
 # Adicionar componentes
-npx @jaimejunior/zoo-cli add button card input
+npx flowtomic@latest add button card input
 # ou
-bunx @jaimejunior/zoo-cli add button card input
+bunx flowtomic@latest add button card input
 
-# Listar componentes disponíveis
-npx @jaimejunior/zoo-cli list
+# Adicionar blocks
+npx flowtomic@latest add-block dashboard-01
 # ou
-bunx @jaimejunior/zoo-cli list
+bunx flowtomic@latest add-block dashboard-01
+
+# Listar componentes e blocks disponíveis
+npx flowtomic@latest list
+# ou
+bunx flowtomic@latest list
 ```
 
-### Via GitHub (Desenvolvimento)
+### Via shadcn CLI (Compatível)
 
 ```bash
-# Inicializar configuração
-bunx github:JaimeJunr/Zoo/cli init
-
-# Adicionar componentes
-bunx github:JaimeJunr/Zoo/cli add button card input
+# Usar o registry do Flowtomic com shadcn CLI
+npx shadcn@latest add https://registry.flowtomic.dev/all.json
 ```
 
-**Nota:** O CLI automaticamente baixa o repositório do GitHub quando necessário.
+**Nota:** O CLI automaticamente baixa o repositório do GitHub quando necessário (via variável de ambiente ou caminho local).
 
 ## 📚 Componentes Disponíveis
 
@@ -88,6 +90,10 @@ bunx github:JaimeJunr/Zoo/cli add button card input
 
 - `use-stat-card` - Hook para StatCard
 
+### Blocks (1)
+
+- `dashboard-01` - Dashboard simples com cards
+
 ## 🛠️ Desenvolvimento
 
 ### Setup
@@ -95,6 +101,9 @@ bunx github:JaimeJunr/Zoo/cli add button card input
 ```bash
 # Instalar dependências
 bun install
+
+# Desenvolvimento com watch (todos os packages)
+bun run dev
 
 # Build todos os packages
 bun run build
@@ -106,6 +115,9 @@ bun run build:cli
 
 # Type check
 bun run type-check
+
+# Servidor do registry (para desenvolvimento)
+bun run registry:server
 ```
 
 ### CLI
@@ -119,27 +131,23 @@ bun run type-check
 
 ## 📖 Documentação
 
-- [CLI_USAGE.md](./CLI_USAGE.md) - Guia completo de uso do CLI
-- [MIGRATION.md](./MIGRATION.md) - Guia de migração de componentes
-- [STATUS.md](./STATUS.md) - Status atual da migração
-- [USAGE.md](./USAGE.md) - Guia de uso do monorepo
+- [docs/USAGE.md](./docs/USAGE.md) - Guia completo de uso do monorepo e CLI
+- [cli/README.md](./cli/README.md) - Documentação detalhada do CLI
 
 ## 🎯 Como Funciona
 
 O CLI copia os arquivos dos componentes diretamente para o seu projeto (similar ao shadcn/ui), permitindo customização total. Os imports são automaticamente ajustados para usar os aliases do seu projeto.
 
-## 📝 Exemplo
+## 📝 Exemplos
+
+### Adicionar Componentes
 
 ```bash
 # 1. Inicializar
-npx @jaimejunior/zoo-cli init
-# ou
-bunx @jaimejunior/zoo-cli init
+npx flowtomic@latest init
 
 # 2. Adicionar componentes
-npx @jaimejunior/zoo-cli add button card input
-# ou
-bunx @jaimejunior/zoo-cli add button card input
+npx flowtomic@latest add button card input
 
 # 3. Usar no projeto
 ```
@@ -150,7 +158,48 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 ```
 
+### Adicionar Blocks
+
+```bash
+# Adicionar um block completo
+npx flowtomic@latest add-block dashboard-01
+```
+
+O block será instalado com todos os seus arquivos e dependências.
+
+### Usar com shadcn CLI
+
+```bash
+# Instalar via shadcn CLI (compatível)
+npx shadcn@latest add https://registry.flowtomic.dev/all.json
+```
+
 ## 🔗 Links
 
 - [Documentação do CLI](./cli/README.md)
-- [Guia de Uso do CLI](./CLI_USAGE.md)
+- [Guia de Uso Completo](./docs/USAGE.md)
+- [Guia de Deploy](./docs/DEPLOYMENT.md)
+- [Registry](./registry/README.md)
+
+## 📦 Publicação
+
+### CLI no npm
+
+O CLI está publicado como `flowtomic`:
+
+```bash
+npx flowtomic@latest init
+npx flowtomic@latest add button
+npx flowtomic@latest add-block dashboard-01
+```
+
+### Registry
+
+O registry está disponível em `https://registry.flowtomic.dev`:
+
+```bash
+# Usar com shadcn CLI
+npx shadcn@latest add https://registry.flowtomic.dev/all.json
+```
+
+Para mais informações sobre publicação e deploy, veja [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).

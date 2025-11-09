@@ -1,6 +1,6 @@
-# @jaimejunior/zoo-cli
+# flowtomic
 
-CLI para instalação de componentes e hooks do Zoo em projetos.
+CLI para instalação de componentes e hooks do Flowtomic em projetos.
 
 ## Instalação e Uso
 
@@ -8,26 +8,26 @@ CLI para instalação de componentes e hooks do Zoo em projetos.
 
 ```bash
 # Inicializar configuração
-bunx github:JaimeJunr/Zoo/cli init
+bunx github:JaimeJunr/Flowtomic/cli init
 
 # Ou se o repositório for privado/local
-bunx /caminho/para/zoo/cli init
+bunx /caminho/para/flowtomic/cli init
 ```
 
 ### Via npx (se publicado no npm)
 
 ```bash
-npx @jaimejunior/zoo-cli init
+npx flowtomic init
 ```
 
 ## Comandos
 
 ### `init`
 
-Inicializa a configuração do Zoo no projeto, criando o arquivo `components.json`.
+Inicializa a configuração do Flowtomic no projeto, criando o arquivo `components.json`.
 
 ```bash
-bunx github:JaimeJunr/Zoo/cli init
+bunx github:JaimeJunr/Flowtomic/cli init
 ```
 
 ### `add`
@@ -36,13 +36,13 @@ Adiciona componentes ou hooks ao projeto. Os arquivos são copiados diretamente 
 
 ```bash
 # Adicionar um componente específico
-bunx github:JaimeJunr/Zoo/cli add button
+bunx github:JaimeJunr/Flowtomic/cli add button
 
 # Adicionar múltiplos componentes
-bunx github:JaimeJunr/Zoo/cli add button card input
+bunx github:JaimeJunr/Flowtomic/cli add button card input
 
 # Modo interativo (sem especificar componentes)
-bunx github:JaimeJunr/Zoo/cli add
+bunx github:JaimeJunr/Flowtomic/cli add
 ```
 
 ### `list`
@@ -50,22 +50,22 @@ bunx github:JaimeJunr/Zoo/cli add
 Lista todos os componentes e hooks disponíveis.
 
 ```bash
-bunx github:JaimeJunr/Zoo/cli list
+bunx github:JaimeJunr/Flowtomic/cli list
 ```
 
 ## Como Funciona
 
-O CLI copia os arquivos dos componentes/hooks do repositório Zoo diretamente para o seu projeto, permitindo customização total (similar ao shadcn/ui).
+O CLI copia os arquivos dos componentes/hooks do repositório Flowtomic diretamente para o seu projeto, permitindo customização total (similar ao shadcn/ui).
 
 ### Resolução do Repositório
 
-O CLI tenta encontrar o repositório Zoo de várias formas:
+O CLI tenta encontrar o repositório Flowtomic de várias formas:
 
-1. **Variável de ambiente** `ZOO_REPO_PATH`
+1. **Variável de ambiente** `FLOWTOMIC_REPO_PATH`
 
    ```bash
-   export ZOO_REPO_PATH=/caminho/para/zoo
-   bunx github:JaimeJunr/Zoo/cli add button
+   export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
+   bunx github:JaimeJunr/Flowtomic/cli add button
    ```
 
 2. **Caminho relativo** (se executado do repositório)
@@ -78,7 +78,7 @@ O comando `init` cria um arquivo `components.json` na raiz do projeto:
 
 ```json
 {
-  "$schema": "https://zoo.dev/schema.json",
+  "$schema": "https://flowtomic.dev/schema.json",
   "style": "default",
   "rsc": false,
   "tsx": true,
@@ -95,8 +95,8 @@ O comando `init` cria um arquivo `components.json` na raiz do projeto:
     "hooks": "@/hooks"
   },
   "packages": {
-    "ui": "@zoo/ui",
-    "logic": "@zoo/logic"
+    "ui": "flowtomic/ui",
+    "logic": "flowtomic/logic"
   }
 }
 ```
@@ -145,10 +145,10 @@ O comando `init` cria um arquivo `components.json` na raiz do projeto:
 
 ```bash
 # 1. Inicializar
-bunx github:JaimeJunr/Zoo/cli init
+bunx github:JaimeJunr/Flowtomic/cli init
 
 # 2. Adicionar componentes
-bunx github:JaimeJunr/Zoo/cli add button card input
+bunx github:JaimeJunr/Flowtomic/cli add button card input
 
 # 3. Usar no projeto
 import { Button } from '@/components/ui/button'
@@ -160,7 +160,7 @@ import { Card } from '@/components/ui/card'
 Para desenvolver o CLI localmente:
 
 ```bash
-cd zoo/cli
+cd flowtomic/cli
 bun install
 bun run dev
 bun run build

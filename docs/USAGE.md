@@ -1,13 +1,13 @@
-# 🦁 Guia de Uso do Zoo
+# 🦁 Guia de Uso do Flowtomic
 
 ## 📦 Estrutura do Monorepo
 
 ```
-zoo/
+flowtomic/
 ├── packages/
-│   ├── ui/          # @zoo/ui - Componentes visuais
-│   └── logic/       # @zoo/logic - Hooks headless
-├── cli/             # @zoo/cli - CLI de instalação
+│   ├── ui/          # flowtomic/ui - Componentes visuais
+│   └── logic/       # flowtomic/logic - Hooks headless
+├── cli/             # flowtomic - CLI de instalação
 └── package.json     # Configuração do monorepo
 ```
 
@@ -16,7 +16,7 @@ zoo/
 ### 1. Instalar Dependências
 
 ```bash
-cd zoo
+cd flowtomic
 bun install
 ```
 
@@ -95,39 +95,45 @@ export type { UseThemeToggleReturn } from "./hooks/useThemeToggle";
 ### Opção 1: Link Local (Desenvolvimento)
 
 ```bash
-# No diretório zoo
+# No diretório flowtomic
 bun link
 
 # No diretório frontend do Amanhecer
-bun link @zoo/ui
-bun link @zoo/logic
+bun link flowtomic/ui
+bun link flowtomic/logic
 ```
 
 ### Opção 2: Usar CLI (Recomendado)
 
-O CLI do Zoo permite instalar componentes diretamente em projetos externos, similar ao shadcn/ui.
+O CLI do Flowtomic permite instalar componentes diretamente em projetos externos, similar ao shadcn/ui.
 
 #### 📦 Instalação e Execução
 
-**Via GitHub (Recomendado - sem publicar no npm)**
+**Via npm/npx (Recomendado)**
 
 ```bash
 # Inicializar configuração
-bunx github:JaimeJunr/Zoo/cli init
+npx flowtomic init
+# ou
+bunx flowtomic init
 
 # Adicionar componentes
-bunx github:JaimeJunr/Zoo/cli add button card input
+npx flowtomic add button card input
+# ou
+bunx flowtomic add button card input
 
 # Listar componentes disponíveis
-bunx github:JaimeJunr/Zoo/cli list
+npx flowtomic list
+# ou
+bunx flowtomic list
 ```
 
 **Via Caminho Local (Desenvolvimento)**
 
 ```bash
-# Se o repositório está em /home/jaime/Amanhecer/zoo
-bunx /home/jaime/Amanhecer/zoo/cli init
-bunx /home/jaime/Amanhecer/zoo/cli add button
+# Se o repositório está localmente
+bunx /caminho/para/flowtomic/cli init
+bunx /caminho/para/flowtomic/cli add button
 ```
 
 **Configurar Variável de Ambiente (Opcional)**
@@ -135,34 +141,42 @@ bunx /home/jaime/Amanhecer/zoo/cli add button
 Para facilitar, você pode definir a variável de ambiente:
 
 ```bash
-export ZOO_REPO_PATH=/home/jaime/Amanhecer/zoo
-bunx github:JaimeJunr/Zoo/cli add button
+export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
+npx flowtomic add button
 ```
 
 #### 🚀 Fluxo de Uso
 
-**1. Inicializar Projeto**
+##### 1. Inicializar Projeto
 
 ```bash
-bunx github:JaimeJunr/Zoo/cli init
+npx flowtomic init
+# ou
+bunx flowtomic init
 ```
 
 Isso cria o arquivo `components.json` na raiz do projeto.
 
-**2. Adicionar Componentes**
+##### 2. Adicionar Componentes
 
 ```bash
 # Adicionar um componente
-bunx github:JaimeJunr/Zoo/cli add button
+npx flowtomic add button
+# ou
+bunx flowtomic add button
 
 # Adicionar múltiplos
-bunx github:JaimeJunr/Zoo/cli add button card input badge
+npx flowtomic add button card input badge
+# ou
+bunx flowtomic add button card input badge
 
 # Modo interativo (seleciona da lista)
-bunx github:JaimeJunr/Zoo/cli add
+npx flowtomic add
+# ou
+bunx flowtomic add
 ```
 
-**3. Usar no Projeto**
+##### 3. Usar no Projeto
 
 ```typescript
 // Os componentes são copiados para o seu projeto
@@ -198,6 +212,9 @@ import { Input } from "@/components/ui/input";
 - `data-table` - Tabela avançada
 - `menu-dock` - Dock de menu
 - `theme-toggle-button` - Botão de toggle de tema
+- `auth-navigation-link` - Link de navegação de auth
+- `auth-form-error-message` - Mensagem de erro de formulário
+- `social-login-buttons` - Botões de login social
 
 **Organisms (5)**
 
@@ -217,7 +234,7 @@ O arquivo `components.json` gerado pelo `init`:
 
 ```json
 {
-  "$schema": "https://zoo.dev/schema.json",
+  "$schema": "https://flowtomic.dev/schema.json",
   "style": "default",
   "rsc": false,
   "tsx": true,
@@ -234,8 +251,8 @@ O arquivo `components.json` gerado pelo `init`:
     "hooks": "@/hooks"
   },
   "packages": {
-    "ui": "@zoo/ui",
-    "logic": "@zoo/logic"
+    "ui": "flowtomic/ui",
+    "logic": "flowtomic/logic"
   }
 }
 ```
@@ -257,9 +274,9 @@ Você pode editar o `components.json` para ajustar os caminhos:
 
 #### 🔧 Como Funciona
 
-1. **Resolução do Repositório**: O CLI encontra o repositório Zoo via:
+1. **Resolução do Repositório**: O CLI encontra o repositório Flowtomic via:
 
-   - Variável `ZOO_REPO_PATH`
+   - Variável `FLOWTOMIC_REPO_PATH`
    - Caminho relativo
    - Caminhos padrão
 
@@ -273,13 +290,19 @@ Você pode editar o `components.json` para ajustar os caminhos:
 
 ```bash
 # 1. Inicializar
-bunx github:JaimeJunr/Zoo/cli init
+npx flowtomic init
+# ou
+bunx flowtomic init
 
 # 2. Ver componentes disponíveis
-bunx github:JaimeJunr/Zoo/cli list
+npx flowtomic list
+# ou
+bunx flowtomic list
 
 # 3. Adicionar componentes
-bunx github:JaimeJunr/Zoo/cli add button card input
+npx flowtomic add button card input
+# ou
+bunx flowtomic add button card input
 
 # 4. Usar no código
 ```
@@ -302,22 +325,28 @@ function MyComponent() {
 **Erro: "components.json não encontrado"**
 
 ```bash
-bunx github:JaimeJunr/Zoo/cli init
+npx flowtomic init
+# ou
+bunx flowtomic init
 ```
 
-**Erro: "Não foi possível encontrar o repositório Zoo"**
+**Erro: "Não foi possível encontrar o repositório Flowtomic"**
 
 ```bash
 # Definir variável de ambiente
-export ZOO_REPO_PATH=/caminho/para/zoo
-bunx github:JaimeJunr/Zoo/cli add button
+export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
+npx flowtomic add button
+# ou
+bunx flowtomic add button
 ```
 
 **Erro: "Componente não encontrado"**
 
 ```bash
 # Ver lista de componentes disponíveis
-bunx github:JaimeJunr/Zoo/cli list
+npx flowtomic list
+# ou
+bunx flowtomic list
 ```
 
 #### 🔗 Próximos Passos

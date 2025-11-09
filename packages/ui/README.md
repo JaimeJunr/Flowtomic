@@ -1,17 +1,17 @@
-# @zoo/ui
+# flowtomic/ui
 
 Componentes UI reutilizáveis baseados em Radix UI e Tailwind CSS.
 
 ## Instalação
 
 ```bash
-bunx @zoo/cli add button
+bunx flowtomic add button
 ```
 
 ## Uso
 
 ```tsx
-import { Button } from "@zoo/ui";
+import { Button } from "flowtomic/ui";
 
 function App() {
   return (
