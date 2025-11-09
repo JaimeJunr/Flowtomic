@@ -46,9 +46,9 @@ function adjustImports(content: string, config: {
   componentsAlias: string
   hooksAlias: string
 }): string {
-  // Substituir imports do @zoo/ui para usar alias local
+  // Substituir imports do flowtomic/ui para usar alias local
   content = content.replace(
-    /from ['"]@zoo\/ui\/(.*?)['"]/g,
+    /from ['"]flowtomic\/ui\/(.*?)['"]/g,
     (match, path) => {
       // Se for lib/utils, usar utilsAlias
       if (path === 'lib/utils') {
@@ -63,9 +63,9 @@ function adjustImports(content: string, config: {
     }
   )
 
-  // Substituir imports do @zoo/logic para usar hooksAlias
+  // Substituir imports do flowtomic/logic para usar hooksAlias
   content = content.replace(
-    /from ['"]@zoo\/logic\/hooks\/(.*?)['"]/g,
+    /from ['"]flowtomic\/logic\/hooks\/(.*?)['"]/g,
     (match, hookName) => {
       return `from '${config.hooksAlias}/${hookName}'`
     }

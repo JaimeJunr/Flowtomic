@@ -6,7 +6,7 @@ import { existsSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import chalk from 'chalk'
 import { findComponent, listComponents, listHooks } from '../utils/component-map'
-import { resolveZooRepo, resolveComponentPath } from '../utils/resolve-repo'
+import { resolveFlowtomicRepo, resolveComponentPath } from '../utils/resolve-repo'
 import { copyAndAdjustImports, ensureUtilsFile } from '../utils/file-utils'
 import inquirer from 'inquirer'
 
@@ -28,7 +28,7 @@ export async function add(components: string[]) {
 
   if (!existsSync(configPath)) {
     console.log(chalk.red('❌ components.json não encontrado'))
-    console.log(chalk.yellow('💡 Execute "npx @jaimejunior/zoo-cli init" primeiro'))
+    console.log(chalk.yellow('💡 Execute "npx flowtomic init" primeiro'))
     return
   }
 
@@ -36,12 +36,12 @@ export async function add(components: string[]) {
     readFileSync(configPath, 'utf-8')
   )
 
-  // Resolver caminho do repositório Zoo
-  const repoPath = resolveZooRepo()
+  // Resolver caminho do repositório Flowtomic
+  const repoPath = resolveFlowtomicRepo()
   if (!repoPath) {
-    console.log(chalk.red('❌ Não foi possível encontrar o repositório Zoo'))
-    console.log(chalk.yellow('💡 Defina a variável de ambiente ZOO_REPO_PATH'))
-    console.log(chalk.gray('   Exemplo: export ZOO_REPO_PATH=/caminho/para/zoo'))
+    console.log(chalk.red('❌ Não foi possível encontrar o repositório Flowtomic'))
+    console.log(chalk.yellow('💡 Defina a variável de ambiente FLOWTOMIC_REPO_PATH'))
+    console.log(chalk.gray('   Exemplo: export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic'))
     return
   }
 
@@ -93,7 +93,7 @@ async function addComponent(
 
   if (!component) {
     console.log(chalk.red(`❌ Componente "${componentName}" não encontrado`))
-    console.log(chalk.yellow('💡 Use "npx @jaimejunior/zoo-cli list" para ver componentes disponíveis'))
+    console.log(chalk.yellow('💡 Use "npx flowtomic list" para ver componentes disponíveis'))
     return
   }
 

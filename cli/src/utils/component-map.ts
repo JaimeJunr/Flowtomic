@@ -136,7 +136,7 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     type: 'molecule',
     path: 'packages/ui/src/components/molecules/stat-card',
     files: ['stat-card.tsx', 'index.ts'],
-    dependencies: ['@zoo/logic', 'lucide-react', 'clsx', 'tailwind-merge'],
+    dependencies: ['flowtomic/logic', 'lucide-react', 'clsx', 'tailwind-merge'],
   },
   'data-table': {
     name: 'data-table',

@@ -1,31 +1,33 @@
 #!/usr/bin/env bun
 
 /**
- * @jaimejunior/zoo-cli
+ * flowtomic
  * 
- * CLI para instalação de componentes e hooks do Zoo
+ * CLI para instalação de componentes, hooks e blocks do Flowtomic
  * 
  * Uso:
- *   npx @jaimejunior/zoo-cli init
- *   npx @jaimejunior/zoo-cli add button
- *   npx @jaimejunior/zoo-cli list
+ *   npx flowtomic init
+ *   npx flowtomic add button
+ *   npx flowtomic add-block dashboard-01
+ *   npx flowtomic list
  */
 
 import { Command } from 'commander'
 import { init } from './commands/init'
 import { add } from './commands/add'
 import { list } from './commands/list'
+import { addBlockCommand } from './commands/add-block'
 
 const program = new Command()
 
 program
-  .name('zoo')
-  .description('CLI para instalação de componentes e hooks do Zoo')
+  .name('flowtomic')
+  .description('CLI para instalação de componentes, hooks e blocks do Flowtomic')
   .version('0.1.0')
 
 program
   .command('init')
-  .description('Inicializar configuração do Zoo no projeto')
+  .description('Inicializar configuração do Flowtomic no projeto')
   .action(init)
 
 program
@@ -33,6 +35,13 @@ program
   .description('Adicionar componente ou hook ao projeto')
   .argument('[components...]', 'Componentes ou hooks para adicionar (opcional, mostra lista interativa)')
   .action(add)
+
+program
+  .command('add-block')
+  .alias('block')
+  .description('Adicionar block ao projeto')
+  .argument('[blocks...]', 'Blocks para adicionar (opcional, mostra lista interativa)')
+  .action(addBlockCommand)
 
 program
   .command('list')

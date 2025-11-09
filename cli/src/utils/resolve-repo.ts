@@ -1,5 +1,5 @@
 /**
- * Utilitários para resolver o caminho do repositório Zoo
+ * Utilitários para resolver o caminho do repositório Flowtomic
  */
 
 import { existsSync, mkdirSync, rmSync } from 'fs'
@@ -9,17 +9,17 @@ import { execSync } from 'child_process'
 import { tmpdir } from 'os'
 
 /**
- * Resolve o caminho do repositório Zoo
+ * Resolve o caminho do repositório Flowtomic
  * 
  * Tenta encontrar o repositório de várias formas:
- * 1. Via variável de ambiente ZOO_REPO_PATH
+ * 1. Via variável de ambiente FLOWTOMIC_REPO_PATH
  * 2. Via caminho relativo do CLI (se executado do repositório)
  * 3. Via GitHub (clonando temporariamente)
  */
-export function resolveZooRepo(): string | null {
+export function resolveFlowtomicRepo(): string | null {
   // 1. Tentar via variável de ambiente
-  if (process.env.ZOO_REPO_PATH) {
-    const repoPath = process.env.ZOO_REPO_PATH
+  if (process.env.FLOWTOMIC_REPO_PATH) {
+    const repoPath = process.env.FLOWTOMIC_REPO_PATH
     if (existsSync(join(repoPath, 'packages', 'ui'))) {
       return repoPath
     }
@@ -31,7 +31,7 @@ export function resolveZooRepo(): string | null {
     // Tentar encontrar o repositório a partir do diretório atual
     let currentDir = process.cwd()
     
-    // Subir até encontrar o diretório zoo
+    // Subir até encontrar o diretório flowtomic
     for (let i = 0; i < 10; i++) {
       if (existsSync(join(currentDir, 'packages', 'ui'))) {
         return currentDir
@@ -59,9 +59,9 @@ export function resolveZooRepo(): string | null {
 
   // 3. Tentar via caminho padrão (desenvolvimento local)
   const defaultPaths = [
-    join(process.cwd(), '..', '..'), // Se executado de dentro do zoo
-    join(process.env.HOME || '', 'Amanhecer', 'zoo'),
-    '/home/jaime/Amanhecer/zoo',
+    join(process.cwd(), '..', '..'), // Se executado de dentro do flowtomic
+    join(process.env.HOME || '', 'Amanhecer', 'flowtomic'),
+    '/home/jaime/Amanhecer/flowtomic',
   ]
 
   for (const path of defaultPaths) {
@@ -73,9 +73,9 @@ export function resolveZooRepo(): string | null {
   // 4. Tentar baixar do GitHub (síncrono via execSync para manter compatibilidade)
   try {
     // Usar git clone que é mais confiável
-    const repoUrl = 'https://github.com/JaimeJunr/Zoo.git'
-    const cacheDir = join(tmpdir(), 'zoo-cli-cache')
-    const repoPath = join(cacheDir, 'Zoo')
+    const repoUrl = 'https://github.com/JaimeJunr/Flowtomic.git'
+    const cacheDir = join(tmpdir(), 'flowtomic-cli-cache')
+    const repoPath = join(cacheDir, 'Flowtomic')
 
     // Se já existe e é válido, usar cache
     if (existsSync(repoPath) && existsSync(join(repoPath, 'packages', 'ui'))) {
@@ -93,7 +93,7 @@ export function resolveZooRepo(): string | null {
     }
 
     // Clonar repositório
-    console.log('📥 Baixando repositório Zoo do GitHub...')
+    console.log('📥 Baixando repositório Flowtomic do GitHub...')
     execSync(`git clone --depth 1 ${repoUrl} "${repoPath}"`, {
       stdio: 'pipe',
       cwd: cacheDir,
@@ -106,16 +106,16 @@ export function resolveZooRepo(): string | null {
   } catch (error) {
     // Se git clone falhar, tentar via tarball
     try {
-      const repoUrl = 'https://github.com/JaimeJunr/Zoo.git'
-      const cacheDir = join(tmpdir(), 'zoo-cli-cache')
-      const repoPath = join(cacheDir, 'Zoo')
+      const repoUrl = 'https://github.com/JaimeJunr/Flowtomic.git'
+      const cacheDir = join(tmpdir(), 'flowtomic-cli-cache')
+      const repoPath = join(cacheDir, 'Flowtomic')
       
       if (existsSync(repoPath)) {
         rmSync(repoPath, { recursive: true, force: true })
       }
       
-      const tarballUrl = 'https://github.com/JaimeJunr/Zoo/archive/refs/heads/main.tar.gz'
-      const tarballPath = join(cacheDir, 'zoo.tar.gz')
+      const tarballUrl = 'https://github.com/JaimeJunr/Flowtomic/archive/refs/heads/main.tar.gz'
+      const tarballPath = join(cacheDir, 'flowtomic.tar.gz')
       
       // Baixar tarball usando curl (mais confiável que fetch em alguns ambientes)
       execSync(`curl -L -f ${tarballUrl} -o "${tarballPath}"`, {
@@ -128,7 +128,7 @@ export function resolveZooRepo(): string | null {
       })
       
       // Renomear se necessário
-      const extractedPath = join(cacheDir, 'Zoo-main')
+      const extractedPath = join(cacheDir, 'Flowtomic-main')
       if (existsSync(extractedPath)) {
         if (existsSync(repoPath)) {
           rmSync(repoPath, { recursive: true, force: true })
@@ -160,7 +160,7 @@ export function resolveZooRepo(): string | null {
  */
 export function resolveComponentPath(componentPath: string, repoPath: string | null): string | null {
   if (!repoPath) {
-    repoPath = resolveZooRepo()
+    repoPath = resolveFlowtomicRepo()
     if (!repoPath) return null
   }
 

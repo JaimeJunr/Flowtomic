@@ -1,5 +1,5 @@
 /**
- * Comando init - Inicializa configuração do Zoo no projeto
+ * Comando init - Inicializa configuração do Flowtomic no projeto
  */
 
 import { existsSync, writeFileSync } from 'fs'
@@ -7,7 +7,7 @@ import { join } from 'path'
 import chalk from 'chalk'
 
 const DEFAULT_CONFIG = {
-  $schema: 'https://zoo.dev/schema.json',
+  $schema: 'https://flowtomic.dev/schema.json',
   style: 'default',
   rsc: false,
   tsx: true,
@@ -24,8 +24,8 @@ const DEFAULT_CONFIG = {
     hooks: '@/hooks',
   },
   packages: {
-    ui: '@zoo/ui',
-    logic: '@zoo/logic',
+    ui: 'flowtomic/ui',
+    logic: 'flowtomic/logic',
   },
 }
 
@@ -39,7 +39,7 @@ export async function init() {
 
   writeFileSync(configPath, JSON.stringify(DEFAULT_CONFIG, null, 2))
 
-  console.log(chalk.green('✅ Configuração do Zoo inicializada!'))
+  console.log(chalk.green('✅ Configuração do Flowtomic inicializada!'))
   console.log(chalk.blue('📝 Arquivo components.json criado'))
 }
 

@@ -1,13 +1,35 @@
 /**
- * Comando list - Lista componentes e hooks disponíveis
+ * Comando list - Lista componentes, hooks e blocks disponíveis
  */
 
 import chalk from 'chalk'
 import { listComponents, listHooks } from '../utils/component-map'
+import { resolveFlowtomicRepo } from '../utils/resolve-repo'
+import { existsSync, readFileSync } from 'fs'
+import { join } from 'path'
+
+function loadBlocks() {
+  const repoPath = resolveFlowtomicRepo()
+  if (!repoPath) return []
+
+  try {
+    const jsonPath = join(repoPath, 'packages/ui/src/blocks/registry-blocks.json')
+    if (existsSync(jsonPath)) {
+      const content = readFileSync(jsonPath, 'utf-8')
+      const data = JSON.parse(content)
+      return data.blocks || []
+    }
+  } catch {
+    // Ignorar erros
+  }
+
+  return []
+}
 
 export async function list() {
   const components = listComponents()
   const hooks = listHooks()
+  const blocks = loadBlocks()
 
   console.log(chalk.blue('\n📦 Componentes UI disponíveis:\n'))
   
@@ -48,6 +70,16 @@ export async function list() {
     console.log()
   }
 
-  console.log(chalk.yellow('💡 Use "npx @jaimejunior/zoo-cli add <nome>" para adicionar um componente'))
+  if (blocks.length > 0) {
+    console.log(chalk.blue('🧱 Blocks disponíveis:\n'))
+    blocks.forEach((b: any) => {
+      console.log(chalk.gray(`    - ${b.name}: ${b.title}`))
+      console.log(chalk.dim(`      ${b.description}`))
+    })
+    console.log()
+  }
+
+  console.log(chalk.yellow('💡 Use "npx flowtomic add <nome>" para adicionar um componente'))
+  console.log(chalk.yellow('💡 Use "npx flowtomic add-block <nome>" para adicionar um block'))
 }
 
