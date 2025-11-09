@@ -19,6 +19,7 @@ build/
 *.swp
 *.swo
 *~
+.gemini/
 
 # OS
 .DS_Store
@@ -39,6 +40,6 @@ coverage/
 *.tmp
 .cache/
 
-cursor/
+.cursor/
 
 sync-prompts.sh
