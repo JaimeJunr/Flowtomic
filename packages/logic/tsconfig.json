@@ -9,10 +9,11 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "flowtomic/logic/*": ["./src/*"]
+      "@flowtomic/logic/*": ["./src/*"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx", "**/*.stories.tsx"]
 }
