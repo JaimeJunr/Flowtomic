@@ -35,7 +35,11 @@
     "dev": "bun run --watch src/cli.ts",
     "build": "bun build ./src/cli.ts --outdir ./dist --target node --format esm --minify --outfile ./dist/cli.js",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
   },
   "dependencies": {
     "commander": "^12.1.0",
@@ -50,4 +54,3 @@
     "typescript": "~5.9.3"
   }
 }
-
