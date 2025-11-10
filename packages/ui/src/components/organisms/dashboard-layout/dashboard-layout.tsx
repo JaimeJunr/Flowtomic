@@ -1,39 +1,39 @@
 /**
  * DashboardLayout - Organism Component
- * 
+ *
  * Layout de conteúdo para páginas do dashboard.
  * Componente genérico e reutilizável para qualquer aplicação.
  */
 
-import React from "react"
-import { cn } from '../../../lib/utils'
+import React from "react";
+import { cn } from "../../../lib/utils";
 
 export interface DashboardLayoutProps {
-  children: React.ReactNode
-  title?: string
-  subtitle?: string
-  actions?: React.ReactNode
-  className?: string
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '7xl' | 'full'
+  children: React.ReactNode;
+  title?: string;
+  subtitle?: string;
+  actions?: React.ReactNode;
+  className?: string;
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "7xl" | "full";
 }
 
 /**
  * Layout de conteúdo para páginas do dashboard.
- * 
+ *
  * Este componente renderiza apenas o conteúdo da página.
  * Pode ser usado em qualquer aplicação que precise de um layout de dashboard.
  */
 const DashboardLayout = React.forwardRef<HTMLDivElement, DashboardLayoutProps>(
-  ({ children, title, subtitle, actions, className, maxWidth = '7xl', ...props }, ref) => {
+  ({ children, title, subtitle, actions, className, maxWidth = "7xl", ...props }, ref) => {
     const maxWidthClasses = {
-      sm: 'max-w-sm',
-      md: 'max-w-md',
-      lg: 'max-w-lg',
-      xl: 'max-w-xl',
-      '2xl': 'max-w-2xl',
-      '7xl': 'max-w-7xl',
-      full: 'max-w-full',
-    }
+      sm: "max-w-sm",
+      md: "max-w-md",
+      lg: "max-w-lg",
+      xl: "max-w-xl",
+      "2xl": "max-w-2xl",
+      "7xl": "max-w-7xl",
+      full: "max-w-full",
+    };
 
     return (
       <div className="h-full w-full" ref={ref} {...props}>
@@ -55,11 +55,10 @@ const DashboardLayout = React.forwardRef<HTMLDivElement, DashboardLayoutProps>(
           </div>
         </div>
       </div>
-    )
-  },
-)
+    );
+  }
+);
 
-DashboardLayout.displayName = "DashboardLayout"
+DashboardLayout.displayName = "DashboardLayout";
 
-export { DashboardLayout }
-
+export { DashboardLayout };

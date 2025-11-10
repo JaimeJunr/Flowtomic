@@ -1,21 +1,21 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from './button-group';
-import { Button } from '../../atoms/button/button';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "../../atoms/button/button";
+import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "./button-group";
 
 const meta = {
-  title: 'Zoo UI/Molecules/ButtonGroup',
+  title: "Flowtomic UI/Molecules/ButtonGroup",
   component: ButtonGroup,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     orientation: {
-      control: 'select',
-      options: ['horizontal', 'vertical'],
+      control: "select",
+      options: ["horizontal", "vertical"],
     },
     equalWidth: {
-      control: 'boolean',
+      control: "boolean",
     },
   },
 } satisfies Meta<typeof ButtonGroup>;
@@ -26,9 +26,9 @@ type Story = StoryObj<typeof meta>;
 export const Horizontal: Story = {
   render: () => (
     <ButtonGroup>
-      <Button variant="outline">Left</Button>
-      <Button variant="outline">Middle</Button>
-      <Button variant="outline">Right</Button>
+      <Button variant="outline">Esquerda</Button>
+      <Button variant="outline">Meio</Button>
+      <Button variant="outline">Direita</Button>
     </ButtonGroup>
   ),
 };
@@ -36,9 +36,9 @@ export const Horizontal: Story = {
 export const Vertical: Story = {
   render: () => (
     <ButtonGroup orientation="vertical">
-      <Button variant="outline">Top</Button>
-      <Button variant="outline">Middle</Button>
-      <Button variant="outline">Bottom</Button>
+      <Button variant="outline">Topo</Button>
+      <Button variant="outline">Meio</Button>
+      <Button variant="outline">Base</Button>
     </ButtonGroup>
   ),
 };
@@ -46,9 +46,9 @@ export const Vertical: Story = {
 export const WithSeparator: Story = {
   render: () => (
     <ButtonGroup>
-      <Button variant="outline">Save</Button>
+      <Button variant="outline">Salvar</Button>
       <ButtonGroupSeparator />
-      <Button variant="outline">Cancel</Button>
+      <Button variant="outline">Cancelar</Button>
     </ButtonGroup>
   ),
 };
@@ -56,9 +56,9 @@ export const WithSeparator: Story = {
 export const WithText: Story = {
   render: () => (
     <ButtonGroup>
-      <Button variant="outline">Action</Button>
-      <ButtonGroupText>or</ButtonGroupText>
-      <Button variant="outline">Alternative</Button>
+      <Button variant="outline">Ação</Button>
+      <ButtonGroupText>ou</ButtonGroupText>
+      <Button variant="outline">Alternativa</Button>
     </ButtonGroup>
   ),
 };
@@ -66,10 +66,9 @@ export const WithText: Story = {
 export const EqualWidth: Story = {
   render: () => (
     <ButtonGroup equalWidth className="w-64">
-      <Button variant="outline">Yes</Button>
-      <Button variant="outline">No</Button>
-      <Button variant="outline">Maybe</Button>
+      <Button variant="outline">Sim</Button>
+      <Button variant="outline">Não</Button>
+      <Button variant="outline">Talvez</Button>
     </ButtonGroup>
   ),
 };
-

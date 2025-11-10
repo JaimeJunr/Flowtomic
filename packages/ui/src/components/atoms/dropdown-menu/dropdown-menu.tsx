@@ -1,32 +1,42 @@
 /**
- * DropdownMenu Component - Zoo UI
+ * DropdownMenu Component - Flowtomic UI
  *
  * Componente DropdownMenu próprio do design-system baseado em Radix UI
  * Implementação direta sem dependência de componentes externos
  */
 
-import * as React from "react"
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
-import { cn } from '../../../lib/utils'
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import * as React from "react";
+import { cn } from "../../../lib/utils";
 
-export type DropdownMenuProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root>
-export type DropdownMenuTriggerProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
-export type DropdownMenuContentProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
-export type DropdownMenuItemProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
-export type DropdownMenuLabelProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
-export type DropdownMenuSeparatorProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
+export type DropdownMenuProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root>;
+export type DropdownMenuTriggerProps = React.ComponentPropsWithoutRef<
+  typeof DropdownMenuPrimitive.Trigger
+>;
+export type DropdownMenuContentProps = React.ComponentPropsWithoutRef<
+  typeof DropdownMenuPrimitive.Content
+>;
+export type DropdownMenuItemProps = React.ComponentPropsWithoutRef<
+  typeof DropdownMenuPrimitive.Item
+>;
+export type DropdownMenuLabelProps = React.ComponentPropsWithoutRef<
+  typeof DropdownMenuPrimitive.Label
+>;
+export type DropdownMenuSeparatorProps = React.ComponentPropsWithoutRef<
+  typeof DropdownMenuPrimitive.Separator
+>;
 
 /**
  * DropdownMenu - Container principal do dropdown menu
  */
-const DropdownMenu = DropdownMenuPrimitive.Root
-DropdownMenu.displayName = "DropdownMenu"
+const DropdownMenu = DropdownMenuPrimitive.Root;
+DropdownMenu.displayName = "DropdownMenu";
 
 /**
  * DropdownMenuTrigger - Trigger do dropdown menu
  */
-const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
-DropdownMenuTrigger.displayName = "DropdownMenuTrigger"
+const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
+DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
 
 /**
  * DropdownMenuContent - Conteúdo do dropdown menu
@@ -48,9 +58,9 @@ const DropdownMenuContent = React.forwardRef<
         {...props}
       />
     </DropdownMenuPrimitive.Portal>
-  )
-})
-DropdownMenuContent.displayName = "DropdownMenuContent"
+  );
+});
+DropdownMenuContent.displayName = "DropdownMenuContent";
 
 /**
  * DropdownMenuItem - Item do dropdown menu
@@ -70,9 +80,9 @@ const DropdownMenuItem = React.forwardRef<
       )}
       {...props}
     />
-  )
-})
-DropdownMenuItem.displayName = "DropdownMenuItem"
+  );
+});
+DropdownMenuItem.displayName = "DropdownMenuItem";
 
 /**
  * DropdownMenuLabel - Label do dropdown menu
@@ -87,9 +97,9 @@ const DropdownMenuLabel = React.forwardRef<
       className={cn("px-2 py-1.5 text-sm font-semibold", className)}
       {...props}
     />
-  )
-})
-DropdownMenuLabel.displayName = "DropdownMenuLabel"
+  );
+});
+DropdownMenuLabel.displayName = "DropdownMenuLabel";
 
 /**
  * DropdownMenuSeparator - Separador do dropdown menu
@@ -104,9 +114,9 @@ const DropdownMenuSeparator = React.forwardRef<
       className={cn("-mx-1 my-1 h-px bg-muted", className)}
       {...props}
     />
-  )
-})
-DropdownMenuSeparator.displayName = "DropdownMenuSeparator"
+  );
+});
+DropdownMenuSeparator.displayName = "DropdownMenuSeparator";
 
 export {
   DropdownMenu,
@@ -115,5 +125,4 @@ export {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-}
-
+};

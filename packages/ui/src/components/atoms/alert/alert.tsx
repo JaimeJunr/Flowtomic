@@ -1,14 +1,14 @@
 /**
- * Alert Component - Zoo UI
+ * Alert Component - Flowtomic UI
  *
  * Componente Alert próprio do design-system
  * Implementação padronizada seguindo os padrões do design system
  */
 
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
-import { cn } from '../../../lib/utils'
+import { cn } from "../../../lib/utils";
 
 const alertVariants = cva(
   "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
@@ -22,15 +22,14 @@ const alertVariants = cva(
           "border-success/50 text-success dark:border-success [&>svg]:text-success bg-success/10",
         warning:
           "border-warning/50 text-warning dark:border-warning [&>svg]:text-warning bg-warning/10",
-        info:
-          "border-info/50 text-info dark:border-info [&>svg]:text-info bg-info/10",
+        info: "border-info/50 text-info dark:border-info [&>svg]:text-info bg-info/10",
       },
     },
     defaultVariants: {
       variant: "default",
     },
   }
-)
+);
 
 export interface AlertProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -41,17 +40,12 @@ export interface AlertProps
  */
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, variant, ...props }, ref) => (
-    <div
-      ref={ref}
-      role="alert"
-      className={cn(alertVariants({ variant }), className)}
-      {...props}
-    />
+    <div ref={ref} role="alert" className={cn(alertVariants({ variant }), className)} {...props} />
   )
-)
-Alert.displayName = "Alert"
+);
+Alert.displayName = "Alert";
 
-export type AlertTitleProps = React.HTMLAttributes<HTMLHeadingElement>
+export type AlertTitleProps = React.HTMLAttributes<HTMLHeadingElement>;
 
 /**
  * AlertTitle - Título do alert
@@ -64,24 +58,19 @@ const AlertTitle = React.forwardRef<HTMLParagraphElement, AlertTitleProps>(
       {...props}
     />
   )
-)
-AlertTitle.displayName = "AlertTitle"
+);
+AlertTitle.displayName = "AlertTitle";
 
-export type AlertDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>
+export type AlertDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
 
 /**
  * AlertDescription - Descrição do alert
  */
 const AlertDescription = React.forwardRef<HTMLParagraphElement, AlertDescriptionProps>(
   ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("text-sm [&_p]:leading-relaxed", className)}
-      {...props}
-    />
+    <div ref={ref} className={cn("text-sm [&_p]:leading-relaxed", className)} {...props} />
   )
-)
-AlertDescription.displayName = "AlertDescription"
+);
+AlertDescription.displayName = "AlertDescription";
 
-export { Alert, AlertTitle, AlertDescription }
-
+export { Alert, AlertTitle, AlertDescription };

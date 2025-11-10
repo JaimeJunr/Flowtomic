@@ -1,28 +1,28 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Input } from './input';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Input } from "./input";
 
 const meta = {
-  title: 'Zoo UI/Atoms/Input',
+  title: "Flowtomic UI/Atoms/Input",
   component: Input,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     size: {
-      control: 'select',
-      options: ['default', 'sm', 'lg'],
+      control: "select",
+      options: ["default", "sm", "lg"],
     },
     variant: {
-      control: 'select',
-      options: ['default', 'error', 'success'],
+      control: "select",
+      options: ["default", "error", "success"],
     },
     type: {
-      control: 'select',
-      options: ['text', 'email', 'password', 'number', 'tel', 'url'],
+      control: "select",
+      options: ["text", "email", "password", "number", "tel", "url"],
     },
     disabled: {
-      control: 'boolean',
+      control: "boolean",
     },
   },
 } satisfies Meta<typeof Input>;
@@ -32,63 +32,62 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    placeholder: 'Enter text...',
+    placeholder: "Digite o texto...",
   },
 };
 
 export const WithLabel: Story = {
   args: {
-    label: 'Email',
-    placeholder: 'email@example.com',
-    type: 'email',
+    label: "E-mail",
+    placeholder: "email@exemplo.com",
+    type: "email",
   },
 };
 
 export const WithHelperText: Story = {
   args: {
-    label: 'Password',
-    type: 'password',
-    helperText: 'Must be at least 8 characters',
+    label: "Senha",
+    type: "password",
+    helperText: "Deve ter pelo menos 8 caracteres",
   },
 };
 
-export const Error: Story = {
+export const ErrorState: Story = {
   args: {
-    label: 'Email',
-    variant: 'error',
-    error: 'Invalid email address',
-    placeholder: 'email@example.com',
+    label: "E-mail",
+    variant: "error",
+    error: "Endereço de e-mail inválido",
+    placeholder: "email@exemplo.com",
   },
 };
 
 export const Success: Story = {
   args: {
-    label: 'Email',
-    variant: 'success',
-    placeholder: 'email@example.com',
-    defaultValue: 'valid@email.com',
+    label: "E-mail",
+    variant: "success",
+    placeholder: "email@exemplo.com",
+    defaultValue: "valido@email.com",
   },
 };
 
 export const Small: Story = {
   args: {
-    size: 'sm',
-    placeholder: 'Small input',
+    size: "sm",
+    placeholder: "Input pequeno",
   },
 };
 
 export const Large: Story = {
   args: {
-    size: 'lg',
-    placeholder: 'Large input',
+    size: "lg",
+    placeholder: "Input grande",
   },
 };
 
 export const Disabled: Story = {
   args: {
-    label: 'Disabled Input',
+    label: "Input Desabilitado",
     disabled: true,
-    defaultValue: 'Cannot edit',
+    defaultValue: "Não pode editar",
   },
 };
-

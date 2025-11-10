@@ -1,9 +1,9 @@
 /**
  * flowtomic/ui
- * 
+ *
  * Biblioteca de componentes UI reutilizáveis
  * baseados em Radix UI e Tailwind CSS
- * 
+ *
  * Estrutura baseada em Atomic Design:
  * - Atoms: Componentes básicos e indivisíveis
  * - Molecules: Componentes compostos
@@ -11,13 +11,13 @@
  */
 
 // Atoms
-export * from './components/atoms'
+export * from "./components/atoms";
 
 // Molecules
-export * from './components/molecules'
+export * from "./components/molecules";
 
 // Organisms
-export * from './components/organisms'
+export * from "./components/organisms";
 
 // Utils
-export { cn } from './lib/utils'
+export { cn } from "./lib/utils";

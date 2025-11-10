@@ -3,128 +3,129 @@
  * Atomic Design: Componentes atômicos e indivisíveis
  */
 
-export { Button, buttonVariants } from './button'
-export type { ButtonProps } from './button'
-
-export { Badge, badgeVariants } from './badge'
-export type { BadgeProps } from './badge'
-
-export { Input, inputVariants } from './input'
-export type { InputProps } from './input'
-
-export {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from './card'
+export type { AlertDescriptionProps, AlertProps, AlertTitleProps } from "./alert";
+export { Alert, AlertDescription, AlertTitle } from "./alert";
 export type {
-  CardProps,
-  CardHeaderProps,
-  CardTitleProps,
-  CardDescriptionProps,
-  CardContentProps,
-  CardFooterProps,
-} from './card'
-
-export { Checkbox } from './checkbox'
-export type { CheckboxProps } from './checkbox'
-
-export { Skeleton, CardSkeleton, TableSkeleton } from './skeleton'
-export type { SkeletonProps } from './skeleton'
-
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-} from './table'
-export type {
-  TableProps,
-  TableHeaderProps,
-  TableBodyProps,
-  TableFooterProps,
-  TableRowProps,
-  TableHeadProps,
-  TableCellProps,
-  TableCaptionProps,
-} from './table'
-
-export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
-
-export { Alert, AlertTitle, AlertDescription } from './alert'
-export type { AlertProps, AlertTitleProps, AlertDescriptionProps } from './alert'
-
-export {
-  AlertDialog,
-  AlertDialogPortal,
-  AlertDialogOverlay,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogCancel,
-} from './alert-dialog'
-export type {
-  AlertDialogProps,
-  AlertDialogTriggerProps,
-  AlertDialogContentProps,
-  AlertDialogHeaderProps,
-  AlertDialogFooterProps,
-  AlertDialogTitleProps,
-  AlertDialogDescriptionProps,
   AlertDialogActionProps,
   AlertDialogCancelProps,
-} from './alert-dialog'
-
+  AlertDialogContentProps,
+  AlertDialogDescriptionProps,
+  AlertDialogFooterProps,
+  AlertDialogHeaderProps,
+  AlertDialogProps,
+  AlertDialogTitleProps,
+  AlertDialogTriggerProps,
+} from "./alert-dialog";
+export {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./alert-dialog";
+export type { BadgeProps } from "./badge";
+export { Badge, badgeVariants } from "./badge";
+export type { ButtonProps } from "./button";
+export { Button, buttonVariants } from "./button";
+export type {
+  CardContentProps,
+  CardDescriptionProps,
+  CardFooterProps,
+  CardHeaderProps,
+  CardProps,
+  CardTitleProps,
+} from "./card";
+export {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./card";
+export type { CheckboxProps } from "./checkbox";
+export { Checkbox } from "./checkbox";
+export type {
+  DialogContentProps,
+  DialogDescriptionProps,
+  DialogFooterProps,
+  DialogHeaderProps,
+  DialogProps,
+  DialogTitleProps,
+  DialogTriggerProps,
+} from "./dialog";
 export {
   Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogTrigger,
   DialogClose,
   DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
   DialogDescription,
-} from './dialog'
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "./dialog";
 export type {
-  DialogProps,
-  DialogTriggerProps,
-  DialogContentProps,
-  DialogHeaderProps,
-  DialogFooterProps,
-  DialogTitleProps,
-  DialogDescriptionProps,
-} from './dialog'
-
+  DropdownMenuContentProps,
+  DropdownMenuItemProps,
+  DropdownMenuLabelProps,
+  DropdownMenuProps,
+  DropdownMenuSeparatorProps,
+  DropdownMenuTriggerProps,
+} from "./dropdown-menu";
 export {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from './dropdown-menu'
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
+export type { InputProps } from "./input";
+export { Input, inputVariants } from "./input";
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
+export type { SkeletonProps } from "./skeleton";
+export { CardSkeleton, Skeleton, TableSkeleton } from "./skeleton";
+export type { ToasterProps } from "./sonner";
+export { Toaster, toast } from "./sonner";
 export type {
-  DropdownMenuProps,
-  DropdownMenuTriggerProps,
-  DropdownMenuContentProps,
-  DropdownMenuItemProps,
-  DropdownMenuLabelProps,
-  DropdownMenuSeparatorProps,
-} from './dropdown-menu'
-
-export { Toaster, toast } from './sonner'
-export type { ToasterProps } from './sonner'
-
+  TableBodyProps,
+  TableCaptionProps,
+  TableCellProps,
+  TableFooterProps,
+  TableHeaderProps,
+  TableHeadProps,
+  TableProps,
+  TableRowProps,
+} from "./table";
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./table";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+export type { AnimatedShinyTextProps } from "./typography/animated-shiny-text";
+export { AnimatedShinyText } from "./typography/animated-shiny-text";

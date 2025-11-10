@@ -1,96 +1,96 @@
 /**
  * StatCard - Componente Visual
- * 
+ *
  * Implementação visual usando o Headless UI hook useStatCard
  * Este componente adiciona markup e styles ao hook Headless
  */
 
-import React from "react"
+import { type StatCardData, useStatCard } from "flowtomic/logic/hooks/useStatCard/useStatCard";
 import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpRight,
+  Minus,
+  MoreHorizontal,
+  Pin,
+  Settings,
+  Share2,
+  Trash,
+  TriangleAlert,
+} from "lucide-react";
+import React from "react";
+import { cn } from "../../../lib/utils";
+import {
+  Badge,
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Badge,
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../atoms"
-import {
-  Minus,
-  ArrowUpRight,
-  ArrowUp,
-  ArrowDown,
-  MoreHorizontal,
-  Settings,
-  Share2,
-  Trash,
-  TriangleAlert,
-  Pin,
-} from "lucide-react"
-import { cn } from "../../../lib/utils"
-import { useStatCard, type StatCardData } from "flowtomic/logic/hooks/useStatCard"
+} from "../../atoms";
 
-export interface StatCardProps extends Omit<StatCardData, 'value'> {
+export interface StatCardProps extends Omit<StatCardData, "value"> {
   /**
    * Título do card
    */
-  title: string
-  
+  title: string;
+
   /**
    * Valor principal (pode ser string ou number)
    * Se for number, será usado diretamente no hook
    * Se for string, será exibido como está
    */
-  value: string | number
-  
+  value: string | number;
+
   /**
    * Subtítulo/descrição do card
    */
-  subtitle?: string
-  
+  subtitle?: string;
+
   /**
    * Cor de destaque do card
    */
-  color?: "blue" | "green" | "orange" | "red" | "purple"
-  
+  color?: "blue" | "green" | "orange" | "red" | "purple";
+
   /**
    * Classe CSS adicional
    */
-  className?: string
-  
+  className?: string;
+
   /**
    * Conteúdo adicional (children)
    */
-  children?: React.ReactNode
-  
+  children?: React.ReactNode;
+
   /**
    * Se deve mostrar o menu de ações (dropdown)
    */
-  showActions?: boolean
-  
+  showActions?: boolean;
+
   /**
    * Callbacks para ações do menu
    */
-  onSettings?: () => void
-  onAddAlert?: () => void
-  onPin?: () => void
-  onShare?: () => void
-  onRemove?: () => void
-  
+  onSettings?: () => void;
+  onAddAlert?: () => void;
+  onPin?: () => void;
+  onShare?: () => void;
+  onRemove?: () => void;
+
   // Compatibilidade retroativa com API antiga
   /**
    * @deprecated Use `delta` em vez disso. Tendência visual (up/down/neutral)
    */
-  trend?: "up" | "down" | "neutral"
-  
+  trend?: "up" | "down" | "neutral";
+
   /**
    * @deprecated Use `delta` em vez disso. Percentual formatado (ex: "+17%")
    */
-  trendPercentage?: string
+  trendPercentage?: string;
 }
 
 const colorClasses = {
@@ -99,7 +99,7 @@ const colorClasses = {
   orange: "bg-card border-border hover:bg-surface-hover",
   red: "bg-card border-border hover:bg-surface-hover",
   purple: "bg-card border-border hover:bg-surface-hover",
-}
+};
 
 const accentColors = {
   blue: "text-accent",
@@ -107,7 +107,7 @@ const accentColors = {
   orange: "text-orange-500",
   red: "text-error",
   purple: "text-primary",
-}
+};
 
 const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
   (
@@ -136,35 +136,35 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
       trendPercentage,
       ...props
     },
-    ref,
+    ref
   ) => {
     // Compatibilidade retroativa: converte trendPercentage para delta
     const computedDelta = React.useMemo(() => {
       if (delta !== undefined) {
-        return delta
+        return delta;
       }
       if (trendPercentage) {
         // Remove o sinal + e % e converte para número
-        const numericValue = parseFloat(trendPercentage.replace(/[+%]/g, ''))
-        if (!isNaN(numericValue)) {
+        const numericValue = parseFloat(trendPercentage.replace(/[+%]/g, ""));
+        if (!Number.isNaN(numericValue)) {
           // Se trend for 'down', torna negativo
-          return trend === 'down' ? -Math.abs(numericValue) : Math.abs(numericValue)
+          return trend === "down" ? -Math.abs(numericValue) : Math.abs(numericValue);
         }
       }
-      return undefined
-    }, [delta, trendPercentage, trend])
+      return undefined;
+    }, [delta, trendPercentage, trend]);
 
     // Determina se é positivo baseado em trend se delta não estiver disponível
     const computedPositive = React.useMemo(() => {
-      if (positive !== undefined) return positive
-      if (computedDelta !== undefined) return computedDelta >= 0
-      if (trend) return trend === 'up'
-      return undefined
-    }, [positive, computedDelta, trend])
+      if (positive !== undefined) return positive;
+      if (computedDelta !== undefined) return computedDelta >= 0;
+      if (trend) return trend === "up";
+      return undefined;
+    }, [positive, computedDelta, trend]);
 
     // Headless UI Hook - apenas lógica
     // Se value for number, usa o hook; se for string, usa diretamente
-    const isNumericValue = typeof value === 'number'
+    const isNumericValue = typeof value === "number";
     const statCardData = useStatCard(
       isNumericValue
         ? {
@@ -186,16 +186,16 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
             format,
             lastFormat,
             positive: computedPositive,
-          },
-    )
+          }
+    );
 
     // Valor formatado (do hook ou string direto)
-    const displayValue = isNumericValue ? statCardData.formattedValue : value
+    const displayValue = isNumericValue ? statCardData.formattedValue : value;
 
     // Ícone de tendência
     const getTrendIcon = () => {
       if (computedDelta === undefined && !trendPercentage) {
-        return <Minus className="h-4 w-4 text-muted-foreground" />
+        return <Minus className="h-4 w-4 text-muted-foreground" />;
       }
       return statCardData.trend.direction === "up" ? (
         <ArrowUp className="h-4 w-4 text-success" />
@@ -203,8 +203,8 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
         <ArrowDown className="h-4 w-4 text-error" />
       ) : (
         <Minus className="h-4 w-4 text-muted-foreground" />
-      )
-    }
+      );
+    };
 
     return (
       <Card
@@ -212,7 +212,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
         className={cn(
           "transition-all duration-300 hover:shadow-lg hover:scale-[1.01] border",
           colorClasses[color],
-          className,
+          className
         )}
         {...props}
       >
@@ -278,7 +278,12 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
         </CardHeader>
         <CardContent className="space-y-2.5">
           <div className="flex items-center gap-2.5">
-            <span className={cn("text-2xl font-medium text-foreground tracking-tight", accentColors[color])}>
+            <span
+              className={cn(
+                "text-2xl font-medium text-foreground tracking-tight",
+                accentColors[color]
+              )}
+            >
               {displayValue}
             </span>
             {(computedDelta !== undefined || trendPercentage) && (
@@ -292,26 +297,21 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
             )}
           </div>
           {subtitle && (
-            <p className="text-sm text-muted-foreground leading-relaxed pt-1">
-              {subtitle}
-            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed pt-1">{subtitle}</p>
           )}
           {statCardData.formattedLastMonth && (
             <div className="text-xs text-muted-foreground mt-2 border-t border-border pt-2.5">
               Vs último mês:{" "}
-              <span className="font-medium text-foreground">
-                {statCardData.formattedLastMonth}
-              </span>
+              <span className="font-medium text-foreground">{statCardData.formattedLastMonth}</span>
             </div>
           )}
           {children && <div className="mt-4 pt-4 border-t border-border">{children}</div>}
         </CardContent>
       </Card>
-    )
-  },
-)
+    );
+  }
+);
 
-StatCard.displayName = "StatCard"
+StatCard.displayName = "StatCard";
 
-export { StatCard }
-
+export { StatCard };

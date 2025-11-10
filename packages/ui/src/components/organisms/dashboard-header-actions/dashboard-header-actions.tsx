@@ -1,71 +1,68 @@
 /**
  * DashboardHeaderActions - Organism Component
- * 
+ *
  * Componente complexo que agrupa todas as ações do header do dashboard.
  * Tornado genérico e reutilizável.
  */
 
-import React from "react"
-import { Button } from "../../atoms/button/button"
-import { ButtonGroup } from "../../molecules/button-group/button-group"
-import { Settings, RefreshCw, Save } from "lucide-react"
-import { cn } from '../../../lib/utils'
+import { RefreshCw, Save, Settings } from "lucide-react";
+import React from "react";
+import { cn } from "../../../lib/utils";
+import { Button } from "../../atoms/button/button";
+import { ButtonGroup } from "../../molecules/button-group/button-group";
 
 export interface DashboardHeaderActionsProps {
   /**
    * Lista de dashboards/views disponíveis
    */
-  dashboards?: Array<{ id: string; name: string }>
+  dashboards?: Array<{ id: string; name: string }>;
   /**
    * ID do dashboard ativo
    */
-  activeDashboardId?: string
+  activeDashboardId?: string;
   /**
    * Layout atual (grid ou list)
    */
-  layout?: "grid" | "list"
+  layout?: "grid" | "list";
   /**
    * Estado de carregamento
    */
-  isLoading?: boolean
+  isLoading?: boolean;
   /**
    * Callback quando o dashboard é alterado
    */
-  onSwitchDashboard?: (id: string) => void
+  onSwitchDashboard?: (id: string) => void;
   /**
    * Callback para salvar como novo
    */
-  onSaveAsNew?: () => void
+  onSaveAsNew?: () => void;
   /**
    * Callback para alternar layout
    */
-  onToggleLayout?: () => void
+  onToggleLayout?: () => void;
   /**
    * Callback para atualizar/refresh
    */
-  onRefresh?: () => void
+  onRefresh?: () => void;
   /**
    * Labels customizáveis
    */
   labels?: {
-    saveAsNew?: string
-    gridLayout?: string
-    listLayout?: string
-    refresh?: string
-  }
-  className?: string
+    saveAsNew?: string;
+    gridLayout?: string;
+    listLayout?: string;
+    refresh?: string;
+  };
+  className?: string;
 }
 
 /**
  * Organismo: DashboardHeaderActions
- * 
+ *
  * Componente complexo que agrupa todas as ações do header do dashboard
  * Composto por múltiplas moléculas e átomos
  */
-export const DashboardHeaderActions = React.forwardRef<
-  HTMLDivElement,
-  DashboardHeaderActionsProps
->(
+export const DashboardHeaderActions = React.forwardRef<HTMLDivElement, DashboardHeaderActionsProps>(
   (
     {
       dashboards = [],
@@ -87,14 +84,10 @@ export const DashboardHeaderActions = React.forwardRef<
       gridLayout = "Grade",
       listLayout = "Lista",
       refresh = "Atualizar",
-    } = labels
+    } = labels;
 
     return (
-      <div
-        ref={ref}
-        className={cn("flex items-center gap-2", className)}
-        {...props}
-      >
+      <div ref={ref} className={cn("flex items-center gap-2", className)} {...props}>
         {/* Seleção de Dashboard */}
         {dashboards.length > 1 && (
           <select
@@ -136,9 +129,8 @@ export const DashboardHeaderActions = React.forwardRef<
           </ButtonGroup>
         )}
       </div>
-    )
+    );
   }
-)
+);
 
-DashboardHeaderActions.displayName = "DashboardHeaderActions"
-
+DashboardHeaderActions.displayName = "DashboardHeaderActions";

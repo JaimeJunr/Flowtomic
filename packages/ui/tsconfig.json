@@ -2,25 +2,29 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "../..",
+    "rootDir": "./src",
     "jsx": "react-jsx",
     "declaration": true,
     "declarationMap": true,
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "flowtomic/ui/*": ["./src/*"],
-      "flowtomic/logic": ["../logic/src"],
-      "flowtomic/logic/*": ["../logic/src/*"]
+      "@/*": ["./src/*"],
+      "@flowtomic/ui/*": ["./src/*"],
+      "@flowtomic/logic": ["../logic/src"],
+      "@flowtomic/logic/*": ["../logic/src/*"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": false
   },
-  "include": ["src/**/*", "../logic/src/**/*"],
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",
     "**/*.test.ts",
     "**/*.test.tsx",
+    "**/*.stories.tsx",
     ".storybook"
-  ]
+  ],
+  "references": [{ "path": "../logic" }]
 }

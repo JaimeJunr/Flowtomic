@@ -1,5 +1,5 @@
 /**
- * Sonner Component - Zoo UI
+ * Sonner Component - Flowtomic UI
  *
  * Componente Sonner próprio do design-system
  * Implementação padronizada seguindo os padrões do design system
@@ -9,30 +9,30 @@
  * ou que o projeto use um hook de tema compatível
  */
 
-"use client"
+"use client";
 
-import { Toaster as SonnerToaster, type ToasterProps as SonnerToasterProps } from "sonner"
 import {
   CircleCheckIcon,
   InfoIcon,
   Loader2Icon,
   OctagonXIcon,
   TriangleAlertIcon,
-} from "lucide-react"
+} from "lucide-react";
+import { Toaster as SonnerToaster, type ToasterProps as SonnerToasterProps } from "sonner";
 
-export interface ToasterProps extends Omit<SonnerToasterProps, 'theme'> {
+export interface ToasterProps extends Omit<SonnerToasterProps, "theme"> {
   /**
    * Tema do toaster ('light' | 'dark')
    * Se não fornecido, usa 'light' como padrão
    */
-  theme?: 'light' | 'dark'
+  theme?: "light" | "dark";
 }
 
 /**
  * Toaster - Componente principal do Sonner
  * Integrado com o sistema de tema do design system
  */
-export function Toaster({ theme = 'light', ...props }: ToasterProps) {
+export function Toaster({ theme = "light", ...props }: ToasterProps) {
   return (
     <SonnerToaster
       theme={theme === "dark" ? "dark" : "light"}
@@ -52,10 +52,8 @@ export function Toaster({ theme = 'light', ...props }: ToasterProps) {
           success:
             "group-[.toast]:!bg-success group-[.toast]:!text-success-foreground group-[.toast]:!border-success",
           description: "group-[.toast]:text-muted-foreground",
-          actionButton:
-            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
-          cancelButton:
-            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
+          actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
+          cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
         },
       }}
       style={
@@ -71,9 +69,8 @@ export function Toaster({ theme = 'light', ...props }: ToasterProps) {
       }
       {...props}
     />
-  )
+  );
 }
 
 // Re-exportar toast do sonner
-export { toast } from 'sonner'
-
+export { toast } from "sonner";

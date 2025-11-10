@@ -24,8 +24,12 @@
     "build": "bun build ./src/index.ts --outdir ./dist --target browser --format esm --minify",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "storybook": "storybook dev -p 6006 --config-dir ../../.storybook",
+    "build-storybook": "storybook build --config-dir ../../.storybook --output-dir ../../storybook-static"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -64,4 +68,3 @@
     "vite": "^7.1.7"
   }
 }
-

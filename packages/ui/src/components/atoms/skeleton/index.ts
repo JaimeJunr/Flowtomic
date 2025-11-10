@@ -1,3 +1,2 @@
-export { Skeleton, CardSkeleton, TableSkeleton } from './skeleton'
-export type { SkeletonProps } from './skeleton'
-
+export type { SkeletonProps } from "./skeleton";
+export { CardSkeleton, Skeleton, TableSkeleton } from "./skeleton";

@@ -1,17 +1,19 @@
 /**
  * MenuDock - Componente Molecule
- * 
+ *
  * Componente de dock de menu com animação e suporte a múltiplos itens
  */
 
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { cn } from '../../../lib/utils';
+import type React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { cn } from "../../../lib/utils";
 
 type IconComponentType = React.ElementType<{ className?: string }>;
 
 export interface MenuDockItem {
+  id?: string;
   label: string;
   icon: IconComponentType;
   onClick?: () => void;
@@ -21,8 +23,8 @@ export interface MenuDockItem {
 export interface MenuDockProps {
   items?: MenuDockItem[];
   className?: string;
-  variant?: 'default' | 'compact' | 'large';
-  orientation?: 'horizontal' | 'vertical';
+  variant?: "default" | "compact" | "large";
+  orientation?: "horizontal" | "vertical";
   showLabels?: boolean;
   animated?: boolean;
   defaultActiveIndex?: number;
@@ -31,18 +33,18 @@ export interface MenuDockProps {
 }
 
 const defaultItems: MenuDockItem[] = [
-  { label: 'home', icon: () => null },
-  { label: 'work', icon: () => null },
-  { label: 'calendar', icon: () => null },
-  { label: 'security', icon: () => null },
-  { label: 'settings', icon: () => null },
+  { label: "home", icon: () => null },
+  { label: "work", icon: () => null },
+  { label: "calendar", icon: () => null },
+  { label: "security", icon: () => null },
+  { label: "settings", icon: () => null },
 ];
 
 export const MenuDock: React.FC<MenuDockProps> = ({
   items,
   className,
-  variant = 'default',
-  orientation = 'horizontal',
+  variant = "default",
+  orientation = "horizontal",
   showLabels = true,
   animated = true,
   defaultActiveIndex = 0,
@@ -59,11 +61,11 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   }, [items]);
 
   const [internalActiveIndex, setInternalActiveIndex] = useState(defaultActiveIndex);
-  
+
   // Usar índice controlado se fornecido, caso contrário usar estado interno
   const isControlled = controlledActiveIndex !== undefined;
   const activeIndex = isControlled ? controlledActiveIndex : internalActiveIndex;
-  
+
   const setActiveIndex = (index: number) => {
     if (!isControlled) {
       setInternalActiveIndex(index);
@@ -87,46 +89,47 @@ export const MenuDock: React.FC<MenuDockProps> = ({
       const activeButton = itemRefs.current[activeIndex];
       const activeText = textRefs.current[activeIndex];
 
-      if (activeButton && activeText && showLabels && orientation === 'horizontal') {
+      if (activeButton && activeText && showLabels && orientation === "horizontal") {
         const buttonRect = activeButton.getBoundingClientRect();
         const textRect = activeText.getBoundingClientRect();
         const containerRect = activeButton.parentElement?.getBoundingClientRect();
 
         if (containerRect) {
           setUnderlineWidth(textRect.width);
-          setUnderlineLeft(buttonRect.left - containerRect.left + (buttonRect.width - textRect.width) / 2);
+          setUnderlineLeft(
+            buttonRect.left - containerRect.left + (buttonRect.width - textRect.width) / 2
+          );
         }
       }
     };
 
     updateUnderline();
-    window.addEventListener('resize', updateUnderline);
-    return () => window.removeEventListener('resize', updateUnderline);
-  }, [activeIndex, finalItems, showLabels, orientation]);
+    window.addEventListener("resize", updateUnderline);
+    return () => window.removeEventListener("resize", updateUnderline);
+  }, [activeIndex, showLabels, orientation]);
 
   const sizeClasses = {
-    default: 'p-3',
-    compact: 'p-2',
-    large: 'p-4',
+    default: "p-3",
+    compact: "p-2",
+    large: "p-4",
   };
 
   const iconSizes = {
-    default: 'w-5 h-5',
-    compact: 'w-4 h-4',
-    large: 'w-6 h-6',
+    default: "w-5 h-5",
+    compact: "w-4 h-4",
+    large: "w-6 h-6",
   };
 
   return (
     <nav
       className={cn(
-        'relative flex',
-        orientation === 'horizontal' ? 'flex-row' : 'flex-col',
-        'items-center gap-2',
-        'bg-background border border-border rounded-lg',
-        'p-2',
+        "relative flex",
+        orientation === "horizontal" ? "flex-row" : "flex-col",
+        "items-center gap-2",
+        "bg-background border border-border rounded-lg",
+        "p-2",
         className
       )}
-      role="navigation"
       aria-label="Menu dock"
     >
       {finalItems.map((item, index) => {
@@ -135,7 +138,8 @@ export const MenuDock: React.FC<MenuDockProps> = ({
 
         return (
           <button
-            key={index}
+            type="button"
+            key={item.id || `menu-item-${index}`}
             ref={(el) => {
               itemRefs.current[index] = el;
             }}
@@ -144,26 +148,26 @@ export const MenuDock: React.FC<MenuDockProps> = ({
               item.onClick?.();
             }}
             className={cn(
-              'relative flex items-center gap-2',
-              'px-3 py-2 rounded-md',
-              'transition-all duration-200',
-              'hover:bg-accent hover:text-accent-foreground',
-              isActive && 'bg-accent text-accent-foreground',
+              "relative flex items-center gap-2",
+              "px-3 py-2 rounded-md",
+              "transition-all duration-200",
+              "hover:bg-accent hover:text-accent-foreground",
+              isActive && "bg-accent text-accent-foreground",
               sizeClasses[variant]
             )}
             aria-label={item.label}
-            aria-current={isActive ? 'page' : undefined}
+            aria-current={isActive ? "page" : undefined}
           >
-            <Icon className={cn(iconSizes[variant], isActive && 'text-primary')} />
+            <Icon className={cn(iconSizes[variant], isActive && "text-primary")} />
             {showLabels && (
               <span
                 ref={(el) => {
                   textRefs.current[index] = el;
                 }}
                 className={cn(
-                  'text-sm font-medium',
-                  'transition-all duration-200',
-                  isActive && 'text-primary'
+                  "text-sm font-medium",
+                  "transition-all duration-200",
+                  isActive && "text-primary"
                 )}
               >
                 {item.label}
@@ -173,11 +177,11 @@ export const MenuDock: React.FC<MenuDockProps> = ({
         );
       })}
 
-      {showLabels && orientation === 'horizontal' && (
+      {showLabels && orientation === "horizontal" && (
         <div
           className={cn(
-            'absolute bottom-0 h-0.5 bg-primary transition-all duration-300',
-            animated && 'ease-out'
+            "absolute bottom-0 h-0.5 bg-primary transition-all duration-300",
+            animated && "ease-out"
           )}
           style={{
             width: `${underlineWidth}px`,
@@ -188,4 +192,3 @@ export const MenuDock: React.FC<MenuDockProps> = ({
     </nav>
   );
 };
-

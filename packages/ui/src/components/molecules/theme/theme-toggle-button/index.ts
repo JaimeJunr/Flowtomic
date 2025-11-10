@@ -1,3 +1,2 @@
-export { ThemeToggleButton } from './theme-toggle-button'
-export type { ThemeToggleButtonProps, StartPosition } from './theme-toggle-button'
-
+export type { StartPosition, ThemeToggleButtonProps } from "./theme-toggle-button";
+export { ThemeToggleButton } from "./theme-toggle-button";

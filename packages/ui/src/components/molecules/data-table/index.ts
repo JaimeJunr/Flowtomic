@@ -1,12 +1,16 @@
-export { DataTable } from './data-table'
-export type { DataTableProps, Column } from './data-table'
-
 // Re-export TanStack Table types
 export type {
   ColumnDef,
-  SortingState,
   ColumnFiltersState,
-  VisibilityState,
   PaginationState,
-} from '@tanstack/react-table'
-
+  SortingState,
+  VisibilityState,
+} from "@tanstack/react-table";
+export type { Column, DataTableProps } from "./data-table";
+export { DataTable } from "./data-table";
+export {
+  DataTablePagination,
+  type DataTablePaginationProps,
+  DataTablePaginationSkeleton,
+  type DataTablePaginationSkeletonProps,
+} from "./data-table-pagination";

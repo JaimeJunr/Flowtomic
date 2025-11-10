@@ -3,9 +3,9 @@
  */
 
 export interface BlockCategory {
-  name: string
-  slug: string
-  hidden?: boolean
+  name: string;
+  slug: string;
+  hidden?: boolean;
 }
 
 export const registryCategories: BlockCategory[] = [
@@ -29,5 +29,4 @@ export const registryCategories: BlockCategory[] = [
     slug: "application",
     hidden: false,
   },
-]
-
+];

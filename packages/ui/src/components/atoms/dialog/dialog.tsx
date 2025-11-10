@@ -1,46 +1,48 @@
 /**
- * Dialog Component - Zoo UI
+ * Dialog Component - Flowtomic UI
  *
  * Componente Dialog próprio do design-system baseado em Radix UI
  * Implementação direta sem dependência de componentes externos
  */
 
-import * as React from "react"
-import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { X } from "lucide-react"
-import { cn } from '../../../lib/utils'
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
+import * as React from "react";
+import { cn } from "../../../lib/utils";
 
-export type DialogProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>
-export type DialogTriggerProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>
-export type DialogContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
-export type DialogHeaderProps = React.HTMLAttributes<HTMLDivElement>
-export type DialogFooterProps = React.HTMLAttributes<HTMLDivElement>
-export type DialogTitleProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
-export type DialogDescriptionProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+export type DialogProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>;
+export type DialogTriggerProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>;
+export type DialogContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>;
+export type DialogHeaderProps = React.HTMLAttributes<HTMLDivElement>;
+export type DialogFooterProps = React.HTMLAttributes<HTMLDivElement>;
+export type DialogTitleProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>;
+export type DialogDescriptionProps = React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Description
+>;
 
 /**
  * Dialog - Container principal do dialog
  */
-const Dialog = DialogPrimitive.Root
-Dialog.displayName = "Dialog"
+const Dialog = DialogPrimitive.Root;
+Dialog.displayName = "Dialog";
 
 /**
  * DialogTrigger - Trigger do dialog
  */
-const DialogTrigger = DialogPrimitive.Trigger
-DialogTrigger.displayName = "DialogTrigger"
+const DialogTrigger = DialogPrimitive.Trigger;
+DialogTrigger.displayName = "DialogTrigger";
 
 /**
  * DialogPortal - Portal do dialog
  */
-const DialogPortal = DialogPrimitive.Portal
-DialogPortal.displayName = "DialogPortal"
+const DialogPortal = DialogPrimitive.Portal;
+DialogPortal.displayName = "DialogPortal";
 
 /**
  * DialogClose - Botão de fechar do dialog
  */
-const DialogClose = DialogPrimitive.Close
-DialogClose.displayName = "DialogClose"
+const DialogClose = DialogPrimitive.Close;
+DialogClose.displayName = "DialogClose";
 
 /**
  * DialogOverlay - Overlay do dialog
@@ -57,8 +59,8 @@ const DialogOverlay = React.forwardRef<
     )}
     {...props}
   />
-))
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
+));
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 /**
  * DialogContent - Conteúdo do dialog
@@ -84,42 +86,27 @@ const DialogContent = React.forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
-))
-DialogContent.displayName = "DialogContent"
+));
+DialogContent.displayName = "DialogContent";
 
 /**
  * DialogHeader - Cabeçalho do dialog
  */
-const DialogHeader = ({
-  className,
-  ...props
-}: DialogHeaderProps) => (
-  <div
-    className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
-      className
-    )}
-    {...props}
-  />
-)
-DialogHeader.displayName = "DialogHeader"
+const DialogHeader = ({ className, ...props }: DialogHeaderProps) => (
+  <div className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)} {...props} />
+);
+DialogHeader.displayName = "DialogHeader";
 
 /**
  * DialogFooter - Rodapé do dialog
  */
-const DialogFooter = ({
-  className,
-  ...props
-}: DialogFooterProps) => (
+const DialogFooter = ({ className, ...props }: DialogFooterProps) => (
   <div
-    className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className
-    )}
+    className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
     {...props}
   />
-)
-DialogFooter.displayName = "DialogFooter"
+);
+DialogFooter.displayName = "DialogFooter";
 
 /**
  * DialogTitle - Título do dialog
@@ -130,14 +117,11 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
-      className
-    )}
+    className={cn("text-lg font-semibold leading-none tracking-tight", className)}
     {...props}
   />
-))
-DialogTitle.displayName = DialogPrimitive.Title.displayName
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
 /**
  * DialogDescription - Descrição do dialog
@@ -151,8 +135,8 @@ const DialogDescription = React.forwardRef<
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
-))
-DialogDescription.displayName = DialogPrimitive.Description.displayName
+));
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 export {
   Dialog,
@@ -165,5 +149,4 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-}
-
+};

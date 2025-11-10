@@ -1,21 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from './card';
-import { Button } from '../button/button';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "../button/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card";
 
 const meta = {
-  title: 'Zoo UI/Atoms/Card',
+  title: "Flowtomic UI/Atoms/Card",
   component: Card,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof Card>;
 
 export default meta;
@@ -25,14 +18,14 @@ export const Default: Story = {
   render: () => (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card description goes here</CardDescription>
+        <CardTitle>Título do Card</CardTitle>
+        <CardDescription>Descrição do card vai aqui</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Card content area</p>
+        <p>Área de conteúdo do card</p>
       </CardContent>
       <CardFooter>
-        <Button>Action</Button>
+        <Button>Ação</Button>
       </CardFooter>
     </Card>
   ),
@@ -42,7 +35,7 @@ export const Simple: Story = {
   render: () => (
     <Card className="w-[350px]">
       <CardContent className="pt-6">
-        <p>Simple card with just content</p>
+        <p>Card simples apenas com conteúdo</p>
       </CardContent>
     </Card>
   ),
@@ -52,11 +45,11 @@ export const WithHeader: Story = {
   render: () => (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Card with Header</CardTitle>
-        <CardDescription>This card has a header section</CardDescription>
+        <CardTitle>Card com Cabeçalho</CardTitle>
+        <CardDescription>Este card possui uma seção de cabeçalho</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Content goes here</p>
+        <p>Conteúdo vai aqui</p>
       </CardContent>
     </Card>
   ),
@@ -66,11 +59,11 @@ export const WithFooter: Story = {
   render: () => (
     <Card className="w-[350px]">
       <CardContent className="pt-6">
-        <p>Card content</p>
+        <p>Conteúdo do card</p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Save</Button>
+        <Button variant="outline">Cancelar</Button>
+        <Button>Salvar</Button>
       </CardFooter>
     </Card>
   ),
@@ -80,17 +73,16 @@ export const Complete: Story = {
   render: () => (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Complete Card</CardTitle>
-        <CardDescription>This is a complete card example</CardDescription>
+        <CardTitle>Card Completo</CardTitle>
+        <CardDescription>Este é um exemplo de card completo</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>This card includes header, content, and footer sections.</p>
+        <p>Este card inclui seções de cabeçalho, conteúdo e rodapé.</p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Confirm</Button>
+        <Button variant="outline">Cancelar</Button>
+        <Button>Confirmar</Button>
       </CardFooter>
     </Card>
   ),
 };
-

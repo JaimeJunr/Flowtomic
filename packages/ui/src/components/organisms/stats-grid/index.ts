@@ -1,3 +1,2 @@
-export { StatsGrid } from './stats-grid'
-export type { StatsGridProps, StatItem } from './stats-grid'
-
+export type { StatItem, StatsGridProps } from "./stats-grid";
+export { StatsGrid } from "./stats-grid";
