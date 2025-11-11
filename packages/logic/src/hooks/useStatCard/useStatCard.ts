@@ -8,11 +8,11 @@
  *
  * @example
  * ```tsx
+ * // Cálculo automático do delta a partir de lastMonth
  * function MyCustomStatCard() {
  *   const { formattedValue, trend, getCardProps } = useStatCard({
  *     value: 122380,
- *     delta: 15.1,
- *     lastMonth: 105922,
+ *     lastMonth: 105922, // delta será calculado automaticamente: +15.5%
  *   })
  *
  *   return (
@@ -21,6 +21,15 @@
  *       <Badge>{trend.percentage}</Badge>
  *     </div>
  *   )
+ * }
+ *
+ * // Ou forneça delta explicitamente para casos especiais
+ * function CustomDeltaCard() {
+ *   const { formattedValue, trend } = useStatCard({
+ *     value: 122380,
+ *     delta: 15.1, // delta explícito tem prioridade
+ *     lastMonth: 105922,
+ *   })
  * }
  * ```
  */
@@ -35,11 +44,14 @@ export interface StatCardData {
 
   /**
    * Percentual de variação (positivo ou negativo)
+   * Se não fornecido, será calculado automaticamente quando `lastMonth` estiver disponível.
+   * Fórmula: ((value - lastMonth) / lastMonth) * 100
    */
   delta?: number;
 
   /**
    * Valor do mês anterior para comparação
+   * Se fornecido e `delta` não estiver definido, o delta será calculado automaticamente.
    */
   lastMonth?: number;
 
@@ -158,11 +170,11 @@ function formatNumberDefault(n: number): string {
  *
  * @example
  * ```tsx
+ * // Cálculo automático do delta a partir de lastMonth
  * function MyCustomStatCard() {
  *   const { formattedValue, trend, getCardProps } = useStatCard({
  *     value: 122380,
- *     delta: 15.1,
- *     lastMonth: 105922,
+ *     lastMonth: 105922, // delta será calculado automaticamente: +15.5%
  *   })
  *
  *   return (
@@ -172,12 +184,21 @@ function formatNumberDefault(n: number): string {
  *     </div>
  *   )
  * }
+ *
+ * // Ou forneça delta explicitamente para casos especiais
+ * function CustomDeltaCard() {
+ *   const { formattedValue, trend } = useStatCard({
+ *     value: 122380,
+ *     delta: 15.1, // delta explícito tem prioridade
+ *     lastMonth: 105922,
+ *   })
+ * }
  * ```
  */
 export function useStatCard(data: StatCardData): UseStatCardReturn {
   const {
     value,
-    delta = 0,
+    delta: explicitDelta,
     lastMonth,
     prefix = "",
     suffix = "",
@@ -185,6 +206,22 @@ export function useStatCard(data: StatCardData): UseStatCardReturn {
     lastFormat,
     positive: explicitPositive,
   } = data;
+
+  // Calcula delta automaticamente se não fornecido mas lastMonth estiver disponível
+  const delta = useMemo(() => {
+    // Se delta foi fornecido explicitamente, usa ele (prioridade)
+    if (explicitDelta !== undefined) {
+      return explicitDelta;
+    }
+
+    // Se lastMonth foi fornecido, calcula o delta automaticamente
+    if (lastMonth !== undefined && lastMonth !== 0) {
+      return ((value - lastMonth) / lastMonth) * 100;
+    }
+
+    // Caso contrário, retorna 0
+    return 0;
+  }, [value, lastMonth, explicitDelta]);
 
   // Calcula se a tendência é positiva
   const isPositive = useMemo(() => {

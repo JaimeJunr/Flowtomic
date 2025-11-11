@@ -58,7 +58,7 @@ function StatCardDemo({
             <p className="text-xs text-muted-foreground mt-1">Mês anterior: {formattedLastMonth}</p>
           )}
         </div>
-        {delta !== undefined && delta !== 0 && (
+        {trend.delta > 0 && (
           <div className="flex flex-col items-end gap-1">
             <Badge
               variant={
@@ -82,17 +82,53 @@ function StatCardDemo({
 }
 
 export const PositiveTrend: Story = {
-  render: () => <StatCardDemo value={122380} delta={15.1} lastMonth={105922} prefix="R$ " />,
+  render: () => (
+    <StatCardDemo value={122380} lastMonth={105922} prefix="R$ " />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Delta calculado automaticamente: ((122380 - 105922) / 105922) * 100 = +15.5%",
+      },
+    },
+  },
 };
 
 export const NegativeTrend: Story = {
-  render: () => <StatCardDemo value={85000} delta={-8.5} lastMonth={92890} prefix="R$ " />,
+  render: () => <StatCardDemo value={85000} lastMonth={92890} prefix="R$ " />,
+  parameters: {
+    docs: {
+      description: {
+        story: "Delta calculado automaticamente: ((85000 - 92890) / 92890) * 100 = -8.5%",
+      },
+    },
+  },
 };
 
 export const WithSuffix: Story = {
   render: () => (
-    <StatCardDemo value={1500000} delta={12.3} lastMonth={1336500} prefix="$" suffix=" USD" />
+    <StatCardDemo value={1500000} lastMonth={1336500} prefix="$" suffix=" USD" />
   ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Delta calculado automaticamente com sufixo customizado",
+      },
+    },
+  },
+};
+
+export const ExplicitDelta: Story = {
+  render: () => (
+    <StatCardDemo value={122380} delta={15.1} lastMonth={105922} prefix="R$ " />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Delta explícito tem prioridade sobre o cálculo automático",
+      },
+    },
+  },
 };
 
 export const NoDelta: Story = {
@@ -101,4 +137,17 @@ export const NoDelta: Story = {
 
 export const LargeValue: Story = {
   render: () => <StatCardDemo value={2500000} delta={25.0} lastMonth={2000000} prefix="R$ " />,
+};
+
+export const PercentGrowth: Story = {
+  render: () => (
+    <StatCardDemo value={50} lastMonth={28} suffix="%" />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Crescimento percentual: de 28% para 50%. Delta calculado automaticamente: ((50 - 28) / 28) * 100 = +78.6%",
+      },
+    },
+  },
 };
