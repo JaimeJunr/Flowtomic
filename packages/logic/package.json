@@ -40,6 +40,7 @@
   "devDependencies": {
     "@types/react": "^19.1.16",
     "@tanstack/react-table": "^8.21.3",
+    "@xyflow/react": "^12.9.2",
     "react": "^19.1.1",
     "react-resizable-panels": "^3.0.6",
     "typescript": "~5.9.3"
