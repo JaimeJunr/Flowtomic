@@ -2,7 +2,7 @@
 
 Hooks headless do Flowtomic para lógica reutilizável sem dependências de UI.
 
-## 📦 Hooks Disponíveis (1)
+## 📦 Hooks Disponíveis (6)
 
 ### `use-stat-card`
 
@@ -10,16 +10,87 @@ Hook para gerenciar estado e lógica do componente StatCard.
 
 **Dependências**: `react`
 
-**Localização**: `packages/logic/src/hooks/useStatCard.ts`
+**Localização**: `packages/logic/src/hooks/useStatCard`
+
+### `use-mobile`
+
+Hook para detectar dispositivos móveis baseado em breakpoint (768px).
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useMoblile`
+
+**Nota**: O nome da pasta contém um typo (`useMoblile`), mas o hook exportado é `useIsMobile`.
+
+### `use-react-table-back`
+
+Hook headless para TanStack Table com paginação e ordenação no backend (server-side).
+
+**Dependências**: `@tanstack/react-table`, `react`
+
+**Localização**: `packages/logic/src/hooks/useReactTableBack`
+
+**Características**:
+- Paginação controlada pelo servidor
+- Ordenação controlada pelo servidor
+- Callbacks para mudanças de paginação e ordenação
+- Informações de paginação (total de páginas, total de itens, etc.)
+
+### `use-react-table-front`
+
+Hook headless para TanStack Table com paginação e ordenação no frontend (client-side).
+
+**Dependências**: `@tanstack/react-table`, `react`
+
+**Localização**: `packages/logic/src/hooks/useReactTableFront`
+
+**Características**:
+- Paginação no cliente
+- Ordenação no cliente
+- Filtros no cliente
+- Processamento de dados local
+
+### `use-resizable`
+
+Hook headless para gerenciar lógica de componentes redimensionáveis com sidebar.
+
+**Dependências**: `react-resizable-panels`, `react`
+
+**Localização**: `packages/logic/src/hooks/useResizable`
+
+**Características**:
+- Persistência de tamanho no localStorage
+- Suporte a snap automático
+- Detecção de mobile
+- Suporte a modo drawer em mobile
+- Controle de tamanhos mínimo e máximo
+
+### `use-theme-transition`
+
+Hook para gerenciar transições suaves de tema usando View Transitions API com fallback automático.
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useThemeTransition`
+
+**Características**:
+- Usa View Transitions API quando disponível
+- Fallback automático para navegadores sem suporte
+- Transições suaves de tema
 
 ## 🚀 Instalação
 
 ```bash
-# Instalar o hook
+# Instalar um hook específico
 npx flowtomic@latest add use-stat-card
+
+# Instalar múltiplos hooks
+npx flowtomic@latest add use-stat-card use-mobile use-resizable
 ```
 
-## 📖 Exemplo de Uso
+## 📖 Exemplos de Uso
+
+### useStatCard
 
 ```typescript
 import { useStatCard } from "@/hooks/use-stat-card";
@@ -35,6 +106,136 @@ export function StatCardExample() {
       <p>Valor: {formattedValue}</p>
       {isLoading && <p>Carregando...</p>}
     </div>
+  );
+}
+```
+
+### useIsMobile
+
+```typescript
+import { useIsMobile } from "@/hooks/use-mobile";
+
+export function ResponsiveComponent() {
+  const isMobile = useIsMobile();
+
+  return (
+    <div>
+      {isMobile ? (
+        <p>Versão Mobile</p>
+      ) : (
+        <p>Versão Desktop</p>
+      )}
+    </div>
+  );
+}
+```
+
+### useReactTableBack
+
+```typescript
+import { useReactTableBack } from "@/hooks/use-react-table-back";
+
+export function ServerTable() {
+  const { table, sorting, pagination, setPagination, paginationInfo } = useReactTableBack({
+    data: pageData,
+    columns: columnDefs,
+    totalCount: 1000,
+    onPaginationChange: ({ pageIndex, pageSize }) => {
+      fetchData({ page: pageIndex + 1, pageSize });
+    },
+    onSortingChange: (sorting) => {
+      fetchData({ sorting });
+    },
+  });
+
+  return (
+    <table>
+      {/* Usar table.getHeaderGroups(), table.getRowModel(), etc. */}
+    </table>
+  );
+}
+```
+
+### useReactTableFront
+
+```typescript
+import { useReactTableFront } from "@/hooks/use-react-table-front";
+
+export function ClientTable() {
+  const { table, sorting, pagination, setPagination, paginationInfo } = useReactTableFront({
+    data: allData,
+    columns: columnDefs,
+    enablePagination: true,
+    enableSorting: true,
+  });
+
+  return (
+    <table>
+      {/* Usar table.getHeaderGroups(), table.getRowModel(), etc. */}
+    </table>
+  );
+}
+```
+
+### useResizable
+
+```typescript
+import { useResizable } from "@/hooks/use-resizable";
+
+export function ResizableLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+  const {
+    handleDoubleClick,
+    shouldUseMobileDrawer,
+    containerRef,
+    autoSaveId,
+    handleLayout,
+    sidebarPanelRef,
+    sidebarSize,
+    minSize,
+    maxSize,
+    handleResizeEnd,
+  } = useResizable({
+    sidebarOpen,
+    setSidebarOpen,
+    side: "left",
+    persistKey: "main-sidebar",
+    defaultSidebarPct: 0.28,
+    minPx: 250,
+    maxPct: 0.6,
+    maxPxCap: 500,
+    mobileDrawer: true,
+  });
+
+  // Usar com react-resizable-panels
+  return (
+    <div ref={containerRef}>
+      {/* Implementação com react-resizable-panels */}
+    </div>
+  );
+}
+```
+
+### useThemeTransition
+
+```typescript
+import { useThemeTransition } from "@/hooks/use-theme-transition";
+
+export function ThemeToggle() {
+  const { startTransition } = useThemeTransition();
+  const { theme, toggleTheme } = useTheme();
+
+  const handleToggle = () => {
+    startTransition(() => {
+      toggleTheme();
+    });
+  };
+
+  return (
+    <button onClick={handleToggle}>
+      {theme === "dark" ? "☀️" : "🌙"}
+    </button>
   );
 }
 ```

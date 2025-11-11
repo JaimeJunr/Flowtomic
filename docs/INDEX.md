@@ -144,7 +144,7 @@ docs/
 ## 📅 Atualizações
 
 - **Última atualização**: 2025-11-09
-- **Versão da documentação**: 1.1.0
+- **Versão da documentação**: 1.2.0
 - **Próxima revisão**: 2025-12-09
 
 ## 🔧 Troubleshooting

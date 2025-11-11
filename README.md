@@ -85,7 +85,7 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 
 ## 📚 Componentes Disponíveis
 
-### Atoms (13)
+### Atoms (26)
 
 - `button` - Botão com variantes
 - `badge` - Badge/etiqueta
@@ -98,10 +98,23 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 - `alert` - Alerta
 - `alert-dialog` - Diálogo de confirmação
 - `dialog` - Modal/diálogo
+- `tooltip` - Tooltip para informações adicionais
+- `command` - Command palette/menu
+- `collapsible` - Container colapsável
+- `scroll-area` - Área de scroll customizada
+- `hover-card` - Card que aparece ao passar o mouse
+- `separator` - Separador horizontal/vertical
+- `loader` - Loading spinner animado
+- `shimmer` - Texto com efeito shimmer
+- `code-block` - Bloco de código com syntax highlighting
+- `inline-citation` - Citação inline com hover card
 - `dropdown-menu` - Menu dropdown
 - `sonner` - Toast notifications
+- `select` - Campo de seleção
+- `animated-shiny-text` - Texto com efeito shimmer animado
+- `progress` - Barra de progresso
 
-### Molecules (10)
+### Molecules (19)
 
 - `button-group` - Grupo de botões
 - `password-input` - Input de senha
@@ -113,18 +126,51 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 - `auth-navigation-link` - Link de navegação de auth
 - `auth-form-error-message` - Mensagem de erro de formulário
 - `social-login-buttons` - Botões de login social
+- `input-group` - Grupo de input com addons
+- `artifact` - Container de artifact
+- `message` - Componente de mensagem com branches
+- `suggestion` - Lista de sugestões
+- `sources` - Lista de fontes colapsável
+- `tool` - Display de tool
+- `task` - Item de task
+- `checkpoint` - Checkpoint display
+- `confirmation` - Confirmation dialog wrapper
 
-### Organisms (5)
+### Organisms (24)
 
 - `dashboard-layout` - Layout de dashboard
 - `stats-grid` - Grid de estatísticas
 - `monthly-summary` - Resumo mensal
 - `dashboard-header-actions` - Ações do header
 - `dashboard-movements-section` - Seção de movimentações
+- `resizable` - Componente redimensionável com sidebar
+- `conversation` - Container de conversa
+- `model-selector` - Seletor de modelo
+- `image` - Display de imagem gerada
+- `open-in-chat` - Dropdown para abrir em outras plataformas
+- `panel` - Panel do @xyflow/react
+- `toolbar` - Toolbar do @xyflow/react
+- `controls` - Controls do @xyflow/react
+- `connection` - Connection do @xyflow/react
+- `queue` - Fila de mensagens e tarefas
+- `reasoning` - Exibição de raciocínio do modelo
+- `plan` - Exibição de planos do modelo
+- `web-preview` - Visualizador de páginas web
+- `chain-of-thought` - Cadeia de raciocínio
+- `context` - Uso de contexto/tokens do modelo
+- `prompt-input` - Input de prompt complexo
+- `canvas` - Canvas do ReactFlow
+- `node` - Node do ReactFlow
+- `edge` - Edge do ReactFlow
 
-### Hooks (1)
+### Hooks (6)
 
 - `use-stat-card` - Hook para StatCard
+- `use-mobile` - Hook para detectar dispositivos móveis
+- `use-react-table-back` - Hook para tabelas com paginação/ordenação no backend
+- `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend
+- `use-resizable` - Hook para componentes redimensionáveis
+- `use-theme-transition` - Hook para transições de tema com View Transitions API
 
 ### Blocks (1)
 
@@ -191,7 +237,19 @@ bun run type-check   # Verificar tipos
 
 ## 🎯 Como Funciona
 
+O Flowtomic fornece um **estilo padrão** que funciona imediatamente, mas permite **customização total** dos componentes conforme sua preferência.
+
 O CLI copia os arquivos dos componentes diretamente para o seu projeto (similar ao shadcn/ui), permitindo customização total. Os imports são automaticamente ajustados para usar os aliases do seu projeto.
+
+### Estilo Padrão vs Customização
+
+- **Estilo Padrão**: Funciona imediatamente após importar os arquivos CSS do Flowtomic
+- **Customização**:
+  - Via `className` para ajustes pontuais
+  - Via variáveis CSS para temas globais
+  - Combinando ambos conforme necessário
+
+Para mais detalhes sobre customização, veja [docs/packages/ui.md](./docs/packages/ui.md).
 
 ## 📝 Exemplos
 

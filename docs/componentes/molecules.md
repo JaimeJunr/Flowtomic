@@ -2,7 +2,7 @@
 
 Componentes moleculares do Flowtomic. São combinações de atoms que formam componentes mais complexos.
 
-## 📦 Componentes Disponíveis (10)
+## 📦 Componentes Disponíveis (22)
 
 ### `button-group`
 
@@ -63,6 +63,82 @@ Mensagem de erro para formulários de autenticação.
 Botões de login social (Google, GitHub, etc.).
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `input-group`
+
+Grupo de input com addons e botões integrados.
+
+**Dependências**: `clsx`, `tailwind-merge`
+
+### `artifact`
+
+Container de artifact com header, actions e conteúdo.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `message`
+
+Componente de mensagem com suporte a branches e attachments.
+
+**Dependências**: `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`, `ai`
+
+### `suggestion`
+
+Lista de sugestões com scroll horizontal.
+
+**Dependências**: `clsx`, `tailwind-merge`
+
+### `sources`
+
+Lista de fontes colapsável.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `tool`
+
+Display de tool com collapsible para mostrar input/output.
+
+**Dependências**: `ai`, `lucide-react`, `clsx`, `tailwind-merge`
+
+### `task`
+
+Item de task com collapsible para mostrar detalhes.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `checkpoint`
+
+Checkpoint display com ícone e trigger.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `confirmation`
+
+Confirmation dialog wrapper para aprovação de ações.
+
+**Dependências**: `ai`, `clsx`, `tailwind-merge`
+
+### `connection`
+
+Componente ConnectionLineComponent do @xyflow/react para renderizar linhas de conexão temporárias.
+
+**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
+### `canvas`
+
+Wrapper do ReactFlow do @xyflow/react para visualização de grafos.
+
+**Dependências**: `@xyflow/react`
+
+**Nota**: Requer importação de CSS: `@xyflow/react/dist/style.css`
+
+### `animated-shiny-text` (Typography)
+
+Texto com efeito shimmer animado para destacar conteúdo. Implementação especializada que usa o componente atômico Shimmer.
+
+**Dependências**: `motion`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/typography/animated-shiny-text`
 
 ## 🚀 Instalação
 

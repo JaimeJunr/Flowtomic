@@ -2,7 +2,7 @@
 
 Componentes organizacionais do Flowtomic. São componentes complexos que combinam múltiplos molecules e atoms.
 
-## 📦 Componentes Disponíveis (5)
+## 📦 Componentes Disponíveis (22)
 
 ### `dashboard-layout`
 
@@ -34,6 +34,110 @@ Seção de movimentações do dashboard com tabela e filtros.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
+### `resizable-layout`
+
+Componente redimensionável com sidebar que suporta persistência, snap automático e modo mobile.
+
+**Dependências**: `@flowtomic/logic`, `react-resizable-panels`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/organisms/resizable-layout`
+
+### `conversation`
+
+Container de conversa com scroll automático e empty state.
+
+**Dependências**: `use-stick-to-bottom`, `lucide-react`, `clsx`, `tailwind-merge`
+
+### `model-selector`
+
+Seletor de modelo com dialog e command palette.
+
+**Dependências**: `cmdk`, `clsx`, `tailwind-merge`
+
+### `image`
+
+Display de imagem gerada com suporte a base64.
+
+**Dependências**: `ai`, `clsx`, `tailwind-merge`
+
+### `open-in-chat`
+
+Dropdown para abrir conversas em diferentes plataformas (ChatGPT, Claude, etc.).
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `panel`
+
+Wrapper do Panel do @xyflow/react para posicionar elementos sobre o canvas.
+
+**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
+### `toolbar`
+
+Wrapper do NodeToolbar do @xyflow/react para exibir ações em nodes.
+
+**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
+### `controls`
+
+Wrapper do Controls do @xyflow/react para controles de zoom e pan.
+
+**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
+### `queue`
+
+Componente de fila para exibir mensagens e tarefas com seções colapsáveis.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `reasoning`
+
+Componente para exibir raciocínio/thinking do modelo com suporte a streaming.
+
+**Dependências**: `@radix-ui/react-use-controllable-state`, `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`
+
+### `plan`
+
+Componente para exibir planos do modelo com suporte a streaming.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `web-preview`
+
+Componente para visualizar páginas web em iframe com console e navegação.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `chain-of-thought`
+
+Componente para exibir cadeia de raciocínio com steps e status.
+
+**Dependências**: `@radix-ui/react-use-controllable-state`, `lucide-react`, `clsx`, `tailwind-merge`
+
+### `context`
+
+Componente para exibir uso de contexto/tokens do modelo com cálculo de custos.
+
+**Dependências**: `tokenlens`, `ai`, `lucide-react`, `clsx`, `tailwind-merge`
+
+### `prompt-input`
+
+Componente complexo para input de prompt com suporte a attachments, speech recognition, e muito mais.
+
+**Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `clsx`, `tailwind-merge`
+
+### `node`
+
+Componente Node para ReactFlow baseado em Card com handles.
+
+**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
+### `edge`
+
+Componentes Edge para ReactFlow (Temporary e Animated).
+
+**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
 ## 🚀 Instalação
 
 ```bash
@@ -41,7 +145,7 @@ Seção de movimentações do dashboard com tabela e filtros.
 npx flowtomic@latest add dashboard-layout
 
 # Instalar múltiplos organisms
-npx flowtomic@latest add dashboard-layout stats-grid monthly-summary
+npx flowtomic@latest add dashboard-layout stats-grid monthly-summary resizable-layout
 ```
 
 ## 📖 Exemplos de Uso

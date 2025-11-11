@@ -4,18 +4,21 @@
 
 Este é um monorepo gerenciado com Bun workspaces contendo:
 
-- **`packages/ui/`** - `@flowtomic/ui`: Componentes UI reutilizáveis (atoms, molecules, organisms)
+- **`packages/ui/`** - `@flowtomic/ui`: Componentes UI reutilizáveis (atoms, molecules, organisms, blocks)
 - **`packages/logic/`** - `@flowtomic/logic`: Hooks headless e lógica reutilizável
+- **`packages/styles/`** - Estilos globais (globals.css, theme.css, typography.css)
 - **`cli/`** - `@flowtomic/cli`: CLI para instalação de componentes em projetos externos
+- **`registry/`** - Registry para componentes e blocks (compatível com shadcn CLI)
 
 ## Padrões de Desenvolvimento
 
 ### Estrutura de Componentes
 
-- **Atoms**: Componentes básicos em `packages/ui/src/components/atoms/`
-- **Molecules**: Componentes compostos em `packages/ui/src/components/molecules/`
-- **Organisms**: Componentes complexos em `packages/ui/src/components/organisms/`
-- **Hooks**: Hooks headless em `packages/logic/src/hooks/`
+- **Atoms**: Componentes básicos em `packages/ui/src/components/atoms/` (15 componentes)
+- **Molecules**: Componentes compostos em `packages/ui/src/components/molecules/` (10 componentes)
+- **Organisms**: Componentes complexos em `packages/ui/src/components/organisms/` (6 componentes)
+- **Blocks**: Componentes pré-construídos em `packages/ui/src/blocks/` (1 block)
+- **Hooks**: Hooks headless em `packages/logic/src/hooks/` (6 hooks)
 
 ### Convenções de Arquivos
 
@@ -57,9 +60,10 @@ useMobile/
 
 ### Dependências
 
-- **UI**: Baseado em Radix UI, Tailwind CSS, class-variance-authority
-- **Logic**: Hooks headless sem dependências de UI
+- **UI**: Baseado em Radix UI, Tailwind CSS v4.1.14, class-variance-authority, clsx, tailwind-merge
+- **Logic**: Hooks headless sem dependências de UI (apenas React e dependências específicas como @tanstack/react-table, react-resizable-panels)
 - **CLI**: Usa Bun para execução
+- **Estilos**: Tailwind CSS v4 com `@tailwindcss/postcss`, suporte a variáveis CSS customizáveis
 
 ### Component Map
 
@@ -83,6 +87,9 @@ Ao adicionar novos componentes/hooks:
 - Ajusta imports automaticamente para aliases do projeto
 - Resolve repositório via `FLOWTOMIC_REPO_PATH` ou caminhos padrão
 - Suporta instalação via GitHub sem publicação no npm
+- Comandos disponíveis: `init`, `add`, `add-block`, `list`
+- Compatível com shadcn CLI via registry: `https://registry.flowtomic.dev/all.json`
+- Publicado no npm como `flowtomic` (uso: `npx flowtomic@latest` ou `bunx flowtomic@latest`)
 
 ### TypeScript
 
@@ -216,13 +223,25 @@ bun run build-storybook
 5. **SEMPRE incluir** exemplos de uso real quando relevante
 6. **NUNCA criar** componente sem story correspondente
 
+### Estilos e Customização
+
+- **Estilos padrão**: Funcionam imediatamente após importar CSS do Flowtomic
+- **Ordem de importação obrigatória**:
+  1. `globals.css` - Inicializa Tailwind v4
+  2. `theme.css` - Define variáveis do tema usando @theme
+  3. `typography.css` - Estilos de tipografia que dependem das variáveis
+- **Customização**: Via `className` (ajustes pontuais) ou variáveis CSS (temas globais)
+- **Requisitos**: Tailwind CSS v4.1.14 com `@tailwindcss/postcss`
+- **Variáveis CSS**: Customizáveis via `:root` e `.dark` (--primary, --radius, etc.)
+
 ### Documentação
 
 - Atualizar `README.md` ao adicionar componentes
-- Atualizar `STATUS.md` com progresso de migração
-- Manter `CLI_USAGE.md` atualizado com novos comandos
+- Atualizar `docs/INDEX.md` com nova documentação
+- Manter `docs/cli/README.md` atualizado com novos comandos
 - Documentar dependências e requisitos
 - **SEMPRE criar** story para cada novo componente/hook
+- **SEMPRE consultar** `docs/` antes de implementar para identificar padrões estabelecidos
 
 ## Comandos Importantes
 
@@ -237,22 +256,120 @@ bun run build:ui         # Build apenas @flowtomic/ui
 bun run build:logic      # Build apenas @flowtomic/logic
 bun run build:cli        # Build apenas @flowtomic/cli
 
+# Linting e Formatação
+bun run lint             # Verificar lint
+bun run lint:fix          # Corrigir problemas de lint
+bun run format            # Formatar código
+bun run format:check      # Verificar formatação
+bun run fix:all           # Corrigir lint e formatar tudo
+
 # Storybook
-bun run storybook        # Executar Storybook em modo desenvolvimento
-bun run build-storybook  # Build estático do Storybook
+bun run storybook         # Executar Storybook em modo desenvolvimento
+bun run build-storybook   # Build estático do Storybook
+
+# Registry
+bun run registry:build    # Build do registry
+bun run registry:server   # Servidor do registry (desenvolvimento)
+
+# Limpeza
+bun run clean             # Limpar builds e node_modules
+
+# Testes
+bun run test              # Executar testes
 ```
+
+## Componentes Disponíveis
+
+### Atoms (15)
+
+- `button` - Botão com variantes
+- `badge` - Badge/etiqueta
+- `input` - Campo de entrada
+- `card` - Card container
+- `checkbox` - Checkbox
+- `skeleton` - Loading skeleton
+- `table` - Tabela base
+- `tabs` - Abas
+- `alert` - Alerta
+- `alert-dialog` - Diálogo de confirmação
+- `dialog` - Modal/diálogo
+- `dropdown-menu` - Menu dropdown
+- `sonner` - Toast notifications
+- `select` - Campo de seleção
+- `animated-shiny-text` - Texto com efeito shimmer animado (em `atoms/typography/`)
+
+### Molecules (10)
+
+- `button-group` - Grupo de botões
+- `password-input` - Input de senha
+- `image-dropzone` - Upload de imagem
+- `stat-card` - Card de estatística
+- `data-table` - Tabela avançada
+- `menu-dock` - Dock de menu
+- `theme-toggle-button` - Botão de toggle de tema (em `molecules/theme/`)
+- `auth-navigation-link` - Link de navegação de auth (em `molecules/auth/`)
+- `auth-form-error-message` - Mensagem de erro de formulário (em `molecules/auth/`)
+- `social-login-buttons` - Botões de login social
+
+### Organisms (6)
+
+- `dashboard-layout` - Layout de dashboard
+- `stats-grid` - Grid de estatísticas
+- `monthly-summary` - Resumo mensal
+- `dashboard-header-actions` - Ações do header
+- `dashboard-movements-section` - Seção de movimentações
+- `resizable-layout` - Componente redimensionável com sidebar
+
+### Hooks (6)
+
+- `use-stat-card` - Hook para StatCard
+- `use-mobile` (exportado como `useIsMobile`) - Hook para detectar dispositivos móveis
+- `use-react-table-back` - Hook para tabelas com paginação/ordenação no backend
+- `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend
+- `use-resizable` - Hook para componentes redimensionáveis
+- `use-theme-transition` - Hook para transições de tema com View Transitions API
+
+### Blocks (1)
+
+- `dashboard-01` - Dashboard simples com cards
+
+## Registry
+
+- **Localização**: `registry/` na raiz do projeto
+- **URL de produção**: `https://registry.flowtomic.dev`
+- **Compatibilidade**: Compatível com shadcn CLI
+- **Uso**: `npx shadcn@latest add https://registry.flowtomic.dev/all.json`
+- **Comandos**: `bun run registry:build` e `bun run registry:server`
+
+## Ferramentas e Tecnologias
+
+- **Runtime**: Bun 1.3.0+
+- **Build System**: Turbo
+- **Linter/Formatter**: Biome
+- **CSS Framework**: Tailwind CSS v4.1.14 com `@tailwindcss/postcss`
+- **Componentes Base**: Radix UI
+- **Ícones**: Lucide React
+- **Notificações**: Sonner
+- **Tabelas**: TanStack Table
+- **Formulários**: React Hook Form + Zod
+- **Temas**: next-themes
+- **Storybook**: @storybook/react-vite v10.0.6
 
 ## Regras Específicas
 
 1. **Nunca** adicionar dependências de negócio específico em atoms ou molecules
 2. **Sempre** manter hooks headless (sem UI)
-3. **Sempre** atualizar `component-map.ts` ao adicionar componentes
+3. **Sempre** atualizar `cli/src/utils/component-map.ts` ao adicionar componentes
 4. **Sempre** verificar se o CLI funciona após mudanças
 5. **Nunca** quebrar a API pública sem documentar mudanças
 6. **Sempre** manter compatibilidade com React 18 e 19
-7. **Sempre** usar Tailwind CSS para estilização
+7. **Sempre** usar Tailwind CSS v4 para estilização
 8. **Sempre** usar Radix UI para acessibilidade em componentes interativos
 9. **SEMPRE criar** story (`.stories.tsx`) para cada componente ou hook
 10. **NUNCA criar** componente/hook sem story correspondente
 11. **SEMPRE seguir** o padrão de estrutura: `pasta/index.ts + story + component`
 12. **SEMPRE usar** nomenclatura correta de títulos no Storybook (`Flowtomic UI/...` ou `Flowtomic Logic/...`)
+13. **SEMPRE consultar** `docs/INDEX.md` antes de implementar para identificar padrões estabelecidos
+14. **SEMPRE seguir** ordem de importação dos estilos: globals.css → theme.css → typography.css
+15. **SEMPRE usar** Biome para linting e formatação (não ESLint/Prettier)
+16. **SEMPRE atualizar** `docs/` ao adicionar novos componentes ou funcionalidades
