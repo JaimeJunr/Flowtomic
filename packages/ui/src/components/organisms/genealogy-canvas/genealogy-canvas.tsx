@@ -4,26 +4,23 @@
  * Componente para exibir árvores genealógicas interativas em um canvas
  */
 
-import { useEdgesState, useNodesState } from "@xyflow/react";
-import type { ComponentProps, ReactNode } from "react";
-import { useEffect, useMemo } from "react";
-import type {
-  GenealogyData,
-  RelationshipType,
-  UseGenealogyOptions,
-} from "@flowtomic/logic";
+import type { GenealogyData, RelationshipType, UseGenealogyOptions } from "@flowtomic/logic";
 import { useGenealogy } from "@flowtomic/logic";
-import { cn } from "../../../lib/utils";
-import { Canvas } from "../../molecules/canvas";
 import {
-  Position,
-  useInternalNode,
-  getBezierPath,
   BaseEdge,
   type EdgeProps,
+  getBezierPath,
   type InternalNode,
+  Position,
   type Node as ReactFlowNode,
+  useEdgesState,
+  useInternalNode,
+  useNodesState,
 } from "@xyflow/react";
+import type { ComponentProps, ReactNode } from "react";
+import { useEffect, useMemo } from "react";
+import { Canvas } from "@/components/molecules/flow/canvas";
+import { cn } from "@/lib/utils";
 import { Edge } from "../edge";
 import { Node, NodeDescription, NodeHeader, NodeTitle } from "../node";
 
@@ -80,13 +77,11 @@ function GenealogyNode({ data }: { data: GenealogyNodeData }) {
           />
         </div>
       )}
-      
+
       <NodeHeader>
         <NodeTitle>{person.name}</NodeTitle>
         {person.type && (
-          <NodeDescription className="text-xs capitalize">
-            {person.type}
-          </NodeDescription>
+          <NodeDescription className="text-xs capitalize">{person.type}</NodeDescription>
         )}
         {person.birthDate && (
           <NodeDescription className="text-xs">
@@ -229,7 +224,10 @@ export const GenealogyCanvas = ({
   );
 
   // Função auxiliar para obter coordenadas do handle
-  const getHandleCoordsByPosition = (node: InternalNode<ReactFlowNode>, handlePosition: Position) => {
+  const getHandleCoordsByPosition = (
+    node: InternalNode<ReactFlowNode>,
+    handlePosition: Position
+  ) => {
     const handleType = handlePosition === Position.Top ? "target" : "source";
     const handle = node.internals.handleBounds?.[handleType]?.find(
       (h) => h.position === handlePosition
@@ -322,4 +320,3 @@ export const GenealogyCanvas = ({
     </div>
   );
 };
-

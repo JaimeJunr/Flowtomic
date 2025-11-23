@@ -4,11 +4,11 @@
  * Componente de abas baseado em Radix UI com animações naturais
  */
 
+import { useAnimatedIndicator } from "@flowtomic/logic";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { motion, useReducedMotion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { useAnimatedIndicator } from "@flowtomic/logic";
 
 // Contexto para compartilhar estado do indicador entre TabsList e TabsTrigger
 interface TabsContextValue {
@@ -28,19 +28,14 @@ const TabsList = React.forwardRef<
   const listRef = React.useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
-  const { indicatorStyle, registerElement, unregisterElement, activeValue } =
-    useAnimatedIndicator({
-      containerRef: listRef as React.RefObject<HTMLElement>,
-      activeSelector: '[data-state="active"]',
-      getElementValue: (element) => {
-        // Buscar o valor do atributo data-value ou do value do botão
-        return (
-          element.getAttribute("data-value") ||
-          element.getAttribute("value") ||
-          ""
-        );
-      },
-    });
+  const { indicatorStyle, registerElement, unregisterElement, activeValue } = useAnimatedIndicator({
+    containerRef: listRef as React.RefObject<HTMLElement>,
+    activeSelector: '[data-state="active"]',
+    getElementValue: (element) => {
+      // Buscar o valor do atributo data-value ou do value do botão
+      return element.getAttribute("data-value") || element.getAttribute("value") || "";
+    },
+  });
 
   const registerTrigger = React.useCallback(
     (element: HTMLButtonElement | null, value: string) => {
@@ -170,14 +165,14 @@ const TabsContent = React.forwardRef<
   const shouldReduceMotion = useReducedMotion();
 
   return (
-  <TabsPrimitive.Content
-    ref={ref}
+    <TabsPrimitive.Content
+      ref={ref}
       value={value}
-    className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      className
-    )}
-    {...props}
+      className={cn(
+        "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        className
+      )}
+      {...props}
       asChild
     >
       <motion.div

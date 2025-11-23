@@ -77,8 +77,7 @@ const ScrollAreaViewport = React.forwardRef<
       // permitir scroll horizontal quando no limite vertical
       if (hasHorizontalScroll && e.deltaY !== 0) {
         const isAtTop = viewport.scrollTop <= 1;
-        const isAtBottom =
-          viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 1;
+        const isAtBottom = viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 1;
 
         // Se estiver no limite vertical ou não houver scroll vertical,
         // fazer scroll horizontal com a roda do mouse

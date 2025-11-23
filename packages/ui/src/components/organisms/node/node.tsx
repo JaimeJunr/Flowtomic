@@ -6,7 +6,7 @@
 
 import { Handle, Position } from "@xyflow/react";
 import type { ComponentProps } from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardAction,
@@ -19,15 +19,15 @@ import {
 
 /**
  * Configuração de handles do Node
- * 
+ *
  * Suporta dois modos:
  * 1. Modo simples: { target: boolean, source: boolean } - compatibilidade
  * 2. Modo avançado: { top, bottom, left, right } - controle completo
- * 
+ *
  * @example
  * // Modo simples
  * { target: true, source: true }
- * 
+ *
  * @example
  * // Modo avançado - todas as direções
  * {
@@ -59,7 +59,7 @@ export type NodeHandlesConfig =
 
 /**
  * Props do componente Node
- * 
+ *
  * @property {NodeHandlesConfig} handles - Configuração dos handles de conexão (obrigatório)
  * @property {string} className - Classes CSS adicionais
  * @property {ReactNode} children - Conteúdo do node
@@ -71,9 +71,9 @@ export type NodeProps = ComponentProps<typeof Card> & {
 
 /**
  * Componente Node para ReactFlow
- * 
+ *
  * Baseado em Card, suporta conexões em todas as direções (cima, baixo, esquerda, direita).
- * 
+ *
  * @example
  * ```tsx
  * <Node handles={{ target: true, source: true }}>
@@ -89,15 +89,18 @@ export const Node = ({ handles, className, ...props }: NodeProps) => {
   const isSimpleMode = "target" in handles || "source" in handles;
 
   return (
-  <Card
-    className={cn("node-container relative size-full h-auto w-sm gap-0 rounded-md p-0", className)}
-    {...props}
-  >
+    <Card
+      className={cn(
+        "node-container relative size-full h-auto w-sm gap-0 rounded-md p-0",
+        className
+      )}
+      {...props}
+    >
       {isSimpleMode ? (
         // Modo simples: compatibilidade com uso atual
         <>
-    {handles.target && <Handle position={Position.Left} type="target" />}
-    {handles.source && <Handle position={Position.Right} type="source" />}
+          {handles.target && <Handle position={Position.Left} type="target" />}
+          {handles.source && <Handle position={Position.Right} type="source" />}
         </>
       ) : (
         // Modo avançado: controle completo de todas as direções
@@ -128,9 +131,9 @@ export const Node = ({ handles, className, ...props }: NodeProps) => {
           )}
         </>
       )}
-    {props.children}
-  </Card>
-);
+      {props.children}
+    </Card>
+  );
 };
 
 export type NodeHeaderProps = ComponentProps<typeof CardHeader>;

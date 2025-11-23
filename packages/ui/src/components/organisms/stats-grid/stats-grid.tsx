@@ -22,9 +22,9 @@
  */
 
 import React from "react";
-import { cn } from "../../../lib/utils";
-import { StatCard } from "../../molecules/stat-card/stat-card";
-import { Card, CardHeader, CardContent, Skeleton } from "../../atoms";
+import { StatCard } from "@/components/molecules/data-display/stat-card/stat-card";
+import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, Skeleton } from "../../atoms";
 
 export interface StatItem {
   id: string;
@@ -74,7 +74,10 @@ export interface StatsGridProps {
 }
 
 const StatsGrid = React.forwardRef<HTMLDivElement, StatsGridProps>(
-  ({ stats, layout = "grid", loading = false, skeletonCount, className, columns, ...props }, ref) => {
+  (
+    { stats, layout = "grid", loading = false, skeletonCount, className, columns, ...props },
+    ref
+  ) => {
     // Colunas customizáveis ou padrão
     const getGridCols = () => {
       if (columns) {
@@ -109,10 +112,10 @@ const StatsGrid = React.forwardRef<HTMLDivElement, StatsGridProps>(
     if (loading) {
       // Determina o número de skeletons: usa skeletonCount, ou stats.length (se > 0), ou 3 por padrão
       const count = skeletonCount ?? (stats.length > 0 ? stats.length : 3);
-      
+
       // Gera IDs únicos para os skeletons
       const skeletonIds = Array.from({ length: count }, (_, i) => `stats-skeleton-${i}`);
-      
+
       return (
         <div ref={ref} className={cn("grid grid-cols-1 gap-6", gridCols, className)} {...props}>
           {skeletonIds.map((id) => (

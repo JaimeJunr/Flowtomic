@@ -7,7 +7,7 @@
 import type { LanguageModelUsage } from "ai";
 import { type ComponentProps, createContext, useContext } from "react";
 import { getUsage } from "tokenlens";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Button, HoverCard, HoverCardContent, HoverCardTrigger, Progress } from "../../atoms";
 
 const PERCENT_MAX = 100;

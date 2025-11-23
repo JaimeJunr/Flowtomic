@@ -7,7 +7,7 @@
 
 import { TrendingUp } from "lucide-react";
 import React from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Badge, Card, CardContent, CardHeader, CardTitle } from "../../atoms";
 
 export interface MonthlySummaryProps {

@@ -8,7 +8,7 @@ import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { BrainIcon, ChevronDownIcon, DotIcon, type LucideIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { createContext, memo, useContext, useMemo } from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Badge, Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../atoms";
 
 type ChainOfThoughtContextValue = {

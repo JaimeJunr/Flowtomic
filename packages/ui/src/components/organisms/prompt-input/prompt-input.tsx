@@ -40,7 +40,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { cn } from "../../../lib/utils";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupTextarea,
+} from "@/components/molecules/forms/input-group";
+import { cn } from "@/lib/utils";
 import {
   Button,
   Command,
@@ -63,12 +69,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../atoms";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupTextarea,
-} from "../../molecules/input-group";
 
 export type AttachmentsContext = {
   files: (FileUIPart & { id: string })[];

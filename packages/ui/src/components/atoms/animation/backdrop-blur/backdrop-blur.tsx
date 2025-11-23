@@ -131,13 +131,13 @@ const BackdropBlur = React.forwardRef<HTMLDivElement, BackdropBlurProps>(
         initial={false}
         animate={
           isOpen
-            ? { 
+            ? {
                 backdropFilter: `blur(${blurIntensity}px)`,
-                backgroundColor: backgroundColorWithOpacity.open
+                backgroundColor: backgroundColorWithOpacity.open,
               }
-            : { 
+            : {
                 backdropFilter: "blur(0px)",
-                backgroundColor: backgroundColorWithOpacity.closed
+                backgroundColor: backgroundColorWithOpacity.closed,
               }
         }
         transition={{ duration }}

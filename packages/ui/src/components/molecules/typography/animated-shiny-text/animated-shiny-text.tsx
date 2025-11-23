@@ -6,8 +6,8 @@
  */
 
 import type { ComponentPropsWithoutRef, FC } from "react";
-import { Shimmer } from "../../../atoms/animation/shimmer";
 import { cn } from "@/lib/utils";
+import { Shimmer } from "../../../atoms/animation/shimmer";
 
 export interface AnimatedShinyTextProps extends ComponentPropsWithoutRef<"span"> {
   /**
@@ -34,11 +34,12 @@ export const AnimatedShinyText: FC<AnimatedShinyTextProps> = ({
   ...props
 }) => {
   // Converte children para string para usar com Shimmer
-  const textContent = typeof children === "string" 
-    ? children 
-    : typeof children === "number" 
-    ? String(children)
-    : null;
+  const textContent =
+    typeof children === "string"
+      ? children
+      : typeof children === "number"
+        ? String(children)
+        : null;
 
   // Se não for string/number, renderiza sem shimmer (compatibilidade)
   if (textContent === null) {
@@ -53,9 +54,8 @@ export const AnimatedShinyText: FC<AnimatedShinyTextProps> = ({
   // O Shimmer multiplica spread pelo comprimento do texto para calcular a largura do gradiente
   // Para aproximar o comportamento do shimmerWidth original, usamos uma fórmula que
   // considera o comprimento do texto e a largura desejada
-  const spread = textContent.length > 0 
-    ? Math.max(0.5, shimmerWidth / (textContent.length * 10)) 
-    : 2;
+  const spread =
+    textContent.length > 0 ? Math.max(0.5, shimmerWidth / (textContent.length * 10)) : 2;
 
   return (
     <Shimmer
@@ -69,4 +69,3 @@ export const AnimatedShinyText: FC<AnimatedShinyTextProps> = ({
     </Shimmer>
   );
 };
-
