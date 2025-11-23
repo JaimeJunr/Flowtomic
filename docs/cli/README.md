@@ -245,6 +245,8 @@ npx flowtomic-cli@latest add button card input
 
 # 3. Adicionar um block completo
 npx flowtomic-cli@latest add-block dashboard-01
+# ou
+npx flowtomic-cli@latest add-block developer-panel
 
 # 4. Usar no projeto
 import { Button } from '@/components/ui/button'
@@ -285,8 +287,39 @@ export function LoginForm() {
 ```bash
 # 1. Adicionar block completo
 npx flowtomic-cli@latest add-block dashboard-01
+# ou para dashboard completo
+npx flowtomic-cli@latest add-block flowtomic-dashboard
 
 # 2. O block já vem com todos os componentes necessários
+```
+
+### Criar Painel de Desenvolvedor
+
+```bash
+# 1. Adicionar block completo de desenvolvedor
+npx flowtomic-cli@latest add-block developer-panel
+
+# 2. O block já vem com todos os componentes necessários
+# (button, card, badge, tabs, script-editor)
+```
+
+```typescript
+import DeveloperPanel from "@/app/developer/page";
+
+export default function DeveloperPage() {
+  return (
+    <DeveloperPanel
+      user={{
+        username: "dev.user",
+        email: "dev@example.com",
+        role: "ADMIN",
+        isAdmin: true,
+      }}
+      apiBaseUrl="https://api.example.com/api"
+      onOpenSwagger={() => window.open("https://api.example.com/swagger-ui.html")}
+    />
+  );
+}
 ```
 
 ### Criar Tabela de Dados

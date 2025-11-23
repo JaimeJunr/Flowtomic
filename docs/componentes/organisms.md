@@ -110,6 +110,24 @@ Componente para visualizar páginas web em iframe com console e navegação.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
+### `script-editor`
+
+Componente para editar e executar scripts com terminal interativo em tempo real.
+
+**Dependências**: `@flowtomic/logic`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/organisms/script-editor`
+
+**Características**:
+
+- Editor de código para scripts
+- Terminal interativo em tempo real via WebSocket
+- Preview da resposta do servidor formatado (JSON)
+- Abas para alternar entre terminal e preview
+- Execução de scripts no backend (WebSocket ou HTTP fallback)
+- Reconexão automática do WebSocket
+- Scroll automático do terminal
+
 ### `chain-of-thought`
 
 Componente para exibir cadeia de raciocínio com steps e status.

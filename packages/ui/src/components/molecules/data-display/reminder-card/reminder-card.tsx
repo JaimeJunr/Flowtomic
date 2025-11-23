@@ -5,8 +5,6 @@
  */
 
 import { Clock, X } from "lucide-react";
-import React from "react";
-import { cn } from "@/lib/utils";
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../../../atoms";
 
 export interface Reminder {
@@ -74,7 +72,7 @@ export function ReminderCard({
   }
 
   // Mostrar apenas o primeiro lembrete (ou todos se necessário)
-  const primaryReminder = reminders[0];
+  const _primaryReminder = reminders[0];
 
   return (
     <Card className={className}>

@@ -8,7 +8,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ButtonGroupProps extends React.HTMLAttributes<HTMLFieldSetElement> {
   orientation?: "horizontal" | "vertical";
   /**
    * Se true, força todos os botões a terem a mesma largura

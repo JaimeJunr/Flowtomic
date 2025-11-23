@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import type { ChartBarInteractiveDataPoint } from "./chart-bar-interactive";
 import { ChartBarInteractive } from "./chart-bar-interactive";
 

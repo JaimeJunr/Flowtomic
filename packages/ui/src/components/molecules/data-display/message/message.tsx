@@ -210,10 +210,13 @@ export const MessageBranchSelector = React.forwardRef<HTMLDivElement, MessageBra
 
     return (
       <ButtonGroup
-        ref={ref}
-        className="[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md"
+        ref={ref as React.ForwardedRef<HTMLFieldSetElement>}
+        className={cn(
+          "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md",
+          className
+        )}
         orientation="horizontal"
-        {...props}
+        {...(props as Omit<React.HTMLAttributes<HTMLFieldSetElement>, "className" | "orientation">)}
       />
     );
   }
@@ -277,7 +280,7 @@ export const MessageBranchPage = React.forwardRef<HTMLSpanElement, MessageBranch
 
     return (
       <ButtonGroupText
-        ref={ref}
+        ref={ref as React.ForwardedRef<HTMLDivElement>}
         className={cn("border-none bg-transparent text-muted-foreground shadow-none", className)}
         {...props}
       >
@@ -290,17 +293,24 @@ MessageBranchPage.displayName = "MessageBranchPage";
 
 export type MessageResponseProps = ComponentProps<typeof Streamdown>;
 
-export const MessageResponse = memo(
-  React.forwardRef<HTMLDivElement, MessageResponseProps>(({ className, ...props }, ref) => (
-    <Streamdown
-      ref={ref}
-      className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
-      {...props}
-    />
-  )),
+const MessageResponseComponent = React.forwardRef<HTMLDivElement, MessageResponseProps>(
+  ({ className, ...props }, _ref) => {
+    const { ref: _, ...streamdownProps } = props as { ref?: unknown; [key: string]: unknown };
+    return (
+      <Streamdown
+        className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
+        {...streamdownProps}
+      />
+    );
+  }
+);
+MessageResponseComponent.displayName = "MessageResponse";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const MessageResponse: any = memo(
+  MessageResponseComponent,
   (prevProps, nextProps) => prevProps.children === nextProps.children
 );
-MessageResponse.displayName = "MessageResponse";
 
 export type MessageAttachmentProps = HTMLAttributes<HTMLDivElement> & {
   data: FileUIPart;

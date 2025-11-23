@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Search, Send } from "lucide-react";
-import { Button } from "../../../atoms";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from "./input-group";
 
 const meta = {

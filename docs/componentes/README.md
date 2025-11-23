@@ -7,16 +7,16 @@
 - [Atoms](atoms.md) - Componentes básicos (54 componentes)
 - [Molecules](molecules.md) - Componentes compostos (36 componentes)
 - [Organisms](organisms.md) - Componentes complexos (23 componentes)
-- [Blocks](blocks.md) - Blocks pré-construídos (2 blocks)
-- [Hooks](hooks.md) - Hooks headless (11 hooks)
+- [Blocks](blocks.md) - Blocks pré-construídos (3 blocks)
+- [Hooks](hooks.md) - Hooks headless (12 hooks)
 
 ## 📊 Estatísticas
 
 - **Total de Atoms**: 54
 - **Total de Molecules**: 36
 - **Total de Organisms**: 23
-- **Total de Hooks**: 11
-- **Total de Blocks**: 2
+- **Total de Hooks**: 12
+- **Total de Blocks**: 3
 
 ## 🎯 Como Usar
 

@@ -28,7 +28,7 @@ function MyComponent() {
 }
 ```
 
-## Hooks Disponíveis (11)
+## Hooks Disponíveis (12)
 
 ### `useAnimatedIndicator`
 
@@ -61,6 +61,10 @@ Hook headless para TanStack Table com paginação e ordenação no frontend (cli
 ### `useResizable`
 
 Hook headless para gerenciar lógica de componentes redimensionáveis com sidebar.
+
+### `useScriptEditor`
+
+Hook headless para gerenciar editor de scripts com terminal interativo (WebSocket, execução, preview).
 
 ### `useStatCard`
 

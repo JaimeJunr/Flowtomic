@@ -64,11 +64,13 @@ export interface BreadcrumbPageProps extends React.ComponentProps<"span"> {}
 
 function BreadcrumbPage({ className, ...props }: BreadcrumbPageProps) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Usar span para manter flexibilidade de estilização
     <span
       data-slot="breadcrumb-page"
       role="link"
       aria-disabled="true"
       aria-current="page"
+      tabIndex={-1}
       className={cn("text-foreground font-normal", className)}
       {...props}
     />

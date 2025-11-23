@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "../../actions/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../display/card";
 import { Animated3D } from "./animated-3d";

@@ -115,8 +115,9 @@ function calculateLevels(hierarchy: Map<string, EntityHierarchy>): Map<string, n
 
   // Função recursiva para calcular nível
   const calculateLevel = (entityId: string): number => {
-    if (levels.has(entityId)) {
-      return levels.get(entityId)!;
+    const cachedLevel = levels.get(entityId);
+    if (cachedLevel !== undefined) {
+      return cachedLevel;
     }
 
     if (visited.has(entityId)) {
@@ -153,7 +154,7 @@ function calculateLevels(hierarchy: Map<string, EntityHierarchy>): Map<string, n
  * Organiza entidades por nível (geração) e calcula posições hierárquicas
  */
 function calculateHierarchicalPositions(
-  data: GenealogyData,
+  _data: GenealogyData,
   hierarchy: Map<string, EntityHierarchy>,
   nodeWidth: number,
   nodeHeight: number,
@@ -169,14 +170,15 @@ function calculateHierarchicalPositions(
     if (!entitiesByLevel.has(level)) {
       entitiesByLevel.set(level, []);
     }
-    entitiesByLevel.get(level)!.push(entityId);
+    entitiesByLevel.get(level)?.push(entityId);
   });
 
   // Calcular posições para cada nível, começando do nível 0 (raiz)
   const sortedLevels = Array.from(entitiesByLevel.keys()).sort((a, b) => a - b);
 
   sortedLevels.forEach((level) => {
-    const entityIds = entitiesByLevel.get(level)!;
+    const entityIds = entitiesByLevel.get(level);
+    if (!entityIds) return;
 
     // Ordenar entidades do mesmo nível (por ID para consistência)
     entityIds.sort();
@@ -216,12 +218,13 @@ function calculateHierarchicalPositions(
 
     // Ajustar posições para evitar sobreposição
     entityIds.forEach((entityId, index) => {
-      const currentPos = positions.get(entityId)!;
-      const minX = currentPos.x;
+      const currentPos = positions.get(entityId);
+      if (!currentPos) return;
 
       // Verificar se há sobreposição com outros nós do mesmo nível
       entityIds.slice(0, index).forEach((otherId) => {
-        const otherPos = positions.get(otherId)!;
+        const otherPos = positions.get(otherId);
+        if (!otherPos) return;
         if (Math.abs(currentPos.x - otherPos.x) < nodeWidth + horizontalSpacing) {
           // Ajustar para evitar sobreposição
           currentPos.x = otherPos.x + nodeWidth + horizontalSpacing;

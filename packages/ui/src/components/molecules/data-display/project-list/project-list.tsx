@@ -93,10 +93,23 @@ export function ProjectList({
             projects.map((project) => (
               <div
                 key={project.id}
-                onClick={() => onProjectClick?.(project)}
+                {...(onProjectClick
+                  ? {
+                      role: "button",
+                      tabIndex: 0,
+                      onClick: () => onProjectClick(project),
+                      onKeyDown: (e: React.KeyboardEvent) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onProjectClick(project);
+                        }
+                      },
+                    }
+                  : {})}
                 className={cn(
                   "flex items-center gap-3 p-3 rounded-lg border transition-colors",
-                  onProjectClick && "cursor-pointer hover:bg-accent"
+                  onProjectClick &&
+                    "cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
                 )}
               >
                 {/* Ícone */}

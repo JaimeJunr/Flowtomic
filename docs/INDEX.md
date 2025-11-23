@@ -27,12 +27,12 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 ### 🧩 Componentes
 
-- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (54 atoms, 36 molecules, 23 organisms, 11 hooks, 2 blocks)
+- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (54 atoms, 36 molecules, 23 organisms, 12 hooks, 3 blocks)
 - [Atoms](componentes/atoms.md) - Componentes básicos (54 componentes: button, input, card, etc.)
 - [Molecules](componentes/molecules.md) - Componentes compostos (36 componentes: button-group, data-table, etc.)
-- [Organisms](componentes/organisms.md) - Componentes complexos (23 componentes: dashboard-layout, stats-grid, etc.)
-- [Blocks](componentes/blocks.md) - Blocks pré-construídos (2 blocks: dashboard-01, flowtomic-dashboard)
-- [Hooks](componentes/hooks.md) - Hooks headless disponíveis (11 hooks)
+- [Organisms](componentes/organisms.md) - Componentes complexos (23 componentes: dashboard-layout, stats-grid, script-editor, etc.)
+- [Blocks](componentes/blocks.md) - Blocks pré-construídos (3 blocks: dashboard-01, flowtomic-dashboard, developer-panel)
+- [Hooks](componentes/hooks.md) - Hooks headless disponíveis (12 hooks)
 
 ### 🛠️ CLI
 

@@ -4,8 +4,6 @@
  * Gráfico de barras simples para analytics usando SVG puro
  */
 
-import React from "react";
-import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../atoms";
 
 export interface BarChartDataPoint {
@@ -98,7 +96,7 @@ export function BarChart({
   // Calcular valores máximos para normalização
   const maxValue = Math.max(...data.map((d) => d.value));
   const chartPadding = 40;
-  const barWidth = Math.max(20, (height - chartPadding * 2) / data.length - 8);
+  const _barWidth = Math.max(20, (height - chartPadding * 2) / data.length - 8);
   const chartWidth = 300;
 
   return (
@@ -115,7 +113,10 @@ export function BarChart({
             height={height}
             viewBox={`0 0 ${chartWidth} ${height}`}
             className="overflow-visible"
+            role="img"
+            aria-label={title || "Bar chart"}
           >
+            <title>{title || "Bar chart"}</title>
             {data.map((point, index) => {
               const barHeight =
                 maxValue > 0 ? (point.value / maxValue) * (height - chartPadding * 2) : 0;
@@ -125,7 +126,7 @@ export function BarChart({
               const fillColor = point.color || (isActive ? defaultColor : inactiveColor);
 
               return (
-                <g key={index}>
+                <g key={`bar-${point.label}-${index}`}>
                   {/* Barra */}
                   <rect
                     x={x}

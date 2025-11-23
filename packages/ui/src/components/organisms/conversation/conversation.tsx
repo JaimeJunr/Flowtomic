@@ -17,16 +17,20 @@ export type ConversationProps = ComponentProps<typeof StickToBottom>;
 export const Conversation = React.forwardRef<
   React.ElementRef<typeof StickToBottom>,
   ConversationProps
->(({ className, ...props }, ref) => (
-  <StickToBottom
-    ref={ref}
-    className={cn("relative flex-1 overflow-y-auto", className)}
-    initial="smooth"
-    resize="smooth"
-    role="log"
-    {...props}
-  />
-));
+>(({ className, children, ...props }, _ref) => {
+  const { ref: _, ...stickToBottomProps } = props as { ref?: unknown; [key: string]: unknown };
+  return (
+    <StickToBottom
+      className={cn("relative flex-1 overflow-y-auto", className)}
+      initial="smooth"
+      resize="smooth"
+      role="log"
+      {...stickToBottomProps}
+    >
+      {children}
+    </StickToBottom>
+  );
+});
 Conversation.displayName = "Conversation";
 
 export type ConversationContentProps = ComponentProps<typeof StickToBottom.Content>;
@@ -34,13 +38,14 @@ export type ConversationContentProps = ComponentProps<typeof StickToBottom.Conte
 export const ConversationContent = React.forwardRef<
   React.ElementRef<typeof StickToBottom.Content>,
   ConversationContentProps
->(({ className, ...props }, ref) => (
-  <StickToBottom.Content
-    ref={ref}
-    className={cn("flex flex-col gap-8 p-4", className)}
-    {...props}
-  />
-));
+>(({ className, children, ...props }, _ref) => {
+  const { ref: _, ...contentProps } = props as { ref?: unknown; [key: string]: unknown };
+  return (
+    <StickToBottom.Content className={cn("flex flex-col gap-8 p-4", className)} {...contentProps}>
+      {children}
+    </StickToBottom.Content>
+  );
+});
 ConversationContent.displayName = "ConversationContent";
 
 export type ConversationEmptyStateProps = ComponentProps<"div"> & {

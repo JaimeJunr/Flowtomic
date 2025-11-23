@@ -6,7 +6,6 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../../actions/button/button";
 import { Separator } from "../../display/separator/separator";
-import { Skeleton } from "../../display/skeleton/skeleton";
 import {
   Sheet,
   SheetContent,

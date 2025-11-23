@@ -54,7 +54,7 @@ const ToolbarInCanvas = ({
   toolbarChildren: ReactNode;
   toolbarPosition?: Position;
 }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState<ReactFlowNode[]>([
+  const [nodes, _setNodes, onNodesChange] = useNodesState<ReactFlowNode[]>([
     {
       id: "1",
       type: "custom",
@@ -62,7 +62,7 @@ const ToolbarInCanvas = ({
       data: { toolbarChildren, toolbarPosition },
     },
   ]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, _setEdges, onEdgesChange] = useEdgesState([]);
 
   const nodeTypes = {
     custom: ({ data }: { data: { toolbarChildren: ReactNode; toolbarPosition?: Position } }) => (
@@ -95,10 +95,16 @@ export const Default: Story = {
       <ToolbarInCanvas
         toolbarChildren={
           <div className="flex items-center gap-1">
-            <button className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs"
+            >
               Edit
             </button>
-            <button className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs"
+            >
               Delete
             </button>
           </div>
@@ -115,10 +121,16 @@ export const TopPosition: Story = {
         toolbarPosition={Position.Top}
         toolbarChildren={
           <div className="flex items-center gap-1">
-            <button className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs"
+            >
               Edit
             </button>
-            <button className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs"
+            >
               Delete
             </button>
           </div>
@@ -134,16 +146,28 @@ export const MultipleActions: Story = {
       <ToolbarInCanvas
         toolbarChildren={
           <div className="flex items-center gap-1">
-            <button className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs"
+            >
               Edit
             </button>
-            <button className="rounded bg-secondary px-2 py-1 text-secondary-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-secondary px-2 py-1 text-secondary-foreground text-xs"
+            >
               Copy
             </button>
-            <button className="rounded bg-secondary px-2 py-1 text-secondary-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-secondary px-2 py-1 text-secondary-foreground text-xs"
+            >
               Share
             </button>
-            <button className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs">
+            <button
+              type="button"
+              className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs"
+            >
               Delete
             </button>
           </div>

@@ -33,9 +33,15 @@ type ToolUIPartApproval =
     }
   | undefined;
 
+type ExtendedState =
+  | ToolUIPart["state"]
+  | "approval-requested"
+  | "approval-responded"
+  | "output-denied";
+
 type ConfirmationContextValue = {
   approval: ToolUIPartApproval;
-  state: ToolUIPart["state"];
+  state: ExtendedState;
 };
 
 const ConfirmationContext = createContext<ConfirmationContextValue | null>(null);
@@ -52,7 +58,7 @@ const useConfirmation = () => {
 
 export type ConfirmationProps = ComponentProps<typeof Alert> & {
   approval?: ToolUIPartApproval;
-  state: ToolUIPart["state"];
+  state: ExtendedState;
 };
 
 export const Confirmation = React.forwardRef<HTMLDivElement, ConfirmationProps>(

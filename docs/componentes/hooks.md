@@ -2,7 +2,7 @@
 
 Hooks headless do Flowtomic para lógica reutilizável sem dependências de UI.
 
-## 📦 Hooks Disponíveis (11)
+## 📦 Hooks Disponíveis (12)
 
 ### `use-animated-indicator`
 
@@ -156,6 +156,23 @@ Hook headless para calcular progresso de projetos (porcentagem, status, distribu
 - Determinar status geral (completed, in-progress, pending, on-hold)
 - Distribuição de projetos por status
 - Função customizada para calcular progresso individual
+
+### `use-script-editor`
+
+Hook headless para gerenciar editor de scripts com terminal interativo.
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useScriptEditor`
+
+**Características**:
+
+- Gerenciamento de conexão WebSocket com reconexão automática
+- Gerenciamento de linhas do terminal (input, output, error, system)
+- Gerenciamento de preview de resultados
+- Execução de scripts via WebSocket ou HTTP (fallback)
+- Controle de estado de execução (running, connected, etc.)
+- Abas para alternar entre terminal e preview
 
 ## 🚀 Instalação
 
@@ -365,6 +382,53 @@ export function GenealogyTree() {
     <ReactFlow nodes={nodes} edges={edges}>
       {/* Renderizar árvore genealógica */}
     </ReactFlow>
+  );
+}
+```
+
+### useScriptEditor
+
+```typescript
+import { useScriptEditor } from "@/hooks/use-script-editor";
+
+export function ScriptEditorExample() {
+  const {
+    script,
+    setScript,
+    terminalLines,
+    preview,
+    activeTab,
+    setActiveTab,
+    isRunning,
+    isConnected,
+    executeScript,
+    stopExecution,
+    clearTerminal,
+  } = useScriptEditor({
+    wsUrl: "ws://localhost:8080/ws/terminal",
+    executeScript: async (script) => {
+      // Fallback HTTP se WebSocket não estiver disponível
+      const response = await fetch("/api/scripts/execute", {
+        method: "POST",
+        body: JSON.stringify({ script }),
+      });
+      return response.json();
+    },
+    autoConnect: true,
+    maxReconnectAttempts: 3,
+  });
+
+  return (
+    <div>
+      <textarea value={script} onChange={(e) => setScript(e.target.value)} />
+      <button onClick={executeScript}>Executar</button>
+      <div>
+        {terminalLines.map((line) => (
+          <div key={line.id}>{line.content}</div>
+        ))}
+      </div>
+      {preview && <pre>{preview}</pre>}
+    </div>
   );
 }
 ```

@@ -1,24 +1,43 @@
 # ⚛️ Regras do Projeto Flowtomic
 
+> **⚠️ IMPORTANTE**: Este arquivo contém regras críticas para o agente de IA. Para informações detalhadas sobre componentes, estrutura e desenvolvimento, **SEMPRE consulte** `docs/INDEX.md` e a documentação específica.
+
+## 📚 Documentação Principal
+
+**SEMPRE consulte** a documentação antes de implementar:
+
+- **`docs/INDEX.md`** - Índice central de toda a documentação
+- **`docs/componentes/README.md`** - Lista completa de componentes (54 atoms, 24 molecules, 23 organisms, 11 hooks, 3 blocks)
+- **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
+- **`docs/packages/ui.md`** - Detalhes do package UI
+- **`docs/packages/logic.md`** - Detalhes do package Logic
+- **`docs/cli/README.md`** - Documentação do CLI
+
 ## Estrutura do Monorepo
 
-Este é um monorepo gerenciado com Bun workspaces contendo:
+**SEMPRE consulte** `docs/arquitetura/monorepo.md` para detalhes completos.
 
-- **`packages/ui/`** - `@flowtomic/ui`: Componentes UI reutilizáveis (atoms, molecules, organisms, blocks)
+Estrutura básica:
+
+- **`packages/ui/`** - `@flowtomic/ui`: Componentes UI reutilizáveis
 - **`packages/logic/`** - `@flowtomic/logic`: Hooks headless e lógica reutilizável
 - **`packages/styles/`** - Estilos globais (globals.css, theme.css, typography.css)
-- **`cli/`** - `@flowtomic/cli`: CLI para instalação de componentes em projetos externos
+- **`cli/`** - `@flowtomic/cli`: CLI para instalação de componentes
 - **`registry/`** - Registry para componentes e blocks (compatível com shadcn CLI)
 
 ## Padrões de Desenvolvimento
 
+**SEMPRE consulte** `docs/desenvolvimento/padroes.md` e `docs/componentes/README.md` para padrões completos.
+
 ### Estrutura de Componentes
 
-- **Atoms**: Componentes básicos em `packages/ui/src/components/atoms/` (54 componentes)
-- **Molecules**: Componentes compostos em `packages/ui/src/components/molecules/` (24 componentes)
-- **Organisms**: Componentes complexos em `packages/ui/src/components/organisms/` (22 componentes)
-- **Blocks**: Componentes pré-construídos em `packages/ui/src/blocks/` (2 blocks)
-- **Hooks**: Hooks headless em `packages/logic/src/hooks/` (10 hooks)
+**SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
+
+- **Atoms**: `docs/componentes/atoms.md` (54 componentes)
+- **Molecules**: `docs/componentes/molecules.md` (24 componentes)
+- **Organisms**: `docs/componentes/organisms.md` (23 componentes)
+- **Blocks**: `docs/componentes/blocks.md` (3 blocks)
+- **Hooks**: `docs/componentes/hooks.md` (11 hooks)
 
 ### Convenções de Arquivos
 
@@ -76,21 +95,26 @@ Ao adicionar novos componentes/hooks:
 
 ### Build e Desenvolvimento
 
-- Usar `bun run build` para build de todos os packages
-- Usar `bun run dev` para desenvolvimento com watch
-- Sempre executar `bun run type-check` antes de commits
-- CLI deve funcionar via `bunx` sem necessidade de publicação no npm
+**SEMPRE consulte** `docs/desenvolvimento/README.md` para comandos completos e guias de desenvolvimento.
+
+Comandos principais:
+
+- `bun run dev` - Desenvolvimento com watch
+- `bun run build` - Build de todos os packages
+- `bun run type-check` - Verificar tipos TypeScript
+- CLI funciona via `bunx` sem necessidade de publicação no npm
 
 ### CLI
 
+**SEMPRE consulte** `docs/cli/README.md` e `cli/README.md` para documentação completa do CLI.
+
+Informações essenciais:
+
 - CLI copia arquivos diretamente para projetos (estilo shadcn/ui)
 - Ajusta imports automaticamente para aliases do projeto
-- Resolve repositório via `FLOWTOMIC_REPO_PATH` ou caminhos padrão
-- Suporta instalação via GitHub sem publicação no npm
-- Comandos disponíveis: `init`, `add`, `add-block`, `list`
+- Comandos: `init`, `add`, `add-block`, `list`
 - Compatível com shadcn CLI via registry: `https://registry.flowtomic.dev/all.json`
-- Publicado no npm como `flowtomic-cli` (uso: `npx flowtomic-cli@latest` ou `bunx flowtomic-cli@latest`)
-- Packages publicados: `@flowtomic/ui@0.1.0` e `@flowtomic/logic@0.1.0`
+- Publicado no npm como `flowtomic-cli`
 
 ### TypeScript
 
@@ -226,232 +250,68 @@ bun run build-storybook
 
 ### Estilos e Customização
 
-- **Estilos padrão**: Funcionam imediatamente após importar CSS do Flowtomic
-- **Ordem de importação obrigatória**:
-  1. `globals.css` - Inicializa Tailwind v4
-  2. `theme.css` - Define variáveis do tema usando @theme
-  3. `typography.css` - Estilos de tipografia que dependem das variáveis
-- **Customização**: Via `className` (ajustes pontuais) ou variáveis CSS (temas globais)
+**SEMPRE consulte** `docs/packages/ui.md` para detalhes completos sobre estilos.
+
+Regras críticas:
+
+- **Ordem de importação obrigatória**: `globals.css` → `theme.css` → `typography.css`
 - **Requisitos**: Tailwind CSS v4.1.14 com `@tailwindcss/postcss`
-- **Variáveis CSS**: Customizáveis via `:root` e `.dark` (--primary, --radius, etc.)
+- **Customização**: Via `className` (ajustes pontuais) ou variáveis CSS (temas globais)
 
 ### Documentação
 
-- Atualizar `README.md` ao adicionar componentes
-- Atualizar `docs/INDEX.md` com nova documentação
-- Manter `docs/cli/README.md` atualizado com novos comandos
-- Documentar dependências e requisitos
-- **SEMPRE criar** story para cada novo componente/hook
-- **SEMPRE consultar** `docs/` antes de implementar para identificar padrões estabelecidos
+**SEMPRE siga** estas regras de documentação:
+
+- **SEMPRE consultar** `docs/INDEX.md` antes de implementar para identificar padrões estabelecidos
+- **SEMPRE atualizar** `docs/INDEX.md` ao adicionar nova documentação
+- **SEMPRE criar** story para cada novo componente/hook (ver seção Storybook abaixo)
+- **SEMPRE atualizar** documentação relevante em `docs/` ao adicionar componentes ou funcionalidades
 
 ## Comandos Importantes
 
-```bash
-# Desenvolvimento
-bun run dev              # Watch mode para todos os packages
-bun run build            # Build de todos os packages
-bun run type-check       # Verificar tipos TypeScript
+**SEMPRE consulte** `docs/desenvolvimento/README.md` para lista completa de comandos e guias de uso.
 
-# Packages específicos
-bun run build:ui         # Build apenas @flowtomic/ui
-bun run build:logic      # Build apenas @flowtomic/logic
-bun run build:cli        # Build apenas @flowtomic/cli
+Comandos principais:
 
-# Linting e Formatação
-bun run lint             # Verificar lint
-bun run lint:fix          # Corrigir problemas de lint
-bun run format            # Formatar código
-bun run format:check      # Verificar formatação
-bun run fix:all           # Corrigir lint e formatar tudo
-
-# Storybook
-bun run storybook         # Executar Storybook em modo desenvolvimento
-bun run build-storybook   # Build estático do Storybook
-
-# Registry
-bun run registry:build    # Build do registry
-bun run registry:server   # Servidor do registry (desenvolvimento)
-
-# Limpeza
-bun run clean             # Limpar builds e node_modules
-
-# Testes
-bun run test              # Executar testes
-```
+- `bun run dev` - Desenvolvimento com watch
+- `bun run build` - Build de todos os packages
+- `bun run type-check` - Verificar tipos TypeScript
+- `bun run storybook` - Executar Storybook
+- `bun run fix:all` - Corrigir lint e formatar tudo
 
 ## Componentes Disponíveis
 
-### Atoms (54)
+**🚨 CRÍTICO**: **SEMPRE consulte** `docs/componentes/README.md` para lista completa e detalhada de todos os componentes.
 
-Componentes básicos organizados por categoria:
+Resumo:
 
-**Formulários e Inputs:**
-
-- `button` - Botão com variantes
-- `input` - Campo de entrada
-- `textarea` - Campo de texto multilinha
-- `checkbox` - Checkbox
-- `select` - Campo de seleção
-- `label` - Label para formulários
-- `radio-group` - Grupo de radio buttons
-- `switch` - Switch toggle
-- `slider` - Slider de valores
-- `toggle` - Toggle button
-- `input-otp` - Input para códigos OTP
-- `field` - Campo de formulário completo
-- `form` - Wrapper de formulário com React Hook Form
-
-**Layout e Estrutura:**
-
-- `card` - Card container
-- `skeleton` - Loading skeleton
-- `table` - Tabela base
-- `tabs` - Abas
-- `separator` - Separador horizontal/vertical
-- `accordion` - Container colapsável
-- `aspect-ratio` - Container com proporção fixa
-- `toggle-group` - Grupo de toggles
-- `drawer` - Drawer lateral
-- `sidebar` - Sidebar navegável
-- `empty` - Estado vazio
-- `kbd` - Teclas de atalho
-
-**Feedback e Diálogos:**
-
-- `alert` - Alerta
-- `alert-dialog` - Diálogo de confirmação
-- `dialog` - Modal/diálogo
-- `popover` - Popover flutuante
-- `sheet` - Sheet lateral
-- `tooltip` - Tooltip para informações adicionais
-- `hover-card` - Card que aparece ao passar o mouse
-- `sonner` - Toast notifications
-
-**Navegação:**
-
-- `dropdown-menu` - Menu dropdown
-- `context-menu` - Menu de contexto
-- `breadcrumb` - Breadcrumb navigation
-- `pagination` - Paginação
-- `menubar` - Barra de menu
-- `navigation-menu` - Menu de navegação
-
-**Exibição de Dados:**
-
-- `badge` - Badge/etiqueta
-- `calendar` - Calendário
-- `carousel` - Carrossel
-- `chart` - Gráficos base
-- `code-block` - Bloco de código com syntax highlighting
-- `snippet` - Snippet de código
-- `inline-citation` - Citação inline com hover card
-
-**Animações e Efeitos:**
-
-- `loader` - Loading spinner animado
-- `shimmer` - Texto com efeito shimmer
-- `spinner` - Spinner animado
-- `animated-shiny-text` - Texto com efeito shimmer animado
-
-**Utilitários:**
-
-- `autocomplete` - Autocomplete
-- `command` - Command palette/menu
-- `collapsible` - Container colapsável
-- `scroll-area` - Área de scroll customizada
-- `progress` - Barra de progresso
-
-### Molecules (24)
-
-- `button-group` - Grupo de botões
-- `password-input` - Input de senha
-- `image-dropzone` - Upload de imagem
-- `stat-card` - Card de estatística
-- `data-table` - Tabela avançada
-- `menu-dock` - Dock de menu
-- `theme-toggle-button` - Botão de toggle de tema
-- `auth-navigation-link` - Link de navegação de auth
-- `auth-form-error-message` - Mensagem de erro de formulário
-- `social-login-buttons` - Botões de login social
-- `input-group` - Grupo de input com addons
-- `artifact` - Container de artifact
-- `message` - Componente de mensagem com branches
-- `suggestion` - Lista de sugestões
-- `sources` - Lista de fontes colapsável
-- `tool` - Display de tool
-- `task` - Item de task
-- `checkpoint` - Checkpoint display
-- `confirmation` - Confirmation dialog wrapper
-- `chart-area-interactive` - Gráfico de área interativo
-- `chart-bar-interactive` - Gráfico de barras interativo
-- `item` - Item de formulário
-- `connection` - Connection do @xyflow/react
-- `canvas` - Canvas do ReactFlow
-
-### Organisms (22)
-
-- `dashboard-layout` - Layout de dashboard
-- `stats-grid` - Grid de estatísticas
-- `monthly-summary` - Resumo mensal
-- `dashboard-header-actions` - Ações do header
-- `dashboard-movements-section` - Seção de movimentações
-- `resizable-layout` - Componente redimensionável com sidebar
-- `conversation` - Container de conversa
-- `model-selector` - Seletor de modelo
-- `image` - Display de imagem gerada
-- `open-in-chat` - Dropdown para abrir em outras plataformas
-- `panel` - Panel do @xyflow/react
-- `toolbar` - Toolbar do @xyflow/react
-- `controls` - Controls do @xyflow/react
-- `queue` - Fila de mensagens e tarefas
-- `reasoning` - Exibição de raciocínio do modelo
-- `plan` - Exibição de planos do modelo
-- `web-preview` - Visualizador de páginas web
-- `chain-of-thought` - Cadeia de raciocínio
-- `context` - Uso de contexto/tokens do modelo
-- `prompt-input` - Input de prompt complexo
-- `node` - Node do ReactFlow
-- `edge` - Edge do ReactFlow
-
-### Hooks (10)
-
-- `use-stat-card` - Hook para StatCard
-- `use-mobile` (exportado como `useIsMobile`) - Hook para detectar dispositivos móveis
-- `use-react-table-back` - Hook para tabelas com paginação/ordenação no backend
-- `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend
-- `use-resizable` - Hook para componentes redimensionáveis
-- `use-theme-transition` - Hook para transições de tema com View Transitions API
-- `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
-- `use-project-stats` - Hook para calcular estatísticas de projetos
-- `use-project-progress` - Hook para calcular progresso de projetos
-- `use-animated-indicator` - Hook para indicadores animados
-- `use-genealogy` - Hook para gerenciar genealogia/hierarquia
-
-### Blocks (2)
-
-- `dashboard-01` - Dashboard simples com cards
-- `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
+- **Atoms**: 54 componentes - Ver `docs/componentes/atoms.md`
+- **Molecules**: 24 componentes - Ver `docs/componentes/molecules.md`
+- **Organisms**: 23 componentes - Ver `docs/componentes/organisms.md`
+- **Hooks**: 11 hooks - Ver `docs/componentes/hooks.md`
+- **Blocks**: 3 blocks - Ver `docs/componentes/blocks.md`
 
 ## Registry
 
-- **Localização**: `registry/` na raiz do projeto
+**SEMPRE consulte** `docs/registry/README.md` e `registry/README.md` para documentação completa.
+
+Informações essenciais:
+
 - **URL de produção**: `https://registry.flowtomic.dev`
 - **Compatibilidade**: Compatível com shadcn CLI
 - **Uso**: `npx shadcn@latest add https://registry.flowtomic.dev/all.json`
-- **Comandos**: `bun run registry:build` e `bun run registry:server`
 
 ## Ferramentas e Tecnologias
 
+**SEMPRE consulte** `docs/arquitetura/padroes.md` para detalhes completos sobre tecnologias e padrões.
+
+Stack principal:
+
 - **Runtime**: Bun 1.3.0+
 - **Build System**: Turbo
-- **Linter/Formatter**: Biome
+- **Linter/Formatter**: Biome (não ESLint/Prettier)
 - **CSS Framework**: Tailwind CSS v4.1.14 com `@tailwindcss/postcss`
 - **Componentes Base**: Radix UI
-- **Ícones**: Lucide React
-- **Notificações**: Sonner
-- **Tabelas**: TanStack Table
-- **Formulários**: React Hook Form + Zod
-- **Temas**: next-themes
 - **Storybook**: @storybook/react-vite v10.0.6
 
 ## Regras Específicas

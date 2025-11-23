@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ArrowRight, Code, Layers, Settings, TestTube, Zap } from "lucide-react";
+import { ArrowRight, Code, Layers, TestTube, Zap } from "lucide-react";
 import { type Project, ProjectList } from "./project-list";
 
 const meta = {

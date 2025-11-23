@@ -1,6 +1,6 @@
 {
   "name": "@flowtomic/logic",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Hooks headless e lógica reutilizável para React",
   "type": "module",
   "main": "./dist/index.js",
@@ -27,7 +27,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
-    "build": "bun build ./src/index.ts --outdir ./dist --target browser --format esm --minify",
+    "build": "tsc --emitDeclarationOnly && bun build ./src/index.ts --outdir ./dist --target browser --format esm --minify",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",
     "lint": "biome check .",

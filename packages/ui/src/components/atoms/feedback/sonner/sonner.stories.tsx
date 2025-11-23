@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { fn } from "storybook/test";
 import { Button } from "../../actions/button";
 import { Toaster, toast } from "./sonner";

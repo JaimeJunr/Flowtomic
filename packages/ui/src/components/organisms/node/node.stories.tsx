@@ -55,7 +55,7 @@ type Story = StoryObj<typeof meta>;
 
 // Componente wrapper para usar Node dentro do Canvas
 const NodeInCanvas = ({ handles, children }: { handles: any; children: ReactNode }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState<ReactFlowNode[]>([
+  const [nodes, _setNodes, onNodesChange] = useNodesState<ReactFlowNode[]>([
     {
       id: "1",
       type: "custom",
@@ -63,7 +63,7 @@ const NodeInCanvas = ({ handles, children }: { handles: any; children: ReactNode
       data: { handles, children },
     },
   ]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, _setEdges, onEdgesChange] = useEdgesState([]);
 
   const nodeTypes = {
     custom: ({ data }: { data: { handles: any; children: ReactNode } }) => (
@@ -93,14 +93,12 @@ export const Default: Story = {
           right: { type: "source" },
         }}
       >
-        <>
-          <NodeHeader>
-            <NodeTitle>Node Title</NodeTitle>
-          </NodeHeader>
-          <NodeContent>
-            <p className="text-sm">Node content goes here</p>
-          </NodeContent>
-        </>
+        <NodeHeader>
+          <NodeTitle>Node Title</NodeTitle>
+        </NodeHeader>
+        <NodeContent>
+          <p className="text-sm">Node content goes here</p>
+        </NodeContent>
       </NodeInCanvas>
     </div>
   ),
@@ -117,14 +115,12 @@ export const AllDirections: Story = {
           right: { type: "source" },
         }}
       >
-        <>
-          <NodeHeader>
-            <NodeTitle>Node com todas as direções</NodeTitle>
-          </NodeHeader>
-          <NodeContent>
-            <p className="text-sm">Este node tem handles em todas as direções</p>
-          </NodeContent>
-        </>
+        <NodeHeader>
+          <NodeTitle>Node com todas as direções</NodeTitle>
+        </NodeHeader>
+        <NodeContent>
+          <p className="text-sm">Este node tem handles em todas as direções</p>
+        </NodeContent>
       </NodeInCanvas>
     </div>
   ),
@@ -139,14 +135,12 @@ export const VerticalOnly: Story = {
           bottom: { type: "source" },
         }}
       >
-        <>
-          <NodeHeader>
-            <NodeTitle>Node Vertical</NodeTitle>
-          </NodeHeader>
-          <NodeContent>
-            <p className="text-sm">Apenas conexões verticais (cima e baixo)</p>
-          </NodeContent>
-        </>
+        <NodeHeader>
+          <NodeTitle>Node Vertical</NodeTitle>
+        </NodeHeader>
+        <NodeContent>
+          <p className="text-sm">Apenas conexões verticais (cima e baixo)</p>
+        </NodeContent>
       </NodeInCanvas>
     </div>
   ),

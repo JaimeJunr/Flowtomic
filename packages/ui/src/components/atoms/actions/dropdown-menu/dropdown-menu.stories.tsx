@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MoreHorizontal, Settings, Share2, Trash, TriangleAlert } from "lucide-react";
-import React from "react";
 import { fn } from "storybook/test";
 import { Button } from "../button/button";
 import {

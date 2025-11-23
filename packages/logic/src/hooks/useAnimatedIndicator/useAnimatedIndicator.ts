@@ -193,7 +193,7 @@ export function useAnimatedIndicator(
   // Atualizar quando activeValue mudar
   useEffect(() => {
     scheduleUpdate();
-  }, [activeValue, scheduleUpdate]);
+  }, [scheduleUpdate]);
 
   // Listener de resize
   useEffect(() => {

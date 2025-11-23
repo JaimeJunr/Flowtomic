@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { Card, CardContent, CardHeader } from "../card/card";
 import { CardSkeleton, Skeleton, TableSkeleton } from "./skeleton";
 
@@ -72,21 +71,24 @@ export const CardContentSkeleton: Story = {
 };
 
 export const StatsGridStyle: Story = {
-  render: () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {Array.from({ length: 4 }, (_, i) => (
-        <Card key={i} className="border">
-          <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4 border-0">
-            <Skeleton className="h-4 w-24" />
-          </CardHeader>
-          <CardContent className="space-y-2.5">
-            <Skeleton className="h-8 w-32" />
-            <Skeleton className="h-4 w-40" />
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  ),
+  render: () => {
+    const cardIds = ["card-1", "card-2", "card-3", "card-4"];
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {cardIds.map((id) => (
+          <Card key={id} className="border">
+            <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4 border-0">
+              <Skeleton className="h-4 w-24" />
+            </CardHeader>
+            <CardContent className="space-y-2.5">
+              <Skeleton className="h-8 w-32" />
+              <Skeleton className="h-4 w-40" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  },
   parameters: {
     docs: {
       description: {

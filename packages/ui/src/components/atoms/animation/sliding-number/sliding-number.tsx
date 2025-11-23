@@ -130,7 +130,12 @@ function SlidingNumber({
   ...props
 }: SlidingNumberProps) {
   const localRef = React.useRef<HTMLSpanElement>(null);
-  React.useImperativeHandle(ref, () => localRef.current!);
+  React.useImperativeHandle(ref, () => {
+    if (!localRef.current) {
+      throw new Error("SlidingNumber ref is not available");
+    }
+    return localRef.current;
+  });
 
   const inViewResult = useInView(localRef, {
     once: inViewOnce,

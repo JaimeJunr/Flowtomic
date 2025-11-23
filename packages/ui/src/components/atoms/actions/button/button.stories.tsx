@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Download, MoreHorizontal } from "lucide-react";
-import React from "react";
 import { fn } from "storybook/test";
 import {
   DropdownMenu,

@@ -14,5 +14,6 @@ export * from "./hooks/useReactTableBack";
 export * from "./hooks/useReactTableFront";
 export * from "./hooks/useResizable";
 // Export hooks
+export * from "./hooks/useScriptEditor";
 export * from "./hooks/useStatCard";
 export * from "./hooks/useTimeTracker";

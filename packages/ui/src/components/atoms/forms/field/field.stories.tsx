@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { Input } from "../input/input";
 import { Field, FieldDescription, FieldError, FieldLabel } from "./field";
 

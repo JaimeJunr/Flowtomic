@@ -122,6 +122,7 @@ npm publish --access public
 - [ ] Testar CLI: `npx flowtomic-cli@latest init`
 - [ ] Testar adicionar componente: `npx flowtomic-cli@latest add button`
 - [ ] Testar adicionar block: `npx flowtomic-cli@latest add-block dashboard-01`
+- [ ] Testar adicionar developer-panel: `npx flowtomic-cli@latest add-block developer-panel`
 - [ ] Testar instalação dos packages: `npm install @flowtomic/ui @flowtomic/logic`
 - [ ] Testar com shadcn: `npx shadcn@latest add https://registry.flowtomic/all.json`
 

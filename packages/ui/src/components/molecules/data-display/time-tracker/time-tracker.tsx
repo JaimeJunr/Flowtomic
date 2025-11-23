@@ -6,7 +6,6 @@
 
 import { useTimeTracker } from "@flowtomic/logic";
 import { Pause, Play, Square } from "lucide-react";
-import React from "react";
 import { cn } from "@/lib/utils";
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../../../atoms";
 

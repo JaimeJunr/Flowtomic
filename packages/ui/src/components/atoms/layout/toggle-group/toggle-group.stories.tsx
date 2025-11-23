@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Bold, Italic, Underline } from "lucide-react";
-import React from "react";
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
 const meta = {

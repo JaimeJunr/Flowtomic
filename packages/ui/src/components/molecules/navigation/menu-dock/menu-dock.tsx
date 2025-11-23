@@ -48,7 +48,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   variant = "default",
   orientation = "horizontal",
   showLabels = true,
-  animated = true,
+  animated: _animated = true,
   defaultActiveIndex = 0,
   activeIndex: controlledActiveIndex,
   onActiveIndexChange,
@@ -91,7 +91,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   const { indicatorStyle, registerElement } = useAnimatedIndicator({
     containerRef: containerRef as React.RefObject<HTMLElement>,
     activeSelector: '[data-active="true"]',
-    getElementValue: (element) => {
+    getElementValue: (element: HTMLElement) => {
       return element.getAttribute("data-index") || "";
     },
     updateOnResize: showLabels && orientation === "horizontal",

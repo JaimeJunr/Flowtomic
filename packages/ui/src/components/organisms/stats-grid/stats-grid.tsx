@@ -148,24 +148,34 @@ const StatsGrid = React.forwardRef<HTMLDivElement, StatsGridProps>(
 
     return (
       <div ref={ref} className={cn("grid grid-cols-1 gap-6", gridCols, className)} {...props}>
-        {stats.map((stat) => (
-          <StatCard
-            key={stat.id}
-            title={stat.title}
-            value={stat.value}
-            subtitle={stat.subtitle}
-            trend={stat.trend}
-            trendPercentage={stat.trendPercentage}
-            color={stat.color}
-            delta={stat.delta}
-            lastMonth={stat.lastMonth}
-            prefix={stat.prefix}
-            suffix={stat.suffix}
-            format={stat.format}
-            lastFormat={stat.lastFormat}
-            positive={stat.positive}
-          />
-        ))}
+        {stats.map((stat) => {
+          const colorMap: Record<
+            "blue" | "green" | "orange" | "red" | "purple",
+            "primary" | "success" | "warning" | "error" | "info"
+          > = {
+            blue: "info",
+            green: "success",
+            orange: "warning",
+            red: "error",
+            purple: "primary",
+          };
+          return (
+            <StatCard
+              key={stat.id}
+              title={stat.title}
+              value={stat.value}
+              subtitle={stat.subtitle}
+              color={stat.color ? colorMap[stat.color] : undefined}
+              delta={stat.delta}
+              lastMonth={stat.lastMonth}
+              prefix={stat.prefix}
+              suffix={stat.suffix}
+              format={stat.format}
+              lastFormat={stat.lastFormat}
+              positive={stat.positive}
+            />
+          );
+        })}
       </div>
     );
   }

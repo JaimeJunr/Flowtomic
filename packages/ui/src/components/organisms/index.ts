@@ -294,6 +294,8 @@ export type {
   ResizableSplitProps,
 } from "./resizable-layout";
 export { ResizableLayout, ResizableSplit } from "./resizable-layout";
+export type { ScriptEditorProps } from "./script-editor";
+export { ScriptEditor } from "./script-editor";
 export type { StatItem, StatsGridProps } from "./stats-grid";
 export { StatsGrid } from "./stats-grid";
 export type { ToolbarProps } from "./toolbar";

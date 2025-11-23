@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import logoDark from "./logo_dark.svg";
 

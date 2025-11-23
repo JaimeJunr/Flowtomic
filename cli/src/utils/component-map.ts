@@ -688,6 +688,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["web-preview.tsx", "index.ts"],
     dependencies: ["lucide-react", "clsx", "tailwind-merge"],
   },
+  "script-editor": {
+    name: "script-editor",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/script-editor",
+    files: ["script-editor.tsx", "index.ts"],
+    dependencies: ["@flowtomic/logic", "lucide-react", "clsx", "tailwind-merge"],
+  },
   "chain-of-thought": {
     name: "chain-of-thought",
     type: "organism",

@@ -8,10 +8,9 @@ export interface ItemGroupProps extends React.ComponentProps<"div"> {}
 
 function ItemGroup({ className, ...props }: ItemGroupProps) {
   return (
-    <div
-      role="list"
+    <ul
       data-slot="item-group"
-      className={cn("group/item-group flex flex-col", className)}
+      className={cn("group/item-group flex flex-col list-none m-0 p-0", className)}
       {...props}
     />
   );

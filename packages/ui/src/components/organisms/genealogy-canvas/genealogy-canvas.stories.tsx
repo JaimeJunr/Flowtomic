@@ -1,6 +1,5 @@
 import type { GenealogyData } from "@flowtomic/logic";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { ReactNode } from "react";
 import { GenealogyCanvas } from "./genealogy-canvas";
 
 // Dados de exemplo para demonstração (pessoas)
@@ -79,7 +78,7 @@ const animalsData: GenealogyData = {
 };
 
 // Dados com adoção
-const adoptionData: GenealogyData = {
+const _adoptionData: GenealogyData = {
   people: [
     { id: "1", name: "Roberto Santos", birthDate: "1970-01-01", gender: "male" },
     { id: "2", name: "Laura Santos", birthDate: "1972-03-15", gender: "female" },

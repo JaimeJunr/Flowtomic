@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Command } from "lucide-react";
-import React from "react";
 import { Kbd, KbdGroup } from "./kbd";
 
 const meta = {

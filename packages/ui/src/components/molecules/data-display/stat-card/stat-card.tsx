@@ -9,7 +9,6 @@ import { type StatCardData, useStatCard } from "flowtomic/logic";
 import {
   ArrowDown,
   ArrowUp,
-  ArrowUpRight,
   Minus,
   MoreHorizontal,
   Pin,

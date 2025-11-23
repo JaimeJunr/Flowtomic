@@ -60,23 +60,9 @@ const BackdropBlur = React.forwardRef<HTMLDivElement, BackdropBlurProps>(
     },
     ref
   ) => {
-    if (disabled) {
-      return (
-        <div
-          ref={ref}
-          className={cn("fixed inset-0 z-40", className)}
-          style={{
-            backgroundColor: `${backgroundColor}${Math.round(opacity * 255)
-              .toString(16)
-              .padStart(2, "0")}`,
-            backdropFilter: isOpen ? `blur(${blurIntensity}px)` : "blur(0px)",
-          }}
-        />
-      );
-    }
-
     // Converte backgroundColor para rgba incluindo a opacidade
     // Usa useMemo para evitar recálculos desnecessários
+    // IMPORTANTE: Hook deve ser chamado antes de qualquer early return
     const backgroundColorWithOpacity = React.useMemo(() => {
       const convertToRgba = (color: string, opacityValue: number): string => {
         // Se já é rgba, extrai os valores RGB e aplica nova opacidade
@@ -124,6 +110,21 @@ const BackdropBlur = React.forwardRef<HTMLDivElement, BackdropBlurProps>(
         closed: convertToRgba(backgroundColor, 0),
       };
     }, [backgroundColor, opacity]);
+
+    if (disabled) {
+      return (
+        <div
+          ref={ref}
+          className={cn("fixed inset-0 z-40", className)}
+          style={{
+            backgroundColor: `${backgroundColor}${Math.round(opacity * 255)
+              .toString(16)
+              .padStart(2, "0")}`,
+            backdropFilter: isOpen ? `blur(${blurIntensity}px)` : "blur(0px)",
+          }}
+        />
+      );
+    }
 
     return (
       <motion.div

@@ -16,7 +16,7 @@ import {
   type AnimatedSlidingNumberProps,
 } from "../animated-sliding-number/animated-sliding-number";
 
-export interface ButtonCounterProps extends Omit<ButtonProps, "children"> {
+export interface ButtonCounterProps extends Omit<ButtonProps, "children" | "prefix" | "suffix"> {
   /**
    * Valor numérico atual
    */
@@ -117,10 +117,8 @@ function ButtonCounter({
           size={size}
           className={cn(
             "gap-2",
-            hideNumberBackground && "bg-transparent border-none shadow-none hover:bg-transparent",
-            buttonProps.className
+            hideNumberBackground && "bg-transparent border-none shadow-none hover:bg-transparent"
           )}
-          disabled={buttonProps.disabled}
           {...buttonProps}
         >
           {prefix}

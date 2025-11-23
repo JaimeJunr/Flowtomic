@@ -88,6 +88,7 @@ export interface FieldProps
 
 function Field({ className, orientation = "vertical", ...props }: FieldProps) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Usar div para manter flexibilidade de estilização
     <div
       role="group"
       data-slot="field"
@@ -221,7 +222,10 @@ function FieldError({ className, children, errors, ...props }: FieldErrorProps) 
 
     return (
       <ul className="ml-4 flex list-disc flex-col gap-1">
-        {uniqueErrors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
+        {uniqueErrors.map(
+          (error, index) =>
+            error?.message && <li key={`error-${error.message}-${index}`}>{error.message}</li>
+        )}
       </ul>
     );
   }, [children, errors]);

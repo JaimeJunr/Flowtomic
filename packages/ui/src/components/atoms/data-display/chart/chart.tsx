@@ -75,6 +75,7 @@ const ChartStyle = ({ id, config }: ChartStyleProps) => {
 
   return (
     <style
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: Necessário para injetar estilos CSS dinâmicos de temas
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(

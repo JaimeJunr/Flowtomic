@@ -398,6 +398,7 @@ function MyComponent() {
 - `queue` - Fila de mensagens e tarefas
 - `reasoning` - Exibição de raciocínio do modelo
 - `resizable-layout` - Componente redimensionável com sidebar
+- `script-editor` - Editor de scripts com terminal interativo
 - `stats-grid` - Grid de estatísticas
 - `toolbar` - Toolbar do @xyflow/react
 - `web-preview` - Visualizador de páginas web
@@ -412,14 +413,16 @@ function MyComponent() {
 - `use-react-table-back` - Hook para tabelas com paginação/ordenação no backend
 - `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend
 - `use-resizable` - Hook para componentes redimensionáveis
+- `use-script-editor` - Hook para gerenciar editor de scripts com terminal interativo
 - `use-stat-card` - Hook para StatCard
 - `use-theme-transition` - Hook para transições de tema com View Transitions API
 - `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
 
-### Blocks (2)
+### Blocks (3)
 
 - `dashboard-01` - Dashboard simples com cards
 - `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
+- `developer-panel` - Painel de desenvolvedor com informações do sistema, ambiente, ferramentas de desenvolvimento e editor de scripts integrado
 
 ## 🛠️ Desenvolvimento
 

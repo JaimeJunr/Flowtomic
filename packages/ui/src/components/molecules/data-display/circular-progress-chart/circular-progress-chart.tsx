@@ -4,8 +4,6 @@
  * Gráfico circular de progresso usando SVG puro
  */
 
-import React from "react";
-import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../atoms";
 
 export interface CircularProgressChartProps {
@@ -122,7 +120,14 @@ export function CircularProgressChart({
       <CardContent>
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="relative" style={{ width: size, height: size }}>
-            <svg width={size} height={size} className="transform -rotate-90">
+            <svg
+              width={size}
+              height={size}
+              className="transform -rotate-90"
+              role="img"
+              aria-label={title || label || "Circular progress chart"}
+            >
+              <title>{title || label || "Circular progress chart"}</title>
               {/* Track (fundo) */}
               <circle
                 cx={size / 2}
@@ -166,8 +171,8 @@ export function CircularProgressChart({
           {/* Legenda */}
           {legend && legend.length > 0 && (
             <div className="flex flex-wrap gap-4 justify-center mt-2">
-              {legend.map((item, index) => (
-                <div key={index} className="flex items-center gap-2">
+              {legend.map((item) => (
+                <div key={`legend-${item.label}`} className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
                   <span className="text-xs text-muted-foreground">{item.label}</span>
                 </div>

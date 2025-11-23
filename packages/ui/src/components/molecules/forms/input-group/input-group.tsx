@@ -6,7 +6,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button, type ButtonProps, Input } from "../../../atoms";
+import { Button, type ButtonProps } from "../../../atoms";
 
 export type InputGroupProps = React.HTMLAttributes<HTMLDivElement>;
 export type InputGroupAddonProps = React.HTMLAttributes<HTMLDivElement> & {

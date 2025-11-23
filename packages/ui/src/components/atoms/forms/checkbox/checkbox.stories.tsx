@@ -1,6 +1,5 @@
 import { Label } from "@radix-ui/react-label";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { Checkbox } from "./checkbox";
 
 const meta = {

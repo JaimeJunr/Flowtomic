@@ -195,7 +195,7 @@ export function ChartBarInteractive({
         </div>
         <div className="flex">
           {(["desktop", "mobile"] as const).map((key) => {
-            const chart = key as keyof typeof config;
+            const chart = key as "desktop" | "mobile";
             const isActive = activeChart === chart;
 
             return (
@@ -250,7 +250,7 @@ export function ChartBarInteractive({
                   className="w-[150px]"
                   nameKey="views"
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value as string | number | Date).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",

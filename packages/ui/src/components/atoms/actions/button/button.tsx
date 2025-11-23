@@ -48,10 +48,10 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, animated = false, transition, ...props }, ref) => {
-    const Comp = asChild ? Slot : animated ? motion.button : "button";
     const baseClassName = cn(buttonVariants({ variant, size, className }));
 
     if (animated && !asChild) {
+      const { onDrag: _onDrag, ...motionProps } = props;
       return (
         <motion.button
           ref={ref}
@@ -65,12 +65,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               damping: 17,
             }
           }
-          {...(props as HTMLMotionProps<"button">)}
+          {...(motionProps as Omit<HTMLMotionProps<"button">, "onDrag" | "ref">)}
         />
       );
     }
 
-    return <Comp className={baseClassName} ref={ref} {...props} />;
+    if (asChild) {
+      return <Slot className={baseClassName} ref={ref} {...props} />;
+    }
+    return <button className={baseClassName} ref={ref} {...props} />;
   }
 );
 Button.displayName = "Button";

@@ -29,7 +29,10 @@ export const WithButton: Story = {
   args: {
     children: (
       <div className="flex items-center gap-2 p-2">
-        <button className="rounded bg-primary px-3 py-1 text-primary-foreground text-sm">
+        <button
+          type="button"
+          className="rounded bg-primary px-3 py-1 text-primary-foreground text-sm"
+        >
           Action
         </button>
       </div>

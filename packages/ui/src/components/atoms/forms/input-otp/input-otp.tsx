@@ -65,7 +65,14 @@ export interface InputOTPSeparatorProps extends React.ComponentProps<"div"> {}
 
 function InputOTPSeparator({ ...props }: InputOTPSeparatorProps) {
   return (
-    <div data-slot="input-otp-separator" role="separator" {...props}>
+    // biome-ignore lint/a11y/useSemanticElements: Usar div para manter flexibilidade de estilização
+    <div
+      data-slot="input-otp-separator"
+      role="separator"
+      aria-valuenow={0}
+      tabIndex={-1}
+      {...props}
+    >
       <MinusIcon />
     </div>
   );

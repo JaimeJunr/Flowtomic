@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { Button } from "../../actions/button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 
@@ -15,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const content = Array.from({ length: 50 }, (_, i) => {
+const _content = Array.from({ length: 50 }, (_, i) => {
   const itemId = `scroll-item-${i + 1}`;
   return (
     <div key={itemId} className="p-4 border-b">
@@ -29,7 +28,7 @@ export const Default: Story = {
     <ScrollArea className="h-[200px] w-[300px] rounded-md border">
       <div className="p-4">
         {Array.from({ length: 10 }, (_, i) => (
-          <div key={i} className="p-2">
+          <div key={`scroll-item-${i + 1}`} className="p-2">
             Item {i + 1}
           </div>
         ))}

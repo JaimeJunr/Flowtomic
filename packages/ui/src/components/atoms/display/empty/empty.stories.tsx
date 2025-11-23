@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FileQuestion } from "lucide-react";
-import React from "react";
 import {
   Empty,
   EmptyContent,
@@ -58,7 +57,10 @@ export const WithAction: Story = {
         <EmptyDescription>Comece adicionando seu primeiro item à lista.</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+        <button
+          type="button"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+        >
           Adicionar Item
         </button>
       </EmptyContent>

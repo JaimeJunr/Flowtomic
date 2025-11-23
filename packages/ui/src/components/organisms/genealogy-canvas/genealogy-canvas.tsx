@@ -303,7 +303,7 @@ export const GenealogyCanvas = ({
       temporary: Edge.Temporary,
       dashed: Edge.Temporary, // Usar Temporary para edges tracejados (adoções)
     }),
-    []
+    [VerticalEdge]
   );
 
   return (
@@ -314,7 +314,7 @@ export const GenealogyCanvas = ({
         edges={edges}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        onNodesChange={onNodesChange as any}
+        onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
       />
     </div>

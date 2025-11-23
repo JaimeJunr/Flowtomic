@@ -5,7 +5,6 @@
  */
 
 import { Plus, User } from "lucide-react";
-import React from "react";
 import { cn } from "@/lib/utils";
 import {
   Avatar,
@@ -136,10 +135,23 @@ export function TeamMemberList({
             members.map((member) => (
               <div
                 key={member.id}
-                onClick={() => onMemberClick?.(member)}
+                {...(onMemberClick
+                  ? {
+                      role: "button",
+                      tabIndex: 0,
+                      onClick: () => onMemberClick(member),
+                      onKeyDown: (e: React.KeyboardEvent) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onMemberClick(member);
+                        }
+                      },
+                    }
+                  : {})}
                 className={cn(
                   "flex items-start gap-3 p-3 rounded-lg border transition-colors",
-                  onMemberClick && "cursor-pointer hover:bg-accent"
+                  onMemberClick &&
+                    "cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
                 )}
               >
                 {/* Avatar */}

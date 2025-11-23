@@ -112,6 +112,7 @@ function Carousel({
         canScrollNext,
       }}
     >
+      {/* biome-ignore lint/a11y/useSemanticElements: Usar div para manter flexibilidade de estilização e compatibilidade com props */}
       <div
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}
@@ -151,6 +152,7 @@ function CarouselItem({ className, ...props }: CarouselItemProps) {
   const { orientation } = useCarousel();
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Usar div para manter flexibilidade de estilização
     <div
       role="group"
       aria-roledescription="slide"

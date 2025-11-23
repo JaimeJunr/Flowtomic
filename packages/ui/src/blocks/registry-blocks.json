@@ -50,6 +50,29 @@
         }
       ],
       "categories": ["dashboard", "admin"]
+    },
+    {
+      "name": "developer-panel",
+      "author": "flowtomic (https://flowtomic.dev)",
+      "title": "Developer Panel",
+      "description": "Painel de desenvolvedor completo com informações do sistema, ambiente, ferramentas de desenvolvimento e editor de scripts integrado.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "button",
+        "card",
+        "badge",
+        "tabs",
+        "script-editor"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "blocks/developer-panel/page.tsx",
+          "type": "registry:page",
+          "target": "app/developer/page.tsx"
+        }
+      ],
+      "categories": ["developer", "admin", "tools"]
     }
   ]
 }

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { Spinner } from "./spinner";
 
 const meta = {
@@ -42,6 +41,7 @@ export const Large: Story = {
 export const InButton: Story = {
   render: () => (
     <button
+      type="button"
       className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
       disabled
     >

@@ -68,6 +68,11 @@ bunx flowtomic-cli@latest add-block dashboard-01
 npx flowtomic-cli@latest add-block flowtomic-dashboard
 # ou
 bunx flowtomic-cli@latest add-block flowtomic-dashboard
+
+# Adicionar painel de desenvolvedor
+npx flowtomic-cli@latest add-block developer-panel
+# ou
+bunx flowtomic-cli@latest add-block developer-panel
 ```
 
 ### Via npm (Packages Publicados)
@@ -165,7 +170,7 @@ Componentes que combinam atoms:
 - `connection` - Connection do @xyflow/react
 - `canvas` - Canvas do ReactFlow
 
-### Organisms (24 Componentes Complexos)
+### Organisms (23 Componentes Complexos)
 
 Componentes de alto nível que combinam molecules:
 
@@ -202,8 +207,9 @@ Componentes de alto nível que combinam molecules:
 **Outros**:
 
 - `web-preview` - Visualizador de páginas web
+- `script-editor` - Editor de scripts com terminal interativo
 
-### Hooks (9 Hooks Headless)
+### Hooks (12 Hooks Headless)
 
 Hooks que fornecem apenas lógica, sem UI:
 
@@ -212,17 +218,21 @@ Hooks que fornecem apenas lógica, sem UI:
 - `use-react-table-back` - Hook para tabelas com paginação/ordenação no backend (server-side)
 - `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend (client-side)
 - `use-resizable` - Hook para componentes redimensionáveis com sidebar
+- `use-script-editor` - Hook para gerenciar editor de scripts com terminal interativo (WebSocket, execução, preview)
 - `use-theme-transition` - Hook para transições de tema com View Transitions API
 - `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
 - `use-project-stats` - Hook para calcular estatísticas de projetos
 - `use-project-progress` - Hook para calcular progresso de projetos
+- `use-animated-indicator` - Hook para indicadores animados
+- `use-genealogy` - Hook para gerenciar genealogia/hierarquia
 
-### Blocks (2 Blocks Pré-construídos)
+### Blocks (3 Blocks Pré-construídos)
 
 Componentes completos e prontos para uso:
 
 - `dashboard-01` - Dashboard simples com cards
 - `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
+- `developer-panel` - Painel de desenvolvedor com informações do sistema, ambiente, ferramentas de desenvolvimento e editor de scripts integrado
 
 ## Uso dos Componentes
 
@@ -282,6 +292,7 @@ import {
   useStatCard,
   useIsMobile,
   useResizable,
+  useScriptEditor,
   useThemeTransition,
 } from "@flowtomic/logic";
 ```
@@ -380,7 +391,158 @@ function ThemeToggle() {
 }
 ```
 
+#### useScriptEditor
+
+```typescript
+import { useScriptEditor } from "@/hooks/use-script-editor";
+
+function ScriptEditorExample() {
+  const {
+    script,
+    setScript,
+    terminalLines,
+    preview,
+    activeTab,
+    setActiveTab,
+    isRunning,
+    isConnected,
+    executeScript,
+    stopExecution,
+    clearTerminal,
+  } = useScriptEditor({
+    wsUrl: "ws://localhost:8080/ws/terminal",
+    executeScript: async (script) => {
+      // Fallback HTTP se WebSocket não estiver disponível
+      const response = await fetch("/api/scripts/execute", {
+        method: "POST",
+        body: JSON.stringify({ script }),
+      });
+      return response.json();
+    },
+    autoConnect: true,
+    maxReconnectAttempts: 3,
+  });
+
+  return (
+    <div>
+      <textarea value={script} onChange={(e) => setScript(e.target.value)} />
+      <button onClick={executeScript}>Executar</button>
+      <div>
+        {terminalLines.map((line) => (
+          <div key={line.id}>{line.content}</div>
+        ))}
+      </div>
+      {preview && <pre>{preview}</pre>}
+    </div>
+  );
+}
+```
+
 **Nota**: Todos os hooks são headless - fornecem apenas lógica, formatação e props de acessibilidade. Você controla o markup e styles.
+
+## Uso dos Blocks
+
+### Importação de Blocks
+
+Após instalar via CLI, os blocks são copiados para o seu projeto:
+
+```typescript
+// Blocks são importados dos caminhos locais após instalação via CLI
+import DeveloperPanel from "@/app/developer/page";
+import DashboardPage from "@/app/dashboard/page";
+```
+
+### Exemplo de Uso do Developer Panel
+
+```typescript
+import DeveloperPanel from "@/app/developer/page";
+import type { DeveloperPanelProps } from "@/app/developer/page";
+
+export default function DeveloperPage() {
+  const [health, setHealth] = useState(null);
+  const [systemInfo, setSystemInfo] = useState(null);
+  const [envInfo, setEnvInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Buscar informações do sistema
+    const fetchSystemInfo = async () => {
+      try {
+        const healthData = await fetch("/api/health").then((r) => r.json());
+        const infoData = await fetch("/api/info").then((r) => r.json());
+
+        setHealth(healthData);
+        setSystemInfo(infoData);
+        setEnvInfo({
+          apiBaseUrl: process.env.NEXT_PUBLIC_API_URL || "",
+          nodeEnv: process.env.NODE_ENV || "development",
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          screenResolution: `${window.screen.width}x${window.screen.height}`,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        });
+      } catch (error) {
+        console.error("Erro ao buscar informações:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSystemInfo();
+  }, []);
+
+  return (
+    <DeveloperPanel
+      user={{
+        username: "dev.user",
+        email: "dev@example.com",
+        role: "ADMIN",
+        isAdmin: true,
+        token: localStorage.getItem("token") || undefined,
+      }}
+      health={health}
+      systemInfo={systemInfo}
+      environmentInfo={envInfo}
+      loading={loading}
+      apiBaseUrl={process.env.NEXT_PUBLIC_API_URL || ""}
+      onOpenSwagger={() => {
+        window.open(
+          `${process.env.NEXT_PUBLIC_API_URL}/swagger-ui.html`,
+          "_blank"
+        );
+      }}
+      onOpenApiDocs={() => {
+        window.open(`${process.env.NEXT_PUBLIC_API_URL}/v3/api-docs`, "_blank");
+      }}
+      onOpenHealthCheck={() => {
+        window.open(`${process.env.NEXT_PUBLIC_API_URL}/health`, "_blank");
+      }}
+      scriptEditorProps={{
+        defaultScript: "console.log('Hello from Flowtomic!');",
+        wsUrl: process.env.NEXT_PUBLIC_WS_URL,
+        executeScript: async (script) => {
+          const response = await fetch("/api/scripts/execute", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ script }),
+          });
+          return response.json();
+        },
+      }}
+    />
+  );
+}
+```
+
+**Funcionalidades do Developer Panel**:
+
+- **Informações do Usuário**: Exibe dados da sessão atual (nome, email, role, token)
+- **Health Check**: Status do sistema e serviços
+- **Informações da Aplicação**: Versão, nome e descrição do sistema
+- **Ambiente Frontend**: Configurações do cliente (API URL, modo, timezone, resolução)
+- **Ferramentas**: Acesso rápido a Swagger UI, API Docs e Health Check
+- **Informações do Navegador**: User Agent e timestamp
+- **Editor de Scripts**: Terminal interativo integrado com suporte a WebSocket
 
 ## Configuração (components.json)
 
@@ -534,7 +696,7 @@ bunx flowtomic-cli@latest list
 - **Molecules**: Use quando precisar de componentes compostos que combinam atoms (button-group, data-table, stat-card, etc.)
 - **Organisms**: Use quando precisar de componentes complexos e específicos de contexto (dashboard-layout, conversation, etc.)
 - **Hooks**: Use quando precisar apenas de lógica sem UI (use-stat-card, use-mobile, use-resizable, etc.)
-- **Blocks**: Use quando precisar de componentes completos e prontos para uso (dashboard-01, flowtomic-dashboard)
+- **Blocks**: Use quando precisar de componentes completos e prontos para uso (dashboard-01, flowtomic-dashboard, developer-panel)
 
 ## Boas Práticas
 

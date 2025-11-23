@@ -4,8 +4,7 @@
  * Header com busca, notificações e perfil do usuário
  */
 
-import { Bell, Command, MessageSquare, Search, User } from "lucide-react";
-import React from "react";
+import { Bell, MessageSquare, Search, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Input } from "../../../atoms";
 import {

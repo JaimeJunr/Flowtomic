@@ -31,7 +31,7 @@ const TabsList = React.forwardRef<
   const { indicatorStyle, registerElement, unregisterElement, activeValue } = useAnimatedIndicator({
     containerRef: listRef as React.RefObject<HTMLElement>,
     activeSelector: '[data-state="active"]',
-    getElementValue: (element) => {
+    getElementValue: (element: HTMLElement) => {
       // Buscar o valor do atributo data-value ou do value do botão
       return element.getAttribute("data-value") || element.getAttribute("value") || "";
     },
