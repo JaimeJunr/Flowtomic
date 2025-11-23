@@ -1,5 +1,5 @@
 {
-  "name": "flowtomic",
+  "name": "flowtomic-cli",
   "version": "0.2.0",
   "description": "CLI para instalação de componentes, hooks e blocks do Flowtomic",
   "type": "module",

@@ -1,5 +1,5 @@
 {
-  "name": "flowtomic/logic",
+  "name": "@flowtomic/logic",
   "version": "0.1.0",
   "description": "Hooks headless e lógica reutilizável para React",
   "type": "module",
@@ -19,6 +19,12 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JaimeJunr/Flowtomic.git"
+  },
+  "author": "JaimeJunr",
+  "license": "MIT",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "build": "bun build ./src/index.ts --outdir ./dist --target browser --format esm --minify",
