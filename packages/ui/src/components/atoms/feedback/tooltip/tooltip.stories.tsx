@@ -146,8 +146,8 @@ export const InteractiveTextExample: Story = {
     return (
       <div className="max-w-2xl space-y-4 p-8 bg-background text-foreground">
         <p className="text-base leading-relaxed">
-          O Flowtomic começou como uma ideia simples: criar componentes UI reutilizáveis e bem
-          documentados. Uma vez que o{" "}
+          O Flowtomic é um sistema de design moderno que oferece componentes UI prontos para uso e
+          hooks headless para máxima flexibilidade. Construído sobre{" "}
           <TooltipWord
             word="Radix UI"
             content={
@@ -155,60 +155,64 @@ export const InteractiveTextExample: Story = {
                 <p className="font-semibold">Radix UI</p>
                 <p className="text-xs text-muted-foreground">
                   Biblioteca de componentes primitivos acessíveis e sem estilização. O Flowtomic
-                  usa Radix UI como base para garantir acessibilidade em todos os componentes.
+                  usa Radix UI como base para garantir acessibilidade (WAI-ARIA compliant) em todos
+                  os componentes interativos.
                 </p>
               </div>
             }
           >
             Radix UI
           </TooltipWord>{" "}
-          foi escolhido como base, tivemos que construir toda a camada de estilização e lógica
-          sobre ele. O Radix UI em geral é uma excelente biblioteca, mas às vezes precisamos de
-          mais controle sobre o comportamento.
+          e inspirado em shadcn/ui, o Flowtomic permite que você acelere seu desenvolvimento
+          mantendo controle total sobre customização. O Radix UI fornece a base sólida de
+          acessibilidade, enquanto o Flowtomic adiciona estilização, lógica e documentação
+          completa.
         </p>
 
         <p className="text-base leading-relaxed">
-          O sistema foi desenvolvido por{" "}
+          O sistema foi desenvolvido seguindo os princípios de{" "}
           <TooltipWord
-            word="Jaime"
+            word="reutilização"
             content={
               <div className="space-y-1">
-                <p className="font-semibold">Jaime</p>
+                <p className="font-semibold">Reutilização de Código</p>
                 <p className="text-xs text-muted-foreground">
-                  Criador e mantenedor do Flowtomic. Desenvolveu o sistema com foco em
-                  reutilização, acessibilidade e documentação completa. Sempre busca melhorar a
-                  experiência de desenvolvimento.
+                  O Flowtomic segue princípios como DRY (Don't Repeat Yourself) e SOLID para
+                  promover reutilização, encapsulamento e abstração. Oferece 54 atoms, 36 molecules,
+                  23 organisms, 11 hooks headless e 3 blocks pré-construídos.
                 </p>
               </div>
             }
           >
-            Jaime
+            reutilização
           </TooltipWord>
-          . Jaime está trabalhando no projeto há bastante tempo. Ele é um grande ativo para o
-          projeto e às vezes tenta implementar funcionalidades de diferentes formas, o que pode
-          ser desafiador de gerenciar.
+          . Em vez de recriar as mesmas lógicas e componentes em cada projeto, o Flowtomic fornece
+          uma solução reutilizável com componentes prontos ou customizáveis. Isso acelera o
+          desenvolvimento seguindo as melhores práticas de engenharia de software, promovendo
+          consistência e qualidade em projetos React/TypeScript.
         </p>
 
         <p className="text-base leading-relaxed">
-          Foi então que decidimos criar um{" "}
+          O Flowtomic oferece uma{" "}
           <TooltipWord
-            word="sistema de design"
+            word="arquitetura separada"
             content={
               <div className="space-y-1">
-                <p className="font-semibold">Sistema de Design Flowtomic</p>
+                <p className="font-semibold">Separação UI e Lógica</p>
                 <p className="text-xs text-muted-foreground">
-                  Um sistema completo de componentes UI baseado em React, TypeScript e Tailwind
-                  CSS. Inclui 54 atoms, 24 molecules, 23 organisms, 11 hooks e 3 blocks, todos
-                  documentados e testados.
+                  O Flowtomic separa completamente UI (@flowtomic/ui) e lógica (@flowtomic/logic).
+                  Hooks headless fornecem apenas lógica, formatação e props de acessibilidade, sem
+                  qualquer markup ou estilos. Isso permite máxima flexibilidade e reutilização.
                 </p>
               </div>
             }
           >
-            sistema de design
-          </TooltipWord>
-          . Em vez de apenas componentes soltos, começamos a pensar em como usar nossas
-          habilidades para construir um futuro melhor para desenvolvimento frontend, com foco em
-          qualidade, acessibilidade e experiência do desenvolvedor.
+            arquitetura separada
+          </TooltipWord>{" "}
+          entre UI e lógica. Os componentes UI são focados em apresentação visual, enquanto os
+          hooks headless contêm toda a lógica complexa, cálculos e gerenciamento de estado. Essa
+          separação permite reutilizar a lógica em qualquer UI customizada, criar designs únicos
+          mantendo a lógica consistente, e testar lógica e UI separadamente.
         </p>
       </div>
     );

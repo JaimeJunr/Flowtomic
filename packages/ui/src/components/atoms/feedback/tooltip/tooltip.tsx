@@ -158,7 +158,20 @@ export function TooltipWithMouseFollow({
 
 	React.useEffect(() => {
 		if (isVisible && contentRef.current) {
-			setHeight(contentRef.current.scrollHeight);
+			// Usar múltiplos requestAnimationFrame para garantir que o DOM foi totalmente renderizado
+			const rafId1 = requestAnimationFrame(() => {
+				const rafId2 = requestAnimationFrame(() => {
+					if (contentRef.current) {
+						// scrollHeight do conteúdo interno
+						const contentScrollHeight = contentRef.current.scrollHeight;
+						// py-1.5 = 0.375rem = 6px top + 6px bottom = 12px total
+						// Adicionar buffer extra para garantir que não corte
+						setHeight(contentScrollHeight + 16);
+					}
+				});
+				return () => cancelAnimationFrame(rafId2);
+			});
+			return () => cancelAnimationFrame(rafId1);
 		}
 	}, [isVisible, content]);
 
@@ -323,13 +336,14 @@ export function TooltipWithMouseFollow({
 							left: position.x,
 							minWidth: `${minWidth}px`,
 							zIndex: 9999,
-							overflow: "hidden",
+							overflow: "visible",
 							wordWrap: "break-word",
 							whiteSpace: "normal",
 						}}
 					>
 						<div
 							ref={contentRef}
+							className="overflow-visible"
 							style={{
 								whiteSpace: "normal",
 								wordWrap: "break-word",
