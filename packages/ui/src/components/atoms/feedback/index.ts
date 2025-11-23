@@ -74,6 +74,37 @@ export {
   InlineCitationSource,
   InlineCitationText,
 } from "./inline-citation";
+export type {
+  PopoverAnchorProps,
+  PopoverContentProps,
+  PopoverProps,
+  PopoverTriggerProps,
+} from "./popover";
+export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "./popover";
+export type {
+  SheetCloseProps,
+  SheetContentProps,
+  SheetDescriptionProps,
+  SheetFooterProps,
+  SheetHeaderProps,
+  SheetOverlayProps,
+  SheetPortalProps,
+  SheetProps,
+  SheetTitleProps,
+  SheetTriggerProps,
+} from "./sheet";
+export {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
+} from "./sheet";
 export type { ToasterProps } from "./sonner";
 export { Toaster, toast } from "./sonner";
 export type {

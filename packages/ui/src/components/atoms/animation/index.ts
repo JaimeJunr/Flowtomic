@@ -15,3 +15,5 @@ export type { TextShimmerProps } from "./shimmer";
 export { Shimmer } from "./shimmer";
 export type { SlidingNumberProps } from "./sliding-number";
 export { SlidingNumber } from "./sliding-number";
+export type { SpinnerProps } from "./spinner";
+export { Spinner } from "./spinner";

@@ -66,6 +66,8 @@ export { DashboardLayout } from "./dashboard-layout";
 export type { DashboardMovementsSectionProps, Movement } from "./dashboard-movements-section";
 export { DashboardMovementsSection } from "./dashboard-movements-section";
 export { Edge } from "./edge";
+export type { GenealogyCanvasProps } from "./genealogy-canvas";
+export { GenealogyCanvas } from "./genealogy-canvas";
 export type { ImageProps } from "./image";
 export { Image } from "./image";
 export type {
@@ -313,5 +315,3 @@ export {
   WebPreviewNavigationButton,
   WebPreviewUrl,
 } from "./web-preview";
-export type { GenealogyCanvasProps } from "./genealogy-canvas";
-export { GenealogyCanvas } from "./genealogy-canvas";

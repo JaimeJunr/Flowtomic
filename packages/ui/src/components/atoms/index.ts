@@ -9,6 +9,8 @@ export * from "./actions";
 export * from "./animation";
 // Code
 export * from "./code";
+// Data Display
+export * from "./data-display";
 // Display
 export * from "./display";
 // Feedback
