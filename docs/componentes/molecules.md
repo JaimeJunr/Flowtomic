@@ -2,7 +2,7 @@
 
 Componentes moleculares do Flowtomic. São combinações de atoms que formam componentes mais complexos.
 
-## 📦 Componentes Disponíveis (22)
+## 📦 Componentes Disponíveis (30)
 
 ### `button-group`
 
@@ -139,6 +139,70 @@ Texto com efeito shimmer animado para destacar conteúdo. Implementação especi
 **Dependências**: `motion`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/molecules/typography/animated-shiny-text`
+
+### `bar-chart` (Data Display)
+
+Gráfico de barras simples para analytics usando SVG puro.
+
+**Dependências**: `card`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/bar-chart`
+
+### `circular-progress-chart` (Data Display)
+
+Gráfico circular de progresso usando SVG puro.
+
+**Dependências**: `card`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/circular-progress-chart`
+
+### `time-tracker` (Data Display)
+
+Timer com controles de pause/stop usando o hook headless useTimeTracker.
+
+**Dependências**: `@flowtomic/logic`, `card`, `button`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/time-tracker`
+
+### `project-list` (Data Display)
+
+Lista de projetos com ícones, datas e ações.
+
+**Dependências**: `card`, `button`, `badge`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/project-list`
+
+### `team-member-list` (Data Display)
+
+Lista de membros da equipe com avatares, nomes, tarefas e status.
+
+**Dependências**: `card`, `avatar`, `badge`, `button`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/team-member-list`
+
+### `reminder-card` (Data Display)
+
+Card de lembretes com horário e botão de ação.
+
+**Dependências**: `card`, `button`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/reminder-card`
+
+### `sidebar-navigation` (Navigation)
+
+Menu lateral completo com logo, seções de navegação e card de download mobile.
+
+**Dependências**: `button`, `card`, `sidebar`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/navigation/sidebar-navigation`
+
+### `dashboard-header` (Layout)
+
+Header com busca, notificações e perfil do usuário.
+
+**Dependências**: `input`, `button`, `avatar`, `badge`, `dropdown-menu`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/layout/dashboard-header`
 
 ## 🚀 Instalação
 

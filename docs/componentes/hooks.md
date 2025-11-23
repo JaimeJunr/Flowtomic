@@ -2,7 +2,7 @@
 
 Hooks headless do Flowtomic para lógica reutilizável sem dependências de UI.
 
-## 📦 Hooks Disponíveis (6)
+## 📦 Hooks Disponíveis (9)
 
 ### `use-stat-card`
 
@@ -77,6 +77,48 @@ Hook para gerenciar transições suaves de tema usando View Transitions API com 
 - Usa View Transitions API quando disponível
 - Fallback automático para navegadores sem suporte
 - Transições suaves de tema
+
+### `use-time-tracker`
+
+Hook headless para gerenciar timer com start, pause, stop, resume e formatação de tempo.
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useTimeTracker`
+
+**Características**:
+- Iniciar, pausar, parar e retomar timer
+- Formatação de tempo customizável (HH:mm:ss, mm:ss, ss)
+- Callbacks para eventos do timer
+- Estado de running, paused e stopped
+
+### `use-project-stats`
+
+Hook headless para calcular estatísticas de projetos (totais, filtros, agregações).
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useProjectStats`
+
+**Características**:
+- Calcular totais por status (running, ended, pending, on-hold, cancelled)
+- Filtros customizados
+- Agrupamento por critérios
+- Distribuição por status
+
+### `use-project-progress`
+
+Hook headless para calcular progresso de projetos (porcentagem, status, distribuição).
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useProjectProgress`
+
+**Características**:
+- Calcular porcentagem total de progresso
+- Determinar status geral (completed, in-progress, pending, on-hold)
+- Distribuição de projetos por status
+- Função customizada para calcular progresso individual
 
 ## 🚀 Instalação
 
