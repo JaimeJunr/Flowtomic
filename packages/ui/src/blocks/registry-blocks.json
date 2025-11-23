@@ -16,6 +16,40 @@
         }
       ],
       "categories": ["dashboard"]
+    },
+    {
+      "name": "flowtomic-dashboard",
+      "author": "flowtomic (https://flowtomic.dev)",
+      "title": "Flowtomic Dashboard",
+      "description": "Dashboard completo com sidebar, header, estatísticas, gráficos, listas de projetos e equipe, e timer.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "button",
+        "card",
+        "input",
+        "avatar",
+        "badge",
+        "progress",
+        "stat-card",
+        "sidebar-navigation",
+        "dashboard-header",
+        "bar-chart",
+        "circular-progress-chart",
+        "project-list",
+        "team-member-list",
+        "reminder-card",
+        "time-tracker",
+        "resizable-layout"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "blocks/flowtomic-dashboard/page.tsx",
+          "type": "registry:page",
+          "target": "app/dashboard/page.tsx"
+        }
+      ],
+      "categories": ["dashboard", "admin"]
     }
   ]
 }
