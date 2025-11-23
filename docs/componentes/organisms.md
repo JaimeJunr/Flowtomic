@@ -2,7 +2,7 @@
 
 Componentes organizacionais do Flowtomic. São componentes complexos que combinam múltiplos molecules e atoms.
 
-## 📦 Componentes Disponíveis (22)
+## 📦 Componentes Disponíveis (23)
 
 ### `dashboard-layout`
 
@@ -41,6 +41,8 @@ Componente redimensionável com sidebar que suporta persistência, snap automát
 **Dependências**: `@flowtomic/logic`, `react-resizable-panels`, `lucide-react`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/organisms/resizable-layout`
+
+**Nota**: Anteriormente listado como `resizable` no README, mas o nome correto é `resizable-layout`.
 
 ### `conversation`
 
@@ -137,6 +139,14 @@ Componente Node para ReactFlow baseado em Card com handles.
 Componentes Edge para ReactFlow (Temporary e Animated).
 
 **Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
+### `genealogy-canvas`
+
+Canvas de genealogia para visualização de hierarquias e relacionamentos.
+
+**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/organisms/genealogy-canvas`
 
 ## 🚀 Instalação
 

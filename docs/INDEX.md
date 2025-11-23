@@ -27,12 +27,12 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 ### 🧩 Componentes
 
-- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes
-- [Atoms](componentes/atoms.md) - Componentes básicos (button, input, card, etc.)
-- [Molecules](componentes/molecules.md) - Componentes compostos (button-group, data-table, etc.)
-- [Organisms](componentes/organisms.md) - Componentes complexos (dashboard-layout, stats-grid, etc.)
-- [Blocks](componentes/blocks.md) - Blocks pré-construídos (dashboard-01, etc.)
-- [Hooks](componentes/hooks.md) - Hooks headless disponíveis
+- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (54 atoms, 36 molecules, 23 organisms, 11 hooks, 2 blocks)
+- [Atoms](componentes/atoms.md) - Componentes básicos (54 componentes: button, input, card, etc.)
+- [Molecules](componentes/molecules.md) - Componentes compostos (36 componentes: button-group, data-table, etc.)
+- [Organisms](componentes/organisms.md) - Componentes complexos (23 componentes: dashboard-layout, stats-grid, etc.)
+- [Blocks](componentes/blocks.md) - Blocks pré-construídos (2 blocks: dashboard-01, flowtomic-dashboard)
+- [Hooks](componentes/hooks.md) - Hooks headless disponíveis (11 hooks)
 
 ### 🛠️ CLI
 
@@ -143,9 +143,9 @@ docs/
 
 ## 📅 Atualizações
 
-- **Última atualização**: 2025-11-09
-- **Versão da documentação**: 1.2.0
-- **Próxima revisão**: 2025-12-09
+- **Última atualização**: 2025-11-22
+- **Versão da documentação**: 1.3.0
+- **Próxima revisão**: 2025-12-22
 
 ## 🔧 Troubleshooting
 

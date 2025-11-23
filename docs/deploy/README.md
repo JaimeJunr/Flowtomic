@@ -4,23 +4,56 @@ Este documento resume tudo que foi configurado para produção.
 
 ## ✅ O que foi implementado
 
-### 1. CLI Publicado como `flowtomic`
+### 1. Packages Publicados no npm
 
-- ✅ `package.json` do CLI atualizado com nome `flowtomic`
+#### CLI (`flowtomic-cli`)
+
+- ✅ `package.json` do CLI atualizado com nome `flowtomic-cli`
 - ✅ Bin configurado: `flowtomic` e `flowtomic-cli`
 - ✅ Keywords atualizadas (incluindo `shadcn`, `blocks`, `registry`)
 - ✅ `.npmignore` configurado
+- ✅ Versão atual: `0.2.0`
 
 **Para publicar:**
+
 ```bash
 cd cli
 bun run build
-npm publish
+npm publish --access public
+```
+
+#### UI (`@flowtomic/ui`)
+
+- ✅ Package scoped: `@flowtomic/ui`
+- ✅ Depende de `@flowtomic/logic@^0.1.0`
+- ✅ Versão atual: `0.1.0`
+
+**Para publicar:**
+
+```bash
+cd packages/ui
+bun run build
+npm publish --access public
+```
+
+#### Logic (`@flowtomic/logic`)
+
+- ✅ Package scoped: `@flowtomic/logic`
+- ✅ Hooks headless e lógica reutilizável
+- ✅ Versão atual: `0.1.0`
+
+**Para publicar:**
+
+```bash
+cd packages/logic
+bun run build
+npm publish --access public
 ```
 
 ### 2. Registry em Produção
 
 #### Estrutura Criada:
+
 - ✅ `registry/build-registry.ts` - Script para gerar registry.json
 - ✅ `registry/api/all.json.ts` - API route para registry completo
 - ✅ `registry/api/blocks.json.ts` - API route para blocks
@@ -29,6 +62,7 @@ npm publish
 - ✅ `registry/server.ts` - Servidor local para desenvolvimento
 
 #### Scripts Adicionados:
+
 - ✅ `bun run registry:build` - Gera o registry.json
 - ✅ `bun run registry:server` - Servidor local
 
@@ -45,13 +79,31 @@ npm publish
 
 ## 📋 Checklist de Deploy
 
-### CLI no npm
+### Packages no npm
 
-- [ ] Build do CLI: `cd cli && bun run build`
-- [ ] Verificar conteúdo: `npm pack --dry-run`
-- [ ] Login no npm: `npm login`
-- [ ] Publicar: `npm publish`
-- [ ] Testar: `npx flowtomic@latest --version`
+#### CLI (`flowtomic-cli`)
+
+- [x] Build do CLI: `cd cli && bun run build`
+- [x] Verificar conteúdo: `npm pack --dry-run`
+- [x] Login no npm: `npm login`
+- [x] Publicar: `npm publish --access public`
+- [x] Versão publicada: `0.2.0`
+- [ ] Testar: `npx flowtomic-cli@latest --version`
+
+#### UI (`@flowtomic/ui`)
+
+- [x] Build do UI: `cd packages/ui && bun run build`
+- [x] Verificar conteúdo: `npm pack --dry-run`
+- [x] Ajustar dependência para `@flowtomic/logic@^0.1.0`
+- [x] Publicar: `npm publish --access public`
+- [x] Versão publicada: `0.1.0`
+
+#### Logic (`@flowtomic/logic`)
+
+- [x] Build do Logic: `cd packages/logic && bun run build`
+- [x] Verificar conteúdo: `npm pack --dry-run`
+- [x] Publicar: `npm publish --access public`
+- [x] Versão publicada: `0.1.0`
 
 ### Registry no Vercel
 
@@ -67,9 +119,10 @@ npm publish
 
 ### Testes Finais
 
-- [ ] Testar CLI: `npx flowtomic@latest init`
-- [ ] Testar adicionar componente: `npx flowtomic@latest add button`
-- [ ] Testar adicionar block: `npx flowtomic@latest add-block dashboard-01`
+- [ ] Testar CLI: `npx flowtomic-cli@latest init`
+- [ ] Testar adicionar componente: `npx flowtomic-cli@latest add button`
+- [ ] Testar adicionar block: `npx flowtomic-cli@latest add-block dashboard-01`
+- [ ] Testar instalação dos packages: `npm install @flowtomic/ui @flowtomic/logic`
 - [ ] Testar com shadcn: `npx shadcn@latest add https://registry.flowtomic/all.json`
 
 ## 🔄 Atualizações Futuras
@@ -103,4 +156,3 @@ npm publish
 - [ai-elements Registry](https://registry.ai-sdk.dev)
 - [Vercel Deployment](https://vercel.com/docs)
 - [npm Publishing](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry)
-

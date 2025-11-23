@@ -14,10 +14,10 @@ bunx github:JaimeJunr/Flowtomic/cli init
 bunx /caminho/para/flowtomic/cli init
 ```
 
-### Via npx (se publicado no npm)
+### Via npx (publicado no npm)
 
 ```bash
-npx flowtomic@latest init
+npx flowtomic-cli@latest init
 ```
 
 ## Comandos
@@ -27,9 +27,9 @@ npx flowtomic@latest init
 Inicializa a configuração do Flowtomic no projeto, criando o arquivo `components.json`.
 
 ```bash
-npx flowtomic@latest init
+npx flowtomic-cli@latest init
 # ou
-bunx flowtomic@latest init
+bunx flowtomic-cli@latest init
 ```
 
 **O que faz**:
@@ -44,16 +44,16 @@ Adiciona componentes ou hooks ao projeto. Os arquivos são copiados diretamente 
 
 ```bash
 # Adicionar um componente específico
-npx flowtomic@latest add button
+npx flowtomic-cli@latest add button
 
 # Adicionar múltiplos componentes
-npx flowtomic@latest add button card input
+npx flowtomic-cli@latest add button card input
 
 # Adicionar hooks
-npx flowtomic@latest add use-stat-card
+npx flowtomic-cli@latest add use-stat-card
 
 # Modo interativo (sem especificar componentes)
-npx flowtomic@latest add
+npx flowtomic-cli@latest add
 ```
 
 **O que faz**:
@@ -68,7 +68,7 @@ Adiciona um block completo ao projeto.
 
 ```bash
 # Adicionar um block específico
-npx flowtomic@latest add-block dashboard-01
+npx flowtomic-cli@latest add-block dashboard-01
 ```
 
 **O que faz**:
@@ -82,16 +82,16 @@ npx flowtomic@latest add-block dashboard-01
 Lista todos os componentes, hooks e blocks disponíveis.
 
 ```bash
-npx flowtomic@latest list
+npx flowtomic-cli@latest list
 ```
 
 **Saída**:
 
-- Lista de atoms (13)
-- Lista de molecules (10)
-- Lista de organisms (5)
-- Lista de hooks (1)
-- Lista de blocks (1)
+- Lista de atoms (54)
+- Lista de molecules (36)
+- Lista de organisms (23)
+- Lista de hooks (11)
+- Lista de blocks (2)
 
 ## Como Funciona
 
@@ -105,7 +105,7 @@ O CLI tenta encontrar o repositório Flowtomic de várias formas:
 
    ```bash
    export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
-   npx flowtomic@latest add button
+   npx flowtomic-cli@latest add button
    ```
 
 2. **Caminho relativo** (se executado do repositório)
@@ -172,43 +172,65 @@ Edite o arquivo `components.json` para ajustar caminhos e aliases:
 
 ## Componentes Disponíveis
 
-### Atoms
+O Flowtomic possui um total de **125 componentes e hooks** disponíveis:
 
-- button
-- badge
-- input
-- card
-- checkbox
-- skeleton
-- table
-- tabs
-- alert
-- alert-dialog
-- dialog
-- dropdown-menu
-- sonner
+### Atoms (54 componentes)
 
-### Molecules
+Componentes básicos organizados por categoria:
 
-- button-group
-- password-input
-- image-dropzone
-- stat-card
-- data-table
-- menu-dock
-- theme-toggle-button
+- **Actions** (4): button, badge, dropdown-menu, context-menu
+- **Animation** (7): animated-3d, backdrop-blur, loader, progress, shimmer, sliding-number, spinner
+- **Code** (2): code-block, snippet
+- **Data Display** (3): calendar, carousel, chart
+- **Display** (7): avatar, card, empty, kbd, separator, skeleton, table
+- **Feedback** (9): alert, alert-dialog, dialog, hover-card, inline-citation, popover, sheet, sonner, tooltip
+- **Forms** (13): autocomplete, checkbox, field, form, input, input-otp, label, radio-group, select, slider, switch, textarea, toggle
+- **Layout** (8): accordion, aspect-ratio, collapsible, drawer, resizable, scroll-area, sidebar, toggle-group
+- **Navigation** (6): breadcrumb, command, menubar, navigation-menu, pagination, tabs
 
-### Organisms
+Para lista completa, consulte [docs/componentes/atoms.md](../componentes/atoms.md).
 
-- dashboard-layout
-- stats-grid
-- monthly-summary
-- dashboard-header-actions
-- dashboard-movements-section
+### Molecules (36 componentes)
 
-### Hooks
+Componentes compostos incluindo:
 
+- **Animation** (3): animated-modal, animated-sliding-number, button-counter
+- **Auth** (4): auth-form-error-message, auth-navigation-link, password-input, social-login-buttons
+- **Data Display** (17): artifact, bar-chart, chart-area-interactive, chart-bar-interactive, checkpoint, circular-progress-chart, data-table, message, project-list, reminder-card, sources, stat-card, suggestion, task, team-member-list, time-tracker, tool
+- **Feedback** (1): confirmation
+- **Flow** (2): canvas, connection
+- **Forms** (4): button-group, image-dropzone, input-group, item
+- **Layout** (1): dashboard-header
+- **Navigation** (2): menu-dock, sidebar-navigation
+- **Theme** (1): theme-toggle-button
+- **Typography** (1): animated-shiny-text
+
+Para lista completa, consulte [docs/componentes/molecules.md](../componentes/molecules.md).
+
+### Organisms (23 componentes)
+
+Componentes complexos incluindo:
+chain-of-thought, context, controls, conversation, dashboard-header-actions, dashboard-layout, dashboard-movements-section, edge, genealogy-canvas, image, model-selector, monthly-summary, node, open-in-chat, panel, plan, prompt-input, queue, reasoning, resizable-layout, stats-grid, toolbar, web-preview
+
+Para lista completa, consulte [docs/componentes/organisms.md](../componentes/organisms.md).
+
+### Hooks (11 hooks)
+
+Hooks headless disponíveis:
+
+- use-animated-indicator
+- use-genealogy
+- use-mobile (exportado como useIsMobile)
+- use-project-progress
+- use-project-stats
+- use-react-table-back
+- use-react-table-front
+- use-resizable
 - use-stat-card
+- use-theme-transition
+- use-time-tracker
+
+Para lista completa, consulte [docs/componentes/hooks.md](../componentes/hooks.md).
 
 ## Exemplos Práticos
 
@@ -216,13 +238,13 @@ Edite o arquivo `components.json` para ajustar caminhos e aliases:
 
 ```bash
 # 1. Inicializar configuração
-npx flowtomic@latest init
+npx flowtomic-cli@latest init
 
 # 2. Adicionar componentes básicos
-npx flowtomic@latest add button card input
+npx flowtomic-cli@latest add button card input
 
 # 3. Adicionar um block completo
-npx flowtomic@latest add-block dashboard-01
+npx flowtomic-cli@latest add-block dashboard-01
 
 # 4. Usar no projeto
 import { Button } from '@/components/ui/button'
@@ -233,7 +255,7 @@ import { Card } from '@/components/ui/card'
 
 ```bash
 # 1. Adicionar componentes necessários
-npx flowtomic@latest add input button card password-input
+npx flowtomic-cli@latest add input button card password-input
 ```
 
 ```typescript
@@ -262,7 +284,7 @@ export function LoginForm() {
 
 ```bash
 # 1. Adicionar block completo
-npx flowtomic@latest add-block dashboard-01
+npx flowtomic-cli@latest add-block dashboard-01
 
 # 2. O block já vem com todos os componentes necessários
 ```
@@ -271,7 +293,7 @@ npx flowtomic@latest add-block dashboard-01
 
 ```bash
 # 1. Adicionar data-table
-npx flowtomic@latest add data-table
+npx flowtomic-cli@latest add data-table
 ```
 
 ```typescript
@@ -323,7 +345,7 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 
 - **Erro: "Componente não encontrado"**
 
-  - **Solução**: **SEMPRE verifique** componentes disponíveis com `npx flowtomic@latest list`
+  - **Solução**: **SEMPRE verifique** componentes disponíveis com `npx flowtomic-cli@latest list`
 
 - **Imports incorretos**
 
@@ -343,7 +365,7 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 
 ```bash
 # SEMPRE verifique componentes disponíveis
-npx flowtomic@latest list
+npx flowtomic-cli@latest list
 ```
 
 #### Problema: Imports incorretos
@@ -373,5 +395,5 @@ Para usar o repositório local em desenvolvimento:
 
 ```bash
 export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
-npx flowtomic@latest add button
+npx flowtomic-cli@latest add button
 ```

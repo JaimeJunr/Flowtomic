@@ -146,24 +146,24 @@ import { useStatCard } from "flowtomic/logic"; // Usa o hook internamente
 
 ```bash
 # Inicializar configuração
-npx flowtomic@latest init
+npx flowtomic-cli@latest init
 # ou
-bunx flowtomic@latest init
+bunx flowtomic-cli@latest init
 
 # Adicionar componentes
-npx flowtomic@latest add button card input
+npx flowtomic-cli@latest add button card input
 # ou
-bunx flowtomic@latest add button card input
+bunx flowtomic-cli@latest add button card input
 
 # Adicionar blocks
-npx flowtomic@latest add-block dashboard-01
+npx flowtomic-cli@latest add-block dashboard-01
 # ou
-bunx flowtomic@latest add-block dashboard-01
+bunx flowtomic-cli@latest add-block dashboard-01
 
 # Listar componentes e blocks disponíveis
-npx flowtomic@latest list
+npx flowtomic-cli@latest list
 # ou
-bunx flowtomic@latest list
+bunx flowtomic-cli@latest list
 ```
 
 ### Via shadcn CLI (Compatível)
@@ -175,97 +175,246 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 
 **Nota:** O CLI automaticamente baixa o repositório do GitHub quando necessário (via variável de ambiente ou caminho local).
 
+## 📦 Instalação dos Packages npm
+
+Os packages do Flowtomic também estão disponíveis diretamente no npm para uso em projetos:
+
+### Instalar Packages
+
+```bash
+# Instalar UI e Logic
+npm install @flowtomic/ui @flowtomic/logic
+
+# Ou usando yarn/pnpm/bun
+yarn add @flowtomic/ui @flowtomic/logic
+pnpm add @flowtomic/ui @flowtomic/logic
+bun add @flowtomic/ui @flowtomic/logic
+```
+
+### Usar os Packages
+
+```typescript
+// Componentes UI
+import { Button, Card, Input, Badge } from "@flowtomic/ui";
+
+// Hooks headless
+import { useStatCard, useIsMobile, useResizable } from "@flowtomic/logic";
+
+// Exemplo de uso
+function MyComponent() {
+  const { formattedValue, trend } = useStatCard({
+    value: 122380,
+    lastMonth: 105922,
+  });
+
+  return (
+    <Card>
+      <Button>Clique aqui</Button>
+      <Input placeholder="Digite algo..." />
+    </Card>
+  );
+}
+```
+
+**Nota:** Ao usar os packages npm, você ainda pode usar o CLI para adicionar componentes individuais que serão copiados para seu projeto, permitindo customização total.
+
 ## 📚 Componentes Disponíveis
 
-### Atoms (26)
+### Atoms (54)
+
+**Actions:**
 
 - `button` - Botão com variantes
 - `badge` - Badge/etiqueta
-- `input` - Campo de entrada
+- `dropdown-menu` - Menu dropdown
+- `context-menu` - Menu de contexto
+
+**Animation:**
+
+- `animated-3d` - Componente com animação 3D
+- `backdrop-blur` - Componente com efeito de blur no fundo
+- `loader` - Loading spinner animado
+- `progress` - Barra de progresso
+- `shimmer` - Texto com efeito shimmer
+- `sliding-number` - Número com animação de deslizamento
+- `spinner` - Spinner animado
+
+**Code:**
+
+- `code-block` - Bloco de código com syntax highlighting
+- `snippet` - Snippet de código
+
+**Data Display:**
+
+- `calendar` - Calendário
+- `carousel` - Carrossel
+- `chart` - Gráficos base
+
+**Display:**
+
+- `avatar` - Componente de avatar com imagem e fallback
 - `card` - Card container
-- `checkbox` - Checkbox
+- `empty` - Estado vazio
+- `kbd` - Teclas de atalho
+- `separator` - Separador horizontal/vertical
 - `skeleton` - Loading skeleton
 - `table` - Tabela base
-- `tabs` - Abas
+
+**Feedback:**
+
 - `alert` - Alerta
 - `alert-dialog` - Diálogo de confirmação
 - `dialog` - Modal/diálogo
-- `tooltip` - Tooltip para informações adicionais
-- `command` - Command palette/menu
-- `collapsible` - Container colapsável
-- `scroll-area` - Área de scroll customizada
 - `hover-card` - Card que aparece ao passar o mouse
-- `separator` - Separador horizontal/vertical
-- `loader` - Loading spinner animado
-- `shimmer` - Texto com efeito shimmer
-- `code-block` - Bloco de código com syntax highlighting
 - `inline-citation` - Citação inline com hover card
-- `dropdown-menu` - Menu dropdown
+- `popover` - Popover flutuante
+- `sheet` - Sheet lateral
 - `sonner` - Toast notifications
+- `tooltip` - Tooltip para informações adicionais
+
+**Forms:**
+
+- `autocomplete` - Autocomplete
+- `checkbox` - Checkbox
+- `field` - Campo de formulário completo
+- `form` - Wrapper de formulário com React Hook Form
+- `input` - Campo de entrada
+- `input-otp` - Input para códigos OTP
+- `label` - Label para formulários
+- `radio-group` - Grupo de radio buttons
 - `select` - Campo de seleção
-- `animated-shiny-text` - Texto com efeito shimmer animado
-- `progress` - Barra de progresso
+- `slider` - Slider de valores
+- `switch` - Switch toggle
+- `textarea` - Campo de texto multilinha
+- `toggle` - Toggle button
 
-### Molecules (19)
+**Layout:**
 
-- `button-group` - Grupo de botões
-- `password-input` - Input de senha
-- `image-dropzone` - Upload de imagem
-- `stat-card` - Card de estatística
-- `data-table` - Tabela avançada
-- `menu-dock` - Dock de menu
-- `theme-toggle-button` - Botão de toggle de tema
-- `auth-navigation-link` - Link de navegação de auth
+- `accordion` - Container colapsável
+- `aspect-ratio` - Container com proporção fixa
+- `collapsible` - Container colapsável
+- `drawer` - Drawer lateral
+- `resizable` - Componente redimensionável com painéis
+- `scroll-area` - Área de scroll customizada
+- `sidebar` - Sidebar navegável
+- `toggle-group` - Grupo de toggles
+
+**Navigation:**
+
+- `breadcrumb` - Breadcrumb navigation
+- `command` - Command palette/menu
+- `menubar` - Barra de menu
+- `navigation-menu` - Menu de navegação
+- `pagination` - Paginação
+- `tabs` - Abas
+
+### Molecules (36)
+
+**Animation:**
+
+- `animated-modal` - Modal com animações
+- `animated-sliding-number` - Número com animação de deslizamento
+- `button-counter` - Contador com botões de incremento/decremento
+
+**Auth:**
+
 - `auth-form-error-message` - Mensagem de erro de formulário
+- `auth-navigation-link` - Link de navegação de auth
+- `password-input` - Input de senha
 - `social-login-buttons` - Botões de login social
-- `input-group` - Grupo de input com addons
+
+**Data Display:**
+
 - `artifact` - Container de artifact
-- `message` - Componente de mensagem com branches
-- `suggestion` - Lista de sugestões
-- `sources` - Lista de fontes colapsável
-- `tool` - Display de tool
-- `task` - Item de task
+- `bar-chart` - Gráfico de barras simples
+- `chart-area-interactive` - Gráfico de área interativo
+- `chart-bar-interactive` - Gráfico de barras interativo
 - `checkpoint` - Checkpoint display
+- `circular-progress-chart` - Gráfico circular de progresso
+- `data-table` - Tabela avançada
+- `message` - Componente de mensagem com branches
+- `project-list` - Lista de projetos
+- `reminder-card` - Card de lembretes
+- `sources` - Lista de fontes colapsável
+- `stat-card` - Card de estatística
+- `suggestion` - Lista de sugestões
+- `task` - Item de task
+- `team-member-list` - Lista de membros da equipe
+- `time-tracker` - Timer com controles
+- `tool` - Display de tool
+
+**Feedback:**
+
 - `confirmation` - Confirmation dialog wrapper
 
-### Organisms (24)
+**Flow:**
 
-- `dashboard-layout` - Layout de dashboard
-- `stats-grid` - Grid de estatísticas
-- `monthly-summary` - Resumo mensal
-- `dashboard-header-actions` - Ações do header
-- `dashboard-movements-section` - Seção de movimentações
-- `resizable` - Componente redimensionável com sidebar
-- `conversation` - Container de conversa
-- `model-selector` - Seletor de modelo
-- `image` - Display de imagem gerada
-- `open-in-chat` - Dropdown para abrir em outras plataformas
-- `panel` - Panel do @xyflow/react
-- `toolbar` - Toolbar do @xyflow/react
-- `controls` - Controls do @xyflow/react
+- `canvas` - Canvas do ReactFlow
 - `connection` - Connection do @xyflow/react
-- `queue` - Fila de mensagens e tarefas
-- `reasoning` - Exibição de raciocínio do modelo
-- `plan` - Exibição de planos do modelo
-- `web-preview` - Visualizador de páginas web
+
+**Forms:**
+
+- `button-group` - Grupo de botões
+- `image-dropzone` - Upload de imagem
+- `input-group` - Grupo de input com addons
+- `item` - Item de formulário
+
+**Layout:**
+
+- `dashboard-header` - Header com busca, notificações e perfil
+
+**Navigation:**
+
+- `menu-dock` - Dock de menu
+- `sidebar-navigation` - Menu lateral completo
+
+**Theme:**
+
+- `theme-toggle-button` - Botão de toggle de tema
+
+**Typography:**
+
+- `animated-shiny-text` - Texto com efeito shimmer animado
+
+### Organisms (23)
+
 - `chain-of-thought` - Cadeia de raciocínio
 - `context` - Uso de contexto/tokens do modelo
-- `prompt-input` - Input de prompt complexo
-- `canvas` - Canvas do ReactFlow
-- `node` - Node do ReactFlow
+- `controls` - Controls do @xyflow/react
+- `conversation` - Container de conversa
+- `dashboard-header-actions` - Ações do header
+- `dashboard-layout` - Layout de dashboard
+- `dashboard-movements-section` - Seção de movimentações
 - `edge` - Edge do ReactFlow
+- `genealogy-canvas` - Canvas de genealogia
+- `image` - Display de imagem gerada
+- `model-selector` - Seletor de modelo
+- `monthly-summary` - Resumo mensal
+- `node` - Node do ReactFlow
+- `open-in-chat` - Dropdown para abrir em outras plataformas
+- `panel` - Panel do @xyflow/react
+- `plan` - Exibição de planos do modelo
+- `prompt-input` - Input de prompt complexo
+- `queue` - Fila de mensagens e tarefas
+- `reasoning` - Exibição de raciocínio do modelo
+- `resizable-layout` - Componente redimensionável com sidebar
+- `stats-grid` - Grid de estatísticas
+- `toolbar` - Toolbar do @xyflow/react
+- `web-preview` - Visualizador de páginas web
 
-### Hooks (9)
+### Hooks (11)
 
-- `use-stat-card` - Hook para StatCard
-- `use-mobile` - Hook para detectar dispositivos móveis
+- `use-animated-indicator` - Hook para indicadores animados
+- `use-genealogy` - Hook para gerenciar genealogia/hierarquia
+- `use-mobile` (exportado como `useIsMobile`) - Hook para detectar dispositivos móveis
+- `use-project-progress` - Hook para calcular progresso de projetos
+- `use-project-stats` - Hook para calcular estatísticas de projetos
 - `use-react-table-back` - Hook para tabelas com paginação/ordenação no backend
 - `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend
 - `use-resizable` - Hook para componentes redimensionáveis
+- `use-stat-card` - Hook para StatCard
 - `use-theme-transition` - Hook para transições de tema com View Transitions API
 - `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
-- `use-project-stats` - Hook para calcular estatísticas de projetos
-- `use-project-progress` - Hook para calcular progresso de projetos
 
 ### Blocks (2)
 
@@ -360,10 +509,10 @@ Para mais detalhes sobre customização, veja [docs/packages/ui.md](./docs/packa
 
 ```bash
 # 1. Inicializar
-npx flowtomic@latest init
+npx flowtomic-cli@latest init
 
 # 2. Adicionar componentes
-npx flowtomic@latest add button card input
+npx flowtomic-cli@latest add button card input
 
 # 3. Usar no projeto
 ```
@@ -378,7 +527,7 @@ import { Input } from "@/components/ui/input";
 
 ```bash
 # Adicionar um block completo
-npx flowtomic@latest add-block dashboard-01
+npx flowtomic-cli@latest add-block dashboard-01
 ```
 
 O block será instalado com todos os seus arquivos e dependências.
@@ -399,14 +548,42 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 
 ## 📦 Publicação
 
-### CLI no npm
+### Packages no npm
 
-O CLI está publicado como `flowtomic`:
+O Flowtomic está publicado no npm em três packages:
+
+#### 1. CLI (`flowtomic-cli`)
+
+CLI para instalação de componentes, hooks e blocks:
 
 ```bash
-npx flowtomic@latest init
-npx flowtomic@latest add button
-npx flowtomic@latest add-block dashboard-01
+npx flowtomic-cli@latest init
+npx flowtomic-cli@latest add button
+npx flowtomic-cli@latest add-block dashboard-01
+```
+
+#### 2. UI (`@flowtomic/ui`)
+
+Componentes UI reutilizáveis:
+
+```bash
+npm install @flowtomic/ui
+```
+
+```typescript
+import { Button, Card, Input } from "@flowtomic/ui";
+```
+
+#### 3. Logic (`@flowtomic/logic`)
+
+Hooks headless e lógica reutilizável:
+
+```bash
+npm install @flowtomic/logic
+```
+
+```typescript
+import { useStatCard, useIsMobile } from "@flowtomic/logic";
 ```
 
 ### Registry
@@ -418,7 +595,7 @@ O registry está disponível em `https://registry.flowtomic.dev`:
 npx shadcn@latest add https://registry.flowtomic.dev/all.json
 ```
 
-Para mais informações sobre publicação e deploy, veja [docs/deploy/DEPLOYMENT.md](./docs/deploy/DEPLOYMENT.md).
+Para mais informações sobre publicação e deploy, veja [docs/deploy/README.md](./docs/deploy/README.md).
 
 ---
 

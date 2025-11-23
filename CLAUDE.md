@@ -14,11 +14,11 @@ Este é um monorepo gerenciado com Bun workspaces contendo:
 
 ### Estrutura de Componentes
 
-- **Atoms**: Componentes básicos em `packages/ui/src/components/atoms/` (15 componentes)
-- **Molecules**: Componentes compostos em `packages/ui/src/components/molecules/` (10 componentes)
-- **Organisms**: Componentes complexos em `packages/ui/src/components/organisms/` (6 componentes)
-- **Blocks**: Componentes pré-construídos em `packages/ui/src/blocks/` (1 block)
-- **Hooks**: Hooks headless em `packages/logic/src/hooks/` (6 hooks)
+- **Atoms**: Componentes básicos em `packages/ui/src/components/atoms/` (54 componentes)
+- **Molecules**: Componentes compostos em `packages/ui/src/components/molecules/` (24 componentes)
+- **Organisms**: Componentes complexos em `packages/ui/src/components/organisms/` (22 componentes)
+- **Blocks**: Componentes pré-construídos em `packages/ui/src/blocks/` (2 blocks)
+- **Hooks**: Hooks headless em `packages/logic/src/hooks/` (10 hooks)
 
 ### Convenções de Arquivos
 
@@ -61,7 +61,7 @@ useMobile/
 ### Dependências
 
 - **UI**: Baseado em Radix UI, Tailwind CSS v4.1.14, class-variance-authority, clsx, tailwind-merge
-- **Logic**: Hooks headless sem dependências de UI (apenas React e dependências específicas como @tanstack/react-table, react-resizable-panels)
+- **Logic**: Hooks headless sem dependências de UI (apenas React, zustand e dependências específicas como @tanstack/react-table, react-resizable-panels)
 - **CLI**: Usa Bun para execução
 - **Estilos**: Tailwind CSS v4 com `@tailwindcss/postcss`, suporte a variáveis CSS customizáveis
 
@@ -89,7 +89,8 @@ Ao adicionar novos componentes/hooks:
 - Suporta instalação via GitHub sem publicação no npm
 - Comandos disponíveis: `init`, `add`, `add-block`, `list`
 - Compatível com shadcn CLI via registry: `https://registry.flowtomic.dev/all.json`
-- Publicado no npm como `flowtomic` (uso: `npx flowtomic@latest` ou `bunx flowtomic@latest`)
+- Publicado no npm como `flowtomic-cli` (uso: `npx flowtomic-cli@latest` ou `bunx flowtomic-cli@latest`)
+- Packages publicados: `@flowtomic/ui@0.1.0` e `@flowtomic/logic@0.1.0`
 
 ### TypeScript
 
@@ -280,25 +281,87 @@ bun run test              # Executar testes
 
 ## Componentes Disponíveis
 
-### Atoms (15)
+### Atoms (54)
+
+Componentes básicos organizados por categoria:
+
+**Formulários e Inputs:**
 
 - `button` - Botão com variantes
-- `badge` - Badge/etiqueta
 - `input` - Campo de entrada
-- `card` - Card container
+- `textarea` - Campo de texto multilinha
 - `checkbox` - Checkbox
+- `select` - Campo de seleção
+- `label` - Label para formulários
+- `radio-group` - Grupo de radio buttons
+- `switch` - Switch toggle
+- `slider` - Slider de valores
+- `toggle` - Toggle button
+- `input-otp` - Input para códigos OTP
+- `field` - Campo de formulário completo
+- `form` - Wrapper de formulário com React Hook Form
+
+**Layout e Estrutura:**
+
+- `card` - Card container
 - `skeleton` - Loading skeleton
 - `table` - Tabela base
 - `tabs` - Abas
+- `separator` - Separador horizontal/vertical
+- `accordion` - Container colapsável
+- `aspect-ratio` - Container com proporção fixa
+- `toggle-group` - Grupo de toggles
+- `drawer` - Drawer lateral
+- `sidebar` - Sidebar navegável
+- `empty` - Estado vazio
+- `kbd` - Teclas de atalho
+
+**Feedback e Diálogos:**
+
 - `alert` - Alerta
 - `alert-dialog` - Diálogo de confirmação
 - `dialog` - Modal/diálogo
-- `dropdown-menu` - Menu dropdown
+- `popover` - Popover flutuante
+- `sheet` - Sheet lateral
+- `tooltip` - Tooltip para informações adicionais
+- `hover-card` - Card que aparece ao passar o mouse
 - `sonner` - Toast notifications
-- `select` - Campo de seleção
-- `animated-shiny-text` - Texto com efeito shimmer animado (em `atoms/typography/`)
 
-### Molecules (10)
+**Navegação:**
+
+- `dropdown-menu` - Menu dropdown
+- `context-menu` - Menu de contexto
+- `breadcrumb` - Breadcrumb navigation
+- `pagination` - Paginação
+- `menubar` - Barra de menu
+- `navigation-menu` - Menu de navegação
+
+**Exibição de Dados:**
+
+- `badge` - Badge/etiqueta
+- `calendar` - Calendário
+- `carousel` - Carrossel
+- `chart` - Gráficos base
+- `code-block` - Bloco de código com syntax highlighting
+- `snippet` - Snippet de código
+- `inline-citation` - Citação inline com hover card
+
+**Animações e Efeitos:**
+
+- `loader` - Loading spinner animado
+- `shimmer` - Texto com efeito shimmer
+- `spinner` - Spinner animado
+- `animated-shiny-text` - Texto com efeito shimmer animado
+
+**Utilitários:**
+
+- `autocomplete` - Autocomplete
+- `command` - Command palette/menu
+- `collapsible` - Container colapsável
+- `scroll-area` - Área de scroll customizada
+- `progress` - Barra de progresso
+
+### Molecules (24)
 
 - `button-group` - Grupo de botões
 - `password-input` - Input de senha
@@ -306,12 +369,26 @@ bun run test              # Executar testes
 - `stat-card` - Card de estatística
 - `data-table` - Tabela avançada
 - `menu-dock` - Dock de menu
-- `theme-toggle-button` - Botão de toggle de tema (em `molecules/theme/`)
-- `auth-navigation-link` - Link de navegação de auth (em `molecules/auth/`)
-- `auth-form-error-message` - Mensagem de erro de formulário (em `molecules/auth/`)
+- `theme-toggle-button` - Botão de toggle de tema
+- `auth-navigation-link` - Link de navegação de auth
+- `auth-form-error-message` - Mensagem de erro de formulário
 - `social-login-buttons` - Botões de login social
+- `input-group` - Grupo de input com addons
+- `artifact` - Container de artifact
+- `message` - Componente de mensagem com branches
+- `suggestion` - Lista de sugestões
+- `sources` - Lista de fontes colapsável
+- `tool` - Display de tool
+- `task` - Item de task
+- `checkpoint` - Checkpoint display
+- `confirmation` - Confirmation dialog wrapper
+- `chart-area-interactive` - Gráfico de área interativo
+- `chart-bar-interactive` - Gráfico de barras interativo
+- `item` - Item de formulário
+- `connection` - Connection do @xyflow/react
+- `canvas` - Canvas do ReactFlow
 
-### Organisms (6)
+### Organisms (22)
 
 - `dashboard-layout` - Layout de dashboard
 - `stats-grid` - Grid de estatísticas
@@ -319,8 +396,24 @@ bun run test              # Executar testes
 - `dashboard-header-actions` - Ações do header
 - `dashboard-movements-section` - Seção de movimentações
 - `resizable-layout` - Componente redimensionável com sidebar
+- `conversation` - Container de conversa
+- `model-selector` - Seletor de modelo
+- `image` - Display de imagem gerada
+- `open-in-chat` - Dropdown para abrir em outras plataformas
+- `panel` - Panel do @xyflow/react
+- `toolbar` - Toolbar do @xyflow/react
+- `controls` - Controls do @xyflow/react
+- `queue` - Fila de mensagens e tarefas
+- `reasoning` - Exibição de raciocínio do modelo
+- `plan` - Exibição de planos do modelo
+- `web-preview` - Visualizador de páginas web
+- `chain-of-thought` - Cadeia de raciocínio
+- `context` - Uso de contexto/tokens do modelo
+- `prompt-input` - Input de prompt complexo
+- `node` - Node do ReactFlow
+- `edge` - Edge do ReactFlow
 
-### Hooks (6)
+### Hooks (10)
 
 - `use-stat-card` - Hook para StatCard
 - `use-mobile` (exportado como `useIsMobile`) - Hook para detectar dispositivos móveis
@@ -328,10 +421,16 @@ bun run test              # Executar testes
 - `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend
 - `use-resizable` - Hook para componentes redimensionáveis
 - `use-theme-transition` - Hook para transições de tema com View Transitions API
+- `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
+- `use-project-stats` - Hook para calcular estatísticas de projetos
+- `use-project-progress` - Hook para calcular progresso de projetos
+- `use-animated-indicator` - Hook para indicadores animados
+- `use-genealogy` - Hook para gerenciar genealogia/hierarquia
 
-### Blocks (1)
+### Blocks (2)
 
 - `dashboard-01` - Dashboard simples com cards
+- `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
 
 ## Registry
 

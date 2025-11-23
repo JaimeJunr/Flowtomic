@@ -4,19 +4,19 @@
 
 ## 📚 Índice
 
-- [Atoms](atoms.md) - Componentes básicos (15 componentes)
-- [Molecules](molecules.md) - Componentes compostos (10 componentes)
-- [Organisms](organisms.md) - Componentes complexos (6 componentes)
-- [Blocks](blocks.md) - Blocks pré-construídos (1 block)
-- [Hooks](hooks.md) - Hooks headless (6 hooks)
+- [Atoms](atoms.md) - Componentes básicos (54 componentes)
+- [Molecules](molecules.md) - Componentes compostos (36 componentes)
+- [Organisms](organisms.md) - Componentes complexos (23 componentes)
+- [Blocks](blocks.md) - Blocks pré-construídos (2 blocks)
+- [Hooks](hooks.md) - Hooks headless (11 hooks)
 
 ## 📊 Estatísticas
 
-- **Total de Atoms**: 15
-- **Total de Molecules**: 10
-- **Total de Organisms**: 6
-- **Total de Hooks**: 6
-- **Total de Blocks**: 1
+- **Total de Atoms**: 54
+- **Total de Molecules**: 36
+- **Total de Organisms**: 23
+- **Total de Hooks**: 11
+- **Total de Blocks**: 2
 
 ## 🎯 Como Usar
 
@@ -67,6 +67,6 @@ import { Input } from "@/components/ui/input";
 
 ## 📅 Atualizações
 
-- **Última atualização**: 2025-11-09
-- **Versão da documentação**: 1.2.0
-- **Próxima revisão**: 2025-12-09
+- **Última atualização**: 2025-11-22
+- **Versão da documentação**: 1.3.0
+- **Próxima revisão**: 2025-12-22

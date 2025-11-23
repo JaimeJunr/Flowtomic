@@ -2,7 +2,7 @@
 
 Componentes moleculares do Flowtomic. São combinações de atoms que formam componentes mais complexos.
 
-## 📦 Componentes Disponíveis (30)
+## 📦 Componentes Disponíveis (36)
 
 ### `button-group`
 
@@ -117,6 +117,102 @@ Checkpoint display com ícone e trigger.
 Confirmation dialog wrapper para aprovação de ações.
 
 **Dependências**: `ai`, `clsx`, `tailwind-merge`
+
+### Animation
+
+#### `animated-modal`
+
+Modal com animações suaves de entrada e saída.
+
+**Dependências**: `motion`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/animation/animated-modal`
+
+#### `animated-sliding-number`
+
+Número com animação de deslizamento usando motion.
+
+**Dependências**: `motion`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/animation/animated-sliding-number`
+
+#### `button-counter`
+
+Contador com botões de incremento/decremento.
+
+**Dependências**: `motion`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/animation/button-counter`
+
+### Data Display
+
+#### `bar-chart`
+
+Gráfico de barras simples para analytics usando SVG puro.
+
+**Dependências**: `card`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/bar-chart`
+
+#### `circular-progress-chart`
+
+Gráfico circular de progresso usando SVG puro.
+
+**Dependências**: `card`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/circular-progress-chart`
+
+#### `project-list`
+
+Lista de projetos com ícones, datas e ações.
+
+**Dependências**: `card`, `button`, `badge`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/project-list`
+
+#### `team-member-list`
+
+Lista de membros da equipe com avatares, nomes, tarefas e status.
+
+**Dependências**: `card`, `avatar`, `badge`, `button`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/team-member-list`
+
+#### `reminder-card`
+
+Card de lembretes com horário e botão de ação.
+
+**Dependências**: `card`, `button`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/reminder-card`
+
+#### `time-tracker`
+
+Timer com controles de pause/stop usando o hook headless useTimeTracker.
+
+**Dependências**: `@flowtomic/logic`, `card`, `button`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/time-tracker`
+
+### Layout
+
+#### `dashboard-header`
+
+Header com busca, notificações e perfil do usuário.
+
+**Dependências**: `input`, `button`, `avatar`, `badge`, `dropdown-menu`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/layout/dashboard-header`
+
+### Navigation
+
+#### `sidebar-navigation`
+
+Menu lateral completo com logo, seções de navegação e card de download mobile.
+
+**Dependências**: `button`, `card`, `sidebar`, `lucide-react`
+
+**Localização**: `packages/ui/src/components/molecules/navigation/sidebar-navigation`
 
 ### `connection`
 

@@ -42,6 +42,14 @@ Menu dropdown para ações e navegação.
 
 **Localização**: `packages/ui/src/components/atoms/actions/dropdown-menu`
 
+#### `context-menu`
+
+Menu de contexto que aparece ao clicar com botão direito.
+
+**Dependências**: `@radix-ui/react-context-menu`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/actions/context-menu`
+
 ### Forms
 
 #### `input`
@@ -75,6 +83,104 @@ Campo de autocomplete com busca e filtragem.
 **Dependências**: `@radix-ui/react-popover`, `lucide-react`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/atoms/forms/autocomplete`
+
+#### `field`
+
+Campo de formulário completo com label, input e mensagem de erro.
+
+**Dependências**: `class-variance-authority`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/field`
+
+#### `form`
+
+Wrapper de formulário com React Hook Form e validação.
+
+**Dependências**: `@radix-ui/react-label`, `@radix-ui/react-slot`, `react-hook-form`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/form`
+
+#### `input-otp`
+
+Input para códigos OTP (One-Time Password) com múltiplos campos.
+
+**Dependências**: `input-otp`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/input-otp`
+
+#### `label`
+
+Label para formulários com suporte a Radix UI.
+
+**Dependências**: `@radix-ui/react-label`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/label`
+
+#### `radio-group`
+
+Grupo de radio buttons para seleção única.
+
+**Dependências**: `@radix-ui/react-radio-group`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/radio-group`
+
+#### `slider`
+
+Slider de valores numéricos com controle deslizante.
+
+**Dependências**: `@radix-ui/react-slider`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/slider`
+
+#### `switch`
+
+Switch toggle para alternar estados.
+
+**Dependências**: `@radix-ui/react-switch`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/switch`
+
+#### `textarea`
+
+Campo de texto multilinha.
+
+**Dependências**: `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/textarea`
+
+#### `toggle`
+
+Toggle button para ações de alternância.
+
+**Dependências**: `@radix-ui/react-toggle`, `class-variance-authority`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/toggle`
+
+### Data Display
+
+#### `calendar`
+
+Calendário para seleção de datas.
+
+**Dependências**: `react-day-picker`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/data-display/calendar`
+
+#### `carousel`
+
+Carrossel para exibir conteúdo em slides.
+
+**Dependências**: `embla-carousel-react`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/data-display/carousel`
+
+#### `chart`
+
+Componente base para gráficos usando Recharts.
+
+**Dependências**: `recharts`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/data-display/chart`
 
 ### Display
 
@@ -118,6 +224,22 @@ Componente de avatar com imagem e fallback.
 
 **Localização**: `packages/ui/src/components/atoms/display/avatar`
 
+#### `empty`
+
+Componente para exibir estado vazio.
+
+**Dependências**: `class-variance-authority`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/display/empty`
+
+#### `kbd`
+
+Componente para exibir teclas de atalho.
+
+**Dependências**: `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/display/kbd`
+
 ### Navigation
 
 #### `tabs`
@@ -135,6 +257,38 @@ Command palette/menu para busca e navegação rápida.
 **Dependências**: `cmdk`, `lucide-react`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/atoms/navigation/command`
+
+#### `breadcrumb`
+
+Breadcrumb navigation para indicar localização na hierarquia.
+
+**Dependências**: `@radix-ui/react-slot`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/navigation/breadcrumb`
+
+#### `menubar`
+
+Barra de menu horizontal para navegação.
+
+**Dependências**: `@radix-ui/react-menubar`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/navigation/menubar`
+
+#### `navigation-menu`
+
+Menu de navegação com suporte a dropdowns e links.
+
+**Dependências**: `@radix-ui/react-navigation-menu`, `class-variance-authority`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/navigation/navigation-menu`
+
+#### `pagination`
+
+Paginação para navegar entre páginas de resultados.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/navigation/pagination`
 
 ### Feedback
 
@@ -194,6 +348,22 @@ Citação inline com hover card para exibir fontes.
 
 **Localização**: `packages/ui/src/components/atoms/feedback/inline-citation`
 
+#### `popover`
+
+Popover flutuante para exibir conteúdo adicional.
+
+**Dependências**: `@radix-ui/react-popover`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/popover`
+
+#### `sheet`
+
+Sheet lateral deslizante para exibir conteúdo.
+
+**Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/sheet`
+
 ### Animation
 
 #### `animated-3d`
@@ -244,23 +414,13 @@ Número com animação de deslizamento.
 
 **Localização**: `packages/ui/src/components/atoms/animation/sliding-number`
 
-#### `counter`
+#### `spinner`
 
-Contador com botões de incremento/decremento.
+Spinner animado para indicar carregamento.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
-**Localização**: `packages/ui/src/components/atoms/animation/counter`
-
-### Typography
-
-#### `animated-number`
-
-Número animado com transições suaves.
-
-**Dependências**: `clsx`, `tailwind-merge`
-
-**Localização**: `packages/ui/src/components/atoms/typography/animated-number`
+**Localização**: `packages/ui/src/components/atoms/animation/spinner`
 
 ### Code
 
@@ -271,6 +431,14 @@ Bloco de código com syntax highlighting usando Shiki.
 **Dependências**: `shiki`, `lucide-react`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/atoms/code/code-block`
+
+#### `snippet`
+
+Snippet de código inline com botão de copiar.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/code/snippet`
 
 ### Layout
 
@@ -297,6 +465,46 @@ Componente redimensionável com painéis.
 **Dependências**: `react-resizable-panels`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/atoms/layout/resizable`
+
+#### `accordion`
+
+Container colapsável em acordeão para organizar conteúdo.
+
+**Dependências**: `@radix-ui/react-accordion`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/layout/accordion`
+
+#### `aspect-ratio`
+
+Container com proporção fixa para manter dimensões.
+
+**Dependências**: `@radix-ui/react-aspect-ratio`
+
+**Localização**: `packages/ui/src/components/atoms/layout/aspect-ratio`
+
+#### `drawer`
+
+Drawer lateral deslizante para mobile.
+
+**Dependências**: `vaul`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/layout/drawer`
+
+#### `sidebar`
+
+Sidebar navegável com suporte a responsividade.
+
+**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `lucide-react`, `@flowtomic/logic`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/layout/sidebar`
+
+#### `toggle-group`
+
+Grupo de toggles para seleção múltipla.
+
+**Dependências**: `@radix-ui/react-toggle-group`, `class-variance-authority`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/layout/toggle-group`
 
 ## 🚀 Instalação
 
@@ -337,17 +545,18 @@ Os atoms estão organizados em categorias dentro de `packages/ui/src/components/
 ```
 atoms/
 ├── actions/          # Componentes de ação
-├── forms/            # Componentes de formulário
+├── animation/        # Componentes de animação
+├── code/             # Componentes de código
+├── data-display/     # Componentes de exibição de dados
 ├── display/          # Componentes de exibição
-├── navigation/       # Componentes de navegação
 ├── feedback/         # Componentes de feedback
-├── animation/         # Componentes de animação
-├── typography/        # Componentes de tipografia
-├── code/              # Componentes de código
-└── layout/            # Componentes de layout
+├── forms/            # Componentes de formulário
+├── layout/           # Componentes de layout
+└── navigation/       # Componentes de navegação
 ```
 
 Cada componente possui sua própria pasta com:
+
 - Arquivo principal do componente (`.tsx`)
 - Arquivo de story (`.stories.tsx`)
 - Arquivo de exportação (`index.ts`)

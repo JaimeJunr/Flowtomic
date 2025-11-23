@@ -2,7 +2,37 @@
 
 Hooks headless do Flowtomic para lógica reutilizável sem dependências de UI.
 
-## 📦 Hooks Disponíveis (9)
+## 📦 Hooks Disponíveis (11)
+
+### `use-animated-indicator`
+
+Hook para gerenciar indicadores animados com estados e transições.
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useAnimatedIndicator`
+
+**Características**:
+
+- Estados de indicador (idle, loading, success, error)
+- Transições suaves entre estados
+- Callbacks para mudanças de estado
+- Controle de animação
+
+### `use-genealogy`
+
+Hook para gerenciar genealogia/hierarquia de elementos com relacionamentos.
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useGenealogy`
+
+**Características**:
+
+- Gerenciamento de hierarquia de elementos
+- Relacionamentos pai-filho
+- Navegação entre elementos
+- Busca e filtragem
 
 ### `use-stat-card`
 
@@ -31,6 +61,7 @@ Hook headless para TanStack Table com paginação e ordenação no backend (serv
 **Localização**: `packages/logic/src/hooks/useReactTableBack`
 
 **Características**:
+
 - Paginação controlada pelo servidor
 - Ordenação controlada pelo servidor
 - Callbacks para mudanças de paginação e ordenação
@@ -45,6 +76,7 @@ Hook headless para TanStack Table com paginação e ordenação no frontend (cli
 **Localização**: `packages/logic/src/hooks/useReactTableFront`
 
 **Características**:
+
 - Paginação no cliente
 - Ordenação no cliente
 - Filtros no cliente
@@ -59,6 +91,7 @@ Hook headless para gerenciar lógica de componentes redimensionáveis com sideba
 **Localização**: `packages/logic/src/hooks/useResizable`
 
 **Características**:
+
 - Persistência de tamanho no localStorage
 - Suporte a snap automático
 - Detecção de mobile
@@ -74,6 +107,7 @@ Hook para gerenciar transições suaves de tema usando View Transitions API com 
 **Localização**: `packages/logic/src/hooks/useThemeTransition`
 
 **Características**:
+
 - Usa View Transitions API quando disponível
 - Fallback automático para navegadores sem suporte
 - Transições suaves de tema
@@ -87,6 +121,7 @@ Hook headless para gerenciar timer com start, pause, stop, resume e formatação
 **Localização**: `packages/logic/src/hooks/useTimeTracker`
 
 **Características**:
+
 - Iniciar, pausar, parar e retomar timer
 - Formatação de tempo customizável (HH:mm:ss, mm:ss, ss)
 - Callbacks para eventos do timer
@@ -101,6 +136,7 @@ Hook headless para calcular estatísticas de projetos (totais, filtros, agregaç
 **Localização**: `packages/logic/src/hooks/useProjectStats`
 
 **Características**:
+
 - Calcular totais por status (running, ended, pending, on-hold, cancelled)
 - Filtros customizados
 - Agrupamento por critérios
@@ -115,6 +151,7 @@ Hook headless para calcular progresso de projetos (porcentagem, status, distribu
 **Localização**: `packages/logic/src/hooks/useProjectProgress`
 
 **Características**:
+
 - Calcular porcentagem total de progresso
 - Determinar status geral (completed, in-progress, pending, on-hold)
 - Distribuição de projetos por status
@@ -160,15 +197,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export function ResponsiveComponent() {
   const isMobile = useIsMobile();
 
-  return (
-    <div>
-      {isMobile ? (
-        <p>Versão Mobile</p>
-      ) : (
-        <p>Versão Desktop</p>
-      )}
-    </div>
-  );
+  return <div>{isMobile ? <p>Versão Mobile</p> : <p>Versão Desktop</p>}</div>;
 }
 ```
 
@@ -178,17 +207,18 @@ export function ResponsiveComponent() {
 import { useReactTableBack } from "@/hooks/use-react-table-back";
 
 export function ServerTable() {
-  const { table, sorting, pagination, setPagination, paginationInfo } = useReactTableBack({
-    data: pageData,
-    columns: columnDefs,
-    totalCount: 1000,
-    onPaginationChange: ({ pageIndex, pageSize }) => {
-      fetchData({ page: pageIndex + 1, pageSize });
-    },
-    onSortingChange: (sorting) => {
-      fetchData({ sorting });
-    },
-  });
+  const { table, sorting, pagination, setPagination, paginationInfo } =
+    useReactTableBack({
+      data: pageData,
+      columns: columnDefs,
+      totalCount: 1000,
+      onPaginationChange: ({ pageIndex, pageSize }) => {
+        fetchData({ page: pageIndex + 1, pageSize });
+      },
+      onSortingChange: (sorting) => {
+        fetchData({ sorting });
+      },
+    });
 
   return (
     <table>
@@ -204,12 +234,13 @@ export function ServerTable() {
 import { useReactTableFront } from "@/hooks/use-react-table-front";
 
 export function ClientTable() {
-  const { table, sorting, pagination, setPagination, paginationInfo } = useReactTableFront({
-    data: allData,
-    columns: columnDefs,
-    enablePagination: true,
-    enableSorting: true,
-  });
+  const { table, sorting, pagination, setPagination, paginationInfo } =
+    useReactTableFront({
+      data: allData,
+      columns: columnDefs,
+      enablePagination: true,
+      enableSorting: true,
+    });
 
   return (
     <table>
@@ -226,7 +257,7 @@ import { useResizable } from "@/hooks/use-resizable";
 
 export function ResizableLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  
+
   const {
     handleDoubleClick,
     shouldUseMobileDrawer,
@@ -275,9 +306,65 @@ export function ThemeToggle() {
   };
 
   return (
-    <button onClick={handleToggle}>
-      {theme === "dark" ? "☀️" : "🌙"}
-    </button>
+    <button onClick={handleToggle}>{theme === "dark" ? "☀️" : "🌙"}</button>
+  );
+}
+```
+
+### useAnimatedIndicator
+
+```typescript
+import { useAnimatedIndicator } from "@/hooks/use-animated-indicator";
+
+export function TabsWithIndicator() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { indicatorStyle, registerElement } = useAnimatedIndicator({
+    containerRef,
+    activeSelector: '[data-state="active"]',
+  });
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div className="flex gap-4">
+        <button data-state="active" ref={(el) => registerElement("tab1", el)}>
+          Tab 1
+        </button>
+        <button data-state="inactive" ref={(el) => registerElement("tab2", el)}>
+          Tab 2
+        </button>
+      </div>
+      {/* Indicador animado */}
+      <div
+        className="absolute bottom-0 h-1 bg-primary transition-all"
+        style={indicatorStyle}
+      />
+    </div>
+  );
+}
+```
+
+### useGenealogy
+
+```typescript
+import { useGenealogy } from "@/hooks/use-genealogy";
+
+export function GenealogyTree() {
+  const { nodes, edges, addEntity, addRelationship, findAncestors } =
+    useGenealogy({
+      initialData: {
+        people: [
+          { id: "1", name: "João", gender: "male" },
+          { id: "2", name: "Maria", gender: "female" },
+        ],
+        relationships: [{ from: "1", to: "2", type: "child" }],
+      },
+    });
+
+  // Usar nodes e edges com ReactFlow
+  return (
+    <ReactFlow nodes={nodes} edges={edges}>
+      {/* Renderizar árvore genealógica */}
+    </ReactFlow>
   );
 }
 ```
