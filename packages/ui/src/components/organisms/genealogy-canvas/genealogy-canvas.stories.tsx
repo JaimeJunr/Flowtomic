@@ -1,6 +1,6 @@
+import type { GenealogyData } from "@flowtomic/logic";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
-import type { GenealogyData } from "@flowtomic/logic";
 import { GenealogyCanvas } from "./genealogy-canvas";
 
 // Dados de exemplo para demonstração (pessoas)
@@ -214,4 +214,3 @@ export const WithCallbacks: Story = {
     </div>
   ),
 };
-

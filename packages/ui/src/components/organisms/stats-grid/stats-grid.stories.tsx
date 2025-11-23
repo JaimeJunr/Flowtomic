@@ -159,7 +159,8 @@ export const AutoCalculatedDelta: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Exemplo demonstrando cálculo automático do delta quando apenas `value` e `lastMonth` são fornecidos. O delta é calculado automaticamente pelo hook useStatCard.",
+        story:
+          "Exemplo demonstrando cálculo automático do delta quando apenas `value` e `lastMonth` são fornecidos. O delta é calculado automaticamente pelo hook useStatCard.",
       },
     },
   },

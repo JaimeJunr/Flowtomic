@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Button } from "../../actions/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 
@@ -19,10 +20,10 @@ export const Default: Story = {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant="outline">Hover me</Button>
+          <Button>Hover me</Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>This is a tooltip</p>
+          <p>Tooltip</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -45,4 +46,29 @@ export const WithLongText: Story = {
       </Tooltip>
     </TooltipProvider>
   ),
+};
+
+export const ArtifactStyle: Story = {
+  render: () => (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="ghost" size="icon-sm">
+            <span className="sr-only">Download</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Download</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Tooltip como no Artifact, usado com botões de ação com ícone e label oculto para acessibilidade.",
+      },
+    },
+  },
 };

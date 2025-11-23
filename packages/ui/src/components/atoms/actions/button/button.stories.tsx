@@ -1,6 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Download } from "lucide-react";
+import { Download, MoreHorizontal } from "lucide-react";
+import React from "react";
 import { fn } from "storybook/test";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../dropdown-menu/dropdown-menu";
 import { Button } from "./button";
 
 const meta = {
@@ -141,5 +149,39 @@ export const Animated: Story = {
     variant: "natural",
     animated: true,
     children: "Animado",
+  },
+};
+
+export const StatCardStyle: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 -me-1.5 text-muted-foreground hover:text-foreground"
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" side="bottom">
+          <DropdownMenuItem>Configurações</DropdownMenuItem>
+          <DropdownMenuItem>Adicionar Alerta</DropdownMenuItem>
+          <DropdownMenuItem>Fixar no Dashboard</DropdownMenuItem>
+          <DropdownMenuItem>Compartilhar</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="text-error">Remover</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Button como no StatCard, usado como trigger de DropdownMenu com ícone e estilização específica.",
+      },
+    },
   },
 };

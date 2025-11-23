@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { ReactNode } from "react";
 import type { Node as ReactFlowNode } from "@xyflow/react";
-import { useNodesState, useEdgesState, Position } from "@xyflow/react";
-import { Toolbar } from "./toolbar";
-import { Canvas } from "../../molecules/canvas";
+import { Position, useEdgesState, useNodesState } from "@xyflow/react";
+import type { ReactNode } from "react";
+import { Canvas } from "@/components/molecules/flow/canvas";
 import { Node, NodeContent, NodeHeader, NodeTitle } from "../node";
+import { Toolbar } from "./toolbar";
 
 const meta = {
   title: "Flowtomic UI/Organisms/Toolbar",
@@ -65,15 +65,9 @@ const ToolbarInCanvas = ({
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const nodeTypes = {
-    custom: ({
-      data,
-    }: {
-      data: { toolbarChildren: ReactNode; toolbarPosition?: Position };
-    }) => (
+    custom: ({ data }: { data: { toolbarChildren: ReactNode; toolbarPosition?: Position } }) => (
       <Node handles={{ top: { type: "target" }, bottom: { type: "source" } }}>
-        <Toolbar position={data.toolbarPosition}>
-          {data.toolbarChildren}
-        </Toolbar>
+        <Toolbar position={data.toolbarPosition}>{data.toolbarChildren}</Toolbar>
         <NodeHeader>
           <NodeTitle>Node com Toolbar</NodeTitle>
         </NodeHeader>

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../../actions/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../display/card";
 import { Animated3D } from "./animated-3d";
@@ -56,18 +56,14 @@ export const Default: Story = {
 
     return (
       <div className="flex flex-col items-center gap-4">
-        <Button onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? "Fechar" : "Abrir"} Animação 3D
-        </Button>
+        <Button onClick={() => setIsOpen(!isOpen)}>{isOpen ? "Fechar" : "Abrir"} Animação</Button>
         <Animated3D isOpen={isOpen}>
           <Card className="w-80">
             <CardHeader>
-              <CardTitle>Card Animado 3D</CardTitle>
+              <CardTitle>Card Animado</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Este card usa animação 3D com perspectiva e efeitos de profundidade.
-              </p>
+              <p>Conteúdo do card</p>
             </CardContent>
           </Card>
         </Animated3D>
@@ -247,5 +243,20 @@ export const MultipleCards: Story = {
         </div>
       </div>
     );
+  },
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
   },
 };

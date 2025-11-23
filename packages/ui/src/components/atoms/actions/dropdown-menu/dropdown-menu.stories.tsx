@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { MoreHorizontal, Settings, Share2, Trash, TriangleAlert } from "lucide-react";
+import React from "react";
 import { fn } from "storybook/test";
 import { Button } from "../button/button";
 import {
@@ -26,14 +28,12 @@ export const Default: Story = {
   render: () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Abrir Menu</Button>
+        <Button>Abrir Menu</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={fn()}>Perfil</DropdownMenuItem>
-        <DropdownMenuItem onClick={fn()}>Configurações</DropdownMenuItem>
-        <DropdownMenuItem onClick={fn()}>Equipe</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={fn()}>Sair</DropdownMenuItem>
+        <DropdownMenuItem>Item 1</DropdownMenuItem>
+        <DropdownMenuItem>Item 2</DropdownMenuItem>
+        <DropdownMenuItem>Item 3</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   ),
@@ -75,4 +75,49 @@ export const WithSeparators: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+};
+
+export const StatCardStyle: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 -me-1.5 text-muted-foreground hover:text-foreground"
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" side="bottom">
+          <DropdownMenuItem>
+            <Settings className="mr-2 h-4 w-4" />
+            Configurações
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <TriangleAlert className="mr-2 h-4 w-4" />
+            Adicionar Alerta
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Share2 className="mr-2 h-4 w-4" />
+            Compartilhar
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="text-error">
+            <Trash className="mr-2 h-4 w-4" />
+            Remover
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do DropdownMenu como no StatCard, com trigger de botão com ícone e menu de ações com separadores e ícones.",
+      },
+    },
+  },
 };

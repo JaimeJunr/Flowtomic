@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertCircle, CheckCircle2, Info as InfoIcon, TriangleAlert } from "lucide-react";
+import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 
 const meta = {
@@ -21,11 +22,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => (
-    <Alert {...args} className="w-[400px]">
+  render: () => (
+    <Alert>
       <AlertCircle className="h-4 w-4" />
-      <AlertTitle>Atenção!</AlertTitle>
-      <AlertDescription>Você pode adicionar componentes ao seu app usando o cli.</AlertDescription>
+      <AlertTitle>Atenção</AlertTitle>
+      <AlertDescription>Mensagem de alerta</AlertDescription>
     </Alert>
   ),
 };
@@ -81,4 +82,19 @@ export const WithoutTitle: Story = {
       <AlertDescription>Você pode adicionar componentes ao seu app usando o cli.</AlertDescription>
     </Alert>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

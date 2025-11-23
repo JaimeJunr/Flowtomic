@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { ReactNode } from "react";
 import type { Node as ReactFlowNode } from "@xyflow/react";
-import { useNodesState, useEdgesState } from "@xyflow/react";
+import { useEdgesState, useNodesState } from "@xyflow/react";
+import type { ReactNode } from "react";
+import { Canvas } from "@/components/molecules/flow/canvas";
 import { Node, NodeContent, NodeHeader, NodeTitle } from "./node";
-import { Canvas } from "../../molecules/canvas";
 
 const meta = {
   title: "Flowtomic UI/Organisms/Node",

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import {
   Select,
   SelectContent,
@@ -27,8 +28,8 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   render: () => (
-    <Select defaultValue="option1">
-      <SelectTrigger className="w-[180px]">
+    <Select>
+      <SelectTrigger>
         <SelectValue placeholder="Selecione uma opção" />
       </SelectTrigger>
       <SelectContent>
@@ -171,4 +172,27 @@ export const PageSizeSelector: Story = {
       </Select>
     </div>
   ),
+};
+
+export const PromptInputStyle: Story = {
+  render: () => (
+    <Select defaultValue="gpt-4">
+      <SelectTrigger className="w-[140px]">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="gpt-4">GPT-4</SelectItem>
+        <SelectItem value="gpt-3.5">GPT-3.5</SelectItem>
+        <SelectItem value="claude">Claude</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Select como no PromptInput, usado para seleção de modelo com largura fixa e sem placeholder visível.",
+      },
+    },
+  },
 };

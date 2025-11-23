@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { fn } from "storybook/test";
 import { Button } from "../../actions/button";
 import {
@@ -37,29 +38,23 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => (
+  render: () => (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Excluir Conta</Button>
+        <Button>Abrir Diálogo</Button>
       </AlertDialogTrigger>
-      <AlertDialogContent animation={args.animation}>
+      <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Você tem certeza absoluta?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Esta ação não pode ser desfeita. Isso excluirá permanentemente sua conta e removerá seus
-            dados de nossos servidores.
-          </AlertDialogDescription>
+          <AlertDialogTitle>Título</AlertDialogTitle>
+          <AlertDialogDescription>Descrição do diálogo</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={fn()}>Continuar</AlertDialogAction>
+          <AlertDialogAction>Confirmar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   ),
-  args: {
-    animation: "depth",
-  },
 };
 
 export const WithCustomActions: Story = {
@@ -292,4 +287,19 @@ export const Animation3DWithoutBlur: Story = {
       </AlertDialogContent>
     </AlertDialog>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

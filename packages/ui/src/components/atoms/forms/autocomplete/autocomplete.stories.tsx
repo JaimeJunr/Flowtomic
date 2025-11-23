@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Autocomplete } from "./autocomplete";
 
 const meta = {
@@ -221,4 +221,19 @@ export const WithAllOptions: Story = {
       <Autocomplete options={allOptions} placeholder="Selecione fruta ou vegetal..." />
     </div>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

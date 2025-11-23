@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { CodeBlock, CodeBlockCopyButton } from "./code-block";
 
 const meta = {
@@ -67,5 +68,22 @@ export const Python: Story = {
 
 print(greet("World"))`,
     language: "python",
+  },
+};
+
+export const ToolStyle: Story = {
+  render: () => (
+    <CodeBlock
+      code={JSON.stringify({ param1: "value1", param2: "value2" }, null, 2)}
+      language="json"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do CodeBlock como no Tool, usado para exibir inputs/outputs de ferramentas em formato JSON.",
+      },
+    },
   },
 };

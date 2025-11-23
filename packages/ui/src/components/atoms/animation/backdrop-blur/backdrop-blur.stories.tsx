@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../../actions/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../display/card";
 import { BackdropBlur } from "./backdrop-blur";
@@ -48,17 +48,13 @@ export const Default: Story = {
     return (
       <div className="relative min-h-screen p-8">
         <div className="flex flex-col items-center gap-4">
-          <Button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? "Fechar" : "Abrir"} Backdrop Blur
-          </Button>
+          <Button onClick={() => setIsOpen(!isOpen)}>{isOpen ? "Fechar" : "Abrir"} Backdrop</Button>
           <Card className="w-80 z-50 relative">
             <CardHeader>
-              <CardTitle>Conteúdo sobre Backdrop</CardTitle>
+              <CardTitle>Conteúdo</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Este card fica sobre o backdrop blur quando ativado.
-              </p>
+              <p>Conteúdo sobre o backdrop</p>
             </CardContent>
           </Card>
         </div>
@@ -173,5 +169,20 @@ export const SlowTransition: Story = {
         <BackdropBlur isOpen={isOpen} duration={1} />
       </div>
     );
+  },
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
   },
 };

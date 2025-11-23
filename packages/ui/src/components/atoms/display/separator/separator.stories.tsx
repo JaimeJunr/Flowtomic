@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Separator } from "./separator";
 
 const meta = {
@@ -14,19 +15,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => (
-    <div className="w-[400px] space-y-4">
-      <div>
-        <h4 className="text-sm font-medium">Section 1</h4>
-        <p className="text-sm text-muted-foreground">Content of section 1</p>
-      </div>
-      <Separator />
-      <div>
-        <h4 className="text-sm font-medium">Section 2</h4>
-        <p className="text-sm text-muted-foreground">Content of section 2</p>
-      </div>
-    </div>
-  ),
+  render: () => <Separator />,
 };
 
 export const Vertical: Story = {
@@ -37,4 +26,19 @@ export const Vertical: Story = {
       <div>Right</div>
     </div>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

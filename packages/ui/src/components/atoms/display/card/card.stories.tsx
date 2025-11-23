@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Button } from "../../actions/button/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card";
 
@@ -16,17 +17,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Título do Card</CardTitle>
-        <CardDescription>Descrição do card vai aqui</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>Área de conteúdo do card</p>
+    <Card>
+      <CardContent className="pt-6">
+        <p>Conteúdo do card</p>
       </CardContent>
-      <CardFooter>
-        <Button>Ação</Button>
-      </CardFooter>
     </Card>
   ),
 };
@@ -85,4 +79,36 @@ export const Complete: Story = {
       </CardFooter>
     </Card>
   ),
+};
+
+export const StatCardStyle: Story = {
+  render: () => (
+    <Card className="transition-all duration-300 hover:shadow-lg hover:scale-[1.01] border bg-card border-border">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4 sm:pb-6 border-0">
+        <div className="space-y-1 flex-1 min-w-0 pr-2">
+          <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide truncate">
+            Receita Total
+          </CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5">
+          <span className="text-xl sm:text-2xl font-medium text-foreground tracking-tight break-words text-accent">
+            R$ 122.380,00
+          </span>
+        </div>
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed pt-1 break-words">
+          Comparado ao mês anterior
+        </p>
+      </CardContent>
+    </Card>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Card como no StatCard, com layout específico para exibição de estatísticas, hover effects e estrutura responsiva.",
+      },
+    },
+  },
 };

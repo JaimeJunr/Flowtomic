@@ -1,5 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Checkbox } from "./checkbox";
 
 const meta = {
@@ -23,17 +24,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => (
-    <div className="flex items-center space-x-2">
-      <Checkbox id="terms" />
-      <Label
-        htmlFor="terms"
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-      >
-        Aceitar termos e condições
-      </Label>
-    </div>
-  ),
+  args: {
+    id: "checkbox-default",
+  },
 };
 
 export const Checked: Story = {
@@ -110,4 +103,26 @@ export const Multiple: Story = {
       </div>
     </div>
   ),
+};
+
+export const DataTableStyle: Story = {
+  render: () => (
+    <div className="flex items-center space-x-2">
+      <Checkbox id="row-select" />
+      <Label
+        htmlFor="row-select"
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 sr-only"
+      >
+        Selecionar linha
+      </Label>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Checkbox como no DataTable, usado para seleção de linhas com label oculto para acessibilidade.",
+      },
+    },
+  },
 };

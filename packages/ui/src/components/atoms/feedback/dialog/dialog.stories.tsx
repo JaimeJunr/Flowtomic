@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { fn } from "storybook/test";
 import { Button } from "../../actions/button";
 import {
@@ -31,38 +32,9 @@ export const Default: Story = {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar Perfil</DialogTitle>
-          <DialogDescription>
-            Faça alterações no seu perfil aqui. Clique em salvar quando terminar.
-          </DialogDescription>
+          <DialogTitle>Título</DialogTitle>
+          <DialogDescription>Descrição do diálogo</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="name" className="text-right">
-              Nome
-            </label>
-            <input
-              id="name"
-              defaultValue="Pedro Duarte"
-              className="col-span-3 rounded-md border px-3 py-2"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="username" className="text-right">
-              Nome de usuário
-            </label>
-            <input
-              id="username"
-              defaultValue="@peduarte"
-              className="col-span-3 rounded-md border px-3 py-2"
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit" onClick={fn()}>
-            Salvar alterações
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   ),
@@ -132,4 +104,28 @@ export const WithForm: Story = {
       </DialogContent>
     </Dialog>
   ),
+};
+
+export const ModelSelectorStyle: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>Selecionar Modelo</Button>
+      </DialogTrigger>
+      <DialogContent className="p-0">
+        <DialogTitle className="sr-only">Selecionar Modelo</DialogTitle>
+        <div className="p-4">
+          <p>Conteúdo do seletor de modelo</p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Dialog como no ModelSelector, com padding zero no content, título oculto para acessibilidade e conteúdo customizado.",
+      },
+    },
+  },
 };

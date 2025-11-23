@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import {
   InlineCitation,
   InlineCitationCard,
@@ -24,15 +25,11 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => (
     <InlineCitation>
-      <InlineCitationText>This is a citation example with a source</InlineCitationText>
+      <InlineCitationText>Texto com citação</InlineCitationText>
       <InlineCitationCard>
         <InlineCitationCardTrigger sources={["https://example.com"]} />
         <InlineCitationCardBody>
-          <InlineCitationSource
-            title="Example Article"
-            url="https://example.com/article"
-            description="This is an example description of the cited source."
-          />
+          <InlineCitationSource title="Artigo" url="https://example.com/article" />
         </InlineCitationCardBody>
       </InlineCitationCard>
     </InlineCitation>
@@ -82,4 +79,19 @@ export const MultipleSources: Story = {
       </InlineCitationCard>
     </InlineCitation>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

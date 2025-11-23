@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -69,32 +70,23 @@ const invoices = [
 
 export const Default: Story = {
   render: () => (
-    <Table className="w-[800px]">
-      <TableCaption>Uma lista de suas faturas recentes.</TableCaption>
+    <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Fatura</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Método</TableHead>
-          <TableHead className="text-right">Valor</TableHead>
+          <TableHead>Coluna 1</TableHead>
+          <TableHead>Coluna 2</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
         <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">R$ 2.250,00</TableCell>
+          <TableCell>Linha 1</TableCell>
+          <TableCell>Dado 1</TableCell>
         </TableRow>
-      </TableFooter>
+        <TableRow>
+          <TableCell>Linha 2</TableCell>
+          <TableCell>Dado 2</TableCell>
+        </TableRow>
+      </TableBody>
     </Table>
   ),
 };
@@ -160,4 +152,43 @@ export const WithoutFooter: Story = {
       </TableBody>
     </Table>
   ),
+};
+
+export const DataTableStyle: Story = {
+  render: () => (
+    <div className="w-full max-w-4xl rounded-xl border border-border bg-card shadow-sm">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead>Nome</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell className="font-medium">001</TableCell>
+            <TableCell>Item 1</TableCell>
+            <TableCell>Ativo</TableCell>
+            <TableCell className="text-right">-</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">002</TableCell>
+            <TableCell>Item 2</TableCell>
+            <TableCell>Inativo</TableCell>
+            <TableCell className="text-right">-</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Table como no DataTable, com container estilizado, bordas arredondadas e sombra.",
+      },
+    },
+  },
 };

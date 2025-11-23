@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Progress } from "./progress";
 
 const meta = {
@@ -62,5 +63,22 @@ export const CustomMax: Story = {
   args: {
     value: 50,
     max: 200,
+  },
+};
+
+export const ContextStyle: Story = {
+  render: () => (
+    <div className="w-full max-w-md space-y-2">
+      <Progress className="bg-muted" value={65} />
+      <p className="text-xs text-muted-foreground">65% usado</p>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Progress como no Context, usado para exibir percentual de uso com background muted.",
+      },
+    },
   },
 };

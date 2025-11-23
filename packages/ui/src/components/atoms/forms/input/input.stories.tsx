@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Input } from "./input";
 
 const meta = {
@@ -89,5 +90,22 @@ export const Disabled: Story = {
     label: "Input Desabilitado",
     disabled: true,
     defaultValue: "Não pode editar",
+  },
+};
+
+export const DataTableStyle: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <Input placeholder="Buscar..." className="max-w-sm" />
+      <Input placeholder="Filtrar por nome..." className="max-w-sm" />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Input como no DataTable, usado para busca e filtros com largura limitada.",
+      },
+    },
   },
 };

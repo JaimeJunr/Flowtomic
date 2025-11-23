@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { fn } from "storybook/test";
 import { Button } from "../../actions/button";
 import { Toaster, toast } from "./sonner";
@@ -19,67 +20,15 @@ export const Default: Story = {
   render: () => (
     <>
       <Toaster />
-      <div className="space-y-4">
-        <Button
-          onClick={() => {
-            toast("Evento foi criado", {
-              description: "Sexta-feira, 10 de fevereiro de 2023 às 17:57",
-            });
-          }}
-        >
-          Mostrar Toast
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => {
-            toast.success("Sucesso!", {
-              description: "Suas alterações foram salvas.",
-            });
-          }}
-        >
-          Toast de Sucesso
-        </Button>
-        <Button
-          variant="destructive"
-          onClick={() => {
-            toast.error("Erro ocorrido", {
-              description: "Houve um problema com sua solicitação.",
-            });
-          }}
-        >
-          Toast de Erro
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => {
-            toast.warning("Aviso", {
-              description: "Por favor, verifique sua entrada.",
-            });
-          }}
-        >
-          Toast de Aviso
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => {
-            toast.info("Informação", {
-              description: "Novos recursos estão disponíveis.",
-            });
-          }}
-        >
-          Toast de Informação
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => {
-            toast.loading("Carregando...", {
-              description: "Por favor, aguarde enquanto processamos sua solicitação.",
-            });
-          }}
-        >
-          Toast de Carregamento
-        </Button>
-      </div>
+      <Button
+        onClick={() => {
+          toast("Toast padrão", {
+            description: "Descrição do toast",
+          });
+        }}
+      >
+        Mostrar Toast
+      </Button>
     </>
   ),
 };
@@ -128,4 +77,19 @@ export const WithCancel: Story = {
       </Button>
     </>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

@@ -4,7 +4,7 @@ import { fn } from "storybook/test";
 import { ThemeToggleButton } from "./theme-toggle-button";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/ThemeToggleButton",
+  title: "Flowtomic UI/Molecules/Theme/ThemeToggleButton",
   component: ThemeToggleButton,
   parameters: {
     layout: "centered",

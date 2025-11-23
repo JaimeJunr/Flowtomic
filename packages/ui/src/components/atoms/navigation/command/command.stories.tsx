@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import React from "react";
 import {
   Command,
   CommandEmpty,
@@ -8,8 +7,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from "./command";
 
 const meta = {
@@ -25,71 +22,31 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const commandRef = useRef<React.ElementRef<typeof Command>>(null);
+  render: () => (
+    <Command className="rounded-lg border w-[300px]">
+      <CommandInput placeholder="Buscar..." />
+      <CommandList>
+        <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
+        <CommandGroup heading="Opções">
+          <CommandItem>Opção 1</CommandItem>
+          <CommandItem>Opção 2</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  ),
+};
 
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          commandRef.current &&
-          !commandRef.current.contains(event.target as Node)
-        ) {
-          setIsOpen(false);
-        }
-      };
-
-      if (isOpen) {
-        document.addEventListener("mousedown", handleClickOutside);
-      }
-
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [isOpen]);
-
-    return (
-      <Command
-        ref={commandRef}
-        className="rounded-lg border shadow-md w-[450px]"
-      >
-        <CommandInput
-          placeholder="Type a command or search..."
-          onFocus={() => setIsOpen(true)}
-          onClick={() => setIsOpen(true)}
-        />
-        {isOpen && (
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading="Suggestions">
-              <CommandItem>
-                <span>Calendar</span>
-              </CommandItem>
-              <CommandItem>
-                <span>Search Emoji</span>
-              </CommandItem>
-              <CommandItem>
-                <span>Calculator</span>
-              </CommandItem>
-            </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup heading="Settings">
-              <CommandItem>
-                <span>Profile</span>
-                <CommandShortcut>⌘P</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <span>Billing</span>
-                <CommandShortcut>⌘B</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <span>Settings</span>
-                <CommandShortcut>⌘S</CommandShortcut>
-              </CommandItem>
-            </CommandGroup>
-          </CommandList>
-        )}
-      </Command>
-    );
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
   },
 };

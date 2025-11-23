@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./resizable";
 
 const meta = {
@@ -25,6 +26,59 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: () => (
+    <div className="h-[300px] w-full">
+      <ResizablePanelGroup direction="horizontal" className="border rounded-lg">
+        <ResizablePanel defaultSize={50}>
+          <div className="flex h-full items-center justify-center p-4 bg-muted">
+            <p className="text-sm">Painel 1</p>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle />
+        <ResizablePanel defaultSize={50}>
+          <div className="flex h-full items-center justify-center p-4">
+            <p className="text-sm">Painel 2</p>
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
+  ),
+};
+
+export const ResizableLayoutStyle: Story = {
+  render: () => (
+    <div className="h-[400px] w-full">
+      <ResizablePanelGroup direction="horizontal" className="h-full">
+        <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
+          <div className="flex h-full flex-col border-r bg-muted p-4">
+            <h2 className="mb-4 text-lg font-semibold">Sidebar</h2>
+            <nav className="space-y-2">
+              <div className="rounded-md bg-background p-2 text-sm">Item 1</div>
+              <div className="rounded-md bg-background p-2 text-sm">Item 2</div>
+            </nav>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={75} minSize={60}>
+          <div className="flex h-full flex-col p-6">
+            <h1 className="mb-4 text-2xl font-bold">Conteúdo Principal</h1>
+            <p className="text-muted-foreground">Conteúdo redimensionável</p>
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Resizable como no ResizableLayout, usado para criar layouts com sidebar redimensionável e conteúdo principal.",
+      },
+    },
+  },
+};
 
 /**
  * Exemplo básico com layout horizontal

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 const meta = {
@@ -15,26 +16,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <Tabs defaultValue="account" className="w-[400px]">
+    <Tabs defaultValue="tab1">
       <TabsList>
-        <TabsTrigger value="account">Conta</TabsTrigger>
-        <TabsTrigger value="password">Senha</TabsTrigger>
+        <TabsTrigger value="tab1">Aba 1</TabsTrigger>
+        <TabsTrigger value="tab2">Aba 2</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Conta</h3>
-          <p className="text-sm text-muted-foreground">
-            Faça alterações na sua conta aqui. Clique em salvar quando terminar.
-          </p>
-        </div>
+      <TabsContent value="tab1">
+        <p>Conteúdo da aba 1</p>
       </TabsContent>
-      <TabsContent value="password">
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Senha</h3>
-          <p className="text-sm text-muted-foreground">
-            Altere sua senha aqui. Após salvar, você será desconectado.
-          </p>
-        </div>
+      <TabsContent value="tab2">
+        <p>Conteúdo da aba 2</p>
       </TabsContent>
     </Tabs>
   ),
@@ -122,4 +113,19 @@ export const WithForm: Story = {
       </TabsContent>
     </Tabs>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

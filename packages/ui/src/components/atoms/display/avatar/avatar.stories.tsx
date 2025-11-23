@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import logoDark from "./logo_dark.svg";
 
@@ -17,8 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => (
     <Avatar>
-      <AvatarImage src="https://avatars.githubusercontent.com/u/138415231?v=4" alt="@jaimejunr" />
-      <AvatarFallback>JJ</AvatarFallback>
+      <AvatarFallback>JD</AvatarFallback>
     </Avatar>
   ),
 };
@@ -65,4 +65,19 @@ export const Small: Story = {
       <AvatarFallback className="text-xs">JJ</AvatarFallback>
     </Avatar>
   ),
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
+  },
 };

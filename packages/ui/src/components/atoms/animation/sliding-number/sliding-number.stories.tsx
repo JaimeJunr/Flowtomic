@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import React, { useState } from "react";
 import { SlidingNumber } from "./sliding-number";
 
 const meta = {
@@ -72,5 +72,20 @@ export const Padded: Story = {
   args: {
     number: 5,
     padStart: true,
+  },
+};
+
+export const NoKnownUsage: Story = {
+  render: () => (
+    <div className="p-4 text-sm text-muted-foreground">
+      Este componente ainda não possui uso conhecido em componentes mais complexos.
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
+      },
+    },
   },
 };
