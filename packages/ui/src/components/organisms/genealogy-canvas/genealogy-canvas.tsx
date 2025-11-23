@@ -11,6 +11,7 @@ import {
   type EdgeProps,
   getBezierPath,
   type InternalNode,
+  type OnNodesChange,
   Position,
   type Node as ReactFlowNode,
   useEdgesState,
@@ -194,7 +195,7 @@ export const GenealogyCanvas = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(
     genealogyNodes.map((node: ReactFlowNode) => ({
       ...node,
-      draggable: true, // Garantir que os nós sejam arrastáveis
+      draggable: true as boolean, // Garantir que os nós sejam arrastáveis
     }))
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(genealogyEdges);
@@ -314,7 +315,7 @@ export const GenealogyCanvas = ({
         edges={edges}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        onNodesChange={onNodesChange}
+        onNodesChange={onNodesChange as OnNodesChange}
         onEdgesChange={onEdgesChange}
       />
     </div>

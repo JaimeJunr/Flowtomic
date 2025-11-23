@@ -7,6 +7,7 @@
 
 "use client";
 
+import type { ExecuteScriptResponse, TerminalLine } from "@flowtomic/logic";
 import { ScriptEditor } from "@/components/organisms";
 import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms";
 import { Code, Info } from "lucide-react";
@@ -98,8 +99,8 @@ export interface DeveloperPanelProps {
   scriptEditorProps?: {
     defaultScript?: string;
     wsUrl?: string;
-    executeScript?: (script: string) => Promise<unknown>;
-    onOutput?: (line: unknown) => void;
+    executeScript?: (script: string) => Promise<ExecuteScriptResponse>;
+    onOutput?: (line: TerminalLine) => void;
     onError?: (error: Error) => void;
   };
 }

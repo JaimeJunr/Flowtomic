@@ -4,7 +4,7 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "../../../atoms/display/separator/separator";
 
-export interface ItemGroupProps extends React.ComponentProps<"div"> {}
+export interface ItemGroupProps extends React.ComponentProps<"ul"> {}
 
 function ItemGroup({ className, ...props }: ItemGroupProps) {
   return (

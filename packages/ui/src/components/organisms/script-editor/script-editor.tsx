@@ -21,7 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../atoms/display";
 import { Textarea } from "../../atoms/forms";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../atoms/navigation/tabs";
 
-export interface ScriptEditorProps extends HTMLAttributes<HTMLDivElement> {
+export interface ScriptEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, "onError"> {
   /**
    * Script inicial
    * @default ""
