@@ -1,6 +1,6 @@
 {
   "name": "@flowtomic/ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Componentes UI reutilizáveis baseados em Radix UI e Tailwind CSS",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@flowtomic/logic",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Hooks headless e lógica reutilizável para React",
   "type": "module",
   "main": "./dist/index.js",
