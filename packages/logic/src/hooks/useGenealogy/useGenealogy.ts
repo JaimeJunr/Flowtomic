@@ -7,8 +7,8 @@
  * Padrão Headless UI: você controla o markup e styles
  */
 
-import { useCallback, useMemo, useState } from "react";
 import type { Edge as ReactFlowEdge, Node as ReactFlowNode } from "@xyflow/react";
+import { useCallback, useMemo, useState } from "react";
 
 /**
  * Tipos de relacionamento
@@ -91,11 +91,11 @@ export interface UseGenealogyReturn {
   nodes: ReactFlowNode[];
   edges: ReactFlowEdge[];
   hierarchy: Map<string, EntityHierarchy>;
-  
+
   // Estado
   selectedNodeId: string | null;
   expansionState: NodeExpansionState;
-  
+
   // Funções de interação
   selectNode: (nodeId: string) => void;
   expandNode: (nodeId: string, expanded?: boolean) => void;
@@ -109,9 +109,7 @@ export interface UseGenealogyReturn {
  * Calcula o nível (geração) de cada entidade na hierarquia
  * Retorna um Map com entityId -> nível (0 = raiz, 1 = filhos da raiz, etc)
  */
-function calculateLevels(
-  hierarchy: Map<string, EntityHierarchy>
-): Map<string, number> {
+function calculateLevels(hierarchy: Map<string, EntityHierarchy>): Map<string, number> {
   const levels = new Map<string, number>();
   const visited = new Set<string>();
 
@@ -176,10 +174,10 @@ function calculateHierarchicalPositions(
 
   // Calcular posições para cada nível, começando do nível 0 (raiz)
   const sortedLevels = Array.from(entitiesByLevel.keys()).sort((a, b) => a - b);
-  
+
   sortedLevels.forEach((level) => {
     const entityIds = entitiesByLevel.get(level)!;
-    
+
     // Ordenar entidades do mesmo nível (por ID para consistência)
     entityIds.sort();
 
@@ -196,9 +194,10 @@ function calculateHierarchicalPositions(
         const parentPositions = entityHierarchy.parents
           .map((parent) => positions.get(parent.id))
           .filter((pos): pos is { x: number; y: number } => pos !== undefined);
-        
+
         if (parentPositions.length > 0) {
-          const avgX = parentPositions.reduce((sum, pos) => sum + pos.x, 0) / parentPositions.length;
+          const avgX =
+            parentPositions.reduce((sum, pos) => sum + pos.x, 0) / parentPositions.length;
           x = avgX;
         }
       }
@@ -206,7 +205,8 @@ function calculateHierarchicalPositions(
       // Se não tem pais ou não conseguiu calcular, distribuir horizontalmente
       if (x === 0 && entityIds.length > 1) {
         const index = entityIds.indexOf(entityId);
-        const totalWidth = entityIds.length * nodeWidth + (entityIds.length - 1) * horizontalSpacing;
+        const totalWidth =
+          entityIds.length * nodeWidth + (entityIds.length - 1) * horizontalSpacing;
         const startX = -totalWidth / 2 + nodeWidth / 2;
         x = startX + index * (nodeWidth + horizontalSpacing);
       }
@@ -218,7 +218,7 @@ function calculateHierarchicalPositions(
     entityIds.forEach((entityId, index) => {
       const currentPos = positions.get(entityId)!;
       const minX = currentPos.x;
-      
+
       // Verificar se há sobreposição com outros nós do mesmo nível
       entityIds.slice(0, index).forEach((otherId) => {
         const otherPos = positions.get(otherId)!;
@@ -318,7 +318,7 @@ function generateEdges(
 
     // Criar edge ID único
     const edgeId = `e-${source}-${target}-${relationship.type}`;
-    
+
     // Evitar duplicatas
     if (edgeIds.has(edgeId)) {
       return;
@@ -328,7 +328,7 @@ function generateEdges(
     // Verificar se ambos os nós existem
     const sourceHierarchy = hierarchy.get(source);
     const targetHierarchy = hierarchy.get(target);
-    
+
     if (!sourceHierarchy || !targetHierarchy) {
       return;
     }
@@ -338,7 +338,11 @@ function generateEdges(
     const targetExpanded = expansionState[target] ?? true;
 
     // Para relacionamentos pai/filho, só mostrar se o nó pai estiver expandido
-    if (relationship.type === "father" || relationship.type === "mother" || relationship.type === "child") {
+    if (
+      relationship.type === "father" ||
+      relationship.type === "mother" ||
+      relationship.type === "child"
+    ) {
       if (!sourceExpanded || !targetExpanded) return;
     }
 
@@ -460,11 +464,22 @@ export function useGenealogy({
   // Gerar nodes e edges
   const nodes = useMemo(
     () =>
-      generateNodes(data, hierarchy, expansionState, nodeWidth, nodeHeight, horizontalSpacing, verticalSpacing),
+      generateNodes(
+        data,
+        hierarchy,
+        expansionState,
+        nodeWidth,
+        nodeHeight,
+        horizontalSpacing,
+        verticalSpacing
+      ),
     [data, hierarchy, expansionState, nodeWidth, nodeHeight, horizontalSpacing, verticalSpacing]
   );
 
-  const edges = useMemo(() => generateEdges(data, hierarchy, expansionState), [data, hierarchy, expansionState]);
+  const edges = useMemo(
+    () => generateEdges(data, hierarchy, expansionState),
+    [data, hierarchy, expansionState]
+  );
 
   // Função para selecionar um nó
   const selectNode = useCallback(
@@ -544,4 +559,3 @@ export function useGenealogy({
     getPersonRelations,
   };
 }
-

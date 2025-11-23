@@ -1,6 +1,7 @@
-import { motion, useReducedMotion } from "motion/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React, { useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import type React from "react";
+import { useRef, useState } from "react";
 import { useAnimatedIndicator } from "./index";
 
 /**
@@ -60,9 +61,7 @@ function AnimatedIndicatorDemo() {
               ref={(el) => registerElement(el, index.toString())}
               onClick={() => setActiveIndex(index)}
               className={`relative z-10 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-                isActive
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {item}
@@ -106,4 +105,3 @@ function AnimatedIndicatorDemo() {
 export const Default: Story = {
   render: () => <AnimatedIndicatorDemo />,
 };
-

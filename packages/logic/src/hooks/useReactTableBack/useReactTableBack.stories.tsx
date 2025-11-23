@@ -1,8 +1,15 @@
+import {
+  Loader,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@flowtomic/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 import { useState } from "react";
-import { Loader, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@flowtomic/ui";
 import { useReactTableBack } from "./index";
 
 type User = {
@@ -145,7 +152,7 @@ function TableDemo({
   const limit = currentPageSizeValue;
   const total = allServerData.length;
   const page = enablePagination ? pageIndex + 1 : 1;
-  
+
   // Informações de ordenação
   const activeSort = currentSorting.length > 0 ? currentSorting[0] : null;
   const sortField = activeSort?.id || null;
@@ -243,7 +250,8 @@ function TableDemo({
         <div className="flex items-center justify-between border-t border-gray-200 bg-gray-50 px-4 py-3">
           <div className="flex items-center gap-4">
             <div className="text-sm text-gray-700">
-              Mostrando {paginationInfo.start} a {paginationInfo.end} de {paginationInfo.total} itens
+              Mostrando {paginationInfo.start} a {paginationInfo.end} de {paginationInfo.total}{" "}
+              itens
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-700">Mostrar</span>

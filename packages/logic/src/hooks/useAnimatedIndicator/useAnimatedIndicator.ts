@@ -125,7 +125,7 @@ export function useAnimatedIndicator(
 
   const updateIndicator = useCallback(() => {
     const currentActiveValue = activeValueRef.current;
-    
+
     if (!currentActiveValue) {
       setIndicatorStyle((prev) => {
         if (prev.opacity === 0) return prev;
@@ -172,7 +172,7 @@ export function useAnimatedIndicator(
 
   // Função para agendar atualização (debounce) - estável
   const scheduleUpdateRef = useRef<(() => void) | undefined>(undefined);
-  
+
   // Atualizar a função no ref sempre que updateIndicator mudar
   useEffect(() => {
     scheduleUpdateRef.current = () => {
@@ -212,7 +212,7 @@ export function useAnimatedIndicator(
   const registerElement = useCallback(
     (element: HTMLElement | null, value: string) => {
       const previousElement = elementsRef.current.get(value);
-      
+
       // Só atualizar se o elemento realmente mudou
       if (element === previousElement) {
         return;
@@ -228,7 +228,7 @@ export function useAnimatedIndicator(
           return; // Elemento já não existe, não precisa atualizar
         }
       }
-      
+
       // Agendar atualização de forma assíncrona para evitar loops
       // Só atualizar se temos um elemento válido
       if (element) {
@@ -249,7 +249,7 @@ export function useAnimatedIndicator(
   // Refs para opções estáveis
   const activeSelectorRef = useRef(activeSelector);
   const getElementValueRef = useRef(getElementValue);
-  
+
   useEffect(() => {
     activeSelectorRef.current = activeSelector;
     getElementValueRef.current = getElementValue;
@@ -261,9 +261,7 @@ export function useAnimatedIndicator(
     if (!container) return;
 
     const findActiveValue = () => {
-      const activeElement = container.querySelector<HTMLElement>(
-        activeSelectorRef.current
-      );
+      const activeElement = container.querySelector<HTMLElement>(activeSelectorRef.current);
       if (activeElement) {
         let value: string | undefined;
 
@@ -324,4 +322,3 @@ export function useAnimatedIndicator(
     activeValue,
   };
 }
-

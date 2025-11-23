@@ -82,9 +82,7 @@ function StatCardDemo({
 }
 
 export const PositiveTrend: Story = {
-  render: () => (
-    <StatCardDemo value={122380} lastMonth={105922} prefix="R$ " />
-  ),
+  render: () => <StatCardDemo value={122380} lastMonth={105922} prefix="R$ " />,
   parameters: {
     docs: {
       description: {
@@ -106,9 +104,7 @@ export const NegativeTrend: Story = {
 };
 
 export const WithSuffix: Story = {
-  render: () => (
-    <StatCardDemo value={1500000} lastMonth={1336500} prefix="$" suffix=" USD" />
-  ),
+  render: () => <StatCardDemo value={1500000} lastMonth={1336500} prefix="$" suffix=" USD" />,
   parameters: {
     docs: {
       description: {
@@ -119,9 +115,7 @@ export const WithSuffix: Story = {
 };
 
 export const ExplicitDelta: Story = {
-  render: () => (
-    <StatCardDemo value={122380} delta={15.1} lastMonth={105922} prefix="R$ " />
-  ),
+  render: () => <StatCardDemo value={122380} delta={15.1} lastMonth={105922} prefix="R$ " />,
   parameters: {
     docs: {
       description: {
@@ -140,13 +134,12 @@ export const LargeValue: Story = {
 };
 
 export const PercentGrowth: Story = {
-  render: () => (
-    <StatCardDemo value={50} lastMonth={28} suffix="%" />
-  ),
+  render: () => <StatCardDemo value={50} lastMonth={28} suffix="%" />,
   parameters: {
     docs: {
       description: {
-        story: "Crescimento percentual: de 28% para 50%. Delta calculado automaticamente: ((50 - 28) / 28) * 100 = +78.6%",
+        story:
+          "Crescimento percentual: de 28% para 50%. Delta calculado automaticamente: ((50 - 28) / 28) * 100 = +78.6%",
       },
     },
   },

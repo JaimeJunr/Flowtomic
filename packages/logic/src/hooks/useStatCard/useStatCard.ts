@@ -40,7 +40,7 @@ export interface StatCardData {
   /**
    * Valor principal do card
    */
-  value: number;
+  value: number | string;
 
   /**
    * Percentual de variação (positivo ou negativo)
@@ -57,6 +57,7 @@ export interface StatCardData {
 
   /**
    * Prefixo para formatação do valor (ex: '$', 'R$')
+   * Se `locale` e `currency` forem fornecidos, será ignorado em favor da formatação de moeda
    */
   prefix?: string;
 
@@ -66,12 +67,32 @@ export interface StatCardData {
   suffix?: string;
 
   /**
+   * Locale para formatação numérica (ex: 'pt-BR', 'en-US', 'de-DE')
+   * Padrão: 'pt-BR' (formata com ponto como separador de milhares)
+   */
+  locale?: string;
+
+  /**
+   * Código da moeda para formatação (ex: 'BRL', 'USD', 'EUR')
+   * Se fornecido, usa formatação de moeda do locale
+   */
+  currency?: string;
+
+  /**
+   * Como exibir a moeda ('symbol' | 'narrowSymbol' | 'code' | 'name')
+   * Padrão: 'symbol' (ex: R$ para BRL, $ para USD)
+   */
+  currencyDisplay?: "symbol" | "narrowSymbol" | "code" | "name";
+
+  /**
    * Função customizada de formatação do valor principal
+   * Tem prioridade sobre locale e currency
    */
   format?: (value: number) => string;
 
   /**
    * Função customizada de formatação do valor do mês anterior
+   * Tem prioridade sobre locale e currency
    */
   lastFormat?: (value: number) => string;
 
@@ -147,19 +168,41 @@ export interface UseStatCardReturn {
 }
 
 /**
- * Formata um número seguindo padrões comuns
- * - Valores >= 1.000.000: formata como "X.XM"
- * - Valores >= 1.000: formata com separador de milhares
- * - Valores < 1.000: retorna como string
+ * Formata um número seguindo padrões comuns com suporte a locale
+ * - Valores >= 1.000.000: formata como "X.XM" (respeitando locale para decimais)
+ * - Valores >= 1.000: formata com separador de milhares conforme locale
+ * - Valores < 1.000: retorna formatado conforme locale
  */
-function formatNumberDefault(n: number): string {
+function formatNumberDefault(n: number, locale: string = "pt-BR"): string {
   if (n >= 1_000_000) {
-    return `${(n / 1_000_000).toFixed(1)}M`;
+    const formatter = new Intl.NumberFormat(locale, {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    });
+    return `${formatter.format(n / 1_000_000)}M`;
   }
   if (n >= 1_000) {
-    return n.toLocaleString();
+    return new Intl.NumberFormat(locale).format(n);
   }
-  return n.toString();
+  return new Intl.NumberFormat(locale).format(n);
+}
+
+/**
+ * Formata um número como moeda usando locale
+ */
+function formatCurrency(
+  n: number,
+  locale: string = "pt-BR",
+  currency: string = "BRL",
+  currencyDisplay: "symbol" | "narrowSymbol" | "code" | "name" = "symbol"
+): string {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+    currencyDisplay,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(n);
 }
 
 /**
@@ -202,6 +245,9 @@ export function useStatCard(data: StatCardData): UseStatCardReturn {
     lastMonth,
     prefix = "",
     suffix = "",
+    locale = "pt-BR",
+    currency,
+    currencyDisplay = "symbol",
     format,
     lastFormat,
     positive: explicitPositive,
@@ -216,7 +262,7 @@ export function useStatCard(data: StatCardData): UseStatCardReturn {
 
     // Se lastMonth foi fornecido, calcula o delta automaticamente
     if (lastMonth !== undefined && lastMonth !== 0) {
-      return ((value - lastMonth) / lastMonth) * 100;
+      return ((Number(value) - Number(lastMonth)) / Number(lastMonth)) * 100;
     }
 
     // Caso contrário, retorna 0
@@ -253,10 +299,18 @@ export function useStatCard(data: StatCardData): UseStatCardReturn {
   // Formata o valor principal
   const formattedValue = useMemo(() => {
     if (format) {
-      return format(value);
+      return format(Number(value));
     }
-    return prefix + formatNumberDefault(value) + suffix;
-  }, [value, prefix, suffix, format]);
+    const numValue = Number(value);
+    if (currency) {
+      // Se currency está definido, usa formatação de moeda (ignora prefix)
+      return (
+        formatCurrency(numValue, locale, currency, currencyDisplay) + (suffix ? ` ${suffix}` : "")
+      );
+    }
+    // Caso contrário, usa formatação numérica padrão com prefix/suffix
+    return prefix + formatNumberDefault(numValue, locale) + suffix;
+  }, [value, prefix, suffix, locale, currency, currencyDisplay, format]);
 
   // Formata o valor do mês anterior
   const formattedLastMonth = useMemo(() => {
@@ -264,8 +318,13 @@ export function useStatCard(data: StatCardData): UseStatCardReturn {
     if (lastFormat) {
       return lastFormat(lastMonth);
     }
-    return prefix + formatNumberDefault(lastMonth) + suffix;
-  }, [lastMonth, prefix, suffix, lastFormat]);
+    if (currency) {
+      // Se currency está definido, usa formatação de moeda (ignora prefix)
+      return formatCurrency(lastMonth, locale, currency, currencyDisplay);
+    }
+    // Caso contrário, usa formatação numérica padrão com prefix/suffix
+    return prefix + formatNumberDefault(lastMonth, locale) + suffix;
+  }, [lastMonth, prefix, suffix, locale, currency, currencyDisplay, lastFormat]);
 
   // Props helper para o card
   const getCardProps = useCallback(
@@ -281,9 +340,15 @@ export function useStatCard(data: StatCardData): UseStatCardReturn {
   );
 
   // Função utilitária de formatação
-  const formatNumber = useCallback((n: number) => {
-    return formatNumberDefault(n);
-  }, []);
+  const formatNumber = useCallback(
+    (n: number) => {
+      if (currency) {
+        return formatCurrency(n, locale, currency, currencyDisplay);
+      }
+      return formatNumberDefault(n, locale);
+    },
+    [locale, currency, currencyDisplay]
+  );
 
   return {
     formattedValue,

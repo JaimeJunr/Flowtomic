@@ -1,6 +1,6 @@
+import { GenealogyCanvas } from "@flowtomic/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { GenealogyData } from "./index";
-import { GenealogyCanvas } from "@flowtomic/ui";
 
 const meta = {
   title: "Flowtomic Logic/Hooks/useGenealogy",
@@ -59,4 +59,3 @@ export const Default: Story = {
     </div>
   ),
 };
-

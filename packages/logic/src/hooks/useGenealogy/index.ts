@@ -1,12 +1,11 @@
 export type {
-  RelationshipType,
   EntityData,
-  Relationship,
-  GenealogyData,
   EntityHierarchy,
+  GenealogyData,
   NodeExpansionState,
+  Relationship,
+  RelationshipType,
   UseGenealogyOptions,
   UseGenealogyReturn,
 } from "./useGenealogy";
 export { useGenealogy } from "./useGenealogy";
-
