@@ -48,6 +48,98 @@ flowtomic/
 └── .storybook/      # Configuração do Storybook
 ```
 
+## 🏗️ Arquitetura: Separação UI e Lógica
+
+O Flowtomic segue uma arquitetura de **separação clara entre UI e lógica**, permitindo máxima flexibilidade e reutilização:
+
+### Princípios Fundamentais
+
+- **Componentes UI (`@flowtomic/ui`)**: Focados em apresentação visual, com **mínima ou nenhuma lógica de negócio**
+- **Hooks Headless (`@flowtomic/logic`)**: Contêm toda a **lógica complexa, cálculos e gerenciamento de estado**, **sem qualquer markup ou estilos**
+
+### Exemplo Prático: StatCard
+
+O `StatCard` demonstra perfeitamente essa arquitetura:
+
+#### 1. Lógica Separada (`useStatCard` - `@flowtomic/logic`)
+
+```typescript
+// packages/logic/src/hooks/useStatCard/useStatCard.ts
+// Hook headless - APENAS lógica, SEM UI
+
+import { useStatCard } from "flowtomic/logic";
+
+function MyCustomStatCard() {
+  const { formattedValue, trend, getCardProps } = useStatCard({
+    value: 122380,
+    lastMonth: 105922, // delta calculado automaticamente: +15.5%
+  });
+
+  // Você controla o markup e styles
+  return (
+    <div {...getCardProps()}>
+      <span>{formattedValue}</span>
+      <Badge variant={trend.variant}>{trend.percentage}</Badge>
+    </div>
+  );
+}
+```
+
+**O que o hook fornece:**
+
+- ✅ Cálculo automático de delta/variação percentual
+- ✅ Formatação de valores (prefix, suffix, custom format)
+- ✅ Informações de tendência (direção, variante, porcentagem)
+- ✅ Estado e processamento de dados
+- ❌ **NÃO fornece**: markup, styles ou componentes visuais
+
+#### 2. Componente Visual (`StatCard` - `@flowtomic/ui`)
+
+```typescript
+// packages/ui/src/components/molecules/data-display/stat-card/stat-card.tsx
+// Componente visual - usa o hook headless
+
+import { StatCard } from "flowtomic/ui";
+import { useStatCard } from "flowtomic/logic"; // Usa o hook internamente
+
+// Componente pronto para uso com UI completa
+<StatCard
+  title="Receita Total"
+  value={122380}
+  lastMonth={105922}
+  color="blue"
+/>;
+```
+
+**O que o componente fornece:**
+
+- ✅ Markup completo (Card, Header, Content)
+- ✅ Estilos e animações
+- ✅ Ícones e badges visuais
+- ✅ Menu de ações (opcional)
+- ❌ **NÃO contém**: lógica de cálculo ou processamento complexo
+
+### Benefícios dessa Arquitetura
+
+1. **Reutilização Máxima**: Use a lógica (`useStatCard`) em qualquer UI customizada
+2. **Flexibilidade Total**: Crie seu próprio visual mantendo a lógica consistente
+3. **Testabilidade**: Teste lógica e UI separadamente
+4. **Manutenibilidade**: Mudanças na lógica não afetam o visual e vice-versa
+5. **Composição**: Combine múltiplos hooks headless para criar componentes complexos
+
+### Quando Usar Cada Abordagem
+
+- **Use o hook headless** quando:
+
+  - Precisa de UI completamente customizada
+  - Quer reutilizar a lógica em diferentes contextos
+  - Está criando um design system próprio
+
+- **Use o componente visual** quando:
+  - Precisa de uma solução rápida e pronta
+  - O design padrão atende suas necessidades
+  - Quer customizar apenas estilos (via `className` ou variáveis CSS)
+
 ## 🚀 Instalação via CLI
 
 ### Uso Direto (Recomendado)
@@ -163,7 +255,7 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 - `node` - Node do ReactFlow
 - `edge` - Edge do ReactFlow
 
-### Hooks (6)
+### Hooks (9)
 
 - `use-stat-card` - Hook para StatCard
 - `use-mobile` - Hook para detectar dispositivos móveis
@@ -171,10 +263,14 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 - `use-react-table-front` - Hook para tabelas com paginação/ordenação no frontend
 - `use-resizable` - Hook para componentes redimensionáveis
 - `use-theme-transition` - Hook para transições de tema com View Transitions API
+- `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
+- `use-project-stats` - Hook para calcular estatísticas de projetos
+- `use-project-progress` - Hook para calcular progresso de projetos
 
-### Blocks (1)
+### Blocks (2)
 
 - `dashboard-01` - Dashboard simples com cards
+- `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
 
 ## 🛠️ Desenvolvimento
 
@@ -237,7 +333,14 @@ bun run type-check   # Verificar tipos
 
 ## 🎯 Como Funciona
 
-O Flowtomic fornece um **estilo padrão** que funciona imediatamente, mas permite **customização total** dos componentes conforme sua preferência.
+O Flowtomic fornece um **estilo padrão** que funciona imediatamente, mas permite **customização total** dos
+componentes conforme sua preferência.
+
+O Flowtomic segue uma **arquitetura de separação entre UI e lógica** (veja [Arquitetura: Separação UI e Lógica](#️-arquitetura-separação-ui-e-lógica) acima), fornecendo:
+
+- **Componentes UI prontos** (`@flowtomic/ui`) com estilo padrão que funciona imediatamente
+- **Hooks headless** (`@flowtomic/logic`) com lógica reutilizável para criar suas próprias UIs
+- **Customização total** dos componentes conforme sua preferência
 
 O CLI copia os arquivos dos componentes diretamente para o seu projeto (similar ao shadcn/ui), permitindo customização total. Os imports são automaticamente ajustados para usar os aliases do seu projeto.
 

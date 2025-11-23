@@ -1,16 +1,16 @@
 {
   "name": "flowtomic",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CLI para instalação de componentes, hooks e blocks do Flowtomic",
   "type": "module",
   "bin": {
-    "flowtomic": "./dist/cli.js",
-    "flowtomic-cli": "./dist/cli.js"
+    "flowtomic": "dist/cli.js",
+    "flowtomic-cli": "dist/cli.js"
   },
   "main": "./dist/cli.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JaimeJunr/Flowtomic.git"
+    "url": "git+https://github.com/JaimeJunr/Flowtomic.git"
   },
   "keywords": [
     "flowtomic",
