@@ -9,4 +9,5 @@ export {
   TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
+  TooltipWithMouseFollow,
 } from "./tooltip";

@@ -269,6 +269,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["spinner.tsx", "index.ts"],
     dependencies: ["lucide-react", "clsx", "tailwind-merge"],
   },
+  "encrypted-text": {
+    name: "encrypted-text",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/animation/encrypted-text",
+    files: ["encrypted-text.tsx", "index.ts"],
+    dependencies: ["motion", "clsx", "tailwind-merge"],
+  },
   accordion: {
     name: "accordion",
     type: "atom",

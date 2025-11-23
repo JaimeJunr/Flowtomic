@@ -7,6 +7,8 @@ export type { Animated3DProps } from "./animated-3d";
 export { Animated3D } from "./animated-3d";
 export type { BackdropBlurProps } from "./backdrop-blur";
 export { BackdropBlur } from "./backdrop-blur";
+export type { EncryptedTextProps } from "./encrypted-text";
+export { EncryptedText } from "./encrypted-text";
 export type { LoaderProps } from "./loader";
 export { Loader } from "./loader";
 export type { ProgressProps } from "./progress";
