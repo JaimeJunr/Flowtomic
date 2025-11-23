@@ -80,6 +80,8 @@ useMobile/
 ### Dependências
 
 - **UI**: Baseado em Radix UI, Tailwind CSS v4.1.14, class-variance-authority, clsx, tailwind-merge
+  - **React Aria**: `@react-aria/tooltip`, `@react-aria/interactions`, `@react-aria/overlays`, `@react-stately/tooltip` (para tooltip com seguimento do mouse)
+  - **Animações**: `motion/react` (Framer Motion) para animações avançadas
 - **Logic**: Hooks headless sem dependências de UI (apenas React, zustand e dependências específicas como @tanstack/react-table, react-resizable-panels)
 - **CLI**: Usa Bun para execução
 - **Estilos**: Tailwind CSS v4 com `@tailwindcss/postcss`, suporte a variáveis CSS customizáveis
@@ -312,6 +314,8 @@ Stack principal:
 - **Linter/Formatter**: Biome (não ESLint/Prettier)
 - **CSS Framework**: Tailwind CSS v4.1.14 com `@tailwindcss/postcss`
 - **Componentes Base**: Radix UI
+- **Acessibilidade**: React Aria (para componentes com seguimento do mouse)
+- **Animações**: motion/react (Framer Motion)
 - **Storybook**: @storybook/react-vite v10.0.6
 
 ## Regras Específicas

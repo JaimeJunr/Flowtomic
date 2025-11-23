@@ -131,7 +131,7 @@ Componentes fundamentais e indivisíveis, organizados em categorias:
 
 **Navigation**: `tabs`, `command`, `breadcrumb`, `pagination`, `menubar`, `navigation-menu`
 
-**Feedback**: `alert`, `alert-dialog`, `dialog`, `tooltip`, `popover`, `sheet`, `sonner`
+**Feedback**: `alert`, `alert-dialog`, `dialog`, `tooltip` (com suporte a seguimento do mouse), `popover`, `sheet`, `sonner`
 
 **Animation**: `loader`, `shimmer`, `spinner`, `progress`
 
@@ -270,6 +270,59 @@ function MyComponent() {
   );
 }
 ```
+
+### Exemplo de Uso do Tooltip
+
+#### Tooltip Padrão (Radix UI)
+
+```typescript
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+function MyComponent() {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button>Hover me</Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Informação do tooltip</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+```
+
+#### Tooltip com Seguimento do Mouse (React Aria)
+
+```typescript
+import { TooltipWithMouseFollow } from "@/components/ui/tooltip";
+
+function MyComponent() {
+  return (
+    <TooltipWithMouseFollow
+      content={<p>Este tooltip segue o cursor do mouse!</p>}
+      minWidth={240}
+    >
+      <Button>Hover and move mouse</Button>
+    </TooltipWithMouseFollow>
+  );
+}
+```
+
+**Características do Tooltip com Seguimento do Mouse**:
+
+- Segue o cursor do mouse em tempo real
+- Posicionamento inteligente que evita sair da viewport
+- Animações suaves baseadas no Aceternity UI (spring animations)
+- Usa React Aria para acessibilidade completa
+- Suporta conteúdo longo com quebra de linha automática
 
 ## Uso dos Hooks
 
@@ -591,7 +644,8 @@ Os componentes podem requerer:
   - `@radix-ui/react-alert-dialog` (alert-dialog)
   - `@radix-ui/react-dialog` (dialog, sheet)
   - `@radix-ui/react-dropdown-menu` (dropdown-menu)
-  - `@radix-ui/react-tooltip` (tooltip)
+  - `@radix-ui/react-tooltip` (tooltip padrão)
+  - `@react-aria/tooltip`, `@react-aria/interactions`, `@react-aria/overlays`, `@react-stately/tooltip` (tooltip com seguimento do mouse)
   - `@radix-ui/react-popover` (popover, autocomplete)
   - `@radix-ui/react-select` (select)
   - `@radix-ui/react-scroll-area` (scroll-area)
@@ -629,7 +683,7 @@ Os componentes podem requerer:
 - **tokenlens** (para context)
 - **nanoid** (para prompt-input)
 - **@xyflow/react** (para panel, toolbar, controls, node, edge, canvas)
-- **motion** (para shimmer)
+- **motion** (para shimmer, tooltip com seguimento do mouse)
 - **use-stick-to-bottom** (para conversation)
 
 ## Padrões Importantes

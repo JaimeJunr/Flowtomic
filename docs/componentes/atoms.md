@@ -326,9 +326,22 @@ Sistema de notificações toast.
 
 #### `tooltip`
 
-Tooltip para exibir informações adicionais ao passar o mouse.
+Tooltip para exibir informações adicionais ao passar o mouse. Suporta dois modos:
 
-**Dependências**: `@radix-ui/react-tooltip`, `clsx`, `tailwind-merge`
+- **Modo padrão (Radix UI)**: Tooltip tradicional com posicionamento automático
+- **Modo seguimento do mouse (React Aria)**: Tooltip que segue o cursor com posicionamento inteligente e animações do Aceternity UI
+
+**Componentes exportados**:
+
+- `Tooltip`, `TooltipProvider`, `TooltipTrigger`, `TooltipContent`, `TooltipPortal` - API padrão do Radix UI
+- `TooltipWithMouseFollow` - Componente standalone com seguimento do mouse usando React Aria
+
+**Dependências**:
+
+- `@radix-ui/react-tooltip` (modo padrão)
+- `@react-aria/tooltip`, `@react-aria/interactions`, `@react-aria/overlays`, `@react-stately/tooltip` (modo seguimento do mouse)
+- `motion/react` (animações)
+- `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/tooltip`
 
