@@ -1,6 +1,6 @@
 {
   "name": "@flowtomic/ui",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Componentes UI reutilizáveis baseados em Radix UI e Tailwind CSS",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,7 +28,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
-    "build": "biome check . && tsc --build && bun build ./src/index.ts --outdir ./dist --target browser --format esm --minify --external react --external react-dom --external react/jsx-runtime --external react-dom/client && bun run build:copy-styles",
+    "build": "biome check . 2>&1 | (! grep -q 'error:' || exit 1) && tsc --build && bun build ./src/index.ts --outdir ./dist --target browser --format esm --minify --external react --external react-dom --external react/jsx-runtime --external react-dom/client && bun run build:copy-styles",
     "build:copy-styles": "bun run ../../scripts/copy-ui-styles.ts",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",

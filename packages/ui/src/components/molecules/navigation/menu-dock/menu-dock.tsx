@@ -112,6 +112,22 @@ export const MenuDock: React.FC<MenuDockProps> = ({
     }
   }, [finalItems, activeIndex, isControlled, animationType]);
 
+  // Registrar elementos quando shouldUseIndicator mudar ou items mudarem
+  useEffect(() => {
+    if (animationType === "default" && shouldUseIndicator) {
+      textRefs.current.forEach((el, index) => {
+        if (el) {
+          registerElement(el, index.toString());
+        }
+      });
+      return () => {
+        textRefs.current.forEach((_, index) => {
+          unregisterElement(index.toString());
+        });
+      };
+    }
+  }, [shouldUseIndicator, registerElement, unregisterElement, animationType]);
+
   // Se animationType for "floating", renderizar FloatingDock
   if (animationType === "floating") {
     return (
@@ -128,22 +144,6 @@ export const MenuDock: React.FC<MenuDockProps> = ({
       />
     );
   }
-
-  // Registrar elementos quando shouldUseIndicator mudar ou items mudarem
-  useEffect(() => {
-    if (shouldUseIndicator) {
-      textRefs.current.forEach((el, index) => {
-        if (el) {
-          registerElement(el, index.toString());
-        }
-      });
-      return () => {
-        textRefs.current.forEach((_, index) => {
-          unregisterElement(index.toString());
-        });
-      };
-    }
-  }, [shouldUseIndicator, registerElement, unregisterElement]);
 
   const sizeClasses = {
     default: "p-3",
