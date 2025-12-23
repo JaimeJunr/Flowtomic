@@ -2,7 +2,7 @@
 
 Hooks headless do Flowtomic para lógica reutilizável sem dependências de UI.
 
-## 📦 Hooks Disponíveis (12)
+## 📦 Hooks Disponíveis (13)
 
 ### `use-animated-indicator`
 
@@ -126,6 +126,26 @@ Hook headless para gerenciar timer com start, pause, stop, resume e formatação
 - Formatação de tempo customizável (HH:mm:ss, mm:ss, ss)
 - Callbacks para eventos do timer
 - Estado de running, paused e stopped
+
+### `use-autocomplete`
+
+Hook headless para gerenciar estado e lógica de autocomplete. Fornece apenas lógica, sem markup ou styles. Você controla completamente a apresentação.
+
+**Dependências**: `react`
+
+**Localização**: `packages/logic/src/hooks/useAutocomplete`
+
+**Características**:
+
+- Estado: `inputValue`, `selectedValue`, `isOpen`, `filteredItems`, `highlightedIndex`
+- Controle: `open()`, `close()`, `select(value)`, `clear()`, `setInputValue(value)`
+- Filtragem: `filterFunction` customizável ou padrão (case-insensitive)
+- Helpers de props: `getInputProps()`, `getPopoverProps()`, `getListProps()`, `getItemProps(item)`
+- Suporte a API antiga (`options`) e composição (`children` via `extractItemsFromChildren`)
+- Loading state: `isLoading`
+- Empty state: `isEmpty`, `emptyMessage`
+- Acessibilidade: `aria-*` attributes nos helpers
+- Navegação por teclado: ArrowUp, ArrowDown, Enter, Escape
 
 ### `use-project-stats`
 
@@ -332,6 +352,7 @@ export function ThemeToggle() {
 
 ```typescript
 import { useAnimatedIndicator } from "@/hooks/use-animated-indicator";
+import { motion } from "motion/react";
 
 export function TabsWithIndicator() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -351,9 +372,21 @@ export function TabsWithIndicator() {
         </button>
       </div>
       {/* Indicador animado */}
-      <div
-        className="absolute bottom-0 h-1 bg-primary transition-all"
-        style={indicatorStyle}
+      <motion.div
+        className="absolute rounded-md bg-primary/10"
+        animate={{
+          x: indicatorStyle.left,
+          y: indicatorStyle.top,
+          width: indicatorStyle.width,
+          height: indicatorStyle.height,
+          opacity: indicatorStyle.opacity,
+        }}
+        style={{
+          pointerEvents: "none",
+          zIndex: 0,
+          left: 0,
+          top: 0,
+        }}
       />
     </div>
   );

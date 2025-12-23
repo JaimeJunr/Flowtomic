@@ -65,7 +65,19 @@ export type { DashboardLayoutProps } from "./dashboard-layout";
 export { DashboardLayout } from "./dashboard-layout";
 export type { DashboardMovementsSectionProps, Movement } from "./dashboard-movements-section";
 export { DashboardMovementsSection } from "./dashboard-movements-section";
+export type { DocumentEditorProps, DocumentPage } from "./document-editor";
+export { DocumentEditor } from "./document-editor";
+export type { DraggableDashboardGridProps } from "./draggable-dashboard-grid";
+export { DraggableDashboardGrid } from "./draggable-dashboard-grid";
 export { Edge } from "./edge";
+export type {
+  BaseFormFieldProps,
+  FormFieldConfig,
+  FormFieldType,
+  FormLayoutProps,
+  FormSectionConfig,
+} from "./form-layout";
+export { BaseFormField, FormLayout } from "./form-layout";
 export type { GenealogyCanvasProps } from "./genealogy-canvas";
 export { GenealogyCanvas } from "./genealogy-canvas";
 export type { ImageProps } from "./image";
@@ -317,3 +329,7 @@ export {
   WebPreviewNavigationButton,
   WebPreviewUrl,
 } from "./web-preview";
+export type { WidgetConfigModalProps } from "./widget-config-modal";
+export { WidgetConfigModal } from "./widget-config-modal";
+export type { WidgetPaletteItem, WidgetPaletteProps } from "./widget-palette";
+export { WidgetPalette } from "./widget-palette";

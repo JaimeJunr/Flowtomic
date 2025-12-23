@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DataTablePaginationSkeleton } from "./data-table-pagination";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/DataTablePaginationSkeleton",
+  title: "Flowtomic UI/Molecules/Data Display/DataTablePaginationSkeleton",
   component: DataTablePaginationSkeleton,
   parameters: {
     layout: "centered",

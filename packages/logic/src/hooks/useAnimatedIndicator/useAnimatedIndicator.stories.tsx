@@ -69,7 +69,7 @@ function AnimatedIndicatorDemo() {
           );
         })}
         <motion.div
-          className="absolute rounded-md bg-background shadow-sm"
+          className="absolute rounded-md bg-primary/10"
           initial={false}
           animate={
             shouldReduceMotion

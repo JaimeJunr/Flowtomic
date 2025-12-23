@@ -3,7 +3,7 @@ import type { ChartBarInteractiveDataPoint } from "./chart-bar-interactive";
 import { ChartBarInteractive } from "./chart-bar-interactive";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/ChartBarInteractive",
+  title: "Flowtomic UI/Molecules/Data Display/ChartBarInteractive",
   component: ChartBarInteractive,
   parameters: {
     layout: "centered",

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { EnvironmentInfo, SystemHealth, SystemInfo, UserInfo } from "./page";
 import DeveloperPanel from "./page";
-import type { DeveloperPanelProps, EnvironmentInfo, SystemHealth, SystemInfo, UserInfo } from "./page";
 
 const meta = {
   title: "Flowtomic UI/Blocks/Developer Panel",
@@ -141,4 +141,3 @@ export const SystemDown: Story = {
     apiBaseUrl: "https://api.example.com/api",
   },
 };
-

@@ -43,8 +43,11 @@ function SlidingNumberRoller({ prevValue, value, place, transition }: SlidingNum
     <span
       ref={measureRef}
       data-slot="sliding-number-roller"
-      className="relative inline-block w-[1ch] overflow-x-visible overflow-y-clip leading-none tabular-nums"
-      style={{ color: "var(--animated-number-color, inherit)" }}
+      className="relative inline-block shrink-0 w-[1ch] h-[1em] overflow-hidden leading-none tabular-nums"
+      style={{
+        color: "var(--animated-number-color, inherit)",
+        lineHeight: 1,
+      }}
     >
       <span className="invisible">0</span>
       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
@@ -52,7 +55,7 @@ function SlidingNumberRoller({ prevValue, value, place, transition }: SlidingNum
           key={`sliding-digit-${digit}`}
           motionValue={animatedValue}
           number={digit}
-          height={height}
+          height={height ?? 0}
           transition={transition}
         />
       ))}
@@ -83,7 +86,9 @@ function SlidingNumberDisplay({
   });
 
   if (!height) {
-    return <span className="invisible absolute">{number}</span>;
+    return (
+      <span className="invisible absolute top-0 left-0 w-full h-[1em] leading-none">{number}</span>
+    );
   }
 
   return (
@@ -93,7 +98,7 @@ function SlidingNumberDisplay({
         y,
         color: "var(--animated-number-color, inherit)",
       }}
-      className="absolute inset-0 flex items-center justify-center"
+      className="absolute top-0 left-0 w-full h-[1em] flex items-center justify-center leading-none"
       transition={{ ...transition, type: "spring" }}
     >
       {number}
@@ -200,7 +205,7 @@ function SlidingNumber({
     <span
       ref={localRef}
       data-slot="sliding-number"
-      className={cn("flex items-center", className)}
+      className={cn("flex flex-row flex-nowrap items-center", className)}
       style={{
         color: "inherit",
         ...(props.style as React.CSSProperties),

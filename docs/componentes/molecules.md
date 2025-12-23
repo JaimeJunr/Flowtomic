@@ -70,6 +70,25 @@ Grupo de input com addons e botões integrados.
 
 **Dependências**: `clsx`, `tailwind-merge`
 
+### `autocomplete`
+
+Campo de autocomplete com busca e filtragem avançada. Usa hook headless `useAutocomplete` do `@flowtomic/logic`. Suporta API antiga (options) e composição (Compound Components), filtragem customizada, valores personalizados, loading assíncrono e acessibilidade completa.
+
+**Componentes exportados**:
+- `Autocomplete` - Componente principal
+- `Autocomplete.List` - Container da lista
+- `Autocomplete.Item` - Item individual do autocomplete
+- `Autocomplete.Section` - Seção para agrupamento de itens
+- `Autocomplete.Empty` - Estado vazio customizável
+- `Autocomplete.Loading` - Estado de loading customizável
+
+**Dependências**: 
+- `@radix-ui/react-popover`
+- `flowtomic/logic` (hook `useAutocomplete`)
+- `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/forms/autocomplete`
+
 ### `artifact`
 
 Container de artifact com header, actions e conteúdo.

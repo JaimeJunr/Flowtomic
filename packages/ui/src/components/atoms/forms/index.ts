@@ -1,5 +1,3 @@
-export type { AutocompleteOption, AutocompleteProps } from "./autocomplete";
-export { Autocomplete } from "./autocomplete";
 export type { CheckboxProps } from "./checkbox";
 export { Checkbox } from "./checkbox";
 export type {

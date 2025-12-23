@@ -1,0 +1,820 @@
+---
+description: Arquitetura Grand Bazaar - Diretrizes para desenvolvimento de múltiplas apps independentes na plataforma Grand Bazaar
+alwaysApply: true
+---
+
+# 🏛️ Grand Bazaar Architecture - Arquitetura de Múltiplos Apps
+
+## 🎯 Visão Geral
+
+O **Grand Bazaar** é uma plataforma que atua como **controller e infraestrutura** para múltiplas aplicações independentes, fazendo a ponte entre as APIs do PerformIt e as "apps" criadas por clientes ou pela Investtools.
+
+### Conceito Fundamental
+
+- **Grand Bazaar**: Plataforma controladora que hospeda múltiplas apps
+- **Apps**: Aplicações independentes e autônomas
+- **Handicraft**: Sistema de cadastro de apps para clientes
+- **Acesso**: Apps são acessadas via `/gbf/{appName}`
+
+## 🚨 COMPORTAMENTO OBRIGATÓRIO
+
+### 1. Ações Críticas para Desenvolvimento de Apps
+
+1. **🚨 CRÍTICO:** **SEMPRE entenda** que cada app é uma aplicação **independente e autônoma**
+2. **🚨 CRÍTICO:** **SEMPRE respeite** a estrutura de diretórios do Grand Bazaar
+3. **🚨 CRÍTICO:** **SEMPRE configure** o build para gerar arquivos estáticos na pasta da app
+4. **🚨 CRÍTICO:** **SEMPRE teste** a integração com o Grand Bazaar antes de commitar
+5. **SEMPRE mantenha** cada app isolada e independente
+6. **SEMPRE siga** os padrões de nomenclatura estabelecidos
+7. **SEMPRE documente** a app no seu próprio README.md
+
+### 2. Estrutura de Diretórios
+
+**SEMPRE organize** cada app como um diretório independente na raiz do Grand Bazaar:
+
+```text
+grand-bazaar/
+├── README.md                    # Documentação do Grand Bazaar
+├── package.json                 # Dependências do Grand Bazaar (se houver)
+├── {app-name}/                  # Cada app é um diretório independente
+│   ├── README.md                # Documentação específica da app
+│   ├── package.json             # Dependências da app
+│   ├── src/                     # Código fonte da app
+│   ├── build/                   # Build de produção (gerado)
+│   └── index.html               # Entry point da app
+├── {outra-app}/                 # Outra app independente
+│   └── ...
+└── ...
+```
+
+**⚠️ NUNCA**:
+
+- **NUNCA misture** código de apps diferentes
+- **NUNCA compartilhe** dependências entre apps sem necessidade
+- **NUNCA crie** dependências cruzadas entre apps
+
+### 3. Nomenclatura de Apps
+
+**SEMPRE use** nomenclatura consistente:
+
+- **Nome da app**: kebab-case (ex: `new-quote`, `client-portfolio`, `operations`)
+- **Nome do diretório**: Mesmo nome da app (ex: `new-quote/`)
+- **Acesso via URL**: `/gbf/{app-name}` (ex: `/gbf/new-quote`)
+
+**Padrões de Sufixos para Desenvolvimento**:
+
+- **`-local`**: Desenvolvimento local (localhost:8000 ou localhost:3000)
+- **`-dev`**: Desenvolvimento no Cloud9 (c9-dev.performit.com.br)
+
+**Exemplos**:
+
+- Produção: `/gbf/new-quote`
+- Local: `/gbf/new-quote-local`
+- Cloud9: `/gbf/new-quote-dev`
+
+### 4. Build e Deploy
+
+**SEMPRE configure** o build para gerar arquivos estáticos:
+
+1. **Build output**: Deve gerar arquivos estáticos na pasta da app
+2. **Entry point**: `index.html` na raiz da pasta da app
+3. **Assets**: Todos os assets devem ser relativos ao `index.html`
+
+**Configuração Vite (exemplo)**:
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  build: {
+    outDir: "build",
+    emptyOutDir: true,
+  },
+  base: "./", // Importante: paths relativos
+});
+```
+
+**⚠️ CRÍTICO**: **SEMPRE use** paths relativos (`./` ou `../`) para assets e imports
+
+### 5. Integração com PerformIt
+
+**SEMPRE configure** a integração corretamente:
+
+#### Variáveis de Ambiente
+
+**SEMPRE defina** variáveis de ambiente para cada app:
+
+```env
+# .env
+VITE_API_BASE_URL=http://localhost:3000
+VITE_API_BASE_GRAILS=http://localhost:8080
+VITE_DEV_API_KEY=ESTE-E-O-USUARIO-INVESTTOOLS
+VITE_DEV_ENVIRONMENT=true
+```
+
+#### Proxy para Desenvolvimento
+
+**SEMPRE configure** proxy no Vite para desenvolvimento local:
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  server: {
+    proxy: {
+      "/g": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
+  },
+});
+```
+
+### 6. Handicraft e Cadastro de Apps
+
+**SEMPRE entenda** o sistema de cadastro:
+
+#### Para Clientes
+
+- **Handicraft**: Sistema de cadastro de apps para clientes
+- **Acesso**: `/g/handicraft/list` no PerformIt
+- **Deploy**: Após cadastro, apps são acessadas via `/gbf/{appName}`
+
+#### Para Desenvolvimento Interno
+
+**SEMPRE use** os sufixos para desenvolvimento:
+
+- **`-local`**: Busca em `http://localhost:8000/` ou `http://localhost:3000/`
+- **`-dev`**: Busca em `https://c9-dev.performit.com.br/gb/`
+- **Sem sufixo**: Busca em `https://s3.amazonaws.com/grandbazaar.performit.com.br/`
+
+**Lógica de Default** (no Rails):
+
+```ruby
+def default_handicraft(app_name)
+  if app_name.end_with?('-dev')
+    # Cloud9
+  elsif app_name.end_with?('-local')
+    # Localhost
+  else
+    # AWS S3
+  end
+end
+```
+
+### 7. Desenvolvimento Local
+
+**SEMPRE siga** este processo para desenvolvimento local:
+
+1. **SEMPRE execute** o servidor de desenvolvimento da app:
+
+   ```bash
+   cd {app-name}
+   npm run dev
+   ```
+
+2. **SEMPRE configure** o Grand Bazaar local (se necessário):
+
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+3. **SEMPRE acesse** via PerformIt com sufixo `-local`:
+
+   ```text
+   http://localhost:3000/gbf/{app-name}-local
+   ```
+
+### 8. Estrutura de Cada App
+
+**SEMPRE organize** cada app seguindo esta estrutura:
+
+```text
+{app-name}/
+├── README.md                    # Documentação da app
+├── package.json                 # Dependências
+├── vite.config.ts               # Configuração Vite
+├── tsconfig.json                # Configuração TypeScript
+├── index.html                   # Entry point HTML
+├── .env                         # Variáveis de ambiente (não commitado)
+├── .env_example                 # Exemplo de variáveis
+├── src/                         # Código fonte
+│   ├── components/              # Componentes reutilizáveis
+│   ├── pages/                   # Páginas da aplicação
+│   ├── hooks/                   # Custom hooks
+│   ├── utils/                   # Utilitários
+│   ├── types/                   # Tipos TypeScript
+│   └── main.tsx                 # Entry point React
+├── build/                       # Build de produção (gerado)
+└── docs/                        # Documentação específica da app
+```
+
+### 9. Documentação
+
+**SEMPRE documente** cada app:
+
+#### README.md da App
+
+**SEMPRE inclua** no README.md de cada app:
+
+- Descrição da funcionalidade
+- Tecnologias utilizadas
+- Estrutura do projeto
+- Instalação e setup
+- Scripts disponíveis
+- Configuração de ambiente
+- Integração com Grand Bazaar
+- Rotas e funcionalidades principais
+
+#### Documentação Técnica
+
+**SEMPRE mantenha** documentação técnica em `docs/`:
+
+- Boas práticas específicas da app
+- Padrões de código
+- Troubleshooting
+- Guias de desenvolvimento
+
+### 10. Isolamento e Independência
+
+**SEMPRE mantenha** apps isoladas:
+
+- **NUNCA compartilhe** código entre apps diretamente
+- **NUNCA crie** dependências entre apps
+- **SEMPRE trate** cada app como um projeto independente
+- **SEMPRE use** bibliotecas compartilhadas apenas quando necessário
+
+**Exceções** (apenas quando absolutamente necessário):
+
+- Bibliotecas compartilhadas via npm packages
+- Utilitários comuns via imports externos
+- APIs compartilhadas do PerformIt
+
+### 11. Qualidade e Padrões
+
+**SEMPRE siga** os padrões de qualidade:
+
+#### TypeScript
+
+- **SEMPRE use** TypeScript para tipagem
+- **SEMPRE defina** tipos explícitos
+- **SEMPRE evite** `any` quando possível
+
+#### React
+
+- **SEMPRE use** componentes funcionais
+- **SEMPRE use** hooks para lógica reutilizável
+- **SEMPRE siga** padrões de nomenclatura (PascalCase para componentes)
+
+#### Testes
+
+- **SEMPRE escreva** testes para funcionalidades críticas
+- **SEMPRE mantenha** cobertura adequada
+- **SEMPRE teste** integração com APIs
+
+#### Linting e Formatação
+
+- **SEMPRE use** Biome ou ESLint + Prettier
+- **SEMPRE configure** Husky para pre-commit hooks
+- **SEMPRE valide** código antes de commitar
+
+### 12. Debugging Local
+
+**SEMPRE use** estas técnicas para debugging:
+
+#### WebStorm
+
+1. **SEMPRE configure** JavaScript Debug configuration
+2. **SEMPRE use** URL com sufixo `-local`
+3. **SEMPRE configure** Remote URLs corretamente
+
+#### Chrome DevTools
+
+1. **SEMPRE use** source maps para debugging
+2. **SEMPRE configure** breakpoints no código fonte
+3. **SEMPRE verifique** network requests para APIs
+
+### 13. Deploy e Produção
+
+**SEMPRE siga** este processo para deploy:
+
+1. **SEMPRE execute** build de produção:
+
+   ```bash
+   npm run build
+   ```
+
+2. **SEMPRE valide** o build localmente:
+
+   ```bash
+   npm run preview
+   ```
+
+3. **SEMPRE teste** a integração com Grand Bazaar
+
+4. **SEMPRE verifique** que todos os assets estão acessíveis
+
+5. **SEMPRE confirme** que a app funciona via `/gbf/{app-name}`
+
+## 14. Boas Práticas para Apps React Modernas
+
+**⚠️ IMPORTANTE**: O Grand Bazaar suporta múltiplas stacks (React, Vue.js, JavaScript vanilla, etc.), mas **apps React modernas** (novas apps) **SEMPRE devem seguir** estas boas práticas estabelecidas.
+
+### 14.1 Estrutura de Projeto e Organização
+
+**SEMPRE organize** apps React seguindo esta estrutura:
+
+```text
+src/
+├── components/          # Componentes reutilizáveis (crud, form, utility)
+├── configs/            # Configurações de exportação
+├── constants/          # Constantes da aplicação
+├── context/            # Contextos React
+├── functions/          # Funções utilitárias
+├── hooks/              # Custom hooks (queries, sorting)
+├── lib/                # Bibliotecas e configurações
+├── models/             # Modelos TypeScript
+├── page-components/    # Componentes de página (por domínio)
+├── pages/              # Páginas da aplicação
+├── schemas/            # Schemas Zod
+├── types/              # Tipos TypeScript
+└── utils/              # Utilitários diversos
+```
+
+**SEMPRE use** nomenclatura consistente:
+
+- **Componentes**: PascalCase (`SelectField.tsx`, `CreatePageComponent.tsx`)
+- **Hooks**: camelCase com prefixo `use` (`useTable.ts`, `useQuoteListQuery.ts`)
+- **Utils/Schemas/Types/Models**: camelCase (`apiUtils.ts`, `quoteSchema.ts`, `quote.ts`)
+
+### 14.2 TypeScript e Tipagem
+
+**SEMPRE use** tipos explícitos em funções, props e retornos. **SEMPRE use** tipos genéricos para hooks e componentes reutilizáveis:
+
+```typescript
+// ✅ CORRETO: Tipos explícitos e genéricos
+export function useTable<TData extends RowData, TValue = unknown>({
+  data,
+  columns,
+}: UseTableProps<TData, TValue>): UseTableReturn<TData> {
+  // ...
+}
+
+export function usePaginatedListQuery<
+  TFilter extends BaseFilterStorage,
+  TData,
+  TParams
+>(
+  config: ListQueryConfig<TFilter, TParams, TData>,
+  initialFilter: TFilter
+): UsePaginatedListQueryReturn<TFilter, TData> {
+  // ...
+}
+```
+
+**SEMPRE use** Zod para validação e inferência automática de tipos:
+
+```typescript
+export const quoteSchema = z.object({
+  symbol: autoCompleteSchema.nullable().refine((val) => val !== null, {
+    message: "O ativo é obrigatório.",
+  }),
+  day: z.union([z.string().min(1), z.date()]),
+  close: decimalField("close"),
+});
+
+export type QuoteFormValues = z.infer<typeof quoteSchema>;
+```
+
+**SEMPRE organize**: Tipos compartilhados em `types/`, modelos em `models/`.
+
+### 14.3 React e Componentes
+
+**SEMPRE use** componentes funcionais com TypeScript. **SEMPRE documente** props complexas:
+
+```typescript
+type CreatePageComponentProps = {
+  title: string;
+  description: string;
+  form: ReactNode;
+};
+
+export function CreatePageComponent({
+  title,
+  description,
+  form,
+}: CreatePageComponentProps) {
+  return (
+    <Container>
+      <ChildContainer>
+        <SectionInfo title={title} description={description} />
+        {form}
+      </ChildContainer>
+    </Container>
+  );
+}
+```
+
+**SEMPRE use** componentes do IVT para UI consistente (`ivt/layout`, `ivt/button`, `ivt/form`). **SEMPRE reutilize** componentes CRUD genéricos (`CreatePageComponent`, `EditPageComponent`, `ListPageComponent`).
+
+### 14.4 Formulários e Validação
+
+**SEMPRE use** React Hook Form com Zod para gerenciamento de formulários:
+
+```typescript
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+export function QuoteForm() {
+  const form = useForm<QuoteFormValues>({
+    resolver: zodResolver(quoteSchema),
+    defaultValues: {
+      /* ... */
+    },
+  });
+
+  return <Form {...form}>{/* ... */}</Form>;
+}
+```
+
+**SEMPRE crie** schemas Zod para validação e inferência de tipos. **SEMPRE crie** componentes de formulário reutilizáveis (`SelectField`, `DateField`, etc.).
+
+### 14.5 Hooks Customizados
+
+**SEMPRE crie** hooks especializados para queries com TanStack Query:
+
+```typescript
+export function useQuoteListQuery(): UsePaginatedListQueryReturn<
+  FilterStorage,
+  Quote
+> {
+  const dayRange = useDayRange();
+  const initialFilter: FilterStorage = { day: dayRange };
+  return usePaginatedListQuery<FilterStorage, Quote, QuoteListParams>(
+    quoteQueryConfig,
+    initialFilter
+  );
+}
+```
+
+**SEMPRE use** hooks especializados para gerenciar ordenação:
+
+```typescript
+export function useTableSorting(
+  sorting: SortingState,
+  sortingConfig: ISortingConfig
+) {
+  const apiParams = useMemo(
+    () => convertSortingToApiParams(sorting, sortingConfig),
+    [sorting, sortingConfig]
+  );
+  return {
+    apiParams,
+    isValidSorting,
+    currentSortField,
+    currentSortDirection,
+    sortableFields: sortingConfig.sortableFields,
+  };
+}
+```
+
+**SEMPRE crie** classes de configuração seguindo SOLID:
+
+```typescript
+export class QuoteSortingConfig extends BaseSortingConfig {
+  protected readonly _columnToBackendMap: Record<string, string> = {
+    securitySymbol: "symbol",
+    securityTypeName: "securityClass",
+    day: "day",
+    close: "close",
+  };
+}
+export const quoteSortingConfig = new QuoteSortingConfig();
+```
+
+### 14.6 Context API
+
+**SEMPRE crie** contextos separados por domínio de negócio com hooks customizados:
+
+```typescript
+export interface QuoteModel {
+  isPendingAction: boolean;
+  selectedQuote: Quote | null;
+  filterStorage: FilterStorage;
+  pagination: PaginationState;
+  sorting: SortingState;
+  getByIdQuote: (id: number) => Promise<void>;
+  createQuote: (data: QuoteDto) => Promise<void>;
+}
+
+export function QuoteProvider({ children }: QuoteProviderProps) {
+  return (
+    <QuoteContext.Provider value={value}>{children}</QuoteContext.Provider>
+  );
+}
+
+export function useQuoteContext(): QuoteModel {
+  const context = useContext(QuoteContext);
+  if (!context) {
+    throw new Error("useQuoteContext must be used within QuoteProvider");
+  }
+  return context;
+}
+```
+
+**SEMPRE mantenha** contextos focados em um único domínio (`QuoteContext`, `MarketIndexContext`, `ExchangeRateContext`).
+
+### 14.7 TanStack Query
+
+**SEMPRE use** TanStack Query para estado servidor. **SEMPRE configure** cache e invalidação:
+
+```typescript
+import { CACHE_TIME } from "@/constants/cache";
+
+const { data, isLoading, isFetching, error } = useQuery({
+  queryKey: ["quotes", filter, pagination, sorting],
+  queryFn: () => fetchQuotes(filter, pagination, sorting),
+  staleTime: CACHE_TIME,
+});
+
+// Invalidação após mutação
+const mutation = useMutation({
+  mutationFn: createQuote,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["quotes"] });
+  },
+});
+```
+
+**SEMPRE use** paginação server-side para grandes volumes de dados com `usePaginatedListQuery`. **SEMPRE trate** loading, fetching e error:
+
+```typescript
+const { data, isLoading, isFetching, isError, error } = useQuery({
+  queryKey: ["quotes"],
+  queryFn: fetchQuotes,
+});
+
+if (isLoading) return <LoadingSkeleton />;
+if (isError) return <ErrorMessage error={error} />;
+if (!data) return null;
+```
+
+### 14.8 TanStack Table
+
+**SEMPRE use** o hook `useTable` para configurar tabelas. **SEMPRE configure** server-side:
+
+```typescript
+const { table, hasSelectedRows, selectedOriginalsRowsData } = useTable({
+  data: quotes,
+  columns: quoteColumns,
+  defaultSorting: [{ id: "day", desc: true }],
+  pagination,
+  onPaginationChange: setPagination,
+  sorting,
+  onSortingChange: setSorting,
+  pageCount: Math.ceil(totalItems / pagination.pageSize),
+  totalRows: totalItems,
+});
+
+const table = useReactTable({
+  data,
+  columns,
+  manualPagination: true,
+  manualSorting: true,
+  manualFiltering: true,
+  pageCount: pageCount,
+  rowCount: totalRows,
+});
+```
+
+**SEMPRE defina** colunas com tipos explícitos (`ColumnDef<Quote>[]`). **SEMPRE use** hooks utilitários (`useExportData`) para exportação CSV/Excel.
+
+### 14.9 API e HTTP
+
+**SEMPRE use** o cliente Axios configurado (`lib/server.ts`):
+
+```typescript
+import server from "@/lib/server";
+const api = server(); // Cliente com interceptors configurados
+const response = await api.get("/quotes");
+```
+
+**SEMPRE configure** interceptors para autenticação automática e tratamento centralizado de erros:
+
+```typescript
+instance.interceptors.request.use(async (req) => {
+  if (config().dev_environment && config().dev_api_key) {
+    req.headers["X-API-Key"] = config().dev_api_key;
+  }
+  return req;
+});
+
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (globalToast) handleAxiosError(error, globalToast);
+    return Promise.reject(error);
+  }
+);
+```
+
+**SEMPRE use** `handleApiResponse` para tratamento de respostas. **SEMPRE forneça** feedback via toast (`useSonner`).
+
+### 14.10 Estilização
+
+**SEMPRE use** Tailwind CSS 4 via plugin Vite e componentes IVT para UI consistente:
+
+```typescript
+// vite.config.ts
+import tailwindcss from "@tailwindcss/vite";
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+
+// Uso
+import { Container, ChildContainer } from "ivt/layout";
+import { Button } from "ivt/button";
+import { FormControl, FormItem, FormLabel } from "ivt/form";
+```
+
+**SEMPRE use** classes utilitárias e responsivas do Tailwind. **SEMPRE considere** acessibilidade (`aria-*`, `aria-label`).
+
+### 14.11 Infrastructure e Clean Architecture
+
+**⚠️ IMPORTANTE**: A camada de **infrastructure** é a camada mais externa da Clean Architecture. Em **apps pequenos** (como no Grand-Bazaar), ela é a **única camada necessária**, implementando toda a lógica de comunicação externa, transformação de dados e orquestração.
+
+**Princípios Aplicados**:
+
+1. **Dependency Rule**: Models são estruturas simples (interfaces/types), Infrastructure implementa toda a lógica. Dependências apontam para dentro (Services → Mappers → DTOs).
+2. **Separation of Concerns**: API/Interceptors (HTTP, erros, auth), Services (orquestração), Mappers (conversão DTO ↔ Model).
+3. **Inversion of Control**: Interfaces definidas nos models, Infrastructure implementa.
+
+**SEMPRE organize** a camada infrastructure:
+
+```text
+src/infrastructure/
+├── api/                    # Comunicação HTTP (agnóstico ao domínio)
+│   ├── client/            # Cliente HTTP (Axios)
+│   ├── dto/               # Data Transfer Objects
+│   ├── endpoints/         # Endpoints tipados
+│   └── interceptors/     # Interceptores (erros, auth, logging)
+├── services/              # Orquestração e casos de uso
+│   ├── base/             # BaseService
+│   └── {entity}/         # Services específicos
+├── mappers/               # Conversão DTO ↔ Model
+│   ├── IDataMapper.ts
+│   └── {Entity}Mapper.ts
+└── config/                # Configurações
+```
+
+**SEMPRE siga** estas convenções:
+
+- **DTOs**: Use sufixo `{Entity}DTO`, mantenha em `api/dto/` separados de `models/`, use `null` quando API retorna `null`.
+- **Endpoints**: Funções tipadas em UPPER*CASE (`{METHOD}*{ENTITY}\_{ACTION}`), aceitem parâmetros tipados, usem `URLSearchParams` para query strings.
+- **Services**: Orquestram API + Mapper. **SEMPRE use** mappers para conversão, endpoints tipados, retorne entidades/models (nunca DTOs).
+- **Mappers**: **SEMPRE implemente** `IDataMapper`, converta `null` (API) → `undefined` (Model), remova `undefined` antes de enviar para API, **NUNCA adicione** validações de negócio.
+
+**Exemplo de Service**:
+
+```typescript
+export class QuoteService extends BaseService<
+  Quote,
+  QuoteDTO,
+  number,
+  QuoteCreate,
+  QuoteUpdate
+> {
+  protected readonly endpoint = "/quote";
+  protected readonly mapper = new QuoteMapper();
+
+  async findById(id: number): Promise<Quote | null> {
+    const response = await this.apiClient.get<QuoteDTO>(GET_QUOTE_ID({ id }));
+    if (!response.data) return null;
+    return this.toDomain(response.data);
+  }
+}
+```
+
+**Exemplo de Mapper**:
+
+```typescript
+export class QuoteMapper
+  implements IDataMapper<Quote, QuoteDTO, QuoteCreate, QuoteUpdate>
+{
+  toDomain(data: QuoteDTO): Quote {
+    return {
+      id: data.id,
+      symbol: data.symbol,
+      day: data.day,
+      close: data.close,
+      volume: data.volume ?? undefined, // null → undefined
+    };
+  }
+
+  toApiRequest(data: QuoteCreate | QuoteUpdate): unknown {
+    const cleaned: Record<string, unknown> = {};
+    if (data.symbol !== undefined) cleaned.symbol = data.symbol;
+    if (data.day !== undefined) cleaned.day = data.day;
+    if (data.close !== undefined) cleaned.close = data.close;
+    return cleaned;
+  }
+}
+```
+
+**Checklist - Novo Service**: Criar DTO, mapper (`IDataMapper`), endpoints, service (`BaseService`), testar CRUD e conversão DTO ↔ Model.
+
+**Checklist - Novo Endpoint**: Função em `api/endpoints/index.ts`, padrão `{METHOD}_{ENTITY}_{ACTION}`, parâmetros tipados, `URLSearchParams`, `API_URL_BASE`.
+
+**Checklist - Novo Mapper**: Implementar `IDataMapper`, `toDomain()` (DTO → Model), `toApiRequest()` (Model → API), converter `null` → `undefined`, remover `undefined` antes de enviar.
+
+### 14.12 Qualidade de Código
+
+**SEMPRE execute** Biome antes de commitar (`npm run biome:fix`). **SEMPRE configure** em `biome.json`:
+
+```json
+{
+  "formatter": { "enabled": true, "indentStyle": "tab" },
+  "linter": { "enabled": true, "rules": { "recommended": true } }
+}
+```
+
+**SEMPRE use** ESLint para regras adicionais e Prettier com plugin Tailwind. **SEMPRE configure** Husky e lint-staged:
+
+```bash
+# .husky/pre-commit
+npm run biome:fix
+```
+
+**Checklist antes de commitar**: `npm run biome:fix`, `npm run build`, `npm run preview`.
+
+### 14.13 Princípios Aplicados
+
+**SEMPRE aplique** estes princípios:
+
+- **SOLID**: Single Responsibility, Interface Segregation
+- **DRY**: Don't Repeat Yourself
+- **YAGNI**: You Aren't Gonna Need It
+- **Clean Code**: Código limpo, legível e manutenível
+- **Type Safety**: Tipagem forte com TypeScript
+
+## 🔗 Integração com Outras Regras
+
+### Regras Relacionadas
+
+- **Core Rule**: [core-rule.mdc](core/core-rule.mdc) - Diretrizes fundamentais
+- **Architecture Guidelines**: [architecture-guidelines.mdc](architecture-guidelines.mdc) - Clean Code, TDD, DDD
+- **React Rule**: [react-rule.mdc](react-rule.mdc) - Padrões React específicos
+- **TypeScript**: [typescript.mdc](front/typescript.mdc) - Padrões TypeScript
+
+## ✅ Checklist de Desenvolvimento
+
+**ANTES de desenvolver uma nova app ou modificar uma existente**:
+
+- [ ] **🚨 CRÍTICO**: Entendi que a app é independente e autônoma
+- [ ] **🚨 CRÍTICO**: Estrutura de diretórios está correta
+- [ ] **🚨 CRÍTICO**: Build está configurado corretamente
+- [ ] **🚨 CRÍTICO**: Variáveis de ambiente estão configuradas
+- [ ] **🚨 CRÍTICO**: Proxy está configurado para desenvolvimento
+- [ ] Nomenclatura segue padrões estabelecidos
+- [ ] README.md está completo e atualizado
+- [ ] Documentação técnica está atualizada
+- [ ] Testes estão implementados
+- [ ] Linting e formatação estão configurados
+- [ ] Integração com Grand Bazaar foi testada
+
+**ANTES de fazer deploy**:
+
+- [ ] Build de produção foi executado
+- [ ] Build foi testado localmente (`npm run preview`)
+- [ ] Todos os assets estão acessíveis
+- [ ] Integração com APIs foi testada
+- [ ] App funciona via `/gbf/{app-name}`
+- [ ] Documentação está atualizada
+
+## 📚 Referências
+
+### Documentação do Projeto
+
+- **README.md** (raiz): Visão geral do Grand Bazaar
+- **README.md** (cada app): Documentação específica da app
+- **docs/** (cada app): Documentação técnica detalhada
+
+### Exemplos de Apps
+
+- **new-quote**: App React moderna com TypeScript, Vite, TanStack Query
+- **operations**: App React com TypeScript
+- **client-portfolio**: App React com TypeScript
+
+### Padrões Identificados
+
+- Apps modernas usam **React + TypeScript + Vite**
+- Apps mais antigas podem usar **Vue.js** ou **JavaScript vanilla**
+- Todas as apps geram **build estático** para deploy
+
+## 🚫 Limites Absolutos
+
+- **NUNCA misture** código de apps diferentes
+- **NUNCA crie** dependências cruzadas entre apps
+- **NUNCA compartilhe** estado entre apps
+- **NUNCA assuma** que uma app conhece outra app
+- **NUNCA pule** o processo de build e validação antes de deploy

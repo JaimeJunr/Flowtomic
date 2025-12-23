@@ -1,0 +1,492 @@
+---
+description: Fundamentos essenciais de engenharia de prompt - metodologias avançadas, técnicas de otimização e templates estruturados
+globs: **/.cursor/rules/**, **/.cursor/commands/**
+alwaysApply: false
+---
+
+# Engenharia de Prompts - Fundamentos Essenciais
+
+## 1. Diretrizes Fundamentais
+
+### 1.1 Identificação e Classificação de Prompts
+
+**SEMPRE identifique** o tipo de prompt antes de otimizar:
+
+#### 1.1.1 Tipos de Prompts
+
+- **System Prompt**: "Você é um..." → Define comportamento da IA
+- **User Prompt**: "Preciso de ajuda com..." → Solicita tarefa específica
+- **Few-Shot Prompt**: "Exemplos:" → Inclui exemplos de aprendizado
+- **Chain-of-Thought**: "Resolva passo a passo" → Solicita raciocínio estruturado
+
+#### 1.1.2 Estratégias de Otimização por Tipo
+
+**System Prompts**:
+
+1. **SEMPRE defina** papel e contexto claramente
+2. **SEMPRE especifique** capacidades e limitações
+3. **SEMPRE estabeleça** tom e personalidade
+4. **SEMPRE inclua** instruções de comportamento
+
+**User Prompts**:
+
+1. **SEMPRE estruture** como: Contexto → Tarefa → Requisitos → Formato
+2. **SEMPRE seja** específico sobre o que precisa
+3. **SEMPRE inclua** contexto técnico relevante
+4. **SEMPRE especifique** formato de saída esperado
+
+**Few-Shot Prompts**:
+
+1. **SEMPRE inclua** exemplos representativos e diversos
+2. **SEMPRE mantenha** consistência no formato
+3. **SEMPRE use** exemplos que cobrem casos típicos
+4. **NUNCA use** exemplos muito específicos ou genéricos
+
+**Chain-of-Thought Prompts**:
+
+1. **SEMPRE defina** passos claros de raciocínio
+2. **SEMPRE solicite** explicação do processo
+3. **SEMPRE inclua** validação da solução
+4. **SEMPRE mantenha** estrutura lógica
+
+## 2. Metodologias Avançadas
+
+### 2.1 Framework S.T.A.R
+
+**SEMPRE aplique** o framework S.T.A.R para prompts estruturados:
+
+1. **Sistema**: **SEMPRE defina** papel e contexto da IA claramente
+2. **Tarefa**: **SEMPRE descreva** objetivo específico a ser alcançado
+3. **Ação**: **SEMPRE especifique** métodos, ferramentas e abordagens
+4. **Resultado**: **SEMPRE defina** formato e estrutura da resposta esperada
+
+```markdown
+# ✅ CORRETO: Framework S.T.A.R aplicado
+
+## Situação
+
+Você é um especialista em React 18 com TypeScript 4.9, focado em performance e acessibilidade.
+
+## Tarefa
+
+Implemente um hook personalizado `useLocalStorage` que gerencie estado persistente.
+
+## Ação
+
+Use TypeScript strict mode, implemente error boundaries e inclua validação de entrada.
+
+## Resultado
+
+Código TypeScript completo com interface de tipos, implementação do hook, exemplo de uso e testes unitários básicos.
+```
+
+### 2.2 Chain-of-Thought Prompting
+
+**SEMPRE incentive** a IA a "pensar em voz alta":
+
+```markdown
+# ✅ CORRETO: Chain-of-Thought estruturado
+
+Resolva o seguinte problema passo a passo:
+
+Problema: [Descrição do problema]
+
+Para resolver este problema, siga estes passos:
+
+1. Primeiro, identifique as informações fornecidas
+2. Em seguida, determine o que está sendo solicitado
+3. Depois, aplique a metodologia apropriada
+4. Por fim, apresente a solução com justificativa
+```
+
+### 2.3 Few-Shot Learning
+
+**SEMPRE forneça** exemplos concretos no prompt:
+
+```markdown
+# ✅ CORRETO: Few-Shot Learning com exemplos representativos
+
+Tarefa: Classificar sentimentos de comentários de clientes
+
+Exemplos:
+
+Entrada: "Produto excelente, entrega rápida!"
+Saída: Positivo
+
+Entrada: "Qualidade ruim, não recomendo"
+Saída: Negativo
+
+Entrada: "Produto ok, mas poderia ser melhor"
+Saída: Neutro
+
+Agora classifique: "[Novo comentário]"
+```
+
+## 3. Técnicas de Otimização
+
+### 3.1 Especificidade e Clareza
+
+**SEMPRE seja** específico e claro em instruções:
+
+```markdown
+# ✅ CORRETO: Instruções específicas e claras
+
+## Contexto Específico
+
+Você é um especialista em React 18 com TypeScript 4.9, focado em performance e acessibilidade.
+
+## Tarefa Clara
+
+Implemente um hook personalizado `useLocalStorage` que:
+
+- Gerencie estado persistente no localStorage
+- Sincronize com múltiplas abas do navegador
+- Forneça fallback para modo SSR
+- Inclua validação de tipo TypeScript
+
+## Formato de Saída
+
+Código TypeScript completo com:
+
+- Interface de tipos
+- Implementação do hook
+- Exemplo de uso
+- Testes unitários básicos
+```
+
+### 3.2 Contexto Adequado
+
+**SEMPRE forneça** contexto suficiente para orientar a IA:
+
+```markdown
+# ✅ CORRETO: Contexto completo e relevante
+
+## Contexto do Projeto
+
+- Aplicação: E-commerce B2B
+- Stack: Next.js 14, TypeScript, Tailwind CSS
+- Estado: Zustand com persistência
+- Autenticação: NextAuth.js
+- Banco: PostgreSQL com Prisma
+
+## Contexto do Problema
+
+- Usuário: Desenvolvedor sênior com 5 anos de experiência
+- Deadline: 2 dias
+- Prioridade: Alta (bloqueia outras features)
+- Restrições: Deve ser compatível com SSR
+```
+
+### 3.3 Instruções Positivas
+
+**SEMPRE foque** no que fazer, não no que evitar:
+
+```markdown
+# ✅ CORRETO: Instruções positivas e claras
+
+## O que fazer:
+
+- Use TypeScript strict mode
+- Implemente error boundaries
+- Adicione loading states
+- Inclua validação de entrada
+- Documente com JSDoc
+
+# ❌ INCORRETO: Instruções negativas e vagas
+
+## O que não fazer:
+
+- Não use any
+- Não esqueça tratamento de erro
+- Não deixe sem loading
+- Não pule validação
+- Não esqueça documentação
+```
+
+## 4. Templates Estruturados
+
+### 4.1 Template de Code Review
+
+**SEMPRE use** este template para revisão de código:
+
+```markdown
+# ✅ CORRETO: Template de Code Review estruturado
+
+# {nome-do-prompt}
+
+## 1. Preparação para Revisão
+
+- [ ] **SEMPRE leia** descrição do PR/commit
+- [ ] **SEMPRE entenda** contexto e objetivos da mudança
+- [ ] **SEMPRE verifique** se testes estão incluídos
+- [ ] **SEMPRE confirme** se documentação foi atualizada
+
+## 2. Análise de Código
+
+### 2.1 Funcionalidade
+
+- [ ] **SEMPRE verifique** se código implementa requisitos
+- [ ] **SEMPRE teste** casos extremos e edge cases
+- [ ] **SEMPRE valide** tratamento de erros
+- [ ] **SEMPRE confirme** se validação de entrada está presente
+
+### 2.2 Qualidade de Código
+
+- [ ] **SEMPRE avalie** legibilidade e clareza
+- [ ] **SEMPRE verifique** se funções têm responsabilidade única
+- [ ] **SEMPRE confirme** se nomes são descritivos
+
+### 2.3 Performance e Segurança
+
+- [ ] **SEMPRE identifique** possíveis gargalos de performance
+- [ ] **SEMPRE verifique** vulnerabilidades de segurança
+- [ ] **SEMPRE valide** uso adequado de recursos
+- [ ] **SEMPRE confirme** se logs não expõem informações sensíveis
+```
+
+### 4.2 Template de Documentação
+
+**SEMPRE use** este template para documentação:
+
+```markdown
+# ✅ CORRETO: Template de Documentação estruturado
+
+# {nome-do-prompt}
+
+## 1. Análise de Requisitos
+
+- [ ] **SEMPRE identifique** público-alvo da documentação
+- [ ] **SEMPRE defina** escopo e objetivos
+- [ ] **SEMPRE liste** tópicos a serem cobertos
+- [ ] **SEMPRE escolha** formato e ferramentas apropriadas
+
+## 2. Estruturação da Documentação
+
+### 2.1 Organização
+
+- [ ] **SEMPRE crie** estrutura hierárquica clara
+- [ ] **SEMPRE use** títulos descritivos e consistentes
+- [ ] **SEMPRE organize** conteúdo em ordem lógica
+- [ ] **SEMPRE inclua** índice e navegação
+
+### 2.2 Conteúdo
+
+- [ ] **SEMPRE inclua** introdução e contexto
+- [ ] **SEMPRE forneça** exemplos práticos
+- [ ] **SEMPRE documente** APIs e interfaces
+- [ ] **SEMPRE inclua** troubleshooting e FAQ
+```
+
+### 4.3 Template de Debugging
+
+**SEMPRE use** este template para debugging:
+
+```markdown
+# ✅ CORRETO: Template de Debugging estruturado
+
+# {nome-do-prompt}
+
+## 1. Coleta de Informações
+
+- [ ] **SEMPRE reproduza** o problema consistentemente
+- [ ] **SEMPRE colete** logs relevantes e mensagens de erro
+- [ ] **SEMPRE identifique** ambiente e configurações
+- [ ] **SEMPRE documente** passos para reproduzir
+
+## 2. Análise do Problema
+
+### 2.1 Isolamento
+
+- [ ] **SEMPRE isole** componente ou módulo problemático
+- [ ] **SEMPRE identifique** dependências afetadas
+- [ ] **SEMPRE verifique** se problema é local ou sistêmico
+- [ ] **SEMPRE confirme** se problema é intermitente ou consistente
+
+### 2.2 Investigação
+
+- [ ] **SEMPRE analise** código relacionado ao problema
+- [ ] **SEMPRE verifique** configurações e variáveis de ambiente
+- [ ] **SEMPRE examine** logs e métricas de sistema
+- [ ] **SEMPRE teste** hipóteses uma por vez
+
+## 3. Resolução
+
+### 3.1 Desenvolvimento da Solução
+
+- [ ] **SEMPRE desenvolva** solução baseada em evidências
+- [ ] **SEMPRE teste** solução em ambiente isolado
+- [ ] **SEMPRE valide** que solução não introduz novos problemas
+- [ ] **SEMPRE documente** mudanças e justificativas
+
+### 3.2 Implementação
+
+- [ ] **SEMPRE implemente** solução de forma incremental
+- [ ] **SEMPRE monitore** sistema após implementação
+- [ ] **SEMPRE valide** que problema foi resolvido
+- [ ] **SEMPRE atualize** testes para prevenir regressão
+```
+
+## 5. Processo de Otimização
+
+### 5.1 Análise de Prompts Existentes
+
+**SEMPRE avalie** prompts atuais antes de otimizar:
+
+#### 5.1.1 Checklist de Análise
+
+- [ ] **Clareza**: O prompt é claro e específico?
+- [ ] **Contexto**: Há contexto suficiente para a tarefa?
+- [ ] **Estrutura**: O prompt está bem organizado?
+- [ ] **Exemplos**: Há exemplos suficientes e relevantes?
+- [ ] **Resultados**: Os resultados atuais atendem às expectativas?
+
+#### 5.1.2 Identificação de Problemas
+
+- [ ] **Vaguedade**: Instruções muito genéricas
+- [ ] **Falta de Contexto**: Informações insuficientes
+- [ ] **Exemplos Ruins**: Exemplos não representativos
+- [ ] **Estrutura Confusa**: Organização inadequada
+- [ ] **Falta de Especificidade**: Objetivos não claros
+
+### 5.2 Técnicas de Melhoria
+
+#### 5.2.1 Melhorias Focadas
+
+1. **SEMPRE adicione** contexto específico onde necessário
+2. **SEMPRE melhore** exemplos com casos mais representativos
+3. **SEMPRE clarifique** instruções ambíguas
+4. **SEMPRE estruture** melhor a organização do prompt
+
+#### 5.2.2 Validação
+
+1. **SEMPRE teste** a versão melhorada
+2. **SEMPRE compare** resultados com versão anterior
+3. **SEMPRE colete** feedback dos usuários
+4. **SEMPRE itere** baseado nos resultados
+
+### 5.3 Exemplos de Otimização
+
+#### 5.3.1 System Prompt
+
+```text
+# ❌ ANTES: System prompt genérico
+
+Você é um assistente de IA. Ajude o usuário com suas perguntas.
+
+# ✅ DEPOIS: System prompt otimizado
+
+Você é um assistente especializado em desenvolvimento de software com foco em:
+
+## Especialização Técnica
+
+- Análise de código e arquitetura
+- Resolução de problemas de programação
+- Melhores práticas de desenvolvimento
+- Debugging e otimização
+
+## Metodologia de Resposta
+
+1. **Entenda** o problema completamente
+2. **Analise** o contexto técnico
+3. **Proponha** soluções práticas
+4. **Explique** o raciocínio por trás da solução
+5. **Forneça** código funcional quando apropriado
+
+## Limitações e Responsabilidades
+
+- Sempre indicar quando não tem certeza
+- Nunca fornecer código sem testar a lógica
+- Solicitar confirmação para mudanças arquiteturais
+- Priorizar soluções simples e manuteníveis
+```
+
+#### 5.3.2 User Prompt
+
+```text
+# ❌ ANTES: User prompt vago
+
+Preciso de ajuda com React.
+
+# ✅ DEPOIS: User prompt estruturado
+
+## Contexto do Projeto
+
+- Projeto: E-commerce React + TypeScript
+- Versão: React 18, TypeScript 4.9
+- Estado: Redux Toolkit
+- Roteamento: React Router v6
+
+## Problema Específico
+
+Estou implementando um carrinho de compras e preciso:
+
+- Adicionar/remover produtos
+- Calcular totais dinamicamente
+- Persistir estado no localStorage
+- Validar estoque disponível
+
+## Código Atual
+
+[inserir código relevante]
+
+## Resultado Esperado
+
+Hook personalizado `useCart` com as funcionalidades acima
+```
+
+## 6. Métricas de Qualidade
+
+### 6.1 Métricas Quantitativas
+
+**SEMPRE monitore** estas métricas essenciais:
+
+- **Precisão**: % de respostas corretas
+- **Relevância**: % de respostas relevantes ao contexto
+- **Completude**: % de respostas completas
+- **Consistência**: % de respostas consistentes entre execuções
+
+### 6.2 Métricas Qualitativas
+
+**SEMPRE avalie** qualidade das respostas:
+
+- **Clareza**: Facilidade de compreensão das respostas
+- **Utilidade**: Valor prático das respostas
+- **Originalidade**: Criatividade e inovação nas soluções
+- **Adequação**: Alinhamento com expectativas do usuário
+
+### 6.3 Métricas de Performance
+
+**SEMPRE otimize** performance do sistema:
+
+- **Latência**: Tempo para primeira resposta
+- **Throughput**: Número de prompts processados por minuto
+- **Eficiência**: Relação qualidade/tempo
+- **Custo**: Custo por prompt processado
+
+## 7. Ferramentas e Recursos
+
+### 7.1 Ferramentas de Otimização
+
+**SEMPRE use** ferramentas especializadas:
+
+- **PromptPerfect**: Otimização automática de prompts
+- **LangSmith**: Monitoramento e debugging
+- **Weights & Biases**: Experimentação e tracking
+- **PromptBase**: Marketplace de prompts otimizados
+
+### 7.2 Frameworks de Desenvolvimento
+
+**SEMPRE considere** frameworks apropriados:
+
+- **LangChain**: Desenvolvimento de aplicações com LLMs
+- **LlamaIndex**: Construção de aplicações de dados
+- **Haystack**: Pipeline de NLP end-to-end
+- **Semantic Kernel**: Integração com Microsoft AI
+
+## 8. Boas Práticas
+
+**SEMPRE configure** templates de prompts para diferentes domínios e casos de uso
+
+**SEMPRE mantenha** consistência na estrutura e linguagem dos prompts
+
+**SEMPRE documente** padrões e templates para reutilização

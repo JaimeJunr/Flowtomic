@@ -1,0 +1,546 @@
+---
+description: Diretrizes completas para uso das ferramentas MCP do Atlassian (Confluence e Jira) - buscar ticket no jira
+alwaysApply: false
+---
+
+# Atlassian MCP Tools - Integração com Confluence e Jira
+
+> **🎯 Objetivo**: Fornecer diretrizes completas para uso das ferramentas MCP do Atlassian (Confluence e Jira) no projeto PerformIt Rails, baseado na documentação oficial do [mcp-atlassian](https://github.com/sooperset/mcp-atlassian/tree/v0.11.2).
+
+## 1. Comportamento Obrigatório
+
+**SEMPRE execute** estas ações ao usar as ferramentas:
+
+1. **SEMPRE use** ferramentas de leitura antes de operações de escrita
+2. **SEMPRE valide** parâmetros obrigatórios antes de chamar ferramentas
+3. **SEMPRE trate** erros de autenticação e permissão adequadamente
+4. **SEMPRE use** projeto **CAP** para tickets da InvestTools
+5. **SEMPRE respeite** rate limiting (300 requests/minuto no Cloud)
+
+## 2. Ferramentas Jira
+
+### 2.1 Busca de Issues
+
+**SEMPRE use** `jira_search` com JQL para buscar issues:
+
+```ruby
+# ✅ CORRETO: Buscar issues do projeto CAP
+jira_search(jql: "project = CAP ORDER BY updated DESC")
+
+# ✅ CORRETO: Buscar por status
+jira_search(jql: "project = CAP AND status = '2. Doing'")
+
+# ✅ CORRETO: Buscar por tipo
+jira_search(jql: "issuetype = 'História' AND project = CAP")
+
+# ✅ CORRETO: Buscar atribuídas ao usuário
+jira_search(jql: "project = CAP AND assignee = currentUser()")
+
+# ✅ CORRETO: Buscar recentes
+jira_search(jql: "project = CAP AND updated >= -7d ORDER BY updated DESC")
+```
+
+**SEMPRE use** `jira_get_issue` para detalhes completos:
+
+```ruby
+# ✅ CORRETO: Buscar issue específico
+jira_get_issue(issue_key: "CAP-123")
+
+# ✅ CORRETO: Com campos específicos
+jira_get_issue(issue_key: "CAP-123", fields: "summary,status,assignee,priority")
+
+# ✅ CORRETO: Com comentários
+jira_get_issue(issue_key: "CAP-123", comment_limit: 20)
+```
+
+**SEMPRE use** `jira_get_board_issues` para board específico:
+
+```ruby
+# Board Principal do projeto CAP é ID 46
+jira_get_board_issues(
+  board_id: "46",
+  jql: "ORDER BY updated DESC",
+  limit: 20
+)
+```
+
+### 2.2 Projeto CAP - InvestTools
+
+**SEMPRE use** estas informações do projeto CAP:
+
+- **Projeto Key**: `CAP`
+- **Board Principal**: "Board DM - Controladoria" (ID: 46)
+- **Tipos**: `História`, `Tarefa`, `Bug`, `Análise`
+- **Status**: `1. TO DO`, `2. Doing`, `5. N1 TEST`, `Waiting deploy`, `Concluído`
+- **Prioridades**: `Highest`, `Medium`
+
+### 2.3 Tipos de Tickets
+
+**SEMPRE identifique** o tipo correto antes de criar ou buscar:
+
+- **`História`** - Funcionalidades expressadas como objetivo do usuário
+- **`Tarefa`** - Trabalho técnico ou administrativo distinto
+- **`Bug`** - Problema ou erro no sistema
+- **`Análise`** - Investigação e análise de problemas
+
+**Padrões JQL por tipo:**
+
+```sql
+-- Histórias em desenvolvimento
+issuetype = "História" AND project = CAP AND status = "2. Doing"
+
+-- Tarefas atribuídas ao usuário
+issuetype = "Tarefa" AND project = CAP AND assignee = currentUser()
+
+-- Bugs de alta prioridade
+issuetype = "Bug" AND project = CAP AND priority = Highest
+
+-- Análises pendentes
+issuetype = "Análise" AND project = CAP AND status != "Concluído"
+```
+
+**Exemplos de criação por tipo:**
+
+```ruby
+# ✅ CORRETO: História
+jira_create_issue(
+  project_key: "CAP",
+  summary: "Inclusão da opção selecionar 'todos os fundos' no relatório de liquidez FOF",
+  issue_type: "História",
+  description: "Como usuário do PIT, eu quero uma forma fácil e eficiente de selecionar múltiplos fundos..."
+)
+
+# ✅ CORRETO: Bug
+jira_create_issue(
+  project_key: "CAP",
+  summary: "Sistema tratando incorretamente o fator de conversão das opções de IBOV",
+  issue_type: "Bug",
+  description: "O sistema está tratando incorretamente o preço das opções..."
+)
+
+# ✅ CORRETO: Análise
+jira_create_issue(
+  project_key: "CAP",
+  summary: "Analisar o que está causando problema no LMS da Oceana",
+  issue_type: "Análise",
+  description: "A Isabella da Oceana comentou sobre um problema que está enfrentando no LMS..."
+)
+```
+
+### 2.4 Status e Workflow
+
+**SEMPRE use** estes status do workflow InvestTools:
+
+- **`1. TO DO`** - Pendentes, planejados mas não iniciados
+- **`2. Doing`** - Em andamento, desenvolvimento ativo
+- **`5. N1 TEST`** - Em teste N1 (primeiro nível de teste)
+- **`Waiting deploy`** - Concluídos, aguardando deploy
+- **`Concluído`** - Concluídos e entregues
+
+**Fluxo de status:**
+
+```mermaid
+flowchart LR
+    TODO[1. TO DO] --> DOING[2. Doing]
+    DOING --> TEST[5. N1 TEST]
+    TEST --> DOING
+    TEST --> DEPLOY[Waiting deploy]
+    DEPLOY --> DONE[Concluído]
+```
+
+**Padrões JQL por status:**
+
+```sql
+-- Tarefas para trabalhar hoje
+status = '1. TO DO' AND project = CAP AND assignee = currentUser() ORDER BY priority DESC
+
+-- Tarefas em progresso
+status = '2. Doing' AND project = CAP AND assignee = currentUser()
+
+-- Tarefas em teste
+status = '5. N1 TEST' AND project = CAP ORDER BY updated DESC
+
+-- Aguardando deploy
+status = 'Waiting deploy' AND project = CAP ORDER BY updated ASC
+
+-- Concluídas recentemente
+status = 'Concluído' AND project = CAP AND updated >= -7d ORDER BY updated DESC
+```
+
+**SEMPRE use** `jira_transition_issue` para transições:
+
+```ruby
+# ✅ CORRETO: Iniciar trabalho (1. TO DO → 2. Doing)
+jira_transition_issue(
+  issue_key: "CAP-123",
+  transition_id: "11",
+  comment: "Iniciando desenvolvimento da funcionalidade"
+)
+
+# ✅ CORRETO: Enviar para teste (2. Doing → 5. N1 TEST)
+jira_transition_issue(
+  issue_key: "CAP-123",
+  transition_id: "21",
+  comment: "Código pronto para teste N1. PR #456 criado."
+)
+
+# ✅ CORRETO: Aprovar teste (5. N1 TEST → Waiting deploy)
+jira_transition_issue(
+  issue_key: "CAP-123",
+  transition_id: "31",
+  comment: "Teste N1 aprovado. Enviando para deploy."
+)
+
+# ✅ CORRETO: Concluir (Waiting deploy → Concluído)
+jira_transition_issue(
+  issue_key: "CAP-123",
+  transition_id: "41",
+  comment: "Deploy concluído com sucesso. Tarefa finalizada."
+)
+```
+
+### 2.5 Prioridades e Labels
+
+**SEMPRE use** prioridades e labels para organização:
+
+**Prioridades:**
+
+- **`Highest`** - Crítico: Sistema inoperante, produção afetada
+- **`Medium`** - Médio: Funcionalidade secundária afetada (mais comum)
+
+**Labels comuns:**
+
+- `frontend`, `backend`, `database`, `infrastructure`
+- `security`, `performance`, `bug`, `feature`
+- `refactor`, `documentation`, `urgent`, `blocked`
+
+**Padrões JQL por prioridade e label:**
+
+```sql
+-- Tickets críticos
+priority = Highest AND project = CAP ORDER BY updated DESC
+
+-- Bugs de alta prioridade
+issuetype = Bug AND priority = Highest AND project = CAP
+
+-- Tickets frontend em progresso
+labels = frontend AND status = '2. Doing' AND project = CAP
+
+-- Tickets urgentes
+labels = urgent AND project = CAP ORDER BY priority DESC
+```
+
+**SEMPRE inclua** prioridade e labels ao criar issues:
+
+```ruby
+# ✅ CORRETO: Bug crítico
+jira_create_issue(
+  project_key: "CAP",
+  summary: "Sistema tratando incorretamente o fator de conversão das opções de IBOV",
+  issue_type: "Bug",
+  additional_fields: {
+    'priority' => {'name' => 'Highest'},
+    'labels' => ['bug', 'urgent', 'backend']
+  }
+)
+```
+
+### 2.6 Operações de Escrita
+
+**SEMPRE use** `jira_create_issue` para criar issues:
+
+```ruby
+# ✅ CORRETO: Issue básico
+jira_create_issue(
+  project_key: "CAP",
+  summary: "Implementar nova funcionalidade",
+  issue_type: "Tarefa",
+  description: "Descrição detalhada da tarefa"
+)
+
+# ✅ CORRETO: Com campos adicionais
+jira_create_issue(
+  project_key: "CAP",
+  summary: "Bug crítico no sistema",
+  issue_type: "Bug",
+  assignee: "user@example.com",
+  components: "Frontend,API",
+  additional_fields: {
+    'priority' => {'name' => 'Highest'},
+    'labels' => ['urgent', 'frontend']
+  }
+)
+```
+
+**SEMPRE use** `jira_update_issue` para atualizações:
+
+```ruby
+# ✅ CORRETO: Atualização básica
+jira_update_issue(
+  issue_key: "CAP-123",
+  fields: {
+    'summary' => 'Novo título da issue',
+    'assignee' => 'newuser@example.com'
+  }
+)
+
+# ✅ CORRETO: Atualizar prioridade e labels
+jira_update_issue(
+  issue_key: "CAP-123",
+  fields: {
+    'priority' => {'name' => 'Highest'}
+  },
+  additional_fields: {
+    'labels' => ['bug', 'critical', 'blocked']
+  }
+)
+```
+
+**SEMPRE use** `jira_add_comment` e `jira_add_worklog`:
+
+```ruby
+# ✅ CORRETO: Adicionar comentário
+jira_add_comment(
+  issue_key: "CAP-123",
+  comment: "Comentário em Markdown com **formatação**"
+)
+
+# ✅ CORRETO: Adicionar worklog
+jira_add_worklog(
+  issue_key: "CAP-123",
+  time_spent: "2h 30m",
+  comment: "Trabalho realizado na implementação"
+)
+```
+
+## 3. Ferramentas Confluence
+
+### 3.1 Busca e Leitura
+
+**SEMPRE use** `confluence_search` para buscar conteúdo:
+
+```ruby
+# ✅ CORRETO: Busca simples
+confluence_search(query: "documentação do projeto")
+
+# ✅ CORRETO: Busca com CQL
+confluence_search(query: "type=page AND space=DEV AND title~\"API\"")
+confluence_search(query: "created >= \"2024-01-01\" AND space=TEAM")
+```
+
+**SEMPRE use** `confluence_get_page` para obter páginas:
+
+```ruby
+# ✅ CORRETO: Por ID
+confluence_get_page(page_id: "123456789")
+
+# ✅ CORRETO: Por título e espaço
+confluence_get_page(
+  title: "Documentação da API",
+  space_key: "DEV"
+)
+
+# ✅ CORRETO: Com metadados e conversão Markdown
+confluence_get_page(
+  page_id: "123456789",
+  include_metadata: true,
+  convert_to_markdown: true
+)
+
+# ✅ CORRETO: Páginas filhas
+confluence_get_page_children(
+  parent_id: "123456789",
+  include_content: true,
+  limit: 25
+)
+```
+
+### 3.2 Criação e Atualização
+
+**SEMPRE use** `confluence_create_page` com conteúdo Markdown:
+
+```ruby
+# ✅ CORRETO: Página básica
+confluence_create_page(
+  space_key: "DEV",
+  title: "Nova Documentação",
+  content: "# Título\n\nConteúdo em **Markdown**"
+)
+
+# ✅ CORRETO: Página com pai
+confluence_create_page(
+  space_key: "DEV",
+  title: "Subpágina",
+  content: "Conteúdo da subpágina",
+  parent_id: "123456789"
+)
+```
+
+**SEMPRE use** `confluence_update_page` para modificações:
+
+```ruby
+# ✅ CORRETO: Atualização básica
+confluence_update_page(
+  page_id: "123456789",
+  title: "Título Atualizado",
+  content: "# Novo Conteúdo\n\nAtualização em **Markdown**"
+)
+
+# ✅ CORRETO: Com comentário de versão
+confluence_update_page(
+  page_id: "123456789",
+  title: "Título Atualizado",
+  content: "Conteúdo atualizado",
+  version_comment: "Correção de informações"
+)
+```
+
+## 4. Padrões de Busca (JQL e CQL)
+
+### 4.1 Padrões JQL Comuns
+
+**SEMPRE use** estes padrões JQL para buscas eficientes:
+
+```sql
+-- Issues por status
+status = '2. Doing' AND project = CAP
+
+-- Issues atribuídos ao usuário atual
+assignee = currentUser()
+
+-- Issues recentemente atualizados
+updated >= -7d AND project = CAP
+
+-- Issues por tipo
+issuetype = 'História' AND project = CAP
+
+-- Issues por prioridade
+priority = Highest AND project = CAP
+
+-- Issues por label
+labels = frontend AND project = CAP
+
+-- Issues com texto específico
+text ~ "bug" AND project = CAP
+
+-- Issues em sprint específico (se aplicável)
+sprint = 10001 AND project = CAP
+```
+
+### 4.2 Padrões CQL Comuns
+
+**SEMPRE use** estes padrões CQL para buscas eficientes:
+
+```sql
+-- Páginas por tipo
+type = page AND space = DEV
+
+-- Páginas por título
+title ~ "API Documentation"
+
+-- Páginas recentes
+created >= "2024-01-01"
+
+-- Páginas por autor
+creator = currentUser()
+
+-- Páginas com label específico
+label = documentation
+
+-- Páginas modificadas recentemente
+lastModified > startOfMonth("-1M")
+```
+
+## 5. Limitações e Considerações
+
+**SEMPRE considere** estas limitações ao usar as ferramentas:
+
+- **Rate Limiting**: Atlassian Cloud tem limite de 300 requests/minuto
+- **Tamanho de Conteúdo**: Confluence limita páginas a 25MB
+- **Campos Customizados**: Jira requer conhecimento de IDs de campos
+- **Permissões**: Usuário deve ter acesso aos projetos/espaços necessários
+- **Erros de Autenticação**: Verifique tokens e configurações se ocorrer erro 401/403
+
+**SEMPRE trate** erros adequadamente:
+
+- **401 Unauthorized**: Problema de autenticação - verifique tokens
+- **403 Forbidden**: Falta de permissão - verifique acesso ao projeto/espaço
+- **404 Not Found**: Recurso não encontrado - verifique IDs/chaves fornecidas
+- **429 Too Many Requests**: Rate limit excedido - aguarde antes de novas requisições
+
+## 6. Exemplos Práticos para PerformIt
+
+### 6.1 Buscar Ticket do Jira
+
+**SEMPRE use** este padrão para buscar tickets:
+
+```ruby
+# ✅ CORRETO: Buscar ticket específico
+jira_get_issue(issue_key: "CAP-123")
+
+# ✅ CORRETO: Buscar tickets recentes do projeto
+jira_search(jql: "project = CAP AND updated >= -7d ORDER BY updated DESC LIMIT 20")
+
+# ✅ CORRETO: Buscar tickets atribuídos ao usuário
+jira_search(jql: "project = CAP AND assignee = currentUser() AND status != 'Concluído'")
+```
+
+### 6.2 Criar Issue para Bug
+
+**SEMPRE use** este padrão para criar bugs:
+
+```ruby
+# ✅ CORRETO: Criar issue de bug
+jira_create_issue(
+  project_key: "CAP",
+  summary: "Bug: Erro na conversão de moeda USD-BRL",
+  issue_type: "Bug",
+  description: "**Descrição:**\n\nErro na conversão de moeda USD para BRL no sistema de pricing.\n\n**Passos para reproduzir:**\n1. Acessar tela de pricing\n2. Selecionar moeda USD\n3. Observar erro de conversão\n\n**Comportamento esperado:**\nConversão deve funcionar normalmente",
+  additional_fields: {
+    'priority' => {'name' => 'Highest'},
+    'labels' => ['pricing', 'currency', 'bug']
+  }
+)
+```
+
+### 6.3 Atualizar Status de Issue
+
+**SEMPRE atualize** status com comentários informativos:
+
+```ruby
+# ✅ CORRETO: Atualizar status para "In Progress"
+jira_transition_issue(
+  issue_key: "CAP-123",
+  transition_id: "11",
+  comment: "Iniciando investigação do problema de conversão de moeda"
+)
+```
+
+### 6.4 Criar Documentação no Confluence
+
+**SEMPRE use** este padrão para documentação:
+
+```ruby
+# ✅ CORRETO: Criar página de documentação
+confluence_create_page(
+  space_key: "DEV",
+  title: "API PerformIt - Endpoints de Pricing",
+  content: "# API PerformIt - Pricing\n\n## Endpoints\n\n### GET /api/pricing\n\nRetorna informações de pricing...",
+  parent_id: "parent_page_id"
+)
+```
+
+## 7. Referências
+
+### Documentação Oficial
+
+- [mcp-atlassian GitHub](https://github.com/sooperset/mcp-atlassian/tree/v0.11.2)
+- [Jira REST API](https://developer.atlassian.com/cloud/jira/platform/rest/v2/)
+- [Confluence REST API](https://developer.atlassian.com/cloud/confluence/rest/v2/)
+
+### Recursos de Ajuda
+
+- [JQL Syntax](https://www.atlassian.com/software/jira/guides/expand-jira/jql)
+- [CQL Syntax](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)
+
+**Por que estas regras existem**: Integração eficiente com Atlassian garante documentação e gestão de projetos centralizadas

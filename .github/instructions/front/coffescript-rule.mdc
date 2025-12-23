@@ -1,0 +1,575 @@
+---
+description: "Diretrizes completas para desenvolvimento CoffeeScript - aplica-se automaticamente a arquivos CoffeeScript para garantir qualidade, consistência e boas práticas"
+globs: **/*.coffee
+alwaysApply: false
+---
+
+# CoffeeScript Development Guidelines
+
+> **📚 Regra Especializada**: Esta regra aplica-se automaticamente a arquivos CoffeeScript para garantir qualidade, consistência e boas práticas de desenvolvimento.
+
+## 1. Diretrizes Fundamentais
+
+### 1.1 Indentação e Formatação
+
+**SEMPRE use** indentação de 2 espaços para manter consistência
+**SEMPRE evite** misturar tabs e espaços
+**SEMPRE mantenha** alinhamento consistente em blocos de código
+**SEMPRE limite** linhas a máximo de 79 caracteres
+**SEMPRE separe** definições de funções e classes com linha em branco
+**SEMPRE evite** espaços em branco no final das linhas
+**SEMPRE use** UTF-8 como codificação padrão
+
+**Por que esta regra existe**: Indentação consistente melhora legibilidade e evita erros de compilação
+**Automação**: Configure CoffeeLint para validar indentação automaticamente
+
+```coffeescript
+# ✅ CORRETO: Indentação de 2 espaços, linhas < 79 chars
+class UserService
+  constructor: (@apiClient) ->
+    @users = []
+
+  fetchUsers: ->
+    @apiClient.get('/users')
+      .then (response) =>
+        @users = response.data
+      .catch (error) =>
+        console.error 'Erro ao buscar usuários:', error
+
+# ❌ INCORRETO: Indentação inconsistente, linha muito longa
+class UserService
+    constructor: (@apiClient) ->
+        @users = []
+
+  fetchUsers: ->
+      @apiClient.get('/users')
+      # Esta linha é muito longa e excede o limite de 79 caracteres recomendado para CoffeeScript
+```
+
+### 1.2 Nomenclatura e Convenções
+
+**SEMPRE use** camelCase para variáveis e funções
+**SEMPRE use** PascalCase para classes e construtores
+**SEMPRE use** UPPER_CASE para constantes
+**SEMPRE escolha** nomes descritivos e autoexplicativos
+
+**Por que esta regra existe**: Nomenclatura consistente melhora legibilidade e manutenibilidade do código
+**Automação**: Configure CoffeeLint para validar padrões de nomenclatura
+
+```coffeescript
+# ✅ CORRETO: Nomenclatura adequada
+class ApiClient
+  constructor: (@baseUrl) ->
+    @MAX_RETRIES = 3
+    @timeout = 5000
+
+  fetchUserData: (userId) ->
+    # Implementação
+
+# ❌ INCORRETO: Nomes genéricos e inconsistentes
+class api
+  constructor: (@url) ->
+    @max = 3
+    @t = 5000
+
+  get: (id) ->
+    # Implementação
+```
+
+### 1.3 Estrutura de Classes e Objetos
+
+**SEMPRE defina** construtores claros com parâmetros explícitos
+**SEMPRE use** `@` para propriedades de instância
+**SEMPRE organize** métodos por funcionalidade
+**SEMPRE use** herança quando apropriado
+
+**Por que esta regra existe**: Estrutura clara de classes facilita manutenção e extensibilidade
+**Automação**: Configure CoffeeLint para validar estrutura de classes
+
+```coffeescript
+# ✅ CORRETO: Estrutura de classe bem organizada
+class BaseService
+  constructor: (@apiClient, @config = {}) ->
+    @isInitialized = false
+
+  initialize: ->
+    @isInitialized = true
+    @onInitialized?()
+
+  onInitialized: null
+
+class UserService extends BaseService
+  constructor: (apiClient, config) ->
+    super apiClient, config
+    @users = []
+
+  fetchUsers: ->
+    return unless @isInitialized
+    @apiClient.get '/users'
+```
+
+### 1.4 Funções e Métodos
+
+**SEMPRE use** arrow functions (`=>`) para preservar contexto `this`
+**SEMPRE use** funções normais (`->`) quando contexto não importa
+**SEMPRE documente** parâmetros e retorno de funções complexas
+**SEMPRE evite** funções aninhadas desnecessárias
+
+**Por que esta regra existe**: Uso correto de funções evita problemas de contexto e melhora legibilidade
+**Automação**: Configure CoffeeLint para validar uso de arrow functions
+
+```coffeescript
+# ✅ CORRETO: Uso adequado de funções
+class DataProcessor
+  processData: (data, callback) ->
+    # Função normal para callback
+    processedData = data.map (item) =>
+      # Arrow function para preservar contexto
+      @transformItem item
+
+    callback? processedData
+
+  transformItem: (item) ->
+    # Lógica de transformação
+    {
+      id: item.id
+      name: item.name?.toUpperCase()
+      processed: true
+    }
+
+# ❌ INCORRETO: Uso inadequado de funções
+class DataProcessor
+  processData: (data, callback) ->
+    # Misturando contextos incorretamente
+    processedData = data.map (item) ->
+      this.transformItem item  # 'this' não se refere à instância
+```
+
+### 1.5 Tratamento de Erros e Validações
+
+**SEMPRE valide** parâmetros de entrada
+**SEMPRE use** try-catch para operações que podem falhar
+**SEMPRE forneça** mensagens de erro descritivas
+**SEMPRE use** callbacks de erro consistentes
+**SEMPRE implemente** tratamento de erros robusto para situações inesperadas
+**SEMPRE gerencie** erros de forma graciosa
+
+**Por que esta regra existe**: Tratamento robusto de erros previne falhas em produção e facilita debugging
+**Automação**: Configure CoffeeLint para validar tratamento de erros
+
+```coffeescript
+# ✅ CORRETO: Tratamento robusto de erros
+class ApiService
+  fetchData: (url, options = {}) ->
+    try
+      throw new Error 'URL é obrigatória' unless url?
+      throw new Error 'URL inválida' unless @isValidUrl url
+
+      @makeRequest url, options
+        .then (response) =>
+          @validateResponse response
+        .catch (error) =>
+          @handleError error, url
+    catch error
+      @handleError error, url
+
+  isValidUrl: (url) ->
+    /^https?:\/\/.+/.test url
+
+  validateResponse: (response) ->
+    throw new Error 'Resposta inválida' unless response?.data?
+    response
+
+  handleError: (error, context) ->
+    console.error "Erro em #{context}:", error.message
+    throw error
+```
+
+### 1.6 Uso de Operadores e Sintaxe
+
+**SEMPRE use** operadores de existência (`?.`, `?=`) quando apropriado
+**SEMPRE use** operadores de comparação explícitos (`is`, `isnt`)
+**SEMPRE use** interpolação de strings (`#{}`) para concatenação
+**SEMPRE evite** operadores ambíguos
+**SEMPRE use** operadores booleanos consistentes (`&&`, `||` ou `and`, `or`)
+**SEMPRE evite** parênteses e chaves desnecessários
+**SEMPRE use** `@` em vez de `this` para referenciar contexto atual
+
+**Por que esta regra existe**: Uso correto de operadores CoffeeScript melhora legibilidade e previne erros
+**Automação**: Configure CoffeeLint para validar uso de operadores
+
+```coffeescript
+# ✅ CORRETO: Uso adequado de operadores
+class UserManager
+  updateUser: (userData) ->
+    return unless userData?.id?
+
+    user = @findUser userData.id
+    return unless user?
+
+    user.name = userData.name ? user.name
+    user.email = userData.email ? user.email
+    user.updatedAt = new Date()
+
+    @saveUser user
+
+  findUser: (id) ->
+    @users?.find (user) => user.id is id
+
+  saveUser: (user) ->
+    console.log "Salvando usuário: #{user.name} (#{user.id})"
+    # Lógica de salvamento
+
+# ❌ INCORRETO: Uso inadequado de operadores
+class UserManager
+  updateUser: (userData) ->
+    # Não verifica existência adequadamente
+    user = this.findUser userData.id  # Usa 'this' em vez de '@'
+    user.name = userData.name || user.name  # Usa || em vez de ?
+    user.email = userData.email || user.email
+```
+
+### 1.7 Estruturas de Controle e Loops
+
+**SEMPRE use** `for...in` para objetos
+**SEMPRE use** `for...of` para arrays
+**SEMPRE use** `when` para condições simples
+**SEMPRE evite** loops aninhados desnecessários
+
+**Por que esta regra existe**: Estruturas de controle adequadas melhoram performance e legibilidade
+**Automação**: Configure CoffeeLint para validar estruturas de controle
+
+```coffeescript
+# ✅ CORRETO: Estruturas de controle adequadas
+class DataAnalyzer
+  analyzeData: (data) ->
+    results = {}
+
+    for item in data
+      continue unless item?.isValid
+
+      category = @categorizeItem item
+      results[category] ?= []
+      results[category].push item
+
+    @processResults results
+
+  categorizeItem: (item) ->
+    switch item.type
+      when 'user' then 'users'
+      when 'product' then 'products'
+      when 'order' then 'orders'
+      else 'others'
+
+  processResults: (results) ->
+    for category, items of results
+      console.log "#{category}: #{items.length} itens"
+      @processCategory category, items
+```
+
+### 1.8 Módulos e Namespaces
+
+**SEMPRE use** padrão de módulo para encapsulamento
+**SEMPRE evite** poluição do namespace global
+**SEMPRE exporte** apenas o necessário
+**SEMPRE use** namespaces para organização
+**SEMPRE organize** código em módulos reutilizáveis
+**SEMPRE siga** práticas recomendadas para estruturação de módulos
+
+**Por que esta regra existe**: Encapsulamento adequado previne conflitos e facilita manutenção
+**Automação**: Configure CoffeeLint para validar padrões de módulo
+
+```coffeescript
+# ✅ CORRETO: Padrão de módulo adequado
+# namespace: App.Services
+App = window.App ? {}
+App.Services = App.Services ? {}
+
+class App.Services.ApiClient
+  constructor: (@baseUrl) ->
+    @headers = {}
+
+  setHeader: (key, value) ->
+    @headers[key] = value
+
+  get: (endpoint) ->
+    # Implementação
+
+# Exportar apenas o necessário
+window.App = App
+
+# ❌ INCORRETO: Poluição do namespace global
+class ApiClient
+  constructor: (@baseUrl) ->
+    # Implementação
+
+# Variáveis globais
+apiClient = new ApiClient '/api'
+```
+
+### 1.9 Strings e Arrays
+
+**SEMPRE use** interpolação de strings em vez de concatenação
+**SEMPRE prefira** métodos nativos de array quando apropriado
+**SEMPRE use** destructuring para arrays quando possível
+**SEMPRE evite** mutação desnecessária de arrays
+
+**Por que esta regra existe**: Uso eficiente de strings e arrays melhora performance e legibilidade
+**Automação**: Configure CoffeeLint para validar padrões de strings e arrays
+
+```coffeescript
+# ✅ CORRETO: Uso eficiente de strings e arrays
+class DataProcessor
+  processItems: (items) ->
+    # Interpolação de string em vez de concatenação
+    message = "Processando #{items.length} itens"
+
+    # Destructuring de array
+    [first, second, ...rest] = items
+
+    # Métodos nativos de array
+    validItems = items.filter (item) => item.isValid
+    processedItems = validItems.map (item) => @transformItem item
+
+    { message, first, second, rest, processedItems }
+
+# ❌ INCORRETO: Uso ineficiente de strings e arrays
+class DataProcessor
+  processItems: (items) ->
+    # Concatenação de string
+    message = "Processando " + items.length + " itens"
+
+    # Acesso manual a elementos
+    first = items[0]
+    second = items[1]
+
+    # Loops manuais em vez de métodos nativos
+    validItems = []
+    for item in items
+      if item.isValid
+        validItems.push item
+```
+
+### 1.10 Comentários e Documentação
+
+**SEMPRE documente** funções públicas complexas
+**SEMPRE explique** lógica de negócio não óbvia
+**SEMPRE use** comentários de bloco para seções grandes
+**SEMPRE evite** comentários óbvios
+
+**Por que esta regra existe**: Documentação adequada facilita manutenção e colaboração em equipe
+**Automação**: Configure CoffeeLint para validar padrões de documentação
+
+```coffeescript
+# ✅ CORRETO: Comentários úteis
+class PaymentProcessor
+  # Processa pagamento usando gateway específico
+  # @param paymentData {Object} Dados do pagamento
+  # @param options {Object} Opções de processamento
+  # @returns {Promise} Promise com resultado do pagamento
+  processPayment: (paymentData, options = {}) ->
+    # Validação específica para gateway brasileiro
+    @validateBrazilianPayment paymentData
+
+    # Configuração de retry para falhas de rede
+    retryCount = options.retryCount ? 3
+
+    @attemptPayment paymentData, retryCount
+
+  # Valida dados específicos do pagamento brasileiro
+  validateBrazilianPayment: (paymentData) ->
+    throw new Error 'CPF obrigatório' unless paymentData.cpf?
+    # Validação adicional...
+
+# ❌ INCORRETO: Comentários desnecessários
+class PaymentProcessor
+  # Construtor da classe
+  constructor: ->
+    # Inicializa variáveis
+    @initialized = false
+
+  # Processa pagamento
+  processPayment: (data) ->
+    # Chama método de processamento
+    @doProcess data
+```
+
+### 1.11 Performance e Otimização
+
+**SEMPRE evite** operações custosas em loops
+**SEMPRE use** cache para operações repetitivas
+**SEMPRE otimize** queries e chamadas de API
+**SEMPRE monitore** performance de funções críticas
+**SEMPRE evite** chamadas de função desnecessárias
+**SEMPRE gerencie** manipuladores de eventos adequadamente
+**SEMPRE evite** vírgulas opcionais desnecessárias
+
+**Por que esta regra existe**: Otimizações de performance melhoram experiência do usuário e eficiência do sistema
+**Automação**: Configure ferramentas de profiling para monitorar performance
+
+```coffeescript
+# ✅ CORRETO: Otimizações de performance
+class DataCache
+  constructor: ->
+    @cache = {}
+    @maxSize = 1000
+
+  get: (key) ->
+    return @cache[key] if @cache[key]?
+    null
+
+  set: (key, value) ->
+    # Implementa LRU para evitar vazamentos de memória
+    if Object.keys(@cache).length >= @maxSize
+      oldestKey = Object.keys(@cache)[0]
+      delete @cache[oldestKey]
+
+    @cache[key] = value
+
+  # Cache de resultados de processamento pesado
+  processHeavyData: (data) ->
+    cacheKey = @generateCacheKey data
+    cached = @get cacheKey
+    return cached if cached?
+
+    result = @performHeavyProcessing data
+    @set cacheKey, result
+    result
+```
+
+## 2. Anti-padrões a Evitar
+
+### 2.1 Variáveis Globais
+
+**SEMPRE evite** poluição do namespace global
+**SEMPRE use** encapsulamento adequado
+
+**Por que esta regra existe**: Variáveis globais causam conflitos e dificultam manutenção
+**Automação**: Configure CoffeeLint para detectar variáveis globais
+
+```coffeescript
+# ❌ INCORRETO: Poluição do namespace global
+userData = {}
+apiKey = 'secret'
+
+# ✅ CORRETO: Encapsulamento adequado
+class App
+  constructor: ->
+    @userData = {}
+    @apiKey = 'secret'
+```
+
+### 2.2 Callback Hell
+
+**SEMPRE evite** callbacks aninhados excessivos
+**SEMPRE use** Promises ou async/await
+
+**Por que esta regra existe**: Callback hell dificulta leitura e manutenção do código
+**Automação**: Configure CoffeeLint para detectar callbacks aninhados
+
+```coffeescript
+# ❌ INCORRETO: Callbacks aninhados
+getUserData: (id) ->
+  @api.getUser id, (user) ->
+    @api.getOrders user.id, (orders) ->
+      @api.getProducts orders[0].productId, (product) ->
+        # Lógica complexa aninhada
+
+# ✅ CORRETO: Uso de Promises ou async/await
+getUserData: (id) ->
+  @api.getUser(id)
+    .then (user) => @api.getOrders user.id
+    .then (orders) => @api.getProducts orders[0].productId
+    .then (product) =>
+      # Lógica organizada
+```
+
+### 2.3 Mutação de Parâmetros
+
+**SEMPRE evite** mutação direta de parâmetros
+**SEMPRE use** imutabilidade quando possível
+
+**Por que esta regra existe**: Mutação de parâmetros causa efeitos colaterais inesperados
+**Automação**: Configure CoffeeLint para detectar mutações de parâmetros
+
+```coffeescript
+# ❌ INCORRETO: Mutação de parâmetros
+processData: (data) ->
+  data.processed = true  # Mutação direta
+  data.timestamp = Date.now()
+  data
+
+# ✅ CORRETO: Imutabilidade
+processData: (data) ->
+  {
+    data...
+    processed: true
+    timestamp: Date.now()
+  }
+```
+
+## 3. Checklist de Qualidade
+
+### 3.1 Antes de Commitar
+
+- [ ] **Indentação consistente** de 2 espaços
+- [ ] **Linhas limitadas** a 79 caracteres
+- [ ] **Nomenclatura adequada** (camelCase, PascalCase)
+- [ ] **Tratamento de erros** robusto implementado
+- [ ] **Interpolação de strings** em vez de concatenação
+- [ ] **Operadores booleanos** consistentes
+- [ ] **Uso de `@`** em vez de `this`
+- [ ] **Comentários úteis** adicionados
+- [ ] **Performance otimizada** para operações críticas
+- [ ] **Testes unitários** para funções complexas
+- [ ] **Documentação atualizada** se necessário
+
+### 3.2 Revisão de Código
+
+- [ ] **Estrutura de classes** bem organizada
+- [ ] **Funções pequenas** e focadas
+- [ ] **Reutilização de código** adequada
+- [ ] **Padrões de módulo** seguidos
+- [ ] **Anti-padrões evitados**
+
+**Por que estas regras existem**: Checklist garante qualidade e consistência do código
+**Automação**: Configure pre-commit hooks para validação automática
+
+## 4. Ferramentas e Recursos
+
+### 4.1 Linting e Formatação
+
+- **CoffeeLint**: Linter específico para CoffeeScript com regras de estilo
+- **Prettier**: Formatação automática de código
+- **ESLint**: Para código JavaScript compilado
+- **CoffeeScript Style Guide**: Guia oficial de estilo
+
+### 4.2 Testes
+
+- **Jasmine**: Framework de testes para CoffeeScript
+- **Mocha**: Framework alternativo
+- **Chai**: Biblioteca de assertions
+
+### 4.3 Build Tools
+
+- **Webpack**: Bundling e otimização
+- **Gulp**: Task runner para automação
+- **Grunt**: Alternativa ao Gulp
+
+**Por que estas regras existem**: Ferramentas adequadas facilitam desenvolvimento e manutenção
+**Automação**: Configure scripts de build para automatizar tarefas
+
+## 5. Referências
+
+- [CoffeeScript Official Guide](http://coffeescript.org/)
+- [CoffeeScript Style Guide](https://github.com/polarmobile/coffeescript-style-guide)
+- [CoffeeScript Cookbook](https://coffeescript-cookbook.github.io/)
+
+**Por que estas regras existem**: Referências facilitam aprendizado e melhoria contínua
+**Automação**: Configure ferramentas para manter referências atualizadas
+
+---
+
+**Última atualização**: 2025-01-11
+**Versão**: 1.0.0
+**Aplicação**: Automática em arquivos `.coffee`

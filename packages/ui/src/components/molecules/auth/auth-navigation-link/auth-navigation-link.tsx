@@ -8,7 +8,6 @@
  */
 
 import type React from "react";
-import { AnimatedShinyText } from "../../typography/animated-shiny-text";
 
 export interface AuthNavigationLinkProps {
   /**
@@ -36,16 +35,6 @@ export interface AuthNavigationLinkProps {
    * Classe CSS adicional
    */
   className?: string;
-  /**
-   * Se true, aplica efeito de texto animado (AnimatedShinyText) no linkText
-   * @default false
-   */
-  animated?: boolean;
-  /**
-   * Largura do shimmer para o efeito animado (apenas quando animated=true)
-   * @default 100
-   */
-  shimmerWidth?: number;
 }
 
 /**
@@ -59,32 +48,10 @@ export function AuthNavigationLink({
   to,
   LinkComponent,
   className = "",
-  animated = false,
-  shimmerWidth = 100,
 }: AuthNavigationLinkProps) {
   const linkClassName = "text-[#5B5FED] dark:text-[#7B7FFF] hover:underline font-semibold";
 
-  const linkContent = animated ? (
-    LinkComponent ? (
-      <LinkComponent to={to} className={linkClassName}>
-        <AnimatedShinyText
-          shimmerWidth={shimmerWidth}
-          className="bg-gradient-to-r from-[#5B5FED] from-0% via-white via-50% to-[#5B5FED] to-100% dark:from-[#7B7FFF] dark:via-white dark:to-[#7B7FFF]"
-        >
-          {linkText}
-        </AnimatedShinyText>
-      </LinkComponent>
-    ) : (
-      <a href={to} className={linkClassName}>
-        <AnimatedShinyText
-          shimmerWidth={shimmerWidth}
-          className="bg-gradient-to-r from-[#5B5FED] from-0% via-white via-50% to-[#5B5FED] to-100% dark:from-[#7B7FFF] dark:via-white dark:to-[#7B7FFF]"
-        >
-          {linkText}
-        </AnimatedShinyText>
-      </a>
-    )
-  ) : LinkComponent ? (
+  const linkContent = LinkComponent ? (
     <LinkComponent to={to} className={linkClassName}>
       {linkText}
     </LinkComponent>

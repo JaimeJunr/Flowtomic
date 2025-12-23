@@ -1,0 +1,286 @@
+---
+description: Documentação e assistente de arquivos XML5 ANBIMA e suporte técnico especializado
+alwaysApply: false
+---
+
+# 📊 Expertise em Arquivos de Carteiras de Investimentos - Padrão XML5 ANBIMA
+
+> **🎯 Objetivo**: Guia completo para expertise em arquivos de carteiras de investimentos no padrão XML5 da ANBIMA, baseado nos manuais oficiais e regras de preenchimento, com assistente especializado em validação e suporte técnico para backoffice.
+
+<!-- Última otimização: 2024-05-21 -->
+<!-- Versão compacta e consolidada -->
+
+## 🚨 **Fundamentos do Padrão XML5 ANBIMA**
+
+### 1. Visão Geral e Evolução
+
+**SEMPRE entenda** que o XML5 ANBIMA é baseado no padrão internacional ISO 20022 (`semt.003.001.04`) desenvolvido pelo Fórum de Serviços Fiduciários da ANBIMA para padronizar a troca de informações entre instituições do mercado financeiro brasileiro.
+
+**SEMPRE reconheça** a evolução para a **Versão 5.0** (Setembro 2024), que adapta à RCVM 175 com estrutura ISO 20022 completa, Business Application Header (BAH) e segregação por Classe/Subclasse.
+
+**SEMPRE aplique** as regras específicas do mercado brasileiro, que podem diferir do padrão ISO 20022 original.
+
+## 🏗️ **Estrutura e Organização do Arquivo XML5**
+
+### 2. Estrutura Hierárquica
+
+**SEMPRE compreenda** que o arquivo XML5 possui estrutura hierárquica baseada no padrão ISO 20022:
+
+1. **Business Application Header (BAH)**: Cabeçalho de aplicação de negócios ISO 20022 (obrigatório).
+2. **Paginação** `<Pgntn>` [1..1]: Informações de paginação do arquivo.
+3. **Detalhes Gerais** `<StmtGnlDtls>` [1..1]: Informações gerais do arquivo.
+4. **Prestadores**:
+   - **Administrador** `<AcctOwnr>` [0..1]
+   - **Gestor** `<AcctSvcr>` [0..1]
+   - **Custodiante** `<SfkpgAcct>` [1..1] (Obrigatório)
+5. **Detalhes da Carteira** `<BalForAcct>` [1..n]: Informações da classe/subclasse/carteira.
+6. **Detalhes dos Ativos** `<SubAcctDtls>` [1..n]: Informações específicas de cada ativo.
+
+### 3. Business Application Header (BAH)
+
+**SEMPRE implemente** o BAH conforme especificação, contendo os campos obrigatórios 001-008: Informante, CNPJ, Destinatário (ex: PREVIC), País (BR), Nome da Mensagem (`semt.003.001.04`), Serviço (`Arquivo de Posição 5.0`) e ID de envio.
+
+### 4. Tipos de Arquivo e Nomenclatura
+
+**SEMPRE use** nomenclatura correta no formato `{TIPO}{IDENTIFICADOR}_{AAAAMMDD}_{AAAAMMDDHHMMSS}_{SUFIXO}.XML`:
+
+- **"CL"** (Classe): CNPJ da classe (14 chars)
+- **"SC"** (Subclasse): Código CVM (10 chars)
+- **"FC"** (Classe sem subclasse): CNPJ da classe
+- **"FD"** (Fundo não adaptado): CNPJ do fundo
+- **"CT"** (Carteira administrada): Código interno (máx 14 chars)
+
+## 📋 **Regras de Preenchimento**
+
+### 5. Regras por Tipo de Fundo
+
+**SEMPRE aplique** a estrutura correta:
+
+- **Fundo de Classe Única**: Cadastro do fundo casca (opcional) + Cadastro da classe + Ativos + Despesas.
+- **Fundo Multi-Classe**: Arquivo separado para cada classe.
+- **Classe com Subclasse**: Fundo casca + Classe + Ativos + Subclasses + Despesas das subclasses.
+  - **⚠️ CRÍTICO**: Despesas da subclasse são necessárias para calcular o PL da classe.
+- **Carteira Administrada**: Cadastro único + Ativos + Despesas.
+
+### 6. Campos Obrigatórios e Validação
+
+**SEMPRE valide** os grupos de campos críticos:
+
+#### 6.1 Detalhes Gerais (009-021)
+
+**SEMPRE valide** os campos de controle e status do arquivo:
+
+- **Operação (QryRef)**: `1`-enviada, `2`-reenviada (exige justificativa), `3`-cancelada manual, `4`-cancelada auto.
+- **Justificativa (stmtId)**: Obrigatória se operação = `2`.
+- **Frequência (frqcy.cd)**: Fixo `ADHO`.
+- **Tipo Atualização (updTp.cd)**: Fixo `COMP` (obrigatório).
+- **Tipo Informação (stmtBsis.cd)**: Fixo `TRAD` (obrigatório).
+- **Indicadores**: Atividade, Auditoria (sempre `true` para fundos), Subconta custódia.
+
+#### 6.2 Grupos de Campos Principais
+
+- **Prestadores (020-029)**: CNPJ do Administrador, Gestor e Custodiante, com Emissor (`Receita Federal do Brasil`) e Tipo (`CNPJ`).
+- **Identificação do Fundo (030-040)**: ISIN, CNPJ, Códigos Galgo/ANBIMA, Tipo de fundo e Nome.
+
+#### 6.3 Valores Financeiros Detalhados (041-049)
+
+**SEMPRE valide** os detalhes financeiros críticos:
+
+- **Indicador (shrtLngInd)**: `LONG` (comprado, impacto positivo) ou `SHORT` (vendido, impacto negativo). **CRÍTICO** para cálculo do PL.
+- **Tipo Preço (pricDtls.tp.cd)**: Fixo `NAVL`.
+- **Moeda (pricDtls.val.amt.ccy)**: Fixo `BRL`.
+- **Tipo Valor (pricDtls.valTp.valTp)**: Fixo `PARV`.
+- **Campos**: Qtde de cota, Valor da cota, Total dos ativos, Sinal (Positivo/Negativo).
+
+#### 6.4 Quantidades e Patrimônio (050-055)
+
+- **Quantidades**: Unidades (`AWAS`), Cotas a receber (`PEND`), Cotas a resgatar (`PENR`), Valores financeiros (`DIRT`).
+- **Patrimônio na Moeda Base** `<AcctBaseCcyTtlAmts>` [1..1]: **OBRIGATÓRIO**.
+  - Representa o PL total da Classe/Carteira ou Patrimônio da Subclasse.
+  - Campos: Moeda (`BRL`), Valor PL, Sinal (`True`/`False`).
+
+## 💰 **Ativos, Despesas e Provisões**
+
+### 7. Tipos de Ativos Suportados
+
+#### 7.1 Tabelas de Identificação ANBIMA
+
+**SEMPRE valide** a tabela correta para o tipo de ativo:
+
+- **Nível 1 (Identificação do Produto)**: **OBRIGATÓRIO** para todos os ativos.
+  - Códigos: `CASH` (Caixa), `GOVE` (Títulos Públicos), `CORP` (Títulos Privados), `DEBE` (Debêntures), `REPO` (Compromissadas), `OPTN` (Opções), `EQUI` (Ações), `SHAR` (Cota de Fundo).
+- **Nível 2 (Identificação do Lastro)**: Derivativos (Futuro, Swap, Opções).
+  - Identifica o ativo objeto da operação.
+- **Nível 3 (Identificação da Negociação)**: Operações e Contratos.
+  - Códigos: `REAM` (Compromissada Compra), `RERA` (Compromissada Venda).
+
+#### 7.2 Tipos de Ativos Contemplados
+
+**SEMPRE reconheça** os tipos suportados (Lista completa formalizada no Q&A 5.0):
+
+- **Renda Fixa**: Caixa, Títulos Públicos/Privados, Compromissadas, Termo RF, Debêntures.
+- **Renda Variável**: Ações B3, Opções, Termo Ações, Empréstimo de Ações e Ativos B3.
+- **Derivativos**: Futuro, Swap, Opção de Derivativo, Opção de Moedas, Forward de Moedas.
+- **Outros**: Imóvel, Cotas (Fundo/Offshore), Provisões, Participações, Direitos Creditórios.
+
+### 8. Despesas e Provisões (Códigos ISO 20022)
+
+**SEMPRE identifique** corretamente:
+
+- **Despesas Liquidadas**: `EXPN` (Total), `MANF` (Taxa Adm), `EQUL` (Performance), `CUST` (Custódia), `BRKF` (Corretagem), `TAXS` (Tributos), `OTHR` (Outras).
+- **Provisões**: `PAYA` (A Pagar), `FUTU` (Operações a Liquidar).
+- **Quantidades**: `AWAS` (Ativos Disponíveis), `DIRT` (Valor Financeiro), `PEND` (Cotas a Receber), `PENR` (Cotas a Resgatar).
+
+**SEMPRE use** códigos detalhados (01-15) para despesas específicas (Advogados, Auditoria, Taxas ANBIMA/CVM, etc.).
+
+## ✅ **Validação e Cálculos**
+
+### 9. Validação de Cálculos Financeiros
+
+#### 9.1 Impacto de Posições e Regras ISIN
+
+**SEMPRE verifique** o impacto no PL:
+
+- **LONG**: Posição comprada → Impacto positivo (+)
+- **SHORT**: Posição vendida → Impacto negativo (-)
+
+**SEMPRE valide** regras de ISIN e CNPJ Emissor:
+
+- **Nacional (B3)**: ISIN obrigatório. Se não existir, usar `BR0000000000`.
+- **Estrangeiro**: ISIN se houver. Se não existir, usar `XX0000000000`.
+
+#### 9.2 Fórmulas de Patrimônio Líquido (PL)
+
+**SEMPRE valide** as fórmulas conforme o tipo de fundo:
+
+#### 9.2.1 Classe COM Subclasses
+
+- **PL Classe** = Somatório dos ativos (Classe) + Receitas (Classe + Subclasse) - Despesas (Classe + Subclasse) - Cotas a Emitir (Subclasse) - Cotas a Resgatar (Subclasse).
+- **Alternativa**: Somatório do produto (Valor Cota Subclasse × Quantidade Subclasse).
+- **⚠️ CRÍTICO**: O valor da cota da CLASSE é apenas gerencial. **NUNCA** use para calcular o PL quando houver subclasses.
+
+#### 9.2.2 Classe SEM Subclasses
+
+- **PL Classe** = Ativos + Receitas - Despesas - Cotas a Emitir - Cotas a Resgatar.
+- **Alternativa**: Valor Cota Classe × Quantidade de Cotas.
+
+#### 9.2.3 Validação de Consistência
+
+**SEMPRE verifique**: Quantidade de cota (042/033), Valor da cota (045/037), Valor total dos ativos (048/040) e Sinal (049/041).
+
+### 10. Validação Regulatória (PREVIC/ANBIMA)
+
+#### 10.1 Validação XSD e Estrutura
+
+**SEMPRE valide** contra os 3 schemas principais:
+
+1. `head.001.001.01.xsd` (namespace `<p:>`) - Envio e tamanho.
+2. `semt.003.001.04.xsd` (namespace `<ns3:>`) - Informações do fundo e ativos.
+3. `SchemaBalanceForSubAccountBrazil.xsd` (namespace `<posatbr:>`) - Extensões Brasil.
+
+#### 10.2 Validador ANBIMA
+
+**SEMPRE considere** o nível de verificação:
+
+- **Verifica**: Estrutura, tamanho dos campos, ISIN, coerência de somatórios (Ativos vs PL).
+- **NÃO Verifica**: Existência real do ISIN ou validade externa do ativo (sem acesso externo).
+
+**SEMPRE considere** campos inspecionados pelo PREVIC:
+
+- **Obrigatórios**: Prestadores (CNPJ), Identificação (ISIN, CNPJ), Valores (Cotas, PL), Despesas (Taxas, Corretagem, Tributos), Provisões.
+- **Opcionais**: Informante, Destinatário, Códigos Galgo/ANBIMA, Detalhes opcionais de despesas.
+
+## 💻 **Exemplos Práticos XML5**
+
+### 11. Estrutura Simplificada de Arquivo
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:semt.003.001.04">
+  <!-- 1. Business Application Header -->
+  <bsnsMsg>
+    <appHdr>
+      <fr><orgId><nm>Instituição</nm><id><orgId><othr><id>12345678901234</id><schmeNm><cd>CNPJ</cd></schmeNm></othr></orgId></id></orgId></fr>
+      <to><orgId><nm>PREVIC</nm><ctryOfRes>BR</ctryOfRes></orgId></to>
+      <msgDefIdr>semt.003.001.04</msgDefIdr>
+      <bizSvc>Arquivo de Posição 5.0</bizSvc>
+    </appHdr>
+  </bsnsMsg>
+
+  <!-- 2. Relatório -->
+  <rpt>
+    <id>RPT001</id>
+    <rptPgntn><pgNb>1</pgNb><lastPgInd>true</lastPgInd></rptPgntn>
+
+    <!-- 3. Informações do Fundo -->
+    <fndInf>
+      <fndId>12345678901234</fndId>
+      <fndNm>Fundo Exemplo</fndNm>
+      <fndTp>FIC</fndTp>
+      <fndClss>
+        <id>CLS001</id>
+        <nm>Classe A</nm>
+        <qty>1000.00</qty>
+        <valtn><amt ccy="BRL">1000000.00</amt></valtn>
+        <!-- Despesas -->
+        <fees>
+           <admFee>0.0125</admFee>
+           <perfFee>0.20</perfFee>
+        </fees>
+      </fndClss>
+    </fndInf>
+
+    <!-- 4. Posições -->
+    <pos>
+      <id>POS001</id>
+      <qty><unit>100.00</unit><ccy>BRL</ccy></qty>
+      <valtn><amt ccy="BRL">50000.00</amt><pctg>0.05</pctg></valtn>
+      <finInstrmId>
+        <id>BRSTNCLTN7</id><idTp>ISIN</idTp>
+      </finInstrmId>
+      <finInstrmAttrbts>
+        <nm>Tesouro Selic 2029</nm>
+        <clssfctnTp>BOND</clssfctnTp>
+        <mtrtyDt>2029-01-01</mtrtyDt>
+      </finInstrmAttrbts>
+    </pos>
+  </rpt>
+</Document>
+```
+
+## 🛠️ **Ferramentas, Suporte e Validação**
+
+### 12. Análise e Suporte Técnico
+
+**SEMPRE realize** análise completa baseada em:
+
+1. Estrutura XML5 e regras ANBIMA.
+2. Validação de códigos (ISIN, CNPJ) e formatos.
+3. Consistência de cálculos (PL, Cotas).
+
+**SEMPRE estruture** respostas de suporte com:
+
+- **Problema**: Descrição clara da inconsistência.
+- **Localização**: Caminho XML (`<Tag>`) onde ocorre o erro.
+- **Solução**: Instrução acionável para correção.
+
+### 13. Checklist de Validação
+
+**SEMPRE verifique** antes da entrega:
+
+- [ ] **Estrutura XML**: Válida, UTF-8, Namespace correto, BAH presente.
+- [ ] **Nomenclatura**: Formato correto conforme tipo (CL, SC, FC, etc.).
+- [ ] **Campos Obrigatórios**: Prestadores, Identificação Fundo, Valores.
+- [ ] **Códigos**: CNPJ (14 dígitos), ISIN (BR+10 alphanum), CVM, ANBIMA válidos.
+- [ ] **Cálculos**: PL consiste com ativos/passivos? Valor Cota x Qtde bate?
+- [ ] **Negócio**: Segregação Classe/Subclasse correta? Despesas informadas?
+- [ ] **Conformidade**: Atende regras PREVIC/ANBIMA?
+
+## 📚 **Referências**
+
+### 14. Documentação Oficial
+
+- **Manual de Preenchimento XML 5.0**: Adaptação à RCVM 175.
+- **Regras de Preenchimento**: CSV oficial com campos e validações.
+- **RCVM 175**: Instrução CVM base para a nova estrutura.
+- **ISO 20022**: Padrão internacional (msg `semt.003.001.04`).

@@ -1,6 +1,10 @@
+/**
+ * Storybook: Button - Padrão Flowtomic
+ * Padronização: argTypes enriquecidos, renomeação de StatCardStyle, história de acessibilidade.
+ */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Download, MoreHorizontal } from "lucide-react";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +19,12 @@ const meta = {
   component: Button,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "O componente Button é um elemento interativo usado para acionar ações ou eventos dentro da interface do usuário. Ele suporta múltiplas variantes de estilo (padrão, destrutivo, contorno, secundário, fantasma, link, sucesso, informação, natural) e tamanhos (padrão, pequeno, grande, ícone em vários tamanhos), permitindo flexibilidade na apresentação conforme o contexto da aplicação. Além disso, o botão pode ser configurado para ser animado ou desabilitado, aprimorando a experiência do usuário.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -31,16 +41,51 @@ const meta = {
         "info",
         "natural",
       ],
+      description: "Variante semântica de estilo.",
+      table: {
+        type: {
+          summary:
+            "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | 'success' | 'info' | 'natural'",
+        },
+        category: "Estilo",
+        defaultValue: { summary: "default" },
+      },
     },
     animated: {
       control: "boolean",
+      description: "Ativa animações sutis de hover/focus específicas da variante.",
+      table: {
+        type: { summary: "boolean" },
+        category: "Comportamento",
+        defaultValue: { summary: "false" },
+      },
     },
     size: {
       control: "select",
       options: ["default", "sm", "lg", "icon", "icon-sm", "icon-lg"],
+      description: "Tamanho do botão incluindo opção de ícone dedicado.",
+      table: {
+        type: { summary: "...sizes" },
+        category: "Layout",
+        defaultValue: { summary: "default" },
+      },
     },
     disabled: {
       control: "boolean",
+      description: "Estado desabilitado sem interação ou foco.",
+      table: {
+        type: { summary: "boolean" },
+        category: "Estado",
+        defaultValue: { summary: "false" },
+      },
+    },
+    children: {
+      description: "Conteúdo interno (texto e/ou ícones).",
+      table: { type: { summary: "React.ReactNode" }, category: "Conteúdo" },
+    },
+    onClick: {
+      description: "Callback de clique (usado em teste de interação).",
+      table: { type: { summary: "(event) => void" }, category: "Eventos" },
     },
   },
   args: { onClick: fn() },
@@ -151,7 +196,8 @@ export const Animated: Story = {
   },
 };
 
-export const StatCardStyle: Story = {
+export const UsageInStatCard: Story = {
+  args: { children: "" },
   render: () => (
     <div className="flex flex-col gap-4">
       <DropdownMenu>
@@ -179,8 +225,32 @@ export const StatCardStyle: Story = {
     docs: {
       description: {
         story:
-          "Exemplo de uso customizado do Button como no StatCard, usado como trigger de DropdownMenu com ícone e estilização específica.",
+          "Uso contextual em StatCard como trigger de DropdownMenu com ícone minimalista e estilização utilitária.",
       },
     },
+  },
+};
+
+export const Accessibility: Story = {
+  args: { children: "Acessível" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstra foco via teclado e acionamento por Enter/Espaço para validar acessibilidade básica do botão.",
+      },
+    },
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const btn = await canvas.getByRole("button", { name: /Acessível/i });
+    await userEvent.tab(); // move foco
+    expect(btn).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    // onClick fn() foi definido em meta.args; podemos verificar chamadas
+    if (typeof args.onClick === "function") {
+      // @ts-expect-error - fn possui mock.calls
+      expect(args.onClick.mock.calls.length).toBeGreaterThan(0);
+    }
   },
 };

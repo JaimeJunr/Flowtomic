@@ -1,0 +1,351 @@
+---
+description: Boas práticas React para desenvolvimento frontend
+globs: src/**/*.tsx,src/**/*.jsx
+---
+
+# React Rule — Boas Práticas
+
+## 🗣️ Definição de papel
+
+- Padroniza boas práticas de desenvolvimento React para projetos frontend.
+
+## 🎯 PRINCÍPIOS FUNDAMENTAIS
+
+- **Objetivo**: garantir legibilidade, consistência e performance em componentes React.
+- **Escopo**: aplica-se a arquivos `src/**/*.tsx` e `src/**/*.jsx` em projetos React.
+- **Preferências**: componentes funcionais, TypeScript, hooks, acessibilidade e testes com RTL.
+
+## 🔄 FLUXO / PROCESSO
+
+1. Criar componentes funcionais pequenos e focados.
+2. Extrair lógica reutilizável em hooks.
+3. Tipar props e estado com TypeScript.
+4. Otimizar render (memoização) quando necessário.
+5. Cobrir fluxos críticos com testes de interação (RTL).
+
+## 📊 FORMATO DE SAÍDA
+
+- Arquivos `*.tsx|*.jsx` em `src/components/**` ou locais ao contexto.
+- Nomeação em `kebab-case` para arquivos; exports nomeados ou default coerentes.
+
+## ✅ CHECKLIST DE QUALIDADE
+
+- [ ] Componente funcional, coeso e pequeno; sem responsabilidades múltiplas.
+- [ ] Props e estado tipados; evitar `any`.
+- [ ] Hooks seguindo as regras (ordem estável, deps do `useEffect` corretas, cleanup quando necessário).
+- [ ] Estado próximo do consumidor; `useState` para local, `useReducer` para lógica complexa e Context API para compartilhado; evitar prop drilling excessivo.
+- [ ] Performance: `useMemo`/`useCallback`/`React.memo` quando útil; lazy loading; `key` adequadas; evitar re-renders desnecessários.
+- [ ] Formulários: componentes controlados, validação, estados de envio/erro e acessibilidade.
+- [ ] Tratamento de erros: Error Boundaries, mensagens amigáveis, UI de fallback e logging apropriado.
+- [ ] Testes (React Testing Library): interações principais, cenários de erro e mocks adequados.
+- [ ] Acessibilidade: semântica, ARIA adequada, navegação por teclado e gestão de foco.
+- [ ] Organização de código: nomeação de arquivos, estrutura de diretórios, estilos próximos ao componente e imports corretos.
+- [ ] Imports limpos; sem código morto.
+
+## 🗣️ PADRÕES DE COMUNICAÇÃO
+
+- Commits claros e atômicos; mensagens no imperativo curto.
+- PRs com resumo objetivo do impacto e escopo.
+
+## 🧠 NOTAS / LEMBRETES
+
+- Manter estado o mais próximo do consumidor; evitar prop drilling excessivo.
+- Usar Context API para estado compartilhado quando necessário.
+- Usar bibliotecas de estilo consistentes (Tailwind, Styled Components, CSS Modules, etc.).
+
+## 🔗 REFERÊNCIAS
+
+- [React Documentation](https://react.dev/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+
+## 🎯 ESTRUTURA DE COMPONENTES
+
+**SEMPRE siga estrutura consistente**:
+
+```tsx
+// 1. Imports
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/Button";
+import type { User } from "@/types/user";
+
+// 2. Interfaces/Types
+interface UserCardProps {
+  user: User;
+  onEdit: (user: User) => void;
+  onDelete: (id: string) => void;
+}
+
+// 3. Componente
+export const UserCard: React.FC<UserCardProps> = ({
+  user,
+  onEdit,
+  onDelete,
+}) => {
+  // 4. Hooks
+  const [isEditing, setIsEditing] = useState(false);
+
+  // 5. Handlers
+  const handleEdit = () => {
+    setIsEditing(true);
+    onEdit(user);
+  };
+
+  // 6. Effects
+  useEffect(() => {
+    // Effect logic
+  }, []);
+
+  // 7. Render
+  return <div className="user-card">{/* JSX */}</div>;
+};
+```
+
+**Diretrizes**:
+
+- Prefira componentes funcionais a componentes de classe
+- Mantenha componentes pequenos e focados (<200 linhas)
+- Extraia lógica reutilizável em hooks customizados
+- Use composição em vez de herança
+- Tipagem adequada de props com TypeScript
+- Divida componentes grandes em partes menores e focadas
+
+## 🎣 HOOKS E ESTADO
+
+**SEMPRE use hooks apropriadamente**:
+
+- **SEMPRE use `useState`** para estado local
+- **SEMPRE use `useEffect`** com dependências corretas
+- **SEMPRE use `useCallback`** para funções passadas como props
+- **SEMPRE use `useMemo`** para cálculos custosos
+- **SEMPRE use `useRef`** para referências DOM
+
+```tsx
+// ✅ CORRETO
+const UserList: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchUsers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await UserService.getUsers();
+      setUsers(data);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const filteredUsers = useMemo(
+    () => users.filter((user) => user.active),
+    [users]
+  );
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  return (
+    <div>{loading ? <Spinner /> : <UserGrid users={filteredUsers} />}</div>
+  );
+};
+```
+
+**Diretrizes**:
+
+- Siga as Regras dos Hooks
+- Use hooks customizados para lógica reutilizável
+- Mantenha hooks focados e simples
+- Defina corretamente os arrays de dependências no `useEffect`
+- Implemente cleanup no `useEffect` quando necessário
+- Evite hooks aninhados
+- Use `useState` para estado local do componente
+- Use `useReducer` para lógica de estado complexa
+- Use Context API para estado compartilhado
+- Mantenha o estado o mais próximo possível de onde é usado
+- Evite prop drilling com uma gerência de estado adequada
+- Use bibliotecas de estado apenas quando necessário
+
+## 🎨 PROPS E COMPOSIÇÃO
+
+**SEMPRE use props tipadas e composição**:
+
+- **SEMPRE defina interfaces** para props
+- **SEMPRE use children** quando apropriado
+- **SEMPRE use defaultProps** ou valores padrão
+- **SEMPRE desestruture props** para clareza
+
+```tsx
+// ✅ CORRETO
+interface CardProps {
+  title: string;
+  children: React.ReactNode;
+  variant?: "primary" | "secondary";
+  className?: string;
+}
+
+export const Card: React.FC<CardProps> = ({
+  title,
+  children,
+  variant = "primary",
+  className = "",
+}) => {
+  return (
+    <div className={`card card--${variant} ${className}`}>
+      <h3 className="card__title">{title}</h3>
+      <div className="card__content">{children}</div>
+    </div>
+  );
+};
+```
+
+## 🚀 PERFORMANCE
+
+**SEMPRE otimize para performance**:
+
+- **SEMPRE use `React.memo`** para componentes puros
+- **SEMPRE use `useCallback`** para funções em props
+- **SEMPRE use `useMemo`** para cálculos custosos
+- **SEMPRE evite** re-renders desnecessários
+
+```tsx
+// ✅ CORRETO
+const ExpensiveComponent = React.memo<{ data: ComplexData }>(({ data }) => {
+  const processedData = useMemo(() => processComplexData(data), [data]);
+
+  return <div>{/* Render processed data */}</div>;
+});
+
+const ParentComponent = () => {
+  const [count, setCount] = useState(0);
+  const [data, setData] = useState<ComplexData>(initialData);
+
+  const handleDataChange = useCallback((newData: ComplexData) => {
+    setData(newData);
+  }, []);
+
+  return (
+    <div>
+      <button onClick={() => setCount((c) => c + 1)}>Count: {count}</button>
+      <ExpensiveComponent data={data} />
+    </div>
+  );
+};
+```
+
+**Diretrizes**:
+
+- Aplique memoização adequada (`useMemo`, `useCallback`)
+- Use `React.memo` para componentes custosos
+- Evite re-renderizações desnecessárias
+- Implemente lazy loading quando fizer sentido
+- Use chaves (`key`) corretas em listas
+- Faça profiling e otimize a performance de renderização
+
+## 📝 FORMULÁRIOS
+
+**SEMPRE use componentes controlados e validação**:
+
+- Use componentes controlados para inputs
+- Implemente validação adequada de formulários
+- Gerencie corretamente estados de envio
+- Exiba estados de loading e erro apropriados
+- Use bibliotecas para formulários complexos
+- Garanta acessibilidade adequada em formulários
+
+## ⚠️ TRATAMENTO DE ERROS
+
+**SEMPRE implemente tratamento de erros robusto**:
+
+- Implemente Error Boundaries
+- Trate erros assíncronos adequadamente
+- Exiba mensagens de erro amigáveis
+- Forneça UI de fallback apropriada
+- Faça logging de erros de forma adequada
+- Trate casos de borda com cuidado
+
+## 🧪 TESTES
+
+**SEMPRE escreva testes abrangentes**:
+
+- **SEMPRE teste** comportamento, não implementação
+- **SEMPRE use** `@testing-library/react`
+- **SEMPRE teste** casos extremos e interações
+- **SEMPRE mocke** dependências externas
+
+```tsx
+// ✅ CORRETO
+import { render, screen, fireEvent } from "@testing-library/react";
+import { UserCard } from "./UserCard";
+
+describe("UserCard", () => {
+  const mockUser: User = {
+    id: "1",
+    name: "John Doe",
+    email: "john@example.com",
+  };
+
+  const mockOnEdit = jest.fn();
+  const mockOnDelete = jest.fn();
+
+  it("should render user information", () => {
+    render(
+      <UserCard user={mockUser} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+    );
+
+    expect(screen.getByText("John Doe")).toBeInTheDocument();
+    expect(screen.getByText("john@example.com")).toBeInTheDocument();
+  });
+
+  it("should call onEdit when edit button is clicked", () => {
+    render(
+      <UserCard user={mockUser} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+    );
+
+    fireEvent.click(screen.getByText("Edit"));
+    expect(mockOnEdit).toHaveBeenCalledWith(mockUser);
+  });
+});
+```
+
+**Diretrizes**:
+
+- Escreva testes de unidade para componentes
+- Crie testes de integração para fluxos complexos
+- Use React Testing Library
+- Teste interações do usuário
+- Teste cenários de erro
+- Use mocks de dados adequados
+
+## ♿ ACESSIBILIDADE
+
+**SEMPRE garanta acessibilidade**:
+
+- Use elementos semânticos de HTML
+- Defina atributos ARIA adequados
+- Garanta navegação por teclado
+- Teste com leitores de tela
+- Gerencie foco de forma adequada
+- Forneça texto alternativo (alt) correto para imagens
+
+## 📁 ORGANIZAÇÃO DE CÓDIGO
+
+**SEMPRE mantenha organização clara**:
+
+- Agrupe componentes relacionados
+- Use convenções de nome de arquivo consistentes
+- Estruture diretórios de forma clara
+- Mantenha estilos próximos aos componentes
+- Use imports/exports adequados
+- Documente lógica de componentes complexos
+
+## 🚫 ANTI-PATTERNS A EVITAR
+
+**NUNCA faça**:
+
+- [ ] Use `useEffect` sem dependências adequadas
+- [ ] Mutação direta de estado
+- [ ] Crie componentes muito grandes (>200 linhas)
+- [ ] Use `key` inadequada em listas
+- [ ] Ignore warnings do React
+- [ ] Use `any` para props de componentes

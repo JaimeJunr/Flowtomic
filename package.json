@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build",
+    "build": "biome check . && turbo run build",
     "build:ui": "turbo run build --filter=flowtomic/ui",
     "build:logic": "turbo run build --filter=flowtomic/logic",
     "build:cli": "turbo run build --filter=flowtomic",

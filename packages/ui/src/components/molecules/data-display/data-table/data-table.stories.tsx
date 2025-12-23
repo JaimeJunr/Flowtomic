@@ -50,7 +50,7 @@ const columns: ColumnDef<User>[] = [
 ];
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/DataTable",
+  title: "Flowtomic UI/Molecules/Data Display/DataTable",
   component: DataTable,
   parameters: {
     layout: "centered",

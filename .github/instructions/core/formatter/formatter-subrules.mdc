@@ -1,0 +1,258 @@
+---
+description: Subrule específica para criação e organização de subrules em sistemas de regras .mdc
+alwaysApply: false
+---
+
+# Formatter Subrules Subrules
+
+## Contexto de Herança
+
+- **Estende**: [Formatter Cursor Rule](../formatter-rule-core.mdc)
+- **Adiciona**: Diretrizes para criação e organização de subrules
+- **Aplica**: Padrões de formatação + sistema hierárquico de subrules
+
+## 🚨 **Diretrizes Fundamentais**
+
+### 1. Critérios de Divisão
+
+1. **SEMPRE divida** quando arquivo >50 linhas
+2. **SEMPRE divida** quando múltiplos domínios técnicos
+3. **SEMPRE divida** quando globs muito amplos (>3 padrões)
+4. **SEMPRE divida** quando frameworks múltiplos
+
+### 2. Estrutura de Subrules
+
+5. **SEMPRE crie** regra base com 30-40 linhas
+6. **SEMPRE organize** subrules em diretório dedicado
+7. **SEMPRE use** nomenclatura consistente: `[domínio]-[especialidade].mdc`
+8. **SEMPRE implemente** herança clara com referências
+
+### 3. Organização de Diretórios
+
+9. **SEMPRE crie** diretório `[domínio]-subrules/`
+10. **SEMPRE mantenha** regra base no nível raiz
+11. **SEMPRE organize** subrules logicamente por especialidade
+
+### 4. Preservação de Frontmatter Durante Divisão
+
+12. **SEMPRE preserve** frontmatter original na regra base
+13. **SEMPRE crie** frontmatter específico para cada subrule
+14. **SEMPRE verifique** integridade após divisão
+
+## 📋 **Processo de Divisão Real - Passo a Passo**
+
+#### Passo 1: Análise e Identificação
+
+```bash
+# ✅ SEMPRE faça primeiro
+wc -l arquivo-principal.mdc  # Identificar tamanho atual
+grep -n "## " arquivo-principal.mdc  # Mapear seções principais
+```
+
+#### Passo 2: Planejamento da Divisão
+
+```bash
+# ✅ SEMPRE planeje antes de implementar
+# Identificar seções candidatas para subrules:
+# - Seções >20 linhas
+# - Domínios específicos (idioma, estrutura, exemplos)
+# - Conteúdo técnico detalhado
+```
+
+#### Passo 3: Implementação da Divisão
+
+```bash
+# ✅ SEMPRE remova conteúdo do arquivo principal
+search_replace
+  old_string: "## Seção Extensa\n\nConteúdo detalhado..."
+  new_string: "## Seção Extensa\n\n> **📚 Para detalhes, use**: [Subrule Específica](subrules/subrule.mdc)"
+
+# ✅ SEMPRE crie subrule com frontmatter correto
+edit_file
+  target_file: subrules/subrule.mdc
+  instructions: "Criar subrule com frontmatter completo"
+  code_edit: "---\ndescription: Descrição específica\nalwaysApply: false\n---\n\n# Conteúdo da Subrule"
+```
+
+#### Passo 4: Validação Obrigatória
+
+```bash
+# ✅ SEMPRE valide após implementação
+wc -l arquivo-principal.mdc  # Confirmar redução
+wc -l subrules/*.mdc  # Verificar tamanho das subrules
+# Testar referências  manualmente
+```
+
+## 🔧 **Técnicas de Preservação de Frontmatter Durante Divisão**
+
+### **Backup Antes da Divisão**
+
+```bash
+# ✅ SEMPRE faça backup primeiro
+read_file arquivo_principal.mdc antes da divisão
+```
+
+### **Preservação de Frontmatter na Regra Base**
+
+```bash
+# ✅ SEMPRE preserve frontmatter original
+search_replace
+  old_string: "---\nfrontmatter_original\n---\n\n# Título"
+  new_string: "---\nfrontmatter_original\n---\n\n# Título\n\n> **📚 Para detalhes, use**: [Subrule](subrules/subrule.mdc)"
+```
+
+### **Criação de Frontmatter para Subrules**
+
+```bash
+# ✅ SEMPRE crie frontmatter específico
+edit_file
+  target_file: subrules/subrule.mdc
+  instructions: "Criar subrule com frontmatter específico"
+  code_edit: "---\ndescription: Subrule específica para [domínio]\nalwaysApply: false\n---\n\n# [Nome da Subrule]"
+```
+
+### **Verificação Pós-Divisão**
+
+```bash
+# ✅ SEMPRE verifique após divisão
+read_file arquivo_principal.mdc para confirmar frontmatter intacto
+read_file subrules/*.mdc para confirmar frontmatter correto
+```
+
+## 🎯 **Checklist de Divisão Real**
+
+**ANTES da implementação**:
+
+- [ ] Arquivo principal >100 linhas identificado
+- [ ] Seções candidatas mapeadas
+- [ ] Plano de divisão criado
+- [ ] Backup do arquivo original feito
+
+**DURANTE a implementação**:
+
+- [ ] Seções extensas removidas do arquivo principal
+- [ ] Referências às subrules adicionadas
+- [ ] Subrules criadas com frontmatter correto
+- [ ] Sistema de herança implementado
+
+**APÓS a implementação**:
+
+- [ ] Arquivo principal reduzido em pelo menos 15%
+- [ ] Todas as subrules têm frontmatter correto
+- [ ] Referências `` funcionando
+- [ ] Sistema de herança testado e funcional
+
+## 📚 **Tipos de Subrules**
+
+#### 1. **Subrules de Framework/Library**
+
+- **Base**: Regra geral da linguagem (ex: JavaScript)
+- **Subrule**: Framework específico (ex: Express.js, React, Vue)
+- **Benefício**: Herda padrões da base + adiciona especificidades
+
+#### 2. **Subrules de Domínio**
+
+- **Base**: Regra geral de desenvolvimento
+- **Subrule**: Domínio específico (ex: Frontend, Backend, Mobile)
+- **Benefício**: Aplica padrões gerais ao contexto específico
+
+#### 3. **Subrules de Padrão**
+
+- **Base**: Regra de arquitetura geral
+- **Subrule**: Padrão específico (ex: MVC, Repository, Observer)
+- **Benefício**: Implementa padrões arquiteturais específicos
+
+## 🔧 **Diretrizes para Criação de Subrules**
+
+#### Estrutura Recomendada
+
+```yaml
+---
+description: Subrule específica para [Framework/Domínio] que estende [Rule Base]
+alwaysApply: false
+---
+# [Nome da Subrule]
+
+## Contexto de Herança
+- **Estende**: [Link para rule base](base-rule.mdc)
+- **Adiciona**: Funcionalidades específicas para [contexto]
+- **Aplica**: Padrões da base + especificidades do domínio
+
+## Diretrizes Específicas
+[Conteúdo específico da subrule]
+
+## Integração com Base
+- **Padrões Herdados**: [Lista de padrões da base aplicados]
+- **Extensões**: [Funcionalidades específicas adicionadas]
+- **Exceções**: [Casos onde a base não se aplica]
+```
+
+## 📚 **Exemplos de Aplicação**
+
+#### Cenário: Desenvolvimento Full-Stack
+
+```
+JavaScript Base Rules (js-base.mdc)
+├── Frontend Subrules (frontend-subrules.mdc)
+│   ├── React Subrules (react-subrules.mdc)
+│   └── Vue Subrules (vue-subrules.mdc)
+└── Backend Subrules (backend-subrules.mdc)
+    ├── Express Subrules (express-subrules.mdc)
+    └── Node.js Subrules (node-subrules.mdc)
+```
+
+#### Cenário: Arquitetura de Software
+
+```
+Software Architecture Base (arch-base.mdc)
+├── Design Patterns Subrules (patterns-subrules.mdc)
+│   ├── Creational Patterns (creational-patterns.mdc)
+│   ├── Structural Patterns (structural-patterns.mdc)
+│   └── Behavioral Patterns (behavioral-patterns.mdc)
+└── Architecture Styles Subrules (styles-subrules.mdc)
+    ├── MVC Subrules (mvc-subrules.mdc)
+    └── Microservices Subrules (microservices-subrules.mdc)
+```
+
+## 🔄 **Processo de Implementação de Subrules**
+
+#### Fase 1: Análise e Planejamento
+
+1. **Identificar regra candidata**: Arquivo >50 linhas ou múltiplos domínios
+2. **Mapear responsabilidades**: Listar todas as seções e funcionalidades
+3. **Definir critérios de divisão**: Por domínio, framework ou tipo de arquivo
+4. **Criar estrutura de diretórios**: Organizar subrules logicamente
+
+#### Fase 2: Criação da Regra Base
+
+1. **Extrair padrões fundamentais**: Regras que se aplicam universalmente
+2. **Manter responsabilidades core**: Funcionalidades essenciais do domínio
+3. **Reduzir para 30-40 linhas**: Foco em diretrizes principais
+4. **Adicionar referências**: Links para subrules especializadas
+
+#### Fase 3: Implementação das Subrules
+
+1. **Criar cada subrule**: Seguindo estrutura obrigatória
+2. **Implementar herança**: Referências claras para regra base
+3. **Validar globs**: Testar padrões de arquivo
+4. **Verificar conteúdo único**: Sem duplicação com base ou outras subrules
+
+#### Fase 4: Validação e Teste
+
+1. **Testar funcionalidade**: Cada subrule funciona independentemente
+2. **Verificar referências**: Links entre base e subrules funcionando
+3. **Validar estrutura**: Seguindo padrões estabelecidos
+4. **Confirmar eficiência**: Redução de tokens e melhoria de foco
+
+## Integração com Base
+
+- **Padrões Herdados**: Modularidade e composição, clareza através de estrutura
+- **Extensões**: Sistema hierárquico, critérios de divisão, organização de diretórios
+- **Exceções**: Nenhuma - todos os padrões base se aplicam
+
+## Contexto Adicional
+
+- **Quando aplicar**: Sempre ao planejar divisão de regras complexas
+- **Automação**: Use templates de subrules para consistência estrutural
+- **Quando aplicar**: Sempre ao planejar divisão de regras complexas
+- **Automação**: Use templates de subrules para consistência estrutural

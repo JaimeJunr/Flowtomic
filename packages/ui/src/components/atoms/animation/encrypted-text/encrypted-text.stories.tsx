@@ -103,4 +103,3 @@ export const CustomCharset: Story = {
     flipDelayMs: 50,
   },
 };
-

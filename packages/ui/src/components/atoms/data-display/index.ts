@@ -34,3 +34,7 @@ export {
   ChartTooltipContent,
   useChart,
 } from "./chart";
+
+// QR Code (data display atom)
+export type { QRCodeProps } from "./qr-code";
+export { QRCode, qrCodeRootVariants } from "./qr-code";

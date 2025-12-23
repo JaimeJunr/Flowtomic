@@ -1,3 +1,7 @@
+/**
+ * Storybook: Badge - Padrão Flowtomic
+ * Padronização: título consistente, argTypes enriquecidos, remoção de redundâncias
+ */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import { Badge } from "./badge";
@@ -7,16 +11,41 @@ const meta = {
   component: Badge,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Badge destaca informações concisas como status e métricas. Variantes: default, secondary, destructive, outline, success, warning, info. Tamanhos: sm, md, lg. Use para rotulagem não interativa ou suporte visual a outros componentes (ex: StatCard).",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
     variant: {
       control: "select",
       options: ["default", "secondary", "destructive", "outline", "success", "warning", "info"],
+      description: "Variante visual (semântica) que define cores da Badge.",
+      table: {
+        type: {
+          summary:
+            "'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning' | 'info'",
+        },
+        category: "Estilo",
+        defaultValue: { summary: "default" },
+      },
     },
     size: {
       control: "select",
       options: ["sm", "md", "lg"],
+      description: "Tamanho da Badge (altura, padding, fonte).",
+      table: {
+        type: { summary: "'sm' | 'md' | 'lg'" },
+        category: "Layout",
+        defaultValue: { summary: "md" },
+      },
+    },
+    children: {
+      description: "Conteúdo textual ou nó React interno.",
+      table: { type: { summary: "React.ReactNode" }, category: "Conteúdo" },
     },
   },
 } satisfies Meta<typeof Badge>;
@@ -24,82 +53,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    children: "Badge",
-  },
-};
+export const Default: Story = { args: { children: "Badge" } };
+export const Secondary: Story = { args: { variant: "secondary", children: "Secundário" } };
+export const Destructive: Story = { args: { variant: "destructive", children: "Destrutivo" } };
+export const Outline: Story = { args: { variant: "outline", children: "Contorno" } };
+export const Success: Story = { args: { variant: "success", children: "Sucesso" } };
+export const Warning: Story = { args: { variant: "warning", children: "Aviso" } };
+export const Info: Story = { args: { variant: "info", children: "Informação" } };
+export const Small: Story = { args: { size: "sm", children: "Pequeno" } };
+export const Large: Story = { args: { size: "lg", children: "Grande" } };
 
-export const Secondary: Story = {
-  args: {
-    variant: "secondary",
-    children: "Secundário",
-  },
-};
-
-export const Destructive: Story = {
-  args: {
-    variant: "destructive",
-    children: "Destrutivo",
-  },
-};
-
-export const Outline: Story = {
-  args: {
-    variant: "outline",
-    children: "Contorno",
-  },
-};
-
-export const Success: Story = {
-  args: {
-    variant: "success",
-    children: "Sucesso",
-  },
-};
-
-export const Warning: Story = {
-  args: {
-    variant: "warning",
-    children: "Aviso",
-  },
-};
-
-export const Info: Story = {
-  args: {
-    variant: "info",
-    children: "Informação",
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: "sm",
-    children: "Pequeno",
-  },
-};
-
-export const Large: Story = {
-  args: {
-    size: "lg",
-    children: "Grande",
-  },
-};
-
-export const Simple: Story = {
-  args: {
-    children: "Badge simples",
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Exemplo básico do componente Badge sem estilização customizada.",
-      },
-    },
-  },
-};
-
-export const StatCardStyle: Story = {
+export const UsageInStatCard: Story = {
+  args: { children: "" },
   render: () => (
     <div className="flex flex-col gap-4">
       <Badge
@@ -128,8 +93,7 @@ export const StatCardStyle: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Exemplo de uso customizado do Badge como no StatCard, com ícones de tendência e classes customizadas para alinhamento e espaçamento.",
+        story: "Uso contextual em StatCard mostrando tendência com ícones e estilo utilitário.",
       },
     },
   },

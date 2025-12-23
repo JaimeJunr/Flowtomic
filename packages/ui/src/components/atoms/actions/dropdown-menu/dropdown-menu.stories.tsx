@@ -1,6 +1,10 @@
+/**
+ * Storybook: DropdownMenu - Padrão Flowtomic
+ * Padronização: renomeação de StatCardStyle, história de acessibilidade, descrição de componente.
+ */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MoreHorizontal, Settings, Share2, Trash, TriangleAlert } from "lucide-react";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { Button } from "../button/button";
 import {
   DropdownMenu,
@@ -16,6 +20,12 @@ const meta = {
   component: DropdownMenu,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "DropdownMenu fornece menu contextual leve com foco em acessibilidade via Radix primitives. Use para ações secundárias agrupadas em trigger discreto (texto ou ícone).",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof DropdownMenu>;
@@ -76,7 +86,8 @@ export const WithSeparators: Story = {
   ),
 };
 
-export const StatCardStyle: Story = {
+export const UsageInStatCard: Story = {
+  args: {},
   render: () => (
     <div className="flex flex-col gap-4">
       <DropdownMenu>
@@ -114,9 +125,44 @@ export const StatCardStyle: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Exemplo de uso customizado do DropdownMenu como no StatCard, com trigger de botão com ícone e menu de ações com separadores e ícones.",
+        story: "Uso contextual em StatCard com trigger ícone e ações agrupadas.",
       },
     },
+  },
+};
+
+export const Accessibility: Story = {
+  args: {},
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="icon" aria-label="Abrir ações">
+          <MoreHorizontal />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem onClick={fn()}>Primeira</DropdownMenuItem>
+        <DropdownMenuItem onClick={fn()}>Segunda</DropdownMenuItem>
+        <DropdownMenuItem onClick={fn()}>Terceira</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstra abertura via teclado (Enter) e foco sequencial em itens do menu para acessibilidade básica.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = await canvas.getByRole("button", { name: /Abrir ações/i });
+    await userEvent.tab();
+    expect(trigger).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    const firstItem = await canvas.getByText("Primeira");
+    expect(firstItem).toBeVisible();
+    await userEvent.keyboard("{ArrowDown}");
   },
 };

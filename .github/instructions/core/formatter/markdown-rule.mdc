@@ -1,0 +1,467 @@
+---
+description: "Diretrizes universais de formatação Markdown para qualquer tipo de arquivo .md - estrutura hierárquica, linguagem imperativa, validação automática e melhores práticas"
+globs: *.md,*.mdc
+---
+
+# Formatação Markdown
+
+## 1. Diretrizes Fundamentais
+
+### 1. Estrutura Hierárquica
+
+**SEMPRE use** hierarquia clara de títulos:
+
+- **`#`** - Título principal do documento
+- **`##`** - Seções principais (máximo 6 seções por documento)
+- **`###`** - Subseções temáticas numeradas
+- **`####`** - Detalhes específicos (máximo 3 níveis de hierarquia)
+
+**SEMPRE organize** seções em ordem lógica
+
+### 2. Formatação de Listas
+
+**SEMPRE use** listas numeradas para processos sequenciais:
+
+```markdown
+## 1. Processo Sequencial
+
+1. **SEMPRE execute** primeiro passo
+2. **SEMPRE configure** segundo passo
+3. **SEMPRE valide** terceiro passo
+4. **SEMPRE teste** resultado final
+```
+
+**SEMPRE use** checkboxes para itens verificáveis:
+
+```markdown
+## 2. Checklist de Validação
+
+- [ ] Item 1 verificado
+- [ ] Item 2 validado
+- [ ] Item 3 confirmado
+- [ ] Item 4 aprovado
+```
+
+**SEMPRE use** listas com marcadores para exemplos e casos:
+
+```markdown
+## 3. Exemplos de Uso
+
+- **Categoria A**: Descrição do caso
+- **Categoria B**: Descrição do caso
+- **Categoria C**: Descrição do caso
+```
+
+### 3. Blocos de Código
+
+**SEMPRE use** blocos de código com linguagem específica:
+
+````markdown
+```bash
+# ✅ CORRETO: Comando com linguagem específica
+comando1
+comando2
+comando3
+```
+
+```javascript
+// ✅ CORRETO: Código com comentários
+function exemplo() {
+  return "resultado";
+}
+```
+````
+
+**SEMPRE inclua** comentários explicativos em exemplos:
+
+```bash
+# Executar primeiro comando
+comando1
+
+# Executar segundo comando
+comando2
+
+# Executar terceiro comando
+comando3
+```
+
+**SEMPRE use** exemplos "✅ CORRETO" vs "❌ INCORRETO":
+
+```markdown
+# ✅ CORRETO: Formatação adequada
+
+## Título da Seção
+
+Conteúdo bem estruturado
+
+# ❌ INCORRETO: Formatação inadequada
+
+Título sem hierarquia
+
+Conteúdo mal estruturado
+```
+
+### 4. Links e Referências
+
+**SEMPRE use** links descritivos e funcionais:
+
+```markdown
+# ✅ CORRETO: Links com contexto claro
+
+- [Documentação oficial do projeto](https://exemplo.com/docs)
+- [Guia de referência](https://exemplo.com/guide)
+- [Regras e padrões](https://exemplo.com/rules)
+
+# ❌ INCORRETO: Links genéricos
+
+- [Projeto](https://exemplo.com)
+- [Guia](https://exemplo.com)
+- [Regras](https://exemplo.com)
+```
+
+**SEMPRE valide** links antes de publicar:
+
+```bash
+# Validar links em arquivos Markdown
+npx markdown-link-check *.md
+
+# Validar links recursivamente
+npx markdown-link-check **/*.md
+```
+
+## 2. Técnicas de Formatação Avançada
+
+### 1. Tabelas
+
+**SEMPRE use** tabelas para dados estruturados:
+
+```markdown
+| Item       | Descrição         | Exemplo              |
+| ---------- | ----------------- | -------------------- |
+| `comando1` | Descrição do item | `comando1 --opcao`   |
+| `comando2` | Descrição do item | `comando2 --flag`    |
+| `comando3` | Descrição do item | `comando3 --verbose` |
+```
+
+**SEMPRE alinhe** colunas apropriadamente:
+
+```markdown
+| Alinhado à esquerda | Centralizado | Alinhado à direita |
+| :------------------ | :----------: | -----------------: |
+| Texto normal        |    Valor     |             123.45 |
+| Outro texto         |    Outro     |             678.90 |
+```
+
+### 2. Citações e Notas
+
+**SEMPRE use** citações para referências e notas importantes:
+
+```markdown
+> **IMPORTANTE**: Esta informação afeta todo o sistema.
+>
+> **DICA**: Use `comando --opcao` para configuração específica.
+
+> **REFERÊNCIA**: Baseado na documentação oficial do [projeto](https://exemplo.com).
+```
+
+**SEMPRE use** notas de rodapé quando apropriado:
+
+```markdown
+Este é um texto com uma nota de rodapé[^1].
+
+[^1]: Esta é a nota de rodapé explicativa.
+```
+
+### 3. Ênfase e Destaque
+
+**SEMPRE use** ênfase apropriadamente:
+
+```markdown
+# ✅ CORRETO: Uso de ênfase
+
+- **Negrito** para termos importantes
+- _Itálico_ para ênfase sutil
+- `Código inline` para comandos e variáveis
+- **_Negrito e itálico_** para ênfase máxima
+
+# ❌ INCORRETO: Uso excessivo de ênfase
+
+- **TUDO** em **NEGRITO** é **DIFÍCIL** de **LER**
+```
+
+**SEMPRE evite** ênfase como cabeçalho:
+
+```markdown
+# ✅ CORRETO: Cabeçalho apropriado
+
+## 1. Título da Seção
+
+# ❌ INCORRETO: Ênfase como cabeçalho
+
+**TÍTULO DA SEÇÃO**
+```
+
+## 3. Regras Markdownlint
+
+### 1. Regras Críticas
+
+**SEMPRE aplique** regras markdownlint essenciais:
+
+- **MD024** - Evitar cabeçalhos duplicados
+- **MD036** - Não usar ênfase como cabeçalho
+- **MD032** - Espaçamento adequado em listas
+- **MD022** - Espaçamento adequado em cabeçalhos
+- **MD031** - Espaçamento adequado em blocos de código
+- **MD040** - Especificar linguagem em blocos de código
+
+### 2. Regras Importantes
+
+**SEMPRE configure** regras markdownlint para máxima qualidade:
+
+#### 2.1 Estrutura e Cabeçalhos
+
+- **MD001** - Níveis de cabeçalho devem incrementar de um em um
+- **MD003** - Estilo de cabeçalho consistente
+- **MD025** - Apenas um cabeçalho H1 por documento
+- **MD026** - Pontuação no final de cabeçalhos
+
+#### 2.2 Listas e Indentação
+
+- **MD004** - Estilo de lista não ordenada
+- **MD005** - Indentação consistente em itens de lista
+- **MD007** - Indentação de listas não ordenadas
+- **MD030** - Espaços após marcadores de lista
+
+#### 2.3 Espaçamento e Formatação
+
+- **MD009** - Sem espaços no final das linhas
+- **MD012** - Sem múltiplas linhas em branco consecutivas
+- **MD013** - Comprimento da linha
+- **MD047** - Arquivo deve terminar com uma única quebra de linha
+
+#### 2.4 Blocos de Código
+
+- **MD046** - Estilo de bloco de código
+- **MD048** - Estilo de cerca de código
+
+#### 2.5 Links e Referências
+
+- **MD011** - Sintaxe de link reversa
+- **MD034** - URLs sem formatação
+- **MD042** - Sem links vazios
+- **MD059** - Texto de link deve ser descritivo
+
+#### 2.6 Ênfase e Formatação
+
+- **MD037** - Sem espaços dentro de marcadores de ênfase
+- **MD049** - Estilo de ênfase
+- **MD050** - Estilo de negrito
+
+#### 2.7 Tabelas
+
+- **MD055** - Estilo de pipe de tabela
+- **MD056** - Contagem de colunas de tabela
+- **MD058** - Tabelas devem ser cercadas por linhas em branco
+
+#### 2.8 Imagens
+
+- **MD045** - Imagens devem ter texto alternativo
+
+### 3. Configuração Recomendada
+
+**SEMPRE configure** markdownlint com regras específicas para máxima qualidade:
+
+```json
+{
+  "MD001": true,
+  "MD003": { "style": "atx" },
+  "MD004": { "style": "dash" },
+  "MD007": { "indent": 2 },
+  "MD009": { "br_spaces": 2 },
+  "MD010": false,
+  "MD011": true,
+  "MD012": { "maximum": 1 },
+  "MD013": { "line_length": 120, "code_blocks": false },
+  "MD014": true,
+  "MD018": true,
+  "MD019": true,
+  "MD020": true,
+  "MD021": true,
+  "MD022": true,
+  "MD023": true,
+  "MD024": { "siblings_only": true },
+  "MD025": true,
+  "MD026": { "punctuation": ".,;:!" },
+  "MD027": true,
+  "MD028": true,
+  "MD029": { "style": "ordered" },
+  "MD030": { "ul_single": 1, "ol_single": 1, "ul_multi": 1, "ol_multi": 1 },
+  "MD031": true,
+  "MD032": true,
+  "MD033": false,
+  "MD034": true,
+  "MD035": { "style": "---" },
+  "MD036": true,
+  "MD037": true,
+  "MD038": true,
+  "MD039": true,
+  "MD040": true,
+  "MD041": false,
+  "MD042": true,
+  "MD043": false,
+  "MD044": { "names": ["JavaScript", "TypeScript", "React", "Node.js"] },
+  "MD045": true,
+  "MD046": { "style": "fenced" },
+  "MD047": true,
+  "MD048": { "style": "backtick" },
+  "MD049": { "style": "asterisk" },
+  "MD050": { "style": "asterisk" },
+  "MD051": true,
+  "MD052": true,
+  "MD053": true,
+  "MD054": { "style": "consistent" },
+  "MD055": { "style": "---" },
+  "MD056": true,
+  "MD058": true,
+  "MD059": true
+}
+```
+
+### 4. Comandos Essenciais
+
+**SEMPRE execute** validação automática:
+
+```bash
+# Validar todos os arquivos Markdown
+npx markdownlint "**/*.md" --fix
+
+# Validar com configuração específica
+npx markdownlint "**/*.md" --config .markdownlint.json
+
+# Validar apenas regras críticas
+npx markdownlint "**/*.md" --rules MD024,MD036,MD032,MD022,MD031,MD040
+
+# Validar com relatório detalhado
+npx markdownlint "**/*.md" --config .markdownlint.json --format json > markdown-report.json
+
+# Validar e corrigir automaticamente
+npx markdownlint "**/*.md" --fix --config .markdownlint.json
+```
+
+**SEMPRE instale** markdownlint para validação:
+
+```bash
+# Instalar markdownlint globalmente
+npm install -g markdownlint-cli
+
+# Ou instalar localmente no projeto
+npm install --save-dev markdownlint-cli
+```
+
+**SEMPRE crie** arquivo de configuração `.markdownlint.json`:
+
+```json
+{
+  "MD013": { "line_length": 120, "code_blocks": false },
+  "MD024": { "siblings_only": true },
+  "MD033": false,
+  "MD041": false
+}
+```
+
+## 5. Critérios de Sucesso\*\*
+
+### 1. Métricas de Qualidade
+
+- **Estrutura Clara**: Máximo 3 níveis de hierarquia
+- **Linguagem Imperativa**: 100% de instruções diretas
+- **Código Formatado**: Blocos com linguagem específica
+- **Links Funcionais**: Todas as referências funcionam
+- **Markdown Válido**: Sem erros de sintaxe
+
+### 2. Sinais de Alerta
+
+- ❌ Perda de estrutura hierárquica
+- ❌ Mudança para linguagem narrativa
+- ❌ Remoção de justificativas técnicas
+- ❌ Links quebrados ou genéricos
+- ❌ Código sem contexto ou comentários
+
+### 3. Lições Aprendidas
+
+#### 3.1 Problemas Críticos Identificados
+
+1. **Estrutura plana** → **Hierarquia clara com seções numeradas**
+2. **Linguagem narrativa** → **Instruções diretas e imperativas**
+3. **Código sem contexto** → **Comentários explicativos e linguagem específica**
+4. **Links genéricos** → **Links descritivos e funcionais**
+5. **Falta de validação** → **Checklist de qualidade e markdownlint**
+
+#### 3.2 Soluções Implementadas com Sucesso
+
+1. **Estrutura hierárquica**: Seções claras com títulos numerados
+2. **Linguagem imperativa**: "SEMPRE", "NUNCA", "NÃO" consistentemente
+3. **Código formatado**: Blocos com linguagem específica e comentários
+4. **Links descritivos**: Contexto claro e validação automática
+5. **Validação automática**: Markdownlint e checklist de qualidade
+
+## 4. Exemplos Práticos de Transformação\*\*
+
+### 1. Estrutura de Documento
+
+#### ❌ ANTES: Estrutura Genérica
+
+```markdown
+# Documento
+
+## Seção 1
+
+Info
+
+## Seção 2
+
+Mais regras aqui.
+```
+
+#### ✅ DEPOIS: Estrutura Hierárquica Clara
+
+```markdown
+# Guia de Documentação
+
+## 1. Pré-requisitos
+
+- [ ] Tema definido
+- [ ] Estrutura planejada
+- [ ] Conteúdo organizado
+
+## 2. Estruturação
+
+1. **SEMPRE crie** título principal
+2. **SEMPRE organize** seções logicamente
+3. **SEMPRE adicione** exemplos quando necessário
+```
+
+### 2. Formatação de Código
+
+#### ❌ ANTES: Código Sem Contexto
+
+```bash
+comando1
+```
+
+#### ✅ DEPOIS: Código com Contexto
+
+```bash
+# Executar primeiro comando
+comando1
+
+# Executar segundo comando
+comando2
+
+# Executar terceiro comando
+comando3
+```
+
+## 6. Boas Práticas
+
+ <!-- Colocar boas praticas aqui -->

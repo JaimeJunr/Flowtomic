@@ -94,7 +94,7 @@ function PaginationWrapper({
 // ============================================================================
 
 const paginationMeta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/DataTablePagination",
+  title: "Flowtomic UI/Molecules/Data Display/DataTablePagination",
   component: DataTablePagination,
   parameters: {
     layout: "centered",

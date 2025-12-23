@@ -1,0 +1,492 @@
+---
+description: Padrões e melhores práticas para testes Jest em projetos JavaScript/TypeScript, aplicando TDD e garantindo qualidade e cobertura de código
+globs: **/*.test.js,**/*.test.jsx,**/*.test.ts,**/*.test.tsx,**/*.spec.js,**/*.spec.jsx,**/*.spec.ts,**/*.spec.tsx
+alwaysApply: false
+---
+
+# 🧪 Padrões de Testes Jest
+
+> **📚 TDD First**: Esta regra define padrões obrigatórios para testes Jest, garantindo qualidade, cobertura e manutenibilidade seguindo princípios de Test-Driven Development.
+
+## 🚨 **COMPORTAMENTO OBRIGATÓRIO**
+
+### **Ações Críticas**
+
+1. **SEMPRE escreva testes PRIMEIRO** antes de implementar funcionalidades (TDD)
+2. **SEMPRE mantenha cobertura mínima** de 70% conforme configurado no projeto
+3. **SEMPRE use padrão AAA** (Arrange-Act-Assert) em todos os testes
+4. **SEMPRE nomeie testes** de forma descritiva e específica
+5. **SEMPRE teste casos de borda** e tratamento de erros
+6. **SEMPRE mantenha testes independentes** e isolados
+
+## 🏗️ **ESTRUTURA E ORGANIZAÇÃO**
+
+### **1. Estrutura de Arquivos de Teste**
+
+**SEMPRE siga** a estrutura do projeto:
+
+```text
+src/
+├── __tests__/
+│   ├── components/          # Testes de componentes
+│   ├── utils/              # Testes de utilitários
+│   ├── services/           # Testes de serviços
+│   └── hooks/              # Testes de hooks (se aplicável)
+```
+
+**SEMPRE nomeie** arquivos com sufixo `.test.{js,jsx,ts,tsx}` ou `.spec.{js,jsx,ts,tsx}`
+
+### **2. Organização de Testes**
+
+**SEMPRE use** blocos `describe` para agrupar testes relacionados:
+
+```javascript
+// ✅ CORRETO
+describe("Validation Utils", () => {
+  describe("validateId", () => {
+    it("should validate normal IDs correctly", () => {
+      // teste
+    });
+  });
+});
+
+// ❌ INCORRETO
+it("should validate normal IDs correctly", () => {
+  // teste isolado sem contexto
+});
+```
+
+## 📝 **PADRÃO AAA OBRIGATÓRIO**
+
+### **1. Arrange (Preparar)**
+
+**SEMPRE prepare** dados e ambiente antes do teste:
+
+```javascript
+// ✅ CORRETO
+it("should detect timestamp-like IDs", () => {
+  // Arrange
+  const timestampId = 1755645845907;
+
+  // Act
+  const result = validateId(timestampId);
+
+  // Assert
+  expect(result.isValid).toBe(false);
+  expect(result.isTimestamp).toBe(true);
+});
+```
+
+### **2. Act (Executar)**
+
+**SEMPRE execute** apenas a função/método sendo testado:
+
+```javascript
+// ✅ CORRETO
+const result = validateId(timestampId);
+
+// ❌ INCORRETO
+const result = validateId(timestampId);
+const processed = processResult(result);
+const final = formatOutput(processed);
+```
+
+### **3. Assert (Verificar)**
+
+**SEMPRE verifique** resultados específicos e múltiplos aspectos:
+
+```javascript
+// ✅ CORRETO
+expect(result.isValid).toBe(false);
+expect(result.issues).toContain("ID parece ser um timestamp");
+expect(result.isTimestamp).toBe(true);
+
+// ❌ INCORRETO
+expect(result).toBeDefined();
+```
+
+## 🎯 **NOMEAÇÃO E DESCRIÇÃO**
+
+### **1. Nomes de Testes**
+
+**SEMPRE use** nomes descritivos que explicam o comportamento:
+
+```javascript
+// ✅ CORRETO
+it("should detect timestamp-like IDs", () => {});
+it("should return error when password is too short", () => {});
+it("should handle empty array gracefully", () => {});
+
+// ❌ INCORRETO
+it("test 1", () => {});
+it("works", () => {});
+it("should work", () => {});
+```
+
+### **2. Descrições de Grupos**
+
+**SEMPRE agrupe** testes logicamente por funcionalidade:
+
+```javascript
+// ✅ CORRETO
+describe("Validation Utils", () => {
+  describe("validateId", () => {
+    // testes específicos para validateId
+  });
+
+  describe("timestampToDate", () => {
+    // testes específicos para timestampToDate
+  });
+});
+```
+
+## 🧪 **TIPOS DE TESTES OBRIGATÓRIOS**
+
+### **1. Testes de Funcionalidade Normal**
+
+**SEMPRE teste** o comportamento esperado com dados válidos:
+
+```javascript
+it("should validate normal IDs correctly", () => {
+  const result = validateId(4);
+  expect(result.isValid).toBe(true);
+  expect(result.issues).toHaveLength(0);
+});
+```
+
+### **2. Testes de Casos de Borda**
+
+**SEMPRE teste** valores extremos e limites:
+
+```javascript
+it("should detect overflow IDs", () => {
+  const result = validateId(2147483648);
+  expect(result.isValid).toBe(false);
+  expect(result.isOverflow).toBe(true);
+});
+
+it("should detect negative IDs", () => {
+  const result = validateId(-1);
+  expect(result.isValid).toBe(false);
+});
+```
+
+### **3. Testes de Tratamento de Erros**
+
+**SEMPRE teste** como o código lida com entradas inválidas:
+
+```javascript
+it("should handle invalid timestamp gracefully", () => {
+  const result = timestampToDate(NaN);
+  expect(result).toBe("Data inválida");
+});
+```
+
+## 🔧 **MOCKS E SPIES**
+
+### **1. Uso de Mocks**
+
+**SEMPRE use** mocks para dependências externas:
+
+```javascript
+// ✅ CORRETO
+const consoleSpy = jest.spyOn(console, "log").mockImplementation();
+
+logValidation(1755645845907, "test");
+
+expect(consoleSpy).toHaveBeenCalledWith(
+  "🔍 VALIDATION [test]:",
+  expect.objectContaining({
+    id: 1755645845907,
+  })
+);
+
+consoleSpy.mockRestore();
+```
+
+### **2. Limpeza de Mocks**
+
+**SEMPRE restaure** mocks após cada teste:
+
+```javascript
+// ✅ CORRETO
+afterEach(() => {
+  jest.clearAllMocks();
+  jest.restoreAllMocks();
+});
+```
+
+## 📊 **COBERTURA E QUALIDADE**
+
+### **1. Cobertura Mínima**
+
+**SEMPRE mantenha** cobertura conforme configurado no projeto:
+
+```javascript
+// jest.config.js - Cobertura mínima recomendada
+coverageThreshold: {
+  global: {
+    branches: 70,
+    functions: 70,
+    lines: 70,
+    statements: 70,
+  },
+}
+```
+
+### **2. Verificação de Qualidade**
+
+**SEMPRE execute** testes antes de concluir:
+
+```bash
+# Comandos obrigatórios (ajuste conforme seu projeto)
+npm test              # Execução completa
+npm run test:watch    # Modo watch para desenvolvimento
+npm run test:coverage # Relatório de cobertura
+
+# Alternativas para outros gerenciadores de pacotes
+yarn test
+pnpm test
+```
+
+## 🚫 **PROIBIÇÕES ABSOLUTAS**
+
+### **1. Testes Dependentes**
+
+**NUNCA crie** testes que dependem de outros:
+
+```javascript
+// ❌ INCORRETO
+let counter = 0;
+
+it("should increment counter", () => {
+  counter++;
+  expect(counter).toBe(1);
+});
+
+it("should continue incrementing", () => {
+  counter++;
+  expect(counter).toBe(2); // ❌ Depende do teste anterior
+});
+```
+
+### **2. Testes de Implementação**
+
+**NUNCA teste** métodos privados ou detalhes internos:
+
+```javascript
+// ❌ INCORRETO
+it("should call internal method", () => {
+  const spy = jest.spyOn(instance, "privateMethod");
+  instance.publicMethod();
+  expect(spy).toHaveBeenCalled(); // ❌ Testa implementação
+});
+
+// ✅ CORRETO
+it("should return expected result", () => {
+  const result = instance.publicMethod();
+  expect(result).toBe(expectedValue); // ✅ Testa comportamento
+});
+```
+
+### **3. Testes Lentos**
+
+**NUNCA crie** testes que dependem de operações lentas:
+
+```javascript
+// ❌ INCORRETO
+it("should fetch data from API", async () => {
+  const data = await fetch("https://api.external.com/data");
+  expect(data).toBeDefined(); // ❌ Dependência externa lenta
+});
+```
+
+## 🔄 **FLUXO TDD OBRIGATÓRIO**
+
+### **1. Ciclo TDD**
+
+**SEMPRE siga** o fluxo Red-Green-Refactor:
+
+```text
+1. Red: Escrever teste que falha
+2. Green: Implementar código mínimo para passar
+3. Refactor: Melhorar código mantendo testes passando
+```
+
+### **2. Implementação Gradual**
+
+**SEMPRE implemente** funcionalidades incrementalmente:
+
+```javascript
+// ✅ CORRETO - Implementação gradual
+describe("User Authentication", () => {
+  it("should validate email format", () => {
+    // Primeiro teste - validação básica
+  });
+
+  it("should validate password strength", () => {
+    // Segundo teste - validação de senha
+  });
+
+  it("should authenticate valid credentials", () => {
+    // Terceiro teste - autenticação completa
+  });
+});
+```
+
+## 📋 **CHECKLIST DE QUALIDADE**
+
+### **Antes de Concluir Testes**
+
+- [ ] Testes seguem padrão AAA (Arrange-Act-Assert)
+- [ ] Nomes são descritivos e específicos
+- [ ] Casos de borda estão cobertos
+- [ ] Tratamento de erros está testado
+- [ ] Mocks são usados para dependências externas
+- [ ] Testes são independentes e isolados
+- [ ] Cobertura mínima de 70% é mantida
+- [ ] Todos os testes passam (comando de teste do projeto)
+
+### **Verificação de Estrutura**
+
+- [ ] Arquivos organizados em pastas apropriadas
+- [ ] Grupos `describe` organizam testes logicamente
+- [ ] Testes individuais são focados e específicos
+- [ ] Setup e teardown são usados quando necessário
+
+## 🔗 **INTEGRAÇÃO COM PROJETO**
+
+### **1. Configuração Jest**
+
+**SEMPRE use** configuração existente do projeto:
+
+```javascript
+// jest.config.js - Configuração padrão
+module.exports = {
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testEnvironment: "jsdom", // ou 'node' para testes de backend
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
+  // Outras configurações específicas do projeto
+};
+```
+
+### **2. Ambiente de Testes**
+
+**SEMPRE configure** ambiente apropriado para seu projeto:
+
+```javascript
+// jest.setup.js - Configurações globais
+import "@testing-library/jest-dom"; // Para testes de componentes React
+// Outras configurações globais conforme necessário
+```
+
+### **3. Comandos de Execução**
+
+**SEMPRE use** scripts configurados no projeto:
+
+```bash
+# Ajuste conforme seu gerenciador de pacotes
+npm test              # Execução completa
+npm run test:watch    # Desenvolvimento iterativo
+npm run test:coverage # Análise de cobertura
+
+# Alternativas
+yarn test
+pnpm test
+```
+
+## 📚 **EXEMPLOS DE IMPLEMENTAÇÃO**
+
+### **1. Teste de Utilitário**
+
+```javascript
+// ✅ EXEMPLO COMPLETO
+describe("Validation Utils", () => {
+  describe("validateId", () => {
+    it("should validate normal IDs correctly", () => {
+      // Arrange
+      const normalId = 4;
+
+      // Act
+      const result = validateId(normalId);
+
+      // Assert
+      expect(result.isValid).toBe(true);
+      expect(result.issues).toHaveLength(0);
+      expect(result.isTimestamp).toBe(false);
+      expect(result.isOverflow).toBe(false);
+    });
+
+    it("should detect timestamp-like IDs", () => {
+      // Arrange
+      const timestampId = 1755645845907;
+
+      // Act
+      const result = validateId(timestampId);
+
+      // Assert
+      expect(result.isValid).toBe(false);
+      expect(result.issues).toContain("ID parece ser um timestamp");
+      expect(result.isTimestamp).toBe(true);
+      expect(result.isOverflow).toBe(true);
+    });
+  });
+});
+```
+
+### **2. Teste de Componente (React/Vue/Angular)**
+
+```javascript
+// ✅ EXEMPLO DE COMPONENTE REACT
+import { render, screen } from "@testing-library/react";
+import { UserList } from "@/components/UserList";
+
+describe("UserList Component", () => {
+  it("should render empty state when no users", () => {
+    // Arrange
+    const users = [];
+
+    // Act
+    render(<UserList users={users} />);
+
+    // Assert
+    expect(screen.getByText("Nenhum usuário encontrado")).toBeInTheDocument();
+  });
+
+  it("should render users when provided", () => {
+    // Arrange
+    const users = [{ id: 1, name: "João", email: "joao@test.com" }];
+
+    // Act
+    render(<UserList users={users} />);
+
+    // Assert
+    expect(screen.getByText("João")).toBeInTheDocument();
+    expect(screen.getByText("joao@test.com")).toBeInTheDocument();
+  });
+});
+```
+
+## ✅ **VERIFICAÇÃO FINAL**
+
+### **Antes de Concluir QUALQUER Teste**
+
+- [ ] Padrão AAA implementado corretamente
+- [ ] Nomes descritivos e específicos
+- [ ] Casos de borda cobertos
+- [ ] Tratamento de erros testado
+- [ ] Mocks usados adequadamente
+- [ ] Testes independentes e isolados
+- [ ] Cobertura mínima mantida
+- [ ] Todos os testes passando
+- [ ] Estrutura organizada logicamente
+- [ ] Integração com configuração do projeto
+
+## 🔗 **REFERÊNCIAS**
+
+- [Core Rule](core-rule.mdc) - Regra base do sistema
+- [Architecture Guidelines](architecture-guidelines.mdc) - Diretrizes de arquitetura
+- [Jest Documentation](https://jestjs.io/docs/getting-started) - Documentação oficial do Jest
+- [Testing Library](https://testing-library.com/) - Biblioteca para testes de componentes

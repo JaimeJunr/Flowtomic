@@ -1,0 +1,568 @@
+---
+description: Sistema de formatação para regras .mdc do Cursor IDE - converte regras Cursor em documentação didática com estrutura clara, linguagem imperativa e preservação de funcionalidade
+globs: .cursor/rules/**/*.mdc
+alwaysApply: false
+---
+
+# Sistema de Formatação para Regras .mdc do Cursor IDE
+
+## 1. Diretrizes Fundamentais
+
+### 1.1 Objetivos de Formatação para Cursor IDE
+
+**SEMPRE mantenha** estes objetivos durante a formatação de Cursor Rules:
+
+- **Formate como artigo**: Pode ser lida por humanos como um artigo
+- **Funciona como instrução**: Pode ser interpretada por IA como comandos precisos para o Cursor
+- **Mantém estrutura clara**: Segue hierarquia lógica de conceitos para Cursor Rules
+- **Preserva funcionalidade**: Não perde metadados ou comandos críticos do Cursor
+- **SEMPRE mantenha** objetivo de 500 linhas (máximo 600) para Cursor Rules
+
+### 1.2 Características de Regras Eficazes para Cursor
+
+**SEMPRE crie** regras que sejam:
+
+- **Focadas**: Uma responsabilidade específica por regra do Cursor
+- **Acionáveis**: Instruções diretas e executáveis para o Cursor IDE
+- **Escopadas**: Aplicáveis ao contexto correto do Cursor
+- **Claras**: Linguagem imperativa sem ambiguidades para desenvolvedores
+
+### 1.3 Linguagem Imperativa para Cursor Rules
+
+**SEMPRE use** linguagem direta e acionável para Cursor Rules:
+
+- **"SEMPRE"** para ações obrigatórias do Cursor
+- **"NUNCA"** para proibições absolutas no Cursor IDE
+- **"NÃO"** para restrições específicas do Cursor
+- **NUNCA use** linguagem narrativa ou conversacional
+
+## 2. Estrutura de Frontmatter para Cursor Rules
+
+### 2.1 Metadados Obrigatórios para Cursor
+
+**SEMPRE configure** estes metadados no frontmatter para Cursor Rules:
+
+1. **SEMPRE use** `description:` para descrição concisa (ação + gatilho + resultado) para Cursor Rules
+2. **SEMPRE use** `globs:` para padrões de arquivos específicos do Cursor (separados por vírgula, sem colchetes)
+3. **SEMPRE use** `alwaysApply:` para indicar aplicação automática no Cursor IDE (opcional)
+
+### 2.2 Formato Correto dos Campos para Cursor Rules
+
+**SEMPRE use** formato sem aspas para os campos do Cursor:
+
+```yaml
+# ✅ CORRETO: Sem aspas para Cursor Rules
+description: Modo de investigação pura para análise de código no Cursor IDE
+globs: *.mdc,**/.cursor/rules/**
+alwaysApply: false
+
+# ❌ INCORRETO: Com aspas (não funciona no Cursor IDE)
+description: "Modo de investigação pura para análise de código no Cursor IDE"
+globs: "*.mdc,**/.cursor/rules/**"
+```
+
+**⚠️ CRÍTICO**: O Cursor IDE não aceita aspas simples ou duplas nos campos `description` e `globs`. Use apenas texto simples, sem aspas.
+
+## 3. Idioma e Linguagem para Cursor Rules
+
+### 3.1 Padrões de Idioma para Cursor IDE
+
+**SEMPRE siga** estes padrões de idioma para Cursor Rules:
+
+1. **SEMPRE escreva** regras em português brasileiro padrão para Cursor Rules
+2. **SEMPRE preserve** metadados em inglês (`description:`, `globs:`, `alwaysApply:`) para Cursor IDE
+3. **SEMPRE use** terminologia técnica em português quando disponível para Cursor Rules
+4. **SEMPRE mantenha** nomes de arquivos, comandos e código em inglês para Cursor IDE
+5. **SEMPRE traduza** exemplos e explicações para português para Cursor Rules
+
+## 4. Processo de Formatação
+
+### 4.1 Análise e Identificação
+
+**SEMPRE execute** análise completa antes de formatar:
+
+1. **SEMPRE leia** o arquivo completo para determinar o número de linhas atual
+2. **SEMPRE identifique** problemas: vagueza, comprimento, falta de estrutura
+3. **SEMPRE mapeie** funcionalidades críticas: comandos, arquivos, fluxos
+4. **SEMPRE planeje** a formatação baseada no tamanho atual:
+   - **≤ 500 linhas**: Formatação de otimização e melhoria
+   - **501-600 linhas**: Formatação de compactação e reorganização
+   - **> 600 linhas**: Formatação de divisão em múltiplas regras
+
+### 4.2 Reestruturação e Otimização
+
+**SEMPRE execute** reestruturação sistemática:
+
+1. **SEMPRE consolide** seções similares e elimine redundâncias
+2. **SEMPRE organize** informações de forma lógica e escaneável
+3. **SEMPRE transforme** linguagem narrativa em instruções diretas
+4. **SEMPRE posicione** exemplos para máximo impacto
+
+### 4.3 Validação de Qualidade
+
+**SEMPRE valide** qualidade após formatação:
+
+1. **SEMPRE confirme** redução de pelo menos 30% no número de linhas
+2. **SEMPRE verifique** que todas as funcionalidades foram preservadas
+3. **SEMPRE teste** se a estrutura é mais clara e acionável
+4. **SEMPRE valide** que não há duplicação de informações
+5. **SEMPRE valide** tamanho final: objetivo 500 linhas (máximo 600) - ver seção 8.6
+
+## 5. Automação e Ferramentas
+
+### 5.1 Automação e Ferramentas
+
+**SEMPRE configure** automação: `npx markdownlint "**/*.mdc" --fix` para validação markdown, `yaml-lint` para frontmatter YAML, `prettier` para formatação, `linter` para validação de código
+
+## 6. Critérios de Sucesso
+
+### 6.1 Métricas de Qualidade
+
+**SEMPRE atinja** estas métricas de qualidade:
+
+- **Estrutura Clara**: Máximo 3 níveis de hierarquia
+- **Linguagem Imperativa**: 100% de instruções diretas
+- **Exemplos Integrados**: Posicionados após regras
+- **Organização Moderna**: Estrutura de subdiretórios por categoria
+- **Automação Configurada**: Scripts de validação e monitoramento
+
+### 6.2 Sinais de Alerta e Problemas Críticos
+
+**SEMPRE identifique** estes problemas:
+
+- Perda de comandos específicos
+- Mudança de metadados sem instrução
+- Remoção de fluxos de trabalho
+- Seções duplicadas
+- Introduções em primeira pessoa ("Eu sou o Cursor...")
+- Justificativas narrativas prolixas
+- Linguagem não imperativa ("EU DEVO ler..." → "SEMPRE leia")
+- Mistura de idiomas
+- Exemplos mal posicionados
+- Formatação inconsistente
+- Aspas nos campos `globs` e `description` (NUNCA use aspas)
+
+## 7. Exemplos Práticos
+
+**SEMPRE use** seções temáticas numeradas e posicione exemplos logo após as regras:
+
+**Exemplo**: Seção "1. Configuração de Componentes" seguida imediatamente por exemplo de código TypeScript mostrando componente funcional com hooks
+
+## 8. Boas Práticas
+
+### 8.1 Princípios Fundamentais de Qualidade
+
+**SEMPRE siga** estes princípios fundamentais para criar regras eficazes:
+
+#### 8.1.1 Regras Objetivas, Práticas e com Escopo Definido
+
+**SEMPRE crie** regras que sejam:
+
+- **Objetivas**: Instruções claras e específicas, sem ambiguidades
+- **Práticas**: Aplicáveis diretamente ao trabalho de desenvolvimento
+- **Escopo definido**: Responsabilidade única e bem delimitada por regra
+- **Focadas**: Uma responsabilidade específica por regra
+- **Acionáveis**: Instruções diretas e executáveis
+
+```markdown
+# ✅ CORRETO: Regra focada e acionável
+
+---
+
+description: Diretrizes específicas para validação de formulários
+globs: **/components/**/\*
+alwaysApply: false
+
+---
+
+## Diretrizes de Validação
+
+1. **SEMPRE use** bibliotecas de validação estruturadas para formulários
+2. **SEMPRE implemente** feedback visual para erros
+3. **SEMPRE valide** campos obrigatórios antes do submit
+
+# ❌ INCORRETO: Regra genérica e vaga
+
+---
+
+description: Boas práticas de desenvolvimento
+globs: _*/*._
+alwaysApply: false
+
+---
+
+## Diretrizes Gerais
+
+1. **SEMPRE escreva** código limpo
+2. **SEMPRE documente** suas funções
+```
+
+#### 8.1.2 Limite de Tamanho e Modularidade
+
+**SEMPRE mantenha** regras sob controle de tamanho:
+
+- **Objetivo**: 500 linhas ou menos por regra
+- **Máximo**: 600 linhas por regra
+- **SEMPRE divida** regras grandes em múltiplas regras combináveis
+- **SEMPRE crie** regras modulares que se complementam
+- **SEMPRE evite** regras monolíticas que misturam múltiplas responsabilidades
+
+```markdown
+# ✅ CORRETO: Regras modulares e focadas
+
+# validation-rule.mdc (200 linhas)
+
+---
+
+description: Validação de formulários com bibliotecas estruturadas
+globs: **/components/**/\*
+
+---
+
+# testing-rule.mdc (180 linhas)
+
+---
+
+description: Testes de componentes com framework de testes
+globs: **/components/**/_.test._
+
+---
+
+# performance-rule.mdc (150 linhas)
+
+---
+
+description: Otimização de performance em componentes
+globs: **/components/**/\*
+
+---
+
+# ❌ INCORRETO: Regra monolítica (800+ linhas)
+
+# complete-rule.mdc (800 linhas)
+
+---
+
+description: Tudo sobre desenvolvimento - validação, testes, performance, etc.
+globs: _*/*._
+
+---
+```
+
+#### 8.1.3 Exemplos Concretos e Referências
+
+**SEMPRE forneça** exemplos concretos e referências específicas:
+
+- **SEMPRE inclua** exemplos "✅ CORRETO" vs "❌ INCORRETO"
+- **SEMPRE referencie** arquivos específicos quando aplicável
+- **SEMPRE evite** orientações vagas ou genéricas
+
+````markdown
+# ✅ CORRETO: Exemplos concretos e específicos
+
+## 1. Validação Estruturada
+
+1. **SEMPRE use** schemas de validação estruturados para formulários
+
+```pseudocode
+// ✅ CORRETO: Schema de validação estruturado
+import validation_library from "validation_framework"
+
+const UserFormSchema = validation_library.object({
+  name: validation_library.string().min(1, "Nome é obrigatório"),
+  email: validation_library.string().email("Email inválido"),
+  age: validation_library.number().min(18, "Idade mínima 18 anos"),
+});
+
+// ❌ INCORRETO: Validação manual sem schema
+const validateUser = (data) => {
+  if (!data.name) return "Nome obrigatório";
+  if (!data.email.includes("@")) return "Email inválido";
+  return null;
+};
+```
+````
+
+**SEMPRE consulte** arquivo de referência: `src/components/UserForm`
+
+```markdown
+# ❌ INCORRETO: Orientações vagas
+
+## Diretrizes de Validação
+
+1. **SEMPRE valide** dados de entrada
+2. **SEMPRE forneça** feedback ao usuário
+3. **SEMPRE use** bibliotecas adequadas
+```
+
+#### 8.1.4 Evitar Orientações Vagas
+
+**SEMPRE evite** orientações vagas e genéricas:
+
+- **SEMPRE elabore** regras de forma clara e objetiva, como em documentos internos
+- **SEMPRE forneça** instruções específicas e acionáveis
+- **SEMPRE evite** frases como "escreva código limpo" sem contexto específico
+- **SEMPRE especifique** o que fazer, como fazer e quando fazer
+
+```markdown
+# ❌ INCORRETO: Orientações vagas
+
+## Diretrizes Gerais
+
+1. **SEMPRE escreva** código limpo
+2. **SEMPRE documente** suas funções
+3. **SEMPRE teste** seu código
+4. **SEMPRE use** boas práticas
+
+# ✅ CORRETO: Orientações específicas e acionáveis
+
+## 1. Estrutura de Funções
+
+1. **SEMPRE limite** funções a máximo 20 linhas de código executável
+2. **SEMPRE use** nomes descritivos que expressem a intenção (ex: `calculateTotalPrice` em vez de `calc`)
+3. **SEMPRE retorne** valores explícitos, evitando efeitos colaterais
+
+## 2. Documentação de Código
+
+1. **SEMPRE documente** funções públicas com JSDoc incluindo:
+   - Descrição do propósito
+   - Parâmetros com tipos e descrições
+   - Valor de retorno com tipo e descrição
+   - Exemplos de uso quando aplicável
+```
+
+#### 8.1.5 Documentação Clara e Reutilização
+
+**SEMPRE escreva** regras como documentação interna clara:
+
+- **SEMPRE use** linguagem imperativa e direta
+- **SEMPRE estruture** como documentação técnica
+- **SEMPRE permita** reutilização em diferentes contextos
+- **SEMPRE reutilize** regras ao repetir avisos no chat
+
+````markdown
+# ✅ CORRETO: Documentação clara e reutilizável
+
+## 1. Configuração de Testes
+
+1. **SEMPRE configure** framework de testes com setup adequado
+2. **SEMPRE use** mocks para dependências externas
+3. **SEMPRE teste** casos de sucesso e erro
+
+```pseudocode
+// ✅ CORRETO: Configuração de testes específica
+// test.config
+module.exports = {
+  testEnvironment: "browser_simulation",
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests"],
+  moduleNameMapping: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
+};
+```
+````
+
+**SEMPRE reutilize** esta configuração em outros projetos
+
+```markdown
+# ❌ INCORRETO: Instruções vagas e não reutilizáveis
+
+## Testes
+
+1. **SEMPRE teste** seu código
+2. **SEMPRE use** ferramentas adequadas
+3. **SEMPRE cubra** casos importantes
+```
+
+### 8.2 Automação de Fluxos de Trabalho
+
+**SEMPRE automatize** fluxos de trabalho de desenvolvimento e geração de documentação:
+
+#### 8.2.1 Exemplo: Análise de Aplicativo
+
+**SEMPRE crie** regras que automatizam análise de aplicativos:
+
+```markdown
+## Análise Automática de Aplicativo
+
+Ao ser solicitado a analisar o aplicativo:
+
+1. **SEMPRE execute** o servidor de desenvolvimento com `npm run dev`
+2. **SEMPRE obtenha** registros do console do navegador
+3. **SEMPRE sugira** melhorias de desempenho baseadas em métricas reais
+4. **SEMPRE identifique** problemas de acessibilidade e usabilidade
+5. **SEMPRE documente** descobertas em formato estruturado
+```
+
+#### 8.2.2 Exemplo: Geração de Documentação
+
+**SEMPRE crie** regras que automatizam geração de documentação:
+
+```markdown
+## Geração Automática de Documentação
+
+Ao ser solicitado a gerar documentação:
+
+1. **SEMPRE extraia** comentários de código relevantes
+2. **SEMPRE analise** o arquivo `README.md` existente para contexto
+3. **SEMPRE gere** documentação em Markdown seguindo padrões do projeto
+4. **SEMPRE inclua** exemplos de uso e casos de teste
+5. **SEMPRE mantenha** consistência com documentação existente
+```
+
+#### 8.2.3 Exemplo: Validação Automática
+
+**SEMPRE crie** regras que automatizam validação:
+
+```markdown
+## Validação Automática de Código
+
+Ao ser solicitado a validar código:
+
+1. **SEMPRE execute** linters configurados (`eslint`, `prettier`, etc.)
+2. **SEMPRE execute** testes automatizados (`npm test`)
+3. **SEMPRE verifique** cobertura de testes (mínimo 80%)
+4. **SEMPRE valide** conformidade com padrões de commit (Conventional Commits)
+5. **SEMPRE reporte** problemas encontrados com sugestões de correção
+```
+
+### 8.3 Estrutura de Regras Composable
+
+**SEMPRE crie** regras que se complementam:
+
+#### 8.3.1 Hierarquia de Regras
+
+```text
+# Estrutura hierárquica de regras
+
+core/
+├── formatter-rule-core.mdc          # Regra base de formatação
+├── architecture-guidelines.mdc       # Diretrizes arquiteturais
+└── development/
+    ├── clean-code-rule.mdc          # Princípios de código limpo
+    ├── tdd-rule.mdc                 # Test-Driven Development
+    └── ddd-rule.mdc                 # Domain-Driven Design
+
+frontend/
+├── component-rule.mdc               # Regras para componentes
+├── styling-rule.mdc                # Estilização e CSS
+└── testing/
+    ├── unit-test-rule.mdc           # Testes unitários
+    └── e2e-test-rule.mdc           # Testes end-to-end
+
+backend/
+├── api-rule.mdc                     # APIs e endpoints
+├── database-rule.mdc                # Banco de dados
+└── security-rule.mdc                # Segurança e autenticação
+```
+
+#### 8.3.2 Reutilização Inteligente
+
+**SEMPRE reutilize** regras quando apropriado:
+
+```markdown
+# ✅ CORRETO: Reutilização inteligente
+
+## Integração com Regras Existentes
+
+**SEMPRE consulte** regras relacionadas:
+
+- **Clean Code**: `fetch_rules(["clean-code-rule"])` para princípios fundamentais
+- **TDD**: `fetch_rules(["tdd-rule"])` para desenvolvimento orientado a testes
+- **DDD**: `fetch_rules(["ddd-rule"])` para modelagem de domínio
+
+**SEMPRE evite** duplicação de conteúdo entre regras
+**SEMPRE mantenha** consistência nas diretrizes
+```
+
+### 8.4 Validação de Qualidade
+
+#### 8.4.1 Sinais de Alerta
+
+**SEMPRE identifique** estes sinais de problemas:
+
+- ❌ Regra com mais de 500 linhas
+- ❌ Múltiplas responsabilidades em uma regra
+- ❌ Orientações vagas como "escreva código limpo"
+- ❌ Falta de exemplos concretos
+- ❌ Ausência de referências específicas
+- ❌ Duplicação de conteúdo com outras regras
+
+### 8.5 Validação Markdown
+
+**SEMPRE consulte** [markdown-rule.mdc](markdown-rule.mdc) para regras completas de markdownlint.
+
+**SEMPRE aplique** validação automática:
+
+```bash
+# Executar markdownlint em arquivos .mdc
+npx markdownlint "**/*.mdc" --fix
+
+# Verificar erros específicos
+npx markdownlint "**/*.mdc" --config .markdownlint.json
+```
+
+### 8.6 Validação de Tamanho Final
+
+**SEMPRE valide** o tamanho do arquivo após a formatação:
+
+1. **SEMPRE conte** o número total de linhas: `wc -l arquivo.mdc`
+2. **SEMPRE verifique** se está dentro do objetivo de 500 linhas (máximo 600)
+3. **SEMPRE aplique** estas regras:
+   - **Objetivo**: 500 linhas ou menos
+   - **Máximo**: 600 linhas
+   - **Ação se > 600**: Dividir em múltiplas regras focadas
+
+### 8.7 20 Melhores Práticas para Project Rules
+
+**SEMPRE siga** estas 20 práticas essenciais:
+
+#### 8.7.1 Estrutura e Organização (4 práticas)
+
+1. **Mantenha rules com menos de 500 linhas**: Rules concisas e focadas para melhor processamento
+2. **Divida rules grandes em múltiplas rules compostas**: Crie várias rules específicas combináveis em vez de monolíticas
+3. **Use nested rules para organização hierárquica**: Coloque `.cursor/rules` em diferentes diretórios (backend, frontend, etc.)
+4. **Organize rules por domínio ou funcionalidade**: Estrutura hierárquica por contexto
+
+```text
+project/.cursor/rules/        # Rules globais
+backend/.cursor/rules/        # Rules backend
+frontend/.cursor/rules/       # Rules frontend
+```
+
+#### 8.7.2 Conteúdo e Clareza (3 práticas)
+
+5. **Seja específico e acionável**: ❌ "Escreva código bom" → ✅ "Use TypeScript para novos arquivos e componentes funcionais no React"
+6. **Escreva rules como documentação interna clara**: Trate como documentação técnica da equipe
+7. **Forneça exemplos concretos ou referencie arquivos**: Use `@filename.ts` para incluir exemplos existentes
+
+#### 8.7.3 Tipos de Rules e Aplicação (4 práticas)
+
+8. **Use "Always Apply" com moderação**: Reserve para regras essenciais universais
+9. **Prefira "Apply Intelligently" para rules contextuais**: Deixe o Agent decidir baseado na descrição
+10. **Use "Apply to Specific Files"**: Configure `globs` para aplicar automaticamente a tipos específicos
+11. **Configure "Apply Manually" para workflows**: Use `@-mention` para invocar rules de workflows específicos
+
+#### 8.7.4 Casos de Uso Eficazes (4 práticas)
+
+12. **Encode conhecimento específico do domínio**: Documente padrões de arquitetura e decisões técnicas
+13. **Automatize workflows específicos**: Crie rules para processos repetitivos (análise, documentação, etc.)
+14. **Padronize decisões de estilo e arquitetura**: Defina convenções por diretório (Tailwind, Framer Motion, etc.)
+15. **Crie rules para validação e conformidade**: Defina padrões (zod para APIs, schemas, etc.)
+
+#### 8.7.5 Manutenção e Versionamento (4 práticas)
+
+16. **Versione suas Project Rules com Git**: Mantenha histórico e colaboração
+17. **Reutilize rules quando repetir prompts**: Transforme pedidos frequentes em rules
+18. **Revise e atualize rules regularmente**: Sincronize com mudanças no projeto
+19. **Teste suas rules em contextos diferentes**: Verifique comportamento em Chat e Inline Edit
+
+#### 8.7.6 Dica Bônus (1 prática)
+
+20. **Formato MDC**: Use metadata (`description`, `globs`, `alwaysApply`) para controlar quando e como rules são aplicadas
+
+**Citação oficial**:
+
+> "Good rules are focused, actionable, and scoped. Keep rules under 500 lines.
+> Split large rules into multiple, composable rules. Provide concrete examples or referenced files.
+> Avoid vague guidance. Write rules like clear internal docs. Reuse rules when repeating prompts in chat."

@@ -1,0 +1,345 @@
+---
+description: Capacitar usuários a criar e aprimorar comandos customizados altamente eficazes para o Cursor IDE, utilizando arquivos Markdown estruturados conforme padrões modernos de documentação executável e as melhores práticas. O foco é garantir clareza, reutilização e automação nos fluxos de trabalho.
+globs: **/.cursor/commands/**
+alwaysApply: false
+---
+
+# Comandos Customizados Cursor IDE
+
+## 1. Diretrizes Fundamentais
+
+### 1.1 Estrutura e Localização
+
+**SEMPRE armazene** comandos Cursor IDE nos locais corretos:
+
+- **Projeto**: `.cursor/commands/`
+- **Organização**: Use subpastas para categorizar comandos Cursor IDE
+
+**SEMPRE use** convenções de nomenclatura claras para comandos Cursor IDE:
+
+- Nomes descritivos baseados em verbos de ação
+- Formato: `{acao}-{contexto}.md`
+- Exemplos: `review-code.md`, `create-pr.md`, `run-tests-and-fix.md`
+- **SEMPRE foque** exclusivamente em comandos customizados do Cursor IDE
+
+### 1.2 Estrutura de Arquivo Padrão
+
+**SEMPRE use** estrutura consistente em todos os comandos Cursor IDE:
+
+```markdown
+# Nome do Comando Cursor IDE
+
+## Parâmetros
+
+- **--parametro1**: Descrição do parâmetro (obrigatório/opcional)
+- **--parametro2**: Descrição do parâmetro (obrigatório/opcional)
+
+## 1. Contexto e Preparação
+
+- [ ] **SEMPRE verifique** pré-requisitos para o comando Cursor IDE
+- [ ] **SEMPRE configure** ambiente necessário para o comando
+- [ ] **SEMPRE foque** exclusivamente em comandos customizados do Cursor IDE
+
+## 2. Execução Principal
+
+- [ ] **SEMPRE execute** passo principal 1 do comando
+- [ ] **SEMPRE execute** passo principal 2 do comando
+- [ ] **SEMPRE execute** passo principal 3 do comando
+
+## 3. Validação e Finalização
+
+- [ ] **SEMPRE verifique** resultados do comando Cursor IDE
+- [ ] **SEMPRE limpe** recursos temporários utilizados
+```
+
+## 2. Integração com Engenharia de Prompt
+
+### 2.1 Chamada Inteligente para Prompt Engineering
+
+**SEMPRE consulte** [prompt-engineering-rule.mdc](prompt-engineering-rule.mdc) quando precisar de:
+
+- Fundamentos teóricos de engenharia de prompt para comandos Cursor IDE
+- Metodologias avançadas (S.T.A.R., Chain-of-Thought, Few-Shot) aplicadas a comandos
+- Técnicas de otimização e refinamento de comandos customizados
+- Estratégias para domínios específicos de comandos Cursor IDE
+- Ferramentas e recursos recomendados para comandos
+
+**SEMPRE use** esta integração para:
+
+- Evitar duplicação de conteúdo sobre engenharia de prompt em comandos
+- Manter consistência nas diretrizes de prompt para comandos Cursor IDE
+- Aproveitar conhecimento especializado consolidado para comandos
+- Reduzir tokens através de referência inteligente em comandos
+- **SEMPRE foque** exclusivamente em comandos customizados do Cursor IDE
+
+### 2.2 Aplicação Contextual para Comandos Cursor IDE
+
+**SEMPRE aplique** princípios de engenharia de prompt ao criar comandos Cursor IDE:
+
+```markdown
+# ✅ CORRETO: Aplicação de princípios de prompt engineering para comandos Cursor IDE
+
+## Estrutura de Comando Eficaz para Cursor IDE
+
+1. **SEMPRE use** framework S.T.A.R. (Sistema-Tarefa-Ação-Resultado) para comandos
+2. **SEMPRE inclua** exemplos concretos (Few-Shot Learning) de comandos Cursor IDE
+3. **SEMPRE estruture** instruções de forma clara e específica para comandos
+4. **SEMPRE valide** eficácia através de métricas de qualidade de comandos
+5. **SEMPRE foque** exclusivamente em comandos customizados do Cursor IDE
+
+# Consulte [prompt-engineering-rule.mdc](prompt-engineering-rule.mdc) para detalhes completos
+```
+
+## 3. Padrões de Comandos Cursor IDE
+
+### 3.1 Checklist Interativo
+
+**SEMPRE use** checkboxes para guias estruturadas e verificáveis de comandos Cursor IDE:
+
+```markdown
+# Code Review Checklist - Comando Cursor IDE
+
+## 1. Funcionalidade do Comando
+
+- [ ] **SEMPRE verifique** se o comando implementa requisitos especificados
+- [ ] **SEMPRE confirme** que casos extremos são tratados adequadamente
+- [ ] **SEMPRE valide** que tratamento de erro é apropriado e consistente
+- [ ] **SEMPRE verifique** que validação de entrada está implementada
+- [ ] **SEMPRE foque** exclusivamente em comandos customizados do Cursor IDE
+
+## 2. Qualidade do Comando Cursor IDE
+
+- [ ] **SEMPRE assegure** que o comando é legível e bem estruturado
+- [ ] **SEMPRE confirme** que funções são pequenas e focadas em responsabilidade única
+- [ ] **SEMPRE verifique** que nomes de variáveis e funções são descritivos
+- [ ] **SEMPRE inclua** comentários que explicam "porquê", não "o quê"
+
+## 3. Testes e Documentação do Comando
+
+- [ ] **SEMPRE verifique** que testes unitários cobrem funcionalidades críticas
+- [ ] **SEMPRE confirme** que documentação está atualizada
+- [ ] **SEMPRE inclua** exemplos de uso do comando Cursor IDE
+```
+
+### 3.2 Guia Procedural Sequencial
+
+**SEMPRE use** listas numeradas para processos com dependências de comandos Cursor IDE:
+
+```markdown
+# Setup New Feature - Comando Cursor IDE
+
+## 1. Definir Requisitos do Comando
+
+- [ ] **SEMPRE esclareça** escopo e objetivos da funcionalidade do comando
+- [ ] **SEMPRE identifique** user stories e critérios de aceitação para o comando
+- [ ] **SEMPRE documente** restrições técnicas e de negócio do comando
+- [ ] **SEMPRE foque** exclusivamente em comandos customizados do Cursor IDE
+
+## 2. Criar Branch de Feature para Comando
+
+- [ ] **SEMPRE faça** branch a partir de `main` ou `develop`
+- [ ] **SEMPRE configure** ambiente de desenvolvimento local para o comando
+- [ ] **SEMPRE verifique** dependências e configurações do comando Cursor IDE
+
+## 3. Planejar Arquitetura do Comando
+
+- [ ] **SEMPRE projete** modelos de dados e APIs necessárias para o comando
+- [ ] **SEMPRE planeje** componentes UI e fluxo de navegação do comando
+- [ ] **SEMPRE identifique** pontos de integração existentes para o comando
+```
+
+### 3.3 Plano de Ação Direcionado
+
+**SEMPRE forneça** instruções específicas para execução pela IA em comandos Cursor IDE:
+
+```markdown
+# Run All Tests and Fix Failures - Comando Cursor IDE
+
+## 1. Executar Suite de Testes do Comando
+
+- [ ] **SEMPRE execute** todos os testes unitários e de integração do comando
+- [ ] **SEMPRE capture** saída completa e identifique todas as falhas do comando
+- [ ] **SEMPRE documente** ambiente e configurações de teste do comando Cursor IDE
+
+## 2. Analisar Falhas Sistematicamente do Comando
+
+- [ ] **SEMPRE categorize** cada falha por tipo (unitário, integração, e2e) do comando
+- [ ] **SEMPRE priorize** correções baseado no impacto e criticidade do comando
+- [ ] **SEMPRE identifique** falhas relacionadas e dependências do comando
+
+## 3. Corrigir Problemas de Forma Ordenada do Comando
+
+- [ ] **SEMPRE comece** com a falha mais crítica ou bloqueante do comando
+- [ ] **SEMPRE corrija** um problema por vez e re-execute testes relevantes do comando
+- [ ] **SEMPRE valide** que correções não introduzem novas falhas no comando Cursor IDE
+```
+
+## 4. Padrões Avançados para Comandos Cursor IDE
+
+### 4.1 Comandos com Parâmetros
+
+**SEMPRE documente** parâmetros e opções claramente para comandos Cursor IDE:
+
+```markdown
+# Deploy to Environment - Comando Cursor IDE
+
+## Parâmetros
+
+- **ENVIRONMENT**: `staging` | `production` | `development`
+- **VERSION**: Tag ou commit hash específico (opcional)
+- **DRY_RUN**: `true` | `false` (padrão: `false`)
+
+## 1. Validação de Parâmetros do Comando
+
+- [ ] **SEMPRE verifique** se ENVIRONMENT é válido para o comando
+- [ ] **SEMPRE confirme** que VERSION existe (se especificado) para o comando
+- [ ] **SEMPRE valide** permissões para ambiente alvo do comando Cursor IDE
+
+## 2. Preparação do Deploy do Comando
+
+- [ ] **SEMPRE faça** backup do ambiente atual antes do comando
+- [ ] **SEMPRE verifique** dependências e configurações do comando
+- [ ] **SEMPRE notifique** equipe sobre início do deploy do comando
+
+## 3. Execução do Deploy do Comando
+
+- [ ] **SEMPRE execute** pipeline de deploy do comando
+- [ ] **SEMPRE monitore** logs e métricas do comando Cursor IDE
+- [ ] **SEMPRE valide** funcionamento pós-deploy do comando
+```
+
+### 4.2 Comandos de Debugging
+
+**SEMPRE inclua** seções de diagnóstico e troubleshooting para comandos Cursor IDE:
+
+```markdown
+# Debug Performance Issues - Comando Cursor IDE
+
+## 1. Coleta de Dados do Comando
+
+- [ ] **SEMPRE execute** profiler de performance do comando
+- [ ] **SEMPRE colete** métricas de sistema (CPU, memória, I/O) do comando
+- [ ] **SEMPRE capture** logs de aplicação relevantes do comando Cursor IDE
+
+## 2. Análise de Dados do Comando
+
+- [ ] **SEMPRE identifique** gargalos de performance do comando
+- [ ] **SEMPRE analise** padrões de uso de recursos do comando
+- [ ] **SEMPRE correlacione** métricas com comportamento do comando Cursor IDE
+
+## 3. Troubleshooting Comum do Comando
+
+### Problema: Alto uso de CPU no Comando
+
+- [ ] **SEMPRE verifique** loops infinitos ou recursão excessiva no comando
+- [ ] **SEMPRE analise** algoritmos ineficientes do comando
+- [ ] **SEMPRE revise** configurações de cache do comando Cursor IDE
+
+### Problema: Vazamento de Memória no Comando
+
+- [ ] **SEMPRE verifique** objetos não liberados do comando
+- [ ] **SEMPRE analise** closures e referências circulares do comando
+- [ ] **SEMPRE revise** gerenciamento de recursos do comando Cursor IDE
+```
+
+## 5. Organização e Manutenção de Comandos Cursor IDE
+
+### 5.1 Estrutura de Diretórios
+
+**SEMPRE organize** comandos Cursor IDE por categoria:
+
+```text
+.cursor/commands/
+├── core/           # Comandos fundamentais do Cursor IDE
+├── development/    # Comandos de desenvolvimento
+├── testing/        # Comandos de teste
+├── deployment/     # Comandos de deploy
+├── maintenance/    # Comandos de manutenção
+└── templates/      # Templates para novos comandos Cursor IDE
+```
+
+### 5.2 Versionamento e Atualização
+
+**SEMPRE mantenha** histórico de mudanças para comandos Cursor IDE:
+
+```markdown
+# Changelog - Comando Cursor IDE
+
+## v1.2.0 - 2024-01-15
+
+- Adicionado suporte para parâmetro DRY_RUN no comando
+- Melhorada validação de ambiente do comando Cursor IDE
+- Corrigido bug na verificação de permissões do comando
+
+## v1.1.0 - 2024-01-10
+
+- Adicionada seção de troubleshooting do comando
+- Melhorada documentação de parâmetros do comando Cursor IDE
+
+## v1.0.0 - 2024-01-01
+
+- Versão inicial do comando Cursor IDE
+```
+
+### 5.3 Padronização da Equipe
+
+**SEMPRE crie** biblioteca central de comandos Cursor IDE:
+
+- [ ] **SEMPRE armazene** comandos críticos em `.cursor/commands/`
+- [ ] **SEMPRE reduza** ambiguidade e melhore consistência dos comandos
+- [ ] **SEMPRE sirva** como documentação executável viva dos comandos
+- [ ] **SEMPRE mantenha** templates atualizados para novos comandos Cursor IDE
+- [ ] **SEMPRE documente** convenções e padrões da equipe para comandos
+- [ ] **SEMPRE foque** exclusivamente em comandos customizados do Cursor IDE
+
+## 6. Ferramentas e Automação para Comandos Cursor IDE
+
+### 6.1 Validação de Comandos Cursor IDE
+
+**SEMPRE valide** comandos Cursor IDE antes de usar:
+
+```bash
+# Validar estrutura de comando Cursor IDE
+npx markdownlint .cursor/commands/**/*.md
+
+# Verificar links e referências dos comandos
+npx markdown-link-check .cursor/commands/**/*.md
+
+# Validar sintaxe de checkboxes dos comandos
+grep -r "\[ \]" .cursor/commands/
+
+# Validar foco em comandos Cursor IDE
+grep -r "Cursor IDE" .cursor/commands/
+```
+
+### 6.2 Geração de Templates
+
+**SEMPRE use** templates para novos comandos Cursor IDE:
+
+```bash
+# Criar novo comando Cursor IDE a partir de template
+cp .cursor/commands/templates/command-template.md .cursor/commands/meu-comando-cursor-ide.md
+
+# Gerar comando Cursor IDE com parâmetros
+npx cursor-command-generator --type=debugging --name="debug-api-cursor-ide" --output=.cursor/commands/
+
+# Validar foco em comandos Cursor IDE
+grep -r "Cursor IDE" .cursor/commands/meu-comando-cursor-ide.md
+```
+
+### 6.3 Formatação e Validação
+
+**SEMPRE consulte** [markdown-rule.mdc](markdown-rule.mdc) para diretrizes completas de formatação Markdown.
+
+**SEMPRE aplique** validação automática para comandos Cursor IDE:
+
+```bash
+# Executar markdownlint em comandos Cursor IDE
+npx markdownlint .cursor/commands/**/*.md --fix
+
+# Configuração específica para comandos Cursor IDE
+npx markdownlint .cursor/commands/**/*.md --config .markdownlint-commands.json
+
+# Validar foco em comandos Cursor IDE
+grep -r "Cursor IDE" .cursor/commands/**/*.md
+```

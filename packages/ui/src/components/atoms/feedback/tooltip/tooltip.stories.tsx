@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
+import type * as React from "react";
 import { Button } from "../../actions/button";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-	TooltipWithMouseFollow,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipWithMouseFollow,
 } from "./tooltip";
 
 const meta = {
@@ -105,8 +105,8 @@ export const FollowMouseWithLongContent: Story = {
         <div className="space-y-2">
           <p className="font-semibold">Informações Detalhadas</p>
           <p className="text-xs text-muted-foreground">
-            Este tooltip segue o mouse e ajusta sua posição automaticamente para não ultrapassar
-            as bordas da tela. Funciona perfeitamente mesmo com conteúdo longo.
+            Este tooltip segue o mouse e ajusta sua posição automaticamente para não ultrapassar as
+            bordas da tela. Funciona perfeitamente mesmo com conteúdo longo.
           </p>
         </div>
       }
@@ -128,7 +128,7 @@ export const FollowMouseWithLongContent: Story = {
 export const InteractiveTextExample: Story = {
   render: () => {
     const TooltipWord = ({
-      word,
+      word: _word,
       content,
       children,
     }: {
@@ -154,9 +154,9 @@ export const InteractiveTextExample: Story = {
               <div className="space-y-1">
                 <p className="font-semibold">Radix UI</p>
                 <p className="text-xs text-muted-foreground">
-                  Biblioteca de componentes primitivos acessíveis e sem estilização. O Flowtomic
-                  usa Radix UI como base para garantir acessibilidade (WAI-ARIA compliant) em todos
-                  os componentes interativos.
+                  Biblioteca de componentes primitivos acessíveis e sem estilização. O Flowtomic usa
+                  Radix UI como base para garantir acessibilidade (WAI-ARIA compliant) em todos os
+                  componentes interativos.
                 </p>
               </div>
             }
@@ -165,8 +165,7 @@ export const InteractiveTextExample: Story = {
           </TooltipWord>{" "}
           e inspirado em shadcn/ui, o Flowtomic permite que você acelere seu desenvolvimento
           mantendo controle total sobre customização. O Radix UI fornece a base sólida de
-          acessibilidade, enquanto o Flowtomic adiciona estilização, lógica e documentação
-          completa.
+          acessibilidade, enquanto o Flowtomic adiciona estilização, lógica e documentação completa.
         </p>
 
         <p className="text-base leading-relaxed">
@@ -209,10 +208,10 @@ export const InteractiveTextExample: Story = {
           >
             arquitetura separada
           </TooltipWord>{" "}
-          entre UI e lógica. Os componentes UI são focados em apresentação visual, enquanto os
-          hooks headless contêm toda a lógica complexa, cálculos e gerenciamento de estado. Essa
-          separação permite reutilizar a lógica em qualquer UI customizada, criar designs únicos
-          mantendo a lógica consistente, e testar lógica e UI separadamente.
+          entre UI e lógica. Os componentes UI são focados em apresentação visual, enquanto os hooks
+          headless contêm toda a lógica complexa, cálculos e gerenciamento de estado. Essa separação
+          permite reutilizar a lógica em qualquer UI customizada, criar designs únicos mantendo a
+          lógica consistente, e testar lógica e UI separadamente.
         </p>
       </div>
     );

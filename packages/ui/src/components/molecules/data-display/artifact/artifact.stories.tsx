@@ -12,7 +12,7 @@ import {
 } from "./artifact";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/Artifact",
+  title: "Flowtomic UI/Molecules/Data Display/Artifact",
   component: Artifact,
   parameters: {
     layout: "centered",

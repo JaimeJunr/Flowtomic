@@ -15,7 +15,7 @@ import {
 } from "./message";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/Message",
+  title: "Flowtomic UI/Molecules/Data Display/Message",
   component: Message,
   parameters: {
     layout: "centered",

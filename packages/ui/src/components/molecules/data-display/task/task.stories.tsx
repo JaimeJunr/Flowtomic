@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Task, TaskContent, TaskItem, TaskItemFile, TaskTrigger } from "./task";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/Task",
+  title: "Flowtomic UI/Molecules/Data Display/Task",
   component: Task,
   parameters: {
     layout: "centered",

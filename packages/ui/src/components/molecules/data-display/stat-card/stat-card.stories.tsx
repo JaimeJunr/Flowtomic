@@ -3,7 +3,7 @@ import { fn } from "storybook/test";
 import { StatCard } from "./stat-card";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/StatCard",
+  title: "Flowtomic UI/Molecules/Data Display/StatCard",
   component: StatCard,
   parameters: {
     layout: "centered",

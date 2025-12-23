@@ -42,7 +42,7 @@ function MyComponent() {
         </button>
       ))}
       <motion.div
-        className="absolute bg-background rounded-md"
+        className="absolute rounded-md bg-primary/10"
         animate={{
           width: indicatorStyle.width,
           height: indicatorStyle.height,

@@ -1,0 +1,592 @@
+---
+description: Diretrizes completas para uso do Brave Search MCP Server - busca web, local, vídeo, imagem, notícias e sumarização com IA
+alwaysApply: false
+---
+
+# 🔍 Brave Search MCP Server - Regras Específicas
+
+> **🎯 Objetivo**: Fornecer diretrizes completas para uso do Brave Search MCP Server no projeto, baseado na documentação oficial do [brave-search-mcp-server](https://github.com/brave/brave-search-mcp-server/tree/a25160bcad9cded587b8ed94eacf9688a1b552de).
+
+## 🚨 **COMPORTAMENTO OBRIGATÓRIO**
+
+### **1. Ações Críticas**
+
+1. **SEMPRE configure** a API key do Brave Search antes de usar ferramentas
+2. **SEMPRE valide** que a API key está configurada e válida
+3. **SEMPRE use** a ferramenta apropriada para o tipo de busca
+4. **SEMPRE monitore** limites de uso da API (Free: 2.000 queries/mês)
+5. **SEMPRE priorize** busca web para consultas gerais
+
+### **2. Validação Obrigatória**
+
+**SEMPRE execute** este checklist antes de qualquer operação:
+
+- [ ] **API Key** configurada e válida
+- [ ] **Transport mode** configurado (STDIO padrão ou HTTP)
+- [ ] **Ferramenta apropriada** selecionada para o tipo de busca
+- [ ] **Parâmetros obrigatórios** fornecidos (query)
+- [ ] **Limites de uso** verificados para evitar exceder quota
+
+## 🔐 **CONFIGURAÇÃO E AUTENTICAÇÃO**
+
+### **1. Configuração Obrigatória**
+
+**SEMPRE configure** variáveis de ambiente necessárias antes de usar as ferramentas:
+
+> **⚠️ IMPORTANTE**: Sem API key configurada, todas as operações falharão com erro de autenticação.
+
+```bash
+# API Key do Brave Search (obrigatória)
+BRAVE_API_KEY=your_brave_search_api_key
+
+# Transport mode (opcional, padrão: stdio)
+BRAVE_MCP_TRANSPORT=stdio  # ou "http"
+
+# HTTP server (apenas se usar HTTP transport)
+BRAVE_MCP_PORT=8080
+BRAVE_MCP_HOST=0.0.0.0
+
+# Nível de log (opcional, padrão: info)
+BRAVE_MCP_LOG_LEVEL=info  # debug, info, notice, warning, error, critical, alert, emergency
+
+# Whitelist/Blacklist de ferramentas (opcional)
+BRAVE_MCP_ENABLED_TOOLS=brave_web_search,brave_news_search
+BRAVE_MCP_DISABLED_TOOLS=brave_image_search
+```
+
+### **2. Obtenção de API Key**
+
+**SEMPRE siga** este processo para obter API key:
+
+1. **SEMPRE acesse** https://brave.com/search/api/
+2. **SEMPRE escolha** plano apropriado:
+   - **Free**: 2.000 queries/mês, busca web básica
+   - **Pro**: Recursos avançados incluindo busca local, sumários IA, snippets extras
+3. **SEMPRE gere** API key no dashboard: https://api-dashboard.search.brave.com/app/keys
+
+### **3. Validação de Configuração**
+
+**SEMPRE teste** a configuração antes de usar as ferramentas:
+
+```bash
+# ✅ CORRETO: Verificar variáveis de ambiente
+echo "BRAVE_API_KEY: ${BRAVE_API_KEY:0:10}..." # Mostrar apenas prefixo por segurança
+echo "BRAVE_MCP_TRANSPORT: $BRAVE_MCP_TRANSPORT"
+
+# ✅ CORRETO: Testar conectividade (se usando HTTP)
+curl -I "http://$BRAVE_MCP_HOST:$BRAVE_MCP_PORT"
+```
+
+## 🛠️ **FERRAMENTAS DISPONÍVEIS**
+
+### **1. Web Search (brave_web_search)**
+
+**SEMPRE use** para buscas web gerais com resultados ricos e filtros avançados:
+
+```json
+{
+  "query": "string (obrigatório, max 400 chars, 50 palavras)",
+  "country": "string (opcional, padrão: US)",
+  "search_lang": "string (opcional, padrão: en)",
+  "ui_lang": "string (opcional, padrão: en-US)",
+  "count": "number (opcional, 1-20, padrão: 10)",
+  "offset": "number (opcional, max 9, padrão: 0)",
+  "safesearch": "string (opcional, off|moderate|strict, padrão: moderate)",
+  "freshness": "string (opcional, pd|pw|pm|py ou range de datas)",
+  "text_decorations": "boolean (opcional, padrão: true)",
+  "spellcheck": "boolean (opcional, padrão: true)",
+  "result_filter": "array (opcional, padrão: [web, query])",
+  "goggles": "array (opcional, custom re-ranking)",
+  "units": "string (opcional, metric|imperial)",
+  "extra_snippets": "boolean (opcional, apenas Pro)",
+  "summary": "boolean (opcional, gerar summary key para IA)"
+}
+```
+
+**Exemplos práticos:**
+
+```json
+// ✅ CORRETO: Busca web básica
+brave_web_search({
+  "query": "melhores práticas React 2024",
+  "count": 10,
+  "country": "BR",
+  "search_lang": "pt"
+})
+
+// ✅ CORRETO: Busca com sumarização IA
+brave_web_search({
+  "query": "como implementar autenticação JWT",
+  "summary": true,
+  "count": 5
+})
+
+// ✅ CORRETO: Busca recente (últimas 24h)
+brave_web_search({
+  "query": "notícias sobre inteligência artificial",
+  "freshness": "pd",
+  "result_filter": ["web", "news"]
+})
+```
+
+### **2. Local Search (brave_local_search)**
+
+**SEMPRE use** para buscar negócios locais com informações detalhadas:
+
+> **⚠️ NOTA**: Requer plano Pro para funcionalidades completas. Fallback para busca web caso contrário.
+
+**Parâmetros**: Mesmos de `brave_web_search`, com filtro automático de localização
+
+```json
+// ✅ CORRETO: Busca de restaurantes próximos
+brave_local_search({
+  "query": "restaurantes italianos perto de mim",
+  "country": "BR"
+})
+
+// ✅ CORRETO: Busca de serviços
+brave_local_search({
+  "query": "bancos perto de Copacabana",
+  "count": 5
+})
+```
+
+### **3. Video Search (brave_video_search)**
+
+**SEMPRE use** para buscar vídeos com metadados completos:
+
+```json
+{
+  "query": "string (obrigatório, max 400 chars, 50 palavras)",
+  "country": "string (opcional, padrão: US)",
+  "search_lang": "string (opcional, padrão: en)",
+  "ui_lang": "string (opcional, padrão: en-US)",
+  "count": "number (opcional correto, 1-50, padrão: 20)",
+  "offset": "number (opcional, max 9, padrão: 0)",
+  "spellcheck": "boolean (opcional, padrão: true)",
+  "safesearch": "string (opcional, off|moderate|strict, padrão: moderate)",
+  "freshness": "string (opcional, pd|pw|pm|py ou range de datas)"
+}
+```
+
+**Exemplos práticos:**
+
+```json
+// ✅ CORRETO: Busca de vídeos tutoriais
+brave_video_search({
+  "query": "tutorial React hooks",
+  "count": 10,
+  "freshness": "py"
+})
+
+// ✅ CORRETO: Busca de vídeos recentes
+brave_video_search({
+  "query": "palestras sobre TypeScript",
+  "freshness": "pm",
+  "safesearch": "off"
+})
+```
+
+### **4. Image Search (brave_image_search)**
+
+**SEMPRE use** para buscar imagens:
+
+> **⚠️ IMPORTANTE**: Versão 2.x remove dados base64 codificados. Retorna apenas URLs de imagens para melhor performance.
+
+```json
+{
+  "query": "string (obrigatório, max 400 chars, 50 palavras)",
+  "country": "string (opcional, padrão: US)",
+  "search_lang": "string (opcional, padrão: en)",
+  "count": "number (opcional, 1-200, padrão: 50)",
+  "safesearch": "string (opcional, off|strict, padrão: strict)",
+  "spellcheck": "boolean (opcional, padrão: true)"
+}
+```
+
+**Exemplos práticos:**
+
+```json
+// ✅ CORRETO: Busca de imagens
+brave_image_search({
+  "query": "diagramas de arquitetura de software",
+  "count": 20,
+  "safesearch": "off"
+})
+
+// ✅ CORRETO: Busca de imagens específicas
+brave_image_search({
+  "query": "logo React framework",
+  "count": 10
+})
+```
+
+### **5. News Search (brave_news_search)**
+
+**SEMPRE use** para buscar notícias atuais com controles de frescor:
+
+```json
+{
+  "query": "string (obrigatório, max 400 chars, 50 palavras)",
+  "country": "string (opcional, padrão: US)",
+  "search_lang": "string (opcional, padrão: en)",
+  "ui_lang": "string (opcional, padrão: en-US)",
+  "count": "number (opcional, 1-50, padrão: 20)",
+  "offset": "number (opcional, max 9, padrão: 0)",
+  "spellcheck": "boolean (opcional, padrão: true)",
+  "safesearch": "string (opcional, off|moderate|strict, padrão: moderate)",
+  "freshness": "string (opcional, padrão: pd para últimas 24h)",
+  "extra_snippets": "boolean (opcional, apenas Pro)",
+  "goggles": "array (opcional, custom re-ranking)"
+}
+```
+
+**Exemplos práticos:**
+
+```json
+// ✅ CORRETO: Busca de notícias recentes
+brave_news_search({
+  "query": "tecnologia e inovação",
+  "freshness": "pd",
+  "count": 10
+})
+
+// ✅ CORRETO: Busca de breaking news
+brave_news_search({
+  "query": "inteligência artificial",
+  "freshness": "pw",
+  "country": "BR"
+})
+```
+
+### **6. Summarizer Search (brave_summarizer)**
+
+**SEMPRE use** para gerar sumários IA a partir de resultados de busca web:
+
+> **⚠️ IMPORTANTE**: Requer usar `summary: true` na busca web primeiro para obter a `key`.
+
+```json
+{
+  "key": "string (obrigatório, summary key de brave_web_search)",
+  "entity_info": "boolean (opcional, padrão: false)",
+  "inline_references": "boolean (opcional, padrão: false)"
+}
+```
+
+**Fluxo correto:**
+
+```json
+// ✅ CORRETO: Passo 1 - Busca web com summary
+brave_web_search({
+  "query": "melhores práticas de segurança em APIs",
+  "summary": true
+})
+// Retorna: { "summary_key": "abc123..." }
+
+// ✅ CORRETO: Passo 2 - Gerar sumário IA
+brave_summarizer({
+  "key": "abc123...",
+  "entity_info": true,
+  "inline_references": true
+})
+```
+
+## 📋 **ESTRATÉGIAS DE USO**
+
+### **1. Quando Usar Cada Ferramenta**
+
+**SEMPRE escolha** a ferramenta apropriada baseado no contexto:
+
+- **`brave_web_search`**: Buscas gerais na web, informações técnicas, documentação
+- **`brave_local_search`**: Negócios locais, restaurantes, serviços próximos
+- **`brave_video_search`**: Tutoriais, palestras, conteúdo em vídeo
+- **`brave_image_search`**: Diagramas, logos, referências visuais
+- **`brave_news_search`**: Notícias atuais, breaking news, atualizações
+- **`brave_summarizer`**: Sumários rápidos de tópicos complexos
+
+### **2. Otimização de Queries**
+
+**SEMPRE otimize** queries para melhorar resultados:
+
+```json
+// ✅ CORRETO: Queries específicas e diretas
+brave_web_search({ "query": "React hooks useState useEffect best practices" })
+
+// ❌ INCORRETO: Queries vagas
+brave_web_search({ "query": "React" })
+
+// ✅ CORRETO: Uso de filtros apropriados
+brave_web_search({
+  "query": "API REST",
+  "result_filter": ["web", "query"],
+  "freshness": "py"
+})
+```
+
+### **3. Gerenciamento de Paginação**
+
+**SEMPRE use** paginação adequada para grandes volumes:
+
+```json
+// ✅ CORRETO: Primeira página
+brave_web_search({
+  "query": "programação funcional",
+  "count": 10,
+  "offset": 0
+})
+
+// ✅ CORRETO: Segunda página
+brave_web_search({
+  "query": "programação funcional",
+  "count": 10,
+  "offset": 10
+})
+```
+
+## 🚨 **LIMITAÇÕES E RESTRIÇÕES**
+
+### **1. Limitações Técnicas**
+
+**SEMPRE considere** estas limitações ao usar as ferramentas:
+
+- **Rate Limiting**: Free plan tem limite de 2.000 queries/mês
+- **Tamanho de Query**: Máximo de 400 caracteres ou 50 palavras
+- **Pagination**: Máximo de 9 offsets (10 páginas)
+- **Image Search**: Não retorna dados base64 na versão 2.x (apenas URLs)
+- **Local Search**: Requer plano Pro para funcionalidades completas
+- **Summarizer**: Requer busca web prévia com `summary: true`
+
+### **2. Restrições de Segurança**
+
+**SEMPRE respeite** estas restrições de segurança:
+
+- **NUNCA compartilhe** API keys em código ou commits
+- **SEMPRE use** variáveis de ambiente para credenciais
+- **SEMPRE configure** `safesearch` apropriado para conteúdo
+- **SEMPRE monitore** uso da API para evitar exceder limites
+- **SEMPRE revogue** API keys comprometidas imediatamente
+
+### **3. Requisitos de Plano**
+
+**SEMPRE verifique** requisitos de plano antes de usar:
+
+- **Free Plan**: Apenas busca web básica
+- **Pro Plan**: Busca local, sumários IA, snippets extras, busca de imagens/vídeos/notícias
+
+## 🔧 **INSTALAÇÃO E CONFIGURAÇÃO**
+
+### **1. Instalação via Smithery**
+
+**SEMPRE use** Smithery para instalação automática:
+
+```bash
+# ✅ CORRETO: Instalação via Smithery
+npx -y @smithery/cli install brave
+```
+
+### **2. Configuração Claudio Desktop**
+
+**SEMPRE configure** `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/brave-search-mcp-server", "--transport", "stdio"],
+      "env": {
+        "BRAVE_API_KEY": "YOUR_API_KEY_HERE"
+      }
+    }
+  }
+}
+```
+
+### **3. Configuração VS Code**
+
+**SEMPRE configure** `.vscode/mcp.json`:
+
+```json
+{
+  "inputs": [
+    {
+      "password": true,
+      "id": "brave-api-key",
+      "type": "promptString",
+      "description": "Brave Search API Key"
+    }
+  ],
+  "servers": {
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/brave-search-mcp-server", "--transport", "stdio"],
+      "env": {
+        "BRAVE_API_KEY": "${input:brave-api-key}"
+      }
+    }
+  }
+}
+```
+
+## 🚨 **TROUBLESHOOTING**
+
+### **1. Problemas Comuns**
+
+#### **1.1 Falhas de Autenticação**
+
+**SEMPRE verifique**:
+
+- API key válida e não expirada
+- Variável de ambiente `BRAVE_API_KEY` configurada corretamente
+- API key tem permissões adequadas para o tipo de busca
+
+#### **1.2 Erros de Transport**
+
+**SEMPRE verifique**:
+
+- Transport mode configurado corretamente (stdio ou http)
+- Porta e host configurados se usando HTTP
+- Servidor MCP rodando corretamente
+
+#### **1.3 Limites de Quota**
+
+**SEMPRE monitore**:
+
+- Uso mensal da API (Free: 2.000 queries/mês)
+- Upgrade para Pro se necessário
+- Caching de resultados quando apropriado
+
+### **2. Ferramentas de Debug**
+
+**SEMPRE use** MCP Inspector para testes:
+
+```bash
+# ✅ CORRETO: Teste local com STDIO
+npx @modelcontextprotocol/inspector node dist/index.js
+
+# ✅ CORRETO: Teste com HTTP
+node dist/index.js --transport http
+# Em outro terminal:
+npx @modelcontextprotocol/inspector --transport http
+```
+
+**SEMPRE monitore** logs:
+
+```bash
+# ✅ CORRETO: Verificar nível de log
+export BRAVE_MCP_LOG_LEVEL=debug
+```
+
+## 📋 **EXEMPLOS PRÁTICOS PARA PERFORMIT**
+
+### **1. Busca de Documentação Técnica**
+
+**SEMPRE use** `brave_web_search` para documentação:
+
+```json
+// ✅ CORRETO: Buscar documentação Grails
+brave_web_search({
+  "query": "Grails 2.5.6 GORM domain classes documentation",
+  "count": 5,
+  "result_filter": ["web"],
+  "search_lang": "en"
+})
+
+// ✅ CORRETO: Buscar soluções para bugs
+brave_web_search({
+  "query": "Grails MySQL connection pool configuration",
+  "freshness": "py",
+  "summary": true
+})
+```
+
+### **2. Busca de Notícias de Tecnologia**
+
+**SEMPRE use** news search para atualizações:
+
+```json
+// ✅ CORRETO: Notícias sobre segurança
+brave_news_search({
+  "query": "vulnerabilidades segurança Java 2024",
+  "freshness": "pw",
+  "country": "BR"
+})
+
+// ✅ CORRETO: Atualizações de frameworks
+brave_news_search({
+  "query": "React TypeScript updates",
+  "freshness": "pm"
+})
+```
+
+### **3. Busca de Tutoriais e Vídeos**
+
+**SEMPRE use** video search para conteúdo educacional:
+
+```json
+// ✅ CORRETO: Tutoriais sobre Clean Code
+brave_video_search({
+  "query": "Clean Code TDD DDD best practices",
+  "count": 10,
+  "freshness": "py"
+})
+
+// ✅ CORRETO: Palestras sobre arquitetura
+brave_video_search({
+  "query": "software architecture patterns talks",
+  "freshness": "py"
+})
+```
+
+## ✅ **VERIFICAÇÃO FINAL**
+
+### **1. Checklist Obrigatório**
+
+**SEMPRE execute** este checklist antes de usar QUALQUER ferramenta Brave Search:
+
+- [ ] **API Key** configurada e testada
+- [ ] **Transport mode** configurado adequadamente
+- [ ] **Ferramenta apropriada** selecionada para o tipo de busca
+- [ ] **Parâmetros obrigatórios** fornecidos (query)
+- [ ] **Limites de uso** verificados para evitar exceder quota
+- [ ] **Plano adequado** verificado (Free vs Pro)
+- [ ] **Segurança** de API key garantida
+
+### **2. Validação de Qualidade**
+
+**SEMPRE valide** que a regra atende aos critérios:
+
+- [ ] **Estrutura hierárquica** clara com seções numeradas
+- [ ] **Linguagem imperativa** com "SEMPRE" e "NUNCA"
+- [ ] **Exemplos posicionados** logo após as regras
+- [ ] **Código formatado** com comentários explicativos
+- [ ] **Links funcionais** e referências atualizadas
+- [ ] **Frontmatter** correto sem aspas nos campos
+
+### **3. Métricas de Sucesso**
+
+**SEMPRE monitore** estas métricas de qualidade:
+
+- **Redução de erros**: Mínimo 30% através de configuração adequada
+- **Clareza de instruções**: 100% de comandos diretos e acionáveis
+- **Exemplos integrados**: Posicionados para máximo impacto
+- **Funcionalidade preservada**: 100% das capacidades mantidas
+- **Validação automática**: Configuração testada e funcional
+
+## 🔗 **REFERÊNCIAS**
+
+### **Documentação Oficial**
+
+- [brave-search-mcp-server GitHub](https://github.com/brave/brave-search-mcp-server/tree/a25160bcad9cded587b8ed94eacf9688a1b552de)
+- [Brave Search API](https://brave.com/search/api/)
+- [Brave API Dashboard](https://api-dashboard.search.brave.com/app/keys)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+
+### **Recursos de Ajuda**
+
+- [Smithery Installation](https://smithery.ai/server/brave)
+- [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
+- [Brave Search API Documentation](https://brave.com/search/api/docs/)
+
+**Por que estas regras existem**: Integração eficiente com Brave Search garante buscas precisas e atualizadas para documentação, soluções técnicas e informações do projeto
+**Automação**: Configure ferramentas para validação automática de API keys e monitoramento de uso

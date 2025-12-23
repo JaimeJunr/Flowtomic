@@ -76,14 +76,6 @@ Checkbox para seleção múltipla.
 
 **Localização**: `packages/ui/src/components/atoms/forms/checkbox`
 
-#### `autocomplete`
-
-Campo de autocomplete com busca e filtragem.
-
-**Dependências**: `@radix-ui/react-popover`, `lucide-react`, `clsx`, `tailwind-merge`
-
-**Localização**: `packages/ui/src/components/atoms/forms/autocomplete`
-
 #### `field`
 
 Campo de formulário completo com label, input e mensagem de erro.

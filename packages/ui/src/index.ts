@@ -18,6 +18,7 @@ export * from "./components/molecules";
 
 // Organisms
 export * from "./components/organisms";
-
 // Utils
 export { cn } from "./lib/utils";
+// Types
+export type { GridConfig, WidgetConfig, WidgetLayout } from "./types/dashboard";

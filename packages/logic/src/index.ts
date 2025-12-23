@@ -6,6 +6,8 @@
  */
 
 export * from "./hooks/useAnimatedIndicator";
+export * from "./hooks/useAutocomplete";
+export * from "./hooks/useDashboardLayout";
 export * from "./hooks/useGenealogy";
 export * from "./hooks/useMoblile";
 export * from "./hooks/useProjectProgress";

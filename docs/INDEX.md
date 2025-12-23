@@ -22,6 +22,9 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 ### 📦 Packages
 
 - [Package UI](packages/ui.md) - Componentes UI (atoms, molecules, organisms, blocks)
+  - **Padrões de Documentação**: Guia completo de como documentar componentes no Storybook
+  - **Desenvolvimento**: Como criar e manter componentes com qualidade
+  - **Checklist**: Validação de qualidade para componentes
 - [Package Logic](packages/logic.md) - Hooks headless e lógica reutilizável
 - [Package CLI](packages/cli.md) - CLI para instalação de componentes
 

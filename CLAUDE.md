@@ -7,7 +7,7 @@
 **SEMPRE consulte** a documentação antes de implementar:
 
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (54 atoms, 24 molecules, 23 organisms, 11 hooks, 3 blocks)
+- **`docs/componentes/README.md`** - Lista completa de componentes (54 atoms, 36 molecules, 23 organisms, 13 hooks, 3 blocks)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -15,7 +15,7 @@
 
 ## Estrutura do Monorepo
 
-**SEMPRE consulte** `docs/arquitetura/monorepo.md` para detalhes completos.
+**SEMPRE consulte** `docs/INDEX.md` e `README.md` para detalhes completos sobre a estrutura do monorepo.
 
 Estrutura básica:
 
@@ -27,17 +27,17 @@ Estrutura básica:
 
 ## Padrões de Desenvolvimento
 
-**SEMPRE consulte** `docs/desenvolvimento/padroes.md` e `docs/componentes/README.md` para padrões completos.
+**SEMPRE consulte** `docs/desenvolvimento/README.md` e `docs/componentes/README.md` para padrões completos.
 
 ### Estrutura de Componentes
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (54 componentes)
-- **Molecules**: `docs/componentes/molecules.md` (24 componentes)
+- **Molecules**: `docs/componentes/molecules.md` (36 componentes)
 - **Organisms**: `docs/componentes/organisms.md` (23 componentes)
 - **Blocks**: `docs/componentes/blocks.md` (3 blocks)
-- **Hooks**: `docs/componentes/hooks.md` (11 hooks)
+- **Hooks**: `docs/componentes/hooks.md` (13 hooks)
 
 ### Convenções de Arquivos
 
@@ -288,9 +288,9 @@ Comandos principais:
 Resumo:
 
 - **Atoms**: 54 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 24 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 36 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 23 componentes - Ver `docs/componentes/organisms.md`
-- **Hooks**: 11 hooks - Ver `docs/componentes/hooks.md`
+- **Hooks**: 13 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 3 blocks - Ver `docs/componentes/blocks.md`
 
 ## Registry
@@ -305,7 +305,7 @@ Informações essenciais:
 
 ## Ferramentas e Tecnologias
 
-**SEMPRE consulte** `docs/arquitetura/padroes.md` para detalhes completos sobre tecnologias e padrões.
+**SEMPRE consulte** `docs/INDEX.md` e `docs/desenvolvimento/README.md` para detalhes completos sobre tecnologias e padrões.
 
 Stack principal:
 

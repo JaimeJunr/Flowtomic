@@ -38,6 +38,11 @@ export interface UseAnimatedIndicatorOptions {
    * @default true
    */
   updateOnResize?: boolean;
+  /**
+   * Valor ativo controlado externamente.
+   * Se fornecido, o hook não tentará detectar o elemento ativo via DOM.
+   */
+  value?: string;
 }
 
 export interface UseAnimatedIndicatorReturn {
@@ -104,6 +109,7 @@ export function useAnimatedIndicator(
     activeSelector = '[data-state="active"]',
     getElementValue,
     updateOnResize = true,
+    value: controlledValue,
   } = options;
 
   const elementsRef = useRef<Map<string, HTMLElement>>(new Map());
@@ -122,6 +128,13 @@ export function useAnimatedIndicator(
   useEffect(() => {
     activeValueRef.current = activeValue;
   }, [activeValue]);
+
+  // Sincronizar valor controlado
+  useEffect(() => {
+    if (controlledValue !== undefined) {
+      setActiveValue(controlledValue);
+    }
+  }, [controlledValue]);
 
   const updateIndicator = useCallback(() => {
     const currentActiveValue = activeValueRef.current;
@@ -255,12 +268,21 @@ export function useAnimatedIndicator(
     getElementValueRef.current = getElementValue;
   }, [activeSelector, getElementValue]);
 
+  // Ref para valor controlado
+  const controlledValueRef = useRef(controlledValue);
+  useEffect(() => {
+    controlledValueRef.current = controlledValue;
+  }, [controlledValue]);
+
   // Observar mudanças no elemento ativo
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const findActiveValue = () => {
+      // Se estiver em modo controlado, ignorar detecção DOM
+      if (controlledValueRef.current !== undefined) return;
+
       const activeElement = container.querySelector<HTMLElement>(activeSelectorRef.current);
       if (activeElement) {
         let value: string | undefined;

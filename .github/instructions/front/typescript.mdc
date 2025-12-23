@@ -1,0 +1,343 @@
+---
+description: Diretrizes rigorosas para desenvolvimento TypeScript com foco em type safety, validação Zod e configurações strict
+globs: **/*.ts, **/*.tsx
+alwaysApply: false
+---
+
+# Diretrizes para Engenharia TypeScript
+
+## Diretrizes
+
+### 1. Configuração TypeScript Obrigatória
+
+1. **SEMPRE configure** `tsconfig.json` com `strict: true` e flags adicionais:
+
+   - `noImplicitAny: true`
+   - `strictNullChecks: true`
+   - `strictFunctionTypes: true`
+   - `strictBindCallApply: true`
+   - `strictPropertyInitialization: true`
+   - `noImplicitThis: true`
+   - `alwaysStrict: true`
+   - `exactOptionalPropertyTypes: true`
+
+2. **SEMPRE use** `--noEmitOnError` para prevenir geração de JS com erros TypeScript
+
+**Por que estas regras existem**: Configuração strict previne erros de type safety e garante código robusto
+**Automação**: Configure TypeScript strict mode e ESLint para forçar boas práticas
+
+### 2. Type Safety Fundamental
+
+3. **NUNCA use** `any` - substitua por `unknown` quando necessário
+4. **SEMPRE tipifique** explicitamente parâmetros, retornos e objetos literais
+5. **NUNCA use** Enums - use unions tipadas em vez disso
+6. **SEMPRE use** `readonly` para propriedades e arrays imutáveis
+7. **SEMPRE aproveite** utility types: `Partial`, `Required`, `Pick`, `Omit`, `Record`
+
+**Por que estas regras existem**: `unknown` é type-safe, tipagem explícita previne erros, readonly garante imutabilidade
+
+### 3. Validação com Zod (Obrigatória)
+
+8. **NUNCA use** type assertions (`as`) para dados externos, APIs ou inputs de usuário
+9. **SEMPRE use** Zod schemas para validação e parsing de dados externos
+10. **SEMPRE implemente** tratamento de erros para falhas de validação
+
+```typescript
+// ✅ CORRETO: Schema Zod com validação
+import { z } from "zod";
+
+const UserSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  email: z.string().email(),
+  age: z.number().int().positive().min(13),
+});
+
+type User = z.infer<typeof UserSchema>;
+
+// ✅ CORRETO: Validação com tratamento de erro
+const fetchUserSafe = async (id: string): Promise<User | null> => {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    const data = await response.json();
+
+    const result = UserSchema.safeParse(data);
+    if (!result.success) {
+      console.error("Invalid user data:", result.error.format());
+      return null;
+    }
+
+    return result.data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+};
+```
+
+### 4. Sistema de Tipos
+
+11. **SEMPRE use** interfaces para definições de objetos; evite types para este propósito
+12. **SEMPRE use** type para unions, intersections e mapped types
+13. **SEMPRE ative** configuração strict do TypeScript
+14. **SEMPRE aproveite** os tipos utilitários built-in do TypeScript
+15. **SEMPRE use** generics para padrões de tipos reutilizáveis
+
+**Por que estas regras existem**: Interfaces são mais extensíveis, `unknown` é type-safe, configuração strict previne erros
+
+### 5. Convenções de Nomenclatura
+
+16. **SEMPRE use** PascalCase para nomes de tipos e interfaces
+17. **SEMPRE use** camelCase para variáveis e funções
+18. **SEMPRE use** UPPER_CASE para constantes
+19. **SEMPRE use** nomes descritivos com verbos auxiliares (ex: `isLoading`, `hasError`)
+20. **SEMPRE prefixe** interfaces de props React com 'Props' (ex: `ButtonProps`)
+21. **SEMPRE use** PascalCase para classes e enums
+22. **SEMPRE use** kebab-case ou PascalCase para arquivos (ex: `user-service.ts` ou `UserService.tsx`)
+23. **SEMPRE prefixe** parâmetros não utilizados com underscore (`_unusedParam`)
+
+**Por que estas regras existem**: Consistência na nomenclatura facilita manutenção e legibilidade
+**Automação**: Configure ESLint com regras de nomenclatura específicas
+
+### 6. Organização de Código
+
+24. **SEMPRE mantenha** definições de tipos próximas ao local de uso
+25. **SEMPRE exporte** tipos e interfaces de arquivos dedicados quando compartilhados
+26. **SEMPRE use** barrel exports (`index.ts`) para organizar exportações
+27. **SEMPRE coloque** tipos compartilhados em diretório `types`
+28. **SEMPRE co-loque** props de componentes com seus componentes
+
+**Por que estas regras existem**: Organização clara facilita navegação e manutenção do código
+**Automação**: Configure Prettier para organizar imports automaticamente
+
+### 7. Funções
+
+29. **SEMPRE use** tipos de retorno explícitos para funções públicas
+30. **SEMPRE use** arrow functions para callbacks e métodos
+31. **SEMPRE implemente** tratamento adequado de erros com tipos de erro customizados
+32. **SEMPRE use** function overloads para cenários de tipos complexos
+33. **SEMPRE prefira** async/await sobre Promises
+
+**Por que estas regras existem**: Tipos explícitos melhoram type safety, async/await é mais legível
+**Automação**: Configure ESLint para forçar tipos de retorno explícitos
+
+### 8. Padrões JavaScript Modernos
+
+34. **SEMPRE use** `const` para variáveis não reatribuídas, `let` caso contrário
+35. **NUNCA use** `await` em return statements - retorne a Promise diretamente
+36. **SEMPRE use** chaves para estruturas de controle, mesmo single-line
+37. **SEMPRE prefira** object spread (`{ ...args }`) sobre `Object.assign`
+38. **SEMPRE use** rest parameters em vez do objeto `arguments`
+39. **SEMPRE use** template literals em vez de concatenação de strings
+
+**Por que estas regras existem**: Padrões modernos melhoram legibilidade e performance
+
+### 9. Organização de Imports
+
+40. **SEMPRE mantenha** imports no topo do arquivo
+41. **SEMPRE agrupe** imports na ordem: built-in → external → internal → parent → sibling → index → object → type
+42. **SEMPRE adicione** linhas em branco entre grupos de imports
+43. **SEMPRE ordene** imports alfabeticamente dentro de cada grupo
+44. **NUNCA tenha** imports duplicados ou dependências circulares
+45. **SEMPRE separe** imports de tipos usando `type` quando apropriado
+
+**Por que estas regras existem**: Organização de imports facilita manutenção e previne conflitos
+
+```typescript
+// ✅ CORRETO: Organização sistemática de imports
+import React, { useState, useEffect } from "react";
+import { debounce } from "lodash";
+
+import { Button } from "@/components/Button";
+import { UserService } from "@/services/UserService";
+import type { User, UserRole } from "@/types/user";
+
+import { validateEmail } from "./utils";
+
+// ❌ INCORRETO: Imports desorganizados
+import { Button } from "@/components/Button";
+import React from "react";
+import { UserService } from "@/services/UserService";
+import { debounce } from "lodash";
+```
+
+### 10. Tratamento de Erros
+
+46. **SEMPRE crie** tipos de erro customizados para erros específicos do domínio
+47. **SEMPRE use** tipos Result para operações que podem falhar
+48. **SEMPRE implemente** error boundaries adequados
+49. **SEMPRE use** blocos try-catch com cláusulas catch tipadas
+50. **SEMPRE trate** rejeições de Promise adequadamente
+
+**Por que estas regras existem**: Tratamento adequado de erros melhora robustez e debuggability
+**Automação**: Configure ESLint para forçar tratamento de erros
+
+### 11. Padrões Arquiteturais
+
+51. **SEMPRE use** o padrão Builder para criação de objetos complexos
+52. **SEMPRE implemente** o padrão Repository para acesso a dados
+53. **SEMPRE use** o padrão Factory para criação de objetos
+54. **SEMPRE aproveite** dependency injection
+55. **SEMPRE use** o padrão Module para encapsulamento
+
+**Por que estas regras existem**: Padrões arquiteturais promovem código reutilizável e testável
+**Automação**: Configure ferramentas de análise de código para detectar violações de padrões
+
+### 12. Estrutura de Arquivos
+
+56. **SEMPRE siga** estrutura consistente de arquivos na ordem:
+    1. Imports
+    2. Types/Interfaces
+    3. Constantes
+    4. Funções utilitárias
+    5. Componente principal
+    6. Exports
+
+**Por que estas regras existem**: Estrutura consistente facilita navegação e manutenção do código
+
+### 13. Testes
+
+57. **SEMPRE escreva** testes tipados com TypeScript
+58. **SEMPRE use** `describe` e `it` para estrutura clara
+59. **SEMPRE mocke** dependências com tipos corretos
+60. **SEMPRE teste** casos extremos e validações
+61. **SEMPRE use** `expect` com matchers específicos
+
+**Por que estas regras existem**: Testes tipados garantem type safety e melhor cobertura
+
+```typescript
+// ✅ CORRETO: Teste tipado
+describe("UserService", () => {
+  it("should create user with valid data", () => {
+    const userData: Omit<User, "id"> = {
+      name: "John Doe",
+      email: "john@example.com",
+    };
+
+    const result = UserService.createUser(userData);
+
+    expect(result).toMatchObject({
+      id: expect.any(String),
+      ...userData,
+    });
+  });
+});
+```
+
+### 14. Console e Debugging
+
+62. **Console statements são permitidos** mas devem ser usados criteriosamente
+63. **SEMPRE prefixe** variáveis não utilizadas com underscore (`_unusedParam`)
+
+**Por que estas regras existem**: Debugging controlado e identificação clara de variáveis não utilizadas
+
+## Exemplos
+
+### Interface vs Type (Regra 11)
+
+```typescript
+// ❌ INCORRETO: Usando type para objeto
+type User = {
+  id: number;
+  name: string;
+};
+
+// ✅ CORRETO: Usando interface para objeto
+interface User {
+  id: number;
+  name: string;
+}
+```
+
+### Type Guards
+
+```typescript
+// ✅ CORRETO: Type guard para verificação de tipo
+function isUser(obj: unknown): obj is User {
+  return typeof obj === "object" && obj !== null && "id" in obj;
+}
+
+// Uso seguro
+if (isUser(data)) {
+  console.log(data.id); // TypeScript sabe que data é User
+}
+```
+
+### ❌ ERRADO: Type Assertions Perigosos
+
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  age: number;
+}
+
+const fetchUser = async (id: string): Promise<User> => {
+  const response = await fetch(`/api/users/${id}`);
+  const data = await response.json();
+  return data as User; // PERIGOSO: Sem validação runtime!
+};
+```
+
+### Type Safety com Utility Types
+
+```typescript
+// ✅ CORRETO: Uso de utility types
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  age: number;
+}
+
+function createUser(userData: Omit<User, "id">): User {
+  return {
+    id: generateId(),
+    ...userData,
+  };
+}
+
+// ❌ INCORRETO: Uso de any
+function createUser(userData: any): any {
+  return userData;
+}
+```
+
+## Limites
+
+- **NUNCA desabilite** regras ESLint sem comentário explicativo
+- **NUNCA pule** testes - sempre implemente ou corrija
+- **NUNCA use** `// @ts-ignore` ou `// @ts-expect-error` sem comentários explicativos
+- **NUNCA comprometa** type safety por conveniência
+- **NUNCA use** patterns legacy quando alternativas modernas estão disponíveis
+- **NUNCA use** `any` em vez de tipos específicos
+- **NUNCA ignore** erros de TypeScript com `@ts-ignore`
+- **NUNCA use** `as` sem validação adequada
+- **NUNCA misture** JavaScript e TypeScript no mesmo arquivo
+- **NUNCA use** `var` em vez de `let` ou `const`
+- **NÃO ignore** configuração strict do TypeScript
+- **NÃO use** `any` em nenhuma circunstância
+- **NÃO misture** padrões de nomenclatura inconsistentes
+- **NÃO coloque** tipos em locais inadequados
+- **NÃO ignore** tratamento de erros
+- **NÃO use** type assertions desnecessárias
+
+## Verificação
+
+- **SEMPRE verifique** se o código compila sem erros TypeScript
+- **SEMPRE confirme** que Zod schemas validam corretamente
+- **SEMPRE teste** edge cases e cenários de erro
+- **SEMPRE valide** que imports estão organizados corretamente
+- Revise por regressões; confirme alinhamento com padrões existentes
+- Baseie-se apenas em fatos fornecidos; não invente padrões
+- Valide se todas as regras estão sendo aplicadas consistentemente
+
+## Contexto Adicional
+
+- **Por que estas regras existem**: Garantir type safety, prevenir bugs runtime, manter código robusto, consistência e manutenibilidade
+- **Quando aplicar**: Sempre ao desenvolver em TypeScript, especialmente com dados externos
+- **Como expandir**: Adicione padrões específicos do projeto conforme necessário
+- **Integração**: Esta regra complementa padrões de linting e arquitetura existentes
+- **Automação**: Configure ESLint, Prettier e TypeScript strict mode
+- **Justificativa Técnica**: Type safety previne erros em runtime, padrões consistentes facilitam manutenção

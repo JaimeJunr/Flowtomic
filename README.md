@@ -81,6 +81,89 @@ O ambiente frontend, por sua vez, ainda está se desenvolvendo nessa questão. D
 - **Acessibilidade**: Componentes acessíveis por padrão (WAI-ARIA)
 - **Performance**: Otimizado para produção
 
+## 🧩 Composition Pattern
+
+O Flowtomic adota o **Composition Pattern** como abordagem fundamental de design, construindo interfaces complexas a partir de componentes menores e reutilizáveis, em vez de usar herança. Essa técnica promove flexibilidade, reutilização de código e modularidade.
+
+### Conceitos Principais
+
+**Composição sobre Herança**: A abordagem fundamental do React é a composição, onde componentes menores são combinados para criar outros maiores e mais complexos. Isso evita o acoplamento excessivo e a rigidez da herança de classes.
+
+**Reutilização de Componentes**: Ao quebrar a interface em partes pequenas e isoladas, é possível reutilizá-las em diferentes partes do aplicativo, garantindo consistência e economia de tempo.
+
+**Flexibilidade**: A composição permite customizar componentes de forma flexível. Um componente `Card` pode aceitar diferentes tipos de conteúdo através de props e composição de subcomponentes.
+
+**Melhor Gerenciamento de Estado**: Padrões como **Compound Components** ajudam a compartilhar estado e lógica entre componentes filhos sem a necessidade de passar muitas props (Prop Drilling), melhorando desempenho e legibilidade.
+
+**Modularidade**: Cada componente tem sua própria lógica e estilo, tornando o desenvolvimento mais fácil de manter e organizar.
+
+### Padrões de Implementação
+
+#### 1. Props.children
+
+Renderiza conteúdo passado entre as tags de abertura e fechamento de um componente:
+
+```typescript
+import { Card } from "@flowtomic/ui";
+
+function MyComponent() {
+  return (
+    <Card>
+      <h2>Título</h2>
+      <p>Conteúdo customizado</p>
+    </Card>
+  );
+}
+```
+
+#### 2. Compound Components
+
+Componente principal que gerencia estado e fornece dados aos componentes filhos via React.Context:
+
+```typescript
+import { Dialog, DialogTrigger, DialogContent } from "@flowtomic/ui";
+
+function MyDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger>Abrir</DialogTrigger>
+      <DialogContent>
+        <p>Conteúdo do diálogo</p>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+#### 3. Composição de Subcomponentes
+
+Em vez de adicionar muitas propriedades a um único componente, criamos componentes menores (subcomponentes) para customizar partes específicas:
+
+```typescript
+import { Card, CardHeader, CardTitle, CardContent } from "@flowtomic/ui";
+
+function MyCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Título do Card</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Conteúdo do card</p>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Benefícios no Flowtomic
+
+1. **Flexibilidade**: Combine componentes de forma dinâmica para criar interfaces complexas
+2. **Reutilização**: Componentes pequenos e isolados podem ser reutilizados em diferentes contextos
+3. **Manutenibilidade**: Mudanças em um componente não afetam outros componentes compostos
+4. **Testabilidade**: Componentes menores são mais fáceis de testar isoladamente
+5. **Performance**: Evita prop drilling e permite otimizações mais granulares
+
 ## 📦 Estrutura
 
 ```text

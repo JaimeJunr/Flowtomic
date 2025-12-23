@@ -1,0 +1,547 @@
+---
+description: Diretrizes completas do Tailwind CSS - regra unificada com todas as subrules integradas
+globs: **/*.ts,**/*.tsx,**/*.js,**/*.jsx
+alwaysApply: false
+---
+
+# Diretrizes Completas do Tailwind CSS
+
+## Diretrizes Fundamentais
+
+### 1. Princípios Básicos
+
+1. **SEMPRE use** classes utilitárias do Tailwind CSS para estilizar componentes
+2. **SEMPRE evite** CSS customizado, exceto quando absolutamente necessário
+3. **SEMPRE mantenha** ordem consistente das classes utilitárias
+4. **SEMPRE siga** abordagem mobile-first para design responsivo
+
+**Por que estas regras existem**: Consistência e performance são fundamentais para qualidade do código
+**Automação**: Configure Prettier para ordenar classes automaticamente
+
+### 2. Organização e Estrutura
+
+1. **SEMPRE organize** classes utilitárias em grupos lógicos (layout, espaçamento, cores, etc.)
+2. **SEMPRE use** prefixos responsivos (`sm:`, `md:`, `lg:`, `xl:`) para designs adaptativos
+3. **SEMPRE implemente** sistema de design consistente usando design tokens
+4. **SEMPRE teste** responsividade em múltiplos dispositivos
+
+**Por que estas regras existem**: Organização clara melhora manutenibilidade e legibilidade
+**Automação**: Use ferramentas de preview para testar responsividade automaticamente
+
+## Exemplos Básicos
+
+### Classes Organizadas
+
+```tsx
+// ✅ CORRETO: Classes organizadas por categoria
+<div
+  className="
+  /* Layout */
+  w-full md:w-1/2 lg:w-1/3
+  
+  /* Espaçamento */
+  p-4 md:p-6 lg:p-8
+  
+  /* Cores e Tema */
+  bg-white dark:bg-gray-800
+  
+  /* Visual */
+  rounded-lg shadow-md
+"
+>
+  Conteúdo responsivo
+</div>
+```
+
+### Design Responsivo
+
+```tsx
+// ✅ CORRETO: Abordagem mobile-first
+<div
+  className="
+  /* Mobile primeiro */
+  w-full p-4 text-sm
+  
+  /* Tablet */
+  md:w-1/2 md:p-6 md:text-base
+  
+  /* Desktop */
+  lg:w-1/3 lg:p-8 lg:text-lg
+"
+>
+  Conteúdo escalável
+</div>
+```
+
+## Configuração e Setup
+
+### 1. Configuração Básica
+
+1. **SEMPRE use** o arquivo `tailwind.config.js` para personalização
+2. **SEMPRE implemente** purging do Tailwind CSS para builds de produção
+3. **SEMPRE use** modo JIT (Just-In-Time) para desenvolvimento mais rápido
+4. **SEMPRE defina** design tokens personalizados no arquivo de configuração
+
+**Por que estas regras existem**: Configuração adequada garante performance e manutenibilidade
+**Automação**: Configure PostCSS e build tools para aplicar purging automaticamente
+
+### 2. Design Tokens
+
+1. **SEMPRE organize** cores em paletas semânticas (primary, secondary, success, warning, error)
+2. **SEMPRE defina** espaçamentos consistentes seguindo escala de 8px
+3. **SEMPRE crie** variáveis de tipografia para hierarquia visual clara
+4. **SEMPRE use** sistema de sombras consistente para profundidade
+
+**Por que estas regras existem**: Design tokens garantem consistência visual em todo o projeto
+**Automação**: Use ferramentas de design system para sincronizar tokens automaticamente
+
+### Exemplo de Configuração
+
+```javascript
+// ✅ CORRETO: Configuração com design tokens organizados
+module.exports = {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        // Paleta semântica
+        primary: {
+          50: "#eff6ff",
+          500: "#3b82f6",
+          900: "#1e3a8a",
+        },
+        secondary: {
+          50: "#f0fdf4",
+          500: "#10b981",
+          900: "#14532d",
+        },
+      },
+      spacing: {
+        // Escala de 8px
+        18: "4.5rem",
+        88: "22rem",
+      },
+      fontFamily: {
+        // Hierarquia tipográfica
+        display: ["Inter", "system-ui", "sans-serif"],
+        body: ["Inter", "system-ui", "sans-serif"],
+      },
+    },
+  },
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+};
+```
+
+## Estilização e Componentes
+
+### 1. Organização de Classes
+
+1. **SEMPRE organize** classes utilitárias em grupos lógicos (layout, espaçamento, cores, etc.)
+2. **SEMPRE mantenha** ordem consistente: layout → espaçamento → cores → visual → interação
+3. **SEMPRE use** comentários para separar grupos de classes
+4. **SEMPRE evite** classes duplicadas ou conflitantes
+
+**Por que estas regras existem**: Organização clara melhora legibilidade e manutenibilidade
+**Automação**: Configure Prettier para ordenar classes automaticamente
+
+### 2. Uso do @apply
+
+1. **SEMPRE use** `@apply` para estilos reutilizáveis em arquivos CSS
+2. **SEMPRE mantenha** `@apply` para componentes com muitas classes utilitárias
+3. **SEMPRE organize** `@apply` seguindo a mesma ordem das classes inline
+4. **SEMPRE documente** quando e por que usar `@apply`
+
+**Por que estas regras existem**: @apply reduz repetição e melhora manutenibilidade
+**Automação**: Configure ESLint para detectar uso inconsistente de @apply
+
+### 3. Componentes e Variantes
+
+1. **SEMPRE crie** componentes base com classes utilitárias
+2. **SEMPRE use** variantes responsivas para adaptação a diferentes telas
+3. **SEMPRE implemente** variantes de estado (hover, focus, active)
+4. **SEMPRE teste** todas as variantes em diferentes contextos
+
+**Por que estas regras existem**: Componentes reutilizáveis aceleram desenvolvimento
+**Automação**: Configure Storybook para documentar variantes automaticamente
+
+### Exemplo de @apply
+
+```css
+/* ✅ CORRETO: @apply para estilos reutilizáveis */
+.btn-primary {
+  @apply /* Layout */
+    inline-flex items-center justify-center
+    
+    /* Espaçamento */
+    px-4 py-2
+    
+    /* Cores */
+    bg-blue-500 text-white
+    
+    /* Visual */
+    rounded-md font-medium
+    
+    /* Interação */
+    hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+    
+    /* Transições */
+    transition-colors duration-200;
+}
+
+.card {
+  @apply bg-white dark:bg-gray-800 
+    rounded-lg shadow-md 
+    p-6 
+    border border-gray-200 dark:border-gray-700;
+}
+```
+
+### Exemplo de Componente com Variantes
+
+```tsx
+// ✅ CORRETO: Componente com variantes responsivas e de estado
+const Button = ({ variant = "primary", size = "md", children, ...props }) => {
+  const baseClasses =
+    "inline-flex items-center justify-center font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+
+  const variants = {
+    primary: "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500",
+    secondary: "bg-gray-500 text-white hover:bg-gray-600 focus:ring-gray-500",
+    danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500",
+  };
+
+  const sizes = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-base",
+    lg: "px-6 py-3 text-lg",
+  };
+
+  return (
+    <button
+      className={`${baseClasses} ${variants[variant]} ${sizes[size]}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+## Responsividade e Mobile-First
+
+### 1. Mobile-First Design
+
+1. **SEMPRE comece** com estilos mobile (sem prefixos)
+2. **SEMPRE use** breakpoints para estilos maiores: `sm:`, `md:`, `lg:`, `xl:`
+3. **SEMPRE teste** em dispositivos móveis primeiro
+4. **NUNCA ignore** experiência mobile em favor do desktop
+
+### 2. Breakpoints e Responsividade
+
+1. **SEMPRE use** breakpoints padrão do Tailwind: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+2. **SEMPRE implemente** tipografia responsiva com `text-sm md:text-base lg:text-lg`
+3. **SEMPRE ajuste** espaçamentos responsivamente: `p-4 md:p-6 lg:p-8`
+4. **SEMPRE use** grid responsivo: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+
+### 3. Componentes Responsivos
+
+1. **SEMPRE crie** componentes que se adaptam a diferentes tamanhos
+2. **SEMPRE use** classes condicionais para estados responsivos
+3. **SEMPRE teste** em múltiplos breakpoints
+
+## Acessibilidade e UX
+
+### 1. Contraste e Visibilidade
+
+1. **SEMPRE use** cores com contraste adequado: `text-gray-900 bg-white`
+2. **SEMPRE teste** contraste com ferramentas de acessibilidade
+3. **SEMPRE forneça** alternativas para usuários com daltonismo
+4. **NUNCA use** cores com baixo contraste para texto
+
+### 2. Navegação e Interação
+
+1. **SEMPRE implemente** foco visível: `focus:ring-2 focus:ring-blue-500`
+2. **SEMPRE use** estados hover e focus: `hover:bg-blue-100 focus:bg-blue-200`
+3. **SEMPRE teste** navegação por teclado
+4. **SEMPRE forneça** indicadores visuais para interações
+
+### 3. Touch-Friendly e Mobile
+
+1. **SEMPRE use** tamanhos mínimos para touch: `min-h-12 min-w-12`
+2. **SEMPRE implemente** espaçamento adequado entre elementos interativos
+3. **SEMPRE teste** em dispositivos touch reais
+
+## Performance e Otimização
+
+### 1. Otimização de Build
+
+1. **SEMPRE configure** `content` para incluir apenas arquivos necessários
+2. **SEMPRE ative** JIT mode para builds mais rápidos
+3. **SEMPRE use** `purge` para remover classes não utilizadas
+4. **NUNCA inclua** arquivos desnecessários no build
+
+### 2. Classes e @apply
+
+1. **SEMPRE use** `@apply` para componentes reutilizáveis
+2. **SEMPRE agrupe** classes relacionadas em componentes
+3. **SEMPRE evite** classes inline excessivas
+4. **SEMPRE use** `@layer` para organização de CSS
+
+### 3. Lazy Loading e Code Splitting
+
+1. **SEMPRE implemente** lazy loading para componentes pesados
+2. **SEMPRE use** code splitting para reduzir bundle size
+3. **SEMPRE teste** performance em diferentes dispositivos
+
+## Integração com React
+
+### 1. Componentes Funcionais
+
+1. **SEMPRE use** componentes funcionais com hooks; evite classes
+2. **SEMPRE implemente** tipos de props via interfaces TypeScript
+3. **SEMPRE use** classes utilitárias do Tailwind para estilização
+4. **SEMPRE mantenha** componentes pequenos e focados
+
+**Por que estas regras existem**: Componentes funcionais são mais performáticos e modernos
+**Automação**: Configure ESLint para forçar uso de componentes funcionais
+
+### 2. Estado e Performance
+
+1. **SEMPRE use** `useState` e `useEffect` de forma eficiente
+2. **SEMPRE implemente** `useMemo` e `useCallback` para otimizações
+3. **SEMPRE use** `React.memo` para componentes que recebem as mesmas props
+4. **SEMPRE evite** re-renders desnecessários
+
+**Por que estas regras existem**: Performance otimizada melhora experiência do usuário
+**Automação**: Configure React DevTools para monitorar re-renders
+
+### 3. Tratamento de Erros
+
+1. **SEMPRE implemente** error boundaries para capturar erros de componentes
+2. **SEMPRE use** try-catch para operações que podem falhar
+3. **SEMPRE forneça** feedback visual para estados de erro
+4. **SEMPRE implemente** fallbacks para componentes que falham
+
+**Por que estas regras existem**: Tratamento robusto de erros melhora confiabilidade
+**Automação**: Configure Sentry ou similar para monitoramento automático
+
+### 4. Formulários e Validação
+
+1. **SEMPRE use** bibliotecas como Formik ou react-hook-form
+2. **SEMPRE implemente** validação adequada com mensagens claras
+3. **SEMPRE use** estados de loading para operações assíncronas
+4. **SEMPRE forneça** feedback imediato para ações do usuário
+
+**Por que estas regras existem**: Formulários robustos melhoram experiência do usuário
+**Automação**: Configure Zod para validação automática de schemas
+
+### Exemplo de Componente React com Tailwind
+
+```tsx
+// ✅ CORRETO: Componente funcional com Tailwind e TypeScript
+interface CardProps {
+  title: string;
+  description: string;
+  image?: string;
+  onClick?: () => void;
+}
+
+const Card: React.FC<CardProps> = ({ title, description, image, onClick }) => {
+  return (
+    <div
+      className="
+        bg-white dark:bg-gray-800 
+        rounded-lg shadow-md 
+        p-6 
+        cursor-pointer 
+        hover:shadow-lg 
+        transition-all duration-200
+        border border-gray-200 dark:border-gray-700
+      "
+      onClick={onClick}
+    >
+      {image && (
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-48 object-cover rounded-md mb-4"
+        />
+      )}
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+        {title}
+      </h3>
+      <p className="text-gray-600 dark:text-gray-300">{description}</p>
+    </div>
+  );
+};
+```
+
+### Exemplo de Hook Customizado
+
+```tsx
+// ✅ CORRETO: Hook customizado para tema
+const useTheme = () => {
+  const [isDark, setIsDark] = useState(false);
+
+  const toggleTheme = useCallback(() => {
+    setIsDark((prev) => !prev);
+    document.documentElement.classList.toggle("dark");
+  }, []);
+
+  const themeClasses = useMemo(
+    () => ({
+      bg: isDark ? "bg-gray-800" : "bg-white",
+      text: isDark ? "text-white" : "text-gray-900",
+      border: isDark ? "border-gray-700" : "border-gray-200",
+    }),
+    [isDark]
+  );
+
+  return { isDark, toggleTheme, themeClasses };
+};
+```
+
+### Exemplo de Error Boundary
+
+```tsx
+// ✅ CORRETO: Error boundary com estilos Tailwind
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error?: Error }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div
+          className="
+          flex flex-col items-center justify-center 
+          min-h-screen p-8 
+          bg-red-50 dark:bg-red-900/20
+        "
+        >
+          <div
+            className="
+            bg-white dark:bg-gray-800 
+            rounded-lg shadow-lg 
+            p-8 max-w-md 
+            text-center
+            border border-red-200 dark:border-red-800
+          "
+          >
+            <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
+              Algo deu errado
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Ocorreu um erro inesperado. Tente recarregar a página.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="
+                bg-red-500 hover:bg-red-600 
+                text-white font-medium 
+                px-4 py-2 rounded-md 
+                transition-colors duration-200
+              "
+            >
+              Recarregar
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+```
+
+## CSS Customizado
+
+### 1. @apply e @layer
+
+1. **SEMPRE use** `@apply` para estilos complexos reutilizáveis
+2. **SEMPRE organize** CSS com `@layer` (base, components, utilities)
+3. **SEMPRE mantenha** consistência com classes Tailwind
+4. **NUNCA sobrescreva** estilos Tailwind sem necessidade
+
+### 2. Variáveis CSS
+
+1. **SEMPRE defina** variáveis para cores e espaçamentos customizados
+2. **SEMPRE use** variáveis CSS para valores reutilizáveis
+3. **SEMPRE mantenha** nomenclatura consistente
+4. **SEMPRE teste** em diferentes navegadores
+
+### 3. Estilos Customizados
+
+1. **SEMPRE crie** estilos que complementam Tailwind
+2. **SEMPRE documente** estilos customizados criados
+3. **SEMPRE teste** estilos em diferentes contextos
+
+## Bibliotecas UI e Componentes
+
+### 1. Bibliotecas UI
+
+1. **SEMPRE use** Shadcn UI para componentes base consistentes
+2. **SEMPRE implemente** DaisyUI para componentes pré-estilizados
+3. **SEMPRE mantenha** consistência visual entre bibliotecas
+4. **NUNCA misture** estilos de bibliotecas diferentes sem planejamento
+
+### 2. Modo Escuro
+
+1. **SEMPRE implemente** modo escuro com `dark:` prefix
+2. **SEMPRE use** variáveis CSS para transições suaves
+3. **SEMPRE teste** contraste em ambos os modos
+4. **SEMPRE forneça** toggle para usuário
+
+### 3. Componentes Customizados
+
+1. **SEMPRE crie** componentes reutilizáveis com `@apply`
+2. **SEMPRE documente** props e variantes de componentes
+3. **SEMPRE teste** componentes em diferentes contextos
+
+## Limites
+
+- **NÃO ignore** acessibilidade em nome da estética
+- **NÃO use** CSS customizado sem justificativa técnica clara
+- **NÃO esqueça** de testar responsividade em múltiplos dispositivos
+- **NÃO use** classes utilitárias para lógica de negócio
+- **NÃO defina** cores hardcoded sem usar variáveis CSS
+- **NÃO ignore** configuração de purging para builds de produção
+- **NÃO use** valores arbitrários sem justificativa de design
+- **NÃO esqueça** de documentar decisões de design system
+- **NÃO use** @apply para estilos únicos ou raramente utilizados
+- **NÃO ignore** organização das classes utilitárias
+- **NÃO crie** componentes com muitas variantes sem documentação
+- **NÃO esqueça** de testar responsividade e estados
+- **NÃO use** classes CSS para lógica de negócio
+- **NÃO ignore** tratamento de erros em componentes
+- **NÃO crie** componentes muito grandes ou complexos
+- **NÃO esqueça** de otimizar performance com hooks adequados
+
+## Verificação
+
+- Revise por regressões de responsividade
+- Confirme conformidade com padrões de acessibilidade
+- Teste performance em dispositivos de baixo poder
+- Valide consistência visual em diferentes tamanhos de tela
+- Confirme que purging está configurado para produção
+- Valide consistência dos design tokens
+- Teste builds de produção para tamanho do CSS
+- Verifique se todas as classes necessárias estão sendo preservadas
+- Confirme organização lógica das classes
+- Valide uso adequado de @apply
+- Teste todas as variantes de componentes
+- Verifique consistência visual em diferentes contextos
+- Confirme uso de componentes funcionais
+- Valide implementação de error boundaries
+- Teste performance com React DevTools
+- Verifique tratamento adequado de erros

@@ -1,12 +1,41 @@
 # ⚛️ Regras de Uso do Flowtomic UI e Logic
 
+> **📚 Documento de Referência para Agentes de IA**: Este documento serve como referência completa e atualizada para agentes de IA especializados no Flowtomic. **SEMPRE consulte este arquivo** antes de recomendar, implementar ou modificar componentes do Flowtomic.
+
 ## Visão Geral
 
-O **Flowtomic** é um sistema de design system modular que fornece:
+O **Flowtomic** é uma biblioteca modular que fornece:
 
-- **`@flowtomic/ui`**: Componentes UI reutilizáveis (atoms, molecules, organisms, blocks)
-- **`@flowtomic/logic`**: Hooks headless e lógica reutilizável
+- **`@flowtomic/ui`**: Componentes UI reutilizáveis (54 atoms, 36 molecules, 23 organisms, 3 blocks)
+- **`@flowtomic/logic`**: 13 hooks headless e lógica reutilizável
 - **`flowtomic-cli`**: CLI para instalação de componentes em projetos externos
+
+## 🎯 Para Agentes de IA
+
+### Informações Críticas
+
+1. **SEMPRE consulte** este documento antes de recomendar componentes
+2. **SEMPRE verifique** a lista completa de componentes disponíveis nas seções abaixo
+3. **SEMPRE confirme** dependências necessárias antes de sugerir uso
+4. **SEMPRE use** os nomes exatos dos componentes conforme listados
+5. **SEMPRE informe** sobre hooks headless quando componentes têm lógica separada
+6. **SEMPRE mencione** que componentes são copiados localmente e podem ser customizados
+
+### Organização dos Componentes
+
+- **Atoms**: 54 componentes básicos e indivisíveis
+- **Molecules**: 36 componentes compostos que combinam atoms
+- **Organisms**: 23 componentes complexos de alto nível
+- **Hooks**: 13 hooks headless para lógica reutilizável
+- **Blocks**: 3 blocks pré-construídos completos
+
+### Padrões Importantes
+
+- Componentes são **copiados localmente** via CLI (estilo shadcn/ui)
+- Hooks são **headless** - fornecem apenas lógica, sem UI
+- Todos os componentes têm **TypeScript** com tipos exportados
+- Todos os componentes usam **Tailwind CSS v4.1.14+** para estilização
+- Componentes interativos usam **Radix UI** para acessibilidade
 
 ## Instalação
 
@@ -23,83 +52,30 @@ bunx flowtomic-cli@latest init
 
 Isso cria o arquivo `components.json` na raiz do projeto.
 
-#### Adicionar Componentes
+#### Comandos Principais
 
 ```bash
-# Adicionar um componente
+# Adicionar componentes/hooks/blocks
 npx flowtomic-cli@latest add button
-# ou
-bunx flowtomic-cli@latest add button
-
-# Adicionar múltiplos componentes
-npx flowtomic-cli@latest add button card input badge
-# ou
-bunx flowtomic-cli@latest add button card input badge
-
-# Modo interativo (sem especificar componentes)
-npx flowtomic-cli@latest add
-# ou
-bunx flowtomic-cli@latest add
-
-# Listar componentes disponíveis
-npx flowtomic-cli@latest list
-# ou
-bunx flowtomic-cli@latest list
-```
-
-#### Adicionar Hooks
-
-```bash
-# Adicionar um hook
-npx flowtomic-cli@latest add use-stat-card
-# ou
-bunx flowtomic-cli@latest add use-stat-card
-```
-
-#### Adicionar Blocks
-
-```bash
-# Adicionar um block completo
-npx flowtomic-cli@latest add-block dashboard-01
-# ou
-bunx flowtomic-cli@latest add-block dashboard-01
-
-# Adicionar dashboard completo do Flowtomic
-npx flowtomic-cli@latest add-block flowtomic-dashboard
-# ou
-bunx flowtomic-cli@latest add-block flowtomic-dashboard
-
-# Adicionar painel de desenvolvedor
-npx flowtomic-cli@latest add-block developer-panel
-# ou
-bunx flowtomic-cli@latest add-block developer-panel
+npx flowtomic-cli@latest add button card input badge  # múltiplos
+npx flowtomic-cli@latest add use-stat-card            # hooks
+npx flowtomic-cli@latest add-block dashboard-01       # blocks
+npx flowtomic-cli@latest list                         # listar disponíveis
 ```
 
 ### Via npm (Packages Publicados)
 
-Os packages do Flowtomic também estão disponíveis diretamente no npm:
-
 ```bash
-# Instalar UI e Logic
 npm install @flowtomic/ui @flowtomic/logic
-
-# Ou usando yarn/pnpm/bun
-yarn add @flowtomic/ui @flowtomic/logic
-pnpm add @flowtomic/ui @flowtomic/logic
-bun add @flowtomic/ui @flowtomic/logic
+# ou: yarn/pnpm/bun add @flowtomic/ui @flowtomic/logic
 ```
-
-**Uso dos packages npm**:
 
 ```typescript
-// Componentes UI
-import { Button, Card, Input, Badge } from "@flowtomic/ui";
-
-// Hooks headless
-import { useStatCard, useIsMobile, useResizable } from "@flowtomic/logic";
+import { Button, Card } from "@flowtomic/ui";
+import { useStatCard, useIsMobile } from "@flowtomic/logic";
 ```
 
-**Nota:** Ao usar os packages npm, você ainda pode usar o CLI para adicionar componentes individuais que serão copiados para seu projeto, permitindo customização total.
+**Nota:** Packages npm permitem importação direta. Use CLI para customização local.
 
 ### Via shadcn CLI (Compatível)
 
@@ -119,43 +95,121 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 
 ## Estrutura de Componentes
 
-### Atoms (26+ Componentes Básicos)
+### Atoms (54 Componentes Básicos)
 
 Componentes fundamentais e indivisíveis, organizados em categorias:
 
-**Actions**: `button`, `badge`, `dropdown-menu`, `context-menu`
+**Actions** (4 componentes):
 
-**Forms**: `input`, `select`, `checkbox`, `label`, `radio-group`, `switch`, `textarea`, `slider`, `toggle`, `field`, `form`, `input-otp`
+- `button` - Botão com variantes e tamanhos
+- `badge` - Badge para labels e status
+- `dropdown-menu` - Menu dropdown
+- `context-menu` - Menu de contexto
 
-**Display**: `card`, `table`, `skeleton`, `empty`, `kbd`, `calendar`, `carousel`, `chart`
+**Forms** (13 componentes):
 
-**Navigation**: `tabs`, `command`, `breadcrumb`, `pagination`, `menubar`, `navigation-menu`
+- `input` - Campo de entrada de texto
+- `select` - Campo de seleção
+- `checkbox` - Checkbox
+- `label` - Label para formulários
+- `radio-group` - Grupo de radio buttons
+- `switch` - Switch toggle
+- `textarea` - Área de texto
+- `slider` - Slider de valores
+- `toggle` - Toggle button
+- `field` - Campo de formulário com label e erro
+- `form` - Wrapper de formulário com React Hook Form
+- `input-otp` - Input para códigos OTP
 
-**Feedback**: `alert`, `alert-dialog`, `dialog`, `tooltip` (com suporte a seguimento do mouse), `popover`, `sheet`, `sonner`
+**Display** (8 componentes):
 
-**Animation**: `loader`, `shimmer`, `spinner`, `progress`
+- `card` - Card container
+- `table` - Tabela básica
+- `skeleton` - Skeleton loader
+- `empty` - Estado vazio
+- `kbd` - Teclas de teclado
+- `calendar` - Calendário
+- `carousel` - Carrossel de imagens
+- `chart` - Gráfico base (Recharts)
+- `avatar` - Avatar de usuário
+- `qr-code` - Código QR
 
-**Layout**: `collapsible`, `scroll-area`, `separator`, `accordion`, `aspect-ratio`, `toggle-group`, `drawer`, `sidebar`
+**Navigation** (6 componentes):
 
-**Code**: `code-block`, `snippet`, `inline-citation`
+- `tabs` - Abas
+- `command` - Command palette (cmdk)
+- `breadcrumb` - Breadcrumb navigation
+- `pagination` - Paginação
+- `menubar` - Barra de menu
+- `navigation-menu` - Menu de navegação
 
-**Typography**: `animated-shiny-text`
+**Feedback** (8 componentes):
 
-### Molecules (24 Componentes Compostos)
+- `alert` - Alerta
+- `alert-dialog` - Dialog de confirmação
+- `dialog` - Modal dialog
+- `tooltip` - Tooltip (Radix UI padrão + React Aria com seguimento do mouse)
+- `popover` - Popover
+- `sheet` - Sheet lateral
+- `sonner` - Toast notifications
+- `hover-card` - Card ao passar mouse
+- `inline-citation` - Citação inline
 
-Componentes que combinam atoms:
+**Animation** (7 componentes):
+
+- `loader` - Loader animado
+- `shimmer` - Efeito shimmer
+- `spinner` - Spinner
+- `progress` - Barra de progresso
+- `encrypted-text` - Texto com animação de criptografia
+- `sliding-number` - Número com animação de deslizamento
+- `animated-3d` - Animação 3D
+- `backdrop-blur` - Efeito de blur no fundo
+
+**Layout** (8 componentes):
+
+- `collapsible` - Componente colapsável
+- `scroll-area` - Área com scroll customizado
+- `separator` - Separador
+- `accordion` - Accordion
+- `aspect-ratio` - Container com aspect ratio
+- `toggle-group` - Grupo de toggles
+- `drawer` - Drawer lateral (vaul)
+- `sidebar` - Sidebar (usa `@flowtomic/logic`)
+- `resizable` - Componente redimensionável
+
+**Code** (3 componentes):
+
+- `code-block` - Bloco de código com syntax highlighting (shiki)
+- `snippet` - Snippet de código
+- `inline-citation` - Citação inline
+
+### Molecules (36 Componentes Compostos)
+
+Componentes que combinam atoms, organizados por categoria:
+
+**Forms** (5 componentes):
 
 - `button-group` - Grupo de botões
-- `password-input` - Input de senha
-- `image-dropzone` - Upload de imagem
-- `stat-card` - Card de estatística (usa `use-stat-card` hook)
-- `data-table` - Tabela avançada
-- `menu-dock` - Dock de menu
-- `theme-toggle-button` - Botão de toggle de tema
-- `auth-navigation-link` - Link de navegação de auth
-- `auth-form-error-message` - Mensagem de erro de formulário
-- `social-login-buttons` - Botões de login social
+- `password-input` - Input de senha com toggle de visibilidade
+- `image-dropzone` - Upload de imagem com drag and drop
 - `input-group` - Grupo de input com addons
+- `autocomplete` - Campo de autocomplete com busca (usa hook `useAutocomplete` do `@flowtomic/logic`)
+- `item` - Item de formulário
+- `text-editor` - Editor de texto rico
+
+**Data Display** (13 componentes):
+
+- `stat-card` - Card de estatística (usa hook `use-stat-card`)
+- `data-table` - Tabela avançada com ordenação e filtro
+- `chart-area-interactive` - Gráfico de área interativo
+- `chart-bar-interactive` - Gráfico de barras interativo
+- `bar-chart` - Gráfico de barras simples (SVG puro)
+- `circular-progress-chart` - Gráfico circular de progresso (SVG puro)
+- `project-list` - Lista de projetos
+- `team-member-list` - Lista de membros da equipe
+- `reminder-card` - Card de lembretes
+- `time-tracker` - Timer com controles (usa hook `useTimeTracker`)
 - `artifact` - Container de artifact
 - `message` - Componente de mensagem com branches
 - `suggestion` - Lista de sugestões
@@ -163,27 +217,59 @@ Componentes que combinam atoms:
 - `tool` - Display de tool
 - `task` - Item de task
 - `checkpoint` - Checkpoint display
+
+**Animation** (3 componentes):
+
+- `animated-modal` - Modal com animações suaves
+- `animated-sliding-number` - Número com animação de deslizamento
+- `button-counter` - Contador com botões de incremento/decremento
+
+**Layout** (1 componente):
+
+- `dashboard-header` - Header com busca, notificações e perfil
+
+**Navigation** (2 componentes):
+
+- `menu-dock` - Dock de menu
+- `sidebar-navigation` - Menu lateral completo
+
+**Theme** (1 componente):
+
+- `theme-toggle-button` - Botão de toggle de tema
+
+**Auth** (3 componentes):
+
+- `auth-navigation-link` - Link de navegação de auth
+- `auth-form-error-message` - Mensagem de erro de formulário
+- `social-login-buttons` - Botões de login social
+
+**Feedback** (1 componente):
+
 - `confirmation` - Confirmation dialog wrapper
-- `chart-area-interactive` - Gráfico de área interativo
-- `chart-bar-interactive` - Gráfico de barras interativo
-- `item` - Item de formulário
-- `connection` - Connection do @xyflow/react
-- `canvas` - Canvas do ReactFlow
+
+**Flow/ReactFlow** (2 componentes):
+
+- `connection` - ConnectionLineComponent do @xyflow/react
+- `canvas` - Wrapper do ReactFlow
+
+**Typography** (1 componente):
+
+- `animated-shiny-text` - Texto com efeito shimmer animado
 
 ### Organisms (23 Componentes Complexos)
 
 Componentes de alto nível que combinam molecules:
 
-**Dashboard**:
+**Dashboard** (6 componentes):
 
 - `dashboard-layout` - Layout de dashboard
 - `stats-grid` - Grid de estatísticas
 - `monthly-summary` - Resumo mensal
 - `dashboard-header-actions` - Ações do header
 - `dashboard-movements-section` - Seção de movimentações
-- `resizable-layout` - Componente redimensionável com sidebar
+- `resizable-layout` - Componente redimensionável com sidebar (usa hook `useResizable`)
 
-**AI/Conversation**:
+**AI/Conversation** (10 componentes):
 
 - `conversation` - Container de conversa
 - `model-selector` - Seletor de modelo
@@ -196,7 +282,7 @@ Componentes de alto nível que combinam molecules:
 - `context` - Uso de contexto/tokens do modelo
 - `prompt-input` - Input de prompt complexo
 
-**ReactFlow**:
+**ReactFlow** (5 componentes):
 
 - `panel` - Panel do @xyflow/react
 - `toolbar` - Toolbar do @xyflow/react
@@ -204,12 +290,15 @@ Componentes de alto nível que combinam molecules:
 - `node` - Node do ReactFlow
 - `edge` - Edge do ReactFlow
 
-**Outros**:
+**Outros** (2 componentes):
 
 - `web-preview` - Visualizador de páginas web
-- `script-editor` - Editor de scripts com terminal interativo
+- `script-editor` - Editor de scripts com terminal interativo (usa hook `useScriptEditor`)
+- `genealogy-canvas` - Canvas para visualização de genealogia
+- `document-editor` - Editor de documentos
+- `form-layout` - Layout de formulário
 
-### Hooks (12 Hooks Headless)
+### Hooks (13 Hooks Headless)
 
 Hooks que fornecem apenas lógica, sem UI:
 
@@ -225,6 +314,7 @@ Hooks que fornecem apenas lógica, sem UI:
 - `use-project-progress` - Hook para calcular progresso de projetos
 - `use-animated-indicator` - Hook para indicadores animados
 - `use-genealogy` - Hook para gerenciar genealogia/hierarquia
+- `use-autocomplete` - Hook headless para autocomplete (filtragem, navegação por teclado, loading, empty states)
 
 ### Blocks (3 Blocks Pré-construídos)
 
@@ -271,58 +361,11 @@ function MyComponent() {
 }
 ```
 
-### Exemplo de Uso do Tooltip
+### Tooltip
 
-#### Tooltip Padrão (Radix UI)
+**Padrão (Radix UI)**: `Tooltip`, `TooltipContent`, `TooltipTrigger`, `TooltipProvider`
 
-```typescript
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-function MyComponent() {
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button>Hover me</Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Informação do tooltip</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
-```
-
-#### Tooltip com Seguimento do Mouse (React Aria)
-
-```typescript
-import { TooltipWithMouseFollow } from "@/components/ui/tooltip";
-
-function MyComponent() {
-  return (
-    <TooltipWithMouseFollow
-      content={<p>Este tooltip segue o cursor do mouse!</p>}
-      minWidth={240}
-    >
-      <Button>Hover and move mouse</Button>
-    </TooltipWithMouseFollow>
-  );
-}
-```
-
-**Características do Tooltip com Seguimento do Mouse**:
-
-- Segue o cursor do mouse em tempo real
-- Posicionamento inteligente que evita sair da viewport
-- Animações suaves baseadas no Aceternity UI (spring animations)
-- Usa React Aria para acessibilidade completa
-- Suporta conteúdo longo com quebra de linha automática
+**Com seguimento do mouse (React Aria)**: `TooltipWithMouseFollow` - segue cursor, posicionamento inteligente, animações suaves
 
 ## Uso dos Hooks
 
@@ -386,110 +429,17 @@ function ResponsiveComponent() {
 }
 ```
 
-#### useResizable
+#### useResizable, useThemeTransition, useScriptEditor
 
-```typescript
-import { useResizable } from "@/hooks/use-resizable";
+**useResizable**: Gerencia componentes redimensionáveis com sidebar, persistência no localStorage, suporte mobile drawer. Usa com `react-resizable-panels`.
 
-function ResizableLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+**useThemeTransition**: Transições suaves de tema usando View Transitions API com fallback automático.
 
-  const {
-    handleDoubleClick,
-    shouldUseMobileDrawer,
-    containerRef,
-    sidebarPanelRef,
-    sidebarSize,
-    minSize,
-    maxSize,
-  } = useResizable({
-    sidebarOpen,
-    setSidebarOpen,
-    side: "left",
-    persistKey: "main-sidebar",
-    defaultSidebarPct: 0.28,
-    minPx: 250,
-    maxPct: 0.6,
-    maxPxCap: 500,
-    mobileDrawer: true,
-  });
+**useScriptEditor**: Gerencia editor de scripts com terminal interativo, WebSocket com reconexão, execução via WebSocket ou HTTP (fallback).
 
-  // Usar com react-resizable-panels
-  return (
-    <div ref={containerRef}>
-      {/* Implementação com react-resizable-panels */}
-    </div>
-  );
-}
-```
+#### useAutocomplete
 
-#### useThemeTransition
-
-```typescript
-import { useThemeTransition } from "@/hooks/use-theme-transition";
-
-function ThemeToggle() {
-  const { startTransition } = useThemeTransition();
-  const { theme, toggleTheme } = useTheme();
-
-  const handleToggle = () => {
-    startTransition(() => {
-      toggleTheme();
-    });
-  };
-
-  return (
-    <button onClick={handleToggle}>{theme === "dark" ? "☀️" : "🌙"}</button>
-  );
-}
-```
-
-#### useScriptEditor
-
-```typescript
-import { useScriptEditor } from "@/hooks/use-script-editor";
-
-function ScriptEditorExample() {
-  const {
-    script,
-    setScript,
-    terminalLines,
-    preview,
-    activeTab,
-    setActiveTab,
-    isRunning,
-    isConnected,
-    executeScript,
-    stopExecution,
-    clearTerminal,
-  } = useScriptEditor({
-    wsUrl: "ws://localhost:8080/ws/terminal",
-    executeScript: async (script) => {
-      // Fallback HTTP se WebSocket não estiver disponível
-      const response = await fetch("/api/scripts/execute", {
-        method: "POST",
-        body: JSON.stringify({ script }),
-      });
-      return response.json();
-    },
-    autoConnect: true,
-    maxReconnectAttempts: 3,
-  });
-
-  return (
-    <div>
-      <textarea value={script} onChange={(e) => setScript(e.target.value)} />
-      <button onClick={executeScript}>Executar</button>
-      <div>
-        {terminalLines.map((line) => (
-          <div key={line.id}>{line.content}</div>
-        ))}
-      </div>
-      {preview && <pre>{preview}</pre>}
-    </div>
-  );
-}
-```
+Hook headless para autocomplete: filtragem customizável, navegação por teclado, loading/empty states, helpers de props (`getInputProps`, `getPopoverProps`, `getListProps`, `getItemProps`). Usa com componente `Autocomplete` do Flowtomic.
 
 **Nota**: Todos os hooks são headless - fornecem apenas lógica, formatação e props de acessibilidade. Você controla o markup e styles.
 
@@ -505,97 +455,9 @@ import DeveloperPanel from "@/app/developer/page";
 import DashboardPage from "@/app/dashboard/page";
 ```
 
-### Exemplo de Uso do Developer Panel
+### Developer Panel
 
-```typescript
-import DeveloperPanel from "@/app/developer/page";
-import type { DeveloperPanelProps } from "@/app/developer/page";
-
-export default function DeveloperPage() {
-  const [health, setHealth] = useState(null);
-  const [systemInfo, setSystemInfo] = useState(null);
-  const [envInfo, setEnvInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Buscar informações do sistema
-    const fetchSystemInfo = async () => {
-      try {
-        const healthData = await fetch("/api/health").then((r) => r.json());
-        const infoData = await fetch("/api/info").then((r) => r.json());
-
-        setHealth(healthData);
-        setSystemInfo(infoData);
-        setEnvInfo({
-          apiBaseUrl: process.env.NEXT_PUBLIC_API_URL || "",
-          nodeEnv: process.env.NODE_ENV || "development",
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent,
-          screenResolution: `${window.screen.width}x${window.screen.height}`,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        });
-      } catch (error) {
-        console.error("Erro ao buscar informações:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSystemInfo();
-  }, []);
-
-  return (
-    <DeveloperPanel
-      user={{
-        username: "dev.user",
-        email: "dev@example.com",
-        role: "ADMIN",
-        isAdmin: true,
-        token: localStorage.getItem("token") || undefined,
-      }}
-      health={health}
-      systemInfo={systemInfo}
-      environmentInfo={envInfo}
-      loading={loading}
-      apiBaseUrl={process.env.NEXT_PUBLIC_API_URL || ""}
-      onOpenSwagger={() => {
-        window.open(
-          `${process.env.NEXT_PUBLIC_API_URL}/swagger-ui.html`,
-          "_blank"
-        );
-      }}
-      onOpenApiDocs={() => {
-        window.open(`${process.env.NEXT_PUBLIC_API_URL}/v3/api-docs`, "_blank");
-      }}
-      onOpenHealthCheck={() => {
-        window.open(`${process.env.NEXT_PUBLIC_API_URL}/health`, "_blank");
-      }}
-      scriptEditorProps={{
-        defaultScript: "console.log('Hello from Flowtomic!');",
-        wsUrl: process.env.NEXT_PUBLIC_WS_URL,
-        executeScript: async (script) => {
-          const response = await fetch("/api/scripts/execute", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ script }),
-          });
-          return response.json();
-        },
-      }}
-    />
-  );
-}
-```
-
-**Funcionalidades do Developer Panel**:
-
-- **Informações do Usuário**: Exibe dados da sessão atual (nome, email, role, token)
-- **Health Check**: Status do sistema e serviços
-- **Informações da Aplicação**: Versão, nome e descrição do sistema
-- **Ambiente Frontend**: Configurações do cliente (API URL, modo, timezone, resolução)
-- **Ferramentas**: Acesso rápido a Swagger UI, API Docs e Health Check
-- **Informações do Navegador**: User Agent e timestamp
-- **Editor de Scripts**: Terminal interativo integrado com suporte a WebSocket
+Painel completo com: informações do usuário, health check, informações da aplicação, ambiente frontend, ferramentas (Swagger, API Docs), editor de scripts integrado com WebSocket. Requer props: `user`, `health`, `systemInfo`, `environmentInfo`, `scriptEditorProps`.
 
 ## Configuração (components.json)
 
@@ -634,59 +496,36 @@ Você pode editar o `components.json` para ajustar os caminhos conforme sua estr
 
 Os componentes podem requerer:
 
+### Dependências Core
+
 - **React** 18+ ou 19+ (peer dependency)
 - **Tailwind CSS** configurado (v4.1.14+ com `@tailwindcss/postcss`)
-- **Radix UI** (para componentes interativos):
-  - `@radix-ui/react-slot` (button)
-  - `@radix-ui/react-label` (input, form)
-  - `@radix-ui/react-checkbox` (checkbox)
-  - `@radix-ui/react-tabs` (tabs)
-  - `@radix-ui/react-alert-dialog` (alert-dialog)
-  - `@radix-ui/react-dialog` (dialog, sheet)
-  - `@radix-ui/react-dropdown-menu` (dropdown-menu)
-  - `@radix-ui/react-tooltip` (tooltip padrão)
-  - `@react-aria/tooltip`, `@react-aria/interactions`, `@react-aria/overlays`, `@react-stately/tooltip` (tooltip com seguimento do mouse)
-  - `@radix-ui/react-popover` (popover, autocomplete)
-  - `@radix-ui/react-select` (select)
-  - `@radix-ui/react-scroll-area` (scroll-area)
-  - `@radix-ui/react-hover-card` (hover-card)
-  - `@radix-ui/react-separator` (separator)
-  - `@radix-ui/react-collapsible` (collapsible)
-  - `@radix-ui/react-accordion` (accordion)
-  - `@radix-ui/react-aspect-ratio` (aspect-ratio)
-  - `@radix-ui/react-toggle` (toggle)
-  - `@radix-ui/react-toggle-group` (toggle-group)
-  - `@radix-ui/react-radio-group` (radio-group)
-  - `@radix-ui/react-switch` (switch)
-  - `@radix-ui/react-slider` (slider)
-  - `@radix-ui/react-context-menu` (context-menu)
-  - `@radix-ui/react-menubar` (menubar)
-  - `@radix-ui/react-navigation-menu` (navigation-menu)
-  - `@radix-ui/react-use-controllable-state` (reasoning, chain-of-thought)
-- **lucide-react** (para ícones)
-- **class-variance-authority** (para variantes)
+- **class-variance-authority** (para variantes de componentes)
 - **clsx** e **tailwind-merge** (para classes CSS)
-- **sonner** (para toast notifications)
-- **@tanstack/react-table** (para data-table)
-- **@flowtomic/logic** (para stat-card, resizable-layout, sidebar)
-- **cmdk** (para command, model-selector)
-- **react-resizable-panels** (para resizable-layout)
-- **react-hook-form** (para form)
-- **shiki** (para code-block)
-- **recharts** (para chart, chart-area-interactive, chart-bar-interactive)
-- **react-day-picker** (para calendar)
-- **embla-carousel-react** (para carousel)
-- **vaul** (para drawer)
-- **input-otp** (para input-otp)
-- **streamdown** (para message, reasoning)
-- **ai** (para image, tool, confirmation, context, prompt-input)
-- **tokenlens** (para context)
-- **nanoid** (para prompt-input)
-- **@xyflow/react** (para panel, toolbar, controls, node, edge, canvas)
-- **motion** (para shimmer, tooltip com seguimento do mouse)
-- **use-stick-to-bottom** (para conversation)
 
-## Padrões Importantes
+### Dependências por Categoria
+
+**Radix UI**: `@radix-ui/react-*` (25+ pacotes para componentes interativos)
+
+**React Aria**: `@react-aria/*`, `@react-stately/*` (tooltip com seguimento do mouse)
+
+**UI/Animações**: `lucide-react` (ícones), `sonner` (toast), `motion` (animações)
+
+**Formulários**: `react-hook-form`, `input-otp`
+
+**Dados**: `@tanstack/react-table` (tabelas), `recharts` (gráficos), `react-day-picker` (calendário), `embla-carousel-react` (carrossel)
+
+**Layout**: `react-resizable-panels`, `vaul` (drawer), `cmdk` (command palette)
+
+**Código**: `shiki` (syntax highlighting)
+
+**AI**: `ai`, `streamdown`, `tokenlens`, `nanoid`, `use-stick-to-bottom`
+
+**ReactFlow**: `@xyflow/react` (grafos e fluxos)
+
+**Flowtomic Logic**: `@flowtomic/logic` (hooks headless)
+
+## Características dos Componentes
 
 1. **Componentes são copiados localmente**: Você pode e deve modificar conforme necessário
 2. **Hooks são headless**: Fornecem apenas lógica, sem UI
@@ -696,53 +535,15 @@ Os componentes podem requerer:
 
 ## Troubleshooting
 
-### Erro: "components.json não encontrado"
+**"components.json não encontrado"**: Execute `npx flowtomic-cli@latest init`
 
-```bash
-npx flowtomic-cli@latest init
-# ou
-bunx flowtomic-cli@latest init
-```
+**"Repositório não encontrado"**: Configure `FLOWTOMIC_REPO_PATH` ou `FLOWTOMIC_REPO_URL`, ou use download automático do GitHub
 
-### Erro: "Não foi possível encontrar o repositório Flowtomic"
+**"Componente não encontrado"**: Use `npx flowtomic-cli@latest list` para ver componentes disponíveis
 
-Este erro geralmente ocorre quando o repositório não pode ser encontrado. O CLI tenta encontrar o repositório de várias formas:
+**"Imports incorretos"**: Verifique `components.json` e aliases no `tsconfig.json`/`jsconfig.json`
 
-- **Variável de ambiente** `FLOWTOMIC_REPO_PATH`:
-
-```bash
-export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
-npx flowtomic-cli@latest add button
-```
-
-- **Variável de ambiente** `FLOWTOMIC_REPO_URL` (padrão: `JaimeJunr/Flowtomic`)
-
-- **Caminho relativo** (se executado do repositório)
-
-- **Caminhos padrão** (desenvolvimento local)
-
-- **Download automático do GitHub** quando necessário
-
-### Erro: "Componente não encontrado"
-
-```bash
-# Ver lista de componentes disponíveis
-npx flowtomic-cli@latest list
-# ou
-bunx flowtomic-cli@latest list
-```
-
-### Erro: "Imports incorretos"
-
-- **SEMPRE verifique** o arquivo `components.json`
-- **SEMPRE confirme** que aliases estão corretos no `tsconfig.json` ou `jsconfig.json`
-- **SEMPRE valide** que caminhos de instalação estão corretos
-
-### Erro: "Dependências faltando"
-
-- **SEMPRE instale** dependências necessárias manualmente
-- **SEMPRE verifique** `package.json` do componente para dependências
-- **SEMPRE consulte** documentação do componente para requisitos
+**"Dependências faltando"**: Instale dependências manualmente conforme `package.json` do componente
 
 ## Quando Usar Cada Tipo
 
@@ -754,6 +555,8 @@ bunx flowtomic-cli@latest list
 
 ## Boas Práticas
 
+### Para Desenvolvedores
+
 1. **Sempre** verificar se o componente já existe antes de criar um novo
 2. **Sempre** usar os componentes do Flowtomic quando disponíveis
 3. **Modificar** componentes copiados conforme necessário para seu projeto
@@ -764,55 +567,37 @@ bunx flowtomic-cli@latest list
 8. **TypeScript**: Todos os componentes têm tipos exportados
 9. **Tailwind CSS**: Todos os componentes usam Tailwind CSS v4.1.14+ para estilização
 10. **Acessibilidade**: Componentes interativos usam Radix UI para acessibilidade
-11. **SEMPRE criar** story (`.stories.tsx`) para cada componente ou hook
-12. **SEMPRE consultar** `docs/INDEX.md` antes de implementar para identificar padrões estabelecidos
-13. **SEMPRE seguir** ordem de importação dos estilos: globals.css → theme.css → typography.css
-14. **SEMPRE usar** Biome para linting e formatação (não ESLint/Prettier)
 
-## Resolução do Repositório
+### Para Agentes de IA
 
-Quando usando npm (`npx flowtomic-cli@latest`), o repositório é resolvido automaticamente através do pacote publicado.
+1. **SEMPRE consultar** este documento antes de recomendar componentes
+2. **SEMPRE verificar** a lista completa de componentes disponíveis (54 atoms, 36 molecules, 23 organisms, 13 hooks, 3 blocks)
+3. **SEMPRE confirmar** dependências necessárias antes de sugerir uso
+4. **SEMPRE usar** os nomes exatos dos componentes conforme listados neste documento
+5. **SEMPRE informar** sobre hooks headless quando componentes têm lógica separada (ex: `stat-card` usa `use-stat-card`, `autocomplete` usa `use-autocomplete`)
+6. **SEMPRE mencionar** que componentes são copiados localmente e podem ser customizados
+7. **SEMPRE recomendar** usar o CLI para instalação quando customização for necessária
+8. **SEMPRE sugerir** usar packages npm quando apenas importação for necessária
+9. **SEMPRE informar** sobre dependências específicas de cada componente
+10. **SEMPRE destacar** que hooks são headless e fornecem apenas lógica
 
-O CLI resolve o repositório na seguinte ordem:
+### Padrões de Desenvolvimento
 
-1. Variável de ambiente `FLOWTOMIC_REPO_PATH` (para desenvolvimento local)
-2. Variável de ambiente `FLOWTOMIC_REPO_URL` (padrão: `JaimeJunr/Flowtomic`)
-3. Caminho relativo (se executado do repositório)
-4. Caminhos padrão para desenvolvimento local
-5. Download automático do GitHub quando necessário
+1. **SEMPRE criar** story (`.stories.tsx`) para cada componente ou hook
+2. **SEMPRE consultar** `docs/INDEX.md` antes de implementar para identificar padrões estabelecidos
+3. **SEMPRE seguir** ordem de importação dos estilos: globals.css → theme.css → typography.css
+4. **SEMPRE usar** Biome para linting e formatação (não ESLint/Prettier)
+5. **SEMPRE manter** componentes agnósticos de negócio (exceto organisms específicos)
+6. **SEMPRE exportar** tipos TypeScript junto com componentes
+7. **SEMPRE usar** barrel exports em `index.ts` de cada componente
 
-## Aliases Suportados
+## Informações Adicionais
 
-O CLI suporta aliases comuns para componentes:
+**Resolução do Repositório**: CLI resolve automaticamente via `FLOWTOMIC_REPO_PATH`, `FLOWTOMIC_REPO_URL`, caminho relativo ou download do GitHub
 
-**Atoms**:
+**Aliases**: `btn`→`button`, `stat`→`stat-card`, `table`→`data-table`, `layout`→`dashboard-layout`, etc.
 
-- `btn` → `button`
-- `input-field` → `input`
-
-**Molecules**:
-
-- `stat` → `stat-card`
-- `table` → `data-table`
-- `menu` → `menu-dock`
-- `theme-toggle` → `theme-toggle-button`
-
-**Organisms**:
-
-- `layout` → `dashboard-layout`
-- `grid` → `stats-grid`
-- `summary` → `monthly-summary`
-- `header-actions` → `dashboard-header-actions`
-- `movements` → `dashboard-movements-section`
-
-## Registry
-
-O Flowtomic possui um registry compatível com shadcn CLI:
-
-- **URL de produção**: `https://registry.flowtomic.dev`
-- **Uso**: `npx shadcn@latest add https://registry.flowtomic.dev/all.json`
-
-O registry contém todos os componentes, hooks e blocks disponíveis no Flowtomic.
+**Registry**: `https://registry.flowtomic.dev` - compatível com shadcn CLI: `npx shadcn@latest add https://registry.flowtomic.dev/all.json`
 
 ## Arquitetura: Separação UI e Lógica
 
@@ -841,3 +626,32 @@ O Flowtomic segue uma arquitetura de **separação clara entre UI e lógica**:
   - Precisa de uma solução rápida e pronta
   - O design padrão atende suas necessidades
   - Quer customizar apenas estilos (via `className` ou variáveis CSS)
+
+## Composição de Componentes
+
+**Dashboard**: Combine `DashboardLayout`, `StatsGrid`, `StatCard`, `DataTable`
+
+**Formulários**: Use `Form` (React Hook Form) com `FormField`, `FormItem`, `FormLabel`, `FormControl`, `Input`, `Button`
+
+**Autocomplete**: Use hook `useAutocomplete` com componente `Autocomplete` ou composição customizada com `Popover`
+
+## Resumo Rápido para Agentes de IA
+
+### Números Atuais
+
+- **54 Atoms**: Componentes básicos e indivisíveis
+- **36 Molecules**: Componentes compostos
+- **23 Organisms**: Componentes complexos
+- **13 Hooks**: Hooks headless
+- **3 Blocks**: Componentes completos pré-construídos
+
+### Referência Rápida
+
+1. **CLI**: `npx flowtomic-cli@latest add <componente>`
+2. **npm**: `npm install @flowtomic/ui @flowtomic/logic`
+3. **Registry**: `https://registry.flowtomic.dev`
+4. **Componentes são copiados localmente** (customizáveis)
+5. **Hooks são headless** (apenas lógica)
+6. **TypeScript** em todos os componentes
+7. **Tailwind CSS v4.1.14+** para estilização
+8. **Radix UI** para acessibilidade

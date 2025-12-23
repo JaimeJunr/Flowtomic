@@ -1,4 +1,9 @@
+/**
+ * Storybook: ContextMenu - Padrão Flowtomic
+ * Padronização: descrição, história de acessibilidade.
+ */
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -14,6 +19,12 @@ const meta = {
   component: ContextMenu,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "ContextMenu exibe ações contextuais ao disparar evento de clique secundário. Útil para listas e áreas de trabalho ricas. Mantém acessibilidade: itens navegáveis por teclado após abertura programática.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof ContextMenu>;
@@ -62,6 +73,48 @@ export const WithShortcuts: Story = {
       </ContextMenuContent>
     </ContextMenu>
   ),
+};
+
+export const Accessibility: Story = {
+  render: () => (
+    <ContextMenu>
+      <ContextMenuTrigger
+        data-testid="cm-trigger"
+        className="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"
+      >
+        Clique (botão direito) ou simulado
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem onClick={fn()}>Ação 1</ContextMenuItem>
+        <ContextMenuItem onClick={fn()}>Ação 2</ContextMenuItem>
+        <ContextMenuItem onClick={fn()}>Ação 3</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstra abertura via clique direito simulado e foco programático para validar acessibilidade de teclado no ContextMenu.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const area = await canvas.getByTestId("cm-trigger");
+
+    // Simula clique com botão direito (context menu)
+    await userEvent.pointer([{ keys: "[MouseRight>]", target: area }, { keys: "[/MouseRight]" }]);
+
+    // Aguarda um pouco para o menu abrir
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Verifica se o menu está aberto através do estado do trigger
+    expect(area).toHaveAttribute("data-state", "open");
+
+    // Navega com setas (o menu já deve estar focado)
+    await userEvent.keyboard("{ArrowDown}");
+  },
 };
 
 export const NoKnownUsage: Story = {

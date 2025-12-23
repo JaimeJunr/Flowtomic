@@ -1,0 +1,1116 @@
+---
+description: Sistema de pré-regra para consolidação de conhecimento evolucional e padrões comprovados
+alwaysApply: false
+---
+
+# 🧠 Evolution - Lições Aprendidas e Padrões Consolidados
+
+## 🚨 **Diretrizes Fundamentais**
+
+### 1. Função como Pré-Regra
+
+**SEMPRE entenda** que este arquivo:
+
+- **Recebe**: Conhecimento consolidado da memória de trabalho
+- **Organiza**: Padrões para facilitar movimentação posterior
+- **Prepara**: Conteúdo para ser movido para regras específicas
+- **Mantém**: Fluxo de conhecimento estruturado e organizado
+
+### 2. Processo de Consolidação
+
+**SEMPRE siga** este fluxo de consolidação:
+
+1. **SEMPRE colete** nova informação no `activeContext.md`
+2. **SEMPRE teste** e comprove em contexto real
+3. **SEMPRE mova** para `evolution.mdc` como pré-regra consolidada
+4. **SEMPRE refine** e organize conhecimento no espaço intermediário
+
+## 1. Padrões de Desenvolvimento TDD
+
+> **📋 MOVIMENTADO**: Padrões TDD consolidados foram movidos para `tdd-rule.mdc`
+>
+> **Localização**: `.cursor/rules/core/development/tdd-rule.mdc`
+>
+> **Padrões Movidos**:
+>
+> - TDD com Evidências Reais e Integração de Serviços
+> - Refatoração Clean Code com TDD
+> - TDD para Correção de Bugs
+>
+> **Status**: ✅ Movimentação concluída - padrões consolidados na regra específica
+
+## 2. Padrões de Investigação e Debugging
+
+> **📋 MOVIMENTADO**: Padrões de investigação e debugging consolidados foram movidos para `debugging-rule.mdc`
+>
+> **Localização**: `.cursor/rules/core/development/debugging-rule.mdc`
+>
+> **Padrões Movidos**:
+>
+> - Investigação de Erro de Rota Estática
+> - Debugging e Logs Estratégicos
+> - Técnicas de Investigação Sistemática
+> - Validação com Evidências Reais
+>
+> **Status**: ✅ Movimentação concluída - padrões consolidados na regra específica
+
+## 3. Padrões de Teste Rails e RSpec
+
+> **📋 MOVIMENTADO**: Padrões de testes Rails e RSpec consolidados foram movidos para `rails-testing-rule.mdc`
+>
+> **Localização**: `.cursor/rules/ruby/rails-testing-rule.mdc`
+>
+> **Padrões Movidos**:
+>
+> - Estrutura RSpec e Qualidade de Testes
+> - Testes TDD Estratégicos
+> - Integração com Teaspoon (JavaScript/CoffeeScript)
+> - Padrões de Qualidade e Métricas
+>
+> **Status**: ✅ Movimentação concluída - padrões consolidados na regra específica
+
+## 4. Padrões de Arquitetura Rails
+
+> **📋 MOVIMENTADO**: Padrões de arquitetura Rails consolidados foram movidos para `rails-code.mdc`
+>
+> **Localização**: `.cursor/rules/ruby/rails-code.mdc`
+>
+> **Padrões Movidos**:
+>
+> - Herança Rails e Comportamento Padrão
+> - Preservação de Contexto
+> - Padrões de Inicialização e Contexto
+>
+> **Status**: ✅ Movimentação concluída - padrões consolidados na regra específica
+
+## 5. Padrões de Qualidade e Fluxo de Trabalho
+
+### 5.1 Rubocop Integration
+
+**Contexto**: Correção automática de problemas de formatação
+
+**Padrão Comprovado**:
+
+```bash
+# ✅ CORRETO: Correção automática
+docker-compose run --rm --no-deps test rubocop app/pricings/application_pricing.rb --autocorrect
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** correção automática do Rubocop quando possível
+2. **SEMPRE execute** Rubocop após mudanças
+3. **SEMPRE mantenha** padrões de código consistentes
+
+### 5.2 Fluxo de Trabalho e Validação com Evidências
+
+**Contexto**: Fluxo sistemático de investigação, planejamento e implementação
+
+**Padrão Comprovado**:
+
+```text
+INFO Mode → Investigação pura e coleta de informações
+    ↓
+PLAN Mode → Planejamento estratégico e especificação técnica
+    ↓
+ACT Mode → Implementação controlada com logs e validação
+```
+
+```ruby
+# ✅ CORRETO: Validação com evidências reais
+log_debug("Moeda convertida: #{from_currency} (original: #{money.currency.id})")
+log_debug("Taxa de câmbio: #{rate}")
+log_debug("Valor convertido: #{converted_amount}")
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE investigue** antes de planejar
+2. **SEMPRE valide** com dados reais
+3. **SEMPRE use** logs estratégicos - fornecem evidências do comportamento
+4. **SEMPRE implemente** com controle - implementação controlada com logs e validação
+
+### 5.3 Integração com Serviços Existentes
+
+**Contexto**: Uso do `CurrencyService` existente
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Integrar com serviço existente
+CurrencyService.convert_dollar_currency_code_by_fund(@fund, money.currency.id)
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE verifique** se já existe serviço antes de implementar
+2. **SEMPRE reutilize** código existente - não reimplemente funcionalidade
+3. **SEMPRE integre** com serviços existentes de forma limpa
+
+### 5.4 Investigação Sistemática e Mapeamento de Fluxo
+
+**Contexto**: Investigação completa de problemas e mapeamento de sistemas complexos
+
+**Padrão Comprovado**:
+
+```text
+1. Mapeamento do Fluxo → Entender hierarquia completa do sistema
+2. Identificação do Problema → Localizar exatamente onde está o bug
+3. Análise de Impacto → Determinar escopo e tipos afetados
+4. Validação da Solução → Confirmar que correção é simples e direta
+5. Preparação para Implementação → Identificar pontos para logging e testes
+```
+
+```text
+PortfolioPreviewPublisherJob
+├── PortfolioFront (estratégia) → ExplosionHashFront (OnlinePricing)
+└── PortfolioBack (custódia) → ExplosionHashBack (DbPricing)
+
+Tipos de Portfólio:
+- Front: Baseado em estratégias (Strategy::OperationItem)
+- Back: Baseado em custódia (Custody)
+- Explodido: expand_positions: true (mostra posições dos fundos investidos)
+- Não-explodido: expand_positions: false (mostra apenas posições diretas)
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE entenda** fluxo hierárquico antes de agir
+2. **SEMPRE mapeie** estrutura completa do sistema
+3. **SEMPRE entenda** hierarquia de prioridade - sistema usa fallbacks inteligentes em ordem específica
+4. **SEMPRE valide** cada nível individualmente
+
+**Aplicação Futura**:
+
+1. **SEMPRE execute** Rubocop após mudanças
+2. **SEMPRE use** correção automática quando possível
+3. **SEMPRE mantenha** padrões de código consistentes
+4. **SEMPRE siga** fluxo INFO → PLAN → ACT
+5. **SEMPRE valide** com dados reais
+6. **SEMPRE implemente** logs estratégicos para evidências
+7. **SEMPRE base** validação em dados, não suposições
+8. **SEMPRE verifique** serviços existentes antes de implementar
+9. **SEMPRE reutilize** código existente quando possível
+10. **SEMPRE integre** com serviços existentes de forma limpa
+11. **SEMPRE mapeie** fluxo completo antes de investigar problemas
+12. **SEMPRE identifique** tipos de componente e suas responsabilidades
+13. **SEMPRE entenda** hierarquia de fallbacks do sistema
+14. **SEMPRE valide** cada nível da hierarquia individualmente
+
+## 6. Métricas de Evolução
+
+### 6.1 Padrões Consolidados
+
+- **5 padrões principais** (compactados de 26)
+- **5 categorias principais** de lições aprendidas (compactadas de 16)
+- **20 aplicações específicas** (compactadas de 35)
+
+### 6.2 Próximos Padrões a Desenvolver
+
+1. **SEMPRE desenvolva** padrões de performance - otimização de queries e cache
+2. **SEMPRE desenvolva** padrões de segurança - validação e sanitização de dados
+3. **SEMPRE desenvolva** padrões de deploy - estratégias de deploy e rollback
+4. **SEMPRE desenvolva** padrões de monitoramento - logs e métricas de produção
+5. **SEMPRE desenvolva** padrões de rota - configuração e troubleshooting de rotas Rails
+
+## 7. Padrões de CoffeeScript e Teaspoon
+
+### 7.1 Descoberta de CoffeeScript e Teaspoon no Sistema Rails
+
+**Contexto**: Descoberta de infraestrutura de testes JavaScript/CoffeeScript durante investigação do ticket CAP-6915
+
+**Padrão Comprovado**:
+
+```bash
+# ✅ CORRETO: Execução de testes JavaScript/CoffeeScript
+bundle exec teaspoon --suite=reconcile
+
+# Resultado: 331 exemplos passaram sem falhas
+```
+
+```coffeescript
+# ✅ CORRETO: Estrutura de teste Teaspoon para CoffeeScript
+describe 'Anbima5GalgoService', ->
+  beforeEach ->
+    @fund = { id: 1, name: 'Test Fund' }
+    @portfolioType = 'galgo'
+    @opts = { test: true }
+    @service = new Anbima5GalgoService(@fund, @portfolioType, @opts)
+
+  describe 'constructor', ->
+    it 'should initialize correctly', ->
+      expect(@service.fund).toEqual(@fund)
+      expect(@service.portfolioType).toEqual(@portfolioType)
+      expect(@service.opts).toEqual(@opts)
+```
+
+**Descobertas**:
+
+1. **SEMPRE reconheça** infraestrutura existente - Teaspoon configurado e funcionando
+2. **SEMPRE valide** suite reconcile - 331 testes passando sem falhas
+3. **SEMPRE identifique** arquivos CoffeeScript - serviços de conciliação em CoffeeScript
+4. **SEMPRE verifique** configuração válida - `spec/teaspoon_env.rb` e `spec/reconcile_spec_helper.coffee`
+
+## 8. Padrões Prontos para Movimentação
+
+### 8.1 Candidatos para Regras Específicas
+
+**Padrões de TDD** → `tdd-rule.mdc` ou `testing-rule.mdc`
+
+1. **SEMPRE mova** TDD com evidências reais
+2. **SEMPRE mova** refatoração Clean Code com TDD
+3. **SEMPRE mova** TDD para correção de bugs
+
+**Padrões de Investigação** → `debugging-rule.mdc` ou `investigation-rule.mdc`
+
+1. **SEMPRE mova** investigação de erro de rota estática
+2. **SEMPRE mova** debugging e logs estratégicos
+
+**Padrões de Testes Rails** → `rspec-rule.mdc` ou `rails-testing-rule.mdc`
+
+1. **SEMPRE mova** estrutura RSpec e qualidade de testes
+2. **SEMPRE mova** testes TDD estratégicos
+
+**Padrões de Arquitetura Rails** → `rails-architecture-rule.mdc`
+
+1. **SEMPRE mova** herança Rails e comportamento padrão
+2. **SEMPRE mova** preservação de contexto
+
+**Padrões de Qualidade** → `quality-rule.mdc` ou `workflow-rule.mdc`
+
+1. **SEMPRE mova** Rubocop integration
+2. **SEMPRE mova** fluxo de trabalho e validação com evidências
+3. **SEMPRE mova** integração com serviços existentes
+
+**Padrões de CoffeeScript** → `coffeescript-rule.mdc` ou `javascript-testing-rule.mdc`
+
+1. **SEMPRE mova** descoberta de CoffeeScript e Teaspoon no sistema Rails
+
+**Padrões de Service Objects** → `service-objects-rule.mdc` ou `rails-services-rule.mdc`
+
+1. **SEMPRE mova** namespace por domínio Mellon
+2. **SEMPRE mova** inicialização com autenticação
+3. **SEMPRE mova** delegação limpa
+4. **SEMPRE mova** configuração condicional
+5. **SEMPRE mova** métodos de classe utilitários
+6. **SEMPRE mova** factory methods privados
+7. **SEMPRE mova** broadcasting com ActionCable
+
+## 9. Padrões de Service Objects - Portfolio Services
+
+### 9.1 Padrão de Namespace por Domínio Mellon
+
+**Contexto**: Implementação de services organizados por domínio de negócio
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Namespace Mellon para domínio específico
+class Mellon::PortfolioService < ApplicationService
+  def initialize
+    connector.authenticate
+  end
+
+  def notifications(date)
+    connector.notifications(date)
+  end
+end
+
+# ✅ CORRETO: Service principal para operações gerais
+class PortfolioService < ApplicationService
+  def self.front_office(opts, portfolio_clazz = Strategy::Portfolio)
+    portfolio = portfolio_clazz.new(opts)
+    portfolio.json_exchange_rates = true
+    portfolio.load_front_positions(opts)
+    portfolio
+  end
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE organize** por domínio - namespaces previnem conflitos e organizam funcionalidades
+2. **SEMPRE use** herança ApplicationService - base comum para todos os services
+3. **SEMPRE mantenha** responsabilidade única - cada service foca em seu domínio específico
+4. **SEMPRE prepare** para escalabilidade - estrutura preparada para novos domínios
+
+### 9.2 Padrão de Inicialização com Autenticação
+
+**Contexto**: Autenticação automática na inicialização de services
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Autenticação automática na inicialização
+def initialize
+  connector.authenticate
+end
+
+# ✅ CORRETO: Factory method com lazy loading
+def connector
+  @connector ||= ::MellonConnector.new
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE implemente** segurança por padrão - autenticação sempre executada antes de operações
+2. **SEMPRE use** lazy loading - dependências carregadas apenas quando necessárias
+3. **SEMPRE use** memoização - `||=` evita recriação desnecessária de objetos
+4. **SEMPRE use** namespace completo - `::` previne conflitos de nomes
+
+### 9.3 Padrão de Delegação Limpa
+
+**Contexto**: Separação clara entre coordenação e execução
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Delegação limpa para connector
+def notifications(date)
+  connector.notifications(date)
+end
+
+def notifications_with_error(date)
+  connector.notifications_with_error(date)
+end
+
+def available_services(date)
+  connector.available_services(date)
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE mantenha** interface consistente - mesma assinatura para métodos relacionados
+2. **SEMPRE separe** responsabilidades - service coordena, connector executa
+3. **SEMPRE garanta** manutenibilidade - mudanças no connector não afetam interface
+4. **SEMPRE facilite** testabilidade - fácil mockar connector para testes
+
+### 9.4 Padrão de Configuração Condicional
+
+**Contexto**: Controle de funcionalidade via configuração externa
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Configuração condicional com guard clause
+def import_xml(xml_file, user)
+  return unless Setting.sma_mellon_import_type&.upcase == 'XML'
+  portfolio_xml_importer.import(xml_file, user)
+end
+
+# ✅ CORRETO: Safe navigation para evitar erros
+def import_xls(json, user)
+  portfolio_json_importer.import(json, user)
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** configuração externa - `Setting` permite controle sem código
+2. **SEMPRE implemente** guard clause - retorno antecipado para condições não atendidas
+3. **SEMPRE use** safe navigation - `&.upcase` previne erros de nil
+4. **SEMPRE garanta** flexibilidade - funcionalidade pode ser habilitada/desabilitada
+
+### 9.5 Padrão de Métodos de Classe Utilitários
+
+**Contexto**: Operações que não precisam de estado de instância
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Método de classe com injeção de dependência
+def self.front_office(opts, portfolio_clazz = Strategy::Portfolio)
+  portfolio = portfolio_clazz.new(opts)
+  portfolio.json_exchange_rates = true
+  portfolio.load_front_positions(opts)
+  portfolio
+end
+
+# ✅ CORRETO: Método de classe para cálculos
+def self.average_nav_on_period(params)
+  interval = params[:fund].business_date_calculator.advance(params[:date], -params[:period], :following) if params[:type] == :business_days
+  interval = params[:date] - params[:period].days if interval.nil?
+
+  Quote.where(security: params[:fund].fund_share)
+       .where(' day >= ? ', interval)
+       .average(:volume)
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** métodos sem estado - métodos que não precisam de instância
+2. **SEMPRE use** injeção de dependência - classes injetáveis como parâmetros
+3. **SEMPRE implemente** fluent interface - configuração seguida de operação
+4. **SEMPRE retorne** objeto útil - objeto configurado retornado para uso
+
+### 9.6 Padrão de Factory Methods Privados
+
+**Contexto**: Criação centralizada de dependências
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Factory methods privados com lazy loading
+protected
+
+def connector
+  @connector ||= ::MellonConnector.new
+end
+
+def portfolio_json_importer
+  ::Mellon::PortfolioJsonImporter.new
+end
+
+def portfolio_xml_importer
+  ::Mellon::XmlPortfolioImporter.new
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** lazy loading - instâncias criadas apenas quando necessárias
+2. **SEMPRE use** memoização - `||=` evita recriação desnecessária
+3. **SEMPRE use** namespace completo - `::` previne conflitos de nomes
+4. **SEMPRE centralize** criação - factory pattern centraliza criação de dependências
+
+### 9.7 Padrão de Broadcasting com ActionCable
+
+**Contexto**: Comunicação em tempo real via WebSockets
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Broadcasting via ActionCable
+def self.broadcast_message(params)
+  ActionCable.server.broadcast 'mellon_ws', params
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** método de classe - não requer instância para uso
+2. **SEMPRE use** ActionCable - integração nativa com WebSockets
+3. **SEMPRE use** canal específico - `mellon_ws` para comunicação Mellon
+4. **SEMPRE mantenha** tempo real - comunicação assíncrona eficiente
+
+**Aplicação Futura**:
+
+1. **SEMPRE use** namespaces para organizar services por domínio
+2. **SEMPRE implemente** autenticação automática na inicialização
+3. **SEMPRE use** delegação limpa para separar responsabilidades
+4. **SEMPRE crie** factory methods privados para dependências
+5. **SEMPRE use** configuração externa para controle de funcionalidades
+6. **SEMPRE implemente** guard clauses para condições
+7. **SEMPRE use** safe navigation para evitar erros de nil
+8. **SEMPRE crie** métodos de classe para operações sem estado
+9. **SEMPRE use** injeção de dependência para flexibilidade
+10. **SEMPRE implemente** fluent interface para configuração
+11. **SEMPRE use** ActionCable para comunicação em tempo real
+12. **SEMPRE crie** canais específicos por domínio
+13. **SEMPRE implemente** métodos de classe para broadcasting
+14. **SEMPRE mantenha** comunicação assíncrona eficiente
+
+## 10. Padrões de Arquitetura - Documentação Completa
+
+**Contexto**: Sistema de carteiras padrão desenvolvido pela Investtools
+para garantir uniformidade e consistência das informações financeiras.
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Estrutura modular do IVT Portfolio
+# Portfolio/ - Classes principais
+# ├── AbstractPortfolio - Classe base abstrata
+# ├── PortfolioBack - Carteira de custódia
+# └── PortfolioFront - Carteira de estratégia
+
+# Explosion/ - Sistema de explosão
+# ├── ExplosionHash - Explosão de fundos de fundos
+# ├── ExplosionHashBack - Explosão para custódia
+# └── ExplosionHashFront - Explosão para estratégia
+
+# Factory/ - Criação de produtos
+# ├── PortfolioFactory - Factory principal
+# └── ProductFactory - Factory de produtos específicos
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** estrutura modular - separação clara entre Portfolio, Explosion e Factory
+2. **SEMPRE use** herança inteligente - AbstractPortfolio como base comum
+3. **SEMPRE implemente** explosão condicional - ExplosionHash para fundos de fundos
+4. **SEMPRE use** factory pattern - criação centralizada de produtos específicos
+5. **SEMPRE padronize** fluxo - Fundo + Data → Portfolio Type → Explosion → Factory → JSON → Kafka
+
+### 10.2 Mellon Integration - Sistema Robusto de Integração
+
+**Contexto**: Integração completa com BNY Mellon para importação de dados de portfólio.
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Arquitetura Mellon Integration
+class MellonConnector
+  def authenticate
+    # Autenticação JWT com Mellon
+  end
+
+  def notifications(date)
+    # Busca notificações por data
+  end
+end
+
+class Mellon::PortfolioService < ApplicationService
+  def initialize
+    connector.authenticate
+  end
+
+  def import_xml(xml_file, user)
+    return unless Setting.sma_mellon_import_type&.upcase == 'XML'
+    portfolio_xml_importer.import(xml_file, user)
+  end
+end
+
+# Jobs automatizados
+DataImporterJob.perform_later # cron: 0 6 * * 2-6
+ErrorReimporterJob.perform_later # cron: 0 7-8 * * 2-6
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE implemente** autenticação automática - JWT na inicialização do service
+2. **SEMPRE use** configuração condicional - Setting para controle de funcionalidades
+3. **SEMPRE implemente** jobs automatizados - Cron jobs para importação e reprocessamento
+4. **SEMPRE use** WebSocket broadcasting - comunicação em tempo real
+5. **SEMPRE aplique** critérios de seleção - fundos Mellon ativos, não conciliados, com identificador externo
+
+### 10.3 Redemption Methods - Análise Completa de Estratégias
+
+**Contexto**: Sistema de seleção automática de estratégias de resgate baseado em características do fundo.
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Factory Pattern para estratégias
+class RedemptionMethodFactory
+  def self.create(fund)
+    case fund.strategy_type
+    when 'lower_tax'
+      LowerTaxRedemptionMethod.new(fund)
+    when 'fifo'
+      FifoRedemptionMethod.new(fund)
+    when 'lifo'
+      LifoRedemptionMethod.new(fund)
+    when 'btg_pactual'
+      BtgPactualRedemptionMethod.new(fund)
+    else
+      DefaultRedemptionMethod.new(fund)
+    end
+  end
+end
+
+# ✅ CORRETO: Estratégias específicas
+class LowerTaxRedemptionMethod < RedemptionMethod
+  def calculate_redemption(amount, date)
+    # Lógica específica para menor tributação
+  end
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** factory pattern - seleção automática baseada em características
+2. **SEMPRE implemente** estratégias específicas - cada método tem lógica própria
+3. **SEMPRE crie** fallback inteligente - DefaultRedemptionMethod para casos não mapeados
+4. **SEMPRE mantenha** extensibilidade - fácil adição de novas estratégias
+
+### 10.4 Memory Optimization - Plano Detalhado de Otimização
+
+**Contexto**: Plano de otimização de memória para API portfolio_ws com alto consumo.
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Alternativa 1 - Processamento em Lotes (IMPLEMENTADA)
+def positions
+  total = {}
+
+  # Processar custódias em lotes de 1000
+  query_custodies.find_in_batches(batch_size: 1000) do |custody_batch|
+    quotes = query_quotes_for_batch(custody_batch)
+    owner_administrator_alias = query_oaas_for_batch(custody_batch)
+
+    custody_batch.each do |custody|
+      # Processar posição individual
+      process_position(custody, quotes, owner_administrator_alias)
+    end
+
+    # Limpar referências do lote
+    custody_batch = nil
+  end
+
+  total
+end
+
+# ✅ CORRETO: Alternativa 2 - Cache Inteligente (PROPOSTA)
+def positions_with_cache
+  Rails.cache.fetch("portfolio_positions_#{fund_id}_#{date}", expires_in: 1.hour) do
+    calculate_positions
+  end
+end
+
+# ✅ CORRETO: Alternativa 3 - Streaming (PROPOSTA)
+def positions_streaming
+  Enumerator.new do |yielder|
+    query_custodies.find_each(batch_size: 500) do |custody|
+      yielder << process_position(custody)
+    end
+  end
+end
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE implemente** processamento em lotes - reduz consumo de memória significativamente
+2. **SEMPRE use** limpeza de referências - `custody_batch = nil` libera memória
+3. **SEMPRE implemente** cache inteligente - evita recálculos desnecessários
+4. **SEMPRE considere** streaming - processamento sob demanda
+5. **SEMPRE monitore** métricas - monitoramento de consumo de memória
+
+### 10.5 Testing Strategy - Estratégia Abrangente de Testes
+
+**Contexto**: Estratégia completa de testes para RSpec e CoffeeScript/JavaScript.
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: RSpec - Testes unitários, integração e sistema
+RSpec.describe PortfolioService, type: :service do
+  let(:fund) { create(:fund) }
+  let(:portfolio_service) { described_class.new(fund) }
+
+  describe '#positions' do
+    it 'returns positions for the fund' do
+      result = portfolio_service.positions
+      expect(result).to be_a(Hash)
+      expect(result.keys).to include(:total_value, :positions)
+    end
+  end
+end
+
+# ✅ CORRETO: Teaspoon - Testes JavaScript/CoffeeScript
+describe 'PortfolioService', ->
+  beforeEach ->
+    @fund = { id: 1, name: 'Test Fund' }
+    @service = new PortfolioService(@fund)
+
+  describe 'positions', ->
+    it 'should return positions hash', ->
+      result = @service.positions()
+      expect(result).toBeDefined()
+      expect(result.total_value).toBeDefined()
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** RSpec - testes unitários, integração e sistema
+2. **SEMPRE implemente** Teaspoon - 331 exemplos passando sem falhas
+3. **SEMPRE use** Jasmine - framework de assertions para JavaScript
+4. **SEMPRE use** AngularJS - framework frontend com mocks
+5. **SEMPRE mantenha** cobertura - SimpleCov para métricas de cobertura
+
+### 10.6 API Endpoints - Documentação Completa de APIs
+
+**Contexto**: Documentação completa de endpoints REST com autenticação e rate limiting.
+
+**Padrão Comprovado**:
+
+```ruby
+# ✅ CORRETO: Autenticação JWT com rate limiting
+class Api::V1::BaseController < ApplicationController
+  before_action :authenticate_user!
+  before_action :check_rate_limit
+
+  private
+
+  def check_rate_limit
+    rate_limit = 1000 # requests per hour
+    # Implementação de rate limiting
+  end
+end
+
+# ✅ CORRETO: Endpoints documentados
+# GET /api/v1/funds - Lista fundos
+# GET /api/v1/funds/:id - Detalhes do fundo
+# GET /api/v1/assets - Lista ativos
+# GET /api/v1/transactions - Lista transações
+# GET /api/v1/quotes - Lista cotações
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE implemente** autenticação JWT - segurança robusta
+2. **SEMPRE use** rate limiting - 1000 requests/hora
+3. **SEMPRE siga** endpoints REST - padrão RESTful
+4. **SEMPRE documente** - Swagger/OpenAPI
+5. **SEMPRE version** - API versionada (v1)
+
+**Aplicação Futura**:
+
+1. **SEMPRE use** estrutura modular para sistemas complexos
+2. **SEMPRE implemente** herança inteligente com classes base
+3. **SEMPRE use** factory pattern para criação de objetos
+4. **SEMPRE padronize** fluxos de dados (Fundo → Portfolio → Explosion → Factory → JSON → Kafka)
+5. **SEMPRE implemente** autenticação automática em services
+6. **SEMPRE use** configuração externa para controle de funcionalidades
+7. **SEMPRE implemente** jobs automatizados com cron
+8. **SEMPRE use** WebSocket para comunicação em tempo real
+9. **SEMPRE aplique** critérios de seleção inteligentes
+10. **SEMPRE use** factory pattern para seleção de estratégias
+11. **SEMPRE implemente** estratégias específicas para cada caso
+12. **SEMPRE crie** fallback inteligente para casos não mapeados
+13. **SEMPRE mantenha** extensibilidade para novas estratégias
+14. **SEMPRE implemente** processamento em lotes para otimização
+15. **SEMPRE use** limpeza de referências para liberar memória
+16. **SEMPRE implemente** cache inteligente para evitar recálculos
+17. **SEMPRE considere** streaming para processamento sob demanda
+18. **SEMPRE monitore** métricas de consumo de memória
+19. **SEMPRE use** RSpec para testes unitários e integração
+20. **SEMPRE implemente** Teaspoon para testes JavaScript/CoffeeScript
+21. **SEMPRE use** Jasmine para assertions em JavaScript
+22. **SEMPRE mantenha** cobertura de testes com SimpleCov
+23. **SEMPRE implemente** autenticação JWT em APIs
+24. **SEMPRE use** rate limiting para proteção de endpoints
+25. **SEMPRE siga** padrões RESTful para APIs
+26. **SEMPRE documente** endpoints com Swagger/OpenAPI
+27. **SEMPRE version** APIs adequadamente
+
+## 11. Comandos de Movimentação
+
+### 11.1 Refinar e Mover para Regras Específicas
+
+```bash
+# Refinar e mover para regras específicas (processo integrado)
+/move evolution
+
+# Compactar após movimentação
+/compact evolution
+```
+
+## 12. Padrões de Autenticação JWT - Spring Security 6
+
+### 12.1 Implementação Completa de JWT com Spring Security 6
+
+**Contexto**: Implementação de sistema de autenticação JWT completo no Sistema Amanhecer
+
+**Padrão Comprovado**:
+
+```java
+// ✅ CORRETO: JwtTokenProvider com Spring Security 6
+@Component
+@Slf4j
+public class JwtTokenProvider {
+
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${app.jwt.expiration}")
+    private long jwtExpiration;
+
+    public String generateToken(Authentication authentication) {
+        log.info("JWT TOKEN PROVIDER - Generating token for user: {}", authentication.getName());
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("authorities", userDetails.getAuthorities());
+        claims.put("username", userDetails.getUsername());
+
+        long startTime = System.currentTimeMillis();
+        String token = createToken(claims, userDetails.getUsername());
+        long executionTime = System.currentTimeMillis() - startTime;
+
+        log.info("JWT TOKEN PROVIDER - Token generated successfully for user: {}, executionTime={}ms",
+                userDetails.getUsername(), executionTime);
+
+        return token;
+    }
+}
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE implemente** logs estratégicos obrigatórios - sempre implementar logs PRIMEIRO em componentes de segurança
+2. **SEMPRE monitore** performance - medir tempo de geração e validação de tokens
+3. **SEMPRE use** claims customizados - incluir authorities e informações do usuário
+4. **SEMPRE implemente** refresh tokens - renovação sem re-login
+5. **SEMPRE use** configuração externa - application.properties para configurações JWT
+
+### 12.2 JwtAuthenticationFilter com Spring Security 6
+
+**Contexto**: Filtro de autenticação JWT integrado ao SecurityFilterChain
+
+**Padrão Comprovado**:
+
+```java
+// ✅ CORRETO: JwtAuthenticationFilter com Spring Security 6
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                  FilterChain filterChain) throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+        String method = request.getMethod();
+
+        log.debug("JWT AUTHENTICATION FILTER - Processing request: {} {}", method, requestURI);
+
+        try {
+            String jwt = getJwtFromRequest(request);
+
+            if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
+                String username = jwtTokenProvider.getUsernameFromToken(jwt);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("JWT AUTHENTICATION FILTER - User authenticated successfully: {} for request: {} {}",
+                        username, method, requestURI);
+            }
+
+        } catch (Exception e) {
+            log.error("JWT AUTHENTICATION FILTER - Error processing authentication for request: {} {}, error: {}",
+                    method, requestURI, e.getMessage());
+            SecurityContextHolder.clearContext();
+        }
+
+        filterChain.doFilter(request, response);
+    }
+}
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** OncePerRequestFilter - garantir execução única por requisição
+2. **SEMPRE implemente** logs de auditoria - registrar tentativas de autenticação e falhas
+3. **SEMPRE trate** erros - limpar contexto em caso de falha
+4. **SEMPRE configure** endpoints públicos - shouldNotFilter para endpoints públicos
+5. **SEMPRE use** logs de debug - para troubleshooting
+
+### 12.3 CustomUserDetailsService com Email como Username
+
+**Contexto**: Sistema baseado em email em vez de username tradicional
+
+**Padrão Comprovado**:
+
+```java
+// ✅ CORRETO: CustomUserDetailsService com email como username
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("CUSTOM USER DETAILS SERVICE - Loading user details for username: {}", username);
+
+        long startTime = System.currentTimeMillis();
+
+        try {
+            // Primeiro, tentar buscar como usuário normal
+            UserDetails userDetails = loadUser(username);
+            if (userDetails != null) {
+                long executionTime = System.currentTimeMillis() - startTime;
+                log.info("CUSTOM USER DETAILS SERVICE - User details loaded successfully for user: {}, executionTime={}ms",
+                        username, executionTime);
+                return userDetails;
+            }
+
+            // Se não encontrou como usuário, tentar como administrador
+            userDetails = loadAdmin(username);
+            if (userDetails != null) {
+                long executionTime = System.currentTimeMillis() - startTime;
+                log.info("CUSTOM USER DETAILS SERVICE - Admin details loaded successfully for admin: {}, executionTime={}ms",
+                        username, executionTime);
+                return userDetails;
+            }
+
+            log.warn("CUSTOM USER DETAILS SERVICE - User not found: {}", username);
+            throw new UsernameNotFoundException("Usuário não encontrado: " + username);
+
+        } catch (UsernameNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("CUSTOM USER DETAILS SERVICE - Error loading user details for username: {}, error: {}",
+                    username, e.getMessage());
+            throw new UsernameNotFoundException("Erro ao carregar usuário: " + username, e);
+        }
+    }
+}
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** email como username - sistema moderno baseado em email
+2. **SEMPRE implemente** fallback inteligente - buscar usuário primeiro, depois admin
+3. **SEMPRE monitore** performance - medir tempo de carregamento de usuários
+4. **SEMPRE implemente** logs de segurança - auditoria completa de tentativas de login
+5. **SEMPRE trate** exceções - UsernameNotFoundException específica
+
+### 12.4 SecurityConfig com Spring Security 6
+
+**Contexto**: Configuração moderna com SecurityFilterChain
+
+**Padrão Comprovado**:
+
+```java
+// ✅ CORRETO: SecurityConfig com Spring Security 6
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").hasRole("USER")
+                        .requestMatchers("/api/rabbits/**", "/api/herds/**").hasRole("USER")
+                        .anyRequest().authenticated())
+                .headers(headers -> headers.frameOptions().sameOrigin())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+}
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE use** SecurityFilterChain - abordagem moderna do Spring Security 6
+2. **SEMPRE configure** stateless sessions - JWT não requer sessões
+3. **SEMPRE use** Method Security - @EnableMethodSecurity para @PreAuthorize
+4. **SEMPRE integre** JWT Filter - integração do filtro JWT na cadeia
+5. **SEMPRE configure** roles específicas - configuração granular por endpoint
+
+### 12.5 AuthController com Endpoints Completos
+
+**Contexto**: Controller de autenticação com login, logout, refresh e informações do usuário
+
+**Padrão Comprovado**:
+
+```java
+// ✅ CORRETO: AuthController com endpoints completos
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+@Slf4j
+public class AuthController {
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginRequest loginRequest) {
+        log.info("AUTH CONTROLLER - Login attempt for username: {}", loginRequest.getUsername());
+
+        long startTime = System.currentTimeMillis();
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()
+                    )
+            );
+
+            String token = jwtTokenProvider.generateToken(authentication);
+            String refreshToken = jwtTokenProvider.generateRefreshToken(loginRequest.getUsername());
+
+            long executionTime = System.currentTimeMillis() - startTime;
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("refreshToken", refreshToken);
+            response.put("type", "Bearer");
+            response.put("username", loginRequest.getUsername());
+            response.put("authorities", authentication.getAuthorities());
+            response.put("expiresIn", jwtTokenProvider.getJwtExpiration());
+
+            log.info("AUTH CONTROLLER - Login successful for username: {}, executionTime={}ms",
+                    loginRequest.getUsername(), executionTime);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            long executionTime = System.currentTimeMillis() - startTime;
+            log.error("AUTH CONTROLLER - Login failed for username: {}, executionTime={}ms, error: {}",
+                    loginRequest.getUsername(), executionTime, e.getMessage());
+
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Credenciais inválidas");
+            errorResponse.put("message", "Usuário ou senha incorretos");
+
+            return ResponseEntity.status(401).body(errorResponse);
+        }
+    }
+}
+```
+
+**Lições Aprendidas**:
+
+1. **SEMPRE crie** endpoints completos - login, logout, refresh, me
+2. **SEMPRE monitore** performance - medir tempo de operações de autenticação
+3. **SEMPRE trate** erros - respostas padronizadas para falhas
+4. **SEMPRE implemente** logs de auditoria - registrar tentativas de login e falhas
+5. **SEMPRE implemente** refresh tokens - renovação de tokens
+
+**Aplicação Futura**:
+
+1. **SEMPRE implemente** logs estratégicos PRIMEIRO em componentes de segurança
+2. **SEMPRE use** Spring Security 6 com SecurityFilterChain moderno
+3. **SEMPRE implemente** JWT com claims customizados e refresh tokens
+4. **SEMPRE configure** autenticação baseada em email
+5. **SEMPRE implemente** auditoria completa de segurança
+6. **SEMPRE use** OncePerRequestFilter para filtros JWT
+7. **SEMPRE configure** endpoints públicos adequadamente
+8. **SEMPRE implemente** fallback inteligente para usuários e admins
+9. **SEMPRE monitore** performance de operações de autenticação
+10. **SEMPRE trate** exceções de segurança adequadamente
+11. **SEMPRE configure** roles específicas por endpoint
+12. **SEMPRE implemente** Method Security com @PreAuthorize
+13. **SEMPRE crie** endpoints completos de autenticação
+14. **SEMPRE implemente** logs de auditoria para compliance
+15. **SEMPRE configure** refresh tokens para melhor UX
+
+```bash
+# Refinar e mover para regras específicas (processo integrado)
+/move evolution
+
+# Compactar após movimentação
+/compact evolution
+```

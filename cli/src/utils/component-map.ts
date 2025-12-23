@@ -108,13 +108,6 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["sonner.tsx", "index.ts"],
     dependencies: ["sonner", "lucide-react", "clsx", "tailwind-merge"],
   },
-  autocomplete: {
-    name: "autocomplete",
-    type: "atom",
-    path: "packages/ui/src/components/atoms/autocomplete",
-    files: ["autocomplete.tsx", "index.ts"],
-    dependencies: ["@radix-ui/react-popover", "lucide-react", "clsx", "tailwind-merge"],
-  },
   tooltip: {
     name: "tooltip",
     type: "atom",
@@ -487,9 +480,28 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
   "input-group": {
     name: "input-group",
     type: "molecule",
-    path: "packages/ui/src/components/molecules/input-group",
+    path: "packages/ui/src/components/molecules/forms/input-group",
     files: ["input-group.tsx", "index.ts"],
     dependencies: ["clsx", "tailwind-merge"],
+  },
+  autocomplete: {
+    name: "autocomplete",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/forms/autocomplete",
+    files: [
+      "autocomplete.tsx",
+      "autocomplete-item.tsx",
+      "autocomplete-section.tsx",
+      "autocomplete-context.tsx",
+      "index.ts",
+    ],
+    dependencies: [
+      "@radix-ui/react-popover",
+      "flowtomic/logic",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge",
+    ],
   },
   artifact: {
     name: "artifact",
@@ -762,6 +774,80 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
       "tailwind-merge",
     ],
   },
+  "widget-resize-handle": {
+    name: "widget-resize-handle",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/widget-resize-handle",
+    files: ["widget-resize-handle.tsx", "index.ts"],
+    dependencies: ["lucide-react", "clsx", "tailwind-merge"],
+  },
+  "edit-mode-toggle": {
+    name: "edit-mode-toggle",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/edit-mode-toggle",
+    files: ["edit-mode-toggle.tsx", "index.ts"],
+    dependencies: ["lucide-react", "@flowtomic/ui", "clsx", "tailwind-merge"],
+  },
+  "draggable-widget": {
+    name: "draggable-widget",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/draggable-widget",
+    files: ["draggable-widget.tsx", "index.ts"],
+    dependencies: [
+      "@dnd-kit/core",
+      "@dnd-kit/utilities",
+      "lucide-react",
+      "@flowtomic/ui",
+      "clsx",
+      "tailwind-merge",
+    ],
+  },
+  "widget-renderer": {
+    name: "widget-renderer",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/widget-renderer",
+    files: ["widget-renderer.tsx", "index.ts"],
+    dependencies: ["@flowtomic/ui", "clsx", "tailwind-merge"],
+  },
+  "draggable-dashboard-grid": {
+    name: "draggable-dashboard-grid",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/draggable-dashboard-grid",
+    files: ["draggable-dashboard-grid.tsx", "index.ts"],
+    dependencies: [
+      "@dnd-kit/core",
+      "@dnd-kit/utilities",
+      "@flowtomic/logic",
+      "@flowtomic/ui",
+      "clsx",
+      "tailwind-merge",
+    ],
+  },
+  "widget-palette": {
+    name: "widget-palette",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/widget-palette",
+    files: ["widget-palette.tsx", "index.ts"],
+    dependencies: [
+      "@dnd-kit/core",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge",
+    ],
+  },
+  "widget-config-modal": {
+    name: "widget-config-modal",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/widget-config-modal",
+    files: ["widget-config-modal.tsx", "index.ts"],
+    dependencies: [
+      "@flowtomic/ui",
+      "react-hook-form",
+      "zod",
+      "clsx",
+      "tailwind-merge",
+    ],
+  },
 };
 
 /**
@@ -773,6 +859,13 @@ export const HOOK_MAP: Record<string, ComponentInfo> = {
     type: "atom",
     path: "packages/logic/src/hooks/useStatCard",
     files: ["useStatCard.ts"],
+    dependencies: ["react"],
+  },
+  "use-dashboard-layout": {
+    name: "useDashboardLayout",
+    type: "atom",
+    path: "packages/logic/src/hooks/useDashboardLayout",
+    files: ["useDashboardLayout.ts", "index.ts"],
     dependencies: ["react"],
   },
 };
@@ -807,6 +900,11 @@ export function findComponent(name: string): ComponentInfo | null {
     summary: "monthly-summary",
     "header-actions": "dashboard-header-actions",
     movements: "dashboard-movements-section",
+    "edit-toggle": "edit-mode-toggle",
+    "widget-resize": "widget-resize-handle",
+    "dashboard-grid": "draggable-dashboard-grid",
+    palette: "widget-palette",
+    "config-modal": "widget-config-modal",
   };
 
   if (aliases[normalized]) {

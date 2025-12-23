@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Source, Sources, SourcesContent, SourcesTrigger } from "./sources";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/Sources",
+  title: "Flowtomic UI/Molecules/Data Display/Sources",
   component: Sources,
   parameters: {
     layout: "centered",

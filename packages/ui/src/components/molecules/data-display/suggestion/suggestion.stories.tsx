@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Suggestion, Suggestions } from "./suggestion";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/Suggestion",
+  title: "Flowtomic UI/Molecules/Data Display/Suggestion",
   component: Suggestions,
   parameters: {
     layout: "centered",

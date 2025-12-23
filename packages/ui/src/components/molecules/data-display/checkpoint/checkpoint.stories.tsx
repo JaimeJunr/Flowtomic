@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkpoint, CheckpointIcon, CheckpointTrigger } from "./checkpoint";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/Checkpoint",
+  title: "Flowtomic UI/Molecules/Data Display/Checkpoint",
   component: Checkpoint,
   parameters: {
     layout: "centered",

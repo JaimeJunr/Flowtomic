@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Tool, ToolContent, ToolHeader, ToolInput, ToolOutput } from "./tool";
 
 const meta = {
-  title: "Flowtomic UI/Molecules/DataDisplay/Tool",
+  title: "Flowtomic UI/Molecules/Data Display/Tool",
   component: Tool,
   parameters: {
     layout: "centered",

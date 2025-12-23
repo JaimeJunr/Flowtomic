@@ -8,10 +8,22 @@
 "use client";
 
 import type { ExecuteScriptResponse, TerminalLine } from "@flowtomic/logic";
-import { ScriptEditor } from "@/components/organisms";
-import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms";
 import { Code, Info } from "lucide-react";
 import { useState } from "react";
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/atoms";
+import { ScriptEditor } from "@/components/organisms";
 
 export interface SystemHealth {
   status: string;
@@ -156,7 +168,9 @@ export default function DeveloperPanel({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Painel de Desenvolvedor</h1>
-          <p className="text-muted-foreground mt-2">Informações técnicas e ferramentas de desenvolvimento</p>
+          <p className="text-muted-foreground mt-2">
+            Informações técnicas e ferramentas de desenvolvimento
+          </p>
         </div>
         <Badge variant="outline" className="text-lg px-4 py-2">
           {user?.isAdmin ? "ADMIN" : "USER"}
@@ -208,7 +222,9 @@ export default function DeveloperPanel({
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Role</p>
-                  <Badge variant={user?.isAdmin ? "default" : "secondary"}>{user?.role || "N/A"}</Badge>
+                  <Badge variant={user?.isAdmin ? "default" : "secondary"}>
+                    {user?.role || "N/A"}
+                  </Badge>
                 </div>
                 {user?.token && (
                   <div>
@@ -220,7 +236,7 @@ export default function DeveloperPanel({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => copyToClipboard(user.token!, "token")}
+                        onClick={() => user.token && copyToClipboard(user.token, "token")}
                       >
                         {copiedText === "token" ? "Copiado!" : "Copiar"}
                       </Button>
@@ -241,7 +257,9 @@ export default function DeveloperPanel({
                   <>
                     <div>
                       <p className="text-sm text-muted-foreground">Status</p>
-                      <Badge variant={health.status === "UP" ? "default" : "destructive"}>{health.status}</Badge>
+                      <Badge variant={health.status === "UP" ? "default" : "destructive"}>
+                        {health.status}
+                      </Badge>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Serviço</p>
@@ -249,7 +267,9 @@ export default function DeveloperPanel({
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Timestamp</p>
-                      <p className="font-medium text-xs">{new Date(health.timestamp).toLocaleString("pt-BR")}</p>
+                      <p className="font-medium text-xs">
+                        {new Date(health.timestamp).toLocaleString("pt-BR")}
+                      </p>
                     </div>
                   </>
                 ) : (
@@ -407,4 +427,3 @@ export default function DeveloperPanel({
     </div>
   );
 }
-

@@ -151,6 +151,10 @@ export type {
   ToolProps,
 } from "./data-display/tool";
 export { Tool, ToolContent, ToolHeader, ToolInput, ToolOutput } from "./data-display/tool";
+export type { DraggableWidgetProps } from "./draggable-widget";
+export { DraggableWidget } from "./draggable-widget";
+export type { EditModeToggleProps } from "./edit-mode-toggle";
+export { EditModeToggle } from "./edit-mode-toggle";
 export type {
   ConfirmationAcceptedProps,
   ConfirmationActionProps,
@@ -172,6 +176,18 @@ export {
 export type { CanvasProps } from "./flow/canvas";
 export { Canvas } from "./flow/canvas";
 export { Connection } from "./flow/connection";
+export type {
+  AutocompleteContextValue,
+  AutocompleteItemProps,
+  AutocompleteProps,
+  AutocompleteSectionProps,
+} from "./forms/autocomplete";
+export {
+  Autocomplete,
+  AutocompleteItem,
+  AutocompleteSection,
+  useAutocompleteContext,
+} from "./forms/autocomplete";
 export type {
   ButtonGroupProps,
   ButtonGroupSeparatorProps,
@@ -216,6 +232,8 @@ export {
   ItemSeparator,
   ItemTitle,
 } from "./forms/item";
+export type { TextEditorMode, TextEditorProps, TextEditorToolbarAction } from "./forms/text-editor";
+export { TextEditor } from "./forms/text-editor";
 export type {
   DashboardHeaderProps,
   DashboardUser,
@@ -235,5 +253,5 @@ export type {
   ThemeToggleButtonProps,
 } from "./theme/theme-toggle-button/theme-toggle-button";
 export { ThemeToggleButton } from "./theme/theme-toggle-button/theme-toggle-button";
-export type { AnimatedShinyTextProps } from "./typography";
-export { AnimatedShinyText } from "./typography";
+export type { WidgetRendererProps } from "./widget-renderer";
+export { WidgetRenderer } from "./widget-renderer";
