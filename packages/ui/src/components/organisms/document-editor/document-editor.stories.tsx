@@ -264,7 +264,10 @@ export const CollaborativeExample: Story = {
               </div>
               <span className="text-muted-foreground">3 pessoas editando</span>
             </div>
-            <button type="button" className="rounded bg-blue-600 px-4 py-1.5 text-white hover:bg-blue-700">
+            <button
+              type="button"
+              className="rounded bg-blue-600 px-4 py-1.5 text-white hover:bg-blue-700"
+            >
               Compartilhar
             </button>
           </div>

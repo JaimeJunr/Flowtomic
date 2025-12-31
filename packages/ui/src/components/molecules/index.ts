@@ -62,6 +62,8 @@ export type {
   ChartBarInteractiveProps,
 } from "./data-display/chart-bar-interactive";
 export { ChartBarInteractive } from "./data-display/chart-bar-interactive";
+export type { ChatMessageData, ChatMessageProps } from "./data-display/chat-message";
+export { ChatMessage } from "./data-display/chat-message";
 export type {
   CheckpointIconProps,
   CheckpointProps,
@@ -173,6 +175,8 @@ export {
   ConfirmationRequest,
   ConfirmationTitle,
 } from "./feedback/confirmation";
+export type { EditChatMessageModalProps } from "./feedback/edit-chat-message-modal";
+export { EditChatMessageModal } from "./feedback/edit-chat-message-modal";
 export type { CanvasProps } from "./flow/canvas";
 export { Canvas } from "./flow/canvas";
 export { Connection } from "./flow/connection";
@@ -194,6 +198,12 @@ export type {
   ButtonGroupTextProps,
 } from "./forms/button-group";
 export { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "./forms/button-group";
+export type {
+  ChatInputProps,
+  MessageTypeOption,
+  ModeOption,
+} from "./forms/chat-input";
+export { ChatInput } from "./forms/chat-input";
 export type { ImageDropzoneProps } from "./forms/image-dropzone";
 export { ImageDropzone } from "./forms/image-dropzone";
 export type {

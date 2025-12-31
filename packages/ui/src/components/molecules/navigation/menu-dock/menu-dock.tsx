@@ -88,7 +88,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   const textRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const shouldUseIndicator = showLabels && orientation === "horizontal";
-  
+
   const { indicatorStyle, registerElement, unregisterElement } = useAnimatedIndicator({
     containerRef: containerRef as React.RefObject<HTMLElement>,
     activeSelector: 'span[data-active="true"]',

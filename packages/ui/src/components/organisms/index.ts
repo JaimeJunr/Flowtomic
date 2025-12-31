@@ -21,6 +21,8 @@ export {
   ChainOfThoughtSearchResults,
   ChainOfThoughtStep,
 } from "./chain-of-thought";
+export type { ChatLogProps } from "./chat-log";
+export { ChatLog } from "./chat-log";
 export type {
   ContextCacheUsageProps,
   ContextContentBodyProps,

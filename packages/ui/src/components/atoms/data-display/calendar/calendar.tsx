@@ -6,19 +6,26 @@ import { Button, buttonVariants } from "../../actions/button/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
+  captionLayout?: "buttons" | "dropdown" | "dropdown-months" | "dropdown-years";
 };
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
-  captionLayout = "label",
+  captionLayout: captionLayoutProp,
   buttonVariant = "ghost",
   formatters,
   components,
+  onMonthChange,
   ...props
 }: CalendarProps) {
   const defaultClassNames = getDefaultClassNames();
+
+  const captionLayoutValue: React.ComponentProps<typeof DayPicker>["captionLayout"] | undefined =
+    !captionLayoutProp || (captionLayoutProp as string) === "buttons"
+      ? undefined
+      : (captionLayoutProp as "dropdown" | "dropdown-months" | "dropdown-years");
 
   return (
     <DayPicker
@@ -29,7 +36,7 @@ function Calendar({
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className
       )}
-      captionLayout={captionLayout}
+      {...(captionLayoutValue !== undefined && { captionLayout: captionLayoutValue })}
       formatters={{
         formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
         ...formatters,
@@ -66,10 +73,7 @@ function Calendar({
         ),
         dropdown: cn("absolute bg-popover inset-0 opacity-0", defaultClassNames.dropdown),
         caption_label: cn(
-          "select-none font-medium",
-          captionLayout === "label"
-            ? "text-sm"
-            : "rounded-md pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5",
+          "select-none font-medium rounded-md pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5",
           defaultClassNames.caption_label
         ),
         table: "w-full border-collapse",
@@ -133,6 +137,7 @@ function Calendar({
         },
         ...components,
       }}
+      onMonthChange={onMonthChange}
       {...props}
     />
   );
