@@ -193,8 +193,9 @@ export function WidgetResizeHandle({
   ]);
 
   return (
-    <div
-      ref={handleRef}
+    <button
+      type="button"
+      ref={handleRef as any}
       onMouseDown={handleMouseDown}
       className={cn(
         "absolute bottom-0 right-0 w-6 h-6",
@@ -206,9 +207,15 @@ export function WidgetResizeHandle({
         isResizing && "opacity-100 bg-primary/40",
         className
       )}
+      tabIndex={0}
       aria-label="Redimensionar widget"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+        }
+      }}
     >
       <Maximize2 className="w-3 h-3 text-primary" />
-    </div>
+    </button>
   );
 }

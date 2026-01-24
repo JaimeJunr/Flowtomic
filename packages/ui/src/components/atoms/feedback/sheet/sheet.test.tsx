@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { Button } from "../../actions/button/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./sheet";
 
@@ -70,7 +69,7 @@ describe("Sheet", () => {
   describe("Lados", () => {
     it("deve renderizar com side right por padrão", async () => {
       const user = userEvent.setup();
-      const { container } = render(
+      render(
         <Sheet>
           <SheetTrigger asChild>
             <Button>Open</Button>

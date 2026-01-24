@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import { ScrollArea } from "./scroll-area";
 
@@ -16,7 +15,7 @@ describe("ScrollArea", () => {
     });
 
     it("deve aplicar className customizada", () => {
-      const { container } = render(
+      render(
         <ScrollArea className="custom-class h-[200px]">
           <div>Content</div>
         </ScrollArea>

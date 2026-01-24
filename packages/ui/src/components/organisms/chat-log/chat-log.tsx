@@ -66,15 +66,15 @@ export const ChatLog = React.forwardRef<HTMLDivElement, ChatLogProps>(
   ) => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const scrollToBottom = () => {
+    const scrollToBottom = React.useCallback(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
+    }, []);
 
     useEffect(() => {
       if (autoScroll && messages.length > 0) {
         scrollToBottom();
       }
-    }, [messages, autoScroll]);
+    }, [messages, autoScroll, scrollToBottom]);
 
     return (
       <div ref={ref} className={cn("h-full flex flex-col", className)} {...props}>

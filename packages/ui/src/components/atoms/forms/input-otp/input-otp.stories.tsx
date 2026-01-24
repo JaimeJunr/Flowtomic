@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "./input-otp";
 
 /**

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ChevronDown } from "lucide-react";
-import React from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { Button } from "../../actions/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../display/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";

@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Slider } from "./slider";
 
@@ -63,7 +62,7 @@ describe("Slider", () => {
 
   describe("Interação", () => {
     it("deve chamar onValueChange quando valor muda", async () => {
-      const user = userEvent.setup();
+      const _user = userEvent.setup();
       const handleChange = vi.fn();
       render(<Slider value={[50]} onValueChange={handleChange} aria-label="Slider" />);
       const slider = screen.getByRole("slider");

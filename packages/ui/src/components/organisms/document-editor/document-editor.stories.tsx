@@ -113,6 +113,7 @@ export const FullyControlled: Story = {
             <div className="flex items-center gap-4">
               <span className="text-sm font-medium">Controles Externos:</span>
               <button
+                type="button"
                 onClick={() => setActivePage(Math.max(0, activePage - 1))}
                 className="rounded bg-slate-700 px-3 py-1 text-sm hover:bg-slate-600"
               >
@@ -122,6 +123,7 @@ export const FullyControlled: Story = {
                 Página {activePage + 1}/{pages.length}
               </span>
               <button
+                type="button"
                 onClick={() => setActivePage(Math.min(pages.length - 1, activePage + 1))}
                 className="rounded bg-slate-700 px-3 py-1 text-sm hover:bg-slate-600"
               >

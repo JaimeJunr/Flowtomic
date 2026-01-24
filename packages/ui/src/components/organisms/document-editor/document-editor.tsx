@@ -108,10 +108,13 @@ export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorPro
     // Estado interno para página ativa
     const [internalActivePage, setInternalActivePage] = React.useState(0);
     const activePage = controlledActivePage ?? internalActivePage;
-    const handleActivePageChange = (index: number) => {
-      setInternalActivePage(index);
-      onActivePageChange?.(index);
-    };
+    const handleActivePageChange = React.useCallback(
+      (index: number) => {
+        setInternalActivePage(index);
+        onActivePageChange?.(index);
+      },
+      [onActivePageChange]
+    );
 
     // Última edição (timestamp)
     const [lastEdit, setLastEdit] = React.useState<Date>(new Date());

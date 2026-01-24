@@ -168,6 +168,7 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
             : (scrambleCharsRef.current[index] ?? generateRandomCharacter(charset));
 
         return (
+          // biome-ignore lint/suspicious/noArrayIndexKey: O índice é estável para esta animação de caracteres
           <span key={index} className={cn(isRevealed ? revealedClassName : encryptedClassName)}>
             {displayChar}
           </span>

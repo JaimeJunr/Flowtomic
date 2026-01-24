@@ -52,9 +52,16 @@ export const Default: Story = {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Opções</label>
+                <label htmlFor="widget-options" className="text-sm font-medium">
+                  Opções
+                </label>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="widget-options"
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
                     <Checkbox
                       id="showLegend"
                       checked={(currentConfig.showLegend as boolean) || false}
@@ -81,6 +88,8 @@ export const Default: Story = {
       type: "chart",
       config: { dataSource: "api/data", showLegend: true },
     },
+    onSave: (id, config) => console.log("Save", id, config),
+    onClose: () => console.log("Close"),
   },
 };
 
@@ -105,5 +114,7 @@ export const CustomTitle: Story = {
   args: {
     open: true,
     widget: { id: "1", type: "custom" },
+    onSave: (id, config) => console.log("Save", id, config),
+    onClose: () => console.log("Close"),
   },
 };

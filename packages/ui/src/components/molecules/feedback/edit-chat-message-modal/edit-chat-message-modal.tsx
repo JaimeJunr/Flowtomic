@@ -126,10 +126,14 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
 
           {/* Campo de edição */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label
+              htmlFor="message-content"
+              className="text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
               Conteúdo da Mensagem
             </label>
             <Textarea
+              id="message-content"
               value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
               className="min-h-[200px] resize-none"

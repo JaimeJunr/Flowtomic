@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React, { useState } from "react";
+import { useState } from "react";
 import { expect, within } from "storybook/test";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../display/card/card";
 import { WidgetResizeHandle } from "./widget-resize-handle";

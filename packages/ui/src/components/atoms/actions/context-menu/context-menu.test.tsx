@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import {
   ContextMenu,
@@ -78,7 +77,7 @@ describe("ContextMenu", () => {
     });
 
     it("deve renderizar item com variant destructive", async () => {
-      const { container } = render(
+      render(
         <ContextMenu>
           <ContextMenuTrigger>Trigger</ContextMenuTrigger>
           <ContextMenuContent>
@@ -101,7 +100,7 @@ describe("ContextMenu", () => {
     });
 
     it("deve renderizar item com inset", async () => {
-      const { container } = render(
+      render(
         <ContextMenu>
           <ContextMenuTrigger>Trigger</ContextMenuTrigger>
           <ContextMenuContent>

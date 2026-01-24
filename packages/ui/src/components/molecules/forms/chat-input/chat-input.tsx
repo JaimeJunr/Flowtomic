@@ -92,7 +92,7 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
         textareaRef.current.style.height = "auto";
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }
-    }, [value]);
+    }, []);
 
     const handleSubmit = () => {
       if (!value.trim() || remaining < 0 || disabled || isLoading) return;

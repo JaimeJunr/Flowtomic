@@ -54,6 +54,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Componente wrapper para usar Node dentro do Canvas
+// biome-ignore lint/suspicious/noExplicitAny: Storybook wrapper
 const NodeInCanvas = ({ handles, children }: { handles: any; children: ReactNode }) => {
   const [nodes, _setNodes, onNodesChange] = useNodesState<ReactFlowNode[]>([
     {

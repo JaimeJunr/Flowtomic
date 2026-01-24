@@ -180,18 +180,21 @@ export const ControlledMode: Story = {
         </div>
         <div className="flex gap-2">
           <button
+            type="button"
             onClick={() => setMode("rich")}
             className="rounded-md bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-700"
           >
             Rich
           </button>
           <button
+            type="button"
             onClick={() => setMode("markdown")}
             className="rounded-md bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-700"
           >
             Markdown
           </button>
           <button
+            type="button"
             onClick={() => setMode("preview")}
             className="rounded-md bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-700"
           >

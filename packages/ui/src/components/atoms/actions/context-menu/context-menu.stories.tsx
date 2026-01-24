@@ -13,7 +13,6 @@
  * @see [ContextMenu Component](./context-menu.tsx) para documentação completa do componente
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import {
   ContextMenu,

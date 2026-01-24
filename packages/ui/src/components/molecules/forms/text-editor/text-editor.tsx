@@ -237,7 +237,10 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
         try {
           // Acesso ao storage markdown da extensão tiptap-markdown
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const md: string = (editor?.storage as any)?.markdown?.getMarkdown?.() ?? "";
+          const md: string =
+            (
+              editor?.storage as Record<string, { getMarkdown?: () => string }>
+            )?.markdown?.getMarkdown?.() ?? "";
           if (typeof md === "string") {
             if (!isControlled) setInternalMarkdown(md);
             if (outputFormat === "text") {

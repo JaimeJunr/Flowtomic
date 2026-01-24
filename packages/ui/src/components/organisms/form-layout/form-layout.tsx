@@ -371,7 +371,7 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                       value={String(field.value ?? "")}
                       onValueChange={field.onChange}
                       className="flex flex-col gap-2"
-                      disabled={disabled as any}
+                      disabled={disabled as boolean}
                     >
                       {(radioOptions ?? [])?.map((opt) => (
                         <div key={opt.value} className="flex items-center gap-2">
@@ -411,6 +411,7 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                     >
                       <InputOTPGroup>
                         {Array.from({ length: otpLength ?? 6 }).map((_, i) => (
+                          // biome-ignore lint/suspicious/noArrayIndexKey: O índice é estável para o OTP
                           <InputOTPSlot key={i} index={i} />
                         ))}
                       </InputOTPGroup>

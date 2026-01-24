@@ -13,7 +13,6 @@
  * @see [Select Component](./select.tsx) para documentação completa do componente
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { expect, within } from "storybook/test";
 import {
   Select,

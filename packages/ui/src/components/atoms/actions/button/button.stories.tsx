@@ -34,7 +34,6 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Download, MoreHorizontal } from "lucide-react";
-import React from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import {
   DropdownMenu,

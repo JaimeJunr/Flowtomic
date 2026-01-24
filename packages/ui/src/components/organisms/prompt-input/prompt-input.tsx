@@ -8,7 +8,6 @@
 
 import type { ChatStatus, FileUIPart } from "ai";
 import {
-  CornerDownLeftIcon,
   ImageIcon,
   Loader2Icon,
   MicIcon,
@@ -685,7 +684,7 @@ export const PromptInput = ({
           className
         )}
         onSubmit={handleSubmit}
-        {...(props as any)}
+        {...(props as Record<string, unknown>)}
       >
         <InputGroup>{children}</InputGroup>
       </form>
@@ -832,7 +831,10 @@ export const PromptInputFooter = ({ className, ...props }: PromptInputFooterProp
 export type PromptInputToolbarProps = HTMLAttributes<HTMLDivElement>;
 
 export const PromptInputToolbar = ({ className, ...props }: PromptInputToolbarProps) => (
-  <div className={cn("flex items-center justify-between p-1", className)} {...(props as any)} />
+  <div
+    className={cn("flex items-center justify-between p-1", className)}
+    {...(props as Record<string, unknown>)}
+  />
 );
 
 export type PromptInputToolsProps = HTMLAttributes<HTMLDivElement>;
@@ -840,7 +842,7 @@ export type PromptInputToolsProps = HTMLAttributes<HTMLDivElement>;
 export const PromptInputTools = ({ className, ...props }: PromptInputToolsProps) => (
   <div
     className={cn("flex items-center gap-1", "[&_button:first-child]:rounded-bl-xl", className)}
-    {...(props as any)}
+    {...(props as Record<string, unknown>)}
   />
 );
 
@@ -865,7 +867,7 @@ export const PromptInputButton = ({
       size={newSize}
       type="button"
       variant={variant}
-      {...(props as any)}
+      {...(props as Record<string, unknown>)}
     />
   );
 };
@@ -931,7 +933,7 @@ export const PromptInputSubmit = ({
       size={size}
       type="submit"
       variant={variant}
-      {...(props as any)}
+      {...(props as Record<string, unknown>)}
     >
       {children ?? Icon}
     </InputGroupButton>
@@ -944,10 +946,10 @@ interface SpeechRecognition extends EventTarget {
   lang: string;
   start(): void;
   stop(): void;
-  onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
-  onend: ((this: SpeechRecognition, ev: Event) => any) | null;
-  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
-  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null;
+  onstart: ((this: SpeechRecognition, ev: Event) => unknown) | null;
+  onend: ((this: SpeechRecognition, ev: Event) => unknown) | null;
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => unknown) | null;
+  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => unknown) | null;
 }
 
 interface SpeechRecognitionEvent extends Event {

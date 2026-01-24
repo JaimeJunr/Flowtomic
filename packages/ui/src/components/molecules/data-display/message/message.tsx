@@ -391,9 +391,9 @@ function parseIncompleteMarkdown(text: string): string {
   const inlineCodeMatch = result.match(inlineCodePattern);
   if (inlineCodeMatch) {
     // Check if we're dealing with a code block (triple backticks)
-    const hasCodeBlockStart = result.includes("```");
+    const _hasCodeBlockStart = result.includes("```");
     const codeBlockPattern = /```[\s\S]*?```/g;
-    const completeCodeBlocks = (result.match(codeBlockPattern) || []).length;
+    const _completeCodeBlocks = (result.match(codeBlockPattern) || []).length;
     const allTripleBackticks = (result.match(/```/g) || []).length;
     // If we have an odd number of ``` sequences, we're inside an incomplete code block
     // In this case, don't complete inline code
@@ -571,7 +571,7 @@ const components: Options["components"] = {
       children.props &&
       typeof (children.props as any).children === "string"
     ) {
-      code = (children.props as any).children;
+      code = (children.props as Record<string, any>).children as string;
     } else if (typeof children === "string") {
       code = children;
     }
@@ -642,8 +642,7 @@ const MessageResponseComponent = React.forwardRef<HTMLDivElement, MessageRespons
 );
 MessageResponseComponent.displayName = "MessageResponse";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const MessageResponse: any = memo(
+export const MessageResponse = memo(
   MessageResponseComponent,
   (prevProps, nextProps) => prevProps.children === nextProps.children
 );
