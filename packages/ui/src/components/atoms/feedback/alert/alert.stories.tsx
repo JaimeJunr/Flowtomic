@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
-import React from "react";
 import { AlertCircle, CheckCircle2, Info as InfoIcon, TriangleAlert } from "lucide-react";
+import React from "react";
+import { expect, within } from "storybook/test";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 
 /**
@@ -164,7 +164,9 @@ export const WithoutTitle: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const alert = canvas.getByRole("alert");
-    const description = canvas.getByText("Você pode adicionar componentes ao seu app usando o cli.");
+    const description = canvas.getByText(
+      "Você pode adicionar componentes ao seu app usando o cli."
+    );
     await expect(alert).toBeInTheDocument();
     await expect(description).toBeInTheDocument();
   },

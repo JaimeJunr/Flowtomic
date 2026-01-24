@@ -79,8 +79,8 @@ FieldSet.displayName = "FieldSet";
  * @property {'legend' | 'label'} [variant='legend'] - Variante visual do legend
  */
 export interface FieldLegendProps extends React.ComponentProps<"legend"> {
-	/** Variante visual do legend */
-	variant?: "legend" | "label";
+  /** Variante visual do legend */
+  variant?: "legend" | "label";
 }
 
 function FieldLegend({ className, variant = "legend", ...props }: FieldLegendProps) {
@@ -145,8 +145,8 @@ const fieldVariants = cva("group/field flex w-full gap-3 data-[invalid=true]:tex
  * @property {'vertical' | 'horizontal' | 'responsive'} [orientation='vertical'] - Orientação do campo
  */
 export interface FieldProps
-	extends React.ComponentProps<"div">,
-		VariantProps<typeof fieldVariants> {}
+  extends React.ComponentProps<"div">,
+    VariantProps<typeof fieldVariants> {}
 
 function Field({ className, orientation = "vertical", ...props }: FieldProps) {
   return (
@@ -268,8 +268,8 @@ FieldSeparator.displayName = "FieldSeparator";
  * @property {Array<{ message?: string } | undefined>} [errors] - Array de erros a exibir
  */
 export interface FieldErrorProps extends React.ComponentProps<"div"> {
-	/** Array de erros a exibir */
-	errors?: Array<{ message?: string } | undefined>;
+  /** Array de erros a exibir */
+  errors?: Array<{ message?: string } | undefined>;
 }
 
 function FieldError({ className, children, errors, ...props }: FieldErrorProps) {

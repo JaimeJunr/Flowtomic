@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type React from "react";
 import { expect, userEvent, within } from "storybook/test";
-import React from "react";
 import { Button } from "../../actions/button";
 import {
   Tooltip,

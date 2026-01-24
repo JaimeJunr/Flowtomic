@@ -62,10 +62,10 @@ import { cn } from "@/lib/utils";
  * @property {number} [max=100] - Valor máximo do slider
  */
 export interface SliderProps extends React.ComponentProps<typeof SliderPrimitive.Root> {
-	/** Valor mínimo do slider */
-	min?: number;
-	/** Valor máximo do slider */
-	max?: number;
+  /** Valor mínimo do slider */
+  min?: number;
+  /** Valor máximo do slider */
+  max?: number;
 }
 
 function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }: SliderProps) {

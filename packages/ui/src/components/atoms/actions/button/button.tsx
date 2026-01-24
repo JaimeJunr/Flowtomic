@@ -144,23 +144,23 @@ const buttonVariants = cva(
  * @property {React.ReactNode} [children] - Conteúdo do botão (texto, ícones, etc.)
  */
 export interface ButtonProps
-	extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "transition">,
-		VariantProps<typeof buttonVariants> {
-	/**
-	 * Quando `true`, o Button não renderiza um elemento próprio, mas passa suas props
-	 * para o primeiro filho usando Radix UI Slot. Útil para composição com outros componentes.
-	 */
-	asChild?: boolean;
-	/**
-	 * Quando `true`, aplica animações sutis de hover e tap via Framer Motion.
-	 * As animações incluem scale no hover (1.02) e no tap (0.98).
-	 */
-	animated?: boolean;
-	/**
-	 * Configuração de transição customizada para animações quando `animated={true}`.
-	 * Se não fornecido, usa transição spring padrão.
-	 */
-	transition?: Transition;
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "transition">,
+    VariantProps<typeof buttonVariants> {
+  /**
+   * Quando `true`, o Button não renderiza um elemento próprio, mas passa suas props
+   * para o primeiro filho usando Radix UI Slot. Útil para composição com outros componentes.
+   */
+  asChild?: boolean;
+  /**
+   * Quando `true`, aplica animações sutis de hover e tap via Framer Motion.
+   * As animações incluem scale no hover (1.02) e no tap (0.98).
+   */
+  animated?: boolean;
+  /**
+   * Configuração de transição customizada para animações quando `animated={true}`.
+   * Se não fornecido, usa transição spring padrão.
+   */
+  transition?: Transition;
 }
 
 /**
@@ -181,7 +181,7 @@ export interface ButtonProps
  * ```
  */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, asChild = false, animated = false, transition, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, animated = false, transition, ...props }, ref) => {
     const baseClassName = cn(buttonVariants({ variant, size, className }));
 
     if (animated && !asChild) {

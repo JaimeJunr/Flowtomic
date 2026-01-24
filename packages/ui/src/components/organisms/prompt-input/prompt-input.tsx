@@ -42,13 +42,6 @@ import {
   useState,
 } from "react";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupTextarea,
-} from "@/components/molecules/forms/input-group";
-import { cn } from "@/lib/utils";
-import {
   Button,
   Command,
   CommandEmpty,
@@ -70,6 +63,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/atoms";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupTextarea,
+} from "@/components/molecules/forms/input-group";
+import { cn } from "@/lib/utils";
 
 export type AttachmentsContext = {
   files: (FileUIPart & { id: string })[];
@@ -831,28 +831,15 @@ export const PromptInputFooter = ({ className, ...props }: PromptInputFooterProp
 
 export type PromptInputToolbarProps = HTMLAttributes<HTMLDivElement>;
 
-export const PromptInputToolbar = ({
-  className,
-  ...props
-}: PromptInputToolbarProps) => (
-  <div
-    className={cn("flex items-center justify-between p-1", className)}
-    {...(props as any)}
-  />
+export const PromptInputToolbar = ({ className, ...props }: PromptInputToolbarProps) => (
+  <div className={cn("flex items-center justify-between p-1", className)} {...(props as any)} />
 );
 
 export type PromptInputToolsProps = HTMLAttributes<HTMLDivElement>;
 
-export const PromptInputTools = ({
-  className,
-  ...props
-}: PromptInputToolsProps) => (
+export const PromptInputTools = ({ className, ...props }: PromptInputToolsProps) => (
   <div
-    className={cn(
-      "flex items-center gap-1",
-      "[&_button:first-child]:rounded-bl-xl",
-      className
-    )}
+    className={cn("flex items-center gap-1", "[&_button:first-child]:rounded-bl-xl", className)}
     {...(props as any)}
   />
 );
@@ -865,8 +852,7 @@ export const PromptInputButton = ({
   size,
   ...props
 }: PromptInputButtonProps) => {
-  const newSize =
-    (size ?? Children.count(props.children) > 1) ? "default" : "icon";
+  const newSize = (size ?? Children.count(props.children) > 1) ? "default" : "icon";
 
   return (
     <InputGroupButton

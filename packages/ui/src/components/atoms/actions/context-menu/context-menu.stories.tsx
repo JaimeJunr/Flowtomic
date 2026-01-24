@@ -13,8 +13,8 @@
  * @see [ContextMenu Component](./context-menu.tsx) para documentação completa do componente
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
 import React from "react";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -146,10 +146,7 @@ export const Accessibility: Story = {
     const area = await canvas.getByTestId("cm-trigger");
 
     // Simula clique com botão direito (context menu)
-    await userEvent.pointer([
-      { keys: "[MouseRight>]", target: area },
-      { keys: "[/MouseRight]" },
-    ]);
+    await userEvent.pointer([{ keys: "[MouseRight>]", target: area }, { keys: "[/MouseRight]" }]);
 
     // Aguarda um pouco para o menu abrir
     await new Promise((resolve) => setTimeout(resolve, 100));

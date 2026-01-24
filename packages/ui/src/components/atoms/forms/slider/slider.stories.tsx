@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
 import React, { useState } from "react";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { Slider } from "./slider";
 
 /**
@@ -72,7 +72,13 @@ export const Range: Story = {
     const [value, setValue] = useState([20, 80]);
     return (
       <div className="w-[300px] space-y-2">
-        <Slider value={value} onValueChange={setValue} min={0} max={100} aria-label="Range slider" />
+        <Slider
+          value={value}
+          onValueChange={setValue}
+          min={0}
+          max={100}
+          aria-label="Range slider"
+        />
         <p className="text-sm text-muted-foreground">
           Valores: {value[0]} - {value[1]}
         </p>
@@ -95,7 +101,13 @@ export const WithMinMax: Story = {
     const [value, setValue] = useState([25]);
     return (
       <div className="w-[300px] space-y-2">
-        <Slider value={value} onValueChange={setValue} min={0} max={50} aria-label="Custom range slider" />
+        <Slider
+          value={value}
+          onValueChange={setValue}
+          min={0}
+          max={50}
+          aria-label="Custom range slider"
+        />
         <p className="text-sm text-muted-foreground">Valor: {value[0]} (0-50)</p>
       </div>
     );

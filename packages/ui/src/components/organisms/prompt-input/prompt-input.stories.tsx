@@ -68,9 +68,7 @@ export const WithModelSelector: Story = {
         </PromptInputToolbar>
         <PromptInputTextarea placeholder="What would you like to know?" />
         <PromptInputFooter>
-          <PromptInputTools>
-            {/* Tools can be added here */}
-          </PromptInputTools>
+          <PromptInputTools>{/* Tools can be added here */}</PromptInputTools>
           <PromptInputSubmit />
         </PromptInputFooter>
       </>
@@ -85,11 +83,7 @@ export const WithCustomHeight: Story = {
     },
     children: (
       <>
-        <PromptInputTextarea
-          placeholder="Type your message..."
-          minHeight={64}
-          maxHeight={200}
-        />
+        <PromptInputTextarea placeholder="Type your message..." minHeight={64} maxHeight={200} />
         <PromptInputFooter>
           <PromptInputSubmit />
         </PromptInputFooter>

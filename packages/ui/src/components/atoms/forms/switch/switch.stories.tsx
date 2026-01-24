@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
 import React, { useState } from "react";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { Switch } from "./switch";
 
 /**

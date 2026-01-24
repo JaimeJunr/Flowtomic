@@ -108,14 +108,14 @@ const inputVariants = cva(
  * @property {string} [className] - Classes CSS adicionais
  */
 export interface InputProps
-	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
-		VariantProps<typeof inputVariants> {
-	/** Label opcional exibido acima do input */
-	label?: string;
-	/** Mensagem de erro exibida abaixo do input */
-	error?: string;
-	/** Texto de ajuda exibido abaixo do input (quando não há erro) */
-	helperText?: string;
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
+    VariantProps<typeof inputVariants> {
+  /** Label opcional exibido acima do input */
+  label?: string;
+  /** Mensagem de erro exibida abaixo do input */
+  error?: string;
+  /** Texto de ajuda exibido abaixo do input (quando não há erro) */
+  helperText?: string;
 }
 
 /**
@@ -133,7 +133,7 @@ export interface InputProps
  * ```
  */
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-	({ className, size, variant, label, error, helperText, id, ...props }, ref) => {
+  ({ className, size, variant, label, error, helperText, id, ...props }, ref) => {
     const generatedId = React.useId();
     const inputId = id || generatedId;
 

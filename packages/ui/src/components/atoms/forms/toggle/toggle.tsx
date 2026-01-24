@@ -91,8 +91,8 @@ const toggleVariants = cva(
  * @property {'default' | 'sm' | 'lg'} [size='default'] - Tamanho do toggle
  */
 export interface ToggleProps
-	extends React.ComponentProps<typeof TogglePrimitive.Root>,
-		VariantProps<typeof toggleVariants> {}
+  extends React.ComponentProps<typeof TogglePrimitive.Root>,
+    VariantProps<typeof toggleVariants> {}
 
 function Toggle({ className, variant, size, ...props }: ToggleProps) {
   return (

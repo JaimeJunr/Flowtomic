@@ -80,15 +80,15 @@ type Story = StoryObj<typeof meta>;
  * Badge com configuração padrão (variante `default`, tamanho `md`).
  */
 export const Default: Story = {
-	args: { children: "Badge" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Badge com configuração padrão. Use esta variante para informações gerais ou quando não há necessidade de destaque semântico específico.",
-			},
-		},
-	},
+  args: { children: "Badge" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Badge com configuração padrão. Use esta variante para informações gerais ou quando não há necessidade de destaque semântico específico.",
+      },
+    },
+  },
 };
 
 /**
@@ -97,15 +97,15 @@ export const Default: Story = {
  * Badge com estilo secundário, útil para informações menos importantes.
  */
 export const Secondary: Story = {
-	args: { variant: "secondary", children: "Secundário" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante secundária com cor neutra. Use para informações complementares ou menos importantes.",
-			},
-		},
-	},
+  args: { variant: "secondary", children: "Secundário" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante secundária com cor neutra. Use para informações complementares ou menos importantes.",
+      },
+    },
+  },
 };
 
 /**
@@ -114,15 +114,15 @@ export const Secondary: Story = {
  * Badge para indicar erros, ações destrutivas ou estados críticos.
  */
 export const Destructive: Story = {
-	args: { variant: "destructive", children: "Destrutivo" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante destrutiva com cor vermelha. Use para indicar erros, ações destrutivas ou estados críticos que requerem atenção.",
-			},
-		},
-	},
+  args: { variant: "destructive", children: "Destrutivo" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante destrutiva com cor vermelha. Use para indicar erros, ações destrutivas ou estados críticos que requerem atenção.",
+      },
+    },
+  },
 };
 
 /**
@@ -131,15 +131,15 @@ export const Destructive: Story = {
  * Badge com borda e fundo transparente, útil para destacar sem ocupar muito espaço visual.
  */
 export const Outline: Story = {
-	args: { variant: "outline", children: "Contorno" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante outline com borda e fundo transparente. Use quando quiser destacar informações sem ocupar muito espaço visual.",
-			},
-		},
-	},
+  args: { variant: "outline", children: "Contorno" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante outline com borda e fundo transparente. Use quando quiser destacar informações sem ocupar muito espaço visual.",
+      },
+    },
+  },
 };
 
 /**
@@ -148,15 +148,15 @@ export const Outline: Story = {
  * Badge para indicar sucesso, confirmação ou estados positivos.
  */
 export const Success: Story = {
-	args: { variant: "success", children: "Sucesso" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante success com cor verde. Use para indicar sucesso, confirmação ou estados positivos.",
-			},
-		},
-	},
+  args: { variant: "success", children: "Sucesso" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante success com cor verde. Use para indicar sucesso, confirmação ou estados positivos.",
+      },
+    },
+  },
 };
 
 /**
@@ -165,15 +165,15 @@ export const Success: Story = {
  * Badge para indicar avisos ou estados que requerem atenção.
  */
 export const Warning: Story = {
-	args: { variant: "warning", children: "Aviso" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante warning com cor amarela. Use para indicar avisos ou estados que requerem atenção do usuário.",
-			},
-		},
-	},
+  args: { variant: "warning", children: "Aviso" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante warning com cor amarela. Use para indicar avisos ou estados que requerem atenção do usuário.",
+      },
+    },
+  },
 };
 
 /**
@@ -182,15 +182,15 @@ export const Warning: Story = {
  * Badge para exibir informações gerais ou educativas.
  */
 export const Info: Story = {
-	args: { variant: "info", children: "Informação" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante info com cor azul. Use para exibir informações gerais, educativas ou informativas.",
-			},
-		},
-	},
+  args: { variant: "info", children: "Informação" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante info com cor azul. Use para exibir informações gerais, educativas ou informativas.",
+      },
+    },
+  },
 };
 
 /**
@@ -199,15 +199,15 @@ export const Info: Story = {
  * Badge com tamanho pequeno, útil para espaços compactos.
  */
 export const Small: Story = {
-	args: { size: "sm", children: "Pequeno" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Badge com tamanho pequeno. Use em espaços compactos ou quando o badge precisa ser discreto.",
-			},
-		},
-	},
+  args: { size: "sm", children: "Pequeno" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Badge com tamanho pequeno. Use em espaços compactos ou quando o badge precisa ser discreto.",
+      },
+    },
+  },
 };
 
 /**
@@ -216,15 +216,15 @@ export const Small: Story = {
  * Badge com tamanho grande, útil para maior destaque visual.
  */
 export const Large: Story = {
-	args: { size: "lg", children: "Grande" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Badge com tamanho grande. Use quando o badge precisa de maior destaque visual ou em interfaces com mais espaço.",
-			},
-		},
-	},
+  args: { size: "lg", children: "Grande" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Badge com tamanho grande. Use quando o badge precisa de maior destaque visual ou em interfaces com mais espaço.",
+      },
+    },
+  },
 };
 
 /**
@@ -233,40 +233,40 @@ export const Large: Story = {
  * Exemplo de uso do Badge em contexto de StatCard, mostrando métricas com ícones e cores semânticas.
  */
 export const UsageInStatCard: Story = {
-	args: { children: "" },
-	render: () => (
-		<div className="flex flex-col gap-4">
-			<Badge
-				variant="success"
-				className="text-xs font-semibold inline-flex items-center gap-1 w-fit"
-			>
-				<ArrowUp className="h-4 w-4" />
-				+17.2%
-			</Badge>
-			<Badge
-				variant="destructive"
-				className="text-xs font-semibold inline-flex items-center gap-1 w-fit"
-			>
-				<ArrowDown className="h-4 w-4" />
-				-8.5%
-			</Badge>
-			<Badge
-				variant="secondary"
-				className="text-xs font-semibold inline-flex items-center gap-1 w-fit"
-			>
-				<Minus className="h-4 w-4" />
-				0%
-			</Badge>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Uso contextual em StatCard mostrando tendência com ícones e estilo utilitário. Demonstra como combinar Badge com ícones para criar indicadores visuais ricos.",
-			},
-		},
-	},
+  args: { children: "" },
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <Badge
+        variant="success"
+        className="text-xs font-semibold inline-flex items-center gap-1 w-fit"
+      >
+        <ArrowUp className="h-4 w-4" />
+        +17.2%
+      </Badge>
+      <Badge
+        variant="destructive"
+        className="text-xs font-semibold inline-flex items-center gap-1 w-fit"
+      >
+        <ArrowDown className="h-4 w-4" />
+        -8.5%
+      </Badge>
+      <Badge
+        variant="secondary"
+        className="text-xs font-semibold inline-flex items-center gap-1 w-fit"
+      >
+        <Minus className="h-4 w-4" />
+        0%
+      </Badge>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Uso contextual em StatCard mostrando tendência com ícones e estilo utilitário. Demonstra como combinar Badge com ícones para criar indicadores visuais ricos.",
+      },
+    },
+  },
 };
 
 /**
@@ -275,19 +275,19 @@ export const UsageInStatCard: Story = {
  * Valida que o Badge é renderizado corretamente e possui estrutura acessível.
  */
 export const Accessibility: Story = {
-	args: { children: "Badge Acessível" },
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Teste de acessibilidade do Badge. Valida renderização e estrutura básica do componente.",
-			},
-		},
-	},
-	play: async ({ canvasElement }) => {
-		const canvas = within(canvasElement);
-		const badge = canvas.getByText("Badge Acessível");
-		expect(badge).toBeInTheDocument();
-		expect(badge.tagName).toBe("DIV");
-	},
+  args: { children: "Badge Acessível" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Teste de acessibilidade do Badge. Valida renderização e estrutura básica do componente.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const badge = canvas.getByText("Badge Acessível");
+    expect(badge).toBeInTheDocument();
+    expect(badge.tagName).toBe("DIV");
+  },
 };

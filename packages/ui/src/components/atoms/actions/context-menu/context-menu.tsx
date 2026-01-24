@@ -119,9 +119,9 @@ ContextMenuRadioGroup.displayName = "ContextMenuRadioGroup";
  * @property {boolean} [inset=false] - Quando `true`, adiciona padding à esquerda
  */
 export interface ContextMenuSubTriggerProps
-	extends React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> {
-	/** Quando `true`, adiciona padding à esquerda */
-	inset?: boolean;
+  extends React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> {
+  /** Quando `true`, adiciona padding à esquerda */
+  inset?: boolean;
 }
 
 function ContextMenuSubTrigger({
@@ -193,11 +193,11 @@ ContextMenuContent.displayName = "ContextMenuContent";
  * @property {'default' | 'destructive'} [variant='default'] - Variante do item (destructive para ações destrutivas)
  */
 export interface ContextMenuItemProps
-	extends React.ComponentProps<typeof ContextMenuPrimitive.Item> {
-	/** Quando `true`, adiciona padding à esquerda (útil para itens aninhados) */
-	inset?: boolean;
-	/** Variante do item (destructive para ações destrutivas) */
-	variant?: "default" | "destructive";
+  extends React.ComponentProps<typeof ContextMenuPrimitive.Item> {
+  /** Quando `true`, adiciona padding à esquerda (útil para itens aninhados) */
+  inset?: boolean;
+  /** Variante do item (destructive para ações destrutivas) */
+  variant?: "default" | "destructive";
 }
 
 function ContextMenuItem({
@@ -284,9 +284,9 @@ ContextMenuRadioItem.displayName = "ContextMenuRadioItem";
  * @property {boolean} [inset=false] - Quando `true`, adiciona padding à esquerda
  */
 export interface ContextMenuLabelProps
-	extends React.ComponentProps<typeof ContextMenuPrimitive.Label> {
-	/** Quando `true`, adiciona padding à esquerda */
-	inset?: boolean;
+  extends React.ComponentProps<typeof ContextMenuPrimitive.Label> {
+  /** Quando `true`, adiciona padding à esquerda */
+  inset?: boolean;
 }
 
 function ContextMenuLabel({ className, inset, ...props }: ContextMenuLabelProps) {

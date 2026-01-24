@@ -84,7 +84,7 @@ function updateVersion(
  */
 async function runTests(): Promise<void> {
 	console.log("🧪 Executando testes...");
-	const result = await $`bun run test -- -- --run`;
+	const result = await $`bun run test --filter=${packageName} -- -- --run`;
 	if (result.exitCode !== 0) {
 		throw new Error("❌ Testes falharam! Corrija os erros antes de publicar.");
 	}
@@ -96,7 +96,7 @@ async function runTests(): Promise<void> {
  */
 async function runBuild(): Promise<void> {
 	console.log("🏗️  Executando build...");
-	const result = await $`bun run build`.quiet();
+	const result = await $`bun run build --filter=${packageName}`.quiet();
 	if (result.exitCode !== 0) {
 		throw new Error("❌ Build falhou! Corrija os erros antes de publicar.");
 	}

@@ -34,14 +34,14 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Download, MoreHorizontal } from "lucide-react";
-import { expect, fn, userEvent, within } from "storybook/test";
 import React from "react";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "../dropdown-menu/dropdown-menu";
 import { Button } from "./button";
 
@@ -131,17 +131,17 @@ type Story = StoryObj<typeof meta>;
  * Button com configuração padrão (variante `default`, tamanho `default`).
  */
 export const Default: Story = {
-	args: {
-		children: "Botão",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Button com configuração padrão. Use esta variante para ações primárias ou principais na interface.",
-			},
-		},
-	},
+  args: {
+    children: "Botão",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Button com configuração padrão. Use esta variante para ações primárias ou principais na interface.",
+      },
+    },
+  },
 };
 
 /**
@@ -150,18 +150,18 @@ export const Default: Story = {
  * Button para ações destrutivas ou perigosas, como excluir ou remover.
  */
 export const Destructive: Story = {
-	args: {
-		variant: "destructive",
-		children: "Destrutivo",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante destrutiva com cor vermelha. Use para ações que podem ter consequências irreversíveis, como excluir ou remover itens.",
-			},
-		},
-	},
+  args: {
+    variant: "destructive",
+    children: "Destrutivo",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante destrutiva com cor vermelha. Use para ações que podem ter consequências irreversíveis, como excluir ou remover itens.",
+      },
+    },
+  },
 };
 
 /**
@@ -170,18 +170,18 @@ export const Destructive: Story = {
  * Button com borda e fundo transparente, útil para ações secundárias.
  */
 export const Outline: Story = {
-	args: {
-		variant: "outline",
-		children: "Contorno",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante outline com borda e fundo transparente. Use para ações secundárias ou quando quiser menos destaque visual.",
-			},
-		},
-	},
+  args: {
+    variant: "outline",
+    children: "Contorno",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante outline com borda e fundo transparente. Use para ações secundárias ou quando quiser menos destaque visual.",
+      },
+    },
+  },
 };
 
 /**
@@ -190,18 +190,18 @@ export const Outline: Story = {
  * Button com estilo secundário, útil para ações menos importantes.
  */
 export const Secondary: Story = {
-	args: {
-		variant: "secondary",
-		children: "Secundário",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante secundária com cor neutra. Use para ações complementares ou menos importantes que a ação primária.",
-			},
-		},
-	},
+  args: {
+    variant: "secondary",
+    children: "Secundário",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante secundária com cor neutra. Use para ações complementares ou menos importantes que a ação primária.",
+      },
+    },
+  },
 };
 
 /**
@@ -210,18 +210,18 @@ export const Secondary: Story = {
  * Button sem fundo, apenas texto, útil para ações discretas.
  */
 export const Ghost: Story = {
-	args: {
-		variant: "ghost",
-		children: "Fantasma",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante ghost sem fundo, apenas texto. Use para ações discretas ou quando o espaço visual é limitado.",
-			},
-		},
-	},
+  args: {
+    variant: "ghost",
+    children: "Fantasma",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante ghost sem fundo, apenas texto. Use para ações discretas ou quando o espaço visual é limitado.",
+      },
+    },
+  },
 };
 
 /**
@@ -230,18 +230,18 @@ export const Ghost: Story = {
  * Button estilizado como link, útil para navegação ou ações de texto.
  */
 export const Link: Story = {
-	args: {
-		variant: "link",
-		children: "Link",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante link estilizada como link com sublinhado no hover. Use para navegação ou ações que se parecem com links.",
-			},
-		},
-	},
+  args: {
+    variant: "link",
+    children: "Link",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante link estilizada como link com sublinhado no hover. Use para navegação ou ações que se parecem com links.",
+      },
+    },
+  },
 };
 
 /**
@@ -250,18 +250,18 @@ export const Link: Story = {
  * Button para ações de sucesso ou confirmação.
  */
 export const Success: Story = {
-	args: {
-		variant: "success",
-		children: "Sucesso",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante success com cor verde. Use para ações de sucesso, confirmação ou estados positivos.",
-			},
-		},
-	},
+  args: {
+    variant: "success",
+    children: "Sucesso",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante success com cor verde. Use para ações de sucesso, confirmação ou estados positivos.",
+      },
+    },
+  },
 };
 
 /**
@@ -270,18 +270,17 @@ export const Success: Story = {
  * Button para exibir informações ou ações informativas.
  */
 export const Info: Story = {
-	args: {
-		variant: "info",
-		children: "Informação",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante info com cor accent. Use para exibir informações ou ações informativas.",
-			},
-		},
-	},
+  args: {
+    variant: "info",
+    children: "Informação",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Variante info com cor accent. Use para exibir informações ou ações informativas.",
+      },
+    },
+  },
 };
 
 /**
@@ -290,18 +289,18 @@ export const Info: Story = {
  * Button com tamanho pequeno, útil para espaços compactos.
  */
 export const Small: Story = {
-	args: {
-		size: "sm",
-		children: "Botão Pequeno",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Button com tamanho pequeno. Use em espaços compactos ou quando o botão precisa ser discreto.",
-			},
-		},
-	},
+  args: {
+    size: "sm",
+    children: "Botão Pequeno",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Button com tamanho pequeno. Use em espaços compactos ou quando o botão precisa ser discreto.",
+      },
+    },
+  },
 };
 
 /**
@@ -310,18 +309,18 @@ export const Small: Story = {
  * Button com tamanho grande, útil para maior destaque visual.
  */
 export const Large: Story = {
-	args: {
-		size: "lg",
-		children: "Botão Grande",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Button com tamanho grande. Use quando o botão precisa de maior destaque visual ou em interfaces com mais espaço.",
-			},
-		},
-	},
+  args: {
+    size: "lg",
+    children: "Botão Grande",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Button com tamanho grande. Use quando o botão precisa de maior destaque visual ou em interfaces com mais espaço.",
+      },
+    },
+  },
 };
 
 /**
@@ -330,18 +329,18 @@ export const Large: Story = {
  * Button desabilitado, não interativo e com feedback visual.
  */
 export const Disabled: Story = {
-	args: {
-		disabled: true,
-		children: "Desabilitado",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Button em estado desabilitado. Não é interativo e possui opacidade reduzida para feedback visual.",
-			},
-		},
-	},
+  args: {
+    disabled: true,
+    children: "Desabilitado",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Button em estado desabilitado. Não é interativo e possui opacidade reduzida para feedback visual.",
+      },
+    },
+  },
 };
 
 /**
@@ -350,22 +349,22 @@ export const Disabled: Story = {
  * Button com ícone e texto, demonstrando uso de ícones do Lucide React.
  */
 export const WithIcon: Story = {
-	args: {
-		children: (
-			<>
-				<Download />
-				Download
-			</>
-		),
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Button com ícone e texto. Os ícones são automaticamente estilizados e espaçados quando usados dentro do Button.",
-			},
-		},
-	},
+  args: {
+    children: (
+      <>
+        <Download />
+        Download
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Button com ícone e texto. Os ícones são automaticamente estilizados e espaçados quando usados dentro do Button.",
+      },
+    },
+  },
 };
 
 /**
@@ -374,18 +373,18 @@ export const WithIcon: Story = {
  * Button com estilo natural e borda, útil para interfaces mais orgânicas.
  */
 export const Natural: Story = {
-	args: {
-		variant: "natural",
-		children: "Natural",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Variante natural com estilo mais orgânico e borda. Use em interfaces que buscam um visual mais natural ou menos formal.",
-			},
-		},
-	},
+  args: {
+    variant: "natural",
+    children: "Natural",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Variante natural com estilo mais orgânico e borda. Use em interfaces que buscam um visual mais natural ou menos formal.",
+      },
+    },
+  },
 };
 
 /**
@@ -394,19 +393,19 @@ export const Natural: Story = {
  * Button com animações sutis via Framer Motion.
  */
 export const Animated: Story = {
-	args: {
-		variant: "natural",
-		animated: true,
-		children: "Animado",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Button com animações sutis ativadas. Ao passar o mouse, o botão aumenta ligeiramente (scale 1.02) e ao clicar diminui (scale 0.98).",
-			},
-		},
-	},
+  args: {
+    variant: "natural",
+    animated: true,
+    children: "Animado",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Button com animações sutis ativadas. Ao passar o mouse, o botão aumenta ligeiramente (scale 1.02) e ao clicar diminui (scale 0.98).",
+      },
+    },
+  },
 };
 
 export const UsageInStatCard: Story = {

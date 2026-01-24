@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
-import React from "react";
 import { Bold } from "lucide-react";
+import React from "react";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { Toggle } from "./toggle";
 
 /**

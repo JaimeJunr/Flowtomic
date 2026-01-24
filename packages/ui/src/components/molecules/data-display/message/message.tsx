@@ -5,6 +5,7 @@
  */
 
 import type { FileUIPart, UIMessage } from "ai";
+import hardenReactMarkdown from "harden-react-markdown";
 import { ChevronLeftIcon, ChevronRightIcon, PaperclipIcon, XIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react";
 import * as React from "react";
@@ -13,12 +14,17 @@ import ReactMarkdown, { type Options } from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import hardenReactMarkdown from "harden-react-markdown";
-import { cn } from "@/lib/utils";
-import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/atoms";
-import { ButtonGroup, ButtonGroupText } from "@/components/molecules/forms/button-group";
-import { CodeBlock, CodeBlockCopyButton } from "@/components/atoms/code/code-block";
 import type { BundledLanguage } from "shiki";
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/atoms";
+import { CodeBlock, CodeBlockCopyButton } from "@/components/atoms/code/code-block";
+import { ButtonGroup, ButtonGroupText } from "@/components/molecules/forms/button-group";
+import { cn } from "@/lib/utils";
 import "katex/dist/katex.min.css";
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {

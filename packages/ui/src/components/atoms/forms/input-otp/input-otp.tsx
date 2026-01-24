@@ -60,8 +60,8 @@ import { cn } from "@/lib/utils";
  * @property {string} [containerClassName] - Classes CSS para o container
  */
 export type InputOTPProps = React.ComponentProps<typeof OTPInput> & {
-	/** Classes CSS para o container */
-	containerClassName?: string;
+  /** Classes CSS para o container */
+  containerClassName?: string;
 };
 
 function InputOTP({ className, containerClassName, maxLength, ...props }: InputOTPProps) {
@@ -94,8 +94,8 @@ InputOTPGroup.displayName = "InputOTPGroup";
  * @property {number} index - Índice do slot (0-based)
  */
 export interface InputOTPSlotProps extends React.ComponentProps<"div"> {
-	/** Índice do slot (0-based) */
-	index: number;
+  /** Índice do slot (0-based) */
+  index: number;
 }
 
 function InputOTPSlot({ index, className, ...props }: InputOTPSlotProps) {

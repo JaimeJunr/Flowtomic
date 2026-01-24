@@ -87,7 +87,8 @@ function ResizablePanel({ ...props }: React.ComponentProps<typeof ResizablePrimi
  *
  * @property {boolean} [withHandle=false] - Se deve exibir handle visual
  */
-interface ResizableHandleProps extends React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> {
+interface ResizableHandleProps
+  extends React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> {
   /** Se deve exibir handle visual */
   withHandle?: boolean;
 }
@@ -100,11 +101,7 @@ interface ResizableHandleProps extends React.ComponentProps<typeof ResizablePrim
  * @param {ResizableHandleProps} props - Props do componente
  * @returns {JSX.Element} Componente ResizableHandle
  */
-function ResizableHandle({
-  withHandle,
-  className,
-  ...props
-}: ResizableHandleProps) {
+function ResizableHandle({ withHandle, className, ...props }: ResizableHandleProps) {
   return (
     <ResizablePrimitive.PanelResizeHandle
       data-slot="resizable-handle"

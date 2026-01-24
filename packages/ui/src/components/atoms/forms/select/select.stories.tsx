@@ -13,17 +13,17 @@
  * @see [Select Component](./select.tsx) para documentação completa do componente
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
 import React from "react";
+import { expect, within } from "storybook/test";
 import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectSeparator,
-	SelectTrigger,
-	SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
 } from "./select";
 
 const meta = {
@@ -209,26 +209,26 @@ export const PageSizeSelector: Story = {
  * Exemplo de uso do Select em contexto de PromptInput para seleção de modelo.
  */
 export const PromptInputStyle: Story = {
-	render: () => (
-		<Select defaultValue="gpt-4">
-			<SelectTrigger className="w-[140px]">
-				<SelectValue />
-			</SelectTrigger>
-			<SelectContent>
-				<SelectItem value="gpt-4">GPT-4</SelectItem>
-				<SelectItem value="gpt-3.5">GPT-3.5</SelectItem>
-				<SelectItem value="claude">Claude</SelectItem>
-			</SelectContent>
-		</Select>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Exemplo de uso customizado do Select como no PromptInput, usado para seleção de modelo com largura fixa e sem placeholder visível.",
-			},
-		},
-	},
+  render: () => (
+    <Select defaultValue="gpt-4">
+      <SelectTrigger className="w-[140px]">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="gpt-4">GPT-4</SelectItem>
+        <SelectItem value="gpt-3.5">GPT-3.5</SelectItem>
+        <SelectItem value="claude">Claude</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exemplo de uso customizado do Select como no PromptInput, usado para seleção de modelo com largura fixa e sem placeholder visível.",
+      },
+    },
+  },
 };
 
 /**
@@ -237,29 +237,29 @@ export const PromptInputStyle: Story = {
  * Valida que o Select é renderizado corretamente e possui estrutura acessível.
  */
 export const Accessibility: Story = {
-	render: () => (
-		<Select>
-			<SelectTrigger>
-				<SelectValue placeholder="Selecione uma opção" />
-			</SelectTrigger>
-			<SelectContent>
-				<SelectItem value="option1">Opção 1</SelectItem>
-				<SelectItem value="option2">Opção 2</SelectItem>
-				<SelectItem value="option3">Opção 3</SelectItem>
-			</SelectContent>
-		</Select>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Teste de acessibilidade do Select. Valida renderização e estrutura básica do componente.",
-			},
-		},
-	},
-	play: async ({ canvasElement }) => {
-		const canvas = within(canvasElement);
-		const trigger = canvas.getByRole("combobox");
-		expect(trigger).toBeInTheDocument();
-	},
+  render: () => (
+    <Select>
+      <SelectTrigger>
+        <SelectValue placeholder="Selecione uma opção" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="option1">Opção 1</SelectItem>
+        <SelectItem value="option2">Opção 2</SelectItem>
+        <SelectItem value="option3">Opção 3</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Teste de acessibilidade do Select. Valida renderização e estrutura básica do componente.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("combobox");
+    expect(trigger).toBeInTheDocument();
+  },
 };

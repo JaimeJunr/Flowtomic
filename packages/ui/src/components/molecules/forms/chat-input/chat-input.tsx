@@ -32,7 +32,8 @@ export interface ModeOption {
   description?: string;
 }
 
-export interface ChatInputProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSubmit" | "onChange"> {
+export interface ChatInputProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onSubmit" | "onChange"> {
   value: string;
   onChange: (value: string) => void;
   onSubmit: (value: string, messageType?: string, mode?: string) => void;

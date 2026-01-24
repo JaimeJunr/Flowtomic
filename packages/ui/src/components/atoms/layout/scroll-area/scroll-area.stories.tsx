@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
 import React from "react";
+import { expect, within } from "storybook/test";
 import { Button } from "../../actions/button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 

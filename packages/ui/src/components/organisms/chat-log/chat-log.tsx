@@ -8,13 +8,17 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import * as React from "react";
 import { useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
 import {
   ChatMessage,
   type ChatMessageData,
   type ChatMessageProps,
 } from "@/components/molecules/data-display/chat-message";
-import { Conversation, ConversationContent, ConversationEmptyState } from "@/components/organisms/conversation";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationEmptyState,
+} from "@/components/organisms/conversation";
+import { cn } from "@/lib/utils";
 
 export interface ChatLogProps extends HTMLAttributes<HTMLDivElement> {
   messages: ChatMessageData[];
