@@ -5,7 +5,7 @@
  */
 
 import type { FileUIPart, UIMessage } from "ai";
-import hardenReactMarkdown from "harden-react-markdown";
+import * as _hardenReactMarkdown from "harden-react-markdown";
 import { ChevronLeftIcon, ChevronRightIcon, PaperclipIcon, XIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react";
 import * as React from "react";
@@ -26,6 +26,15 @@ import { CodeBlock, CodeBlockCopyButton } from "@/components/atoms/code/code-blo
 import { ButtonGroup, ButtonGroupText } from "@/components/molecules/forms/button-group";
 import { cn } from "@/lib/utils";
 import "katex/dist/katex.min.css";
+
+// Mantenha interop para diferentes ambientes (bundlers/runtimes)
+const hardenReactMarkdown = (
+  typeof _hardenReactMarkdown === "function"
+    ? _hardenReactMarkdown
+    : typeof (_hardenReactMarkdown as any).default === "function"
+      ? (_hardenReactMarkdown as any).default
+      : _hardenReactMarkdown
+) as any;
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
   from: UIMessage["role"];
@@ -589,13 +598,9 @@ const components: Options["components"] = {
 export type MessageResponseProps = HTMLAttributes<HTMLDivElement> & {
   options?: Options;
   children: Options["children"];
-  allowedImagePrefixes?: ComponentProps<
-    ReturnType<typeof hardenReactMarkdown>
-  >["allowedImagePrefixes"];
-  allowedLinkPrefixes?: ComponentProps<
-    ReturnType<typeof hardenReactMarkdown>
-  >["allowedLinkPrefixes"];
-  defaultOrigin?: ComponentProps<ReturnType<typeof hardenReactMarkdown>>["defaultOrigin"];
+  allowedImagePrefixes?: string[];
+  allowedLinkPrefixes?: string[];
+  defaultOrigin?: string;
   parseIncompleteMarkdown?: boolean;
 };
 
@@ -693,16 +698,18 @@ export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachm
           </>
         ) : (
           <>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                  <PaperclipIcon className="size-4" />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{attachmentLabel}</p>
-              </TooltipContent>
-            </Tooltip>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                    <PaperclipIcon className="size-4" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{attachmentLabel}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             {onRemove && (
               <Button
                 aria-label="Remove attachment"
