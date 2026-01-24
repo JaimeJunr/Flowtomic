@@ -84,7 +84,7 @@ function updateVersion(
  */
 async function runTests(): Promise<void> {
 	console.log("🧪 Executando testes...");
-	const result = await $`bun run test`.quiet();
+	const result = await $`bun run test -- -- --run`;
 	if (result.exitCode !== 0) {
 		throw new Error("❌ Testes falharam! Corrija os erros antes de publicar.");
 	}

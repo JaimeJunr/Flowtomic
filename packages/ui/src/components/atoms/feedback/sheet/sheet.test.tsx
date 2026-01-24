@@ -88,7 +88,7 @@ describe("Sheet", () => {
 			await user.click(button);
 
 			await waitFor(() => {
-				const sheet = container.querySelector('[data-slot="sheet-content"]');
+				const sheet = document.querySelector('[data-slot="sheet-content"]');
 				expect(sheet).toBeInTheDocument();
 			});
 		});

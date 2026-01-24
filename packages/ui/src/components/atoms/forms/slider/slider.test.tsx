@@ -76,7 +76,7 @@ describe("Slider", () => {
 		it("deve desabilitar o Slider quando disabled", () => {
 			render(<Slider defaultValue={[50]} disabled aria-label="Slider" />);
 			const slider = screen.getByRole("slider", { name: "Slider" });
-			expect(slider).toBeDisabled();
+			expect(slider).toHaveAttribute("data-disabled");
 		});
 	});
 

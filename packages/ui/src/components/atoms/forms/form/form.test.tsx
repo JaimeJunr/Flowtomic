@@ -98,32 +98,35 @@ describe("Form", () => {
 		it("deve submeter o formulário", async () => {
 			const user = userEvent.setup();
 			const handleSubmit = vi.fn();
-			const form = useForm({
-				defaultValues: {
-					email: "",
-				},
-			});
+			function FormWrapper() {
+				const form = useForm({
+					defaultValues: {
+						email: "",
+					},
+				});
+				return (
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(handleSubmit)}>
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>E-mail</FormLabel>
+										<FormControl>
+											<Input placeholder="email@exemplo.com" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button type="submit">Enviar</Button>
+						</form>
+					</Form>
+				);
+			}
 
-			render(
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(handleSubmit)}>
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>E-mail</FormLabel>
-									<FormControl>
-										<Input placeholder="email@exemplo.com" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<Button type="submit">Enviar</Button>
-					</form>
-				</Form>
-			);
+			render(<FormWrapper />);
 
 			const input = screen.getByPlaceholderText("email@exemplo.com");
 			const button = screen.getByRole("button", { name: "Enviar" });
@@ -140,36 +143,41 @@ describe("Form", () => {
 	describe("Validação", () => {
 		it("deve exibir mensagem de erro quando validação falha", async () => {
 			const user = userEvent.setup();
-			const form = useForm({
-				defaultValues: {
-					email: "",
-				},
-				mode: "onSubmit",
-			});
 
-			render(
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(() => {})}>
-						<FormField
-							control={form.control}
-							name="email"
-							rules={{
-								required: "E-mail é obrigatório",
-							}}
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>E-mail</FormLabel>
-									<FormControl>
-										<Input placeholder="email@exemplo.com" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<Button type="submit">Enviar</Button>
-					</form>
-				</Form>
-			);
+			function FormWrapper() {
+				const form = useForm({
+					defaultValues: {
+						email: "",
+					},
+					mode: "onSubmit",
+				});
+
+				return (
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(() => {})}>
+							<FormField
+								control={form.control}
+								name="email"
+								rules={{
+									required: "E-mail é obrigatório",
+								}}
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>E-mail</FormLabel>
+										<FormControl>
+											<Input placeholder="email@exemplo.com" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button type="submit">Enviar</Button>
+						</form>
+					</Form>
+				);
+			}
+
+			render(<FormWrapper />);
 
 			const button = screen.getByRole("button", { name: "Enviar" });
 			await user.click(button);

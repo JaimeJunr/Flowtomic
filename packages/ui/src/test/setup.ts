@@ -12,11 +12,35 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
 	disconnect: vi.fn(),
 }));
 
+// Mock matchMedia
+Object.defineProperty(window, "matchMedia", {
+	writable: true,
+	value: vi.fn().mockImplementation((query) => ({
+		matches: false,
+		media: query,
+		onchange: null,
+		addListener: vi.fn(), // Deprecated
+		removeListener: vi.fn(), // Deprecated
+		addEventListener: vi.fn(),
+		removeEventListener: vi.fn(),
+		dispatchEvent: vi.fn(),
+	})),
+});
+
+// Mock scrollIntoView
+Element.prototype.scrollIntoView = vi.fn();
+
 // Mock hasPointerCapture para Radix UI
 beforeAll(() => {
 	Element.prototype.hasPointerCapture = vi.fn().mockReturnValue(false);
 	Element.prototype.setPointerCapture = vi.fn();
 	Element.prototype.releasePointerCapture = vi.fn();
+	
+	// Mock PointerEvent if not exists
+	if (typeof window.PointerEvent === "undefined") {
+		// @ts-ignore
+		window.PointerEvent = class PointerEvent extends MouseEvent {};
+	}
 });
 
 // Limpa após cada teste

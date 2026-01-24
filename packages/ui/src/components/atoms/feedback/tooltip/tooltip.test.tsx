@@ -65,8 +65,9 @@ describe("Tooltip", () => {
 			await user.hover(button);
 
 			await waitFor(() => {
-				const content = screen.getByText("Tooltip content");
-				expect(content).toBeInTheDocument();
+				const content = screen.getAllByText("Tooltip content");
+				expect(content.length).toBeGreaterThan(0);
+				expect(content[0]).toBeInTheDocument();
 			});
 		});
 	});
@@ -90,8 +91,9 @@ describe("Tooltip", () => {
 			await user.hover(button);
 
 			await waitFor(() => {
-				const content = screen.getByText("Tooltip appears");
-				expect(content).toBeInTheDocument();
+				const content = screen.getAllByText("Tooltip appears");
+				expect(content.length).toBeGreaterThan(0);
+				expect(content[0]).toBeInTheDocument();
 			});
 		});
 	});

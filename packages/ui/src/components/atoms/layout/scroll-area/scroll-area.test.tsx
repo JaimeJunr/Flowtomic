@@ -21,7 +21,7 @@ describe("ScrollArea", () => {
 					<div>Content</div>
 				</ScrollArea>
 			);
-			const scrollArea = container.querySelector('[data-slot="scroll-area"]');
+			const scrollArea = document.querySelector('[data-slot="scroll-area"]');
 			expect(scrollArea).toBeInTheDocument();
 		});
 	});

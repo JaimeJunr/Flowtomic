@@ -95,7 +95,7 @@ describe("ContextMenu", () => {
 			]);
 
 			await waitFor(() => {
-				const item = container.querySelector('[data-variant="destructive"]');
+				const item = document.querySelector('[data-variant="destructive"]');
 				expect(item).toBeInTheDocument();
 			});
 		});
@@ -118,7 +118,7 @@ describe("ContextMenu", () => {
 			]);
 
 			await waitFor(() => {
-				const item = container.querySelector('[data-inset="true"]');
+				const item = document.querySelector('[data-inset="true"]');
 				expect(item).toBeInTheDocument();
 			});
 		});
