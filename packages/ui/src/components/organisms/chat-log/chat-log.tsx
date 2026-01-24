@@ -13,8 +13,8 @@ import {
   ChatMessage,
   type ChatMessageData,
   type ChatMessageProps,
-} from "../../molecules/data-display/chat-message";
-import { Conversation, ConversationContent, ConversationEmptyState } from "../conversation";
+} from "@/components/molecules/data-display/chat-message";
+import { Conversation, ConversationContent, ConversationEmptyState } from "@/components/organisms/conversation";
 
 export interface ChatLogProps extends HTMLAttributes<HTMLDivElement> {
   messages: ChatMessageData[];

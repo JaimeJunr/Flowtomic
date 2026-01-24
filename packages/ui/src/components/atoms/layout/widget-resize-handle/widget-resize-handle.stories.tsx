@@ -1,13 +1,28 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../atoms";
+import { expect, within } from "storybook/test";
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../display/card/card";
 import { WidgetResizeHandle } from "./widget-resize-handle";
 
+/**
+ * Stories do componente WidgetResizeHandle.
+ *
+ * O WidgetResizeHandle é usado para redimensionar widgets arrastando o canto
+ * inferior direito. Usa snap to grid para alinhamento preciso.
+ *
+ * @see [WidgetResizeHandle Component](../widget-resize-handle.tsx) para documentação completa do componente
+ */
 const meta = {
-  title: "Flowtomic UI/Atoms/WidgetResizeHandle",
+  title: "Flowtomic UI/Atoms/Layout/WidgetResizeHandle",
   component: WidgetResizeHandle,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Handle para redimensionar widgets arrastando o canto inferior direito. Usa snap to grid e suporta limites mínimos e máximos.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -35,6 +50,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Story padrão do WidgetResizeHandle.
+ * Demonstra o uso básico com redimensionamento via drag.
+ */
 export const Default: Story = {
   render: (args) => {
     const [width, setWidth] = useState(args.currentWidth ?? 4);
@@ -66,6 +85,11 @@ export const Default: Story = {
         />
       </div>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const handle = canvas.getByLabelText("Redimensionar widget");
+    await expect(handle).toBeInTheDocument();
   },
   args: {
     widgetId: "demo-widget",

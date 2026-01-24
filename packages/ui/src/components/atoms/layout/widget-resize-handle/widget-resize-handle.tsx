@@ -1,8 +1,46 @@
 /**
- * WidgetResizeHandle - Atom Component
+ * # WidgetResizeHandle Component
  *
- * Handle para redimensionar widgets arrastando o canto inferior direito.
- * Componente puro de UI, totalmente genérico e reutilizável.
+ * O componente `WidgetResizeHandle` é usado para redimensionar widgets
+ * arrastando o canto inferior direito. Usa snap to grid para alinhamento
+ * preciso e suporta limites mínimos e máximos.
+ *
+ * ## Características Principais
+ *
+ * - **Snap to Grid**: Alinhamento automático à grade
+ * - **Limites**: Suporta min/max width e height
+ * - **Visual**: Handle visual que aparece no hover
+ * - **Drag to Resize**: Arrastar para redimensionar
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { WidgetResizeHandle } from "@flowtomic/ui/components/atoms/layout/widget-resize-handle";
+ *
+ * function MyWidget({ widgetId, width, height, onResize }) {
+ *   return (
+ *     <div className="relative group">
+ *       <div>Conteúdo do widget</div>
+ *       <WidgetResizeHandle
+ *         widgetId={widgetId}
+ *         currentWidth={width}
+ *         currentHeight={height}
+ *         onResize={onResize}
+ *         minWidth={2}
+ *         minHeight={2}
+ *         maxWidth={12}
+ *         maxHeight={20}
+ *       />
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Usa aria-label para leitores de tela
+ * - Suporta navegação por teclado
+ * - Feedback visual claro
  */
 
 import { Maximize2 } from "lucide-react";

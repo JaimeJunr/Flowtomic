@@ -1,16 +1,33 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, fn, userEvent, within } from "storybook/test";
+import React from "react";
 import { RadioGroup, RadioGroupItem } from "./radio-group";
 
+/**
+ * Stories do componente RadioGroup.
+ *
+ * O RadioGroup é um grupo de botões de opção usado para permitir que o usuário
+ * selecione uma opção de um conjunto. É baseado em Radix UI para garantir acessibilidade completa.
+ *
+ * @see [RadioGroup Component](../radio-group.tsx) para documentação completa do componente
+ */
 const meta = {
   title: "Flowtomic UI/Atoms/Forms/RadioGroup",
   component: RadioGroup,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Grupo de botões de opção para seleção única. Suporta navegação por teclado e acessibilidade completa via Radix UI.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
     defaultValue: {
       control: "text",
+      description: "Valor padrão selecionado",
     },
   },
 } satisfies Meta<typeof RadioGroup>;
@@ -18,6 +35,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Story padrão do RadioGroup.
+ * Demonstra o uso básico com duas opções.
+ */
 export const Default: Story = {
   render: () => (
     <RadioGroup>
@@ -35,8 +56,25 @@ export const Default: Story = {
       </div>
     </RadioGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const option1 = canvas.getByLabelText("Opção 1");
+    const option2 = canvas.getByLabelText("Opção 2");
+
+    await expect(option1).toBeInTheDocument();
+    await expect(option2).toBeInTheDocument();
+
+    // Testa seleção
+    await userEvent.click(option1);
+    await expect(option1).toBeChecked();
+    await expect(option2).not.toBeChecked();
+  },
 };
 
+/**
+ * Story demonstrando RadioGroup em layout horizontal.
+ * As opções são exibidas lado a lado usando flexbox.
+ */
 export const Horizontal: Story = {
   render: () => (
     <RadioGroup defaultValue="option1" className="flex gap-4">
@@ -60,8 +98,17 @@ export const Horizontal: Story = {
       </div>
     </RadioGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const option1 = canvas.getByLabelText("Opção 1");
+    await expect(option1).toBeChecked();
+  },
 };
 
+/**
+ * Story demonstrando RadioGroup com opção desabilitada.
+ * Uma das opções está desabilitada e não pode ser selecionada.
+ */
 export const WithDisabled: Story = {
   render: () => (
     <RadioGroup defaultValue="option1">
@@ -85,6 +132,14 @@ export const WithDisabled: Story = {
       </div>
     </RadioGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const option1 = canvas.getByLabelText("Opção 1");
+    const option2 = canvas.getByLabelText("Opção 2 (Desabilitada)");
+
+    await expect(option1).toBeChecked();
+    await expect(option2).toBeDisabled();
+  },
 };
 
 export const NoKnownUsage: Story = {

@@ -1,12 +1,72 @@
 /**
- * Sonner Component - Flowtomic UI
+ * # Sonner Component (Toaster)
  *
- * Componente Sonner próprio do design-system
- * Implementação padronizada seguindo os padrões do design system
- * Baseado em: https://ui.shadcn.com/docs/components/sonner
+ * O componente `Toaster` (Sonner) é usado para exibir notificações toast
+ * na aplicação. Fornece feedback visual para ações do usuário com diferentes
+ * tipos de mensagens (success, error, warning, info, loading).
  *
- * NOTA: Este componente requer que o tema seja passado como prop
- * ou que o projeto use um hook de tema compatível
+ * ## Características Principais
+ *
+ * - **Múltiplos Tipos**: Suporta success, error, warning, info e loading
+ * - **Posicionamento**: Configurável (padrão: top-right)
+ * - **Tema**: Suporta light e dark
+ * - **Ícones**: Ícones customizados para cada tipo
+ * - **Ações**: Suporta botões de ação e cancelamento
+ *
+ * ## Tipos de Toast
+ *
+ * - **success**: Mensagens de sucesso (verde)
+ * - **error**: Mensagens de erro (vermelho)
+ * - **warning**: Avisos (amarelo)
+ * - **info**: Informações (azul)
+ * - **loading**: Carregamento (spinner)
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { Toaster, toast } from "@flowtomic/ui/components/atoms/feedback/sonner";
+ *
+ * function App() {
+ *   return (
+ *     <>
+ *       <Toaster />
+ *       <button onClick={() => toast.success("Operação realizada com sucesso!")}>
+ *         Mostrar Toast
+ *       </button>
+ *     </>
+ *   );
+ * }
+ * ```
+ *
+ * ## Exemplos de Uso
+ *
+ * ```tsx
+ * // Success
+ * toast.success("Operação realizada com sucesso!");
+ *
+ * // Error
+ * toast.error("Erro ao processar requisição");
+ *
+ * // Warning
+ * toast.warning("Atenção: ação irreversível");
+ *
+ * // Info
+ * toast.info("Nova atualização disponível");
+ *
+ * // Loading
+ * const toastId = toast.loading("Processando...");
+ * // Depois atualizar para success
+ * toast.success("Concluído!", { id: toastId });
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta leitores de tela
+ * - Navegação por teclado
+ * - Foco gerenciado automaticamente
+ *
+ * @see [Sonner Documentation](https://sonner.emilkowal.ski/) para mais detalhes
+ * @see [shadcn/ui Sonner](https://ui.shadcn.com/docs/components/sonner) para referência
  */
 
 "use client";

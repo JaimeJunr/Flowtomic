@@ -1,6 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
+import React from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./resizable";
 
+/**
+ * Stories do componente Resizable.
+ *
+ * O Resizable é usado para criar painéis redimensionáveis que podem ser
+ * ajustados pelo usuário arrastando as bordas.
+ *
+ * @see [Resizable Component](../resizable.tsx) para documentação completa do componente
+ */
 const meta = {
   title: "Flowtomic UI/Atoms/Layout/Resizable",
   component: ResizablePanelGroup,
@@ -9,7 +19,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Componentes base para criar layouts redimensionáveis usando react-resizable-panels. Inclui ResizablePanelGroup, ResizablePanel e ResizableHandle.",
+          "Componentes para criar layouts redimensionáveis. Suporta direções horizontal e vertical, com handles visuais para redimensionamento.",
       },
     },
   },
@@ -26,6 +36,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Story padrão do Resizable.
+ * Demonstra o uso básico com dois painéis horizontais.
+ */
 export const Default: Story = {
   render: () => (
     <div className="h-[300px] w-full">
@@ -44,6 +58,13 @@ export const Default: Story = {
       </ResizablePanelGroup>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const panel1 = canvas.getByText("Painel 1");
+    const panel2 = canvas.getByText("Painel 2");
+    await expect(panel1).toBeInTheDocument();
+    await expect(panel2).toBeInTheDocument();
+  },
 };
 
 export const ResizableLayoutStyle: Story = {

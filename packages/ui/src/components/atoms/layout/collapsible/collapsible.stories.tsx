@@ -1,21 +1,47 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
+import React from "react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "../../actions/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../display/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
 
+/**
+ * Stories do componente Collapsible.
+ *
+ * O Collapsible é usado para exibir conteúdo que pode ser expandido ou colapsado.
+ * É baseado em Radix UI para garantir acessibilidade completa.
+ *
+ * @see [Collapsible Component](../collapsible.tsx) para documentação completa do componente
+ */
 const meta = {
   title: "Flowtomic UI/Atoms/Layout/Collapsible",
   component: Collapsible,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Componente collapsible para exibir conteúdo expandível/colapsável. Suporta estado controlado e não controlado.",
+      },
+    },
   },
   tags: ["autodocs"],
+  argTypes: {
+    open: {
+      control: "boolean",
+      description: "Estado aberto do collapsible",
+    },
+  },
 } satisfies Meta<typeof Collapsible>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Story padrão do Collapsible.
+ * Demonstra o uso básico com trigger e conteúdo.
+ */
 export const Default: Story = {
   render: () => (
     <Collapsible>
@@ -27,6 +53,11 @@ export const Default: Story = {
       </CollapsibleContent>
     </Collapsible>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Toggle" });
+    await expect(button).toBeInTheDocument();
+  },
 };
 
 export const WithCard: Story = {
@@ -54,6 +85,10 @@ export const WithCard: Story = {
   ),
 };
 
+/**
+ * Story demonstrando Collapsible com estado defaultOpen.
+ * O collapsible inicia aberto por padrão.
+ */
 export const ToolStyle: Story = {
   render: () => (
     <Collapsible defaultOpen>
@@ -70,6 +105,13 @@ export const ToolStyle: Story = {
       </CollapsibleContent>
     </Collapsible>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Tool Name" });
+    const content = canvas.getByText("Conteúdo da ferramenta");
+    await expect(button).toBeInTheDocument();
+    await expect(content).toBeInTheDocument();
+  },
   parameters: {
     docs: {
       description: {

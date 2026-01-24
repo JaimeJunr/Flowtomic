@@ -1,15 +1,49 @@
 /**
- * Alert Component - Flowtomic UI
+ * # Alert Component
  *
- * Componente Alert próprio do design-system
- * Implementação padronizada seguindo os padrões do design system
+ * O componente `Alert` é usado para exibir mensagens importantes ao usuário,
+ * como avisos, erros, sucessos ou informações. Fornece feedback visual claro
+ * através de variantes semânticas.
  *
- * Variantes disponíveis:
- * - default: Estilo padrão neutro
- * - destructive: Para erros e ações destrutivas (ex: "Erro", "Falha")
- * - success: Para mensagens de sucesso
- * - warning: Para avisos e alertas (ex: "Atenção", "Aviso")
- * - info: Para informações gerais
+ * ## Características Principais
+ *
+ * - **Variantes Semânticas**: Suporta múltiplas variantes (default, destructive, success, warning, info)
+ * - **Composição**: Alert + AlertTitle + AlertDescription para estrutura flexível
+ * - **Ícones**: Suporta ícones para melhor comunicação visual
+ * - **Acessível**: Usa role="alert" para leitores de tela
+ *
+ * ## Variantes
+ *
+ * - **`default`**: Estilo padrão neutro
+ * - **`destructive`**: Para erros e ações destrutivas (ex: "Erro", "Falha")
+ * - **`success`**: Para mensagens de sucesso
+ * - **`warning`**: Para avisos e alertas (ex: "Atenção", "Aviso")
+ * - **`info`**: Para informações gerais
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { Alert, AlertTitle, AlertDescription } from "@flowtomic/ui/components/atoms/feedback/alert";
+ * import { AlertCircle } from "lucide-react";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <Alert>
+ *       <AlertCircle className="h-4 w-4" />
+ *       <AlertTitle>Atenção</AlertTitle>
+ *       <AlertDescription>Mensagem de alerta</AlertDescription>
+ *     </Alert>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Usa `role="alert"` para leitores de tela
+ * - Estrutura semântica com título e descrição
+ * - Suporta ícones para comunicação visual
+ *
+ * @see [Alert Component Stories](./alert.stories.tsx) para exemplos de uso
  */
 
 import { cva, type VariantProps } from "class-variance-authority";
@@ -43,7 +77,22 @@ export interface AlertProps
     VariantProps<typeof alertVariants> {}
 
 /**
- * Alert - Container principal do alert
+ * Props do componente Alert.
+ *
+ * @property {'default' | 'destructive' | 'success' | 'warning' | 'info'} [variant='default'] - Variante visual do alert
+ */
+export interface AlertProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof alertVariants> {}
+
+/**
+ * Alert - Container principal do alert.
+ *
+ * Componente de alerta usado para exibir mensagens importantes ao usuário.
+ * Suporta múltiplas variantes semânticas para diferentes tipos de feedback.
+ *
+ * @param {AlertProps} props - Props do componente
+ * @returns {JSX.Element} Componente Alert
  */
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, variant, ...props }, ref) => (
@@ -52,10 +101,19 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
 );
 Alert.displayName = "Alert";
 
+/**
+ * Props do componente AlertTitle.
+ */
 export type AlertTitleProps = React.HTMLAttributes<HTMLHeadingElement>;
 
 /**
- * AlertTitle - Título do alert
+ * AlertTitle - Título do alert.
+ *
+ * Componente usado para exibir o título do alerta.
+ * Deve ser usado dentro de um componente Alert.
+ *
+ * @param {AlertTitleProps} props - Props do componente
+ * @returns {JSX.Element} Componente AlertTitle
  */
 const AlertTitle = React.forwardRef<HTMLParagraphElement, AlertTitleProps>(
   ({ className, ...props }, ref) => (
@@ -68,10 +126,19 @@ const AlertTitle = React.forwardRef<HTMLParagraphElement, AlertTitleProps>(
 );
 AlertTitle.displayName = "AlertTitle";
 
+/**
+ * Props do componente AlertDescription.
+ */
 export type AlertDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
 
 /**
- * AlertDescription - Descrição do alert
+ * AlertDescription - Descrição do alert.
+ *
+ * Componente usado para exibir a descrição detalhada do alerta.
+ * Deve ser usado dentro de um componente Alert.
+ *
+ * @param {AlertDescriptionProps} props - Props do componente
+ * @returns {JSX.Element} Componente AlertDescription
  */
 const AlertDescription = React.forwardRef<HTMLParagraphElement, AlertDescriptionProps>(
   ({ className, ...props }, ref) => (

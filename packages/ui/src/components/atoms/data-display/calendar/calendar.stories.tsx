@@ -61,7 +61,7 @@ import { Calendar } from "./calendar";
  * @see [react-day-picker Documentation](https://react-day-picker.js.org/) para mais detalhes sobre props avançadas
  */
 const meta = {
-  title: "Flowtomic UI/Atoms/Data Display/Calendar",
+  title: "Flowtomic UI/Atoms/DataDisplay/Calendar",
   component: Calendar,
   parameters: {
     layout: "centered",

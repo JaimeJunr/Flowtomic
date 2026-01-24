@@ -1,8 +1,56 @@
 /**
- * Dialog Component - Flowtomic UI
+ * # Dialog Component
  *
- * Componente Dialog próprio do design-system baseado em Radix UI
- * Implementação direta sem dependência de componentes externos
+ * O componente `Dialog` é usado para exibir conteúdo em uma modal overlay.
+ * É baseado em Radix UI para garantir acessibilidade completa.
+ *
+ * ## Características Principais
+ *
+ * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
+ * - **Overlay**: Overlay escuro por padrão
+ * - **Fechamento**: Suporta fechamento via Escape, clique no overlay ou botão de fechar
+ *
+ * ## Componentes
+ *
+ * - **Dialog**: Container principal
+ * - **DialogTrigger**: Trigger para abrir o dialog
+ * - **DialogContent**: Conteúdo do dialog
+ * - **DialogHeader**: Cabeçalho do dialog (título e descrição)
+ * - **DialogFooter**: Rodapé do dialog (botões de ação)
+ * - **DialogTitle**: Título do dialog
+ * - **DialogDescription**: Descrição do dialog
+ * - **DialogClose**: Botão de fechar
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@flowtomic/ui/components/atoms/feedback/dialog";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <Dialog>
+ *       <DialogTrigger>Open Dialog</DialogTrigger>
+ *       <DialogContent>
+ *         <DialogHeader>
+ *           <DialogTitle>Title</DialogTitle>
+ *         </DialogHeader>
+ *       </DialogContent>
+ *     </Dialog>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado (Tab, Escape)
+ * - Segue padrões WAI-ARIA via Radix UI
+ * - Suporta leitores de tela
+ * - Foco gerenciado automaticamente
+ * - Foco retorna ao trigger quando fechado
+ *
+ * @see [Radix UI Dialog](https://www.radix-ui.com/primitives/docs/components/dialog) para mais detalhes
  */
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -21,31 +69,41 @@ export type DialogDescriptionProps = React.ComponentPropsWithoutRef<
 >;
 
 /**
- * Dialog - Container principal do dialog
+ * Dialog - Container principal do dialog.
+ *
+ * Componente usado para gerenciar o estado do dialog.
  */
 const Dialog = DialogPrimitive.Root;
 Dialog.displayName = "Dialog";
 
 /**
- * DialogTrigger - Trigger do dialog
+ * DialogTrigger - Trigger do dialog.
+ *
+ * Componente usado como trigger para abrir o dialog.
  */
 const DialogTrigger = DialogPrimitive.Trigger;
 DialogTrigger.displayName = "DialogTrigger";
 
 /**
- * DialogPortal - Portal do dialog
+ * DialogPortal - Portal do dialog.
+ *
+ * Componente usado para renderizar o dialog em um portal.
  */
 const DialogPortal = DialogPrimitive.Portal;
 DialogPortal.displayName = "DialogPortal";
 
 /**
- * DialogClose - Botão de fechar do dialog
+ * DialogClose - Botão de fechar do dialog.
+ *
+ * Componente usado para fechar o dialog.
  */
 const DialogClose = DialogPrimitive.Close;
 DialogClose.displayName = "DialogClose";
 
 /**
- * DialogOverlay - Overlay do dialog
+ * DialogOverlay - Overlay do dialog.
+ *
+ * Componente usado para exibir o overlay escuro atrás do dialog.
  */
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,

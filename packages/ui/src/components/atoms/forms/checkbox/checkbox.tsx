@@ -1,8 +1,51 @@
 /**
- * Checkbox Component - Flowtomic UI
+ * # Checkbox Component
  *
- * Componente Checkbox próprio do design-system baseado em Radix UI
- * Implementação direta sem dependência de componentes externos
+ * O componente `Checkbox` é um controle de seleção usado para permitir que o usuário selecione
+ * uma ou mais opções de um conjunto. É baseado em Radix UI para garantir acessibilidade completa.
+ *
+ * ## Características Principais
+ *
+ * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
+ * - **Estados Visuais**: Suporta estados checked, unchecked e disabled
+ * - **Indicador Visual**: Exibe ícone de check quando selecionado
+ * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
+ * - **Customizável**: Pode ser estilizado via className e props HTML padrão
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { Checkbox } from "@flowtomic/ui/components/atoms/forms/checkbox";
+ *
+ * function MyComponent() {
+ *   const [checked, setChecked] = React.useState(false);
+ *
+ *   return (
+ *     <Checkbox
+ *       checked={checked}
+ *       onCheckedChange={setChecked}
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * ## Com Label
+ *
+ * ```tsx
+ * <div className="flex items-center gap-2">
+ *   <Checkbox id="terms" />
+ *   <label htmlFor="terms">Aceito os termos</label>
+ * </div>
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado (Tab, Espaço)
+ * - Segue padrões WAI-ARIA via Radix UI
+ * - Suporta leitores de tela
+ * - Foco gerenciado automaticamente
+ *
+ * @see [Radix UI Checkbox](https://www.radix-ui.com/primitives/docs/components/checkbox) para mais detalhes
  */
 
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
@@ -10,10 +53,25 @@ import { Check } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Props do componente Checkbox.
+ * @see CheckboxPrimitive.Root para props disponíveis (checked, onCheckedChange, disabled, etc.)
+ */
 export type CheckboxProps = React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>;
 
 /**
- * Checkbox - Componente de checkbox
+ * Componente Checkbox para seleção de opções.
+ *
+ * @component
+ * @param {CheckboxProps} props - Props do componente
+ * @returns {JSX.Element} Elemento Checkbox renderizado
+ *
+ * @example
+ * ```tsx
+ * <Checkbox checked={checked} onCheckedChange={setChecked} />
+ * <Checkbox defaultChecked />
+ * <Checkbox disabled />
+ * ```
  */
 const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(
   ({ className, ...props }, ref) => {

@@ -8,7 +8,7 @@ import {
 } from "./carousel";
 
 const meta = {
-  title: "Flowtomic UI/Atoms/Data Display/Carousel",
+  title: "Flowtomic UI/Atoms/DataDisplay/Carousel",
   component: Carousel,
   parameters: {
     layout: "centered",

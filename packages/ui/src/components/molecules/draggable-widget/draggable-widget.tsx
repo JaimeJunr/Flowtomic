@@ -9,7 +9,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Settings2, X } from "lucide-react";
 import { memo } from "react";
-import { WidgetResizeHandle } from "@/components/atoms/widget-resize-handle";
+import { WidgetResizeHandle } from "@/components/atoms/layout/widget-resize-handle";
 import { cn } from "@/lib/utils";
 
 export interface DraggableWidgetProps {

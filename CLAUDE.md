@@ -12,6 +12,7 @@
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
 - **`docs/cli/README.md`** - Documentação do CLI
+- **`docs/deploy/npm.md`** - Documentação do script de publicação automatizada no NPM
 
 ## Estrutura do Monorepo
 
@@ -24,6 +25,7 @@ Estrutura básica:
 - **`packages/styles/`** - Estilos globais (globals.css, theme.css, typography.css)
 - **`cli/`** - `@flowtomic/cli`: CLI para instalação de componentes
 - **`registry/`** - Registry para componentes e blocks (compatível com shadcn CLI)
+- **`scripts/`** - Scripts de automação (publicação NPM, etc.)
 
 ## Padrões de Desenvolvimento
 
@@ -280,6 +282,80 @@ Comandos principais:
 - `bun run type-check` - Verificar tipos TypeScript
 - `bun run storybook` - Executar Storybook
 - `bun run fix:all` - Corrigir lint e formatar tudo
+- `bun run publish` - Publicar packages no NPM (ver seção abaixo)
+
+### Publicação no NPM
+
+**SEMPRE consulte** `docs/deploy/npm.md` para documentação completa do script de publicação.
+
+**SEMPRE use** o script de publicação automatizada para publicar packages no NPM:
+
+#### Script de Publicação (`scripts/publish.ts`)
+
+O script automatiza o processo completo de publicação:
+
+1. **Executa testes** - Valida que todos os testes passam
+2. **Executa build** - Garante que o build está funcionando
+3. **Atualiza versão** - Incrementa versão automaticamente (major/minor/patch)
+4. **Publica no NPM** - Publica o package selecionado
+
+#### Uso do Script
+
+**Modo Interativo (Recomendado)**:
+
+```bash
+bun run publish
+```
+
+O script irá:
+
+- Mostrar lista de packages disponíveis (ui, logic, cli)
+- Mostrar opções de tipo de versão com preview da nova versão
+- Executar validações (testes e build)
+- Atualizar versão e publicar
+
+**Modo Não-Interativo**:
+
+```bash
+# Sintaxe: <package> <version-type>
+bun run publish ui patch
+bun run publish logic minor
+bun run publish cli major
+```
+
+#### Packages Disponíveis para Publicação
+
+- **`ui`** → `@flowtomic/ui` - Componentes UI reutilizáveis
+- **`logic`** → `@flowtomic/logic` - Hooks headless e lógica
+- **`cli`** → `flowtomic-cli` - CLI para instalação de componentes
+
+#### Tipos de Versão
+
+- **`major`** (1.0.0 → 2.0.0) - Mudanças incompatíveis na API
+- **`minor`** (1.0.0 → 1.1.0) - Novas funcionalidades mantendo compatibilidade
+- **`patch`** (1.0.0 → 1.0.1) - Correções de bugs mantendo compatibilidade
+
+#### Regras de Publicação
+
+**SEMPRE siga** estas regras ao publicar:
+
+1. **SEMPRE execute** `bun run publish` em vez de publicar manualmente
+2. **SEMPRE escolha** o tipo de versão apropriado (major/minor/patch)
+3. **SEMPRE aguarde** validações (testes e build) antes da publicação
+4. **NUNCA publique** manualmente sem executar testes e build primeiro
+5. **SEMPRE verifique** se está autenticado no NPM antes de publicar
+
+#### Fluxo de Publicação
+
+O script executa automaticamente:
+
+1. **Validação**: Verifica package e tipo de versão
+2. **Testes**: Executa `bun run test` em todos os packages
+3. **Build**: Executa `bun run build` em todos os packages
+4. **Atualização**: Atualiza `package.json` do package selecionado
+5. **Publicação**: Publica no NPM usando `npm publish --access public`
+
+**⚠️ IMPORTANTE**: Se testes ou build falharem, a publicação **não será executada**.
 
 ## Componentes Disponíveis
 
@@ -336,3 +412,6 @@ Stack principal:
 14. **SEMPRE seguir** ordem de importação dos estilos: globals.css → theme.css → typography.css
 15. **SEMPRE usar** Biome para linting e formatação (não ESLint/Prettier)
 16. **SEMPRE atualizar** `docs/` ao adicionar novos componentes ou funcionalidades
+17. **SEMPRE usar** `bun run publish` para publicar packages no NPM (nunca publicar manualmente)
+18. **SEMPRE executar** testes e build antes de publicar (o script faz isso automaticamente)
+19. **SEMPRE escolher** o tipo de versão apropriado (major/minor/patch) ao publicar

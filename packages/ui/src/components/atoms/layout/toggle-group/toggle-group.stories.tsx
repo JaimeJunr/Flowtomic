@@ -1,19 +1,51 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
+import React from "react";
 import { Bold, Italic, Underline } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
+/**
+ * Stories do componente ToggleGroup.
+ *
+ * O ToggleGroup é usado para agrupar múltiplos toggles em um grupo onde
+ * apenas um ou múltiplos podem estar selecionados.
+ *
+ * @see [ToggleGroup Component](../toggle-group.tsx) para documentação completa do componente
+ */
 const meta = {
   title: "Flowtomic UI/Atoms/Layout/ToggleGroup",
   component: ToggleGroup,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Grupo de toggles para seleção. Suporta modos single (um item) ou multiple (múltiplos itens). Herda variantes e tamanhos do Toggle.",
+      },
+    },
   },
   tags: ["autodocs"],
+  argTypes: {
+    type: {
+      control: "select",
+      options: ["single", "multiple"],
+      description: "Tipo de seleção (single ou multiple)",
+    },
+    variant: {
+      control: "select",
+      options: ["default", "outline"],
+      description: "Variante visual do toggle group",
+    },
+  },
 } satisfies Meta<typeof ToggleGroup>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Story padrão do ToggleGroup.
+ * Demonstra o uso básico com modo multiple (múltiplos itens podem estar selecionados).
+ */
 export const Default: Story = {
   render: () => (
     <ToggleGroup type="multiple">
@@ -25,8 +57,19 @@ export const Default: Story = {
       </ToggleGroupItem>
     </ToggleGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const option1 = canvas.getByRole("button", { name: "Option 1" });
+    const option2 = canvas.getByRole("button", { name: "Option 2" });
+    await expect(option1).toBeInTheDocument();
+    await expect(option2).toBeInTheDocument();
+  },
 };
 
+/**
+ * Story demonstrando ToggleGroup com modo single.
+ * Apenas um item pode estar selecionado por vez.
+ */
 export const Single: Story = {
   render: () => (
     <ToggleGroup type="single">
@@ -41,6 +84,15 @@ export const Single: Story = {
       </ToggleGroupItem>
     </ToggleGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const left = canvas.getByRole("button", { name: "Left" });
+    const center = canvas.getByRole("button", { name: "Center" });
+    const right = canvas.getByRole("button", { name: "Right" });
+    await expect(left).toBeInTheDocument();
+    await expect(center).toBeInTheDocument();
+    await expect(right).toBeInTheDocument();
+  },
 };
 
 export const WithSpacing: Story = {

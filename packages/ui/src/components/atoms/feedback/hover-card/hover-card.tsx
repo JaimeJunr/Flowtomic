@@ -1,7 +1,41 @@
 /**
- * HoverCard Component - Flowtomic UI
+ * # HoverCard Component
  *
- * Componente HoverCard baseado em Radix UI
+ * O componente `HoverCard` é usado para exibir conteúdo flutuante quando o usuário
+ * passa o mouse sobre um elemento. É baseado em Radix UI para garantir acessibilidade completa.
+ *
+ * ## Características Principais
+ *
+ * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
+ * - **Hover**: Abre automaticamente ao passar o mouse
+ * - **Composição**: HoverCard + HoverCardTrigger + HoverCardContent para flexibilidade
+ * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { HoverCard, HoverCardTrigger, HoverCardContent } from "@flowtomic/ui/components/atoms/feedback/hover-card";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <HoverCard>
+ *       <HoverCardTrigger>Hover me</HoverCardTrigger>
+ *       <HoverCardContent>
+ *         <p>Conteúdo do hover card</p>
+ *       </HoverCardContent>
+ *     </HoverCard>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado (Tab, Enter, Espaço)
+ * - Segue padrões WAI-ARIA via Radix UI
+ * - Suporta leitores de tela
+ * - Foco gerenciado automaticamente
+ *
+ * @see [Radix UI Hover Card](https://www.radix-ui.com/primitives/docs/components/hover-card) para mais detalhes
  */
 
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
@@ -17,19 +51,25 @@ export type HoverCardContentProps = React.ComponentPropsWithoutRef<
 >;
 
 /**
- * HoverCard - Container principal do hover card
+ * HoverCard - Container principal do hover card.
+ *
+ * Componente usado para gerenciar o estado do hover card.
  */
 const HoverCard = HoverCardPrimitive.Root;
 HoverCard.displayName = "HoverCard";
 
 /**
- * HoverCardTrigger - Trigger do hover card
+ * HoverCardTrigger - Trigger do hover card.
+ *
+ * Componente usado como trigger para abrir o hover card ao passar o mouse.
  */
 const HoverCardTrigger = HoverCardPrimitive.Trigger;
 HoverCardTrigger.displayName = "HoverCardTrigger";
 
 /**
- * HoverCardContent - Conteúdo do hover card
+ * HoverCardContent - Conteúdo do hover card.
+ *
+ * Componente usado para exibir o conteúdo do hover card.
  */
 const HoverCardContent = React.forwardRef<
   React.ElementRef<typeof HoverCardPrimitive.Content>,

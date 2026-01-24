@@ -777,7 +777,7 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
   "widget-resize-handle": {
     name: "widget-resize-handle",
     type: "atom",
-    path: "packages/ui/src/components/atoms/widget-resize-handle",
+    path: "packages/ui/src/components/atoms/layout/widget-resize-handle",
     files: ["widget-resize-handle.tsx", "index.ts"],
     dependencies: ["lucide-react", "clsx", "tailwind-merge"],
   },

@@ -24,7 +24,8 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.stories.tsx",
-    ".storybook"
+    ".storybook",
+    "**/_reference/**"
   ],
   "references": [{ "path": "../logic" }]
 }
