@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type React from "react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../../atoms";
 import { ResizableLayout } from "./resizable-layout";
 
@@ -62,16 +62,30 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Componente wrapper para gerenciar o estado do sidebar
+ * Componente wrapper para gerenciar o estado do sidebar.
+ * Em docs (várias instâncias na mesma página), usa persistKey único por instância
+ * para evitar que uma sobrescreva a outra no localStorage.
  */
 function ResizableLayoutWrapper(
-  props: Omit<React.ComponentProps<typeof ResizableLayout>, "sidebarOpen" | "setSidebarOpen">
+  props: Omit<React.ComponentProps<typeof ResizableLayout>, "sidebarOpen" | "setSidebarOpen"> & {
+    /** Quando true (página Docs), suffixa o persistKey com useId() para não colidir entre instâncias */
+    docsMode?: boolean;
+  }
 ) {
+  const { docsMode, persistKey = "default", ...rest } = props;
+  const instanceId = useId();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const stablePersistKey =
+    docsMode === true ? `${persistKey}-${instanceId.replace(/:/g, "-")}` : persistKey;
 
   return (
-    <div className="h-screen w-screen">
-      <ResizableLayout {...props} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+    <div className="h-screen w-screen min-h-[400px] min-w-[600px]">
+      <ResizableLayout
+        {...rest}
+        persistKey={stablePersistKey}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
     </div>
   );
 }
@@ -133,26 +147,38 @@ const ExampleContent = ({ title = "Conteúdo Principal" }: { title?: string }) =
 );
 
 export const Default: Story = {
-  render: () => (
-    <ResizableLayoutWrapper sidebar={<ExampleSidebar title="Sidebar Padrão" />} side="left">
+  render: (_args, context) => (
+    <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
+      sidebar={<ExampleSidebar title="Sidebar Padrão" />}
+      side="left"
+      persistKey="storybook-default"
+    >
       <ExampleContent title="Conteúdo Principal" />
     </ResizableLayoutWrapper>
   ),
 };
 
 export const SidebarRight: Story = {
-  render: () => (
-    <ResizableLayoutWrapper sidebar={<ExampleSidebar title="Sidebar à Direita" />} side="right">
+  render: (_args, context) => (
+    <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
+      sidebar={<ExampleSidebar title="Sidebar à Direita" />}
+      side="right"
+      persistKey="storybook-sidebar-right"
+    >
       <ExampleContent title="Conteúdo Principal" />
     </ResizableLayoutWrapper>
   ),
 };
 
 export const CustomSizes: Story = {
-  render: () => (
+  render: (_args, context) => (
     <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
       sidebar={<ExampleSidebar title="Sidebar Customizada" />}
       side="left"
+      persistKey="storybook-custom-sizes"
       defaultSidebarPct={0.35}
       minPx={200}
       maxPct={0.5}
@@ -164,8 +190,9 @@ export const CustomSizes: Story = {
 };
 
 export const WithPersistence: Story = {
-  render: () => (
+  render: (_args, context) => (
     <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
       sidebar={<ExampleSidebar title="Sidebar Persistente" />}
       side="left"
       persistKey="storybook-resizable"
@@ -185,10 +212,12 @@ export const WithPersistence: Story = {
 };
 
 export const ThickResizer: Story = {
-  render: () => (
+  render: (_args, context) => (
     <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
       sidebar={<ExampleSidebar title="Handle Espesso" />}
       side="left"
+      persistKey="storybook-thick-resizer"
       resizerThicknessPx={16}
     >
       <ExampleContent title="Conteúdo com Handle Espesso" />
@@ -197,10 +226,12 @@ export const ThickResizer: Story = {
 };
 
 export const NarrowSidebar: Story = {
-  render: () => (
+  render: (_args, context) => (
     <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
       sidebar={<ExampleSidebar title="Sidebar Estreita" />}
       side="left"
+      persistKey="storybook-narrow"
       defaultSidebarPct={0.15}
       minPx={150}
       maxPct={0.3}
@@ -211,10 +242,12 @@ export const NarrowSidebar: Story = {
 };
 
 export const WideSidebar: Story = {
-  render: () => (
+  render: (_args, context) => (
     <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
       sidebar={<ExampleSidebar title="Sidebar Larga" />}
       side="left"
+      persistKey="storybook-wide"
       defaultSidebarPct={0.5}
       minPx={300}
       maxPct={0.7}
@@ -226,10 +259,12 @@ export const WideSidebar: Story = {
 };
 
 export const WithSnap: Story = {
-  render: () => (
+  render: (_args, context) => (
     <ResizableLayoutWrapper
+      docsMode={context.viewMode === "docs"}
       sidebar={<ExampleSidebar title="Sidebar com Snap" />}
       side="left"
+      persistKey="storybook-snap"
       defaultSidebarPct={0.25}
       tinySizePx={60}
       snapThreshold={50}

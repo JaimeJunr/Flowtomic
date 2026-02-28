@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, within } from "storybook/test";
+import { ResizableLayout } from "../../../organisms/resizable-layout/resizable-layout";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./resizable";
 
 /**
@@ -63,39 +65,6 @@ export const Default: Story = {
     const panel2 = canvas.getByText("Painel 2");
     await expect(panel1).toBeInTheDocument();
     await expect(panel2).toBeInTheDocument();
-  },
-};
-
-export const ResizableLayoutStyle: Story = {
-  render: () => (
-    <div className="h-[400px] w-full">
-      <ResizablePanelGroup direction="horizontal" className="h-full">
-        <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
-          <div className="flex h-full flex-col border-r bg-muted p-4">
-            <h2 className="mb-4 text-lg font-semibold">Sidebar</h2>
-            <nav className="space-y-2">
-              <div className="rounded-md bg-background p-2 text-sm">Item 1</div>
-              <div className="rounded-md bg-background p-2 text-sm">Item 2</div>
-            </nav>
-          </div>
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75} minSize={60}>
-          <div className="flex h-full flex-col p-6">
-            <h1 className="mb-4 text-2xl font-bold">Conteúdo Principal</h1>
-            <p className="text-muted-foreground">Conteúdo redimensionável</p>
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Exemplo de uso customizado do Resizable como no ResizableLayout, usado para criar layouts com sidebar redimensionável e conteúdo principal.",
-      },
-    },
   },
 };
 
@@ -172,44 +141,6 @@ export const Vertical: Story = {
 };
 
 /**
- * Exemplo com sidebar e conteúdo principal
- */
-export const SidebarLayout: Story = {
-  render: () => (
-    <div className="h-screen w-screen">
-      <ResizablePanelGroup direction="horizontal" className="h-full">
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
-          <div className="flex h-full flex-col border-r bg-muted p-4">
-            <h2 className="mb-4 text-lg font-semibold">Sidebar</h2>
-            <nav className="space-y-2">
-              <div className="rounded-md bg-background p-2 text-sm">Menu Item 1</div>
-              <div className="rounded-md bg-background p-2 text-sm">Menu Item 2</div>
-              <div className="rounded-md bg-background p-2 text-sm">Menu Item 3</div>
-            </nav>
-          </div>
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={80} minSize={60}>
-          <div className="flex h-full flex-col p-6">
-            <h1 className="mb-4 text-2xl font-bold">Conteúdo Principal</h1>
-            <p className="text-muted-foreground">
-              Este é o conteúdo principal. Você pode redimensionar a sidebar arrastando o handle.
-            </p>
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Layout típico de sidebar com conteúdo principal, comum em dashboards e aplicações.",
-      },
-    },
-  },
-};
-
-/**
  * Exemplo sem handle visível
  */
 export const WithoutHandle: Story = {
@@ -275,6 +206,51 @@ export const Collapsible: Story = {
       description: {
         story:
           "Painel colapsável que pode ser minimizado até um tamanho mínimo. Útil para sidebars que podem ser ocultadas.",
+      },
+    },
+  },
+};
+
+/**
+ * Exemplo usando o organismo ResizableLayout (sidebar + conteúdo com persistência e handle).
+ */
+function ResizableLayoutExample() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  return (
+    <div className="h-[400px] w-full">
+      <ResizableLayout
+        sidebar={
+          <div className="flex flex-col gap-2 p-4">
+            <h2 className="text-lg font-semibold">Sidebar</h2>
+            <nav className="space-y-1 text-sm">
+              <div className="rounded-md bg-muted/50 px-2 py-1.5">Item 1</div>
+              <div className="rounded-md bg-muted/50 px-2 py-1.5">Item 2</div>
+            </nav>
+          </div>
+        }
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        persistKey="resizable-atom-story"
+      >
+        <div className="flex h-full flex-col p-6">
+          <h1 className="mb-2 text-xl font-bold">Conteúdo Principal</h1>
+          <p className="text-muted-foreground">
+            Este exemplo usa o organismo ResizableLayout, que compõe os átomos Resizable com
+            persistência e controle de sidebar.
+          </p>
+        </div>
+      </ResizableLayout>
+    </div>
+  );
+}
+
+export const WithResizableLayout: Story = {
+  render: () => <ResizableLayoutExample />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Único exemplo que usa o organismo ResizableLayout. Mostra sidebar redimensionável com persistência e conteúdo principal.",
       },
     },
   },

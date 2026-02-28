@@ -91,14 +91,14 @@
   --shadow-xs-skeumorphic: var(--shadow-skeumorphic), var(--shadow-xs);
 
   --shadow-modern-mockup-inner-lg:
-    0px 0px 3.765px 1.255px rgba(10, 13, 18, 0.08) inset, 0px 0px 2.51px 1.255px
-    rgba(10, 13, 18, 0.03) inset;
+    0px 0px 3.765px 1.255px rgba(10, 13, 18, 0.08) inset,
+    0px 0px 2.51px 1.255px rgba(10, 13, 18, 0.03) inset;
   --shadow-modern-mockup-inner-md:
-    0px 0px 1.692px 0.564px rgba(10, 13, 18, 0.08) inset, 0px 0px 1.128px 0.564px
-    rgba(10, 13, 18, 0.03) inset;
+    0px 0px 1.692px 0.564px rgba(10, 13, 18, 0.08) inset,
+    0px 0px 1.128px 0.564px rgba(10, 13, 18, 0.03) inset;
   --shadow-modern-mockup-inner-sm:
-    0px 0px 4.48px 1.493px rgba(10, 13, 18, 0.08) inset, 0px 0px 2.987px 1.493px
-    rgba(10, 13, 18, 0.03) inset;
+    0px 0px 4.48px 1.493px rgba(10, 13, 18, 0.08) inset,
+    0px 0px 2.987px 1.493px rgba(10, 13, 18, 0.03) inset;
 
   --shadow-modern-mockup-outer-lg:
     0px 7.529px 10.039px -2.51px rgba(10, 13, 18, 0.08), 0px 2.51px 3.765px -1.255px rgba(

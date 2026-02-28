@@ -126,7 +126,7 @@ export function WidgetResizeHandle({
   const [isResizing, setIsResizing] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [startSize, setStartSize] = useState({ w: currentWidth, h: currentHeight });
-  const handleRef = useRef<HTMLDivElement>(null);
+  const handleRef = useRef<HTMLButtonElement>(null);
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -195,7 +195,7 @@ export function WidgetResizeHandle({
   return (
     <button
       type="button"
-      ref={handleRef as any}
+      ref={handleRef}
       onMouseDown={handleMouseDown}
       className={cn(
         "absolute bottom-0 right-0 w-6 h-6",
