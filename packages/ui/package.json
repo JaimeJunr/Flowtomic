@@ -36,6 +36,7 @@
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
     "format:check": "biome format .",
+    "test": "bun test src/",
     "storybook": "storybook dev -p 6006 --config-dir ../../.storybook",
     "build-storybook": "storybook build --config-dir ../../.storybook --output-dir ../../storybook-static"
   },
