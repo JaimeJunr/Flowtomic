@@ -33,7 +33,8 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "format:check": "biome format ."
+    "format:check": "biome format .",
+    "test": "bun test src"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
