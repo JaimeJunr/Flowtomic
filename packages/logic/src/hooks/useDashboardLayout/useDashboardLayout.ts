@@ -139,6 +139,51 @@ const DEFAULT_GRID_CONFIG: GridConfig = {
   gap: 16,
 };
 
+export interface ComputeWidgetGridPositionFromDragInput {
+  startX: number;
+  startY: number;
+  widgetWidth: number;
+  deltaX: number;
+  deltaY: number;
+  gridColumns: number;
+  cellSize?: number;
+  gap?: number;
+}
+
+/**
+ * Calcula posição de grid a partir do delta cumulativo do dnd-kit.
+ *
+ * O delta do dnd-kit é medido desde o início do drag, não entre eventos.
+ * A posição deve ser derivada da posição inicial + delta, nunca da posição atual.
+ */
+export function computeWidgetGridPositionFromDrag({
+  startX,
+  startY,
+  widgetWidth,
+  deltaX,
+  deltaY,
+  gridColumns,
+  cellSize = DEFAULT_GRID_CONFIG.cellSize ?? 50,
+  gap = DEFAULT_GRID_CONFIG.gap ?? 16,
+}: ComputeWidgetGridPositionFromDragInput): { x: number; y: number } {
+  const totalCellSize = cellSize + gap;
+  const gridDeltaX = Math.round(deltaX / totalCellSize);
+  const gridDeltaY = Math.round(deltaY / totalCellSize);
+
+  if (gridDeltaX === 0 && gridDeltaY === 0) {
+    return { x: startX, y: startY };
+  }
+
+  const newX = Math.max(0, Math.min(gridColumns - widgetWidth, startX + gridDeltaX));
+  const newY = Math.max(0, startY + gridDeltaY);
+
+  if (newX + widgetWidth > gridColumns) {
+    return { x: startX, y: startY };
+  }
+
+  return { x: newX, y: newY };
+}
+
 /**
  * Hook para gerenciar layout do dashboard
  *
