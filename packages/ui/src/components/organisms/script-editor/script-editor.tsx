@@ -1,25 +1,8 @@
-/**
- * ScriptEditor Component - Flowtomic UI
- *
- * Componente para editar e executar scripts com terminal interativo
- *
- * Funcionalidades:
- * - Editor de código para scripts
- * - Terminal interativo em tempo real
- * - Preview da resposta do servidor
- * - Abas para alternar entre terminal e preview
- * - Execução de scripts no backend
- */
-
 import { type ExecuteScriptResponse, type TerminalLine, useScriptEditor } from "@flowtomic/logic";
-import { Check, Copy, Play, Square, Trash2 } from "lucide-react";
+import { Play, Square } from "lucide-react";
 import type { HTMLAttributes } from "react";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { Badge, Button } from "../../atoms/actions";
-import { Card, CardContent, CardHeader, CardTitle } from "../../atoms/display";
-import { Textarea } from "../../atoms/forms";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../atoms/navigation/tabs";
 
 export interface ScriptEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, "onError"> {
   /**
@@ -61,31 +44,27 @@ export interface ScriptEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   maxReconnectAttempts?: number;
 }
 
-/**
- * ScriptEditor - Componente para editar e executar scripts com terminal interativo
- */
+const MONO = "font-mono text-[13px] leading-[22px]";
+
+const DEFAULT_SCRIPT = `// Serviços do Spring estão no contexto: ctx.getBean("nome")
+
+def repo = ctx.getBean("userRepository")
+def usuarios = repo.findAll()
+
+def resultado = [
+  total: usuarios.size(),
+  usuarios: usuarios.collect { [id: it.id, name: it.name] }
+]
+
+// a última expressão volta como resultado
+resultado`;
+
+/** Editor de scripts Groovy executados no servidor, com log de execução e resultado lado a lado. */
 export const ScriptEditor = forwardRef<HTMLDivElement, ScriptEditorProps>(
   (
     {
       className,
-      defaultScript = `// Exemplo de script Groovy
-// Serviços do Spring Boot estão disponíveis automaticamente
-// Exemplos: userService, animalService, herdService, ctx (ApplicationContext)
-
-// Exemplo 1: Acessar repositório via ApplicationContext
-def userRepo = ctx.getBean("userRepository")
-def usuarios = userRepo.findAll()
-def resultado = [
-  message: "Usuários encontrados",
-  total: usuarios.size(),
-  usuarios: usuarios.collect { [id: it.id, name: it.name, email: it.email] }
-]
-
-// Exemplo 2: Usar serviço diretamente (se disponível)
-// def userService = ctx.getBean("userService")
-
-// Última expressão é retornada como resultado
-resultado`,
+      defaultScript = DEFAULT_SCRIPT,
       wsUrl,
       executeScript,
       onOutput,
@@ -101,8 +80,6 @@ resultado`,
       setScript,
       terminalLines,
       preview,
-      activeTab,
-      setActiveTab,
       isRunning,
       isConnected,
       executeScript: executeScriptHandler,
@@ -118,207 +95,154 @@ resultado`,
       maxReconnectAttempts,
     });
 
-    const [copied, setCopied] = useState(false);
-    const terminalRef = useRef<HTMLDivElement>(null);
+    const logRef = useRef<HTMLDivElement>(null);
 
-    // Scroll automático do terminal
+    // Mantém a última linha do log visível conforme o servidor emite saída
     useEffect(() => {
-      if (terminalRef.current) {
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+      if (logRef.current) {
+        logRef.current.scrollTop = logRef.current.scrollHeight;
       }
     }, []);
 
-    const copyToClipboard = async (text: string) => {
-      try {
-        await navigator.clipboard.writeText(text);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch (err) {
-        console.error("Erro ao copiar:", err);
+    const lineCount = Math.max(1, script.split("\n").length);
+    const ultimaExecucao = terminalLines.at(-1)?.timestamp;
+
+    const runOnCtrlEnter = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter" && !isRunning) {
+        event.preventDefault();
+        executeScriptHandler();
       }
     };
 
     return (
-      <Card ref={ref} className={cn("w-full", className)} {...props}>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Editor de Scripts</CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">
-                Edite e execute scripts com terminal interativo em tempo real
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant={isConnected ? "default" : "secondary"}>
-                {isConnected ? "🟢 Conectado" : "🔴 Desconectado"}
-              </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => copyToClipboard(script)}
-                disabled={!script}
+      <div ref={ref} className={cn("flex flex-col gap-4", className)} {...props}>
+        <div className="flex items-center justify-between gap-6">
+          <p className={cn(MONO, "flex items-center gap-2.5 text-foreground/80")}>
+            <span
+              aria-hidden
+              className={cn(
+                "size-2 shrink-0 rounded-full",
+                isConnected ? "bg-success" : "bg-destructive"
+              )}
+            />
+            <span>{isConnected ? "conectado" : "desconectado"}</span>
+            {wsUrl && <span className="text-muted-foreground">{wsUrl}</span>}
+          </p>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground">Ctrl+Enter executa</span>
+            {isRunning ? (
+              <button
+                type="button"
+                onClick={stopExecution}
+                className="inline-flex h-9 items-center gap-2 rounded-md border border-destructive bg-background px-4 text-[13px] font-medium text-destructive hover:bg-destructive/5"
               >
-                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              </Button>
-            </div>
+                <Square className="size-3 fill-current" aria-hidden />
+                Parar
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={executeScriptHandler}
+                className="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-[13px] font-medium text-primary-foreground hover:bg-primary/90"
+              >
+                <Play className="size-3 fill-current" aria-hidden />
+                Executar
+              </button>
+            )}
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Editor de Código */}
-          <div className="relative">
-            <div className="flex items-center justify-between mb-2">
-              <label htmlFor="script-editor-textarea" className="text-sm font-medium">
-                Script
+        </div>
+
+        <div className="grid min-h-[420px] grid-cols-1 gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-border">
+            <div className="flex items-center border-b border-border bg-muted/50 px-3.5 py-2">
+              <label
+                htmlFor="script-editor-textarea"
+                className="font-mono text-xs text-foreground/80"
+              >
+                script.groovy
               </label>
-              <div className="flex gap-2">
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={executeScriptHandler}
-                  disabled={isRunning}
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  Executar
-                </Button>
-                <Button variant="outline" size="sm" onClick={stopExecution} disabled={!isRunning}>
-                  <Square className="h-4 w-4 mr-2" />
-                  Parar
-                </Button>
-              </div>
             </div>
-            <div className="relative bg-muted/50 border border-border rounded-lg overflow-hidden">
-              <div className="flex flex-row gap-x-2 p-3 border-b border-border bg-muted">
-                <div className="h-2 w-2 rounded-full bg-red-500"></div>
-                <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
-                <div className="h-2 w-2 rounded-full bg-green-500"></div>
-              </div>
-              <Textarea
+            <div className={cn(MONO, "grid min-h-0 flex-1 grid-cols-[44px_minmax(0,1fr)]")}>
+              <pre
+                aria-hidden
+                data-testid="line-numbers"
+                className="m-0 select-none border-r border-border bg-muted/50 py-3.5 pr-2.5 text-right text-muted-foreground/70"
+              >
+                {Array.from({ length: lineCount }, (_, i) => i + 1).join("\n")}
+              </pre>
+              <textarea
                 id="script-editor-textarea"
                 value={script}
                 onChange={(e) => setScript(e.target.value)}
-                className="w-full h-64 p-4 font-mono text-sm bg-background resize-none focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="Digite seu script Groovy aqui... (ou JavaScript como fallback)"
+                onKeyDown={runOnCtrlEnter}
                 spellCheck={false}
+                className={cn(
+                  MONO,
+                  "m-0 resize-none overflow-auto whitespace-pre bg-background px-4 py-3.5 text-foreground outline-none"
+                )}
               />
             </div>
           </div>
 
-          {/* Terminal e Preview com Abas */}
-          <div className="border border-border rounded-lg overflow-hidden">
-            <Tabs
-              value={activeTab}
-              onValueChange={(value) => setActiveTab(value as "terminal" | "preview")}
-            >
-              <div className="flex border-b border-border bg-muted">
-                <TabsList className="bg-transparent border-0 p-0 h-auto">
-                  <TabsTrigger value="terminal">Terminal</TabsTrigger>
-                  <TabsTrigger value="preview">Preview</TabsTrigger>
-                </TabsList>
-                <div className="flex-1" />
-                <Button variant="ghost" size="sm" onClick={clearTerminal} className="mr-2">
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Limpar
-                </Button>
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-gray-900 text-gray-200">
+            <div className="flex items-center justify-between border-b border-gray-700 px-3.5 py-2">
+              <span className="font-mono text-xs text-gray-400">
+                {ultimaExecucao
+                  ? `última execução · ${hora(ultimaExecucao)}`
+                  : "sem execução ainda"}
+              </span>
+              <button
+                type="button"
+                onClick={clearTerminal}
+                className="h-6.5 rounded px-2 text-xs text-gray-400 hover:text-gray-200"
+              >
+                Limpar
+              </button>
+            </div>
+            <div ref={logRef} className={cn(MONO, "flex min-h-0 flex-1 flex-col overflow-auto")}>
+              <div className="flex flex-col gap-0.5 px-4 py-3.5 text-gray-400">
+                {terminalLines.length === 0 && !isRunning && (
+                  <span>Execute o script para ver o log aqui.</span>
+                )}
+                {terminalLines.map((line) => (
+                  <LogLine key={line.id} line={line} />
+                ))}
+                {isRunning && <span className="animate-pulse text-gray-300">executando…</span>}
               </div>
-
-              <TabsContent value="terminal" className="mt-0">
-                <TerminalContent ref={terminalRef} lines={terminalLines} isRunning={isRunning} />
-              </TabsContent>
-
-              <TabsContent value="preview" className="mt-0">
-                <PreviewContent content={preview} />
-              </TabsContent>
-            </Tabs>
+              {preview && (
+                <div className="flex flex-1 flex-col gap-2 border-t border-gray-700 px-4 py-3.5">
+                  <p className="m-0 text-xs text-gray-500">resultado</p>
+                  <pre className="m-0 whitespace-pre font-[inherit] text-white">{preview}</pre>
+                </div>
+              )}
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 );
 ScriptEditor.displayName = "ScriptEditor";
 
-// Componente de conteúdo do terminal
-interface TerminalContentProps {
-  lines: TerminalLine[];
-  isRunning: boolean;
-}
+const LINE_COLOR: Record<TerminalLine["type"], string> = {
+  input: "text-brand-300",
+  output: "text-gray-200",
+  error: "text-error-400",
+  system: "text-gray-400",
+};
 
-const TerminalContent = forwardRef<HTMLDivElement, TerminalContentProps>(
-  ({ lines, isRunning }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "p-4 font-mono text-sm h-64 overflow-auto",
-          // Modo dark: estilo terminal escuro
-          "dark:bg-[#0d1117] dark:text-[#c9d1d9]",
-          // Modo light: usar input que é mais escuro que muted, mantendo a paleta
-          "bg-input text-foreground"
-        )}
-      >
-        {lines.length === 0 ? (
-          <div className="text-muted-foreground dark:text-[#8b949e]">
-            <span className="text-primary dark:text-[#58a6ff]">$</span> Terminal pronto. Execute um
-            script para ver a saída...
-          </div>
-        ) : (
-          <div className="space-y-1">
-            {lines.map((line) => (
-              <div
-                key={line.id}
-                className={cn(
-                  "flex items-start gap-2 animate-in fade-in slide-in-from-top-1 duration-200",
-                  line.type === "error" && "text-destructive dark:text-[#f85149]",
-                  line.type === "output" && "text-foreground dark:text-[#c9d1d9]",
-                  line.type === "system" && "text-muted-foreground dark:text-[#8b949e]",
-                  line.type === "input" && "text-primary dark:text-[#58a6ff]"
-                )}
-              >
-                {line.type === "input" && (
-                  <span className="text-primary dark:text-[#58a6ff]">$</span>
-                )}
-                {line.type === "error" && (
-                  <span className="text-destructive dark:text-[#f85149]">✗</span>
-                )}
-                {line.type === "system" && (
-                  <span className="text-muted-foreground dark:text-[#8b949e]">●</span>
-                )}
-                <span className="flex-1 whitespace-pre-wrap break-words">{line.content}</span>
-              </div>
-            ))}
-            {isRunning && (
-              <div className="text-muted-foreground dark:text-[#8b949e] animate-pulse">
-                <span className="text-primary dark:text-[#58a6ff]">$</span>{" "}
-                <span className="animate-pulse">▋</span> Executando...
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  }
-);
-TerminalContent.displayName = "TerminalContent";
-
-// Componente de preview
-interface PreviewContentProps {
-  content: string;
-}
-
-const PreviewContent = ({ content }: PreviewContentProps) => {
-  if (!content) {
-    return (
-      <div className="p-4 text-muted-foreground text-center h-64 flex items-center justify-center">
-        Nenhum resultado ainda. Execute um script para ver o preview...
-      </div>
-    );
-  }
-
+function LogLine({ line }: { line: TerminalLine }) {
   return (
-    <div className="p-4 h-64 overflow-auto">
-      <pre className="text-sm font-mono bg-muted p-4 rounded-lg overflow-auto">
-        <code>{content}</code>
-      </pre>
+    <div className="flex gap-3">
+      <span className="shrink-0 text-gray-500">{hora(line.timestamp)}</span>
+      <span className={cn("whitespace-pre-wrap break-words", LINE_COLOR[line.type])}>
+        {line.type === "input" && "> "}
+        {line.content}
+      </span>
     </div>
   );
-};
+}
+
+function hora(date: Date): string {
+  return date.toLocaleTimeString("pt-BR");
+}
