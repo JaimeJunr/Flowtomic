@@ -45,6 +45,7 @@
     "@types/semver": "^7.7.1",
     "autoprefixer": "^10.4.27",
     "inquirer": "^13.3.0",
+    "playwright": "1.63.0",
     "postcss": "^8.5.6",
     "semver": "^7.7.4",
     "storybook": "^10.2.13",

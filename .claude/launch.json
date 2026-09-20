@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "storybook",
+      "runtimeExecutable": "bunx",
+      "runtimeArgs": [
+        "storybook",
+        "dev",
+        "-p",
+        "6006",
+        "--config-dir",
+        ".storybook",
+        "--no-open"
+      ],
+      "port": 6006
+    },
+    {
+      "name": "registry",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "registry/server.ts"],
+      "port": 3001
+    }
+  ]
+}
