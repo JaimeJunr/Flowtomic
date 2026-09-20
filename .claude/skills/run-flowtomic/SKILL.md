@@ -145,12 +145,33 @@ o modo run:
 cd packages/ui && bunx vitest run --reporter=dot
 ```
 
-Verde em 2026-09-20: 39 arquivos, 353 testes, ~18s. Os `Warning: Missing
-Description ... for {DialogContent}` no stderr são ruído conhecido, não falha.
+O `registry` também é workspace e tem suíte própria, que guarda o parser do
+component map:
+
+```bash
+cd registry && bun run test
+```
+
+Verde em 2026-09-20: 39 arquivos e 353 testes no `ui` (~18s); 4 no `registry`.
+Os `Warning: Missing Description ... for {DialogContent}` no stderr são ruído
+conhecido, não falha.
 
 ## Registry e CLI
 
-O registry serve JSON compatível com shadcn na porta 3001:
+Em produção (Vercel) o `buildCommand` é `registry:build`, e as rotas em
+`registry/api/` leem o `registry/registry.json` gerado:
+
+```bash
+bun run registry:build
+```
+
+Saem 119 componentes e 3 blocks.
+
+⚠️ O servidor **local** é outra coisa: `registry/server.ts` tem um
+`loadComponentMap()` que é stub declarado ("Por enquanto, retornar arrays
+vazios"), então ele serve os 3 blocks e **zero componentes**, por mais que o
+`registry.json` esteja cheio. Para ver o conteúdo real do registry, leia o
+arquivo gerado, não o `localhost:3001`.
 
 ```bash
 bun run registry/server.ts
@@ -160,7 +181,8 @@ bun run registry/server.ts
 cd cli && bun run build && node dist/cli.js list
 ```
 
-O `list` sai com exit 0 e imprime 122 componentes.
+O `list` sai com exit 0 e imprime 122 linhas: os mesmos 119 componentes e
+hooks, mais os 3 blocks.
 
 ## Gotchas
 
@@ -174,11 +196,6 @@ O `list` sai com exit 0 e imprime 122 componentes.
   O chunk não sumiu: a reinstalação **trocou o hash do nome** (`lib-7RNZBJWQ` →
   `lib-W6JDP72S`) e o processo em memória ainda procura o antigo. Não reinstale nada
   — basta reiniciar o Storybook.
-- **`registry:build` gera 0 componentes e isso não é culpa sua.** O
-  `loadComponentMap()` em `registry/build-registry.ts:72` usa regex non-greedy
-  (`[\s\S]*?`), que para no primeiro `}` e captura **256 dos 31.634 caracteres** de
-  `cli/src/utils/component-map.ts`. Só os 3 blocks saem, e eles vêm de um JSON
-  estático. O CLI não sofre disso — ele importa o mapa de verdade.
 - **O Storybook 10.2 navega o iframe duas vezes na mesma URL.** É um auto-reload
   depois do boot, e a segunda navegação destrói o contexto de execução no meio da
   checagem: o Playwright estoura `Execution context was destroyed, most likely
@@ -187,6 +204,12 @@ O `list` sai com exit 0 e imprime 122 componentes.
 - **Logo após mexer em dependência, a primeira carga pode dar 504.** O erro é
   `Failed to load resource: 504 (Outdated Optimize Dep)`, do pre-bundle do Vite se
   reorganizando. Some sozinho na segunda passada — reveja antes de abrir bug.
+- **39 dos 119 componentes do registry saem com `content` vazio.** O `path` em
+  `cli/src/utils/component-map.ts` está desatualizado para eles: diz
+  `atoms/button`, mas o arquivo vive em `atoms/actions/button` desde a
+  reorganização por subcategoria. O `componentToRegistryItem` não acha o arquivo,
+  engole o erro no `catch` e emite `content: ""` — o item aparece na listagem e
+  instalaria vazio.
 - **O Storybook não lança exceção quando a story quebra.** Ele troca a classe do
   `<body>` para `sb-show-errordisplay`. O `#error-message` **existe sempre**, vazio
   no caminho feliz — usar a presença dele como sinal dá falso positivo em toda

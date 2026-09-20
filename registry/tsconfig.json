@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022"],
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "types": ["node", "bun"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}
