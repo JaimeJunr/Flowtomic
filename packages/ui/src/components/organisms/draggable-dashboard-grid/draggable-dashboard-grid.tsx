@@ -242,7 +242,10 @@ export function DraggableDashboardGrid({
             stroke="currentColor"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-labelledby="empty-dashboard-icon-title"
           >
+            <title id="empty-dashboard-icon-title">Ícone de Dashboard Vazio</title>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

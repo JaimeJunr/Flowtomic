@@ -8,12 +8,12 @@
 
 import type { ChatStatus, FileUIPart } from "ai";
 import {
-  CornerDownLeftIcon,
   ImageIcon,
   Loader2Icon,
   MicIcon,
   PaperclipIcon,
   PlusIcon,
+  SendIcon,
   SquareIcon,
   XIcon,
 } from "lucide-react";
@@ -41,13 +41,6 @@ import {
   useState,
 } from "react";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupTextarea,
-} from "@/components/molecules/forms/input-group";
-import { cn } from "@/lib/utils";
-import {
   Button,
   Command,
   CommandEmpty,
@@ -68,7 +61,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../atoms";
+} from "@/components/atoms";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupTextarea,
+} from "@/components/molecules/forms/input-group";
+import { cn } from "@/lib/utils";
 
 export type AttachmentsContext = {
   files: (FileUIPart & { id: string })[];
@@ -678,7 +678,14 @@ export const PromptInput = ({
         title="Upload files"
         type="file"
       />
-      <form className={cn("w-full", className)} onSubmit={handleSubmit} {...props}>
+      <form
+        className={cn(
+          "w-full divide-y overflow-hidden rounded-xl border bg-background shadow-sm",
+          className
+        )}
+        onSubmit={handleSubmit}
+        {...(props as Record<string, unknown>)}
+      >
         <InputGroup>{children}</InputGroup>
       </form>
     </>
@@ -697,12 +704,17 @@ export const PromptInputBody = ({ className, ...props }: PromptInputBodyProps) =
   <div className={cn("contents", className)} {...props} />
 );
 
-export type PromptInputTextareaProps = ComponentProps<typeof InputGroupTextarea>;
+export type PromptInputTextareaProps = ComponentProps<typeof InputGroupTextarea> & {
+  minHeight?: number;
+  maxHeight?: number;
+};
 
 export const PromptInputTextarea = ({
   onChange,
   className,
   placeholder = "What would you like to know?",
+  minHeight = 48,
+  maxHeight = 164,
   ...props
 }: PromptInputTextareaProps) => {
   const controller = useOptionalPromptInputController();
@@ -715,17 +727,16 @@ export const PromptInputTextarea = ({
         return;
       }
       if (e.shiftKey) {
+        // Allow newline
         return;
       }
+      // Submit on Enter (without Shift)
       e.preventDefault();
 
       const form = e.currentTarget.form;
-      const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-      if (submitButton?.disabled) {
-        return;
+      if (form) {
+        form.requestSubmit();
       }
-
-      form?.requestSubmit();
     }
 
     if (e.key === "Backspace" && e.currentTarget.value === "" && attachments.files.length > 0) {
@@ -775,13 +786,22 @@ export const PromptInputTextarea = ({
 
   return (
     <InputGroupTextarea
-      className={cn("field-sizing-content max-h-48 min-h-16", className)}
+      className={cn(
+        "w-full resize-none rounded-none border-none p-3 shadow-none outline-none ring-0",
+        "field-sizing-content max-h-[6lh] bg-transparent dark:bg-transparent",
+        "focus-visible:ring-0",
+        className
+      )}
       name="message"
       onCompositionEnd={() => setIsComposing(false)}
       onCompositionStart={() => setIsComposing(true)}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
       placeholder={placeholder}
+      style={{
+        minHeight: `${minHeight}px`,
+        maxHeight: `${maxHeight}px`,
+      }}
       {...props}
       {...controlledProps}
     />
@@ -808,10 +828,22 @@ export const PromptInputFooter = ({ className, ...props }: PromptInputFooterProp
   />
 );
 
+export type PromptInputToolbarProps = HTMLAttributes<HTMLDivElement>;
+
+export const PromptInputToolbar = ({ className, ...props }: PromptInputToolbarProps) => (
+  <div
+    className={cn("flex items-center justify-between p-1", className)}
+    {...(props as Record<string, unknown>)}
+  />
+);
+
 export type PromptInputToolsProps = HTMLAttributes<HTMLDivElement>;
 
 export const PromptInputTools = ({ className, ...props }: PromptInputToolsProps) => (
-  <div className={cn("flex items-center gap-1", className)} {...props} />
+  <div
+    className={cn("flex items-center gap-1", "[&_button:first-child]:rounded-bl-xl", className)}
+    {...(props as Record<string, unknown>)}
+  />
 );
 
 export type PromptInputButtonProps = ComponentProps<typeof InputGroupButton>;
@@ -822,15 +854,20 @@ export const PromptInputButton = ({
   size,
   ...props
 }: PromptInputButtonProps) => {
-  const newSize = size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
+  const newSize = (size ?? Children.count(props.children) > 1) ? "default" : "icon";
 
   return (
     <InputGroupButton
-      className={cn(className)}
+      className={cn(
+        "shrink-0 gap-1.5 rounded-lg",
+        variant === "ghost" && "text-muted-foreground",
+        newSize === "default" && "px-3",
+        className
+      )}
       size={newSize}
       type="button"
       variant={variant}
-      {...props}
+      {...(props as Record<string, unknown>)}
     />
   );
 };
@@ -875,12 +912,12 @@ export type PromptInputSubmitProps = ComponentProps<typeof InputGroupButton> & {
 export const PromptInputSubmit = ({
   className,
   variant = "default",
-  size = "icon-sm",
+  size = "icon",
   status,
   children,
   ...props
 }: PromptInputSubmitProps) => {
-  let Icon = <CornerDownLeftIcon className="size-4" />;
+  let Icon = <SendIcon className="size-4" />;
 
   if (status === "submitted") {
     Icon = <Loader2Icon className="size-4 animate-spin" />;
@@ -892,12 +929,11 @@ export const PromptInputSubmit = ({
 
   return (
     <InputGroupButton
-      aria-label="Submit"
-      className={cn(className)}
+      className={cn("gap-1.5 rounded-lg", className)}
       size={size}
       type="submit"
       variant={variant}
-      {...props}
+      {...(props as Record<string, unknown>)}
     >
       {children ?? Icon}
     </InputGroupButton>
@@ -910,10 +946,10 @@ interface SpeechRecognition extends EventTarget {
   lang: string;
   start(): void;
   stop(): void;
-  onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
-  onend: ((this: SpeechRecognition, ev: Event) => any) | null;
-  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
-  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null;
+  onstart: ((this: SpeechRecognition, ev: Event) => unknown) | null;
+  onend: ((this: SpeechRecognition, ev: Event) => unknown) | null;
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => unknown) | null;
+  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => unknown) | null;
 }
 
 interface SpeechRecognitionEvent extends Event {
@@ -1067,7 +1103,7 @@ export const PromptInputSelectTrigger = ({
   <SelectTrigger
     className={cn(
       "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
-      "hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
+      "hover:bg-accent hover:text-foreground aria-aria-expanded:bg-accent aria-aria-expanded:text-foreground",
       className
     )}
     {...props}
@@ -1092,6 +1128,22 @@ export type PromptInputSelectValueProps = ComponentProps<typeof SelectValue>;
 export const PromptInputSelectValue = ({ className, ...props }: PromptInputSelectValueProps) => (
   <SelectValue className={cn(className)} {...props} />
 );
+
+// Alias for ModelSelect (better naming for AI prompts)
+export type PromptInputModelSelectProps = PromptInputSelectProps;
+export const PromptInputModelSelect = PromptInputSelect;
+
+export type PromptInputModelSelectTriggerProps = PromptInputSelectTriggerProps;
+export const PromptInputModelSelectTrigger = PromptInputSelectTrigger;
+
+export type PromptInputModelSelectContentProps = PromptInputSelectContentProps;
+export const PromptInputModelSelectContent = PromptInputSelectContent;
+
+export type PromptInputModelSelectItemProps = PromptInputSelectItemProps;
+export const PromptInputModelSelectItem = PromptInputSelectItem;
+
+export type PromptInputModelSelectValueProps = PromptInputSelectValueProps;
+export const PromptInputModelSelectValue = PromptInputSelectValue;
 
 export type PromptInputHoverCardProps = ComponentProps<typeof HoverCard>;
 

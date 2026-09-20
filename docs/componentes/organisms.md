@@ -50,6 +50,24 @@ Container de conversa com scroll automático e empty state.
 
 **Dependências**: `use-stick-to-bottom`, `lucide-react`, `clsx`, `tailwind-merge`
 
+### `chat-log`
+
+Container de mensagens de chat com scroll automático, suporte a filtros customizáveis, header com controles e empty state.
+
+**Dependências**: `use-stick-to-bottom`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/organisms/chat-log`
+
+**Características**:
+- Container de mensagens de chat
+- Scroll automático para última mensagem
+- Suporte a filtros customizáveis (via props)
+- Header com controles customizáveis (busca, capítulos, etc.)
+- Empty state customizável
+- Integração com ChatMessage
+- Suporte a markdown
+- Configuração de tipos de mensagem e senders
+
 ### `model-selector`
 
 Seletor de modelo com dialog e command palette.

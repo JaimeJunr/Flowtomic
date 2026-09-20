@@ -1,9 +1,66 @@
+/**
+ * # InputOTP Component
+ *
+ * O componente `InputOTP` é um campo de entrada usado para códigos de verificação
+ * (One-Time Password). Fornece uma interface visual com slots individuais para cada dígito.
+ *
+ * ## Características Principais
+ *
+ * - **Slots Visuais**: Cada dígito é exibido em um slot individual
+ * - **Auto-foco**: Foco automático entre slots
+ * - **Validação**: Suporte a validação de formato
+ * - **Acessível**: Estrutura semântica para acessibilidade
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ *
+ * ## Componentes
+ *
+ * - **InputOTP**: Container principal do OTP
+ * - **InputOTPGroup**: Agrupa slots
+ * - **InputOTPSlot**: Slot individual para dígito
+ * - **InputOTPSeparator**: Separador visual entre grupos
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { InputOTP, InputOTPGroup, InputOTPSlot } from "@flowtomic/ui/components/atoms/forms/input-otp";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <InputOTP maxLength={6}>
+ *       <InputOTPGroup>
+ *         <InputOTPSlot index={0} />
+ *         <InputOTPSlot index={1} />
+ *         <InputOTPSlot index={2} />
+ *         <InputOTPSlot index={3} />
+ *         <InputOTPSlot index={4} />
+ *         <InputOTPSlot index={5} />
+ *       </InputOTPGroup>
+ *     </InputOTP>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado
+ * - Suporta leitores de tela
+ * - Foco gerenciado automaticamente entre slots
+ *
+ * @see [input-otp](https://github.com/guilhermerodz/input-otp) para mais detalhes
+ */
+
 import { OTPInput, OTPInputContext } from "input-otp";
 import { MinusIcon } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Props do componente InputOTP.
+ *
+ * @property {string} [containerClassName] - Classes CSS para o container
+ */
 export type InputOTPProps = React.ComponentProps<typeof OTPInput> & {
+  /** Classes CSS para o container */
   containerClassName?: string;
 };
 
@@ -31,7 +88,13 @@ function InputOTPGroup({ className, ...props }: InputOTPGroupProps) {
 
 InputOTPGroup.displayName = "InputOTPGroup";
 
+/**
+ * Props do componente InputOTPSlot.
+ *
+ * @property {number} index - Índice do slot (0-based)
+ */
 export interface InputOTPSlotProps extends React.ComponentProps<"div"> {
+  /** Índice do slot (0-based) */
   index: number;
 }
 

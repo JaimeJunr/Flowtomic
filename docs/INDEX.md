@@ -61,7 +61,7 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 - [Guia de Deploy](deploy/DEPLOYMENT.md) - Como fazer deploy do CLI e registry
 - [Setup de Produção](deploy/PRODUCTION_SETUP.md) - Configuração de ambiente de produção
-- [Publicação no npm](deploy/npm.md) - Como publicar o CLI no npm
+- [Publicação no NPM](deploy/npm.md) - Script automatizado de publicação dos packages no NPM
 - [Configuração do Registry](deploy/registry.md) - Como configurar o registry em produção
 
 ## 🗺️ Como Usar Esta Documentação
@@ -130,6 +130,9 @@ docs/
 │   ├── build.md
 │   └── instalacao.md
 └── deploy/                      # Documentação de deploy
+    ├── README.md
+    ├── DEPLOYMENT.md
+    ├── PRODUCTION_SETUP.md
     ├── npm.md
     └── registry.md
 ```

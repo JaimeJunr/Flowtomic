@@ -1,9 +1,60 @@
+/**
+ * # Field Component
+ *
+ * O componente `Field` é um sistema de composição para campos de formulário que fornece
+ * estrutura consistente para labels, descrições, erros e conteúdo. Suporta múltiplas
+ * orientações (vertical, horizontal, responsive) e composição flexível.
+ *
+ * ## Características Principais
+ *
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ * - **Orientação**: Suporta vertical, horizontal e responsive
+ * - **Validação**: Integração com mensagens de erro
+ * - **Acessível**: Estrutura semântica para acessibilidade
+ *
+ * ## Componentes
+ *
+ * - **Field**: Container principal do campo
+ * - **FieldLabel**: Label do campo
+ * - **FieldDescription**: Descrição/ajuda do campo
+ * - **FieldError**: Mensagens de erro
+ * - **FieldContent**: Container para o controle
+ * - **FieldGroup**: Agrupa múltiplos campos
+ * - **FieldSet**: Fieldset semântico
+ * - **FieldLegend**: Legend do fieldset
+ * - **FieldSeparator**: Separador visual
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { Field, FieldLabel, FieldContent, FieldDescription } from "@flowtomic/ui/components/atoms/forms/field";
+ * import { Input } from "@flowtomic/ui/components/atoms/forms/input";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <Field>
+ *       <FieldLabel htmlFor="email">E-mail</FieldLabel>
+ *       <FieldContent>
+ *         <Input id="email" />
+ *         <FieldDescription>Digite seu e-mail</FieldDescription>
+ *       </FieldContent>
+ *     </Field>
+ *   );
+ * }
+ * ```
+ *
+ * @see [Input Component](../input/input.tsx) para exemplos de uso
+ */
+
 import { cva, type VariantProps } from "class-variance-authority";
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "../../display/separator/separator";
 import { Label } from "../label/label";
 
+/**
+ * Props do componente FieldSet.
+ */
 export interface FieldSetProps extends React.ComponentProps<"fieldset"> {}
 
 function FieldSet({ className, ...props }: FieldSetProps) {
@@ -22,7 +73,13 @@ function FieldSet({ className, ...props }: FieldSetProps) {
 
 FieldSet.displayName = "FieldSet";
 
+/**
+ * Props do componente FieldLegend.
+ *
+ * @property {'legend' | 'label'} [variant='legend'] - Variante visual do legend
+ */
 export interface FieldLegendProps extends React.ComponentProps<"legend"> {
+  /** Variante visual do legend */
   variant?: "legend" | "label";
 }
 
@@ -82,6 +139,11 @@ const fieldVariants = cva("group/field flex w-full gap-3 data-[invalid=true]:tex
   },
 });
 
+/**
+ * Props do componente Field.
+ *
+ * @property {'vertical' | 'horizontal' | 'responsive'} [orientation='vertical'] - Orientação do campo
+ */
 export interface FieldProps
   extends React.ComponentProps<"div">,
     VariantProps<typeof fieldVariants> {}
@@ -200,7 +262,13 @@ function FieldSeparator({ children, className, ...props }: FieldSeparatorProps) 
 
 FieldSeparator.displayName = "FieldSeparator";
 
+/**
+ * Props do componente FieldError.
+ *
+ * @property {Array<{ message?: string } | undefined>} [errors] - Array de erros a exibir
+ */
 export interface FieldErrorProps extends React.ComponentProps<"div"> {
+  /** Array de erros a exibir */
   errors?: Array<{ message?: string } | undefined>;
 }
 

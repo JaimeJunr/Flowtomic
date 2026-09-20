@@ -1,7 +1,58 @@
 /**
- * InlineCitation Component - Flowtomic UI
+ * # InlineCitation Component
  *
- * Componente de citação inline com hover card
+ * O componente `InlineCitation` é usado para exibir citações inline com hover card
+ * que mostra informações detalhadas sobre as fontes. É útil para documentos acadêmicos,
+ * artigos e conteúdo que requer referências.
+ *
+ * ## Características Principais
+ *
+ * - **Hover Card**: Exibe informações detalhadas ao passar o mouse
+ * - **Múltiplas Fontes**: Suporta múltiplas fontes com badge
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ * - **Acessível**: Baseado em HoverCard (Radix UI) para acessibilidade
+ *
+ * ## Componentes
+ *
+ * - **InlineCitation**: Container principal
+ * - **InlineCitationText**: Texto da citação
+ * - **InlineCitationCard**: Card com hover (wrapper do HoverCard)
+ * - **InlineCitationCardTrigger**: Trigger com badge mostrando fonte
+ * - **InlineCitationCardBody**: Corpo do card
+ * - **InlineCitationSource**: Fonte individual com título, URL e descrição
+ * - **InlineCitationQuote**: Citação em formato blockquote
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { InlineCitation, InlineCitationText, InlineCitationCard, InlineCitationCardTrigger, InlineCitationCardBody, InlineCitationSource } from "@flowtomic/ui/components/atoms/feedback/inline-citation";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <InlineCitation>
+ *       <InlineCitationText>Texto com citação</InlineCitationText>
+ *       <InlineCitationCard>
+ *         <InlineCitationCardTrigger sources={["https://example.com"]} />
+ *         <InlineCitationCardBody>
+ *           <InlineCitationSource
+ *             title="Título da Fonte"
+ *             url="https://example.com"
+ *             description="Descrição da fonte"
+ *           />
+ *         </InlineCitationCardBody>
+ *       </InlineCitationCard>
+ *     </InlineCitation>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Baseado em HoverCard (Radix UI) para acessibilidade
+ * - Suporta leitores de tela
+ * - Navegação por teclado
+ *
+ * @see [HoverCard Component](../hover-card/hover-card.tsx) para mais detalhes sobre o hover card
  */
 
 import * as React from "react";

@@ -1,6 +1,16 @@
 /**
- * Storybook: ContextMenu - Padrão Flowtomic
- * Padronização: descrição, história de acessibilidade.
+ * # ContextMenu Component Stories
+ *
+ * Stories do componente ContextMenu demonstrando uso básico, atalhos, acessibilidade e casos de uso.
+ *
+ * ## Características
+ *
+ * - **Clique Secundário**: Abre via clique com botão direito
+ * - **Atalhos**: Suporta exibição de atalhos de teclado
+ * - **Submenus**: Suporta menus aninhados
+ * - **Acessibilidade**: Navegação completa por teclado
+ *
+ * @see [ContextMenu Component](./context-menu.tsx) para documentação completa do componente
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
@@ -32,6 +42,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * ## Exemplo Padrão
+ *
+ * ContextMenu básico com itens simples.
+ */
 export const Default: Story = {
   render: () => (
     <ContextMenu>
@@ -45,8 +60,21 @@ export const Default: Story = {
       </ContextMenuContent>
     </ContextMenu>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "ContextMenu básico com itens simples. Clique com o botão direito na área para abrir o menu.",
+      },
+    },
+  },
 };
 
+/**
+ * ## Com Atalhos e Variantes
+ *
+ * ContextMenu com atalhos de teclado, separadores, labels e variante destrutiva.
+ */
 export const WithShortcuts: Story = {
   render: () => (
     <ContextMenu>
@@ -73,8 +101,21 @@ export const WithShortcuts: Story = {
       </ContextMenuContent>
     </ContextMenu>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "ContextMenu com atalhos de teclado, separadores, labels e variante destrutiva. Demonstra uso avançado do componente.",
+      },
+    },
+  },
 };
 
+/**
+ * ## Teste de Acessibilidade
+ *
+ * Valida abertura via clique direito simulado e navegação por teclado.
+ */
 export const Accessibility: Story = {
   render: () => (
     <ContextMenu>
@@ -114,20 +155,5 @@ export const Accessibility: Story = {
 
     // Navega com setas (o menu já deve estar focado)
     await userEvent.keyboard("{ArrowDown}");
-  },
-};
-
-export const NoKnownUsage: Story = {
-  render: () => (
-    <div className="p-4 text-sm text-muted-foreground">
-      Este componente ainda não possui uso conhecido em componentes mais complexos.
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Este componente ainda não possui uso conhecido em molecules ou organisms.",
-      },
-    },
   },
 };

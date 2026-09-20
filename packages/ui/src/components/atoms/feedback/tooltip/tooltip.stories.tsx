@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type * as React from "react";
+import type React from "react";
+import { expect, within } from "storybook/test";
 import { Button } from "../../actions/button";
 import {
   Tooltip,
@@ -9,18 +10,43 @@ import {
   TooltipWithMouseFollow,
 } from "./tooltip";
 
+/**
+ * Stories do componente Tooltip.
+ *
+ * O Tooltip é usado para exibir informações adicionais quando o usuário
+ * passa o mouse sobre um elemento. Suporta dois modos: padrão (Radix UI) e
+ * com seguimento do mouse (React Aria).
+ *
+ * @see [Tooltip Component](../tooltip.tsx) para documentação completa do componente
+ */
 const meta = {
   title: "Flowtomic UI/Atoms/Feedback/Tooltip",
   component: Tooltip,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Componente tooltip para exibir informações adicionais. Suporta modo padrão (Radix UI) e modo com seguimento do mouse (React Aria).",
+      },
+    },
   },
   tags: ["autodocs"],
+  argTypes: {
+    delayDuration: {
+      control: "number",
+      description: "Delay em milissegundos antes de exibir o tooltip",
+    },
+  },
 } satisfies Meta<typeof Tooltip>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Story padrão do Tooltip.
+ * Demonstra o uso básico com modo padrão (Radix UI).
+ */
 export const Default: Story = {
   render: () => (
     <TooltipProvider>
@@ -34,8 +60,17 @@ export const Default: Story = {
       </Tooltip>
     </TooltipProvider>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Hover me" });
+    await expect(button).toBeInTheDocument();
+  },
 };
 
+/**
+ * Story demonstrando Tooltip com texto longo.
+ * O tooltip ajusta automaticamente para múltiplas linhas.
+ */
 export const WithLongText: Story = {
   render: () => (
     <TooltipProvider>
@@ -52,6 +87,11 @@ export const WithLongText: Story = {
       </Tooltip>
     </TooltipProvider>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Hover for long text" });
+    await expect(button).toBeInTheDocument();
+  },
 };
 
 export const ArtifactStyle: Story = {
@@ -79,6 +119,10 @@ export const ArtifactStyle: Story = {
   },
 };
 
+/**
+ * Story demonstrando Tooltip com seguimento do mouse.
+ * O tooltip segue o cursor e ajusta sua posição automaticamente.
+ */
 export const FollowMouse: Story = {
   render: () => (
     <TooltipWithMouseFollow
@@ -88,6 +132,11 @@ export const FollowMouse: Story = {
       <Button variant="outline">Hover and move mouse</Button>
     </TooltipWithMouseFollow>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Hover and move mouse" });
+    await expect(button).toBeInTheDocument();
+  },
   parameters: {
     docs: {
       description: {

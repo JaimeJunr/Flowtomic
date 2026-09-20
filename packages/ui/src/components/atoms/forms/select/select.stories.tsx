@@ -1,4 +1,19 @@
+/**
+ * # Select Component Stories
+ *
+ * Stories do componente Select demonstrando uso básico, grupos, labels, scroll e casos de uso.
+ *
+ * ## Características
+ *
+ * - **Composição**: Múltiplos sub-componentes
+ * - **Grupos e Labels**: Organização visual
+ * - **Scroll**: Suporte a listas longas
+ * - **Acessibilidade**: Navegação completa por teclado
+ *
+ * @see [Select Component](./select.tsx) para documentação completa do componente
+ */
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import {
   Select,
   SelectContent,
@@ -23,7 +38,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Select básico com opções simples
+ * ## Exemplo Padrão
+ *
+ * Select básico com opções simples.
  */
 export const Default: Story = {
   render: () => (
@@ -41,7 +58,9 @@ export const Default: Story = {
 };
 
 /**
- * Select com tamanho pequeno
+ * ## Tamanho Pequeno
+ *
+ * Select com tamanho pequeno, útil para espaços compactos.
  */
 export const Small: Story = {
   render: () => (
@@ -59,7 +78,9 @@ export const Small: Story = {
 };
 
 /**
- * Select com grupos e labels
+ * ## Com Grupos e Labels
+ *
+ * Select com grupos e labels para organização visual de opções.
  */
 export const WithGroups: Story = {
   render: () => (
@@ -87,7 +108,9 @@ export const WithGroups: Story = {
 };
 
 /**
- * Select com muitas opções (scroll)
+ * ## Com Scroll
+ *
+ * Select com muitas opções demonstrando scroll automático.
  */
 export const WithScroll: Story = {
   render: () => (
@@ -107,7 +130,9 @@ export const WithScroll: Story = {
 };
 
 /**
- * Select desabilitado
+ * ## Estado Desabilitado
+ *
+ * Select desabilitado, não interativo.
  */
 export const Disabled: Story = {
   render: () => (
@@ -125,7 +150,9 @@ export const Disabled: Story = {
 };
 
 /**
- * Select com opções desabilitadas
+ * ## Com Itens Desabilitados
+ *
+ * Select com algumas opções desabilitadas.
  */
 export const WithDisabledItems: Story = {
   render: () => (
@@ -148,7 +175,9 @@ export const WithDisabledItems: Story = {
 };
 
 /**
- * Select para seleção de tamanho de página (exemplo de uso em tabelas)
+ * ## Uso em Tabelas
+ *
+ * Exemplo de uso do Select para seleção de tamanho de página em tabelas.
  */
 export const PageSizeSelector: Story = {
   render: () => (
@@ -173,6 +202,11 @@ export const PageSizeSelector: Story = {
   ),
 };
 
+/**
+ * ## Uso em PromptInput
+ *
+ * Exemplo de uso do Select em contexto de PromptInput para seleção de modelo.
+ */
 export const PromptInputStyle: Story = {
   render: () => (
     <Select defaultValue="gpt-4">
@@ -193,5 +227,38 @@ export const PromptInputStyle: Story = {
           "Exemplo de uso customizado do Select como no PromptInput, usado para seleção de modelo com largura fixa e sem placeholder visível.",
       },
     },
+  },
+};
+
+/**
+ * ## Teste de Acessibilidade
+ *
+ * Valida que o Select é renderizado corretamente e possui estrutura acessível.
+ */
+export const Accessibility: Story = {
+  render: () => (
+    <Select>
+      <SelectTrigger>
+        <SelectValue placeholder="Selecione uma opção" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="option1">Opção 1</SelectItem>
+        <SelectItem value="option2">Opção 2</SelectItem>
+        <SelectItem value="option3">Opção 3</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Teste de acessibilidade do Select. Valida renderização e estrutura básica do componente.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("combobox");
+    expect(trigger).toBeInTheDocument();
   },
 };

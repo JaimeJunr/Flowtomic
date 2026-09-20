@@ -1,0 +1,221 @@
+/**
+ * # WidgetResizeHandle Component
+ *
+ * O componente `WidgetResizeHandle` é usado para redimensionar widgets
+ * arrastando o canto inferior direito. Usa snap to grid para alinhamento
+ * preciso e suporta limites mínimos e máximos.
+ *
+ * ## Características Principais
+ *
+ * - **Snap to Grid**: Alinhamento automático à grade
+ * - **Limites**: Suporta min/max width e height
+ * - **Visual**: Handle visual que aparece no hover
+ * - **Drag to Resize**: Arrastar para redimensionar
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { WidgetResizeHandle } from "@flowtomic/ui/components/atoms/layout/widget-resize-handle";
+ *
+ * function MyWidget({ widgetId, width, height, onResize }) {
+ *   return (
+ *     <div className="relative group">
+ *       <div>Conteúdo do widget</div>
+ *       <WidgetResizeHandle
+ *         widgetId={widgetId}
+ *         currentWidth={width}
+ *         currentHeight={height}
+ *         onResize={onResize}
+ *         minWidth={2}
+ *         minHeight={2}
+ *         maxWidth={12}
+ *         maxHeight={20}
+ *       />
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Usa aria-label para leitores de tela
+ * - Suporta navegação por teclado
+ * - Feedback visual claro
+ */
+
+import { Maximize2 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+
+export interface WidgetResizeHandleProps {
+  /**
+   * ID do widget a ser redimensionado
+   */
+  widgetId: string;
+
+  /**
+   * Largura atual do widget em unidades de grade
+   */
+  currentWidth: number;
+
+  /**
+   * Altura atual do widget em unidades de grade
+   */
+  currentHeight: number;
+
+  /**
+   * Callback quando widget é redimensionado
+   */
+  onResize: (widgetId: string, w: number, h: number) => void;
+
+  /**
+   * Tamanho mínimo do widget (largura)
+   */
+  minWidth?: number;
+
+  /**
+   * Tamanho mínimo do widget (altura)
+   */
+  minHeight?: number;
+
+  /**
+   * Tamanho máximo do widget (largura)
+   */
+  maxWidth?: number;
+
+  /**
+   * Tamanho máximo do widget (altura)
+   */
+  maxHeight?: number;
+
+  /**
+   * Tamanho da célula do grid em pixels
+   */
+  cellSize?: number;
+
+  /**
+   * Gap entre células em pixels
+   */
+  gap?: number;
+
+  /**
+   * Classe CSS adicional
+   */
+  className?: string;
+}
+
+/**
+ * Handle para redimensionar widget
+ *
+ * Componente puro de UI que permite redimensionar widgets arrastando
+ * o canto inferior direito. Usa snap to grid para alinhamento.
+ */
+export function WidgetResizeHandle({
+  widgetId,
+  currentWidth,
+  currentHeight,
+  onResize,
+  minWidth = 2,
+  minHeight = 2,
+  maxWidth = 12,
+  maxHeight = 20,
+  cellSize = 50,
+  gap = 16,
+  className,
+}: WidgetResizeHandleProps) {
+  const [isResizing, setIsResizing] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [startSize, setStartSize] = useState({ w: currentWidth, h: currentHeight });
+  const handleRef = useRef<HTMLButtonElement>(null);
+
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      setIsResizing(true);
+      setStartPos({ x: e.clientX, y: e.clientY });
+      setStartSize({ w: currentWidth, h: currentHeight });
+    },
+    [currentWidth, currentHeight]
+  );
+
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const deltaX = e.clientX - startPos.x;
+      const deltaY = e.clientY - startPos.y;
+
+      // Calcula novo tamanho baseado no movimento do mouse
+      // Usa snap to grid
+      const totalCellSize = cellSize + gap;
+      const deltaW = Math.round(deltaX / totalCellSize);
+      const deltaH = Math.round(deltaY / totalCellSize);
+
+      // Se não houver mudança significativa, não atualiza
+      if (deltaW === 0 && deltaH === 0) return;
+
+      const newW = Math.max(minWidth, Math.min(maxWidth, startSize.w + deltaW));
+      const newH = Math.max(minHeight, Math.min(maxHeight, startSize.h + deltaH));
+
+      // Atualiza apenas se mudou
+      if (newW !== currentWidth || newH !== currentHeight) {
+        onResize(widgetId, newW, newH);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [
+    isResizing,
+    startPos,
+    startSize,
+    currentWidth,
+    currentHeight,
+    widgetId,
+    minWidth,
+    minHeight,
+    maxWidth,
+    maxHeight,
+    cellSize,
+    gap,
+    onResize,
+  ]);
+
+  return (
+    <button
+      type="button"
+      ref={handleRef}
+      onMouseDown={handleMouseDown}
+      className={cn(
+        "absolute bottom-0 right-0 w-6 h-6",
+        "flex items-center justify-center",
+        "bg-primary/20 border border-primary/40 rounded-tl-md",
+        "cursor-nwse-resize",
+        "opacity-0 group-hover:opacity-100 transition-opacity",
+        "hover:bg-primary/30",
+        isResizing && "opacity-100 bg-primary/40",
+        className
+      )}
+      tabIndex={0}
+      aria-label="Redimensionar widget"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+        }
+      }}
+    >
+      <Maximize2 className="w-3 h-3 text-primary" />
+    </button>
+  );
+}

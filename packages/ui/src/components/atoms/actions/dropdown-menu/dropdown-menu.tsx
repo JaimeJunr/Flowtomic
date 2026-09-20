@@ -1,8 +1,56 @@
 /**
- * DropdownMenu Component - Flowtomic UI
+ * # DropdownMenu Component
  *
- * Componente DropdownMenu próprio do design-system baseado em Radix UI
- * Implementação direta sem dependência de componentes externos
+ * O componente `DropdownMenu` fornece um menu contextual leve com foco em acessibilidade via Radix UI primitives.
+ * É útil para ações secundárias agrupadas em um trigger discreto (texto ou ícone).
+ *
+ * ## Características Principais
+ *
+ * - **Trigger Flexível**: Suporta qualquer elemento como trigger (Button, ícone, texto)
+ * - **Acessível**: Suporta navegação completa por teclado e leitores de tela
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ * - **Animações**: Transições suaves de abertura/fechamento
+ * - **Baseado em Radix UI**: Usa primitives do Radix UI para acessibilidade
+ *
+ * ## Componentes
+ *
+ * - **DropdownMenu**: Container raiz do menu
+ * - **DropdownMenuTrigger**: Elemento que dispara o menu (clique ou teclado)
+ * - **DropdownMenuContent**: Conteúdo do menu
+ * - **DropdownMenuItem**: Item individual do menu
+ * - **DropdownMenuLabel**: Label/separador de seção
+ * - **DropdownMenuSeparator**: Separador visual
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@flowtomic/ui/components/atoms/actions/dropdown-menu";
+ * import { Button } from "@flowtomic/ui/components/atoms/actions/button";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <DropdownMenu>
+ *       <DropdownMenuTrigger asChild>
+ *         <Button>Abrir Menu</Button>
+ *       </DropdownMenuTrigger>
+ *       <DropdownMenuContent>
+ *         <DropdownMenuItem>Item 1</DropdownMenuItem>
+ *         <DropdownMenuItem>Item 2</DropdownMenuItem>
+ *         <DropdownMenuItem>Item 3</DropdownMenuItem>
+ *       </DropdownMenuContent>
+ *     </DropdownMenu>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado (Enter, Espaço, setas, Esc)
+ * - Segue padrões WAI-ARIA via Radix UI
+ * - Foco gerenciado automaticamente
+ * - Suporta leitores de tela
+ *
+ * @see [Radix UI Dropdown Menu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu) para mais detalhes
  */
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";

@@ -1,6 +1,16 @@
 /**
- * Storybook: DropdownMenu - Padrão Flowtomic
- * Padronização: renomeação de StatCardStyle, história de acessibilidade, descrição de componente.
+ * # DropdownMenu Component Stories
+ *
+ * Stories do componente DropdownMenu demonstrando uso básico, labels, separadores, acessibilidade e casos de uso.
+ *
+ * ## Características
+ *
+ * - **Trigger Flexível**: Suporta qualquer elemento como trigger
+ * - **Labels e Separadores**: Organização visual do menu
+ * - **Acessibilidade**: Navegação completa por teclado
+ * - **Composição**: Integração com outros componentes (Button, ícones)
+ *
+ * @see [DropdownMenu Component](./dropdown-menu.tsx) para documentação completa do componente
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MoreHorizontal, Settings, Share2, Trash, TriangleAlert } from "lucide-react";
@@ -33,6 +43,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * ## Exemplo Padrão
+ *
+ * DropdownMenu básico com itens simples.
+ */
 export const Default: Story = {
   render: () => (
     <DropdownMenu>
@@ -46,8 +61,20 @@ export const Default: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story: "DropdownMenu básico com itens simples. Clique no botão para abrir o menu.",
+      },
+    },
+  },
 };
 
+/**
+ * ## Com Labels
+ *
+ * DropdownMenu com label e separador para organização visual.
+ */
 export const WithLabels: Story = {
   render: () => (
     <DropdownMenu>
@@ -64,8 +91,21 @@ export const WithLabels: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "DropdownMenu com label e separador para organização visual. Útil para agrupar itens relacionados.",
+      },
+    },
+  },
 };
 
+/**
+ * ## Com Separadores
+ *
+ * DropdownMenu com múltiplos separadores para organização de grupos de ações.
+ */
 export const WithSeparators: Story = {
   render: () => (
     <DropdownMenu>
@@ -84,8 +124,21 @@ export const WithSeparators: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "DropdownMenu com múltiplos separadores para organização de grupos de ações relacionadas.",
+      },
+    },
+  },
 };
 
+/**
+ * ## Uso em StatCard
+ *
+ * Exemplo de uso do DropdownMenu em contexto de StatCard com trigger ícone e ações agrupadas.
+ */
 export const UsageInStatCard: Story = {
   args: {},
   render: () => (
@@ -125,12 +178,18 @@ export const UsageInStatCard: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Uso contextual em StatCard com trigger ícone e ações agrupadas.",
+        story:
+          "Uso contextual em StatCard com trigger ícone e ações agrupadas. Demonstra integração com outros componentes.",
       },
     },
   },
 };
 
+/**
+ * ## Teste de Acessibilidade
+ *
+ * Valida abertura via teclado e navegação por setas.
+ */
 export const Accessibility: Story = {
   args: {},
   render: () => (

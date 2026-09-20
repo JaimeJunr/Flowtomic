@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { QRCode } from "./qr-code";
 
 const meta = {
-  title: "Flowtomic UI/Atoms/Data Display/QRCode",
+  title: "Flowtomic UI/Atoms/DataDisplay/QRCode",
   component: QRCode,
   parameters: {
     layout: "centered",

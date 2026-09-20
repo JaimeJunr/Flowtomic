@@ -1,18 +1,95 @@
+/**
+ * # Sheet Component
+ *
+ * O componente `Sheet` é usado para exibir conteúdo em um painel lateral deslizante.
+ * É baseado em Radix UI Dialog para garantir acessibilidade completa.
+ *
+ * ## Características Principais
+ *
+ * - **Acessível**: Baseado em Radix UI Dialog com suporte completo a leitores de tela
+ * - **Lados**: Suporta abertura de qualquer lado (top, right, bottom, left)
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
+ * - **Overlay**: Overlay escuro por padrão
+ *
+ * ## Componentes
+ *
+ * - **Sheet**: Container principal
+ * - **SheetTrigger**: Trigger para abrir o sheet
+ * - **SheetContent**: Conteúdo do sheet
+ * - **SheetHeader**: Cabeçalho do sheet
+ * - **SheetFooter**: Rodapé do sheet
+ * - **SheetTitle**: Título do sheet
+ * - **SheetDescription**: Descrição do sheet
+ * - **SheetClose**: Botão de fechar
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@flowtomic/ui/components/atoms/feedback/sheet";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <Sheet>
+ *       <SheetTrigger>Open Sheet</SheetTrigger>
+ *       <SheetContent>
+ *         <SheetHeader>
+ *           <SheetTitle>Sheet Title</SheetTitle>
+ *         </SheetHeader>
+ *       </SheetContent>
+ *     </Sheet>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado (Tab, Escape)
+ * - Segue padrões WAI-ARIA via Radix UI
+ * - Suporta leitores de tela
+ * - Foco gerenciado automaticamente
+ * - Foco retorna ao trigger quando fechado
+ *
+ * @see [Radix UI Dialog](https://www.radix-ui.com/primitives/docs/components/dialog) para mais detalhes
+ */
+
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { XIcon } from "lucide-react";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Props do componente Sheet.
+ */
 export interface SheetProps extends React.ComponentProps<typeof SheetPrimitive.Root> {}
 
+/**
+ * Sheet - Container principal do sheet.
+ *
+ * Componente usado para gerenciar o estado do sheet.
+ *
+ * @param {SheetProps} props - Props do componente
+ * @returns {JSX.Element} Componente Sheet
+ */
 function Sheet({ ...props }: SheetProps) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
 Sheet.displayName = "Sheet";
 
+/**
+ * Props do componente SheetTrigger.
+ */
 export interface SheetTriggerProps extends React.ComponentProps<typeof SheetPrimitive.Trigger> {}
 
+/**
+ * SheetTrigger - Trigger do sheet.
+ *
+ * Componente usado como trigger para abrir o sheet.
+ *
+ * @param {SheetTriggerProps} props - Props do componente
+ * @returns {JSX.Element} Componente SheetTrigger
+ */
 function SheetTrigger({ ...props }: SheetTriggerProps) {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
@@ -52,10 +129,24 @@ function SheetOverlay({ className, ...props }: SheetOverlayProps) {
 
 SheetOverlay.displayName = "SheetOverlay";
 
+/**
+ * Props do componente SheetContent.
+ *
+ * @property {'top' | 'right' | 'bottom' | 'left'} [side='right'] - Lado de onde o sheet abre
+ */
 export interface SheetContentProps extends React.ComponentProps<typeof SheetPrimitive.Content> {
+  /** Lado de onde o sheet abre */
   side?: "top" | "right" | "bottom" | "left";
 }
 
+/**
+ * SheetContent - Conteúdo do sheet.
+ *
+ * Componente usado para exibir o conteúdo do sheet.
+ *
+ * @param {SheetContentProps} props - Props do componente
+ * @returns {JSX.Element} Componente SheetContent
+ */
 function SheetContent({ className, children, side = "right", ...props }: SheetContentProps) {
   return (
     <SheetPortal>

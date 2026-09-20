@@ -9,7 +9,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Settings2, X } from "lucide-react";
 import { memo } from "react";
-import { WidgetResizeHandle } from "@/components/atoms/widget-resize-handle";
+import { WidgetResizeHandle } from "@/components/atoms/layout/widget-resize-handle";
 import { cn } from "@/lib/utils";
 
 export interface DraggableWidgetProps {
@@ -156,7 +156,8 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
         {isEditMode && (
           <>
             {/* Drag Handle */}
-            <div
+            <button
+              type="button"
               {...attributes}
               {...listeners}
               className={cn(
@@ -166,15 +167,22 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
                 "opacity-0 group-hover:opacity-100 transition-opacity",
                 "hover:bg-background"
               )}
+              tabIndex={0}
               aria-label="Arrastar widget"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                }
+              }}
             >
               <GripVertical className="w-4 h-4 text-muted-foreground" />
-            </div>
+            </button>
 
             {/* Actions */}
             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               {onConfigure && (
                 <button
+                  type="button"
                   onClick={handleConfigure}
                   className={cn(
                     "p-1.5 rounded-md",
@@ -189,6 +197,7 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
               )}
               {onRemove && (
                 <button
+                  type="button"
                   onClick={handleRemove}
                   className={cn(
                     "p-1.5 rounded-md",

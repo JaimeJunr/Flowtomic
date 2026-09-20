@@ -3,7 +3,7 @@ import { Bar, BarChart, XAxis } from "recharts";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "./chart";
 
 const meta = {
-  title: "Flowtomic UI/Atoms/Data Display/Chart",
+  title: "Flowtomic UI/Atoms/DataDisplay/Chart",
   component: ChartContainer,
   parameters: {
     layout: "centered",

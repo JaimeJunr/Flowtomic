@@ -5,12 +5,12 @@ import { BaseFormField, FormLayout, type FormSectionConfig } from "./form-layout
 
 interface FormData {
   name: string;
-
   email: string;
   website: string;
   phone: string;
   password: string;
   age: number;
+  weight: number;
   country: string;
   birthDate: Date;
   newsletter: boolean;
@@ -33,7 +33,7 @@ const meta: Meta<typeof FormLayout> = {
     docs: {
       description: {
         component:
-          "O componente FormLayout é um layout de formulário configurável que suporta múltiplos tipos de campo (text, number, select, date, checkbox, textarea) organizados em seções. Construído sobre React Hook Form, oferece validação, formatação de números, layout responsivo em grid e integração completa com o design system.",
+          "O componente FormLayout é um layout de formulário configurável que suporta múltiplos tipos de campo (text, email, url, tel, password, textarea, number, decimal, currency, select, date, checkbox, switch, radio, slider, otp, toggle) organizados em seções. Construído sobre React Hook Form, oferece validação, formatação de números brasileiros (vírgula como decimal), layout responsivo em grid e integração completa com o design system.",
       },
     },
   },
@@ -117,6 +117,7 @@ export const Default: Story = {
         phone: "",
         password: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -159,6 +160,15 @@ export const Default: Story = {
             type: "number",
             placeholder: "0",
             decimalScale: 0,
+            cols: 1,
+          },
+          {
+            name: "weight",
+            label: "Peso (kg)",
+            type: "decimal",
+            placeholder: "Ex: 2,5",
+            description: "Campo decimal para pesos e medidas (sem separador de milhares)",
+            decimalScale: 2,
             cols: 1,
           },
           {
@@ -243,6 +253,7 @@ export const WithTitleAndHeader: Story = {
         name: "",
         email: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -314,6 +325,7 @@ export const WithAllFieldTypes: Story = {
         name: "",
         email: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -378,11 +390,21 @@ export const WithAllFieldTypes: Story = {
             cols: 1,
           },
           {
+            name: "weight",
+            label: "Peso (kg)",
+            type: "decimal",
+            placeholder: "Ex: 2,5",
+            description:
+              "Campo decimal para pesos e medidas (sem separador de milhares, apenas vírgula como decimal)",
+            decimalScale: 2,
+            cols: 1,
+          },
+          {
             name: "price",
             label: "Preço",
             type: "currency",
             placeholder: "0,00",
-            description: "Campo de moeda com separador e prefixo",
+            description: "Campo de moeda com separador de milhares (ponto) e prefixo R$",
             decimalScale: 2,
             prefix: "R$ ",
             cols: 1,
@@ -502,6 +524,7 @@ export const WithMultipleSections: Story = {
         name: "",
         email: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -621,6 +644,7 @@ export const WithDisabledFields: Story = {
         name: "João Silva",
         email: "joao@exemplo.com",
         age: 30,
+        weight: undefined,
         country: "BR",
         birthDate: new Date("1994-01-15"),
         newsletter: true,
@@ -709,6 +733,7 @@ export const CompactLayout: Story = {
         name: "",
         email: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -776,6 +801,7 @@ export const simpleLayout: Story = {
         name: "",
         email: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -833,6 +859,7 @@ export const WithExternalSubmit: Story = {
         name: "",
         email: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -907,6 +934,7 @@ export const CustomFieldUsage: Story = {
         name: "",
         email: "",
         age: 0,
+        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
@@ -957,6 +985,106 @@ export const CustomFieldUsage: Story = {
             <Button type="submit">Enviar</Button>
           </div>
         </form>
+      </div>
+    );
+  },
+};
+
+export const DecimalFieldExample: Story = {
+  name: "Campo Decimal",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstração do novo tipo 'decimal' para valores decimais simples como pesos, medidas e quantidades. Diferente do tipo 'number' (que tem separador de milhares) e 'currency' (que tem prefixo), o tipo 'decimal' é ideal para valores numéricos simples com vírgula como separador decimal, sem separador de milhares. Útil para pesos (kg), medidas (m, cm), quantidades decimais, etc.",
+      },
+    },
+  },
+  render: () => {
+    interface DecimalFormData {
+      productName: string;
+      weight: number | undefined;
+      quantity: number;
+      price: number;
+    }
+
+    const form = useForm<DecimalFormData>({
+      defaultValues: {
+        productName: "",
+        weight: undefined,
+        quantity: 0,
+        price: 0,
+      },
+    });
+
+    const sections: FormSectionConfig<DecimalFormData>[] = [
+      {
+        title: "Comparação: Decimal vs Number vs Currency",
+        description: "Diferenças entre os tipos numéricos disponíveis",
+        fields: [
+          {
+            name: "productName",
+            label: "Nome do Produto",
+            type: "text",
+            placeholder: "Ex: Arroz",
+            required: true,
+            cols: 2,
+          },
+          {
+            name: "weight",
+            label: "Peso (kg) - Tipo Decimal",
+            type: "decimal",
+            placeholder: "Ex: 2,5",
+            description:
+              "Tipo 'decimal': apenas vírgula como separador decimal, sem separador de milhares. Ideal para pesos, medidas e quantidades decimais simples.",
+            decimalScale: 2,
+            cols: 1,
+          },
+          {
+            name: "quantity",
+            label: "Quantidade - Tipo Number",
+            type: "number",
+            placeholder: "Ex: 1.500",
+            description:
+              "Tipo 'number': separador de milhares (ponto) e vírgula como decimal. Ideal para números grandes.",
+            decimalScale: 0,
+            cols: 1,
+          },
+          {
+            name: "price",
+            label: "Preço - Tipo Currency",
+            type: "currency",
+            placeholder: "Ex: 1.250,99",
+            description:
+              "Tipo 'currency': separador de milhares (ponto), vírgula como decimal e prefixo R$. Ideal para valores monetários.",
+            decimalScale: 2,
+            prefix: "R$ ",
+            cols: 1,
+          },
+        ],
+      },
+    ];
+
+    return (
+      <div className="w-[900px]">
+        <FormLayout
+          form={form}
+          sections={sections}
+          onSubmit={(data) => {
+            console.log("Form submitted:", data);
+            alert("Formulário enviado! Veja o console.");
+          }}
+          title="Exemplo: Tipo Decimal"
+          description="Demonstração do novo tipo 'decimal' para valores decimais simples (pesos, medidas, etc.)"
+        />
+        <div className="flex justify-end gap-2 mt-4">
+          <Button variant="outline" onClick={() => form.reset()}>
+            Limpar
+          </Button>
+          <Button type="submit" onClick={form.handleSubmit((data) => console.log(data))}>
+            Enviar
+          </Button>
+        </div>
       </div>
     );
   },

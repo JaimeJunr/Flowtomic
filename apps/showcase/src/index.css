@@ -1,0 +1,17 @@
+/* 1. globals.css - DEVE vir primeiro para inicializar Tailwind v4 */
+@import "../../../packages/styles/globals.css";
+/* 2. theme.css - Variáveis do tema */
+@import "../../../packages/styles/theme.css";
+/* 3. typography.css - Tipografia */
+@import "../../../packages/styles/typography.css";
+
+/* Tema escuro para a apresentação */
+:root {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+}

@@ -6,7 +6,7 @@
  */
 
 // Hooks Flowtomic
-import { type AutocompleteOption, useAutocomplete } from "flowtomic/logic";
+import { type AutocompleteOption, useAutocomplete } from "@flowtomic/logic";
 // Ícones
 import { ChevronDownIcon, XIcon } from "lucide-react";
 // React e types

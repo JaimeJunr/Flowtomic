@@ -43,9 +43,10 @@ for (const fileName of STYLE_FILES) {
 }
 
 if (copiedCount === STYLE_FILES.length) {
-  console.log(`\n✅ Todos os arquivos CSS copiados com sucesso! (${copiedCount}/${STYLE_FILES.length})`);
+  console.log(
+    `\n✅ Todos os arquivos CSS copiados com sucesso! (${copiedCount}/${STYLE_FILES.length})`
+  );
 } else {
   console.error(`\n❌ Erro: Apenas ${copiedCount}/${STYLE_FILES.length} arquivos foram copiados`);
   process.exit(1);
 }
-

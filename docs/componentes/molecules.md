@@ -101,6 +101,56 @@ Componente de mensagem com suporte a branches e attachments.
 
 **Dependências**: `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`, `ai`
 
+### `chat-message`
+
+Componente genérico de mensagem de chat com suporte a markdown, tipos de mensagem customizáveis, badges e context menu.
+
+**Dependências**: `react-markdown`, `lucide-react`, `@radix-ui/react-context-menu`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/chat-message`
+
+**Características**:
+- Suporte a markdown via ReactMarkdown
+- Tipos de mensagem customizáveis (STORY, ACTION, SAY, etc.)
+- Badges e cores configuráveis
+- Context menu para editar/visualizar/deletar
+- Timestamp formatável
+- Suporte a diferentes senders (Sistema, Mestre, NPC, etc.)
+
+### `chat-input`
+
+Componente de input para chat com suporte a tipos de mensagem, modos customizáveis, contador de caracteres e atalhos de teclado.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/forms/chat-input`
+
+**Características**:
+- Textarea com auto-resize
+- Contador de caracteres
+- Seleção de tipo de mensagem (opcional)
+- Modos customizáveis (opcional)
+- Atalhos de teclado configuráveis (Ctrl+Enter para enviar, ESC para limpar)
+- Botão de envio
+- Suporte a indicadores customizados (triggers, etc.)
+- Header opcional com título e descrição
+
+### `edit-chat-message-modal`
+
+Modal genérico para editar mensagens de chat com validação de alterações não salvas e exibição de metadados.
+
+**Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/feedback/edit-chat-message-modal`
+
+**Características**:
+- Modal para editar mensagens
+- Exibição de metadados da mensagem (sender, tipo, timestamp)
+- Textarea para edição
+- Validação de alterações não salvas
+- Callbacks para salvar/cancelar
+- Formatação customizável de timestamp e badges
+
 ### `suggestion`
 
 Lista de sugestões com scroll horizontal.

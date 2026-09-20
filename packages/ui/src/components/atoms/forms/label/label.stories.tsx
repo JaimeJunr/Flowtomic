@@ -1,11 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Label } from "./label";
 
+/**
+ * Stories do componente Label.
+ *
+ * O Label é um componente de texto usado para identificar campos de formulário.
+ * Ele fornece associação semântica com inputs através do atributo `htmlFor`.
+ *
+ * @see [Label Component](../label.tsx) para documentação completa do componente
+ */
 const meta = {
   title: "Flowtomic UI/Atoms/Forms/Label",
   component: Label,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Componente de label para campos de formulário. Fornece associação semântica com inputs através do atributo `htmlFor`.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -22,12 +37,25 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Story padrão do Label.
+ * Demonstra o uso básico do componente sem associação com input.
+ */
 export const Default: Story = {
   args: {
     children: "Label padrão",
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const label = canvas.getByText("Label padrão");
+    await expect(label).toBeInTheDocument();
+  },
 };
 
+/**
+ * Story demonstrando Label associado a um input.
+ * Quando o label é clicado, o input recebe foco automaticamente.
+ */
 export const WithInput: Story = {
   render: () => (
     <div className="space-y-2">
@@ -40,8 +68,24 @@ export const WithInput: Story = {
       />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const label = canvas.getByText("E-mail");
+    const input = canvas.getByPlaceholderText("email@exemplo.com");
+
+    await expect(label).toBeInTheDocument();
+    await expect(input).toBeInTheDocument();
+
+    // Testa que clicar no label foca o input
+    await userEvent.click(label);
+    await expect(input).toHaveFocus();
+  },
 };
 
+/**
+ * Story demonstrando Label com indicador de campo obrigatório.
+ * Usa um asterisco vermelho para indicar que o campo é obrigatório.
+ */
 export const Required: Story = {
   render: () => (
     <div className="space-y-2">
@@ -56,8 +100,17 @@ export const Required: Story = {
       />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const label = canvas.getByText(/Nome/);
+    await expect(label).toBeInTheDocument();
+  },
 };
 
+/**
+ * Story demonstrando Label para campo desabilitado.
+ * O label também é estilizado para indicar que o campo está desabilitado.
+ */
 export const Disabled: Story = {
   render: () => (
     <div className="space-y-2">
@@ -73,6 +126,14 @@ export const Disabled: Story = {
       />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const label = canvas.getByText("Campo Desabilitado");
+    const input = canvas.getByPlaceholderText("Não pode editar");
+
+    await expect(label).toBeInTheDocument();
+    await expect(input).toBeDisabled();
+  },
 };
 
 export const NoKnownUsage: Story = {

@@ -1,3 +1,69 @@
+/**
+ * # Sidebar Component
+ *
+ * O componente `Sidebar` é usado para criar uma barra lateral navegável
+ * que pode ser expandida/colapsada. Suporta modos desktop e mobile,
+ * com persistência de estado via cookies.
+ *
+ * ## Características Principais
+ *
+ * - **Responsivo**: Adapta-se automaticamente para mobile (usa Sheet) e desktop
+ * - **Estados**: Suporta expanded e collapsed
+ * - **Persistência**: Salva estado em cookies
+ * - **Atalho de Teclado**: Cmd/Ctrl + B para toggle
+ * - **Variantes**: sidebar, floating, inset
+ * - **Collapsible**: offcanvas, icon, none
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ *
+ * ## Componentes Principais
+ *
+ * - **SidebarProvider**: Provider do contexto do sidebar
+ * - **Sidebar**: Container principal do sidebar
+ * - **SidebarTrigger**: Botão para toggle do sidebar
+ * - **SidebarHeader**: Cabeçalho do sidebar
+ * - **SidebarContent**: Conteúdo do sidebar
+ * - **SidebarFooter**: Rodapé do sidebar
+ * - **SidebarGroup**: Grupo de itens
+ * - **SidebarGroupLabel**: Label do grupo
+ * - **SidebarGroupContent**: Conteúdo do grupo
+ * - **SidebarMenu**: Menu do sidebar
+ * - **SidebarMenuItem**: Item do menu
+ * - **SidebarMenuButton**: Botão do item do menu
+ * - **useSidebar**: Hook para acessar contexto do sidebar
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { SidebarProvider, Sidebar, SidebarContent, SidebarTrigger } from "@flowtomic/ui/components/atoms/layout/sidebar";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <SidebarProvider>
+ *       <Sidebar>
+ *         <SidebarContent>
+ *           <SidebarMenu>
+ *             <SidebarMenuItem>
+ *               <SidebarMenuButton>Item 1</SidebarMenuButton>
+ *             </SidebarMenuItem>
+ *           </SidebarMenu>
+ *         </SidebarContent>
+ *       </Sidebar>
+ *       <SidebarTrigger />
+ *     </SidebarProvider>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado
+ * - Atalho de teclado (Cmd/Ctrl + B)
+ * - Suporta leitores de tela
+ * - Tooltips para itens colapsados
+ *
+ * @see [Sidebar Component Stories](./sidebar.stories.tsx) para exemplos de uso
+ */
+
 import { useIsMobile } from "@flowtomic/logic";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -78,6 +144,7 @@ function SidebarProvider({
         _setOpen(openState);
       }
 
+      // biome-ignore lint/suspicious/noDocumentCookie: Necessário para persistir o estado do sidebar
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
     [setOpenProp, open]

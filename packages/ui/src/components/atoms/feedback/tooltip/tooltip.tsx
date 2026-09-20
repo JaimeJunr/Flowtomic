@@ -1,9 +1,59 @@
 /**
- * Tooltip Component - Flowtomic UI
+ * # Tooltip Component
  *
- * Componente Tooltip baseado em Radix UI (padrão) ou React Aria (followMouse)
- * com seguimento do mouse e posicionamento inteligente
- * Baseado no Aceternity UI Tooltip Card para animações
+ * O componente `Tooltip` é usado para exibir informações adicionais quando o usuário
+ * passa o mouse sobre um elemento. Suporta dois modos: padrão (Radix UI) e com
+ * seguimento do mouse (React Aria).
+ *
+ * ## Características Principais
+ *
+ * - **Dois Modos**: Padrão (Radix UI) ou com seguimento do mouse (React Aria)
+ * - **Posicionamento Inteligente**: Ajusta automaticamente para não sair da viewport
+ * - **Acessível**: Suporta leitores de tela e navegação por teclado
+ * - **Animações**: Animações suaves via Framer Motion no modo followMouse
+ * - **Composição**: TooltipProvider + Tooltip + TooltipTrigger + TooltipContent
+ *
+ * ## Modos de Uso
+ *
+ * ### Modo Padrão (Radix UI)
+ *
+ * ```tsx
+ * import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@flowtomic/ui/components/atoms/feedback/tooltip";
+ *
+ * <TooltipProvider>
+ *   <Tooltip>
+ *     <TooltipTrigger asChild>
+ *       <Button>Hover me</Button>
+ *     </TooltipTrigger>
+ *     <TooltipContent>
+ *       <p>Informação do tooltip</p>
+ *     </TooltipContent>
+ *   </Tooltip>
+ * </TooltipProvider>
+ * ```
+ *
+ * ### Modo com Seguimento do Mouse
+ *
+ * ```tsx
+ * import { TooltipWithMouseFollow } from "@flowtomic/ui/components/atoms/feedback/tooltip";
+ *
+ * <TooltipWithMouseFollow
+ *   content={<p>Este tooltip segue o mouse!</p>}
+ *   minWidth={240}
+ * >
+ *   <Button>Hover and move</Button>
+ * </TooltipWithMouseFollow>
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta leitores de tela via React Aria
+ * - Navegação por teclado (Tab, Enter, Espaço)
+ * - Suporte a touch em dispositivos móveis
+ * - Posicionamento inteligente para não sair da viewport
+ *
+ * @see [Radix UI Tooltip](https://www.radix-ui.com/primitives/docs/components/tooltip) para mais detalhes
+ * @see [React Aria Tooltip](https://react-spectrum.adobe.com/react-aria/useTooltip.html) para mais detalhes
  */
 
 "use client";
@@ -235,7 +285,7 @@ export function TooltipWithMouseFollow({
     [calculatePosition]
   );
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
     state.open();
     const rect = e.currentTarget.getBoundingClientRect();
     // Usar coordenadas relativas ao container para cálculo
@@ -250,7 +300,7 @@ export function TooltipWithMouseFollow({
     setPosition({ x: 0, y: 0 });
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!isVisible) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
@@ -258,7 +308,7 @@ export function TooltipWithMouseFollow({
     updateMousePosition(mouseX, mouseY);
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+  const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
     const touch = e.touches[0];
     const rect = e.currentTarget.getBoundingClientRect();
     const mouseX = touch.clientX - rect.left;
@@ -275,7 +325,7 @@ export function TooltipWithMouseFollow({
     }, 2000);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     if (window.matchMedia("(hover: none)").matches) {
       e.preventDefault();
       if (isVisible) {
@@ -304,8 +354,9 @@ export function TooltipWithMouseFollow({
   }, [isVisible, mouse.x, mouse.y, calculatePosition]);
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: Trigger flexível
     <div
-      ref={containerRef}
+      ref={containerRef as React.RefObject<HTMLDivElement>}
       className={cn("relative inline-block", containerClassName)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -313,6 +364,12 @@ export function TooltipWithMouseFollow({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleClick?.(e as unknown as React.MouseEvent<HTMLElement>);
+        }
+      }}
     >
       {children}
       <AnimatePresence>

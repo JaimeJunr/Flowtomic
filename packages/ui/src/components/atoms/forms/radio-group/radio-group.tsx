@@ -1,8 +1,56 @@
+/**
+ * # RadioGroup Component
+ *
+ * O componente `RadioGroup` é um grupo de botões de opção usado para permitir que o usuário
+ * selecione uma opção de um conjunto. É baseado em Radix UI para garantir acessibilidade completa.
+ *
+ * ## Características Principais
+ *
+ * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
+ * - **Seleção Única**: Apenas uma opção pode ser selecionada por vez
+ * - **Composição**: RadioGroup + RadioGroupItem para flexibilidade
+ * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { RadioGroup, RadioGroupItem } from "@flowtomic/ui/components/atoms/forms/radio-group";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <RadioGroup defaultValue="option1">
+ *       <div className="flex items-center gap-2">
+ *         <RadioGroupItem value="option1" id="option1" />
+ *         <label htmlFor="option1">Opção 1</label>
+ *       </div>
+ *       <div className="flex items-center gap-2">
+ *         <RadioGroupItem value="option2" id="option2" />
+ *         <label htmlFor="option2">Opção 2</label>
+ *       </div>
+ *     </RadioGroup>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado (setas, Tab)
+ * - Segue padrões WAI-ARIA via Radix UI
+ * - Suporta leitores de tela
+ * - Foco gerenciado automaticamente
+ *
+ * @see [Radix UI Radio Group](https://www.radix-ui.com/primitives/docs/components/radio-group) para mais detalhes
+ */
+
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { CircleIcon } from "lucide-react";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Props do componente RadioGroup.
+ * @see RadioGroupPrimitive.Root para props disponíveis (value, onValueChange, defaultValue, etc.)
+ */
 export interface RadioGroupProps extends React.ComponentProps<typeof RadioGroupPrimitive.Root> {}
 
 function RadioGroup({ className, ...props }: RadioGroupProps) {

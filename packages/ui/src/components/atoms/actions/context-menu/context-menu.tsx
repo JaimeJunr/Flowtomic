@@ -1,8 +1,68 @@
+/**
+ * # ContextMenu Component
+ *
+ * O componente `ContextMenu` exibe um menu contextual ao disparar evento de clique secundário (botão direito).
+ * É útil para listas, áreas de trabalho ricas e interfaces que requerem ações contextuais.
+ *
+ * ## Características Principais
+ *
+ * - **Clique Secundário**: Abre via clique com botão direito do mouse
+ * - **Acessível**: Suporta navegação por teclado após abertura programática
+ * - **Composição**: Múltiplos sub-componentes para flexibilidade
+ * - **Animações**: Transições suaves de abertura/fechamento
+ * - **Baseado em Radix UI**: Usa primitives do Radix UI para acessibilidade
+ *
+ * ## Componentes
+ *
+ * - **ContextMenu**: Container raiz do menu
+ * - **ContextMenuTrigger**: Área que dispara o menu (clique direito)
+ * - **ContextMenuContent**: Conteúdo do menu
+ * - **ContextMenuItem**: Item individual do menu
+ * - **ContextMenuLabel**: Label/separador de seção
+ * - **ContextMenuSeparator**: Separador visual
+ * - **ContextMenuShortcut**: Atalho de teclado
+ * - **ContextMenuSub**: Submenu aninhado
+ * - **ContextMenuCheckboxItem**: Item com checkbox
+ * - **ContextMenuRadioItem**: Item com radio button
+ *
+ * ## Uso Básico
+ *
+ * ```tsx
+ * import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from "@flowtomic/ui/components/atoms/actions/context-menu";
+ *
+ * function MyComponent() {
+ *   return (
+ *     <ContextMenu>
+ *       <ContextMenuTrigger>Clique com botão direito</ContextMenuTrigger>
+ *       <ContextMenuContent>
+ *         <ContextMenuItem>Copiar</ContextMenuItem>
+ *         <ContextMenuItem>Colar</ContextMenuItem>
+ *         <ContextMenuItem variant="destructive">Excluir</ContextMenuItem>
+ *       </ContextMenuContent>
+ *     </ContextMenu>
+ *   );
+ * }
+ * ```
+ *
+ * ## Acessibilidade
+ *
+ * - Suporta navegação por teclado (setas, Enter, Esc)
+ * - Segue padrões WAI-ARIA via Radix UI
+ * - Foco gerenciado automaticamente
+ * - Suporta leitores de tela
+ *
+ * @see [Radix UI Context Menu](https://www.radix-ui.com/primitives/docs/components/context-menu) para mais detalhes
+ */
+
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Props do componente ContextMenu (Root).
+ * @see ContextMenuPrimitive.Root para props disponíveis
+ */
 export type ContextMenuProps = React.ComponentProps<typeof ContextMenuPrimitive.Root>;
 
 function ContextMenu(props: ContextMenuProps) {
@@ -53,8 +113,14 @@ function ContextMenuRadioGroup(props: ContextMenuRadioGroupProps) {
 
 ContextMenuRadioGroup.displayName = "ContextMenuRadioGroup";
 
+/**
+ * Props do componente ContextMenuSubTrigger.
+ *
+ * @property {boolean} [inset=false] - Quando `true`, adiciona padding à esquerda
+ */
 export interface ContextMenuSubTriggerProps
   extends React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> {
+  /** Quando `true`, adiciona padding à esquerda */
   inset?: boolean;
 }
 
@@ -120,9 +186,17 @@ function ContextMenuContent({ className, ...props }: ContextMenuContentProps) {
 
 ContextMenuContent.displayName = "ContextMenuContent";
 
+/**
+ * Props do componente ContextMenuItem.
+ *
+ * @property {boolean} [inset=false] - Quando `true`, adiciona padding à esquerda (útil para itens aninhados)
+ * @property {'default' | 'destructive'} [variant='default'] - Variante do item (destructive para ações destrutivas)
+ */
 export interface ContextMenuItemProps
   extends React.ComponentProps<typeof ContextMenuPrimitive.Item> {
+  /** Quando `true`, adiciona padding à esquerda (útil para itens aninhados) */
   inset?: boolean;
+  /** Variante do item (destructive para ações destrutivas) */
   variant?: "default" | "destructive";
 }
 
@@ -204,8 +278,14 @@ function ContextMenuRadioItem({ className, children, ...props }: ContextMenuRadi
 
 ContextMenuRadioItem.displayName = "ContextMenuRadioItem";
 
+/**
+ * Props do componente ContextMenuLabel.
+ *
+ * @property {boolean} [inset=false] - Quando `true`, adiciona padding à esquerda
+ */
 export interface ContextMenuLabelProps
   extends React.ComponentProps<typeof ContextMenuPrimitive.Label> {
+  /** Quando `true`, adiciona padding à esquerda */
   inset?: boolean;
 }
 

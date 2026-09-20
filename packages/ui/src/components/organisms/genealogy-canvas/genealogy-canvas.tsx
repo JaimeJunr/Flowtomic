@@ -156,11 +156,76 @@ export interface GenealogyCanvasProps
   className?: string;
 }
 
-/**
- * Componente GenealogyCanvas
- *
- * Renderiza uma árvore genealógica interativa usando ReactFlow
- */
+// Função auxiliar para obter coordenadas do handle
+const getHandleCoordsByPosition = (node: InternalNode<ReactFlowNode>, handlePosition: Position) => {
+  const handleType = handlePosition === Position.Top ? "target" : "source";
+  const handle = node.internals.handleBounds?.[handleType]?.find(
+    (h) => h.position === handlePosition
+  );
+
+  if (!handle) {
+    return [0, 0] as const;
+  }
+
+  let offsetX = handle.width / 2;
+  let offsetY = handle.height / 2;
+
+  switch (handlePosition) {
+    case Position.Top:
+      offsetY = 0;
+      break;
+    case Position.Bottom:
+      offsetY = handle.height;
+      break;
+    case Position.Left:
+      offsetX = 0;
+      break;
+    case Position.Right:
+      offsetX = handle.width;
+      break;
+  }
+
+  const x = node.internals.positionAbsolute.x + handle.x + offsetX;
+  const y = node.internals.positionAbsolute.y + handle.y + offsetY;
+
+  return [x, y] as const;
+};
+
+// Edge customizado para conexões verticais (top/bottom)
+const VerticalEdge = ({ id, source, target, markerEnd, style }: EdgeProps) => {
+  const sourceNode = useInternalNode(source);
+  const targetNode = useInternalNode(target);
+
+  if (!(sourceNode && targetNode)) {
+    return null;
+  }
+
+  // Usar Bottom para source e Top para target
+  const sourcePos = Position.Bottom;
+  const targetPos = Position.Top;
+
+  const [sx, sy] = getHandleCoordsByPosition(sourceNode, sourcePos);
+  const [tx, ty] = getHandleCoordsByPosition(targetNode, targetPos);
+
+  const [edgePath] = getBezierPath({
+    sourceX: sx,
+    sourceY: sy,
+    sourcePosition: sourcePos,
+    targetX: tx,
+    targetY: ty,
+    targetPosition: targetPos,
+  });
+
+  return (
+    <>
+      <BaseEdge id={id} markerEnd={markerEnd} path={edgePath} style={style} />
+      <circle fill="var(--primary)" r="4">
+        <animateMotion dur="2s" path={edgePath} repeatCount="indefinite" />
+      </circle>
+    </>
+  );
+};
+
 export const GenealogyCanvas = ({
   data,
   initialExpanded = [],
@@ -224,79 +289,6 @@ export const GenealogyCanvas = ({
     [renderNode]
   );
 
-  // Função auxiliar para obter coordenadas do handle
-  const getHandleCoordsByPosition = (
-    node: InternalNode<ReactFlowNode>,
-    handlePosition: Position
-  ) => {
-    const handleType = handlePosition === Position.Top ? "target" : "source";
-    const handle = node.internals.handleBounds?.[handleType]?.find(
-      (h) => h.position === handlePosition
-    );
-
-    if (!handle) {
-      return [0, 0] as const;
-    }
-
-    let offsetX = handle.width / 2;
-    let offsetY = handle.height / 2;
-
-    switch (handlePosition) {
-      case Position.Top:
-        offsetY = 0;
-        break;
-      case Position.Bottom:
-        offsetY = handle.height;
-        break;
-      case Position.Left:
-        offsetX = 0;
-        break;
-      case Position.Right:
-        offsetX = handle.width;
-        break;
-    }
-
-    const x = node.internals.positionAbsolute.x + handle.x + offsetX;
-    const y = node.internals.positionAbsolute.y + handle.y + offsetY;
-
-    return [x, y] as const;
-  };
-
-  // Edge customizado para conexões verticais (top/bottom)
-  const VerticalEdge = ({ id, source, target, markerEnd, style }: EdgeProps) => {
-    const sourceNode = useInternalNode(source);
-    const targetNode = useInternalNode(target);
-
-    if (!(sourceNode && targetNode)) {
-      return null;
-    }
-
-    // Usar Bottom para source e Top para target
-    const sourcePos = Position.Bottom;
-    const targetPos = Position.Top;
-
-    const [sx, sy] = getHandleCoordsByPosition(sourceNode, sourcePos);
-    const [tx, ty] = getHandleCoordsByPosition(targetNode, targetPos);
-
-    const [edgePath] = getBezierPath({
-      sourceX: sx,
-      sourceY: sy,
-      sourcePosition: sourcePos,
-      targetX: tx,
-      targetY: ty,
-      targetPosition: targetPos,
-    });
-
-    return (
-      <>
-        <BaseEdge id={id} markerEnd={markerEnd} path={edgePath} style={style} />
-        <circle fill="var(--primary)" r="4">
-          <animateMotion dur="2s" path={edgePath} repeatCount="indefinite" />
-        </circle>
-      </>
-    );
-  };
-
   // Definir tipos de edges customizados
   const edgeTypes = useMemo(
     () => ({
@@ -304,7 +296,7 @@ export const GenealogyCanvas = ({
       temporary: Edge.Temporary,
       dashed: Edge.Temporary, // Usar Temporary para edges tracejados (adoções)
     }),
-    [VerticalEdge]
+    []
   );
 
   return (

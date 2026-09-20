@@ -88,7 +88,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   const textRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const shouldUseIndicator = showLabels && orientation === "horizontal";
-  
+
   const { indicatorStyle, registerElement, unregisterElement } = useAnimatedIndicator({
     containerRef: containerRef as React.RefObject<HTMLElement>,
     activeSelector: 'span[data-active="true"]',
@@ -336,6 +336,7 @@ const FloatingDockMobile: React.FC<{
         )}
       </AnimatePresence>
       <button
+        type="button"
         onClick={() => setOpen(!open)}
         className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-800"
         aria-label="Toggle menu"

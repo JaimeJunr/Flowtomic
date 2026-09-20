@@ -83,3 +83,5 @@ export {
 } from "./sidebar";
 export type { ToggleGroupItemProps, ToggleGroupProps } from "./toggle-group";
 export { ToggleGroup, ToggleGroupItem } from "./toggle-group";
+export type { WidgetResizeHandleProps } from "./widget-resize-handle";
+export { WidgetResizeHandle } from "./widget-resize-handle";

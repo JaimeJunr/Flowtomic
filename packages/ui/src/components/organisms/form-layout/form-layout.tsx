@@ -48,6 +48,7 @@ export type FormFieldType =
   | "password"
   | "textarea"
   | "number"
+  | "decimal"
   | "currency"
   | "select"
   | "date"
@@ -245,6 +246,21 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                     />
                   );
 
+                case "decimal":
+                  return (
+                    <NumericFormat
+                      customInput={Input}
+                      decimalSeparator=","
+                      thousandSeparator="" // Sem separador de milhares para decimais simples
+                      decimalScale={decimalScale ?? 2}
+                      value={field.value ?? ""}
+                      onValueChange={(values) => field.onChange(values.floatValue)}
+                      placeholder={placeholder}
+                      disabled={disabled}
+                      allowNegative={false}
+                    />
+                  );
+
                 case "currency":
                   return (
                     <NumericFormat
@@ -297,13 +313,18 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                             "w-full justify-start text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
+                          type="button"
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? (
-                            format(new Date(field.value), "dd/MM/yyyy", { locale: ptBR })
-                          ) : (
-                            <span>{placeholder || "Selecione"}</span>
-                          )}
+                          <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+                          <span className="flex-1 text-left">
+                            {field.value ? (
+                              format(new Date(field.value), "dd/MM/yyyy", { locale: ptBR })
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {placeholder || "Selecione"}
+                              </span>
+                            )}
+                          </span>
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
@@ -350,7 +371,7 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                       value={String(field.value ?? "")}
                       onValueChange={field.onChange}
                       className="flex flex-col gap-2"
-                      disabled={disabled as any}
+                      disabled={disabled as boolean}
                     >
                       {(radioOptions ?? [])?.map((opt) => (
                         <div key={opt.value} className="flex items-center gap-2">
@@ -390,6 +411,7 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                     >
                       <InputOTPGroup>
                         {Array.from({ length: otpLength ?? 6 }).map((_, i) => (
+                          // biome-ignore lint/suspicious/noArrayIndexKey: O índice é estável para o OTP
                           <InputOTPSlot key={i} index={i} />
                         ))}
                       </InputOTPGroup>

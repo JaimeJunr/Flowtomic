@@ -22,6 +22,7 @@ export interface AutocompleteSectionProps extends React.HTMLAttributes<HTMLDivEl
 const AutocompleteSection = React.forwardRef<HTMLDivElement, AutocompleteSectionProps>(
   ({ className, title, children, ...props }, ref) => {
     return (
+      // biome-ignore lint/a11y/useSemanticElements: Agrupamento em menu de autocomplete
       <div
         ref={ref}
         {...props}
@@ -32,9 +33,7 @@ const AutocompleteSection = React.forwardRef<HTMLDivElement, AutocompleteSection
         {title && (
           <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{title}</div>
         )}
-        <ul role="group" className="space-y-0.5">
-          {children}
-        </ul>
+        <ul className="space-y-0.5">{children}</ul>
       </div>
     );
   }
