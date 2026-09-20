@@ -24,6 +24,10 @@ export type CodeBlockProps = HTMLAttributes<HTMLDivElement> & {
   code: string;
   language: BundledLanguage;
   showLineNumbers?: boolean;
+  /** Max height in pixels; overflow becomes scrollable when set. */
+  maxHeight?: number;
+  /** When true, scrollbars are visible when content overflows. */
+  showScrollbars?: boolean;
 };
 
 type CodeBlockContextType = {
@@ -77,7 +81,19 @@ export async function highlightCode(
 }
 
 export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
-  ({ code, language, showLineNumbers = false, className, children, ...props }, ref) => {
+  (
+    {
+      code,
+      language,
+      showLineNumbers = false,
+      maxHeight,
+      showScrollbars = false,
+      className,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const [html, setHtml] = useState<string>("");
     const [darkHtml, setDarkHtml] = useState<string>("");
     const mounted = useRef(false);
@@ -101,9 +117,11 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
         <div
           ref={ref}
           className={cn(
-            "group relative w-full overflow-hidden rounded-md border bg-background text-foreground",
+            "group relative w-full rounded-md border bg-background text-foreground",
+            maxHeight != null || showScrollbars ? "overflow-auto" : "overflow-hidden",
             className
           )}
+          style={maxHeight != null ? { maxHeight: `${maxHeight}px` } : undefined}
           {...props}
         >
           <div className="relative">

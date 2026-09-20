@@ -5,7 +5,7 @@
  * Este componente adiciona markup e styles ao hook Headless
  */
 
-import { type StatCardData, useStatCard } from "flowtomic/logic";
+import { type StatCardData, useStatCard } from "@flowtomic/logic";
 import {
   ArrowDown,
   ArrowUp,

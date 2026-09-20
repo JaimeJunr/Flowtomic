@@ -1092,7 +1092,7 @@ export const PromptInputSpeechButton = ({
 
 export type PromptInputSelectProps = ComponentProps<typeof Select>;
 
-export const PromptInputSelect = (props: PromptInputSelectProps) => <Select {...(props as any)} />;
+export const PromptInputSelect = (props: PromptInputSelectProps) => <Select {...props} />;
 
 export type PromptInputSelectTriggerProps = ComponentProps<typeof SelectTrigger>;
 
@@ -1106,7 +1106,7 @@ export const PromptInputSelectTrigger = ({
       "hover:bg-accent hover:text-foreground aria-aria-expanded:bg-accent aria-aria-expanded:text-foreground",
       className
     )}
-    {...(props as any)}
+    {...props}
   />
 );
 
@@ -1115,20 +1115,18 @@ export type PromptInputSelectContentProps = ComponentProps<typeof SelectContent>
 export const PromptInputSelectContent = ({
   className,
   ...props
-}: PromptInputSelectContentProps) => (
-  <SelectContent className={cn(className)} {...(props as any)} />
-);
+}: PromptInputSelectContentProps) => <SelectContent className={cn(className)} {...props} />;
 
 export type PromptInputSelectItemProps = ComponentProps<typeof SelectItem>;
 
 export const PromptInputSelectItem = ({ className, ...props }: PromptInputSelectItemProps) => (
-  <SelectItem className={cn(className)} {...(props as any)} />
+  <SelectItem className={cn(className)} {...props} />
 );
 
 export type PromptInputSelectValueProps = ComponentProps<typeof SelectValue>;
 
 export const PromptInputSelectValue = ({ className, ...props }: PromptInputSelectValueProps) => (
-  <SelectValue className={cn(className)} {...(props as any)} />
+  <SelectValue className={cn(className)} {...props} />
 );
 
 // Alias for ModelSelect (better naming for AI prompts)

@@ -6,4 +6,5 @@ export {
   FormLayout,
   type FormLayoutProps,
   type FormSectionConfig,
+  type NumericFilterValue,
 } from "./form-layout";

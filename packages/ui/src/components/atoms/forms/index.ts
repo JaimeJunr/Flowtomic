@@ -1,5 +1,11 @@
 export type { CheckboxProps } from "./checkbox";
 export { Checkbox } from "./checkbox";
+export type { DateInputProps } from "./date-input";
+export {
+  DateInput,
+  dateInputBaseClasses,
+  dateInputDisabledClasses,
+} from "./date-input";
 export type {
   FieldContentProps,
   FieldDescriptionProps,
@@ -73,5 +79,11 @@ export type { SwitchProps } from "./switch";
 export { Switch } from "./switch";
 export type { TextareaProps } from "./textarea";
 export { Textarea } from "./textarea";
+export type { TimeInputProps } from "./time-input";
+export {
+  TimeInput,
+  timeInputBaseClasses,
+  timeInputDisabledClasses,
+} from "./time-input";
 export type { ToggleProps } from "./toggle";
 export { Toggle, toggleVariants } from "./toggle";

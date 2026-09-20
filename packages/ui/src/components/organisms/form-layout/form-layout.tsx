@@ -1,14 +1,16 @@
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { CalendarIcon } from "lucide-react";
 import type * as React from "react";
+import { useId } from "react";
 import type { Control, FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-import { PasswordInput } from "@/components/molecules";
+import {
+  CalendarPopover,
+  CalendarRange,
+  NumericFilterField,
+  type NumericFilterValue,
+  PasswordInput,
+} from "@/components/molecules";
 import { cn } from "@/lib/utils";
 import {
-  Button,
-  Calendar,
   Checkbox,
   Form,
   FormControl,
@@ -21,9 +23,7 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  Label,
   RadioGroup,
   RadioGroupItem,
   Select,
@@ -36,6 +36,8 @@ import {
   Switch,
   Toggle,
 } from "../../atoms";
+
+const inputErrorClassName = "border-destructive focus-visible:ring-destructive";
 
 /**
  * Tipos de campo suportados pelo FormLayout
@@ -52,12 +54,17 @@ export type FormFieldType =
   | "currency"
   | "select"
   | "date"
+  | "dateRange"
   | "checkbox"
   | "switch"
   | "radio"
   | "slider"
   | "otp"
-  | "toggle";
+  | "toggle"
+  | "numericFilter";
+
+/** Valor do campo tipo numericFilter (operador + valor numérico) */
+export type { NumericFilterValue } from "@/components/molecules";
 
 /**
  * Configuração de um campo de formulário
@@ -94,6 +101,20 @@ export interface FormFieldConfig<T extends FieldValues> {
   otpLength?: number;
   /** Intervalo mínimo/máximo para slider */
   sliderRange?: { min: number; max: number; step?: number };
+  /** Para type "numericFilter": permitir negativos */
+  allowNegative?: boolean;
+  /** Para type "numericFilter": exibir como moeda (R$, 2 decimais) */
+  isCurrency?: boolean;
+  /** Para type "numericFilter": exibir como percentual (sufixo %) */
+  isPercent?: boolean;
+  /** Para type "numericFilter": moeda (ex.: "BRL" para R$) */
+  currency?: "BRL";
+  /** Para type "date": desabilitar datas futuras (padrão false no form = calendário totalmente utilizável). O campo usa CalendarPopover com dropdown de mês e ano. */
+  disableFuture?: boolean;
+  /** Para type "date": desabilitar fins de semana (padrão false no form = calendário totalmente utilizável) */
+  disableWeekends?: boolean;
+  /** Para type "dateRange": exibir intervalos rápidos (Hoje, Esta Semana, etc.) */
+  showQuickRanges?: boolean;
 }
 
 /**
@@ -125,6 +146,7 @@ export interface BaseFormFieldProps<T extends FieldValues> {
  * baseado na configuração fornecida
  */
 export function BaseFormField<T extends FieldValues>({ config, control }: BaseFormFieldProps<T>) {
+  const baseId = useId();
   const {
     name,
     label,
@@ -139,308 +161,375 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
     radioOptions,
     otpLength,
     sliderRange,
+    allowNegative,
+    isCurrency,
+    isPercent,
+    currency,
+    showQuickRanges,
+    disableFuture,
+    disableWeekends,
   } = config;
 
   return (
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
-        <FormItem
-          className={
-            type === "checkbox"
-              ? "flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
-              : ""
-          }
-        >
-          {type !== "checkbox" && (
-            <FormLabel>
-              {label} {required && <span className="text-destructive">*</span>}
-            </FormLabel>
-          )}
+      render={({ field, fieldState }) => {
+        const isError = fieldState?.invalid;
+        return (
+          <FormItem
+            className={
+              type === "checkbox"
+                ? "flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+                : ""
+            }
+          >
+            {type !== "checkbox" && type !== "switch" && (
+              <FormLabel>
+                {label}{" "}
+                {required && (
+                  <span
+                    className="text-destructive"
+                    style={{
+                      float: "none",
+                      width: "auto",
+                      marginRight: 0,
+                      marginTop: 0,
+                    }}
+                  >
+                    *
+                  </span>
+                )}
+              </FormLabel>
+            )}
 
-          <FormControl>
-            {(() => {
-              switch (type) {
-                case "text":
-                  return (
-                    <Input
-                      {...field}
-                      placeholder={placeholder}
-                      disabled={disabled}
-                      value={(field.value as string) || ""}
-                    />
-                  );
-
-                case "email":
-                  return (
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder={placeholder}
-                      disabled={disabled}
-                      value={(field.value as string) || ""}
-                    />
-                  );
-
-                case "url":
-                  return (
-                    <Input
-                      {...field}
-                      type="url"
-                      placeholder={placeholder}
-                      disabled={disabled}
-                      value={(field.value as string) || ""}
-                    />
-                  );
-
-                case "tel":
-                  return (
-                    <Input
-                      {...field}
-                      type="tel"
-                      placeholder={placeholder}
-                      disabled={disabled}
-                      value={(field.value as string) || ""}
-                    />
-                  );
-
-                case "password":
-                  return (
-                    <PasswordInput
-                      id={String(name)}
-                      label=""
-                      placeholder={placeholder}
-                      value={(field.value as string) || ""}
-                      register={{
-                        name: String(name),
-                        onChange: field.onChange,
-                        onBlur: field.onBlur,
-                        ref: field.ref,
-                      }}
-                    />
-                  );
-
-                case "textarea":
-                  return (
-                    <textarea
-                      className="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      {...field}
-                      placeholder={placeholder}
-                      disabled={disabled}
-                      value={(field.value as string) || ""}
-                    />
-                  );
-
-                case "number":
-                  return (
-                    <NumericFormat
-                      customInput={Input}
-                      decimalSeparator=","
-                      thousandSeparator="."
-                      decimalScale={decimalScale ?? 7}
-                      value={field.value ?? ""}
-                      onValueChange={(values) => field.onChange(values.floatValue)}
-                      placeholder={placeholder}
-                      disabled={disabled}
-                    />
-                  );
-
-                case "decimal":
-                  return (
-                    <NumericFormat
-                      customInput={Input}
-                      decimalSeparator=","
-                      thousandSeparator="" // Sem separador de milhares para decimais simples
-                      decimalScale={decimalScale ?? 2}
-                      value={field.value ?? ""}
-                      onValueChange={(values) => field.onChange(values.floatValue)}
-                      placeholder={placeholder}
-                      disabled={disabled}
-                      allowNegative={false}
-                    />
-                  );
-
-                case "currency":
-                  return (
-                    <NumericFormat
-                      customInput={Input}
-                      decimalSeparator=","
-                      thousandSeparator="."
-                      decimalScale={decimalScale ?? 2}
-                      value={field.value ?? ""}
-                      onValueChange={(values) => field.onChange(values.floatValue)}
-                      placeholder={placeholder}
-                      disabled={disabled}
-                      prefix={prefix ?? "R$ "}
-                    />
-                  );
-
-                case "select":
-                  return (
-                    <Select
-                      onValueChange={field.onChange}
-                      value={String(field.value || "")}
-                      disabled={disabled}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={placeholder || "Selecione"} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {options?.map((opt) => {
-                          const val = typeof opt === "object" ? String(opt.value) : opt;
-                          const lab = typeof opt === "object" ? opt.label : opt;
-                          return (
-                            <SelectItem key={val} value={val}>
-                              {lab}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  );
-
-                case "date":
-                  return (
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          disabled={disabled}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                          type="button"
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                          <span className="flex-1 text-left">
-                            {field.value ? (
-                              format(new Date(field.value), "dd/MM/yyyy", { locale: ptBR })
-                            ) : (
-                              <span className="text-muted-foreground">
-                                {placeholder || "Selecione"}
-                              </span>
-                            )}
-                          </span>
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value ? new Date(field.value) : undefined}
-                          onSelect={field.onChange}
-                          locale={ptBR}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  );
-
-                case "checkbox":
-                  return (
-                    <>
-                      <Checkbox
-                        checked={!!field.value}
-                        onCheckedChange={field.onChange}
+            <FormControl>
+              {(() => {
+                switch (type) {
+                  case "text":
+                    return (
+                      <Input
+                        {...field}
+                        placeholder={placeholder}
                         disabled={disabled}
+                        value={(field.value as string) || ""}
+                        variant={isError ? "error" : "default"}
                       />
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>{label}</FormLabel>
-                        {description && <FormDescription>{description}</FormDescription>}
-                      </div>
-                    </>
-                  );
+                    );
 
-                case "switch":
-                  return (
-                    <div className="flex items-center justify-between">
-                      <FormLabel>{label}</FormLabel>
-                      <Switch
-                        checked={!!field.value}
-                        onCheckedChange={field.onChange}
+                  case "email":
+                    return (
+                      <Input
+                        {...field}
+                        type="email"
+                        placeholder={placeholder}
                         disabled={disabled}
+                        value={(field.value as string) || ""}
+                        variant={isError ? "error" : "default"}
                       />
-                    </div>
-                  );
+                    );
 
-                case "radio":
-                  return (
-                    <RadioGroup
-                      value={String(field.value ?? "")}
-                      onValueChange={field.onChange}
-                      className="flex flex-col gap-2"
-                      disabled={disabled as boolean}
-                    >
-                      {(radioOptions ?? [])?.map((opt) => (
-                        <div key={opt.value} className="flex items-center gap-2">
-                          <RadioGroupItem value={opt.value} id={`${String(name)}-${opt.value}`} />
-                          <label htmlFor={`${String(name)}-${opt.value}`} className="text-sm">
-                            {opt.label}
-                          </label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  );
-
-                case "slider":
-                  return (
-                    <div className="space-y-2">
-                      <Slider
-                        value={[Number(field.value ?? sliderRange?.min ?? 0)]}
-                        onValueChange={(vals) => field.onChange(vals[0])}
-                        min={sliderRange?.min ?? 0}
-                        max={sliderRange?.max ?? 100}
-                        step={sliderRange?.step ?? 1}
+                  case "url":
+                    return (
+                      <Input
+                        {...field}
+                        type="url"
+                        placeholder={placeholder}
                         disabled={disabled}
+                        value={(field.value as string) || ""}
+                        variant={isError ? "error" : "default"}
                       />
-                      {typeof field.value === "number" && (
-                        <p className="text-xs text-muted-foreground">Valor: {field.value}</p>
-                      )}
-                    </div>
-                  );
+                    );
 
-                case "otp":
-                  return (
-                    <InputOTP
-                      maxLength={otpLength ?? 6}
-                      value={String(field.value ?? "")}
-                      onChange={field.onChange}
-                      disabled={disabled}
-                    >
-                      <InputOTPGroup>
-                        {Array.from({ length: otpLength ?? 6 }).map((_, i) => (
-                          // biome-ignore lint/suspicious/noArrayIndexKey: O índice é estável para o OTP
-                          <InputOTPSlot key={i} index={i} />
-                        ))}
-                      </InputOTPGroup>
-                    </InputOTP>
-                  );
+                  case "tel":
+                    return (
+                      <Input
+                        {...field}
+                        type="tel"
+                        placeholder={placeholder}
+                        disabled={disabled}
+                        value={(field.value as string) || ""}
+                        variant={isError ? "error" : "default"}
+                      />
+                    );
 
-                case "toggle":
-                  return (
-                    <div className="flex items-center gap-2">
-                      <Toggle
-                        pressed={!!field.value}
-                        onPressedChange={(pressed) => field.onChange(pressed)}
+                  case "password":
+                    return (
+                      <PasswordInput
+                        id={String(name)}
+                        label=""
+                        placeholder={placeholder}
+                        value={(field.value as string) || ""}
+                        register={{
+                          name: String(name),
+                          onChange: field.onChange,
+                          onBlur: field.onBlur,
+                          ref: field.ref,
+                        }}
+                      />
+                    );
+
+                  case "textarea":
+                    return (
+                      <textarea
+                        className={cn(
+                          "flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                          isError && inputErrorClassName
+                        )}
+                        {...field}
+                        placeholder={placeholder}
+                        disabled={disabled}
+                        value={(field.value as string) || ""}
+                      />
+                    );
+
+                  case "number":
+                    return (
+                      <NumericFormat
+                        customInput={Input}
+                        decimalSeparator=","
+                        thousandSeparator="."
+                        decimalScale={decimalScale ?? 7}
+                        value={field.value ?? ""}
+                        onValueChange={(values) => {
+                          if (values.value === "") {
+                            field.onChange(null);
+                          } else {
+                            field.onChange(values.floatValue);
+                          }
+                        }}
+                        placeholder={placeholder}
+                        disabled={disabled}
+                        className={cn(isError && inputErrorClassName)}
+                      />
+                    );
+
+                  case "decimal":
+                    return (
+                      <NumericFormat
+                        customInput={Input}
+                        decimalSeparator=","
+                        thousandSeparator="" // Sem separador de milhares para decimais simples
+                        decimalScale={decimalScale ?? 2}
+                        value={field.value ?? ""}
+                        onValueChange={(values) => {
+                          if (values.value === "") {
+                            field.onChange(null);
+                          } else {
+                            field.onChange(values.floatValue);
+                          }
+                        }}
+                        placeholder={placeholder}
+                        disabled={disabled}
+                        allowNegative={false}
+                        className={cn(isError && inputErrorClassName)}
+                      />
+                    );
+
+                  case "currency":
+                    return (
+                      <NumericFormat
+                        customInput={Input}
+                        decimalSeparator=","
+                        thousandSeparator="."
+                        decimalScale={decimalScale ?? 2}
+                        value={field.value ?? ""}
+                        onValueChange={(values) => {
+                          if (values.value === "") {
+                            field.onChange(null);
+                          } else {
+                            field.onChange(values.floatValue);
+                          }
+                        }}
+                        placeholder={placeholder}
+                        disabled={disabled}
+                        prefix={prefix ?? "R$ "}
+                        className={cn(isError && inputErrorClassName)}
+                      />
+                    );
+
+                  case "numericFilter":
+                    return (
+                      <NumericFilterField
+                        value={(field.value as NumericFilterValue | null | undefined) ?? null}
+                        onChange={field.onChange}
+                        placeholder={placeholder}
+                        allowNegative={allowNegative ?? true}
+                        isCurrency={isCurrency}
+                        isPercent={isPercent}
+                        currency={currency}
+                        decimalScale={decimalScale ?? (isCurrency ? 2 : 20)}
+                        disabled={disabled}
+                        error={isError}
+                      />
+                    );
+
+                  case "select":
+                    return (
+                      <Select
+                        onValueChange={field.onChange}
+                        value={String(field.value || "")}
                         disabled={disabled}
                       >
-                        {label}
-                      </Toggle>
-                    </div>
-                  );
+                        <FormControl>
+                          <SelectTrigger
+                            id={String(name)}
+                            className={cn(isError && inputErrorClassName)}
+                          >
+                            <SelectValue placeholder={placeholder || "Selecione"} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="max-h-[300px] overflow-y-auto">
+                          {options?.map((opt) => {
+                            const val = typeof opt === "object" ? String(opt.value) : opt;
+                            const lab = typeof opt === "object" ? opt.label : opt;
+                            return (
+                              <SelectItem key={val} value={val}>
+                                {lab}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    );
 
-                default:
-                  return null;
-              }
-            })()}
-          </FormControl>
+                  case "date":
+                    return (
+                      <CalendarPopover
+                        date={field.value}
+                        setDate={field.onChange}
+                        placeholder={placeholder || "Selecione"}
+                        disabled={disabled}
+                        disableFuture={disableFuture ?? false}
+                        disableWeekends={disableWeekends ?? false}
+                        className={cn("w-full", isError && inputErrorClassName)}
+                      />
+                    );
 
-          {type !== "checkbox" && description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
+                  case "dateRange":
+                    return (
+                      <CalendarRange
+                        value={field.value ?? undefined}
+                        onChange={field.onChange}
+                        placeholder={placeholder || "Selecione o intervalo"}
+                        disabled={disabled}
+                        showQuickRanges={showQuickRanges ?? false}
+                        className={cn(isError && inputErrorClassName)}
+                      />
+                    );
+
+                  case "checkbox":
+                    return (
+                      <>
+                        <Checkbox
+                          checked={!!field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={disabled}
+                        />
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>{label}</FormLabel>
+                          {description && !isError && (
+                            <FormDescription>{description}</FormDescription>
+                          )}
+                        </div>
+                      </>
+                    );
+
+                  case "switch":
+                    return (
+                      <div className="flex items-center justify-between">
+                        <FormLabel>{label}</FormLabel>
+                        <Switch
+                          checked={!!field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={disabled}
+                        />
+                      </div>
+                    );
+
+                  case "radio":
+                    return (
+                      <RadioGroup
+                        value={String(field.value ?? "")}
+                        onValueChange={field.onChange}
+                        className="flex flex-col gap-2"
+                        disabled={disabled ?? false}
+                      >
+                        {(radioOptions ?? [])?.map((opt) => {
+                          const radioId = `${String(name)}-${opt.value}`;
+                          return (
+                            <div key={opt.value} className="flex items-center gap-2">
+                              <RadioGroupItem value={opt.value} id={radioId} />
+                              <Label htmlFor={radioId}>{opt.label}</Label>
+                            </div>
+                          );
+                        })}
+                      </RadioGroup>
+                    );
+
+                  case "slider":
+                    return (
+                      <div className={cn("space-y-2", isError && inputErrorClassName)}>
+                        <Slider
+                          value={[Number(field.value ?? sliderRange?.min ?? 0)]}
+                          onValueChange={(vals) => field.onChange(vals[0])}
+                          min={sliderRange?.min ?? 0}
+                          max={sliderRange?.max ?? 100}
+                          step={sliderRange?.step ?? 1}
+                          disabled={disabled}
+                        />
+                        {typeof field.value === "number" && (
+                          <p className="text-xs text-muted-foreground">Valor: {field.value}</p>
+                        )}
+                      </div>
+                    );
+
+                  case "otp":
+                    return (
+                      <InputOTP
+                        maxLength={otpLength ?? 6}
+                        value={String(field.value ?? "")}
+                        onChange={field.onChange}
+                        disabled={disabled}
+                      >
+                        <InputOTPGroup>
+                          {Array.from({ length: otpLength ?? 6 }, (_, i) => ({
+                            id: `${baseId}-otp-${i}`,
+                            index: i,
+                          })).map((slot) => (
+                            <InputOTPSlot key={slot.id} index={slot.index} />
+                          ))}
+                        </InputOTPGroup>
+                      </InputOTP>
+                    );
+
+                  case "toggle":
+                    return (
+                      <div className="flex items-center gap-2">
+                        <Toggle
+                          pressed={!!field.value}
+                          onPressedChange={(pressed) => field.onChange(pressed)}
+                          disabled={disabled}
+                          className={cn(isError && inputErrorClassName)}
+                        >
+                          {label}
+                        </Toggle>
+                      </div>
+                    );
+
+                  default:
+                    return null;
+                }
+              })()}
+            </FormControl>
+
+            {type !== "checkbox" && description && !isError && (
+              <FormDescription>{description}</FormDescription>
+            )}
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 }
@@ -458,6 +547,8 @@ export interface FormLayoutProps<T extends FieldValues> {
   sections: FormSectionConfig<T>[];
   /** Callback executado quando o formulário é submetido */
   onSubmit: (values: T) => void;
+  /** Callback executado quando a validação falha */
+  onError?: (errors: unknown) => void;
   /** ID opcional do formulário (útil para submit externo) */
   formId?: string;
   /** Título opcional do formulário */
@@ -466,6 +557,8 @@ export interface FormLayoutProps<T extends FieldValues> {
   description?: string;
   /** Conteúdo adicional no header (ex: botões de ação) */
   headerContent?: React.ReactNode;
+  /** Ref opcional para o elemento form */
+  formRef?: React.RefObject<HTMLFormElement | null>;
 }
 
 /**
@@ -476,10 +569,12 @@ export function FormLayout<T extends FieldValues>({
   form,
   sections,
   onSubmit,
+  onError,
   formId,
   title,
   description,
   headerContent,
+  formRef,
 }: FormLayoutProps<T>) {
   /**
    * Utilitário para classes de grid responsivo
@@ -494,7 +589,12 @@ export function FormLayout<T extends FieldValues>({
 
   return (
     <Form {...form}>
-      <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-4 relative">
+      <form
+        id={formId}
+        ref={formRef as React.RefObject<HTMLFormElement>}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
+        className="space-y-8 p-4 relative"
+      >
         {(title || description) && (
           <div className="space-y-2 mb-6">
             <div className="flex justify-between items-start">
@@ -523,7 +623,7 @@ export function FormLayout<T extends FieldValues>({
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {section.fields.map((config) => (
-                <div key={config.name} className={getColSpanClass(config.cols)}>
+                <div key={String(config.name)} className={getColSpanClass(config.cols)}>
                   <BaseFormField config={config} control={form.control} />
                 </div>
               ))}

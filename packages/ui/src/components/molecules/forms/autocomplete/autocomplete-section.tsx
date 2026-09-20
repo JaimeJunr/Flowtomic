@@ -24,7 +24,7 @@ const AutocompleteSection = React.forwardRef<HTMLDivElement, AutocompleteSection
     return (
       // biome-ignore lint/a11y/useSemanticElements: Agrupamento em menu de autocomplete
       <div
-        ref={ref as any}
+        ref={ref}
         {...props}
         className={cn("space-y-1", className)}
         role="group"

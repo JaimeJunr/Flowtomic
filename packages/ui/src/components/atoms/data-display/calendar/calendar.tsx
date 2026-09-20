@@ -7,6 +7,10 @@ import { Button, buttonVariants } from "../../actions/button/button";
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
   captionLayout?: "buttons" | "dropdown" | "dropdown-months" | "dropdown-years";
+  /** Ano inicial para dropdown de anos (ex.: 1900). Repasse para DayPicker. */
+  fromYear?: number;
+  /** Ano final para dropdown de anos (ex.: 2100). Repasse para DayPicker. */
+  toYear?: number;
 };
 
 function Calendar({
@@ -18,6 +22,8 @@ function Calendar({
   formatters,
   components,
   onMonthChange,
+  fromYear,
+  toYear,
   ...props
 }: CalendarProps) {
   const defaultClassNames = getDefaultClassNames();
@@ -138,6 +144,8 @@ function Calendar({
         ...components,
       }}
       onMonthChange={onMonthChange}
+      fromYear={fromYear}
+      toYear={toYear}
       {...props}
     />
   );

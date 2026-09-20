@@ -49,3 +49,5 @@ testes-aceitacao-storybook-resultados.md
 .cursor/
 
 sync-prompts.sh
+
+.lock

@@ -1,7 +1,15 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "../../atoms";
-import { BaseFormField, FormLayout, type FormSectionConfig } from "./form-layout";
+import {
+  BaseFormField,
+  FormLayout,
+  type FormSectionConfig,
+  type NumericFilterValue,
+} from "./form-layout";
 
 interface FormData {
   name: string;
@@ -10,9 +18,10 @@ interface FormData {
   phone: string;
   password: string;
   age: number;
-  weight: number;
+  weight: number | undefined;
   country: string;
-  birthDate: Date;
+  /** Valor do campo date (string yyyy-MM-dd ou undefined). O calendário exibe dropdown de mês e ano. */
+  birthDate: string | undefined;
   newsletter: boolean;
   bio: string;
   salary: number;
@@ -33,7 +42,7 @@ const meta: Meta<typeof FormLayout> = {
     docs: {
       description: {
         component:
-          "O componente FormLayout é um layout de formulário configurável que suporta múltiplos tipos de campo (text, email, url, tel, password, textarea, number, decimal, currency, select, date, checkbox, switch, radio, slider, otp, toggle) organizados em seções. Construído sobre React Hook Form, oferece validação, formatação de números brasileiros (vírgula como decimal), layout responsivo em grid e integração completa com o design system.",
+          'Layout de formulário configurável que suporta múltiplos tipos de campo (text, email, url, tel, password, textarea, number, decimal, currency, select, date, dateRange, checkbox, switch, radio, slider, otp, toggle, numericFilter) organizados em seções. O tipo **date** usa CalendarPopover com dropdown de mês e ano para navegação rápida. Construído sobre React Hook Form, com validação (ex.: Zod), formatação numérica brasileira (vírgula decimal), grid responsivo e integração ao design system. Use `formId` para botão de submit fora do layout (`form="{formId}"`).',
       },
     },
   },
@@ -92,11 +101,49 @@ const meta: Meta<typeof FormLayout> = {
         defaultValue: { summary: "undefined" },
       },
     },
+    onError: {
+      control: false,
+      description: "Callback executado quando a validação falha",
+      table: {
+        type: { summary: "(errors: unknown) => void" },
+        defaultValue: { summary: "undefined" },
+      },
+    },
+    formRef: {
+      control: false,
+      description: "Ref opcional para o elemento form",
+      table: {
+        type: { summary: "React.RefObject<HTMLFormElement | null>" },
+        defaultValue: { summary: "undefined" },
+      },
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj;
+
+const defaultFormValues: Partial<FormData> = {
+  name: "",
+  email: "",
+  website: "",
+  phone: "",
+  password: "",
+  age: 0,
+  weight: undefined,
+  country: "",
+  birthDate: undefined,
+  newsletter: false,
+  bio: "",
+  salary: 0,
+  price: 0,
+  role: "",
+  enabled: false,
+  status: "",
+  level: 50,
+  otp: "",
+  toggleFlag: false,
+};
 
 export const Default: Story = {
   name: "Padrão",
@@ -104,33 +151,13 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          "Exemplo padrão do FormLayout com múltiplas seções contendo diferentes tipos de campo. Demonstra a organização em seções e o layout responsivo em grid.",
+          "Formulário com duas seções: Informações Pessoais (nome, e-mail, idade, peso, data de nascimento com dropdown de mês/ano, país) e Informações Adicionais (biografia, newsletter). Botões de ação usam formId para submit e reset.",
       },
     },
   },
   render: () => {
     const form = useForm<FormData>({
-      defaultValues: {
-        name: "",
-        email: "",
-        website: "",
-        phone: "",
-        password: "",
-        age: 0,
-        weight: undefined,
-        country: "",
-        birthDate: undefined,
-        newsletter: false,
-        bio: "",
-        salary: 0,
-        price: 0,
-        role: "",
-        enabled: false,
-        status: "",
-        level: 50,
-        otp: "",
-        toggleFlag: false,
-      },
+      defaultValues: defaultFormValues as FormData,
     });
 
     const sections: FormSectionConfig<FormData>[] = [
@@ -217,6 +244,7 @@ export const Default: Story = {
     return (
       <div className="w-[800px]">
         <FormLayout
+          formId="default-form"
           form={form}
           sections={sections}
           onSubmit={(data) => {
@@ -228,7 +256,7 @@ export const Default: Story = {
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Limpar
           </Button>
-          <Button type="submit" onClick={form.handleSubmit((data) => console.log(data))}>
+          <Button type="submit" form="default-form">
             Enviar
           </Button>
         </div>
@@ -250,17 +278,17 @@ export const WithTitleAndHeader: Story = {
   render: () => {
     const form = useForm<FormData>({
       defaultValues: {
+        ...defaultFormValues,
         name: "",
         email: "",
         age: 0,
-        weight: undefined,
         country: "",
         birthDate: undefined,
         newsletter: false,
         bio: "",
         salary: 0,
         role: "",
-      },
+      } as FormData,
     });
 
     const sections: FormSectionConfig<FormData>[] = [
@@ -288,19 +316,20 @@ export const WithTitleAndHeader: Story = {
     return (
       <div className="w-[800px]">
         <FormLayout
+          formId="title-header-form"
           form={form}
           sections={sections}
           onSubmit={(data) => console.log(data)}
           title="Cadastro de Usuário"
           description="Preencha os campos abaixo para criar sua conta"
           headerContent={
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" type="button">
               Ajuda
             </Button>
           }
         />
         <div className="flex justify-end mt-4">
-          <Button type="submit" onClick={form.handleSubmit((data) => console.log(data))}>
+          <Button type="submit" form="title-header-form">
             Criar Conta
           </Button>
         </div>
@@ -315,24 +344,13 @@ export const WithAllFieldTypes: Story = {
     docs: {
       description: {
         story:
-          "Demonstração completa de todos os tipos de campo disponíveis: text, number, select, date, textarea e checkbox. Cada campo inclui descrição e placeholder.",
+          "Todos os tipos suportados: text, email, url, tel, password, number, decimal, currency, select, date (com dropdown de mês e ano), textarea, checkbox, switch, radio, slider, otp, toggle. Cada um com descrição e placeholder.",
       },
     },
   },
   render: () => {
     const form = useForm<FormData>({
-      defaultValues: {
-        name: "",
-        email: "",
-        age: 0,
-        weight: undefined,
-        country: "",
-        birthDate: undefined,
-        newsletter: false,
-        bio: "",
-        salary: 0,
-        role: "",
-      },
+      defaultValues: defaultFormValues as FormData,
     });
 
     const sections: FormSectionConfig<FormData>[] = [
@@ -427,7 +445,7 @@ export const WithAllFieldTypes: Story = {
             label: "Campo de Data",
             type: "date",
             placeholder: "Selecione",
-            description: "Exemplo de campo de data",
+            description: "Calendário com dropdown de mês e ano (navegação rápida)",
             cols: 1,
           },
           {
@@ -520,18 +538,7 @@ export const WithMultipleSections: Story = {
   },
   render: () => {
     const form = useForm<FormData>({
-      defaultValues: {
-        name: "",
-        email: "",
-        age: 0,
-        weight: undefined,
-        country: "",
-        birthDate: undefined,
-        newsletter: false,
-        bio: "",
-        salary: 0,
-        role: "",
-      },
+      defaultValues: defaultFormValues as FormData,
     });
 
     const sections: FormSectionConfig<FormData>[] = [
@@ -609,6 +616,7 @@ export const WithMultipleSections: Story = {
     return (
       <div className="w-[900px]">
         <FormLayout
+          formId="multi-section-form"
           form={form}
           sections={sections}
           onSubmit={(data) => console.log(data)}
@@ -616,10 +624,10 @@ export const WithMultipleSections: Story = {
           description="Exemplo de formulário dividido em seções organizadas"
         />
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" onClick={() => form.reset()}>
+          <Button type="button" variant="outline" onClick={() => form.reset()}>
             Cancelar
           </Button>
-          <Button type="submit" onClick={form.handleSubmit((data) => console.log(data))}>
+          <Button type="submit" form="multi-section-form">
             Salvar
           </Button>
         </div>
@@ -646,12 +654,12 @@ export const WithDisabledFields: Story = {
         age: 30,
         weight: undefined,
         country: "BR",
-        birthDate: new Date("1994-01-15"),
+        birthDate: "1994-01-15",
         newsletter: true,
         bio: "",
         salary: 0,
         role: "",
-      },
+      } as FormData,
     });
 
     const sections: FormSectionConfig<FormData>[] = [
@@ -729,18 +737,7 @@ export const CompactLayout: Story = {
   },
   render: () => {
     const form = useForm<FormData>({
-      defaultValues: {
-        name: "",
-        email: "",
-        age: 0,
-        weight: undefined,
-        country: "",
-        birthDate: undefined,
-        newsletter: false,
-        bio: "",
-        salary: 0,
-        role: "",
-      },
+      defaultValues: defaultFormValues as FormData,
     });
 
     const sections: FormSectionConfig<FormData>[] = [
@@ -765,7 +762,12 @@ export const CompactLayout: Story = {
             name: "country",
             label: "País",
             type: "select",
-            options: ["Brasil", "Portugal", "Angola"],
+            placeholder: "Selecione",
+            options: [
+              { label: "Brasil", value: "BR" },
+              { label: "Portugal", value: "PT" },
+              { label: "Angola", value: "AO" },
+            ],
             cols: 1,
           },
         ],
@@ -774,9 +776,14 @@ export const CompactLayout: Story = {
 
     return (
       <div className="w-[600px]">
-        <FormLayout form={form} sections={sections} onSubmit={(data) => console.log(data)} />
+        <FormLayout
+          formId="compact-form"
+          form={form}
+          sections={sections}
+          onSubmit={(data) => console.log(data)}
+        />
         <div className="flex justify-end mt-4">
-          <Button type="submit" onClick={form.handleSubmit((data) => console.log(data))}>
+          <Button type="submit" form="compact-form">
             Enviar
           </Button>
         </div>
@@ -785,30 +792,19 @@ export const CompactLayout: Story = {
   },
 };
 
-export const simpleLayout: Story = {
+export const SimpleLayout: Story = {
   name: "Layout Simples",
   parameters: {
     docs: {
       description: {
         story:
-          "Layout simples com apenas 2 campos em uma seção. Útil para formulários diretos e objetivos.",
+          "Uma seção sem título, com dois campos (nome e e-mail). Submit via botão externo usando formId.",
       },
     },
   },
   render: () => {
     const form = useForm<FormData>({
-      defaultValues: {
-        name: "",
-        email: "",
-        age: 0,
-        weight: undefined,
-        country: "",
-        birthDate: undefined,
-        newsletter: false,
-        bio: "",
-        salary: 0,
-        role: "",
-      },
+      defaultValues: defaultFormValues as FormData,
     });
 
     const sections: FormSectionConfig<FormData>[] = [
@@ -832,9 +828,14 @@ export const simpleLayout: Story = {
 
     return (
       <div className="w-[600px]">
-        <FormLayout form={form} sections={sections} onSubmit={(data) => console.log(data)} />
+        <FormLayout
+          formId="simple-form"
+          form={form}
+          sections={sections}
+          onSubmit={(data) => console.log(data)}
+        />
         <div className="flex justify-end mt-4">
-          <Button type="submit" onClick={form.handleSubmit((data) => console.log(data))}>
+          <Button type="submit" form="simple-form">
             Enviar
           </Button>
         </div>
@@ -911,6 +912,95 @@ export const WithExternalSubmit: Story = {
           </Button>
           <Button type="submit" form="external-form">
             Salvar (Botão Externo)
+          </Button>
+        </div>
+      </div>
+    );
+  },
+};
+
+export const WithOnErrorAndFormRef: Story = {
+  name: "onError e formRef",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstra onError (callback quando a validação falha) e formRef (ref para o elemento form). Campos numéricos vazios são enviados como null. Submeta sem preencher para ver os erros e o callback onError.",
+      },
+    },
+  },
+  render: () => {
+    const schema = z.object({
+      name: z.string().min(1, "Nome é obrigatório"),
+      age: z.number().nullable(),
+      weight: z.number().nullable(),
+    });
+    type ValidatedFormData = z.infer<typeof schema>;
+    const formRef = useRef<HTMLFormElement | null>(null);
+    const form = useForm<ValidatedFormData>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+        name: "",
+        age: null,
+        weight: null,
+      },
+    });
+
+    const sections: FormSectionConfig<ValidatedFormData>[] = [
+      {
+        title: "Validação e Erros",
+        fields: [
+          {
+            name: "name",
+            label: "Nome",
+            type: "text",
+            placeholder: "Obrigatório",
+            required: true,
+          },
+          {
+            name: "age",
+            label: "Idade",
+            type: "number",
+            placeholder: "Vazio = null",
+            decimalScale: 0,
+          },
+          {
+            name: "weight",
+            label: "Peso (kg)",
+            type: "decimal",
+            placeholder: "Vazio = null",
+            decimalScale: 2,
+          },
+        ],
+      },
+    ];
+
+    return (
+      <div className="w-[700px] space-y-4">
+        <FormLayout
+          form={form}
+          sections={sections}
+          formRef={formRef}
+          onSubmit={(data) => {
+            console.log("Submitted:", data);
+            alert("Válido! Veja o console.");
+          }}
+          onError={(errors) => {
+            console.log("Validation errors:", errors);
+            alert("Corrija os erros antes de enviar.");
+          }}
+        />
+        <div className="flex justify-end gap-2">
+          <Button
+            type="submit"
+            onClick={() =>
+              form.handleSubmit(
+                (d) => console.log(d),
+                (e) => console.log(e)
+              )
+            }
+          >
+            Enviar
           </Button>
         </div>
       </div>
@@ -1068,6 +1158,7 @@ export const DecimalFieldExample: Story = {
     return (
       <div className="w-[900px]">
         <FormLayout
+          formId="decimal-example-form"
           form={form}
           sections={sections}
           onSubmit={(data) => {
@@ -1075,13 +1166,13 @@ export const DecimalFieldExample: Story = {
             alert("Formulário enviado! Veja o console.");
           }}
           title="Exemplo: Tipo Decimal"
-          description="Demonstração do novo tipo 'decimal' para valores decimais simples (pesos, medidas, etc.)"
+          description="Demonstração do tipo 'decimal' para valores decimais simples (pesos, medidas, etc.)"
         />
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" onClick={() => form.reset()}>
+          <Button type="button" variant="outline" onClick={() => form.reset()}>
             Limpar
           </Button>
-          <Button type="submit" onClick={form.handleSubmit((data) => console.log(data))}>
+          <Button type="submit" form="decimal-example-form">
             Enviar
           </Button>
         </div>
@@ -1090,19 +1181,148 @@ export const DecimalFieldExample: Story = {
   },
 };
 
-export const NoKnownUsage: Story = {
-  name: "Sem Uso Conhecido",
-  render: () => (
-    <div className="p-4 text-sm text-muted-foreground">
-      Este componente ainda não possui uso conhecido em blocks ou outros componentes complexos.
-    </div>
-  ),
+export const WithNumericFilter: Story = {
+  name: "Campo NumericFilter",
   parameters: {
     docs: {
       description: {
         story:
-          "Este componente ainda não possui uso conhecido em blocks ou componentes mais complexos do Flowtomic.",
+          "Campo de filtro numérico com operador (=, >, <, ≥, ≤) e valor. Suporta número, moeda (BRL) e percentual. Útil para filtros de tabela ou formulários de busca.",
       },
     },
+  },
+  render: () => {
+    interface FilterFormData {
+      amount: NumericFilterValue | null;
+      priceFilter: NumericFilterValue | null;
+      discountFilter: NumericFilterValue | null;
+    }
+
+    const form = useForm<FilterFormData>({
+      defaultValues: {
+        amount: { operator: "eq", value: null },
+        priceFilter: { operator: "gte", value: 100 },
+        discountFilter: { operator: "lte", value: 50 },
+      },
+    });
+
+    const sections: FormSectionConfig<FilterFormData>[] = [
+      {
+        title: "Filtros numéricos",
+        description: "Campos numericFilter com operador e valor",
+        fields: [
+          {
+            name: "amount",
+            label: "Valor (número)",
+            type: "numericFilter",
+            placeholder: "Digite o valor",
+            allowNegative: true,
+            decimalScale: 2,
+          },
+          {
+            name: "priceFilter",
+            label: "Preço (moeda)",
+            type: "numericFilter",
+            placeholder: "0,00",
+            isCurrency: true,
+            currency: "BRL",
+          },
+          {
+            name: "discountFilter",
+            label: "Desconto (%)",
+            type: "numericFilter",
+            placeholder: "0",
+            isPercent: true,
+            decimalScale: 2,
+          },
+        ],
+      },
+    ];
+
+    return (
+      <div className="w-[700px]">
+        <FormLayout
+          formId="numeric-filter-form"
+          form={form}
+          sections={sections}
+          onSubmit={(data) => {
+            console.log("Filtros:", data);
+            alert("Veja o console para os valores.");
+          }}
+        />
+        <div className="flex justify-end gap-2 mt-4">
+          <Button type="submit" form="numeric-filter-form">
+            Enviar
+          </Button>
+        </div>
+      </div>
+    );
+  },
+};
+
+export const DateFieldWithDropdown: Story = {
+  name: "Campo de Data (dropdown mês/ano)",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'O tipo **date** usa CalendarPopover com dropdown de mês e ano (captionLayout="dropdown", fromYear/toYear). Abra o calendário e use os selects para trocar de ano rapidamente, sem navegar mês a mês.',
+      },
+    },
+  },
+  render: () => {
+    interface DateFormData {
+      birthDate: string | undefined;
+      eventDate: string | undefined;
+    }
+    const form = useForm<DateFormData>({
+      defaultValues: { birthDate: undefined, eventDate: undefined },
+    });
+    const sections: FormSectionConfig<DateFormData>[] = [
+      {
+        title: "Datas",
+        description: "Campos de data com calendário e dropdown de mês/ano",
+        fields: [
+          {
+            name: "birthDate",
+            label: "Data de Nascimento",
+            type: "date",
+            placeholder: "Selecione a data",
+            required: true,
+            disableFuture: true,
+            cols: 1,
+          },
+          {
+            name: "eventDate",
+            label: "Data do Evento",
+            type: "date",
+            placeholder: "Selecione",
+            disableFuture: false,
+            cols: 1,
+          },
+        ],
+      },
+    ];
+    return (
+      <div className="w-[500px]">
+        <FormLayout
+          formId="date-dropdown-form"
+          form={form}
+          sections={sections}
+          onSubmit={(data) => {
+            console.log("Datas:", data);
+            alert(`Enviado: ${JSON.stringify(data)}`);
+          }}
+        />
+        <div className="flex justify-end gap-2 mt-4">
+          <Button type="button" variant="outline" onClick={() => form.reset()}>
+            Limpar
+          </Button>
+          <Button type="submit" form="date-dropdown-form">
+            Enviar
+          </Button>
+        </div>
+      </div>
+    );
   },
 };

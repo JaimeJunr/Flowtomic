@@ -51,18 +51,17 @@ import { cn } from "@/lib/utils";
 
 /**
  * ResizablePanelGroup - Container principal que agrupa painéis redimensionáveis.
+ * Usa Group da API v4 de react-resizable-panels.
  *
- * Componente usado para agrupar múltiplos painéis redimensionáveis.
- *
- * @param {React.ComponentProps<typeof ResizablePrimitive.PanelGroup>} props - Props do componente
+ * @param {React.ComponentProps<typeof ResizablePrimitive.Group>} props - Props do componente
  * @returns {JSX.Element} Componente ResizablePanelGroup
  */
 function ResizablePanelGroup({
   className,
   ...props
-}: React.ComponentProps<typeof ResizablePrimitive.PanelGroup>) {
+}: React.ComponentProps<typeof ResizablePrimitive.Group>) {
   return (
-    <ResizablePrimitive.PanelGroup
+    <ResizablePrimitive.Group
       data-slot="resizable-panel-group"
       className={cn("flex h-full w-full data-[panel-group-direction=vertical]:flex-col", className)}
       {...props}
@@ -73,8 +72,6 @@ function ResizablePanelGroup({
 /**
  * ResizablePanel - Painel individual redimensionável.
  *
- * Componente usado para representar um painel que pode ser redimensionado.
- *
  * @param {React.ComponentProps<typeof ResizablePrimitive.Panel>} props - Props do componente
  * @returns {JSX.Element} Componente ResizablePanel
  */
@@ -84,11 +81,11 @@ function ResizablePanel({ ...props }: React.ComponentProps<typeof ResizablePrimi
 
 /**
  * Props do componente ResizableHandle.
+ * Usa Separator da API v4 de react-resizable-panels.
  *
  * @property {boolean} [withHandle=false] - Se deve exibir handle visual
  */
-interface ResizableHandleProps
-  extends React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> {
+interface ResizableHandleProps extends React.ComponentProps<typeof ResizablePrimitive.Separator> {
   /** Se deve exibir handle visual */
   withHandle?: boolean;
 }
@@ -96,14 +93,12 @@ interface ResizableHandleProps
 /**
  * ResizableHandle - Handle para redimensionar entre painéis.
  *
- * Componente usado para criar uma área redimensionável entre dois painéis.
- *
  * @param {ResizableHandleProps} props - Props do componente
  * @returns {JSX.Element} Componente ResizableHandle
  */
 function ResizableHandle({ withHandle, className, ...props }: ResizableHandleProps) {
   return (
-    <ResizablePrimitive.PanelResizeHandle
+    <ResizablePrimitive.Separator
       data-slot="resizable-handle"
       className={cn(
         "bg-border focus-visible:ring-ring relative flex w-px items-center justify-center after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-hidden data-[panel-group-direction=vertical]:h-px data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:after:left-0 data-[panel-group-direction=vertical]:after:h-1 data-[panel-group-direction=vertical]:after:w-full data-[panel-group-direction=vertical]:after:translate-x-0 data-[panel-group-direction=vertical]:after:-translate-y-1/2 [&[data-panel-group-direction=vertical]>div]:rotate-90",
@@ -116,7 +111,7 @@ function ResizableHandle({ withHandle, className, ...props }: ResizableHandlePro
           <GripVerticalIcon className="size-2.5" />
         </div>
       )}
-    </ResizablePrimitive.PanelResizeHandle>
+    </ResizablePrimitive.Separator>
   );
 }
 

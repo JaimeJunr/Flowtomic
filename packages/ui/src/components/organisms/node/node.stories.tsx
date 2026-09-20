@@ -67,7 +67,7 @@ const NodeInCanvas = ({ handles, children }: { handles: any; children: ReactNode
   const [edges, _setEdges, onEdgesChange] = useEdgesState([]);
 
   const nodeTypes = {
-    custom: ({ data }: { data: { handles: any; children: ReactNode } }) => (
+    custom: ({ data }: { data: { handles: ReactNode; children: ReactNode } }) => (
       <Node handles={data.handles}>{data.children}</Node>
     ),
   };

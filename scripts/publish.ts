@@ -10,11 +10,11 @@
  * 4. Publica no NPM
  */
 
+import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 // @ts-expect-error - Bun types are global
 import { $ } from "bun";
-import { readFileSync, writeFileSync } from "fs";
 import inquirer from "inquirer";
-import { join } from "path";
 import semver from "semver";
 
 type VersionType = "major" | "minor" | "patch";
@@ -67,7 +67,7 @@ function updateVersion(packagePath: string, versionType: VersionType): string {
   }
 
   packageJson.version = newVersion;
-  writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n", "utf-8");
+  writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, "utf-8");
 
   return newVersion;
 }
@@ -85,11 +85,11 @@ async function runTests(packageName: string): Promise<void> {
 }
 
 /**
- * Executa build
+ * Executa build do package (via turbo com filter; evita biome check do root).
  */
 async function runBuild(packageName: string): Promise<void> {
   console.log("🏗️  Executando build...");
-  const result = await $`bun run build --filter=${packageName}`.quiet();
+  const result = await $`bunx turbo run build --filter=${packageName}`;
   if (result.exitCode !== 0) {
     throw new Error("❌ Build falhou! Corrija os erros antes de publicar.");
   }
@@ -184,7 +184,12 @@ async function main() {
   }
 
   if (!versionType) {
-    const currentVersion = getCurrentVersion(PACKAGES[packageName!].path);
+    const pkg = packageName !== undefined && PACKAGES[packageName] ? PACKAGES[packageName] : null;
+    if (!pkg) {
+      console.error("❌ Selecione um package antes de escolher a versão.");
+      process.exit(1);
+    }
+    const currentVersion = getCurrentVersion(pkg.path);
     const majorVersion = semver.inc(currentVersion, "major") || "N/A";
     const minorVersion = semver.inc(currentVersion, "minor") || "N/A";
     const patchVersion = semver.inc(currentVersion, "patch") || "N/A";

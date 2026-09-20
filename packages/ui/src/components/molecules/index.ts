@@ -52,6 +52,10 @@ export {
 } from "./data-display/artifact";
 export type { BarChartDataPoint, BarChartProps } from "./data-display/bar-chart";
 export { BarChart } from "./data-display/bar-chart";
+export type { CalendarPopoverProps } from "./data-display/calendar-popover";
+export { CalendarPopover, normalizeDate } from "./data-display/calendar-popover";
+export type { CalendarRangeProps } from "./data-display/calendar-range";
+export { CalendarRange } from "./data-display/calendar-range";
 export type {
   ChartAreaInteractiveDataPoint,
   ChartAreaInteractiveProps,
@@ -206,6 +210,12 @@ export type {
 export { ChatInput } from "./forms/chat-input";
 export type { ImageDropzoneProps } from "./forms/image-dropzone";
 export { ImageDropzone } from "./forms/image-dropzone";
+export type { InlineDateTimeEditorProps } from "./forms/inline-datetime-editor";
+export {
+  dateAndTimeToIso,
+  InlineDateTimeEditor,
+  isoToDateAndTime,
+} from "./forms/inline-datetime-editor";
 export type {
   InputGroupAddonProps,
   InputGroupButtonProps,
@@ -242,6 +252,12 @@ export {
   ItemSeparator,
   ItemTitle,
 } from "./forms/item";
+export type {
+  NumericFilterFieldProps,
+  NumericFilterOperator,
+  NumericFilterValue,
+} from "./forms/numeric-filter-field";
+export { NumericFilterField } from "./forms/numeric-filter-field";
 export type { TextEditorMode, TextEditorProps, TextEditorToolbarAction } from "./forms/text-editor";
 export { TextEditor } from "./forms/text-editor";
 export type {

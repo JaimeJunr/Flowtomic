@@ -355,9 +355,8 @@ export function TooltipWithMouseFollow({
 
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: Trigger flexível
-    // biome-ignore lint/a11y/useKeyWithClickEvents: Comportamento de trigger customizado
     <div
-      ref={containerRef as any}
+      ref={containerRef as React.RefObject<HTMLDivElement>}
       className={cn("relative inline-block", containerClassName)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
