@@ -50,32 +50,50 @@ async function openStory(page, id) {
 	await page.goto(`${BASE}/iframe.html?id=${encodeURIComponent(id)}&viewMode=story`, {
 		waitUntil: "domcontentloaded",
 	});
-	// Espera semântica: ou a story pintou algo, ou o Storybook trocou o body
-	// pro painel de erro. O sinal é a CLASSE no <body> — #error-message existe
-	// sempre, vazio, e por isso não serve de gatilho sozinho.
-	await page.waitForFunction(
-		() => {
-			const root = document.querySelector("#storybook-root");
-			return (
-				document.body.classList.contains("sb-show-errordisplay") ||
-				(root !== null && root.innerHTML.trim().length > 0)
+
+	// O Storybook 10.2 navega o iframe DUAS vezes na mesma URL (auto-reload após
+	// o boot). A segunda navegação destrói o contexto de execução entre a espera
+	// e a leitura, então a checagem é refeita quando isso acontece — limitado,
+	// não um retry cego.
+	let rendered;
+	let lastError;
+	for (let tentativa = 0; tentativa < 3; tentativa++) {
+		try {
+			// Espera semântica: ou a story pintou algo, ou o Storybook trocou o body
+			// pro painel de erro. O sinal é a CLASSE no <body> — #error-message
+			// existe sempre, vazio, e por isso não serve de gatilho sozinho.
+			await page.waitForFunction(
+				() => {
+					const root = document.querySelector("#storybook-root");
+					return (
+						document.body.classList.contains("sb-show-errordisplay") ||
+						(root !== null && root.innerHTML.trim().length > 0)
+					);
+				},
+				null,
+				{ timeout: 15000 },
 			);
-		},
-		null,
-		{ timeout: 15000 },
-	);
 
-	const rendered = await page.evaluate(() => {
-		if (document.body.classList.contains("sb-show-errordisplay")) {
-			const msg = document.querySelector("#error-message")?.textContent?.trim();
-			return { ok: false, reason: (msg || "sb-show-errordisplay sem mensagem").slice(0, 300) };
+			rendered = await page.evaluate(() => {
+				if (document.body.classList.contains("sb-show-errordisplay")) {
+					const msg = document.querySelector("#error-message")?.textContent?.trim();
+					return { ok: false, reason: (msg || "sb-show-errordisplay sem mensagem").slice(0, 300) };
+				}
+				const root = document.querySelector("#storybook-root");
+				const filled = root !== null && root.innerHTML.trim().length > 0;
+				return { ok: filled, reason: filled ? "" : "#storybook-root vazio" };
+			});
+			break;
+		} catch (e) {
+			lastError = e;
+			if (!/Execution context was destroyed|navigation/i.test(e.message)) throw e;
+			await page.waitForLoadState("domcontentloaded");
 		}
-		const root = document.querySelector("#storybook-root");
-		const filled = root !== null && root.innerHTML.trim().length > 0;
-		return { ok: filled, reason: filled ? "" : "#storybook-root vazio" };
-	});
+	}
+	if (!rendered) throw lastError;
 
-	return { rendered, errors };
+	// O reload republica os mesmos console.error; sem dedupe a contagem infla.
+	return { rendered, errors: [...new Set(errors)] };
 }
 
 async function main() {

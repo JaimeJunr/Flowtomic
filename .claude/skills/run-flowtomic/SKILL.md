@@ -46,10 +46,10 @@ cd packages/logic && bun run build
 cd packages/ui && bun run build
 ```
 
-⚠️ `packages/ui` **falha hoje na `main`**: `tsc --build` para com 25 erros
-(`stat-card`, `autocomplete`, `stats-grid`) e sai com exit 1. Isso é pré-existente,
-não é a sua mudança, e **não impede o Storybook nem os testes**. Confirme com
-`grep -c 'error TS'` antes de atribuir a si mesmo qualquer erro novo.
+Ambos saem com exit 0 (remedido em 2026-09-20, após o merge do
+`feat/componentes-data-hora-filtros`). Até pouco antes o `ui` parava com 25 erros
+de `tsc --build`; se voltar a falhar, cheque `grep -c 'error TS'` antes de atribuir
+os erros à sua mudança.
 
 ## Run — caminho do agente
 
@@ -145,8 +145,8 @@ o modo run:
 cd packages/ui && bunx vitest run --reporter=dot
 ```
 
-Verde hoje: 34 arquivos, 282 testes, ~11s. Os `Warning: Missing Description ...
-for {DialogContent}` no stderr são ruído conhecido, não falha.
+Verde em 2026-09-20: 39 arquivos, 353 testes, ~18s. Os `Warning: Missing
+Description ... for {DialogContent}` no stderr são ruído conhecido, não falha.
 
 ## Registry e CLI
 
@@ -160,7 +160,7 @@ bun run registry/server.ts
 cd cli && bun run build && node dist/cli.js list
 ```
 
-O `list` sai com exit 0 e imprime 116 componentes.
+O `list` sai com exit 0 e imprime 122 componentes.
 
 ## Gotchas
 
@@ -175,10 +175,18 @@ O `list` sai com exit 0 e imprime 116 componentes.
   `lib-W6JDP72S`) e o processo em memória ainda procura o antigo. Não reinstale nada
   — basta reiniciar o Storybook.
 - **`registry:build` gera 0 componentes e isso não é culpa sua.** O
-  `loadComponentMap()` em `registry/build-registry.ts:71` usa regex non-greedy
-  (`[\s\S]*?`), que para no primeiro `}` e captura **256 dos 30.059 caracteres** de
+  `loadComponentMap()` em `registry/build-registry.ts:72` usa regex non-greedy
+  (`[\s\S]*?`), que para no primeiro `}` e captura **256 dos 31.634 caracteres** de
   `cli/src/utils/component-map.ts`. Só os 3 blocks saem, e eles vêm de um JSON
   estático. O CLI não sofre disso — ele importa o mapa de verdade.
+- **O Storybook 10.2 navega o iframe duas vezes na mesma URL.** É um auto-reload
+  depois do boot, e a segunda navegação destrói o contexto de execução no meio da
+  checagem: o Playwright estoura `Execution context was destroyed, most likely
+  because of a navigation`. O driver refaz a checagem (no máximo 3 vezes) só nesse
+  erro, e deduplica os `console.error`, que o reload republica.
+- **Logo após mexer em dependência, a primeira carga pode dar 504.** O erro é
+  `Failed to load resource: 504 (Outdated Optimize Dep)`, do pre-bundle do Vite se
+  reorganizando. Some sozinho na segunda passada — reveja antes de abrir bug.
 - **O Storybook não lança exceção quando a story quebra.** Ele troca a classe do
   `<body>` para `sb-show-errordisplay`. O `#error-message` **existe sempre**, vazio
   no caminho feliz — usar a presença dele como sinal dá falso positivo em toda
@@ -207,4 +215,5 @@ O `list` sai com exit 0 e imprime 116 componentes.
 | `waitForFunction: Timeout 30000ms exceeded` | o Storybook está no ar mas serve erro, ou o timeout foi ignorado (ver Gotchas) | `curl -sf localhost:6006/index.json` para separar os dois casos |
 | Driver com `ok:false` e `reason: "Couldn't find story matching ..."` | storyId errado | `verify.mjs list --grep <termo>` |
 | `vitest` não termina | script do pacote é watch | `bunx vitest run` |
-| `bun run build` do ui com exit 1 | 25 erros TS pré-existentes na `main` | não é sua mudança; o Storybook não depende do build |
+| `Execution context was destroyed ... navigation` | auto-reload do iframe no Storybook 10.2 | o driver já refaz a checagem; se persistir, veja Gotchas |
+| `504 (Outdated Optimize Dep)` numa story | pre-bundle do Vite após mudança de dependência | rodar de novo; some sozinho |
