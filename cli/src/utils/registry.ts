@@ -12,15 +12,28 @@ interface RegistryData {
 }
 
 /**
+ * O endpoint é remoto: proxy, página de erro em HTML ou deploy pela metade
+ * devolvem 200 com corpo que não é um registry. Sem esta checagem esse corpo
+ * seguia adiante tipado como `RegistryData` e quebrava longe daqui.
+ */
+function ehRegistryData(valor: unknown): valor is RegistryData {
+  return typeof valor === "object" && valor !== null && !Array.isArray(valor);
+}
+
+/** Assinatura mínima do `fetch` que este módulo usa; injetável para teste. */
+type Buscador = (url: string) => Promise<Response>;
+
+/**
  * Busca o registry completo online
  */
-export async function fetchRegistry(): Promise<RegistryData | null> {
+export async function fetchRegistry(buscar: Buscador = fetch): Promise<RegistryData | null> {
   try {
-    const response = await fetch(`${REGISTRY_URL}/all.json`);
+    const response = await buscar(`${REGISTRY_URL}/all.json`);
     if (!response.ok) {
       throw new Error(`Failed to fetch registry: ${response.statusText}`);
     }
-    return await response.json();
+    const dados: unknown = await response.json();
+    return ehRegistryData(dados) ? dados : null;
   } catch (error) {
     console.error("Erro ao buscar registry online:", error);
     return null;
