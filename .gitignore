@@ -8,6 +8,8 @@ dist/
 build/
 storybook-static/
 *.tsbuildinfo
+# gerado por `bun run registry:build`; as rotas em registry/api/ leem em runtime
+registry/registry.json
 
 # Environment
 .env
