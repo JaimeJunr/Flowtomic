@@ -1,0 +1,83 @@
+# O nome deste arquivo é parte do contrato: o npm casa o publish pelo NOME do
+# workflow (publish.yml), configurado em Trusted Publisher de cada pacote.
+# Renomear este arquivo quebra a publicação até reconfigurar no npmjs.com.
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Pacote a publicar
+        required: true
+        type: choice
+        default: both
+        options:
+          - logic
+          - ui
+          - both
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      # O npm troca este token OIDC por credencial de publicação de vida curta.
+      # Sem `id-token: write` o trusted publishing falha com ENEEDAUTH.
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      # Trusted publishing exige npm >= 11.5.1 e Node >= 22.14.0. Falha cedo e
+      # com mensagem clara em vez de estourar como erro de autenticação no fim.
+      - name: Confere versões mínimas
+        run: |
+          node -e '
+            const [npmMajor, npmMinor, npmPatch] = process.argv[1].split(".").map(Number);
+            const ok = npmMajor > 11 || (npmMajor === 11 && (npmMinor > 5 || (npmMinor === 5 && npmPatch >= 1)));
+            if (!ok) {
+              console.error(`npm ${process.argv[1]} é antigo demais: trusted publishing exige >= 11.5.1`);
+              process.exit(1);
+            }
+            console.log(`npm ${process.argv[1]} · node ${process.version} — ok`);
+          ' "$(npm --version)"
+
+      - run: bun install --frozen-lockfile
+
+      # O @flowtomic/ui consome os tipos do logic via project reference do
+      # TypeScript, então o logic é buildado mesmo quando só o ui vai subir.
+      - name: Build do @flowtomic/logic
+        run: bun run build
+        working-directory: packages/logic
+
+      - name: Testes do @flowtomic/logic
+        run: bun run test:run
+        working-directory: packages/logic
+
+      - name: Publica @flowtomic/logic
+        if: inputs.package == 'logic' || inputs.package == 'both'
+        run: npm publish --access public
+        working-directory: packages/logic
+
+      - name: Build do @flowtomic/ui
+        if: inputs.package == 'ui' || inputs.package == 'both'
+        run: bun run build
+        working-directory: packages/ui
+
+      - name: Publica @flowtomic/ui
+        if: inputs.package == 'ui' || inputs.package == 'both'
+        run: npm publish --access public
+        working-directory: packages/ui
