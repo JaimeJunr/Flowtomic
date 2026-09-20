@@ -1,5 +1,6 @@
 "use client";
 
+import type { ResizableSidebarConfig } from "@flowtomic/logic";
 import { useResizable } from "@flowtomic/logic";
 import type React from "react";
 import {
@@ -9,23 +10,19 @@ import {
 } from "@/components/atoms/layout/resizable";
 import { cn } from "@/lib/utils";
 
-export interface ResizableLayoutProps {
+export type { ResizableSidebarConfig } from "@flowtomic/logic";
+
+export interface ResizableLayoutProps
+  extends ResizableSidebarConfig,
+    Pick<React.HTMLAttributes<HTMLDivElement>, "className"> {
+  children: React.ReactNode;
+  persistKey?: string;
+  setSidebarOpen: (open: boolean) => void;
   sidebar: React.ReactNode;
   sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
-  children: React.ReactNode;
   side?: "left" | "right";
-  persistKey?: string;
-  defaultSidebarPct?: number;
-  minPx?: number;
-  maxPct?: number;
-  maxPxCap?: number;
-  resizerThicknessPx?: number;
-  mobileDrawer?: boolean;
   drawerWidthVw?: number;
-  className?: string;
-  tinySizePx?: number;
-  snapThreshold?: number;
+  resizerThicknessPx?: number;
 }
 
 /**

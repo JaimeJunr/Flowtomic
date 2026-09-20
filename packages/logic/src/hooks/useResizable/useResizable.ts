@@ -29,6 +29,21 @@ export interface UseResizableOptions {
   snapThreshold?: number;
 }
 
+/**
+ * Configuração do sidebar para uso em constante (ex.: SIDEBAR_CONFIG).
+ * Pode ser passada em spread no ResizableLayout ou em useResizable.
+ */
+export type ResizableSidebarConfig = Pick<
+  UseResizableOptions,
+  | "defaultSidebarPct"
+  | "maxPct"
+  | "maxPxCap"
+  | "minPx"
+  | "mobileDrawer"
+  | "snapThreshold"
+  | "tinySizePx"
+>;
+
 export interface UseResizableReturn {
   handleDoubleClick: () => void;
   shouldUseMobileDrawer: boolean;

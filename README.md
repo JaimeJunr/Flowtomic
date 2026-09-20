@@ -812,8 +812,8 @@ function CustomStatCard() {
 ### Documentação de Componentes
 
 - [Componentes Disponíveis](./docs/componentes/README.md) - Lista completa de componentes
-- [Atoms](./docs/componentes/atoms.md) - Componentes básicos (54 componentes)
-- [Molecules](./docs/componentes/molecules.md) - Componentes compostos (36 componentes)
+- [Atoms](./docs/componentes/atoms.md) - Componentes básicos (63 componentes)
+- [Molecules](./docs/componentes/molecules.md) - Componentes compostos (47 componentes)
 - [Organisms](./docs/componentes/organisms.md) - Componentes complexos (23 componentes)
 - [Hooks](./docs/componentes/hooks.md) - Hooks headless (11 hooks)
 - [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (3 blocks)

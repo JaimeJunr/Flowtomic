@@ -4,8 +4,8 @@
 
 ## 📚 Índice
 
-- [Atoms](atoms.md) - Componentes básicos (54 componentes)
-- [Molecules](molecules.md) - Componentes compostos (36 componentes)
+- [Atoms](atoms.md) - Componentes básicos (63 componentes)
+- [Molecules](molecules.md) - Componentes compostos (47 componentes)
 - [Organisms](organisms.md) - Componentes complexos (23 componentes)
 - [Blocks](blocks.md) - Blocks pré-construídos (3 blocks)
 - [Hooks](hooks.md) - Hooks headless (12 hooks)

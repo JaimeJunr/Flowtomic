@@ -7,6 +7,7 @@ Componentes UI reutilizáveis baseados em Radix UI e Tailwind CSS.
 - [Instalação](#instalação)
 - [Estilos](#estilos)
   - [Estilo Padrão](#estilo-padrão)
+  - [Uso do package publicado com Tailwind v4](#uso-do-package-publicado-com-tailwind-v4)
   - [Customização de Estilos](#customização-de-estilos)
   - [Variáveis CSS Disponíveis](#variáveis-css-disponíveis)
 - [Uso](#uso)
@@ -72,6 +73,44 @@ Para usar os componentes com o estilo padrão, importe os arquivos CSS na ordem 
 ```
 
 **Nota**: Se você estiver usando o CLI do Flowtomic (`bunx flowtomic init`), os estilos serão configurados automaticamente.
+
+### Uso do package publicado com Tailwind v4
+
+Quando você consome o `@flowtomic/ui` **via npm** (em vez do CLI que copia arquivos para o projeto), o Tailwind v4 **não escaneia `node_modules`** por padrão. As classes utilitárias dos componentes (por exemplo `px-2.5 py-0.5` do Badge) ficam no código do pacote; se o Tailwind do seu app não escanear esse código, ele não gera o CSS dessas classes e os componentes aparecem **sem padding, bordas ou outros estilos** corretos.
+
+**Solução**: use a diretiva `@source` no seu CSS principal (no mesmo arquivo onde está o `@import "tailwindcss"` ou onde importa os estilos do Flowtomic) para registrar o pacote como fonte de classes:
+
+```css
+@import "tailwindcss";
+
+/* Incluir classes do @flowtomic/ui — node_modules não é escaneado por padrão no Tailwind v4 */
+@source "../../node_modules/@flowtomic/ui";
+
+/* Em seguida, seus outros imports (estilos do Flowtomic, globals do projeto, etc.) */
+```
+
+O caminho em `@source` é **relativo ao arquivo CSS** onde a diretiva está. Exemplos:
+
+- Se o arquivo é `src/styles/globals.css`, use `../../node_modules/@flowtomic/ui`.
+- Se o arquivo é `src/index.css` na raiz de `src/`, use `../node_modules/@flowtomic/ui`.
+
+Após adicionar o `@source`, faça um novo build (ou reinicie o dev server) para o Tailwind gerar as utilitárias usadas pelos componentes do Flowtomic.
+
+#### Documentação oficial (Tailwind CSS)
+
+Trechos relevantes da documentação do Tailwind CSS v4:
+
+**Quais arquivos são escaneados** ([Detecting classes in source files](https://tailwindcss.com/docs/detecting-classes-in-source-files)):
+
+> Tailwind will scan every file in your project for class names, **except in the following cases**: Files that are in your `.gitignore` file, **Files in the `node_modules` directory**, Binary files like images, videos, or zip files, CSS files, Common package manager lock files. **If you need to scan any files that Tailwind is ignoring by default, you can explicitly register those sources.**
+
+**Registrando fontes adicionais** ([Detecting classes in source files](https://tailwindcss.com/docs/detecting-classes-in-source-files)):
+
+> Use `@source` to **explicitly register source paths relative to the stylesheet**. This is especially useful when you need to **scan an external library that is built with Tailwind**, since dependencies are usually listed in your `.gitignore` file and **ignored by Tailwind by default**.
+
+**Diretiva @source** ([Functions and directives](https://tailwindcss.com/docs/functions-and-directives)):
+
+> The `@source` directive allows you to **explicitly specify source files that aren't picked up by Tailwind's automatic content detection**. This is useful when you have utility classes in files that Tailwind doesn't automatically scan, **ensuring those classes are included in your compiled output**.
 
 ### Customização de Estilos
 
@@ -1566,6 +1605,8 @@ danger?: boolean;
 ```
 
 ## Troubleshooting
+
+- **Badge ou outros componentes sem padding/estilos corretos**: isso ocorre quando você usa o package `@flowtomic/ui` via npm e o Tailwind v4 do seu app não escaneia `node_modules`. O Tailwind não gera as classes utilitárias dos componentes. Adicione `@source` no seu CSS principal apontando para o pacote. Veja [Uso do package publicado com Tailwind v4](#uso-do-package-publicado-com-tailwind-v4).
 
 - Invalid hook call: normalmente é causado por múltiplas cópias do React no app consumidor. Verifique:
   - Tenha apenas uma versão de `react` e `react-dom` instalada:

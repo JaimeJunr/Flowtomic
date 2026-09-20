@@ -42,7 +42,23 @@ Dock de menu para navegação.
 
 ### `theme-toggle-button`
 
-Botão para alternar entre temas claro/escuro.
+Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
+
+**Uso de Estado Externo**:
+O componente visual do Flowtomic UI não possui estado interno de controle do tema da aplicação, necessitando que você implemente a integração do estado (`theme`) bem como as chamadas pass-through de atualização (`onThemeChange`).
+
+Exemplo prático de implementação com um hook externo `useThemeToggle`:
+
+```tsx
+import { ThemeToggleButton } from "@flowtomic/ui";
+import { useThemeToggle } from "@/hooks/useThemeToggle"; // Seu hook de controle local de tema
+
+export function ThemeButton() {
+  const { theme, setTheme } = useThemeToggle();
+
+  return <ThemeToggleButton theme={theme} onThemeChange={setTheme} />;
+}
+```
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
@@ -70,11 +86,28 @@ Grupo de input com addons e botões integrados.
 
 **Dependências**: `clsx`, `tailwind-merge`
 
+### `numeric-filter-field`
+
+Campo de filtro numérico que combina um operador (`eq`, `gt`, `lt`, `gte`, `lte`) com um valor formatado. Suporta número puro, moeda (BRL) e percentual, com separadores pt-BR.
+
+**Dependências**: `react-number-format`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/forms/numeric-filter-field`
+
+### `inline-datetime-editor`
+
+Editor inline de data e hora. Exibe o valor formatado e, ao ativar a edição, alterna para `date-input` + `time-input` com botões Salvar/Cancelar. O estado de edição é controlado pelo parent via `isEditing`/`onStartEdit`; o valor trafega em ISO-8601.
+
+**Dependências**: `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/forms/inline-datetime-editor`
+
 ### `autocomplete`
 
 Campo de autocomplete com busca e filtragem avançada. Usa hook headless `useAutocomplete` do `@flowtomic/logic`. Suporta API antiga (options) e composição (Compound Components), filtragem customizada, valores personalizados, loading assíncrono e acessibilidade completa.
 
 **Componentes exportados**:
+
 - `Autocomplete` - Componente principal
 - `Autocomplete.List` - Container da lista
 - `Autocomplete.Item` - Item individual do autocomplete
@@ -82,7 +115,8 @@ Campo de autocomplete com busca e filtragem avançada. Usa hook headless `useAut
 - `Autocomplete.Empty` - Estado vazio customizável
 - `Autocomplete.Loading` - Estado de loading customizável
 
-**Dependências**: 
+**Dependências**:
+
 - `@radix-ui/react-popover`
 - `flowtomic/logic` (hook `useAutocomplete`)
 - `lucide-react`, `clsx`, `tailwind-merge`
@@ -110,6 +144,7 @@ Componente genérico de mensagem de chat com suporte a markdown, tipos de mensag
 **Localização**: `packages/ui/src/components/molecules/data-display/chat-message`
 
 **Características**:
+
 - Suporte a markdown via ReactMarkdown
 - Tipos de mensagem customizáveis (STORY, ACTION, SAY, etc.)
 - Badges e cores configuráveis
@@ -126,6 +161,7 @@ Componente de input para chat com suporte a tipos de mensagem, modos customizáv
 **Localização**: `packages/ui/src/components/molecules/forms/chat-input`
 
 **Características**:
+
 - Textarea com auto-resize
 - Contador de caracteres
 - Seleção de tipo de mensagem (opcional)
@@ -144,6 +180,7 @@ Modal genérico para editar mensagens de chat com validação de alterações n�
 **Localização**: `packages/ui/src/components/molecules/feedback/edit-chat-message-modal`
 
 **Características**:
+
 - Modal para editar mensagens
 - Exibição de metadados da mensagem (sender, tipo, timestamp)
 - Textarea para edição
@@ -214,6 +251,22 @@ Contador com botões de incremento/decremento.
 **Localização**: `packages/ui/src/components/molecules/animation/button-counter`
 
 ### Data Display
+
+#### `calendar-popover`
+
+Seletor de data única em popover, com botão gatilho formatado em pt-BR. Permite desabilitar datas por função ou por conjunto (`disabledDates`), além de estados de carregamento. Por padrão bloqueia datas futuras e fins de semana (`disableFuture` e `disableWeekends`).
+
+**Dependências**: `date-fns`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/calendar-popover`
+
+#### `calendar-range`
+
+Seletor de intervalo de datas em popover, com atalhos opcionais de intervalo rápido (`showQuickRanges`) e tooltip para datas desabilitadas. Aceita `Matcher` do `react-day-picker` para regras de bloqueio.
+
+**Dependências**: `date-fns`, `react-day-picker`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/calendar-range`
 
 #### `bar-chart`
 
