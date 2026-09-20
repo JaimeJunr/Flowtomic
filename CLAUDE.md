@@ -439,14 +439,20 @@ Stack principal:
 
 ## Testes
 
-Vitest, configurado **por pacote**. Não há CI rodando teste hoje — o único workflow é o de
-publicação, e ele roda só os testes do `logic`.
+Vitest, configurado **por pacote**. O CI (`.github/workflows/ci.yml`, desde 20/09/2026) roda em
+todo PR e push na `main`: Biome no repo inteiro, build + teste do `logic`, type-check + teste com
+cobertura do `ui`, teste do `registry` e do `cli`, e o `registry:build`. Serial, um pacote por vez.
+
+⚠️ **Cobertura global do `ui` medida em 20/09/2026: 20,9% de linhas.** O CI gera o relatório mas
+**não tem threshold** — pôr 75% agora nasceria vermelho. A meta é subir por área (os 27 atoms sem
+teste primeiro) e só então travar o número no `vitest.config.ts`.
 
 | pacote | arquivos de teste | script | ambiente |
 |---|---|---|---|
-| `packages/ui` | 34 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
-| `packages/logic` | 1 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
-| `cli` | 0 | — | — |
+| `packages/ui` | 41 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
+| `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
+| `registry` | 1 | `test` | guarda o parser do component map |
+| `cli` | 2 | `test` | guarda os `path` do component map contra os arquivos em disco |
 
 ⚠️ **`bun run test` no `packages/ui` entra em modo watch e não devolve o terminal.** O pacote
 não tem `test:run` (o `logic` tem). Para rodar uma vez:
@@ -533,5 +539,6 @@ Não promova nenhuma destas a fato no corpo sem verificar antes.
   transformar num wrapper que só dispara o workflow.
 - **O `bun@1.3.0` do `packageManager` está defasado?** A máquina de desenvolvimento roda
   1.3.14. Os dois aceitam o mesmo lock, mas a divergência existe.
-- **Falta CI de teste.** Nenhum workflow roda os 34 testes do `ui`. Resolve: decidir se vale um
-  workflow de `pull_request`.
+- **Quando travar o threshold de cobertura do `ui`?** O CI mede (20,9% em 20/09/2026) mas não
+  bloqueia. Resolve: subir cobertura por área e fixar o número no `vitest.config.ts` quando
+  passar de 75%.
