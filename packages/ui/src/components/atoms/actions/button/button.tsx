@@ -111,6 +111,9 @@ const buttonVariants = cva(
         info: "bg-accent text-accent-foreground shadow-sm hover:bg-accent-hover",
         natural:
           "bg-background text-foreground border border-input shadow-sm hover:bg-accent hover:text-accent-foreground",
+        /** Toolbar-style: subtle bg for use in toolbars (e.g. Koda sidebar). */
+        toolbar:
+          "bg-black/10 dark:bg-white/10 rounded-sm overflow-hidden whitespace-nowrap hover:bg-black/20 dark:hover:bg-white/20",
       },
       size: {
         default: "h-9 px-4 py-2",
