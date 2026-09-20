@@ -1,10 +1,3 @@
-/**
- * Table Component - Flowtomic UI
- *
- * Componente Table próprio do design-system
- * Implementação completa sem dependências externas
- */
-
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

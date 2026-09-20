@@ -1,13 +1,3 @@
-/**
- * EncryptedText Component - Flowtomic UI
- *
- * Componente de texto que revela o texto gradualmente com efeito de texto criptografado/gibberish.
- * Baseado em Aceternity UI - https://ui.aceternity.com/components/encrypted-text
- * Usa motion/react para detecção de viewport e animações suaves
- */
-
-"use client";
-
 import { motion, useInView } from "motion/react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";

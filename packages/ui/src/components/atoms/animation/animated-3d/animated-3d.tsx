@@ -1,12 +1,3 @@
-/**
- * Animated3D Component - Flowtomic UI
- *
- * Componente de animação 3D reutilizável com perspectiva e efeitos de profundidade
- * Usa Framer Motion para animações suaves com física de spring
- */
-
-"use client";
-
 import { motion, type Transition } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";

@@ -1,16 +1,3 @@
-/**
- * AlertDialog Component - Flowtomic UI
- *
- * Componente AlertDialog próprio do design-system baseado em Radix UI
- * Implementação direta sem dependência de componentes externos
- * Usado para confirmações e alertas críticos que requerem ação do usuário
- *
- * Melhorias:
- * - Animações 3D com perspectiva quando animation="3d"
- * - Backdrop blur opcional
- * - Mantém compatibilidade total com código existente
- */
-
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
