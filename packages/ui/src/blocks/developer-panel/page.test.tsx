@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 import DeveloperPanel from "./page";
 
 const health = { status: "UP", timestamp: "2026-09-20T17:52:22Z", service: "api-service" };
@@ -81,5 +82,54 @@ describe("DeveloperPanel", () => {
       render(<DeveloperPanel error="Falha ao buscar o sistema" />);
       expect(screen.getByText("Falha ao buscar o sistema")).toBeInTheDocument();
     });
+  });
+});
+
+describe("DeveloperPanel — o que a tela faz", () => {
+  const apiBaseUrl = "http://localhost:8080/api";
+
+  it("deriva as URLs dos atalhos a partir da base da API", () => {
+    render(<DeveloperPanel apiBaseUrl={apiBaseUrl} />);
+    expect(screen.getByRole("link", { name: /swagger ui/i })).toHaveAttribute(
+      "href",
+      "http://localhost:8080/swagger-ui.html"
+    );
+    expect(screen.getByRole("link", { name: /openapi/i })).toHaveAttribute(
+      "href",
+      "http://localhost:8080/v3/api-docs"
+    );
+    expect(screen.getByRole("link", { name: /health check/i })).toHaveAttribute(
+      "href",
+      "http://localhost:8080/api/health"
+    );
+  });
+
+  it("com callback customizado, o atalho chama o callback em vez de navegar", async () => {
+    const onOpenSwagger = vi.fn();
+    render(<DeveloperPanel apiBaseUrl={apiBaseUrl} onOpenSwagger={onOpenSwagger} />);
+    const link = screen.getByRole("link", { name: /swagger ui/i });
+    await userEvent.click(link);
+    expect(onOpenSwagger).toHaveBeenCalledOnce();
+    // o href continua lá — a semântica de link (abrir em nova aba, copiar endereço) não se perde
+    expect(link).toHaveAttribute("href", "http://localhost:8080/swagger-ui.html");
+  });
+
+  it("copia o token para a área de transferência e confirma no botão", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+    render(<DeveloperPanel user={{ username: "dev.user", token: "eyJhbGci.token" }} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /copiar token/i }));
+
+    expect(writeText).toHaveBeenCalledWith("eyJhbGci.token");
+    // o botão troca de ícone (Copy → Check) mas mantém o nome acessível
+    expect(screen.getByRole("button", { name: /copiar token/i })).toBeInTheDocument();
+  });
+
+  it("a aba Editor de scripts abre o editor", async () => {
+    render(<DeveloperPanel scriptEditorProps={{ defaultScript: "1 + 1" }} />);
+    await userEvent.click(screen.getByRole("tab", { name: /editor de scripts/i }));
+    expect(await screen.findByText("script.groovy")).toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toHaveValue("1 + 1");
   });
 });
