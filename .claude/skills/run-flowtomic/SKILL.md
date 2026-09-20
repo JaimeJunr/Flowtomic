@@ -152,7 +152,16 @@ component map:
 cd registry && bun run test
 ```
 
-Verde em 2026-09-20: 39 arquivos e 353 testes no `ui` (~18s); 4 no `registry`.
+O `cli` também: a suíte dele guarda os `path` do component map contra os
+arquivos em disco, que é o que impede um componente mudar de pasta e o
+`flowtomic add` passar a copiar nada em silêncio.
+
+```bash
+cd cli && bun run test
+```
+
+Verde em 2026-09-20: 39 arquivos e 353 testes no `ui` (~18s); 4 no `registry`;
+119 no `cli`.
 Os `Warning: Missing Description ... for {DialogContent}` no stderr são ruído
 conhecido, não falha.
 
@@ -204,12 +213,6 @@ hooks, mais os 3 blocks.
 - **Logo após mexer em dependência, a primeira carga pode dar 504.** O erro é
   `Failed to load resource: 504 (Outdated Optimize Dep)`, do pre-bundle do Vite se
   reorganizando. Some sozinho na segunda passada — reveja antes de abrir bug.
-- **39 dos 119 componentes do registry saem com `content` vazio.** O `path` em
-  `cli/src/utils/component-map.ts` está desatualizado para eles: diz
-  `atoms/button`, mas o arquivo vive em `atoms/actions/button` desde a
-  reorganização por subcategoria. O `componentToRegistryItem` não acha o arquivo,
-  engole o erro no `catch` e emite `content: ""` — o item aparece na listagem e
-  instalaria vazio.
 - **O Storybook não lança exceção quando a story quebra.** Ele troca a classe do
   `<body>` para `sb-show-errordisplay`. O `#error-message` **existe sempre**, vazio
   no caminho feliz — usar a presença dele como sinal dá falso positivo em toda
