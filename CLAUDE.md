@@ -467,6 +467,16 @@ cd packages/ui && bunx vitest run
 - **PRs:** `gh pr create --base main --repo JaimeJunr/Flowtomic`.
 - **Recursos são escassos na máquina de desenvolvimento:** build e teste sempre por pacote e
   em série. Nunca `turbo run build` sem `--filter`, nunca vários comandos pesados em paralelo.
+- **Design de tela: identidade decidida antes do código.** Redesign de block/organism passa
+  por um canvas `/design` que o dono revisa por comentário, depois um elemento piloto, depois o
+  resto. Referência aprovada em 20/09/2026: o `developer-panel`
+  (https://claude.ai/artifact/ULAwTHrbLJo31PdrSowDhw). Tells que contam como "cara de IA" aqui
+  e não passam: subtítulo que repete o título, tudo em cards idênticos, emoji como ícone, copy
+  de template alheio (nomes fictícios, "Download our Mobile App"), eyebrow em CAPS espaçado,
+  UI dividida pelo mecanismo do sistema (abas Terminal/Preview) e não pelo trabalho da pessoa,
+  dois botões competindo o tempo todo. O que substitui: uma pergunta por tela respondida de
+  longe, `<dl>` denso em vez de card, JetBrains Mono nos valores (já está no `theme.css`),
+  um botão sólido por tela, estado vazio como instrução com endereço concreto.
 
 ## Armadilhas
 
@@ -491,6 +501,11 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **`turbo run type-check` no `ui` depende do build do `logic`** (`dependsOn: ["^build"]`).
   Rodar `bun run type-check` direto dentro de `packages/ui`, fora do turbo, falha se o `dist`
   do `logic` não existir.
+- ⚠️ **Importar do barrel `@/components/organisms` quebra o Vitest** com `Unknown file
+  extension ".css"`: o barrel puxa `message.tsx`, que importa `katex.min.css`. Em teste e em
+  block, importe o organism pelo caminho direto (`@/components/organisms/script-editor`).
+- ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
+  `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 
 ## Checklist ao abrir PR
 
