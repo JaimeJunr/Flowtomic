@@ -7,7 +7,9 @@
           {
             "type": "command",
             "command": "bash",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/flowtomic-git-sync.sh"],
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/flowtomic-git-sync.sh"
+            ],
             "timeout": 15
           }
         ]
@@ -19,13 +21,18 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(git *)",
             "command": "bash",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/flowtomic-pr-reminder.sh"],
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/flowtomic-pr-reminder.sh"
+            ],
+            "if": "Bash(git *)",
             "timeout": 5
           }
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
   }
 }
