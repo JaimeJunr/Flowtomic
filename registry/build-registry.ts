@@ -10,18 +10,11 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { COMPONENT_MAP, type ComponentInfo, HOOK_MAP } from "../cli/src/utils/component-map";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = join(__dirname, "..");
-
-interface ComponentInfo {
-  name: string;
-  type: "atom" | "molecule" | "organism";
-  path: string;
-  files: string[];
-  dependencies?: string[];
-}
 
 interface BlockFile {
   path: string;
@@ -58,118 +51,24 @@ interface RegistryItem {
 /**
  * Carrega o component map do CLI
  */
-function loadComponentMap(): { components: ComponentInfo[]; hooks: ComponentInfo[] } {
-  const componentMapPath = join(rootDir, "cli/src/utils/component-map.ts");
-  if (!existsSync(componentMapPath)) {
-    return { components: [], hooks: [] };
+export function loadComponentMap(): { components: ComponentInfo[]; hooks: ComponentInfo[] } {
+  const components: ComponentInfo[] = [];
+  const hooks: ComponentInfo[] = [];
+
+  // O mapa é importado, não extraído do texto do arquivo: a versão anterior lia
+  // `component-map.ts` como string e o regex não-guloso parava no primeiro `}`,
+  // devolvendo 0 componentes em silêncio.
+  for (const component of Object.values(COMPONENT_MAP)) {
+    if (component.type === "atom" && component.path.includes("hooks")) {
+      hooks.push(component);
+    } else {
+      components.push(component);
+    }
   }
 
-  try {
-    const content = readFileSync(componentMapPath, "utf-8");
+  hooks.push(...Object.values(HOOK_MAP));
 
-    // Extrair COMPONENT_MAP usando regex
-    const componentMapMatch = content.match(
-      /export const COMPONENT_MAP: Record<string, ComponentInfo> = ({[\s\S]*?})/m
-    );
-    const hookMapMatch = content.match(
-      /export const HOOK_MAP: Record<string, ComponentInfo> = ({[\s\S]*?})/m
-    );
-
-    const components: ComponentInfo[] = [];
-    const hooks: ComponentInfo[] = [];
-
-    if (componentMapMatch) {
-      // Parsear o objeto (simplificado - em produção usar um parser mais robusto)
-      const mapContent = componentMapMatch[1];
-      // Extrair cada entrada do objeto
-      const entries = mapContent.match(/'([^']+)':\s*{[\s\S]*?}/g) || [];
-
-      for (const entry of entries) {
-        const nameMatch = entry.match(/'([^']+)':/);
-        if (!nameMatch) continue;
-
-        const name = nameMatch[1];
-        const typeMatch = entry.match(/type:\s*'([^']+)'/);
-        const pathMatch = entry.match(/path:\s*'([^']+)'/);
-        const filesMatch = entry.match(/files:\s*\[([^\]]+)\]/);
-        const depsMatch = entry.match(/dependencies:\s*\[([^\]]+)\]/);
-
-        if (name && typeMatch && pathMatch && filesMatch) {
-          const type = typeMatch[1] as "atom" | "molecule" | "organism";
-          const path = pathMatch[1];
-          const files = filesMatch[1]
-            .split(",")
-            .map((f) => f.trim().replace(/['"]/g, ""))
-            .filter(Boolean);
-          const dependencies = depsMatch
-            ? depsMatch[1]
-                .split(",")
-                .map((d) => d.trim().replace(/['"]/g, ""))
-                .filter(Boolean)
-            : undefined;
-
-          const component: ComponentInfo = {
-            name,
-            type,
-            path,
-            files,
-            dependencies,
-          };
-
-          if (type === "atom" && path.includes("hooks")) {
-            hooks.push(component);
-          } else {
-            components.push(component);
-          }
-        }
-      }
-    }
-
-    if (hookMapMatch) {
-      // Similar para hooks
-      const mapContent = hookMapMatch[1];
-      const entries = mapContent.match(/'([^']+)':\s*{[\s\S]*?}/g) || [];
-
-      for (const entry of entries) {
-        const nameMatch = entry.match(/'([^']+)':/);
-        if (!nameMatch) continue;
-
-        const name = nameMatch[1];
-        const typeMatch = entry.match(/type:\s*'([^']+)'/);
-        const pathMatch = entry.match(/path:\s*'([^']+)'/);
-        const filesMatch = entry.match(/files:\s*\[([^\]]+)\]/);
-        const depsMatch = entry.match(/dependencies:\s*\[([^\]]+)\]/);
-
-        if (name && typeMatch && pathMatch && filesMatch) {
-          const type = typeMatch[1] as "atom" | "molecule" | "organism";
-          const path = pathMatch[1];
-          const files = filesMatch[1]
-            .split(",")
-            .map((f) => f.trim().replace(/['"]/g, ""))
-            .filter(Boolean);
-          const dependencies = depsMatch
-            ? depsMatch[1]
-                .split(",")
-                .map((d) => d.trim().replace(/['"]/g, ""))
-                .filter(Boolean)
-            : undefined;
-
-          hooks.push({
-            name,
-            type,
-            path,
-            files,
-            dependencies,
-          });
-        }
-      }
-    }
-
-    return { components, hooks };
-  } catch (error) {
-    console.error("Erro ao carregar component map:", error);
-    return { components: [], hooks: [] };
-  }
+  return { components, hooks };
 }
 
 /**
@@ -265,4 +164,8 @@ function main() {
   console.log(`   - ${registry.blocks.length} blocks`);
 }
 
-main();
+// Só executa quando rodado como script (`bun run build-registry.ts`); sob o
+// test runner o módulo é importado e não deve escrever registry.json.
+if (import.meta.main) {
+  main();
+}

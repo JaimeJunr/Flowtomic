@@ -4,15 +4,7 @@
     {
       "name": "storybook",
       "runtimeExecutable": "bunx",
-      "runtimeArgs": [
-        "storybook",
-        "dev",
-        "-p",
-        "6006",
-        "--config-dir",
-        ".storybook",
-        "--no-open"
-      ],
+      "runtimeArgs": ["storybook", "dev", "-p", "6006", "--config-dir", ".storybook", "--no-open"],
       "port": 6006
     },
     {
