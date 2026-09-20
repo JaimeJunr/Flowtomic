@@ -4,7 +4,7 @@
  * Subcomponente para modo composição
  */
 
-import type { AutocompleteOption } from "flowtomic/logic";
+import type { AutocompleteOption } from "@flowtomic/logic";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useAutocompleteContext } from "./autocomplete-context";

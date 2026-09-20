@@ -4,7 +4,7 @@
  * Fornece estado e helpers do hook useAutocomplete para subcomponentes
  */
 
-import type { UseAutocompleteReturn } from "flowtomic/logic";
+import type { UseAutocompleteReturn } from "@flowtomic/logic";
 import * as React from "react";
 
 export interface AutocompleteContextValue extends UseAutocompleteReturn {
