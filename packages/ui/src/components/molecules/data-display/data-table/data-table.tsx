@@ -6,6 +6,7 @@
  * com a estrutura visual do table.tsx base
  */
 
+import { useReactTableBack, useReactTableFront } from "@flowtomic/logic";
 import {
   type Cell,
   type ColumnDef,
@@ -16,7 +17,6 @@ import {
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useReactTableBack, useReactTableFront } from "@flowtomic/logic";
 import { ArrowDown, ChevronsUpDown, HelpCircle } from "lucide-react";
 import type { ComponentPropsWithRef, HTMLAttributes, ReactNode } from "react";
 import React, { createContext, useContext, useMemo } from "react";
