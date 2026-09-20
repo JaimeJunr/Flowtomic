@@ -1,6 +1,6 @@
+import { useReactTableFront } from "@flowtomic/logic";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ColumnDef } from "@tanstack/react-table";
-import { useReactTableFront } from "@flowtomic/logic";
 import { DataTablePagination } from "./data-table-pagination";
 
 type User = {
