@@ -174,7 +174,7 @@ Edite o arquivo `components.json` para ajustar caminhos e aliases:
 
 O Flowtomic possui um total de **125 componentes e hooks** disponíveis:
 
-### Atoms (54 componentes)
+### Atoms (63 componentes)
 
 Componentes básicos organizados por categoria:
 
@@ -190,7 +190,7 @@ Componentes básicos organizados por categoria:
 
 Para lista completa, consulte [docs/componentes/atoms.md](../componentes/atoms.md).
 
-### Molecules (36 componentes)
+### Molecules (47 componentes)
 
 Componentes compostos incluindo:
 

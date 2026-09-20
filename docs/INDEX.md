@@ -30,9 +30,9 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 ### 🧩 Componentes
 
-- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (54 atoms, 36 molecules, 23 organisms, 12 hooks, 3 blocks)
-- [Atoms](componentes/atoms.md) - Componentes básicos (54 componentes: button, input, card, etc.)
-- [Molecules](componentes/molecules.md) - Componentes compostos (36 componentes: button-group, data-table, etc.)
+- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (63 atoms, 47 molecules, 30 organisms, 14 hooks, 3 blocks)
+- [Atoms](componentes/atoms.md) - Componentes básicos (63 componentes: button, input, card, etc.)
+- [Molecules](componentes/molecules.md) - Componentes compostos (47 componentes: button-group, data-table, etc.)
 - [Organisms](componentes/organisms.md) - Componentes complexos (23 componentes: dashboard-layout, stats-grid, script-editor, etc.)
 - [Blocks](componentes/blocks.md) - Blocks pré-construídos (3 blocks: dashboard-01, flowtomic-dashboard, developer-panel)
 - [Hooks](componentes/hooks.md) - Hooks headless disponíveis (12 hooks)
@@ -157,6 +157,7 @@ docs/
 
 ### Problemas Comuns
 
+- **Componentes do `@flowtomic/ui` sem padding/estilos ao usar o package via npm**: O Tailwind v4 não escaneia `node_modules` por padrão. Adicione `@source` no CSS do seu app apontando para `@flowtomic/ui`. Ver [Package UI — Uso do package publicado com Tailwind v4](packages/ui.md#uso-do-package-publicado-com-tailwind-v4).
 - **Links quebrados**: Verifique se os arquivos referenciados existem
 - **Documentação desatualizada**: Consulte a seção de atualizações e verifique a data da última atualização
 - **Estrutura de diretórios incorreta**: Valide a estrutura de documentação conforme este índice

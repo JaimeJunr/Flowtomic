@@ -15,6 +15,36 @@ O script `scripts/publish.ts` automatiza todo o processo de publicação dos pac
 - ✅ **Interação interativa** para seleção de package e tipo de versão
 - ✅ **Suporte a argumentos** para uso não-interativo
 
+### 📝 CHANGELOG (obrigatório)
+
+**Antes de publicar**, é obrigatório atualizar o **CHANGELOG** do package que será publicado com as modificações da nova versão.
+
+- **Localização**: Cada package possui seu próprio CHANGELOG:
+  - `packages/ui/CHANGELOG` — `@flowtomic/ui`
+  - `packages/logic/CHANGELOG` — `@flowtomic/logic`
+  - `cli/CHANGELOG` — `flowtomic-cli`
+- **Quando**: Atualize o CHANGELOG **antes** de executar `bun run publish` (ou no mesmo commit que antecede a publicação).
+- **Conteúdo**: Registre as mudanças da nova versão (ex.: novos componentes, correções, breaking changes), seguindo o tipo de versão escolhido (patch/minor/major).
+- **Formato sugerido** (estilo [Keep a Changelog](https://keepachangelog.com/)):
+
+  ```markdown
+  # Changelog
+
+  ## [X.Y.Z] - YYYY-MM-DD
+
+  ### Added
+  - Novo componente X.
+
+  ### Changed
+  - Ajuste no comportamento de Y.
+
+  ### Fixed
+  - Correção em Z.
+
+  ### Breaking
+  - (apenas para major) Descrição da mudança incompatível.
+  ```
+
 ### 📋 Uso
 
 #### Modo Interativo (Recomendado)
@@ -42,8 +72,9 @@ O script irá:
      - `major` → `1.0.0` (mudanças incompatíveis)
 3. Executar testes
 4. Executar build
-5. Atualizar versão no package.json
-6. Publicar no NPM
+5. **Atualizar CHANGELOG** do package com as modificações da nova versão (feito manualmente antes/durante o processo)
+6. Atualizar versão no package.json
+7. Publicar no NPM
 
 **⚠️ IMPORTANTE**: No modo interativo, você **NÃO deve digitar um número de versão**. Use as setas do teclado para escolher entre `patch`, `minor` ou `major`. O script calcula automaticamente a nova versão.
 
@@ -106,12 +137,14 @@ O script executa automaticamente as seguintes etapas:
 1. **Validação**: Verifica se package e tipo de versão são válidos
 2. **Testes**: Executa `bun run test` em todos os packages
 3. **Build**: Executa `bun run build` em todos os packages
-4. **Atualização de Versão**: Atualiza o `package.json` do package selecionado
-5. **Publicação**: Publica no NPM usando `npm publish --access public`
+4. **CHANGELOG**: O responsável pela publicação deve ter **atualizado o CHANGELOG** do package com as modificações da nova versão (o script não altera o CHANGELOG)
+5. **Atualização de Versão**: Atualiza o `package.json` do package selecionado
+6. **Publicação**: Publica no NPM usando `npm publish --access public`
 
 ### ⚠️ Importante
 
 - O script **sempre executa testes e build** antes de publicar
+- **SEMPRE atualize o CHANGELOG** do package com as modificações da versão antes (ou no mesmo ciclo) da publicação
 - Se os testes ou build falharem, a publicação **não será executada**
 - A versão é atualizada **antes** da publicação
 - Se a publicação falhar, a versão já terá sido atualizada (você pode reverter manualmente se necessário)
@@ -181,14 +214,33 @@ bun run publish ui 0.1.16
      - Tentar publicar manualmente: `cd packages/ui && npm publish --access public`
      - Ou reverter a versão no `package.json` manualmente
 
+### ✅ Checklist antes de publicar
+
+Antes de executar `bun run publish`:
+
+1. [ ] Testes passando localmente (`bun run test`)
+2. [ ] Build passando localmente (`bun run build`)
+3. [ ] **CHANGELOG do package atualizado** com as modificações da nova versão (data e itens Added/Changed/Fixed/Breaking conforme aplicável)
+
 ### 📝 Exemplos Práticos
 
 #### Publicar Patch do UI
 
-```bash
-# Publicar correção de bug no @flowtomic/ui
-bun run publish ui patch
-```
+1. Atualize `packages/ui/CHANGELOG` com a nova versão, por exemplo:
+
+   ```markdown
+   ## [0.1.16] - 2025-03-01
+
+   ### Fixed
+   - Ajuste de estilo no componente X.
+   ```
+
+2. Execute a publicação:
+
+   ```bash
+   # Publicar correção de bug no @flowtomic/ui
+   bun run publish ui patch
+   ```
 
 #### Publicar Minor do Logic
 

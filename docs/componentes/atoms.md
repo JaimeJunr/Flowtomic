@@ -148,6 +148,22 @@ Toggle button para ações de alternância.
 
 **Localização**: `packages/ui/src/components/atoms/forms/toggle`
 
+#### `date-input`
+
+Entrada de data (`input type="date"`) com estilo do design system. Quando `disabled`, um overlay bloqueia a interação sem usar o atributo nativo, mantendo o ícone do calendário visível.
+
+**Dependências**: `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/date-input`
+
+#### `time-input`
+
+Entrada de hora (`input type="time"`) com estilo do design system. Segue a mesma estratégia de `date-input` para o estado desabilitado, preservando o ícone nativo do relógio.
+
+**Dependências**: `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/time-input`
+
 ### Data Display
 
 #### `calendar`
