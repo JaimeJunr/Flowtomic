@@ -1,44 +1,3 @@
-/**
- * # Popover Component
- *
- * O componente `Popover` é usado para exibir conteúdo flutuante que aparece
- * quando o usuário clica em um trigger. É baseado em Radix UI para garantir
- * acessibilidade completa.
- *
- * ## Características Principais
- *
- * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
- * - **Posicionamento**: Suporta alinhamento e offset customizáveis
- * - **Composição**: Popover + PopoverTrigger + PopoverContent para flexibilidade
- * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
- *
- * ## Uso Básico
- *
- * ```tsx
- * import { Popover, PopoverTrigger, PopoverContent } from "@flowtomic/ui/components/atoms/feedback/popover";
- *
- * function MyComponent() {
- *   return (
- *     <Popover>
- *       <PopoverTrigger>Open</PopoverTrigger>
- *       <PopoverContent>
- *         <p>Conteúdo do popover</p>
- *       </PopoverContent>
- *     </Popover>
- *   );
- * }
- * ```
- *
- * ## Acessibilidade
- *
- * - Suporta navegação por teclado (Tab, Escape)
- * - Segue padrões WAI-ARIA via Radix UI
- * - Suporta leitores de tela
- * - Foco gerenciado automaticamente
- *
- * @see [Radix UI Popover](https://www.radix-ui.com/primitives/docs/components/popover) para mais detalhes
- */
-
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
@@ -51,10 +10,7 @@ export interface PopoverProps extends React.ComponentProps<typeof PopoverPrimiti
 /**
  * Popover - Container principal do popover.
  *
- * Componente usado para exibir conteúdo flutuante quando o usuário clica em um trigger.
- *
- * @param {PopoverProps} props - Props do componente
- * @returns {JSX.Element} Componente Popover
+ * @see [Radix UI Popover](https://www.radix-ui.com/primitives/docs/components/popover) para mais detalhes
  */
 function Popover({ ...props }: PopoverProps) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
@@ -68,26 +24,13 @@ Popover.displayName = "Popover";
 export interface PopoverTriggerProps
   extends React.ComponentProps<typeof PopoverPrimitive.Trigger> {}
 
-/**
- * PopoverTrigger - Trigger do popover.
- *
- * Componente usado como trigger para abrir o popover.
- *
- * @param {PopoverTriggerProps} props - Props do componente
- * @returns {JSX.Element} Componente PopoverTrigger
- */
+/** PopoverTrigger - Trigger do popover. */
 function PopoverTrigger({ ...props }: PopoverTriggerProps) {
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
 }
 
 PopoverTrigger.displayName = "PopoverTrigger";
 
-/**
- * Props do componente PopoverContent.
- *
- * @property {'start' | 'center' | 'end'} [align='center'] - Alinhamento do popover
- * @property {number} [sideOffset=4] - Offset em pixels do lado do popover
- */
 export interface PopoverContentProps extends React.ComponentProps<typeof PopoverPrimitive.Content> {
   /** Alinhamento do popover */
   align?: "start" | "center" | "end";
@@ -95,14 +38,7 @@ export interface PopoverContentProps extends React.ComponentProps<typeof Popover
   sideOffset?: number;
 }
 
-/**
- * PopoverContent - Conteúdo do popover.
- *
- * Componente usado para exibir o conteúdo do popover.
- *
- * @param {PopoverContentProps} props - Props do componente
- * @returns {JSX.Element} Componente PopoverContent
- */
+/** PopoverContent - Conteúdo do popover. */
 function PopoverContent({
   className,
   align = "center",

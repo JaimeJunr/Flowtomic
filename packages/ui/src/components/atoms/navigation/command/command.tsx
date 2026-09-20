@@ -1,9 +1,3 @@
-/**
- * Command Component - Flowtomic UI
- *
- * Componente Command baseado em cmdk (Command Menu)
- */
-
 import { Command as CommandPrimitive } from "cmdk";
 import { Search } from "lucide-react";
 import * as React from "react";

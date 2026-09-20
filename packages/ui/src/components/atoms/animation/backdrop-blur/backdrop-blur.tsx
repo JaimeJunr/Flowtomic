@@ -1,10 +1,3 @@
-/**
- * BackdropBlur Component - Flowtomic UI
- *
- * Componente de backdrop blur reutilizável para overlays e modais
- * Usa Framer Motion para animação suave do blur
- */
-
 import { motion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";

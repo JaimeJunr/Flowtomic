@@ -1,59 +1,3 @@
-/**
- * # Select Component
- *
- * O componente `Select` é um controle de seleção usado para permitir que o usuário escolha
- * uma opção de uma lista de opções. É baseado em Radix UI para garantir acessibilidade completa.
- *
- * ## Características Principais
- *
- * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
- * - **Composição**: Múltiplos sub-componentes para flexibilidade
- * - **Animações**: Transições suaves de abertura/fechamento
- * - **Busca**: Suporta busca/filtro de opções (via Radix UI)
- * - **Customizável**: Pode ser estilizado via className e props HTML padrão
- *
- * ## Componentes
- *
- * - **Select**: Container raiz do select
- * - **SelectTrigger**: Elemento que dispara o select
- * - **SelectValue**: Exibe o valor selecionado
- * - **SelectContent**: Conteúdo do dropdown
- * - **SelectItem**: Item individual da lista
- * - **SelectLabel**: Label/separador de seção
- * - **SelectGroup**: Agrupa itens relacionados
- * - **SelectSeparator**: Separador visual
- *
- * ## Uso Básico
- *
- * ```tsx
- * import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@flowtomic/ui/components/atoms/forms/select";
- *
- * function MyComponent() {
- *   return (
- *     <Select>
- *       <SelectTrigger>
- *         <SelectValue placeholder="Selecione..." />
- *       </SelectTrigger>
- *       <SelectContent>
- *         <SelectItem value="option1">Opção 1</SelectItem>
- *         <SelectItem value="option2">Opção 2</SelectItem>
- *         <SelectItem value="option3">Opção 3</SelectItem>
- *       </SelectContent>
- *     </Select>
- *   );
- * }
- * ```
- *
- * ## Acessibilidade
- *
- * - Suporta navegação por teclado (setas, Enter, Esc)
- * - Segue padrões WAI-ARIA via Radix UI
- * - Suporta leitores de tela
- * - Foco gerenciado automaticamente
- *
- * @see [Radix UI Select](https://www.radix-ui.com/primitives/docs/components/select) para mais detalhes
- */
-
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import type * as React from "react";
@@ -63,9 +7,7 @@ import { cn } from "@/lib/utils";
 /**
  * Componente Select (Root) para seleção de opções.
  *
- * @component
- * @param {React.ComponentProps<typeof SelectPrimitive.Root>} props - Props do componente
- * @returns {JSX.Element} Elemento Select renderizado
+ * @see [Radix UI Select](https://www.radix-ui.com/primitives/docs/components/select) para mais detalhes
  */
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;

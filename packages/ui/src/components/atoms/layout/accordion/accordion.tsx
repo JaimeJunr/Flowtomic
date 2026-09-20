@@ -1,44 +1,3 @@
-/**
- * # Accordion Component
- *
- * O componente `Accordion` é usado para exibir conteúdo colapsável em seções.
- * É baseado em Radix UI para garantir acessibilidade completa.
- *
- * ## Características Principais
- *
- * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
- * - **Modos**: Suporta single (apenas um item aberto) ou multiple (múltiplos itens abertos)
- * - **Composição**: Accordion + AccordionItem + AccordionTrigger + AccordionContent
- * - **Animações**: Animações suaves de abertura/fechamento
- * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
- *
- * ## Uso Básico
- *
- * ```tsx
- * import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@flowtomic/ui/components/atoms/layout/accordion";
- *
- * function MyComponent() {
- *   return (
- *     <Accordion type="single" collapsible>
- *       <AccordionItem value="item-1">
- *         <AccordionTrigger>Item 1</AccordionTrigger>
- *         <AccordionContent>Conteúdo do item 1</AccordionContent>
- *       </AccordionItem>
- *     </Accordion>
- *   );
- * }
- * ```
- *
- * ## Acessibilidade
- *
- * - Suporta navegação por teclado (Tab, Enter, Espaço, setas)
- * - Segue padrões WAI-ARIA via Radix UI
- * - Suporta leitores de tela
- * - Foco gerenciado automaticamente
- *
- * @see [Radix UI Accordion](https://www.radix-ui.com/primitives/docs/components/accordion) para mais detalhes
- */
-
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "lucide-react";
 import type * as React from "react";
@@ -52,10 +11,7 @@ export type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root
 /**
  * Accordion - Container principal do accordion.
  *
- * Componente usado para gerenciar o estado do accordion.
- *
- * @param {AccordionProps} props - Props do componente
- * @returns {JSX.Element} Componente Accordion
+ * @see [Radix UI Accordion](https://www.radix-ui.com/primitives/docs/components/accordion) para mais detalhes
  */
 function Accordion(props: AccordionProps) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
@@ -68,14 +24,7 @@ Accordion.displayName = "Accordion";
  */
 export interface AccordionItemProps extends React.ComponentProps<typeof AccordionPrimitive.Item> {}
 
-/**
- * AccordionItem - Item individual do accordion.
- *
- * Componente usado para agrupar trigger e content de um item.
- *
- * @param {AccordionItemProps} props - Props do componente
- * @returns {JSX.Element} Componente AccordionItem
- */
+/** AccordionItem - Item individual do accordion. */
 function AccordionItem({ className, ...props }: AccordionItemProps) {
   return (
     <AccordionPrimitive.Item
@@ -94,14 +43,7 @@ AccordionItem.displayName = "AccordionItem";
 export interface AccordionTriggerProps
   extends React.ComponentProps<typeof AccordionPrimitive.Trigger> {}
 
-/**
- * AccordionTrigger - Trigger do accordion item.
- *
- * Componente usado como trigger para abrir/fechar o item.
- *
- * @param {AccordionTriggerProps} props - Props do componente
- * @returns {JSX.Element} Componente AccordionTrigger
- */
+/** AccordionTrigger - Trigger do accordion item. */
 function AccordionTrigger({ className, children, ...props }: AccordionTriggerProps) {
   return (
     <AccordionPrimitive.Header className="flex">
@@ -128,14 +70,7 @@ AccordionTrigger.displayName = "AccordionTrigger";
 export interface AccordionContentProps
   extends React.ComponentProps<typeof AccordionPrimitive.Content> {}
 
-/**
- * AccordionContent - Conteúdo do accordion item.
- *
- * Componente usado para exibir o conteúdo do item quando aberto.
- *
- * @param {AccordionContentProps} props - Props do componente
- * @returns {JSX.Element} Componente AccordionContent
- */
+/** AccordionContent - Conteúdo do accordion item. */
 function AccordionContent({ className, children, ...props }: AccordionContentProps) {
   return (
     <AccordionPrimitive.Content

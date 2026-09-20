@@ -1,59 +1,3 @@
-/**
- * # Toggle Component
- *
- * O componente `Toggle` é um botão de alternância usado para ativar ou desativar
- * uma opção. Diferente do Switch, o Toggle mantém estado visual quando pressionado.
- * É baseado em Radix UI para garantir acessibilidade completa.
- *
- * ## Características Principais
- *
- * - **Acessível**: Baseado em Radix UI com suporte completo a leitores de tela
- * - **Estados Visuais**: Suporta estados on, off e disabled
- * - **Variantes**: Suporta default e outline
- * - **Tamanhos**: Suporta default, sm e lg
- * - **Foco Gerenciado**: Foco e navegação por teclado gerenciados automaticamente
- *
- * ## Variantes
- *
- * - **`default`**: Variante padrão sem borda
- * - **`outline`**: Variante com borda
- *
- * ## Tamanhos
- *
- * - **`default`**: Tamanho padrão (h-9)
- * - **`sm`**: Tamanho pequeno (h-8)
- * - **`lg`**: Tamanho grande (h-10)
- *
- * ## Uso Básico
- *
- * ```tsx
- * import { Toggle } from "@flowtomic/ui/components/atoms/forms/toggle";
- *
- * function MyComponent() {
- *   const [pressed, setPressed] = React.useState(false);
- *
- *   return (
- *     <Toggle
- *       pressed={pressed}
- *       onPressedChange={setPressed}
- *     >
- *       Toggle
- *     </Toggle>
- *   );
- * }
- * ```
- *
- * ## Acessibilidade
- *
- * - Suporta navegação por teclado (Tab, Espaço, Enter)
- * - Segue padrões WAI-ARIA via Radix UI
- * - Suporta leitores de tela
- * - Foco gerenciado automaticamente
- *
- * @see [Radix UI Toggle](https://www.radix-ui.com/primitives/docs/components/toggle) para mais detalhes
- * @see [Switch Component](../switch/switch.tsx) para alternativa com estado visual diferente
- */
-
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
@@ -84,12 +28,6 @@ const toggleVariants = cva(
   }
 );
 
-/**
- * Props do componente Toggle.
- *
- * @property {'default' | 'outline'} [variant='default'] - Variante visual do toggle
- * @property {'default' | 'sm' | 'lg'} [size='default'] - Tamanho do toggle
- */
 export interface ToggleProps
   extends React.ComponentProps<typeof TogglePrimitive.Root>,
     VariantProps<typeof toggleVariants> {}
