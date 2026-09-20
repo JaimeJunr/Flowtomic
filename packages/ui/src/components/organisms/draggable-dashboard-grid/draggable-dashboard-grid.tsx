@@ -16,9 +16,9 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { useDashboardLayout } from "@flowtomic/logic";
+import { computeWidgetGridPositionFromDrag, useDashboardLayout } from "@flowtomic/logic";
 import type * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DraggableWidget } from "@/components/molecules/draggable-widget";
 import { cn } from "@/lib/utils";
 import type { GridConfig, WidgetLayout } from "@/types/dashboard";
@@ -142,6 +142,10 @@ export function DraggableDashboardGrid({
 
   const [activeId, setActiveId] = useState<string | null>(null);
 
+  // Posição do widget no instante em que o drag começou. O delta do dnd-kit é
+  // cumulativo desde esse instante, então a origem precisa ser preservada.
+  const dragStartPositionRef = useRef<{ id: string; x: number; y: number } | null>(null);
+
   // Configura sensores para drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -158,36 +162,37 @@ export function DraggableDashboardGrid({
   }, [localWidgets, activeId]);
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id as string);
+    const widgetId = event.active.id as string;
+    const widget = localWidgets.find((w) => w.id === widgetId);
+
+    setActiveId(widgetId);
+
+    if (widget) {
+      dragStartPositionRef.current = { id: widgetId, x: widget.x, y: widget.y };
+    }
   };
 
   const handleDragMove = (event: DragMoveEvent) => {
     if (!isEditMode || !activeId) return;
 
-    const { delta } = event;
-    const activeWidget = localWidgets.find((w) => w.id === activeId);
+    const dragStart = dragStartPositionRef.current;
+    if (!dragStart || dragStart.id !== activeId) return;
 
+    const activeWidget = localWidgets.find((w) => w.id === activeId);
     if (!activeWidget) return;
 
-    // Calcula nova posição baseada no delta do movimento
-    // Usa o tamanho da célula do grid para snap to grid
-    const cellSize = (normalizedGridConfig.cellSize || 50) + (normalizedGridConfig.gap || 16);
-
-    // Calcula delta em unidades de grid (snap to grid)
-    const deltaX = Math.round(delta.x / cellSize);
-    const deltaY = Math.round(delta.y / cellSize);
-
-    // Se não houver movimento significativo, não atualiza
-    if (deltaX === 0 && deltaY === 0) return;
-
-    const newX = Math.max(
-      0,
-      Math.min(normalizedGridConfig.columns - activeWidget.w, activeWidget.x + deltaX)
-    );
-    const newY = Math.max(0, activeWidget.y + deltaY);
-
-    // Valida limites do grid
-    if (newX + activeWidget.w > normalizedGridConfig.columns) return;
+    // Posição absoluta calculada a partir da origem do drag, não da posição
+    // atual — que já foi atualizada pelo evento anterior.
+    const { x: newX, y: newY } = computeWidgetGridPositionFromDrag({
+      startX: dragStart.x,
+      startY: dragStart.y,
+      widgetWidth: activeWidget.w,
+      deltaX: event.delta.x,
+      deltaY: event.delta.y,
+      gridColumns: normalizedGridConfig.columns,
+      cellSize: normalizedGridConfig.cellSize,
+      gap: normalizedGridConfig.gap,
+    });
 
     // Move widget para nova posição apenas se mudou
     if (newX !== activeWidget.x || newY !== activeWidget.y) {
@@ -207,10 +212,12 @@ export function DraggableDashboardGrid({
       onAddWidget?.(widgetType, defaultSize);
     }
 
+    dragStartPositionRef.current = null;
     setActiveId(null);
   };
 
   const handleDragCancel = () => {
+    dragStartPositionRef.current = null;
     setActiveId(null);
   };
 
