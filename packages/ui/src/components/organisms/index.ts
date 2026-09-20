@@ -305,6 +305,7 @@ export type { ReasoningContentProps, ReasoningProps, ReasoningTriggerProps } fro
 export { Reasoning, ReasoningContent, ReasoningTrigger } from "./reasoning";
 export type {
   ResizableLayoutProps,
+  ResizableSidebarConfig,
   ResizableSplitProps,
 } from "./resizable-layout";
 export { ResizableLayout, ResizableSplit } from "./resizable-layout";
