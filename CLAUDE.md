@@ -439,14 +439,20 @@ Stack principal:
 
 ## Testes
 
-Vitest, configurado **por pacote**. Não há CI rodando teste hoje — o único workflow é o de
-publicação, e ele roda só os testes do `logic`.
+Vitest, configurado **por pacote**. O CI (`.github/workflows/ci.yml`, desde 20/09/2026) roda em
+todo PR e push na `main`: Biome no repo inteiro, build + teste do `logic`, type-check + teste com
+cobertura do `ui`, teste do `registry` e do `cli`, e o `registry:build`. Serial, um pacote por vez.
+
+⚠️ **Cobertura global do `ui` medida em 20/09/2026: 20,9% de linhas.** O CI gera o relatório mas
+**não tem threshold** — pôr 75% agora nasceria vermelho. A meta é subir por área (os 27 atoms sem
+teste primeiro) e só então travar o número no `vitest.config.ts`.
 
 | pacote | arquivos de teste | script | ambiente |
 |---|---|---|---|
-| `packages/ui` | 34 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
-| `packages/logic` | 1 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
-| `cli` | 0 | — | — |
+| `packages/ui` | 41 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
+| `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
+| `registry` | 1 | `test` | guarda o parser do component map |
+| `cli` | 2 | `test` | guarda os `path` do component map contra os arquivos em disco |
 
 ⚠️ **`bun run test` no `packages/ui` entra em modo watch e não devolve o terminal.** O pacote
 não tem `test:run` (o `logic` tem). Para rodar uma vez:
@@ -467,6 +473,16 @@ cd packages/ui && bunx vitest run
 - **PRs:** `gh pr create --base main --repo JaimeJunr/Flowtomic`.
 - **Recursos são escassos na máquina de desenvolvimento:** build e teste sempre por pacote e
   em série. Nunca `turbo run build` sem `--filter`, nunca vários comandos pesados em paralelo.
+- **Design de tela: identidade decidida antes do código.** Redesign de block/organism passa
+  por um canvas `/design` que o dono revisa por comentário, depois um elemento piloto, depois o
+  resto. Referência aprovada em 20/09/2026: o `developer-panel`
+  (https://claude.ai/artifact/ULAwTHrbLJo31PdrSowDhw). Tells que contam como "cara de IA" aqui
+  e não passam: subtítulo que repete o título, tudo em cards idênticos, emoji como ícone, copy
+  de template alheio (nomes fictícios, "Download our Mobile App"), eyebrow em CAPS espaçado,
+  UI dividida pelo mecanismo do sistema (abas Terminal/Preview) e não pelo trabalho da pessoa,
+  dois botões competindo o tempo todo. O que substitui: uma pergunta por tela respondida de
+  longe, `<dl>` denso em vez de card, JetBrains Mono nos valores (já está no `theme.css`),
+  um botão sólido por tela, estado vazio como instrução com endereço concreto.
 
 ## Armadilhas
 
@@ -491,6 +507,11 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **`turbo run type-check` no `ui` depende do build do `logic`** (`dependsOn: ["^build"]`).
   Rodar `bun run type-check` direto dentro de `packages/ui`, fora do turbo, falha se o `dist`
   do `logic` não existir.
+- ⚠️ **Importar do barrel `@/components/organisms` quebra o Vitest** com `Unknown file
+  extension ".css"`: o barrel puxa `message.tsx`, que importa `katex.min.css`. Em teste e em
+  block, importe o organism pelo caminho direto (`@/components/organisms/script-editor`).
+- ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
+  `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 
 ## Checklist ao abrir PR
 
@@ -518,5 +539,6 @@ Não promova nenhuma destas a fato no corpo sem verificar antes.
   transformar num wrapper que só dispara o workflow.
 - **O `bun@1.3.0` do `packageManager` está defasado?** A máquina de desenvolvimento roda
   1.3.14. Os dois aceitam o mesmo lock, mas a divergência existe.
-- **Falta CI de teste.** Nenhum workflow roda os 34 testes do `ui`. Resolve: decidir se vale um
-  workflow de `pull_request`.
+- **Quando travar o threshold de cobertura do `ui`?** O CI mede (20,9% em 20/09/2026) mas não
+  bloqueia. Resolve: subir cobertura por área e fixar o número no `vitest.config.ts` quando
+  passar de 75%.

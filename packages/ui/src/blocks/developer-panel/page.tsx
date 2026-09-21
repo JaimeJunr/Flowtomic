@@ -1,29 +1,11 @@
-/**
- * Developer Panel Block
- *
- * Painel de desenvolvedor com informações do sistema, ambiente e ferramentas de desenvolvimento.
- * Inclui editor de scripts integrado.
- */
-
 "use client";
 
 import type { ExecuteScriptResponse, TerminalLine } from "@flowtomic/logic";
-import { Code, Info } from "lucide-react";
+import { Check, Copy, ExternalLink } from "lucide-react";
 import { useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/atoms";
-import { ScriptEditor } from "@/components/organisms";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms";
+import { ScriptEditor } from "@/components/organisms/script-editor";
+import { cn } from "@/lib/utils";
 
 export interface SystemHealth {
   status: string;
@@ -55,59 +37,36 @@ export interface UserInfo {
 }
 
 export interface DeveloperPanelProps {
-  /**
-   * Informações do usuário atual
-   */
+  /** Informações do usuário atual */
   user?: UserInfo;
-
-  /**
-   * Status de health check do sistema
-   */
+  /** Status de health check do sistema */
   health?: SystemHealth | null;
-
-  /**
-   * Informações do sistema/aplicação
-   */
+  /** Informações do sistema/aplicação */
   systemInfo?: SystemInfo | null;
-
-  /**
-   * Informações do ambiente frontend
-   */
+  /** Informações do ambiente frontend */
   environmentInfo?: EnvironmentInfo | null;
-
   /**
    * Estado de carregamento
+   * @default false
    */
   loading?: boolean;
-
   /**
    * Mensagem de erro
+   * @default null
    */
   error?: string | null;
-
   /**
    * URL base da API para links de ferramentas
+   * @default ""
    */
   apiBaseUrl?: string;
-
-  /**
-   * Callback para abrir Swagger UI
-   */
+  /** Callback para abrir Swagger UI */
   onOpenSwagger?: () => void;
-
-  /**
-   * Callback para abrir API Docs
-   */
+  /** Callback para abrir API Docs */
   onOpenApiDocs?: () => void;
-
-  /**
-   * Callback para abrir Health Check
-   */
+  /** Callback para abrir Health Check */
   onOpenHealthCheck?: () => void;
-
-  /**
-   * Configurações do ScriptEditor
-   */
+  /** Configurações do ScriptEditor */
   scriptEditorProps?: {
     defaultScript?: string;
     wsUrl?: string;
@@ -117,6 +76,16 @@ export interface DeveloperPanelProps {
   };
 }
 
+const MONO = "font-mono";
+const DT = "text-muted-foreground";
+const SECTION_TITLE = "text-[13px] font-medium text-muted-foreground";
+const DL = "grid grid-cols-[88px_minmax(0,1fr)] gap-x-4 gap-y-2.5 text-sm leading-5";
+
+function hora(iso: string): string {
+  return new Date(iso).toLocaleTimeString("pt-BR");
+}
+
+/** Painel de diagnóstico para quem consome o Flowtomic: responde "meu ambiente está ok?" e dá acesso rápido às ferramentas. */
 export default function DeveloperPanel({
   user,
   health,
@@ -138,292 +107,265 @@ export default function DeveloperPanel({
     setTimeout(() => setCopiedText(null), 2000);
   };
 
-  const defaultOpenSwagger = () => {
-    const swaggerUrl = `${apiBaseUrl.replace("/api", "")}/swagger-ui.html`;
-    window.open(swaggerUrl, "_blank");
-  };
-
-  const defaultOpenApiDocs = () => {
-    const apiDocsUrl = `${apiBaseUrl.replace("/api", "")}/v3/api-docs`;
-    window.open(apiDocsUrl, "_blank");
-  };
-
-  const defaultOpenHealthCheck = () => {
-    window.open(`${apiBaseUrl}/health`, "_blank");
-  };
+  const apiRoot = apiBaseUrl.replace("/api", "");
+  const swaggerUrl = `${apiRoot}/swagger-ui.html`;
+  const apiDocsUrl = `${apiRoot}/v3/api-docs`;
+  const healthUrl = `${apiBaseUrl}/health`;
 
   if (loading) {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <p className="text-muted-foreground">Carregando informações do sistema...</p>
+          <p className="text-muted-foreground">Carregando informações do sistema…</p>
         </div>
       </div>
     );
   }
 
+  const apiUp = health?.status === "UP";
+
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Painel de Desenvolvedor</h1>
-          <p className="text-muted-foreground mt-2">
-            Informações técnicas e ferramentas de desenvolvimento
-          </p>
-        </div>
-        <Badge variant="outline" className="text-lg px-4 py-2">
-          {user?.isAdmin ? "ADMIN" : "USER"}
-        </Badge>
-      </div>
-
-      {/* Erro */}
-      {error && (
-        <Card className="border-destructive">
-          <CardHeader>
-            <CardTitle className="text-destructive">Erro</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>{error}</p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Abas principais */}
-      <Tabs defaultValue="info" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6">
-          <TabsTrigger value="info" className="flex items-center gap-2">
-            <Info className="h-4 w-4" />
-            Informações do Sistema
-          </TabsTrigger>
-          <TabsTrigger value="editor" className="flex items-center gap-2">
-            <Code className="h-4 w-4" />
-            Editor de Scripts
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Aba: Informações do Sistema */}
-        <TabsContent value="info" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Informações do Usuário */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Usuário Atual</CardTitle>
-                <CardDescription>Informações da sessão atual</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div>
-                  <p className="text-sm text-muted-foreground">Nome</p>
-                  <p className="font-medium">{user?.username || "N/A"}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium">{user?.email || "N/A"}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Role</p>
-                  <Badge variant={user?.isAdmin ? "default" : "secondary"}>
-                    {user?.role || "N/A"}
-                  </Badge>
-                </div>
-                {user?.token && (
-                  <div>
-                    <p className="text-sm text-muted-foreground">Token</p>
-                    <div className="flex items-center gap-2">
-                      <code className="text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
-                        {user.token.substring(0, 20)}...
-                      </code>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => user.token && copyToClipboard(user.token, "token")}
-                      >
-                        {copiedText === "token" ? "Copiado!" : "Copiar"}
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Health Check */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Status do Sistema</CardTitle>
-                <CardDescription>Health check da API</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {health ? (
-                  <>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Status</p>
-                      <Badge variant={health.status === "UP" ? "default" : "destructive"}>
-                        {health.status}
-                      </Badge>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Serviço</p>
-                      <p className="font-medium">{health.service}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Timestamp</p>
-                      <p className="font-medium text-xs">
-                        {new Date(health.timestamp).toLocaleString("pt-BR")}
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-muted-foreground">Não disponível</p>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Informações da Aplicação */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Informações da Aplicação</CardTitle>
-                <CardDescription>Versão e detalhes do sistema</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {systemInfo ? (
-                  <>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Nome</p>
-                      <p className="font-medium">{systemInfo.name}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Versão</p>
-                      <Badge variant="outline">{systemInfo.version}</Badge>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Descrição</p>
-                      <p className="font-medium text-sm">{systemInfo.description}</p>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-muted-foreground">Não disponível</p>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Ambiente Frontend */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Ambiente Frontend</CardTitle>
-                <CardDescription>Configurações do cliente</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {environmentInfo ? (
-                  <>
-                    <div>
-                      <p className="text-sm text-muted-foreground">API Base URL</p>
-                      <div className="flex items-center gap-2">
-                        <code className="text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
-                          {environmentInfo.apiBaseUrl}
-                        </code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(environmentInfo.apiBaseUrl, "apiUrl")}
-                        >
-                          {copiedText === "apiUrl" ? "Copiado!" : "Copiar"}
-                        </Button>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Modo</p>
-                      <Badge variant="outline">{environmentInfo.nodeEnv}</Badge>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Timezone</p>
-                      <p className="font-medium text-xs">{environmentInfo.timezone}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Resolução</p>
-                      <p className="font-medium text-xs">{environmentInfo.screenResolution}</p>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-muted-foreground">Não disponível</p>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Ferramentas de Desenvolvimento */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Ferramentas</CardTitle>
-                <CardDescription>Acesso rápido a ferramentas de desenvolvimento</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={onOpenSwagger || defaultOpenSwagger}
-                >
-                  📚 Abrir Swagger UI
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={onOpenApiDocs || defaultOpenApiDocs}
-                >
-                  📖 Abrir API Docs (JSON)
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={onOpenHealthCheck || defaultOpenHealthCheck}
-                >
-                  ❤️ Health Check
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Informações do Navegador */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Navegador</CardTitle>
-                <CardDescription>Informações do cliente web</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {environmentInfo ? (
-                  <>
-                    <div>
-                      <p className="text-sm text-muted-foreground">User Agent</p>
-                      <div className="flex items-center gap-2">
-                        <code className="text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
-                          {environmentInfo.userAgent.substring(0, 50)}...
-                        </code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(environmentInfo.userAgent, "userAgent")}
-                        >
-                          {copiedText === "userAgent" ? "Copiado!" : "Copiar"}
-                        </Button>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Timestamp</p>
-                      <p className="font-medium text-xs">
-                        {new Date(environmentInfo.timestamp).toLocaleString("pt-BR")}
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-muted-foreground">Não disponível</p>
-                )}
-              </CardContent>
-            </Card>
+    <div className="container mx-auto px-16 py-12">
+      <Tabs defaultValue="info" className="flex flex-col gap-10">
+        <header className="flex items-start justify-between gap-6">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-[22px] font-semibold tracking-tight leading-tight">
+              Painel do desenvolvedor
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Ambiente local · {systemInfo?.name ?? "Flowtomic App"}
+              {user?.username && ` · ${user.username}`}
+            </p>
           </div>
+          <TabsList aria-label="Seções">
+            <TabsTrigger value="info">Ambiente</TabsTrigger>
+            <TabsTrigger value="editor">Editor de scripts</TabsTrigger>
+          </TabsList>
+        </header>
+
+        {error && (
+          <p
+            role="alert"
+            className="rounded-md border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+          >
+            {error}
+          </p>
+        )}
+
+        <TabsContent value="info" className="flex flex-col gap-10">
+          <section
+            aria-label="Estado do ambiente"
+            className="flex flex-col gap-3.5 border-b border-border pb-8"
+          >
+            {health ? (
+              <>
+                <p className="flex items-center gap-3.5">
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "size-3 shrink-0 rounded-full",
+                      apiUp
+                        ? "bg-success shadow-[0_0_0_4px_rgba(23,178,106,0.18)]"
+                        : "bg-destructive shadow-[0_0_0_4px_rgba(240,68,56,0.18)]"
+                    )}
+                  />
+                  <span className="text-[40px] font-semibold tracking-tight leading-none">
+                    {apiUp ? "API no ar" : "API fora do ar"}
+                  </span>
+                </p>
+                <p
+                  className={cn(MONO, "flex flex-wrap gap-5 pl-[26px] text-sm text-foreground/80")}
+                >
+                  <span>{health.service}</span>
+                  {systemInfo?.version && <span>v{systemInfo.version}</span>}
+                  {environmentInfo?.nodeEnv && <span>{environmentInfo.nodeEnv}</span>}
+                  <span className={DT}>
+                    verificado às <time dateTime={health.timestamp}>{hora(health.timestamp)}</time>
+                  </span>
+                </p>
+                {!apiUp && (
+                  <p className="max-w-[640px] pl-[26px] text-sm leading-5 text-foreground/80">
+                    Sem resposta em <code className={MONO}>{healthUrl}</code>. Confira se a API está
+                    rodando e se a porta bate com a configuração do ambiente.
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <p className="flex items-center gap-3.5 text-muted-foreground">
+                  <span
+                    aria-hidden
+                    className="size-3 shrink-0 rounded-full bg-muted-foreground/40"
+                  />
+                  <span className="text-[40px] font-semibold tracking-tight leading-none">
+                    Sem resposta
+                  </span>
+                </p>
+                <p className="max-w-[640px] pl-[26px] text-sm leading-5 text-foreground/80">
+                  A API não respondeu em <code className={MONO}>{healthUrl}</code>. Confira se ela
+                  está rodando e se a porta bate com a configuração do ambiente.
+                </p>
+              </>
+            )}
+          </section>
+
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
+            <section aria-labelledby="h-sessao" className="flex flex-col gap-3.5">
+              <h2 id="h-sessao" className={SECTION_TITLE}>
+                Sessão
+              </h2>
+              <dl className={DL}>
+                <dt className={DT}>usuário</dt>
+                <dd className={MONO}>{user?.username ?? "—"}</dd>
+                <dt className={DT}>e-mail</dt>
+                <dd className={MONO}>{user?.email ?? "—"}</dd>
+                <dt className={DT}>papel</dt>
+                <dd className={MONO}>{user?.role ?? "—"}</dd>
+                {user?.token && (
+                  <>
+                    <dt className={DT}>token</dt>
+                    <dd className="flex min-w-0 items-center gap-2">
+                      <code className={cn(MONO, "truncate text-[13px]")}>{user.token}</code>
+                      <CopyButton
+                        label="Copiar token"
+                        copied={copiedText === "token"}
+                        onClick={() => user.token && copyToClipboard(user.token, "token")}
+                      />
+                    </dd>
+                  </>
+                )}
+              </dl>
+            </section>
+
+            <section aria-labelledby="h-ambiente" className="flex flex-col gap-3.5">
+              <h2 id="h-ambiente" className={SECTION_TITLE}>
+                Ambiente
+              </h2>
+              <dl className={DL}>
+                <dt className={DT}>API</dt>
+                <dd className="flex min-w-0 items-center gap-2">
+                  <code className={cn(MONO, "truncate text-[13px]")}>
+                    {environmentInfo?.apiBaseUrl || apiBaseUrl || "—"}
+                  </code>
+                  {environmentInfo?.apiBaseUrl && (
+                    <CopyButton
+                      label="Copiar URL da API"
+                      copied={copiedText === "apiUrl"}
+                      onClick={() => copyToClipboard(environmentInfo.apiBaseUrl, "apiUrl")}
+                    />
+                  )}
+                </dd>
+                <dt className={DT}>modo</dt>
+                <dd className={MONO}>{environmentInfo?.nodeEnv ?? "—"}</dd>
+                <dt className={DT}>fuso</dt>
+                <dd className={MONO}>{environmentInfo?.timezone ?? "—"}</dd>
+                <dt className={DT}>versão</dt>
+                <dd className={MONO}>{systemInfo?.version ?? "—"}</dd>
+              </dl>
+            </section>
+
+            <section aria-labelledby="h-navegador" className="flex flex-col gap-3.5">
+              <h2 id="h-navegador" className={SECTION_TITLE}>
+                Navegador
+              </h2>
+              <dl className={DL}>
+                <dt className={DT}>agente</dt>
+                <dd className="flex min-w-0 items-start gap-2">
+                  <span
+                    className={cn(MONO, "break-all text-[13px] leading-[18px] text-foreground/80")}
+                  >
+                    {environmentInfo?.userAgent ?? "—"}
+                  </span>
+                  {environmentInfo?.userAgent && (
+                    <CopyButton
+                      label="Copiar user agent"
+                      copied={copiedText === "userAgent"}
+                      onClick={() => copyToClipboard(environmentInfo.userAgent, "userAgent")}
+                    />
+                  )}
+                </dd>
+                <dt className={DT}>tela</dt>
+                <dd className={MONO}>{environmentInfo?.screenResolution ?? "—"}</dd>
+                <dt className={DT}>lido às</dt>
+                <dd className={MONO}>
+                  {environmentInfo?.timestamp ? hora(environmentInfo.timestamp) : "—"}
+                </dd>
+              </dl>
+            </section>
+          </div>
+
+          <section
+            aria-labelledby="h-atalhos"
+            className="flex flex-col gap-3.5 border-t border-border pt-8"
+          >
+            <h2 id="h-atalhos" className={SECTION_TITLE}>
+              Atalhos
+            </h2>
+            <div className="flex flex-wrap gap-8 text-sm font-medium">
+              <ToolLink href={swaggerUrl} onClick={onOpenSwagger}>
+                Swagger UI
+              </ToolLink>
+              <ToolLink href={apiDocsUrl} onClick={onOpenApiDocs}>
+                Especificação OpenAPI
+              </ToolLink>
+              <ToolLink href={healthUrl} onClick={onOpenHealthCheck}>
+                Health check
+              </ToolLink>
+            </div>
+          </section>
         </TabsContent>
 
-        {/* Aba: Editor de Scripts */}
-        <TabsContent value="editor" className="space-y-6">
+        <TabsContent value="editor">
           <ScriptEditor {...scriptEditorProps} />
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+interface CopyButtonProps {
+  label: string;
+  copied: boolean;
+  onClick: () => void;
+}
+
+function CopyButton({ label, copied, onClick }: CopyButtonProps) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className="inline-flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-background text-foreground/80 hover:bg-muted"
+    >
+      {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+    </button>
+  );
+}
+
+interface ToolLinkProps {
+  href: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+function ToolLink({ href, onClick, children }: ToolLinkProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      onClick={
+        onClick &&
+        ((event) => {
+          // callback customizado substitui a navegação padrão, sem perder a semântica de link
+          event.preventDefault();
+          onClick();
+        })
+      }
+      className="inline-flex items-center gap-1.5 text-primary hover:underline"
+    >
+      {children}
+      <ExternalLink className="size-[13px]" aria-hidden />
+    </a>
   );
 }
