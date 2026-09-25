@@ -503,6 +503,10 @@ Cada uma já mordeu alguém neste repo.
   citado no `README.md` e nos `docs/`.
 - ⚠️ **O `.npmrc` do repo pina só o escopo `@flowtomic`.** O `flowtomic-cli` não tem escopo e
   fica desprotegido do registry default da máquina.
+- ⚠️ **`bun.lock` com URL do CodeArtifact trava a CI por 6h.** Um `bun add` nesta máquina
+  reescreveu os 1.223 `resolved` pro registry corporativo; a CI, sem credencial, ficou parada no
+  `bun install` até o GitHub matar o job. O `.npmrc` agora fixa `registry=` no npm público, mas
+  antes de commitar lock confira: `grep -c codeartifact bun.lock` tem que dar `0`.
 - ⚠️ **`bun run test` no `packages/ui` trava em watch** — ver a seção *Testes*.
 - ⚠️ **`turbo run type-check` no `ui` depende do build do `logic`** (`dependsOn: ["^build"]`).
   Rodar `bun run type-check` direto dentro de `packages/ui`, fora do turbo, falha se o `dist`
