@@ -14,7 +14,7 @@ import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
-import { type Editor, EditorContent, useEditor } from "@tiptap/react";
+import { type Editor, EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
   AlignCenter,
@@ -282,6 +282,14 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
       input.click();
     }, [editor, onUploadImage]);
 
+    // O Editor do TipTap mantém a mesma referência entre transações; sem este número
+    // nas deps o useMemo nunca recalcula isActive() e a toolbar congela o estado ativo.
+    const editorTransaction = useEditorState({
+      editor,
+      selector: ({ transactionNumber }) => transactionNumber,
+    });
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: editorTransaction só força o recálculo de isActive()
     const Toolbar = React.useMemo(() => {
       if (!toolbar) return null;
       const e = editor as Editor | null;
@@ -455,7 +463,7 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
           )}
         </div>
       );
-    }, [editor, toolbar, allowedActions, handleImageInsert]);
+    }, [editor, editorTransaction, toolbar, allowedActions, handleImageInsert]);
 
     const richView = (
       <div className="grid gap-2">

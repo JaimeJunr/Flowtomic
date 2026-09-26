@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { TextEditor } from "./text-editor";
 
@@ -19,5 +19,16 @@ describe("TextEditor - toolbar acessível", () => {
       "aria-pressed",
       "false"
     );
+  });
+
+  it("alterna aria-pressed do negrito a cada clique", async () => {
+    render(<TextEditor availableModes={["rich"]} />);
+    const bold = screen.getByRole("button", { name: "Negrito" });
+
+    fireEvent.click(bold);
+    await waitFor(() => expect(bold).toHaveAttribute("aria-pressed", "true"));
+
+    fireEvent.click(bold);
+    await waitFor(() => expect(bold).toHaveAttribute("aria-pressed", "false"));
   });
 });
