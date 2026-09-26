@@ -95,10 +95,10 @@ export const Default: Story = {
         }}
       >
         <NodeHeader>
-          <NodeTitle>Node Title</NodeTitle>
+          <NodeTitle>Build do logic</NodeTitle>
         </NodeHeader>
         <NodeContent>
-          <p className="text-sm">Node content goes here</p>
+          <p className="text-sm">Roda antes do build do ui, que consome seus tipos</p>
         </NodeContent>
       </NodeInCanvas>
     </div>
@@ -117,7 +117,7 @@ export const AllDirections: Story = {
         }}
       >
         <NodeHeader>
-          <NodeTitle>Node com todas as direções</NodeTitle>
+          <NodeTitle>Testes do logic</NodeTitle>
         </NodeHeader>
         <NodeContent>
           <p className="text-sm">Este node tem handles em todas as direções</p>
@@ -137,7 +137,7 @@ export const VerticalOnly: Story = {
         }}
       >
         <NodeHeader>
-          <NodeTitle>Node Vertical</NodeTitle>
+          <NodeTitle>Publish no npm</NodeTitle>
         </NodeHeader>
         <NodeContent>
           <p className="text-sm">Apenas conexões verticais (cima e baixo)</p>

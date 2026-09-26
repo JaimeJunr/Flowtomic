@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: "Panel Content",
+    children: "flowtomic-cli add",
   },
 };
 
@@ -33,7 +33,7 @@ export const WithButton: Story = {
           type="button"
           className="rounded bg-primary px-3 py-1 text-primary-foreground text-sm"
         >
-          Action
+          Executar
         </button>
       </div>
     ),

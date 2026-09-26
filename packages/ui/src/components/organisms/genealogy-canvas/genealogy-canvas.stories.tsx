@@ -2,15 +2,16 @@ import type { GenealogyData } from "@flowtomic/logic";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GenealogyCanvas } from "./genealogy-canvas";
 
-// Dados de exemplo para demonstração (pessoas)
+// Dados de exemplo para demonstração (pessoas identificadas por papel/geração,
+// não por nome fictício — ver CLAUDE.md, seção "Design de tela")
 const exampleData: GenealogyData = {
   people: [
-    { id: "1", name: "João Silva", birthDate: "1950-01-01", gender: "male" },
-    { id: "2", name: "Maria Silva", birthDate: "1952-03-15", gender: "female" },
-    { id: "3", name: "Pedro Silva", birthDate: "1980-05-20", gender: "male" },
-    { id: "4", name: "Ana Silva", birthDate: "1982-07-10", gender: "female" },
-    { id: "5", name: "Carlos Silva", birthDate: "2010-09-01", gender: "male" },
-    { id: "6", name: "Sofia Silva", birthDate: "2012-11-15", gender: "female" },
+    { id: "1", name: "Avô paterno", birthDate: "1950-01-01", gender: "male" },
+    { id: "2", name: "Avó paterna", birthDate: "1952-03-15", gender: "female" },
+    { id: "3", name: "Pai", birthDate: "1980-05-20", gender: "male" },
+    { id: "4", name: "Mãe", birthDate: "1982-07-10", gender: "female" },
+    { id: "5", name: "Você", birthDate: "2010-09-01", gender: "male" },
+    { id: "6", name: "Irmã", birthDate: "2012-11-15", gender: "female" },
   ],
   relationships: [
     { from: "1", to: "3", type: "father" },
@@ -80,9 +81,9 @@ const animalsData: GenealogyData = {
 // Dados com adoção
 const _adoptionData: GenealogyData = {
   people: [
-    { id: "1", name: "Roberto Santos", birthDate: "1970-01-01", gender: "male" },
-    { id: "2", name: "Laura Santos", birthDate: "1972-03-15", gender: "female" },
-    { id: "3", name: "Lucas Santos", birthDate: "2005-06-20", gender: "male" },
+    { id: "1", name: "Pai adotivo", birthDate: "1970-01-01", gender: "male" },
+    { id: "2", name: "Mãe adotiva", birthDate: "1972-03-15", gender: "female" },
+    { id: "3", name: "Filho adotado", birthDate: "2005-06-20", gender: "male" },
   ],
   relationships: [
     { from: "1", to: "3", type: "father" },

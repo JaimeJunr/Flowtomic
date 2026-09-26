@@ -36,15 +36,25 @@ const nodeTypes = {
         <NodeTitle>{data.label}</NodeTitle>
       </NodeHeader>
       <NodeContent>
-        <p className="text-sm text-muted-foreground">Conteúdo do node</p>
+        <p className="text-sm text-muted-foreground">Etapa do workflow Publish</p>
       </NodeContent>
     </Node>
   ),
 };
 
 const initialNodes: ReactFlowNode[] = [
-  { id: "1", type: "custom", position: { x: 60, y: 150 }, data: { label: "Node 1" } },
-  { id: "2", type: "custom", position: { x: 560, y: 150 }, data: { label: "Node 2" } },
+  {
+    id: "1",
+    type: "custom",
+    position: { x: 60, y: 150 },
+    data: { label: "PR mergeado na main" },
+  },
+  {
+    id: "2",
+    type: "custom",
+    position: { x: 560, y: 150 },
+    data: { label: "npm publish (@flowtomic/ui)" },
+  },
 ];
 
 // Edge é renderizado pelo <svg> interno do ReactFlow: fora de um Canvas com
