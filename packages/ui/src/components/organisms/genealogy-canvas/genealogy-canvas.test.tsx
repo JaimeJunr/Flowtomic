@@ -29,4 +29,19 @@ describe("GenealogyCanvas", () => {
     );
     expect(screen.getByText("Custom: Avô paterno")).toBeInTheDocument();
   });
+
+  it("formata data de nascimento ISO (yyyy-mm-dd) em pt-BR sem deslocar por fuso", () => {
+    render(<GenealogyCanvas data={data} initialExpanded={["1", "2"]} />);
+    // "1950-01-01" parseado com `new Date()` cai em 31/12/1949 em UTC-3; o esperado é 01/01/1950.
+    expect(screen.getByText("01/01/1950")).toBeInTheDocument();
+  });
+
+  it("mantém o texto original quando a data não é uma ISO válida", () => {
+    const dataComDataInvalida: GenealogyData = {
+      people: [{ id: "3", name: "Bisavô", birthDate: "por volta de 1920" }],
+      relationships: [],
+    };
+    render(<GenealogyCanvas data={dataComDataInvalida} initialExpanded={["3"]} />);
+    expect(screen.getByText("por volta de 1920")).toBeInTheDocument();
+  });
 });

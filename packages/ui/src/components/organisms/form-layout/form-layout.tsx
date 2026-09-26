@@ -615,7 +615,7 @@ export function FormLayout<T extends FieldValues>({
             {(section.title || section.description) && (
               <div className="flex items-center gap-2">
                 {section.title && (
-                  <h3 className="text-lg font-medium text-gray-900">{section.title}</h3>
+                  <h3 className="text-lg font-medium text-foreground">{section.title}</h3>
                 )}
                 <Separator className="flex-1" />
               </div>

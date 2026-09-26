@@ -79,7 +79,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
     return (
       <div
         ref={resizable.containerRef}
-        className={cn("relative flex-1 flex overflow-hidden", className)}
+        className={cn("relative h-full flex-1 flex overflow-hidden", className)}
       >
         {sidebarOpen && (
           <div
@@ -112,7 +112,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   return (
     <div
       ref={resizable.containerRef}
-      className={cn("relative flex-1 flex overflow-hidden", className)}
+      className={cn("relative h-full flex-1 flex overflow-hidden", className)}
     >
       <ResizablePanelGroup
         groupRef={

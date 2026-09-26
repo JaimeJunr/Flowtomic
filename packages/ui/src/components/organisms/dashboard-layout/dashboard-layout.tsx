@@ -39,7 +39,7 @@ const DashboardLayout = React.forwardRef<HTMLDivElement, DashboardLayoutProps>(
       <div className="h-full w-full" ref={ref} {...props}>
         <div className={cn("p-6 h-full", className)}>
           <div className={cn("mx-auto space-y-12", maxWidthClasses[maxWidth])}>
-            {/* Page Header */}
+            {/* Cabeçalho da página */}
             {(title || subtitle || actions) && (
               <div className="mb-8 flex justify-between items-start">
                 <div>
@@ -50,7 +50,7 @@ const DashboardLayout = React.forwardRef<HTMLDivElement, DashboardLayoutProps>(
               </div>
             )}
 
-            {/* Page Content */}
+            {/* Conteúdo da página */}
             {children}
           </div>
         </div>

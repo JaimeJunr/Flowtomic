@@ -19,6 +19,22 @@ describe("ScriptEditor", () => {
     });
   });
 
+  describe("Script padrão é do Flowtomic, não de outro projeto", () => {
+    it("não traz o exemplo de userRepository do Spring de outro projeto", () => {
+      render(<ScriptEditor autoConnect={false} />);
+      expect(screen.getByRole("textbox")).not.toHaveValue(
+        expect.stringMatching(/userRepository/) as unknown as string
+      );
+      expect(document.body.textContent).not.toMatch(/userRepository/);
+    });
+
+    it("o script padrão referencia o registro de componentes do Flowtomic", () => {
+      render(<ScriptEditor autoConnect={false} />);
+      const editor = screen.getByRole("textbox") as HTMLTextAreaElement;
+      expect(editor.value).toMatch(/componentRegistryService/);
+    });
+  });
+
   describe("Vernáculo de IDE, não de card", () => {
     it("nomeia o arquivo e numera as linhas do script", () => {
       renderIdle();

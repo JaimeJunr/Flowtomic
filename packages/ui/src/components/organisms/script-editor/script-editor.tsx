@@ -48,12 +48,12 @@ const MONO = "font-mono text-[13px] leading-[22px]";
 
 const DEFAULT_SCRIPT = `// Serviços do Spring estão no contexto: ctx.getBean("nome")
 
-def repo = ctx.getBean("userRepository")
-def usuarios = repo.findAll()
+def registry = ctx.getBean("componentRegistryService")
+def componentes = registry.findAll()
 
 def resultado = [
-  total: usuarios.size(),
-  usuarios: usuarios.collect { [id: it.id, name: it.name] }
+  total: componentes.size(),
+  componentes: componentes.collect { [nome: it.name, tipo: it.type] }
 ]
 
 // a última expressão volta como resultado

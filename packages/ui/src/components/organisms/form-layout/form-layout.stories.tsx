@@ -649,8 +649,8 @@ export const WithDisabledFields: Story = {
   render: () => {
     const form = useForm<FormData>({
       defaultValues: {
-        name: "João Silva",
-        email: "joao@exemplo.com",
+        name: "Marina Costa",
+        email: "marina@flowtomic.dev",
         age: 30,
         weight: undefined,
         country: "BR",
@@ -845,7 +845,7 @@ export const SimpleLayout: Story = {
 };
 
 export const WithExternalSubmit: Story = {
-  name: "Submit Externo",
+  name: "Envio Externo",
   parameters: {
     docs: {
       description: {

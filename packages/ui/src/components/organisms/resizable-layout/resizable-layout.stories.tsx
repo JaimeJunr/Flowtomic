@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type React from "react";
 import { useId, useState } from "react";
-import { Button, Card, CardContent, CardHeader, CardTitle } from "../../atoms";
+import { Button } from "../../atoms";
 import { ResizableLayout } from "./resizable-layout";
 
 const meta = {
@@ -90,60 +90,50 @@ function ResizableLayoutWrapper(
   );
 }
 
+const COMPONENT_GROUPS = [
+  { label: "Atoms", count: 63 },
+  { label: "Molecules", count: 47 },
+  { label: "Organisms", count: 30 },
+  { label: "Hooks", count: 14 },
+];
+
 /**
- * Sidebar de exemplo
+ * Sidebar de exemplo: o índice de componentes do Flowtomic.
+ * `title` fica só como rótulo acessível da variação da story.
  */
-const ExampleSidebar = ({ title = "Sidebar" }: { title?: string }) => (
-  <div className="p-4 h-full">
-    <h2 className="text-lg font-semibold mb-4">{title}</h2>
-    <nav className="space-y-2">
-      <Button variant="ghost" className="w-full justify-start">
-        Menu Item 1
-      </Button>
-      <Button variant="ghost" className="w-full justify-start">
-        Menu Item 2
-      </Button>
-      <Button variant="ghost" className="w-full justify-start">
-        Menu Item 3
-      </Button>
-    </nav>
-    <div className="mt-8 p-4 bg-muted rounded-lg">
-      <p className="text-sm text-muted-foreground">
-        Esta é uma sidebar de exemplo. Você pode redimensionar arrastando o handle.
-      </p>
-    </div>
-  </div>
+const ExampleSidebar = ({ title = "Componentes" }: { title?: string }) => (
+  <nav aria-label={title} className="flex h-full flex-col gap-4 p-4">
+    <span className="font-display px-2 text-sm font-semibold">Componentes</span>
+    <ul className="text-sm">
+      {COMPONENT_GROUPS.map((group, index) => (
+        <li key={group.label}>
+          <Button
+            variant="ghost"
+            className={index === 2 ? "w-full justify-between bg-accent" : "w-full justify-between"}
+          >
+            {group.label}
+            <span className="font-mono text-xs text-muted-foreground">{group.count}</span>
+          </Button>
+        </li>
+      ))}
+    </ul>
+  </nav>
 );
 
 /**
- * Conteúdo principal de exemplo
+ * Conteúdo principal de exemplo: a página de um organism.
  */
-const ExampleContent = ({ title = "Conteúdo Principal" }: { title?: string }) => (
-  <div className="p-6 h-full overflow-auto">
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="mb-4">
-          Este é o conteúdo principal. A sidebar pode ser redimensionada arrastando o handle entre
-          os painéis.
-        </p>
-        <p className="mb-4">
-          Você pode fazer duplo clique no handle para colapsar/expandir a sidebar automaticamente.
-        </p>
-        <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">• Arraste o handle para redimensionar</p>
-          <p className="text-sm text-muted-foreground">
-            • Duplo clique no handle para colapsar/expandir
-          </p>
-          <p className="text-sm text-muted-foreground">
-            • O tamanho é persistido automaticamente no localStorage
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
+const ExampleContent = ({ title = "stats-grid" }: { title?: string }) => (
+  <article className="flex h-full max-w-2xl flex-col gap-4 overflow-auto p-8">
+    <h1 className="font-display text-2xl font-bold">{title}</h1>
+    <p className="text-[15px] leading-relaxed text-foreground/80">
+      Régua de métricas com valor em mono e variação contra o período anterior. Arraste a divisória
+      para dar mais espaço à lista; dois cliques nela fecham ou abrem a lista.
+    </p>
+    <pre className="overflow-x-auto rounded-md bg-foreground px-4 py-3 font-mono text-sm text-background">
+      <code>bunx flowtomic-cli add stats-grid</code>
+    </pre>
+  </article>
 );
 
 export const Default: Story = {
@@ -154,7 +144,7 @@ export const Default: Story = {
       side="left"
       persistKey="storybook-default"
     >
-      <ExampleContent title="Conteúdo Principal" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
 };
@@ -167,7 +157,7 @@ export const SidebarRight: Story = {
       side="right"
       persistKey="storybook-sidebar-right"
     >
-      <ExampleContent title="Conteúdo Principal" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
 };
@@ -184,7 +174,7 @@ export const CustomSizes: Story = {
       maxPct={0.5}
       maxPxCap={400}
     >
-      <ExampleContent title="Conteúdo com Sidebar Customizada" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
 };
@@ -198,7 +188,7 @@ export const WithPersistence: Story = {
       persistKey="storybook-resizable"
       defaultSidebarPct={0.3}
     >
-      <ExampleContent title="Conteúdo com Persistência" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
   parameters: {
@@ -220,7 +210,7 @@ export const ThickResizer: Story = {
       persistKey="storybook-thick-resizer"
       resizerThicknessPx={16}
     >
-      <ExampleContent title="Conteúdo com Handle Espesso" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
 };
@@ -236,7 +226,7 @@ export const NarrowSidebar: Story = {
       minPx={150}
       maxPct={0.3}
     >
-      <ExampleContent title="Conteúdo com Sidebar Estreita" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
 };
@@ -253,7 +243,7 @@ export const WideSidebar: Story = {
       maxPct={0.7}
       maxPxCap={600}
     >
-      <ExampleContent title="Conteúdo com Sidebar Larga" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
 };
@@ -269,7 +259,7 @@ export const WithSnap: Story = {
       tinySizePx={60}
       snapThreshold={50}
     >
-      <ExampleContent title="Conteúdo com Snap Automático" />
+      <ExampleContent />
     </ResizableLayoutWrapper>
   ),
   parameters: {
