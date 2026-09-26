@@ -165,8 +165,8 @@ export default function DeveloperPanel({
                     className={cn(
                       "size-3 shrink-0 rounded-full",
                       apiUp
-                        ? "bg-success shadow-[0_0_0_4px_rgba(23,178,106,0.18)]"
-                        : "bg-destructive shadow-[0_0_0_4px_rgba(240,68,56,0.18)]"
+                        ? "bg-success shadow-[0_0_0_4px_hsl(var(--success)/0.18)]"
+                        : "bg-destructive shadow-[0_0_0_4px_hsl(var(--destructive)/0.18)]"
                     )}
                   />
                   <span className="text-[40px] font-semibold tracking-tight leading-none">

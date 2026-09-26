@@ -49,7 +49,7 @@ export function AuthNavigationLink({
   LinkComponent,
   className = "",
 }: AuthNavigationLinkProps) {
-  const linkClassName = "text-brand-700 dark:text-brand-400 hover:underline font-semibold";
+  const linkClassName = "text-accent-foreground hover:underline font-semibold";
 
   const linkContent = LinkComponent ? (
     <LinkComponent to={to} className={linkClassName}>
@@ -62,7 +62,7 @@ export function AuthNavigationLink({
   );
 
   return (
-    <p className={`text-center text-sm text-gray-600 dark:text-gray-300 ${className}`}>
+    <p className={`text-center text-sm text-muted-foreground ${className}`}>
       {text} {linkContent}
     </p>
   );

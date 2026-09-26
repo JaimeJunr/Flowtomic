@@ -67,11 +67,11 @@ export interface TeamMemberListProps {
 function getStatusColor(status: TeamMemberStatus): string {
   switch (status) {
     case "completed":
-      return "text-green-600";
+      return "text-success";
     case "in-progress":
-      return "text-orange-600";
+      return "text-warning";
     case "pending":
-      return "text-red-600";
+      return "text-destructive";
     default:
       return "text-muted-foreground";
   }

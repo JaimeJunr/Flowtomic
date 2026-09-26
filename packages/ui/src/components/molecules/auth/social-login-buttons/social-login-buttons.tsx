@@ -44,10 +44,10 @@ export function SocialLoginButtons({
       {/* Divisor */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-200 dark:border-gray-700" />
+          <div className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-medium">
+          <span className="px-4 bg-background text-muted-foreground font-medium">
             {dividerText}
           </span>
         </div>
@@ -60,7 +60,7 @@ export function SocialLoginButtons({
           type="button"
           variant="outline"
           onClick={onGoogleClick}
-          className="w-full h-14 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 bg-transparent transition-all duration-300 font-medium text-base"
+          className="w-full h-14 border-2 border-border hover:bg-accent bg-transparent transition-all duration-300 font-medium text-base"
           aria-label="Entrar com Google"
         >
           <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" aria-hidden="true">
@@ -89,7 +89,7 @@ export function SocialLoginButtons({
           type="button"
           variant="outline"
           onClick={onAppleClick}
-          className="w-full h-14 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 bg-transparent transition-all duration-300 font-medium text-base"
+          className="w-full h-14 border-2 border-border hover:bg-accent bg-transparent transition-all duration-300 font-medium text-base"
           aria-label="Entrar com Apple"
         >
           <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

@@ -326,7 +326,7 @@ const FloatingDockMobile: React.FC<{
                 <a
                   href={item.href}
                   onClick={item.onClick}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-900"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-muted"
                 >
                   <div className="h-4 w-4">{item.icon}</div>
                 </a>
@@ -338,10 +338,10 @@ const FloatingDockMobile: React.FC<{
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-800"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-muted"
         aria-label="Toggle menu"
       >
-        <Menu className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
+        <Menu className="h-5 w-5 text-muted-foreground" />
       </button>
     </div>
   );
@@ -358,7 +358,7 @@ const FloatingDockDesktop: React.FC<{
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto hidden h-16 items-end gap-4 rounded-2xl bg-gray-50 px-4 pb-3 md:flex dark:bg-neutral-900",
+        "mx-auto hidden h-16 items-end gap-4 rounded-2xl bg-muted px-4 pb-3 md:flex",
         className
       )}
     >
@@ -426,7 +426,7 @@ function IconContainer({
         style={{ width, height }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="relative flex aspect-square items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800"
+        className="relative flex aspect-square items-center justify-center rounded-full bg-secondary"
       >
         <AnimatePresence>
           {hovered && (
@@ -434,7 +434,7 @@ function IconContainer({
               initial={{ opacity: 0, y: 10, x: "-50%" }}
               animate={{ opacity: 1, y: 0, x: "-50%" }}
               exit={{ opacity: 0, y: 2, x: "-50%" }}
-              className="absolute -top-8 left-1/2 w-fit rounded-md border border-gray-200 bg-gray-100 px-2 py-0.5 text-xs whitespace-pre text-neutral-700 dark:border-neutral-900 dark:bg-neutral-800 dark:text-white"
+              className="absolute -top-8 left-1/2 w-fit rounded-md border border-border bg-popover px-2 py-0.5 text-xs whitespace-pre text-popover-foreground"
             >
               {title}
             </motion.div>

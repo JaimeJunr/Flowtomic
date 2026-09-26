@@ -50,19 +50,19 @@ describe("Badge", () => {
     it("deve aplicar variante success", () => {
       const { container } = render(<Badge variant="success">Success</Badge>);
       const badge = container.querySelector("div");
-      expect(badge).toHaveClass("bg-green-500");
+      expect(badge).toHaveClass("bg-success");
     });
 
     it("deve aplicar variante warning", () => {
       const { container } = render(<Badge variant="warning">Warning</Badge>);
       const badge = container.querySelector("div");
-      expect(badge).toHaveClass("bg-yellow-500");
+      expect(badge).toHaveClass("bg-warning");
     });
 
     it("deve aplicar variante info", () => {
       const { container } = render(<Badge variant="info">Info</Badge>);
       const badge = container.querySelector("div");
-      expect(badge).toHaveClass("bg-blue-500");
+      expect(badge).toHaveClass("bg-info");
     });
   });
 

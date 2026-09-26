@@ -184,9 +184,10 @@ export const ScriptEditor = forwardRef<HTMLDivElement, ScriptEditorProps>(
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-gray-900 text-gray-200">
-            <div className="flex items-center justify-between border-b border-gray-700 px-3.5 py-2">
-              <span className="font-mono text-xs text-gray-400">
+          {/* `dark` aqui fixa os tokens escuros no painel de log: terminal é escuro nos dois modos */}
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-background text-foreground dark">
+            <div className="flex items-center justify-between border-b border-border px-3.5 py-2">
+              <span className="font-mono text-xs text-muted-foreground">
                 {ultimaExecucao
                   ? `última execução · ${hora(ultimaExecucao)}`
                   : "sem execução ainda"}
@@ -194,25 +195,25 @@ export const ScriptEditor = forwardRef<HTMLDivElement, ScriptEditorProps>(
               <button
                 type="button"
                 onClick={clearTerminal}
-                className="h-6.5 rounded px-2 text-xs text-gray-400 hover:text-gray-200"
+                className="h-6.5 rounded px-2 text-xs text-muted-foreground hover:text-foreground"
               >
                 Limpar
               </button>
             </div>
             <div ref={logRef} className={cn(MONO, "flex min-h-0 flex-1 flex-col overflow-auto")}>
-              <div className="flex flex-col gap-0.5 px-4 py-3.5 text-gray-400">
+              <div className="flex flex-col gap-0.5 px-4 py-3.5 text-muted-foreground">
                 {terminalLines.length === 0 && !isRunning && (
                   <span>Execute o script para ver o log aqui.</span>
                 )}
                 {terminalLines.map((line) => (
                   <LogLine key={line.id} line={line} />
                 ))}
-                {isRunning && <span className="animate-pulse text-gray-300">executando…</span>}
+                {isRunning && <span className="animate-pulse text-foreground/80">executando…</span>}
               </div>
               {preview && (
-                <div className="flex flex-1 flex-col gap-2 border-t border-gray-700 px-4 py-3.5">
-                  <p className="m-0 text-xs text-gray-500">resultado</p>
-                  <pre className="m-0 whitespace-pre font-[inherit] text-white">{preview}</pre>
+                <div className="flex flex-1 flex-col gap-2 border-t border-border px-4 py-3.5">
+                  <p className="m-0 text-xs text-muted-foreground">resultado</p>
+                  <pre className="m-0 whitespace-pre font-[inherit] text-foreground">{preview}</pre>
                 </div>
               )}
             </div>
@@ -225,16 +226,16 @@ export const ScriptEditor = forwardRef<HTMLDivElement, ScriptEditorProps>(
 ScriptEditor.displayName = "ScriptEditor";
 
 const LINE_COLOR: Record<TerminalLine["type"], string> = {
-  input: "text-brand-300",
-  output: "text-gray-200",
-  error: "text-error-400",
-  system: "text-gray-400",
+  input: "text-foreground",
+  output: "text-foreground/90",
+  error: "text-destructive",
+  system: "text-muted-foreground",
 };
 
 function LogLine({ line }: { line: TerminalLine }) {
   return (
     <div className="flex gap-3">
-      <span className="shrink-0 text-gray-500">{hora(line.timestamp)}</span>
+      <span className="shrink-0 text-muted-foreground">{hora(line.timestamp)}</span>
       <span className={cn("whitespace-pre-wrap break-words", LINE_COLOR[line.type])}>
         {line.type === "input" && "> "}
         {line.content}

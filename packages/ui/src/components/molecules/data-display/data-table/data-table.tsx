@@ -294,7 +294,7 @@ const TableHead: React.FC<TableHeadProps> = ({
         {tooltip && (
           <div className="group relative">
             <HelpCircle className="h-4 w-4 cursor-pointer text-muted-foreground transition duration-100 ease-linear hover:text-foreground focus:text-foreground" />
-            <div className="absolute bottom-full left-1/2 mb-2 hidden -translate-x-1/2 transform rounded bg-gray-900 px-2 py-1 text-xs text-white group-hover:block">
+            <div className="absolute bottom-full left-1/2 mb-2 hidden -translate-x-1/2 transform rounded bg-foreground px-2 py-1 text-xs text-background group-hover:block">
               {tooltip}
             </div>
           </div>

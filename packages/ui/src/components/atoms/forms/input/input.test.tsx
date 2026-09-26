@@ -62,7 +62,7 @@ describe("Input", () => {
     it("deve aplicar variante success", () => {
       const { container } = render(<Input variant="success" />);
       const input = container.querySelector("input");
-      expect(input).toHaveClass("border-green-500");
+      expect(input).toHaveClass("border-success");
     });
   });
 
