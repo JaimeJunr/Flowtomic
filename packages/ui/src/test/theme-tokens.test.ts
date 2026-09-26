@@ -109,13 +109,13 @@ describe("Identidade Urucum no tema", () => {
     }
   });
 
-  it("success e destructive servem de texto no fundo e de fundo sólido com o foreground", () => {
+  it("os quatro tons de status servem de texto no fundo e de fundo sólido com o foreground", () => {
     // A mesma cor vira texto (text-success na variação do StatsGrid) e botão/badge sólido
     // (bg-destructive text-destructive-foreground). As duas leituras precisam passar AA.
     for (const selector of [":root", ".dark"]) {
       const block = readBlock(globalsCss, selector);
       const background = parseHsl(readToken(block, "--background"));
-      for (const name of ["--success", "--destructive"]) {
+      for (const name of ["--success", "--destructive", "--warning", "--info"]) {
         const tone = parseHsl(readToken(block, name));
         const onTone = parseHsl(readToken(block, `${name}-foreground`));
         expect(contrast(tone, background), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
@@ -187,5 +187,49 @@ describe("Componentes seguem o tema", () => {
       HARDCODED_PURPLE.test(readFileSync(file, "utf8"))
     );
     expect(offenders.map((file) => path.relative(SRC_DIR, file))).toEqual([]);
+  });
+
+  // Cor fixa não troca no modo escuro nem com o tema de quem instala: `text-gray-900` do
+  // form-layout passou pelo guarda de roxo até 26/09/2026. A escala crua do theme.css
+  // (`bg-brand-600`) também fica de fora: no Storybook ela saía transparente, sem erro. Use background/foreground, muted,
+  // border, primary, accent e os tons de status (success, destructive, warning, info).
+  const FIXED_COLOR =
+    /\b(?:text|bg|border|ring|from|to|via|fill|stroke|outline|divide|shadow|placeholder|caret|decoration)-(?:gray|slate|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|black|white)(?:-\d{2,3})?\b|\b(?:text|bg|border|ring|from|to|via|fill|stroke|shadow)-(?:brand|error|success|warning|info)-\d{2,3}\b|#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)/g;
+  // Véu atrás de modal (dialog, sheet, drawer): preto translúcido nos dois modos, padrão shadcn.
+  const SCRIM = /\bbg-black\/\d+\b/g;
+  const ALLOWED_FILES: Record<string, string> = {
+    "components/atoms/data-display/qr-code/qr-code.tsx": "fundo transparente passado à lib do QR",
+    "components/atoms/animation/backdrop-blur/backdrop-blur.tsx": "converte a cor que vem por prop",
+    "components/atoms/data-display/chart/chart.tsx":
+      "seletores internos do Recharts ([stroke='#ccc'])",
+    "components/molecules/forms/text-editor/text-editor.tsx":
+      "paleta que a pessoa escolhe no texto",
+  };
+
+  it("todo token de hover usado num componente existe como cor do Tailwind", () => {
+    // `--primary-hover` e irmãos existiam no :root sem `--color-*`, então `hover:bg-success-hover`
+    // do Button não gerava CSS nenhum (medido em 26/09/2026).
+    const used = new Set(
+      sourceFiles(SRC_DIR).flatMap((file) =>
+        [...readFileSync(file, "utf8").matchAll(/\b(?:bg|text|border)-([a-z]+-hover)\b/g)].map(
+          (match) => match[1]
+        )
+      )
+    );
+    const missing = [...used].filter(
+      (name) => !globalsCss.includes(`--color-${name}:`) && !themeCss.includes(`--color-${name}:`)
+    );
+    expect(missing).toEqual([]);
+  });
+
+  it("nenhum componente ou block usa cor fixa no lugar dos tokens", () => {
+    const offenders = sourceFiles(SRC_DIR).flatMap((file) => {
+      const relative = path.relative(SRC_DIR, file);
+      if (relative in ALLOWED_FILES || relative.startsWith("test/")) return [];
+      const source = readFileSync(file, "utf8").replace(SCRIM, "");
+      const hits = source.match(FIXED_COLOR) ?? [];
+      return hits.length > 0 ? [`${relative}: ${[...new Set(hits)].join(" ")}`] : [];
+    });
+    expect(offenders).toEqual([]);
   });
 });

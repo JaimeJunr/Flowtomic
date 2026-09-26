@@ -80,17 +80,17 @@ export const ChatLog = React.forwardRef<HTMLDivElement, ChatLogProps>(
       <div ref={ref} className={cn("h-full flex flex-col", className)} {...props}>
         {/* Header com controles */}
         {headerActions && (
-          <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between p-3 bg-muted border-b border-border">
             {headerActions}
           </div>
         )}
 
         {/* Filtros */}
-        {filters && <div className="border-b border-gray-200 dark:border-gray-700">{filters}</div>}
+        {filters && <div className="border-b border-border">{filters}</div>}
 
         {/* Container de mensagens com scroll */}
-        <Conversation className="flex-1 overflow-y-auto px-1 sm:px-2 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-200 dark:border-gray-700">
-          <ConversationContent className="p-4 text-gray-900 dark:text-gray-200 leading-relaxed space-y-3 sm:space-y-4">
+        <Conversation className="flex-1 overflow-y-auto px-1 sm:px-2 bg-muted/50 rounded-lg border border-border">
+          <ConversationContent className="p-4 text-foreground leading-relaxed space-y-3 sm:space-y-4">
             {messages.length === 0
               ? emptyState || (
                   <ConversationEmptyState

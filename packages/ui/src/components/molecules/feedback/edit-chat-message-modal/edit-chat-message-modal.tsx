@@ -38,13 +38,13 @@ const defaultFormatTimestamp = (timestamp: Date | string): string => {
 const defaultGetMessageTypeBadgeClassName = (messageType?: string): string => {
   switch (messageType) {
     case "SAY":
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300";
+      return "bg-success/10 text-success";
     case "ACTION":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300";
+      return "bg-warning/10 text-warning";
     case "STORY":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300";
+      return "bg-info/10 text-info";
     default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300";
+      return "bg-muted text-foreground";
   }
 };
 
@@ -103,22 +103,22 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
       <DialogContent className={cn("max-w-2xl max-h-[80vh] overflow-hidden", className)}>
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <Edit className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <Edit className="w-5 h-5 text-info" />
             <DialogTitle className="text-lg">Editar Mensagem</DialogTitle>
           </div>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Informações da mensagem */}
-          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 border">
+          <div className="bg-muted rounded-lg p-3 border">
             <div className="flex items-center gap-2 mb-2">
-              <span className="font-medium text-gray-900 dark:text-gray-100">{message.sender}</span>
+              <span className="font-medium text-foreground">{message.sender}</span>
               {message.messageType && (
                 <Badge className={getMessageTypeBadgeClassName(message.messageType)}>
                   {message.messageType}
                 </Badge>
               )}
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto">
+              <span className="text-xs text-muted-foreground ml-auto">
                 {formatTimestamp(message.timestamp)}
               </span>
             </div>
@@ -126,10 +126,7 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
 
           {/* Campo de edição */}
           <div className="space-y-2">
-            <label
-              htmlFor="message-content"
-              className="text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="message-content" className="text-sm font-medium text-foreground">
               Conteúdo da Mensagem
             </label>
             <Textarea
@@ -140,10 +137,10 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
               placeholder="Digite o conteúdo da mensagem..."
               disabled={isLoading}
             />
-            <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>{editedContent.length} caracteres</span>
               {hasChanges && (
-                <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                <div className="flex items-center gap-1 text-warning">
                   <TriangleAlert className="w-3.5 h-3.5" />
                   <span>Alterações não salvas</span>
                 </div>
@@ -162,7 +159,7 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
               className="flex items-center gap-2"
             >
               {isLoading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
               ) : (
                 <Save className="w-4 h-4" />
               )}

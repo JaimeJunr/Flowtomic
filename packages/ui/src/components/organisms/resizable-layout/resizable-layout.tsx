@@ -66,9 +66,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   const ResizableHandleEl = (
     <ResizableHandle
       withHandle
-      className={cn(
-        "select-none cursor-col-resize z-40 group hover:bg-gray-200/40 dark:hover:bg-gray-700/40"
-      )}
+      className={cn("select-none cursor-col-resize z-40 group hover:bg-foreground/10")}
       style={{ width: resizerThicknessPx }}
       onMouseDown={resizable.onResizeHandleMouseDown}
       onDoubleClick={resizable.handleDoubleClick}
@@ -90,7 +88,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
         )}
         <div
           className={cn(
-            "fixed top-16 bottom-0 z-50 bg-surface dark:bg-gray-800 transform transition-transform duration-200 border-r border-border",
+            "fixed top-16 bottom-0 z-50 bg-surface transform transition-transform duration-200 border-r border-border",
             side === "right" ? "right-0" : "left-0"
           )}
           style={{
@@ -142,7 +140,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
               collapsible={true}
               collapsedSize={0}
               className={cn(
-                "min-h-full bg-surface dark:bg-gray-800 border-r border-border flex flex-col overflow-y-auto transition-all duration-200"
+                "min-h-full bg-surface border-r border-border flex flex-col overflow-y-auto transition-all duration-200"
               )}
             >
               {sidebarOpen && sidebar}
@@ -176,7 +174,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
               collapsible={true}
               collapsedSize={0}
               className={cn(
-                "min-h-full bg-surface dark:bg-gray-800 border-l border-border flex flex-col overflow-y-auto transition-all duration-200"
+                "min-h-full bg-surface border-l border-border flex flex-col overflow-y-auto transition-all duration-200"
               )}
             >
               {sidebarOpen && sidebar}

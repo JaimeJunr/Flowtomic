@@ -125,8 +125,8 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
               className={cn(
                 "text-xs font-medium transition-colors",
                 selectedMessageType === type.value
-                  ? "bg-brand-600 text-white hover:bg-brand-700"
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  ? "bg-primary text-primary-foreground hover:bg-primary-hover"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
               )}
             >
               {type.icon && <span className="mr-1">{type.icon}</span>}
@@ -154,8 +154,8 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
                     className={cn(
                       "text-sm font-medium transition-all flex items-center gap-2",
                       selectedMode === mode.value
-                        ? "bg-brand-600 text-white shadow-lg shadow-brand-600/25"
-                        : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:text-foreground"
                     )}
                   >
                     {mode.icon && <span>{mode.icon}</span>}
@@ -177,18 +177,20 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
     return (
       <div
         ref={ref}
-        className={cn("border border-gray-700/50 rounded-lg bg-gray-900/40", className)}
+        className={cn("border border-border/50 rounded-lg bg-popover", className)}
         {...props}
       >
         {showHeader && (
-          <header className="px-4 py-3 border-b border-gray-700/50 flex items-center gap-2">
-            <span className="inline-flex w-5 h-5 items-center justify-center rounded-md bg-brand-600 text-white text-xs">
+          <header className="px-4 py-3 border-b border-border/50 flex items-center gap-2">
+            <span className="inline-flex w-5 h-5 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs">
               ■
             </span>
             <div>
-              {headerTitle && <h3 className="text-sm font-medium text-gray-200">{headerTitle}</h3>}
+              {headerTitle && (
+                <h3 className="text-sm font-medium text-foreground">{headerTitle}</h3>
+              )}
               {headerDescription && (
-                <p className="text-[11px] text-gray-400">{headerDescription}</p>
+                <p className="text-[11px] text-muted-foreground">{headerDescription}</p>
               )}
             </div>
           </header>
@@ -210,8 +212,8 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
             maxLength={maxLength}
             disabled={disabled || isLoading}
             className={cn(
-              "w-full min-h-[80px] mb-2 rounded-md bg-gray-900 border border-gray-700",
-              "text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500",
+              "w-full min-h-[80px] mb-2 rounded-md bg-background border border-input",
+              "text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring",
               "p-3 resize-none disabled:opacity-50"
             )}
           />
@@ -221,10 +223,10 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
             {showCounter && (
               <span
                 className={cn(
-                  "absolute left-4 bottom-14 text-[12px] font-bold select-none px-2 py-0.5 rounded-full shadow bg-gray-900/50 hover:bg-gray-900 transition-colors hover:cursor-default",
+                  "absolute left-4 bottom-14 text-[12px] font-bold select-none px-2 py-0.5 rounded-full shadow bg-popover/50 hover:bg-popover transition-colors hover:cursor-default",
                   remaining > 0
-                    ? "text-green-400/70 hover:text-green-400"
-                    : "text-red-400/70 hover:text-red-400"
+                    ? "text-success/70 hover:text-success"
+                    : "text-destructive/70 hover:text-destructive"
                 )}
                 style={{ zIndex: 5 }}
               >
@@ -243,7 +245,7 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
             <Button
               onClick={handleSubmit}
               disabled={!value.trim() || remaining < 0 || disabled || isLoading}
-              className="bg-brand-600 hover:bg-brand-700 text-white rounded-full px-5 py-2 flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-primary hover:bg-primary-hover text-primary-foreground rounded-full px-5 py-2 flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />
               {isLoading ? "Enviando..." : "Enviar"}
@@ -252,7 +254,7 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
 
           {/* Shortcuts hint */}
           {shortcuts && (
-            <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <div className="flex items-center justify-between text-xs text-muted-foreground mt-2">
               {shortcuts.submit && (
                 <span>
                   {shortcuts.submit.replace("Ctrl", "Ctrl").replace("Meta", "Cmd")} para enviar
