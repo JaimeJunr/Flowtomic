@@ -126,9 +126,38 @@ describe("FlowtomicDashboardPage", () => {
       expect(screen.getByText("01:24:08")).toBeInTheDocument();
       expect(screen.getByText("rodando em Story do date-range-picker")).toBeInTheDocument();
     });
+
+    it("cronômetro pausado mostra Retomar, e o rodando mostra Pausar", async () => {
+      const onToggleTimer = vi.fn();
+      const timer = { elapsedSeconds: 60, deliveryTitle: "Story do date-range-picker" };
+      const { rerender } = render(
+        <FlowtomicDashboardPage
+          deliveries={deliveries}
+          today={today}
+          timer={timer}
+          onToggleTimer={onToggleTimer}
+        />
+      );
+      await userEvent.click(screen.getByRole("button", { name: "Pausar" }));
+      expect(onToggleTimer).toHaveBeenCalledOnce();
+      rerender(
+        <FlowtomicDashboardPage
+          deliveries={deliveries}
+          today={today}
+          timer={{ ...timer, running: false }}
+        />
+      );
+      expect(screen.getByRole("button", { name: "Retomar" })).toBeInTheDocument();
+      expect(screen.getByText("pausado em Story do date-range-picker")).toBeInTheDocument();
+    });
   });
 
   describe("Sem cara de template", () => {
+    it("não promete atalho de teclado que não existe", () => {
+      render(<FlowtomicDashboardPage deliveries={deliveries} today={today} />);
+      expect(screen.queryByText(/Ctrl K|⌘K/)).not.toBeInTheDocument();
+    });
+
     it("não traz KPI em cards, nomes inventados nem app mobile", () => {
       render(<FlowtomicDashboardPage />);
       for (const text of [/Total Projects/, /Totok/, /Mobile App/, /Arc Company/]) {

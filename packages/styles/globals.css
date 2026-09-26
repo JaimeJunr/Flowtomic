@@ -122,9 +122,9 @@
     --accent-hover: 18 100% 82%;
 
     /* Success Colors - Verde com melhor contraste */
-    --success: 142 76% 36%;
+    --success: 142 72% 29%;
     --success-foreground: 0 0% 100%;
-    --success-hover: 142 76% 30%;
+    --success-hover: 143 64% 24%;
 
     /* Warning Colors - Amarelo com melhor contraste */
     --warning: 38 92% 50%;
@@ -140,8 +140,8 @@
     --error: 0 84% 60%;
     --error-foreground: 0 84% 20%;
     --error-hover: 0 84% 50%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 84% 20%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
     /* Muted Colors */
     --muted: 210 40% 96%;
@@ -223,7 +223,7 @@
 
     /* Success Colors - Verde com melhor contraste para dark mode */
     --success: 142 76% 45%;
-    --success-foreground: 142 76% 85%;
+    --success-foreground: 144 61% 10%;
     --success-hover: 142 76% 55%;
 
     /* Warning Colors - Amarelo com melhor contraste para dark mode */
@@ -240,8 +240,8 @@
     --error: 0 84% 60%;
     --error-foreground: 0 84% 85%;
     --error-hover: 0 72% 70%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 84% 85%;
+    --destructive: 0 91% 71%;
+    --destructive-foreground: 0 75% 15%;
 
     /* Muted Colors */
     --muted: 217 32% 17%;

@@ -109,6 +109,23 @@ describe("Identidade Urucum no tema", () => {
     }
   });
 
+  it("success e destructive servem de texto no fundo e de fundo sólido com o foreground", () => {
+    // A mesma cor vira texto (text-success na variação do StatsGrid) e botão/badge sólido
+    // (bg-destructive text-destructive-foreground). As duas leituras precisam passar AA.
+    for (const selector of [":root", ".dark"]) {
+      const block = readBlock(globalsCss, selector);
+      const background = parseHsl(readToken(block, "--background"));
+      for (const name of ["--success", "--destructive"]) {
+        const tone = parseHsl(readToken(block, name));
+        const onTone = parseHsl(readToken(block, `${name}-foreground`));
+        expect(contrast(tone, background), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
+        expect(contrast(tone, onTone), `${selector} ${name}-foreground`).toBeGreaterThanOrEqual(
+          4.5
+        );
+      }
+    }
+  });
+
   it("warning não se confunde com a marca: matiz a pelo menos 20° do brand-500", () => {
     const brand = hue(parseRgb(readToken(themeCss, "--color-brand-500")));
     const warning = hue(parseRgb(readToken(themeCss, "--color-warning-500")));

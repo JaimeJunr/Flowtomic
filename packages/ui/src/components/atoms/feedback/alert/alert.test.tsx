@@ -3,6 +3,17 @@ import { describe, expect, it } from "vitest";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 
 describe("Alert", () => {
+  describe("Texto legível no fundo tingido", () => {
+    // O *-foreground é a cor de texto em cima do fundo sólido (branco no claro); no fundo
+    // tingido de 10% o texto precisa da própria cor do tom.
+    it.each(["destructive", "success"] as const)("%s escreve com a cor do tom", (variant) => {
+      render(<Alert variant={variant}>Falhou</Alert>);
+      const alert = screen.getByRole("alert");
+      expect(alert).toHaveClass(`text-${variant}`);
+      expect(alert).not.toHaveClass(`text-${variant}-foreground`);
+    });
+  });
+
   describe("Renderização", () => {
     it("deve renderizar o Alert", () => {
       render(

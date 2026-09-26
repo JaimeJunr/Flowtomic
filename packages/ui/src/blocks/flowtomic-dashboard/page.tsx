@@ -28,6 +28,8 @@ export interface Delivery {
 export interface DeliveryTimer {
   elapsedSeconds: number;
   deliveryTitle: string;
+  /** `false` troca "Pausar" por "Retomar". @default true */
+  running?: boolean;
 }
 
 export interface FlowtomicDashboardProps {
@@ -174,20 +176,20 @@ export default function FlowtomicDashboardPage({
   const progress = Math.min(100, Math.round((summary.doneThisMonth / monthGoal) * 100));
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <nav
         aria-label="Principal"
-        className="flex w-58 shrink-0 flex-col gap-6 border-r border-border bg-surface px-4 py-6"
+        className="flex shrink-0 flex-col gap-2 border-b border-border bg-surface px-4 py-3 md:w-58 md:gap-6 md:border-r md:border-b-0 md:py-6"
       >
         <span className="font-display px-2 text-lg font-bold">{appName}</span>
-        <ul className="flex flex-col gap-0.5 text-sm">
+        <ul className="-mx-2 flex gap-0.5 overflow-x-auto text-sm md:mx-0 md:flex-col">
           {NAV_ITEMS.map((item, index) => (
             <li key={item.href}>
               <a
                 href={item.href}
                 aria-current={index === 0 ? "page" : undefined}
                 className={cn(
-                  "block rounded-md px-2 py-2",
+                  "flex min-h-11 items-center whitespace-nowrap rounded-md px-2",
                   index === 0
                     ? "bg-accent font-semibold text-accent-foreground"
                     : "text-foreground/80 hover:bg-muted"
@@ -200,19 +202,18 @@ export default function FlowtomicDashboardPage({
         </ul>
       </nav>
 
-      <main className="flex flex-1 flex-col gap-8 px-10 py-8">
-        <header className="flex items-center gap-4">
+      <main className="flex min-w-0 flex-1 flex-col gap-8 px-4 py-6 md:px-10 md:py-8">
+        <header className="flex flex-wrap items-center gap-4">
           <h1 className="font-display flex-1 text-base font-semibold text-muted-foreground">
             Entregas da semana
           </h1>
-          <label className="flex h-10 w-70 items-center gap-2 rounded-md border border-input px-3 text-muted-foreground">
+          <label className="order-last flex h-11 w-full items-center gap-2 rounded-md border border-input px-3 text-muted-foreground focus-within:ring-2 focus-within:ring-ring sm:order-none sm:w-70">
             <Search aria-hidden className="size-4" />
             <input
               placeholder="Buscar entrega"
               aria-label="Buscar entrega"
-              className="flex-1 bg-transparent text-sm text-foreground outline-none"
+              className="h-full min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none"
             />
-            <kbd className={cn(MONO, "text-xs")}>Ctrl K</kbd>
           </label>
           <Button onClick={onNewDelivery}>Nova entrega</Button>
         </header>
@@ -220,7 +221,7 @@ export default function FlowtomicDashboardPage({
         <section aria-label="Veredito da semana" className="flex flex-col gap-2">
           <p className="flex items-center gap-3.5">
             <span aria-hidden className={cn("size-3.5 shrink-0 rounded-full", verdict.dot)} />
-            <span className="font-display text-[40px] font-bold leading-none tracking-tight">
+            <span className="font-display text-[28px] font-bold leading-tight tracking-tight sm:text-[40px] sm:leading-none">
               {verdict.text}
             </span>
           </p>
@@ -251,13 +252,15 @@ export default function FlowtomicDashboardPage({
                 <p className={cn(MONO, "text-[28px] font-medium")}>
                   {formatElapsed(timer.elapsedSeconds)}
                 </p>
-                <p className="text-sm text-muted-foreground">rodando em {timer.deliveryTitle}</p>
+                <p className="text-sm text-muted-foreground">
+                  {`${timer.running === false ? "pausado" : "rodando"} em ${timer.deliveryTitle}`}
+                </p>
                 <button
                   type="button"
                   onClick={onToggleTimer}
-                  className="self-start text-sm font-medium text-accent-foreground hover:underline"
+                  className="-ml-2 min-h-11 self-start rounded-md px-2 text-sm font-medium text-accent-foreground hover:underline"
                 >
-                  Pausar
+                  {timer.running === false ? "Retomar" : "Pausar"}
                 </button>
               </SideSection>
             )}
@@ -300,40 +303,42 @@ function DueTable({ open, today }: { open: Delivery[]; today: Date }) {
           próxima.
         </p>
       ) : (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="text-left text-[13px] text-muted-foreground">
-              <th className="py-2 font-medium">Entrega</th>
-              <th className="py-2 font-medium">Com</th>
-              <th className="py-2 font-medium">Prazo</th>
-              <th className="py-2 font-medium">Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {open.map((delivery) => {
-              const late = daysBetween(delivery.dueDate, today);
-              const state =
-                late > 0
-                  ? { label: `atrasada ${plural(late, "dia", "dias")}`, dot: "bg-destructive" }
-                  : STATE_LABEL[delivery.state as Exclude<DeliveryState, "concluida">];
-              return (
-                <tr key={delivery.id} className="border-t border-border">
-                  <td className="py-3 font-medium">{delivery.title}</td>
-                  <td className="text-foreground/70">{delivery.owner}</td>
-                  <td className={cn(MONO, late > 0 && "text-destructive")}>
-                    {formatDay(delivery.dueDate)}
-                  </td>
-                  <td>
-                    <span className="inline-flex items-center gap-1.5">
-                      <span aria-hidden className={cn("size-2 rounded-full", state.dot)} />
-                      {state.label}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="-mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
+          <table className="w-full min-w-[520px] border-collapse text-sm">
+            <thead>
+              <tr className="text-left text-[13px] text-muted-foreground">
+                <th className="py-2 font-medium">Entrega</th>
+                <th className="py-2 font-medium">Com</th>
+                <th className="py-2 font-medium">Prazo</th>
+                <th className="py-2 font-medium">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {open.map((delivery) => {
+                const late = daysBetween(delivery.dueDate, today);
+                const state =
+                  late > 0
+                    ? { label: `atrasada ${plural(late, "dia", "dias")}`, dot: "bg-destructive" }
+                    : STATE_LABEL[delivery.state as Exclude<DeliveryState, "concluida">];
+                return (
+                  <tr key={delivery.id} className="border-t border-border">
+                    <td className="py-3 font-medium">{delivery.title}</td>
+                    <td className="text-foreground/70">{delivery.owner}</td>
+                    <td className={cn(MONO, late > 0 && "text-destructive")}>
+                      {formatDay(delivery.dueDate)}
+                    </td>
+                    <td>
+                      <span className="inline-flex items-center gap-1.5">
+                        <span aria-hidden className={cn("size-2 rounded-full", state.dot)} />
+                        {state.label}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   );
