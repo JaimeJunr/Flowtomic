@@ -3,10 +3,10 @@
     {
       "name": "dashboard-01",
       "author": "flowtomic (https://flowtomic.dev)",
-      "title": "Dashboard",
-      "description": "Um dashboard simples com cards usando componentes do Flowtomic.",
+      "title": "Esqueleto de app",
+      "description": "Sidebar, cabeçalho e uma área vazia que mostra onde fica o conteúdo e o comando do primeiro componente.",
       "type": "registry:block",
-      "registryDependencies": ["card", "button"],
+      "registryDependencies": [],
       "dependencies": [],
       "files": [
         {
@@ -20,27 +20,10 @@
     {
       "name": "flowtomic-dashboard",
       "author": "flowtomic (https://flowtomic.dev)",
-      "title": "Flowtomic Dashboard",
-      "description": "Dashboard completo com sidebar, header, estatísticas, gráficos, listas de projetos e equipe, e timer.",
+      "title": "Entregas da semana",
+      "description": "Diz de longe o que está atrasado e o que vence até sexta: tabela do que vence, meta do mês, cronômetro e quem está em quê.",
       "type": "registry:block",
-      "registryDependencies": [
-        "button",
-        "card",
-        "input",
-        "avatar",
-        "badge",
-        "progress",
-        "stat-card",
-        "sidebar-navigation",
-        "dashboard-header",
-        "bar-chart",
-        "circular-progress-chart",
-        "project-list",
-        "team-member-list",
-        "reminder-card",
-        "time-tracker",
-        "resizable-layout"
-      ],
+      "registryDependencies": ["button"],
       "dependencies": [],
       "files": [
         {

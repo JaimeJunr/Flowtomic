@@ -180,8 +180,8 @@ interface User {
 
 const user: User = {
   id: 1,
-  name: "John Doe",
-  email: "john@example.com",
+  name: "Revisora",
+  email: "revisora@flowtomic.dev",
 };
 \`\`\`
 
@@ -232,10 +232,10 @@ export const MessageResponseWithTable: StoryObj<typeof messageResponseMeta> = {
 
 | Component | Type | Status |
 |-----------|------|--------|
-| Button | Atom | ✅ Ready |
-| Card | Atom | ✅ Ready |
-| DataTable | Molecule | ✅ Ready |
-| Dashboard | Organism | 🚧 In Progress |
+| Button | Atom | Pronto |
+| Card | Atom | Pronto |
+| DataTable | Molecule | Pronto |
+| Dashboard | Organism | Em andamento |
 
 ## Features
 
@@ -295,11 +295,11 @@ This is how **MessageResponse** works inside a **Message** component.
 
 ## Features
 
-- ✅ Streaming support
-- ✅ Code highlighting
-- ✅ Math formulas
-- ✅ Tables and lists
-- ✅ Security hardened
+- Streaming support
+- Code highlighting
+- Math formulas
+- Tables and lists
+- Security hardened
 
 \`\`\`typescript
 const response = <MessageResponse>Hello, World!</MessageResponse>;

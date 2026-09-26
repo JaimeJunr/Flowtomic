@@ -19,8 +19,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const sampleUser: DashboardUser = {
-  name: "Totok Michael",
-  email: "tmichael20@mail.com",
+  name: "Mantenedor Flowtomic",
+  email: "mantenedor@flowtomic.dev",
 };
 
 const sampleNotifications: Notification[] = [
@@ -47,8 +47,8 @@ const sampleNotifications: Notification[] = [
 const sampleMessages: Notification[] = [
   {
     id: "1",
-    title: "New message from John",
-    description: "Can we discuss the project?",
+    title: "Nova mensagem da Revisora",
+    description: "Deixei dois comentários no PR do tema.",
     unread: true,
   },
   {

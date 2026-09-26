@@ -21,26 +21,26 @@ type Story = StoryObj<typeof meta>;
 const sampleMembers: TeamMember[] = [
   {
     id: "1",
-    name: "Alexandra Deff",
-    task: "Github Project Repository",
+    name: "Mantenedor",
+    task: "Tema Urucum no theme.css",
     status: "completed",
   },
   {
     id: "2",
-    name: "Edwin Adenike",
-    task: "Integrate User Authentication System",
+    name: "Revisora",
+    task: "Revisão do PR do flowtomic-cli init",
     status: "in-progress",
   },
   {
     id: "3",
-    name: "Isaac Oluwatemilorun",
-    task: "Develop Search and Filter Functionality",
+    name: "Você",
+    task: "Story do date-range-picker",
     status: "pending",
   },
   {
     id: "4",
-    name: "David Oshodi",
-    task: "Responsive Layout for Homepage",
+    name: "Colaboradora",
+    task: "Build do registry na Vercel",
     status: "in-progress",
   },
 ];

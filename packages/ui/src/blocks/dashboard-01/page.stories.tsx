@@ -9,28 +9,25 @@ const meta = {
     docs: {
       description: {
         component:
-          "Exemplo de block de dashboard com cards. Este block pode ser instalado via CLI usando `bunx @flowtomic/cli add dashboard-01`.",
+          "Esqueleto de app: sidebar, cabeçalho e uma área vazia que mostra onde fica o conteúdo e o comando do primeiro componente. Instale com `bunx flowtomic-cli add-block dashboard-01`.",
       },
     },
   },
   tags: ["autodocs"],
+  argTypes: {
+    appName: { control: "text" },
+    pagePath: { control: "text" },
+  },
 } satisfies Meta<typeof DashboardPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => <DashboardPage />,
-};
+export const Default: Story = {};
 
-export const WithCustomContent: Story = {
-  render: () => <DashboardPage />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Este é um exemplo básico de dashboard. Você pode customizar os cards e adicionar mais conteúdo conforme necessário.",
-      },
-    },
+export const CustomProject: Story = {
+  args: {
+    appName: "Painel interno",
+    pagePath: "src/pages/home.tsx",
   },
 };

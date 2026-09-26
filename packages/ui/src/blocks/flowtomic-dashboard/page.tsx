@@ -1,327 +1,366 @@
 /**
- * Flowtomic Dashboard Block
+ * Flowtomic Dashboard Block — Entregas da semana
  *
- * Dashboard completo com sidebar, header, estatísticas, gráficos, listas de projetos e equipe, e timer
+ * Responde uma pergunta de longe: "o que está atrasado e o que vence até sexta?".
+ * Tabela do que vence, meta do mês, cronômetro e quem está em quê.
  */
 
 "use client";
 
-import { useProjectProgress, useProjectStats } from "@flowtomic/logic";
-import { ArrowRight, Code, Layers, TestTube, Zap } from "lucide-react";
-import { useState } from "react";
-import { SidebarProvider } from "@/components/atoms/layout";
-import {
-  BarChart,
-  CircularProgressChart,
-  DashboardHeader,
-  ProjectList,
-  ReminderCard,
-  SidebarNavigation,
-  StatCard,
-  TeamMemberList,
-  TimeTracker,
-} from "@/components/molecules";
-import type { Project as ProjectListProject } from "@/components/molecules/data-display/project-list";
-import type { Reminder } from "@/components/molecules/data-display/reminder-card";
-import type { TeamMember } from "@/components/molecules/data-display/team-member-list";
-import type { DashboardUser, Notification } from "@/components/molecules/layout/dashboard-header";
-import { ResizableLayout } from "@/components/organisms";
+import { Search } from "lucide-react";
+import type { ReactNode } from "react";
+import { Button } from "@/components/atoms";
+import { cn } from "@/lib/utils";
 
-// Dados de exemplo
-const sampleProjects = [
-  { id: "1", status: "running" as const, name: "Project A" },
-  { id: "2", status: "running" as const, name: "Project B" },
-  { id: "3", status: "ended" as const, name: "Project C" },
-  { id: "4", status: "ended" as const, name: "Project D" },
-  { id: "5", status: "pending" as const, name: "Project E" },
-  { id: "6", status: "pending" as const, name: "Project F" },
-  { id: "7", status: "on-hold" as const, name: "Project G" },
-  { id: "8", status: "running" as const, name: "Project H" },
-  { id: "9", status: "running" as const, name: "Project I" },
-  { id: "10", status: "running" as const, name: "Project J" },
-  { id: "11", status: "running" as const, name: "Project K" },
-  { id: "12", status: "running" as const, name: "Project L" },
-  { id: "13", status: "ended" as const, name: "Project M" },
-  { id: "14", status: "ended" as const, name: "Project N" },
-  { id: "15", status: "ended" as const, name: "Project O" },
-  { id: "16", status: "ended" as const, name: "Project P" },
-  { id: "17", status: "ended" as const, name: "Project Q" },
-  { id: "18", status: "ended" as const, name: "Project R" },
-  { id: "19", status: "ended" as const, name: "Project S" },
-  { id: "20", status: "ended" as const, name: "Project T" },
-  { id: "21", status: "ended" as const, name: "Project U" },
-  { id: "22", status: "ended" as const, name: "Project V" },
-  { id: "23", status: "ended" as const, name: "Project W" },
-  { id: "24", status: "ended" as const, name: "Project X" },
+export type DeliveryState = "em-andamento" | "em-revisao" | "concluida";
+
+export interface Delivery {
+  id: string;
+  title: string;
+  /** Quem está com a entrega, por papel ("Mantenedor", "Revisora", "você") */
+  owner: string;
+  dueDate: Date;
+  state: DeliveryState;
+  /** Quando foi concluída; sem ela, a conta do mês usa o prazo */
+  completedAt?: Date;
+}
+
+export interface DeliveryTimer {
+  elapsedSeconds: number;
+  deliveryTitle: string;
+}
+
+export interface FlowtomicDashboardProps {
+  /** @default entregas de exemplo relativas a `today` */
+  deliveries?: Delivery[];
+  /** Data de referência para "atrasada" e "vence até sexta". @default new Date() */
+  today?: Date;
+  /** @default 20 */
+  monthGoal?: number;
+  timer?: DeliveryTimer | null;
+  /** @default "Flowtomic" */
+  appName?: string;
+  onNewDelivery?: () => void;
+  onToggleTimer?: () => void;
+}
+
+const DAY_MS = 86_400_000;
+const MONO = "font-mono";
+const SECTION_TITLE = "font-display text-sm font-semibold";
+const NAV_ITEMS = [
+  { label: "Entregas", href: "/entregas" },
+  { label: "Revisões", href: "/revisoes" },
+  { label: "Registry", href: "/registry" },
+  { label: "Equipe", href: "/equipe" },
 ];
 
-const projectListData: ProjectListProject[] = [
-  {
-    id: "1",
-    name: "Develop API Endpoints",
-    dueDate: new Date(2024, 10, 26),
-    icon: <ArrowRight className="h-5 w-5 text-blue-600" />,
-    iconColor: "rgba(37, 99, 235, 0.1)",
-  },
-  {
-    id: "2",
-    name: "Onboarding Flow",
-    dueDate: new Date(2024, 10, 28),
-    icon: <Layers className="h-5 w-5 text-green-600" />,
-    iconColor: "rgba(22, 163, 74, 0.1)",
-  },
-  {
-    id: "3",
-    name: "Build Dashboard",
-    dueDate: new Date(2024, 10, 30),
-    icon: <Code className="h-5 w-5 text-yellow-600" />,
-    iconColor: "rgba(202, 138, 4, 0.1)",
-  },
-  {
-    id: "4",
-    name: "Optimize Page Load",
-    dueDate: new Date(2024, 11, 5),
-    icon: <Zap className="h-5 w-5 text-orange-600" />,
-    iconColor: "rgba(234, 88, 12, 0.1)",
-  },
-  {
-    id: "5",
-    name: "Cross-Browser Testing",
-    dueDate: new Date(2024, 11, 6),
-    icon: <TestTube className="h-5 w-5 text-brand-600" />,
-    iconColor: "rgba(147, 51, 234, 0.1)",
-  },
-];
+function startOfDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
 
-const teamMembers: TeamMember[] = [
-  {
-    id: "1",
-    name: "Alexandra Deff",
-    task: "Github Project Repository",
-    status: "completed",
-  },
-  {
-    id: "2",
-    name: "Edwin Adenike",
-    task: "Integrate User Authentication System",
-    status: "in-progress",
-  },
-  {
-    id: "3",
-    name: "Isaac Oluwatemilorun",
-    task: "Develop Search and Filter Functionality",
-    status: "pending",
-  },
-  {
-    id: "4",
-    name: "David Oshodi",
-    task: "Responsive Layout for Homepage",
-    status: "in-progress",
-  },
-];
+function daysBetween(from: Date, to: Date): number {
+  return Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / DAY_MS);
+}
 
-const reminders: Reminder[] = [
-  {
-    id: "1",
-    title: "Meeting with Arc Company",
-    time: "02.00 pm - 04.00 pm",
-  },
-];
+/** Sexta-feira da semana de `today`; sábado e domingo já olham a sexta seguinte. */
+function nextFriday(today: Date): Date {
+  const offset = (5 - today.getDay() + 7) % 7;
+  return new Date(startOfDay(today).getTime() + offset * DAY_MS);
+}
 
-const user: DashboardUser = {
-  name: "Totok Michael",
-  email: "tmichael20@mail.com",
-};
+function plural(count: number, singular: string, pluralForm: string): string {
+  return `${count} ${count === 1 ? singular : pluralForm}`;
+}
 
-const notifications: Notification[] = [
-  {
-    id: "1",
-    title: "New project assigned",
-    unread: true,
-  },
-];
+function formatDay(date: Date): string {
+  return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+}
 
-const messages: Notification[] = [
-  {
-    id: "1",
-    title: "New message",
-    unread: true,
-  },
-];
+function formatElapsed(totalSeconds: number): string {
+  const parts = [totalSeconds / 3600, (totalSeconds % 3600) / 60, totalSeconds % 60];
+  return parts.map((part) => String(Math.floor(part)).padStart(2, "0")).join(":");
+}
 
-export default function FlowtomicDashboardPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [searchValue, setSearchValue] = useState("");
-
-  // Calcular estatísticas
-  const { total, ended, running, pending } = useProjectStats({
-    projects: sampleProjects,
-  });
-
-  // Calcular progresso
-  const progressProjects = sampleProjects.map((p) => ({
-    id: p.id,
-    status:
-      p.status === "ended"
-        ? ("completed" as const)
-        : p.status === "running"
-          ? ("in-progress" as const)
-          : ("pending" as const),
-  }));
-  const { percentage: progressPercentage } = useProjectProgress({
-    projects: progressProjects,
-  });
-
-  // Dados do gráfico de barras
-  const barChartData = [
-    { label: "S", value: 0 },
-    { label: "M", value: 45 },
-    { label: "T", value: 74 },
-    { label: "W", value: 60 },
-    { label: "T", value: 0 },
-    { label: "F", value: 0 },
-    { label: "S", value: 0 },
+function sampleDeliveries(today: Date): Delivery[] {
+  const inDays = (days: number) => new Date(startOfDay(today).getTime() + days * DAY_MS);
+  return [
+    {
+      id: "1",
+      title: "Endpoint de health no registry",
+      owner: "Mantenedor",
+      dueDate: inDays(-2),
+      state: "em-andamento",
+    },
+    {
+      id: "2",
+      title: "Onboarding do flowtomic-cli init",
+      owner: "Revisora",
+      dueDate: inDays(0),
+      state: "em-revisao",
+    },
+    {
+      id: "3",
+      title: "Story do date-range-picker",
+      owner: "você",
+      dueDate: inDays(1),
+      state: "em-andamento",
+    },
+    {
+      id: "4",
+      title: "Build do registry na Vercel",
+      owner: "Mantenedor",
+      dueDate: inDays(2),
+      state: "em-andamento",
+    },
+    {
+      id: "5",
+      title: "Tema Urucum no theme.css",
+      owner: "você",
+      dueDate: inDays(-4),
+      state: "concluida",
+    },
   ];
+}
+
+interface WeekSummary {
+  open: Delivery[];
+  overdue: number;
+  dueSoon: number;
+  doneThisMonth: number;
+}
+
+function summarize(deliveries: Delivery[], today: Date): WeekSummary {
+  const friday = nextFriday(today);
+  const open = deliveries
+    .filter((d) => d.state !== "concluida")
+    .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+  const isOverdue = (d: Delivery) => daysBetween(d.dueDate, today) > 0;
+  const doneThisMonth = deliveries.filter((d) => {
+    const doneAt = d.completedAt ?? d.dueDate;
+    return (
+      d.state === "concluida" &&
+      doneAt.getMonth() === today.getMonth() &&
+      doneAt.getFullYear() === today.getFullYear()
+    );
+  }).length;
+  return {
+    open,
+    overdue: open.filter(isOverdue).length,
+    dueSoon: open.filter((d) => !isOverdue(d) && daysBetween(d.dueDate, friday) >= 0).length,
+    doneThisMonth,
+  };
+}
+
+function verdictOf({ overdue, dueSoon }: WeekSummary): { text: string; dot: string } {
+  const parts = [
+    overdue > 0 ? plural(overdue, "atrasada", "atrasadas") : null,
+    dueSoon > 0 ? `${dueSoon} ${dueSoon === 1 ? "vence" : "vencem"} até sexta` : null,
+  ].filter(Boolean);
+  if (parts.length === 0) return { text: "Nada vence esta semana", dot: "bg-success" };
+  return { text: parts.join(", "), dot: overdue > 0 ? "bg-destructive" : "bg-warning" };
+}
+
+export default function FlowtomicDashboardPage({
+  deliveries,
+  today = new Date(),
+  monthGoal = 20,
+  timer = null,
+  appName = "Flowtomic",
+  onNewDelivery,
+  onToggleTimer,
+}: FlowtomicDashboardProps) {
+  const summary = summarize(deliveries ?? sampleDeliveries(today), today);
+  const verdict = verdictOf(summary);
+  const progress = Math.min(100, Math.round((summary.doneThisMonth / monthGoal) * 100));
 
   return (
-    <SidebarProvider>
-      <ResizableLayout
-        sidebar={
-          <SidebarNavigation
-            appName="Flowtomic"
-            mobileAppCard={{
-              title: "Download our Mobile App",
-              buttonText: "Download",
-              onDownload: () => console.log("Download app"),
-            }}
-            onNavigate={(item) => console.log("Navigate:", item)}
-          />
-        }
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        persistKey="flowtomic-dashboard-sidebar"
+    <div className="flex min-h-screen bg-background text-foreground">
+      <nav
+        aria-label="Principal"
+        className="flex w-58 shrink-0 flex-col gap-6 border-r border-border bg-surface px-4 py-6"
       >
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <DashboardHeader
-            searchValue={searchValue}
-            onSearchChange={setSearchValue}
-            user={user}
-            notifications={notifications}
-            messages={messages}
-          />
+        <span className="font-display px-2 text-lg font-bold">{appName}</span>
+        <ul className="flex flex-col gap-0.5 text-sm">
+          {NAV_ITEMS.map((item, index) => (
+            <li key={item.href}>
+              <a
+                href={item.href}
+                aria-current={index === 0 ? "page" : undefined}
+                className={cn(
+                  "block rounded-md px-2 py-2",
+                  index === 0
+                    ? "bg-accent font-semibold text-accent-foreground"
+                    : "text-foreground/80 hover:bg-muted"
+                )}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-          {/* Conteúdo Principal */}
-          <div className="flex-1 overflow-auto p-6">
-            <div className="max-w-7xl mx-auto space-y-6">
-              {/* Título */}
-              <div>
-                <h1 className="text-3xl font-bold">Dashboard</h1>
-                <p className="text-muted-foreground mt-1">
-                  Plan, prioritize, and accomplish your tasks with ease.
+      <main className="flex flex-1 flex-col gap-8 px-10 py-8">
+        <header className="flex items-center gap-4">
+          <h1 className="font-display flex-1 text-base font-semibold text-muted-foreground">
+            Entregas da semana
+          </h1>
+          <label className="flex h-10 w-70 items-center gap-2 rounded-md border border-input px-3 text-muted-foreground">
+            <Search aria-hidden className="size-4" />
+            <input
+              placeholder="Buscar entrega"
+              aria-label="Buscar entrega"
+              className="flex-1 bg-transparent text-sm text-foreground outline-none"
+            />
+            <kbd className={cn(MONO, "text-xs")}>Ctrl K</kbd>
+          </label>
+          <Button onClick={onNewDelivery}>Nova entrega</Button>
+        </header>
+
+        <section aria-label="Veredito da semana" className="flex flex-col gap-2">
+          <p className="flex items-center gap-3.5">
+            <span aria-hidden className={cn("size-3.5 shrink-0 rounded-full", verdict.dot)} />
+            <span className="font-display text-[40px] font-bold leading-none tracking-tight">
+              {verdict.text}
+            </span>
+          </p>
+          <p className={cn(MONO, "pl-7 text-sm text-muted-foreground")}>
+            {`${summary.open.length} em andamento · ${summary.doneThisMonth} de ${monthGoal} concluídas no mês`}
+          </p>
+        </section>
+
+        <div className="flex flex-col gap-12 lg:flex-row">
+          <DueTable open={summary.open} today={today} />
+          <aside className="flex w-full flex-col gap-8 lg:w-75">
+            <SideSection title="Mês">
+              <p className={cn(MONO, "text-[28px] font-medium")}>
+                {summary.doneThisMonth}
+                <span className="text-muted-foreground"> / {monthGoal}</span>
+              </p>
+              <div
+                className="h-1.5 rounded-full bg-muted"
+                role="progressbar"
+                aria-valuenow={progress}
+                aria-label="Meta do mês"
+              >
+                <div className="h-1.5 rounded-full bg-primary" style={{ width: `${progress}%` }} />
+              </div>
+            </SideSection>
+            {timer && (
+              <SideSection title="Cronômetro">
+                <p className={cn(MONO, "text-[28px] font-medium")}>
+                  {formatElapsed(timer.elapsedSeconds)}
                 </p>
-              </div>
-
-              {/* Cards de Resumo de Projetos */}
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <StatCard
-                  title="Total Projects"
-                  value={total}
-                  lastMonth={20}
-                  color="primary"
-                  variant="compact"
-                />
-                <StatCard
-                  title="Ended Projects"
-                  value={ended}
-                  lastMonth={8}
-                  color="info"
-                  variant="compact"
-                />
-                <StatCard
-                  title="Running Projects"
-                  value={running}
-                  lastMonth={10}
-                  color="success"
-                  variant="compact"
-                />
-                <StatCard
-                  title="Pending Project"
-                  value={pending}
-                  subtitle="On Discuss"
-                  color="warning"
-                  variant="compact"
-                />
-              </div>
-
-              {/* Grid Principal */}
-              <div className="grid gap-6 lg:grid-cols-3">
-                {/* Coluna Esquerda */}
-                <div className="lg:col-span-2 space-y-6">
-                  {/* Project Analytics */}
-                  <BarChart
-                    data={barChartData}
-                    title="Project Analytics"
-                    height={200}
-                    showValues={true}
-                  />
-
-                  {/* Reminders */}
-                  <ReminderCard
-                    reminders={reminders}
-                    title="Reminders"
-                    actionButtonText="Start Meeting"
-                    onStartMeeting={(reminder) => console.log("Start:", reminder)}
-                  />
-
-                  {/* Project List */}
-                  <ProjectList
-                    projects={projectListData}
-                    title="Project"
-                    addButtonText="+ New"
-                    onProjectClick={(project) => console.log("Project:", project)}
-                    onAddNew={() => console.log("Add new project")}
-                  />
-                </div>
-
-                {/* Coluna Direita */}
-                <div className="space-y-6">
-                  {/* Team Collaboration */}
-                  <TeamMemberList
-                    members={teamMembers}
-                    title="Team Collaboration"
-                    addButtonText="+ Add Member"
-                    onMemberClick={(member) => console.log("Member:", member)}
-                    onAddMember={() => console.log("Add member")}
-                  />
-
-                  {/* Project Progress */}
-                  <CircularProgressChart
-                    value={progressPercentage}
-                    label="Project Ended"
-                    title="Project Progress"
-                    size={200}
-                    legend={[
-                      { label: "Completed", color: "hsl(var(--primary))" },
-                      { label: "In Progress", color: "hsl(var(--success))" },
-                      { label: "Pending", color: "hsl(var(--muted))" },
-                    ]}
-                  />
-
-                  {/* Time Tracker */}
-                  <TimeTracker
-                    title="Time Tracker"
-                    initialTime={0}
-                    format="HH:mm:ss"
-                    backgroundColor="hsl(var(--primary))"
-                    className="text-primary-foreground"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+                <p className="text-sm text-muted-foreground">rodando em {timer.deliveryTitle}</p>
+                <button
+                  type="button"
+                  onClick={onToggleTimer}
+                  className="self-start text-sm font-medium text-accent-foreground hover:underline"
+                >
+                  Pausar
+                </button>
+              </SideSection>
+            )}
+            <OwnerSummary open={summary.open} today={today} />
+          </aside>
         </div>
-      </ResizableLayout>
-    </SidebarProvider>
+      </main>
+    </div>
+  );
+}
+
+function SideSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="flex flex-col gap-3">
+      <div className="flex items-center gap-3">
+        <h2 className={SECTION_TITLE}>{title}</h2>
+        <span aria-hidden className="h-px flex-1 bg-border" />
+      </div>
+      {children}
+    </section>
+  );
+}
+
+const STATE_LABEL: Record<Exclude<DeliveryState, "concluida">, { label: string; dot: string }> = {
+  "em-andamento": { label: "em andamento", dot: "bg-muted-foreground/50" },
+  "em-revisao": { label: "em revisão", dot: "bg-warning" },
+};
+
+function DueTable({ open, today }: { open: Delivery[]; today: Date }) {
+  return (
+    <section className="flex flex-1 flex-col gap-3">
+      <div className="flex items-center gap-3">
+        <h2 className={SECTION_TITLE}>Vencendo</h2>
+        <span aria-hidden className="h-px flex-1 bg-border" />
+      </div>
+      {open.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Nenhuma entrega aberta. Use{" "}
+          <strong className="font-medium text-foreground">Nova entrega</strong> para registrar a
+          próxima.
+        </p>
+      ) : (
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="text-left text-[13px] text-muted-foreground">
+              <th className="py-2 font-medium">Entrega</th>
+              <th className="py-2 font-medium">Com</th>
+              <th className="py-2 font-medium">Prazo</th>
+              <th className="py-2 font-medium">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {open.map((delivery) => {
+              const late = daysBetween(delivery.dueDate, today);
+              const state =
+                late > 0
+                  ? { label: `atrasada ${plural(late, "dia", "dias")}`, dot: "bg-destructive" }
+                  : STATE_LABEL[delivery.state as Exclude<DeliveryState, "concluida">];
+              return (
+                <tr key={delivery.id} className="border-t border-border">
+                  <td className="py-3 font-medium">{delivery.title}</td>
+                  <td className="text-foreground/70">{delivery.owner}</td>
+                  <td className={cn(MONO, late > 0 && "text-destructive")}>
+                    {formatDay(delivery.dueDate)}
+                  </td>
+                  <td>
+                    <span className="inline-flex items-center gap-1.5">
+                      <span aria-hidden className={cn("size-2 rounded-full", state.dot)} />
+                      {state.label}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
+    </section>
+  );
+}
+
+function OwnerSummary({ open, today }: { open: Delivery[]; today: Date }) {
+  const byOwner = new Map<string, { total: number; late: number }>();
+  for (const delivery of open) {
+    const entry = byOwner.get(delivery.owner) ?? { total: 0, late: 0 };
+    entry.total += 1;
+    if (daysBetween(delivery.dueDate, today) > 0) entry.late += 1;
+    byOwner.set(delivery.owner, entry);
+  }
+  if (byOwner.size === 0) return null;
+  return (
+    <SideSection title="Quem está em quê">
+      <dl className="grid grid-cols-[96px_minmax(0,1fr)] gap-y-2 text-sm">
+        {[...byOwner].map(([owner, { total, late }]) => (
+          <div key={owner} className="contents">
+            <dt className="text-muted-foreground">{owner}</dt>
+            <dd>
+              {plural(total, "entrega", "entregas")}
+              {late > 0 && `, ${plural(late, "atrasada", "atrasadas")}`}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </SideSection>
   );
 }

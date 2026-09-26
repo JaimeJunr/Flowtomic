@@ -1,25 +1,25 @@
-# 📚 Documentação do Flowtomic
+# Documentação do Flowtomic
 
 > **Objetivo**: Guia central para navegação e compreensão da documentação do projeto Flowtomic.
 
-## 🎯 Sobre o Projeto
+## Sobre o Projeto
 
 O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hooks headless e ferramentas reutilizáveis para projetos React/TypeScript. O projeto segue a filosofia de reutilização de código, permitindo que desenvolvedores acelerem seu desenvolvimento com componentes prontos e customizáveis.
 
-## 📖 Índice de Documentação
+## Índice de Documentação
 
-### 🚀 Início Rápido
+### Início Rápido
 
 - [Guia de Desenvolvimento](desenvolvimento/guia.md) - Guia completo de uso do monorepo e CLI
 - [Instalação e Configuração](desenvolvimento/instalacao.md) - Como instalar e configurar o projeto
 
-### 🏗️ Arquitetura e Design
+### Arquitetura e Design
 
 - [Arquitetura do Monorepo](arquitetura/monorepo.md) - Estrutura e organização do monorepo
 - [Decisões de Design](arquitetura/decisoes.md) - Decisões arquiteturais importantes
 - [Padrões Utilizados](arquitetura/padroes.md) - Padrões de código e convenções
 
-### 📦 Packages
+### Packages
 
 - [Package UI](packages/ui.md) - Componentes UI (atoms, molecules, organisms, blocks)
   - **Padrões de Documentação**: Guia completo de como documentar componentes no Storybook
@@ -28,28 +28,28 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 - [Package Logic](packages/logic.md) - Hooks headless e lógica reutilizável
 - [Package CLI](packages/cli.md) - CLI para instalação de componentes
 
-### 🧩 Componentes
+### Componentes
 
 - [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (63 atoms, 47 molecules, 30 organisms, 14 hooks, 3 blocks)
 - [Atoms](componentes/atoms.md) - Componentes básicos (63 componentes: button, input, card, etc.)
 - [Molecules](componentes/molecules.md) - Componentes compostos (47 componentes: button-group, data-table, etc.)
-- [Organisms](componentes/organisms.md) - Componentes complexos (23 componentes: dashboard-layout, stats-grid, script-editor, etc.)
+- [Organisms](componentes/organisms.md) - Componentes complexos (30 componentes: dashboard-layout, stats-grid, script-editor, etc.)
 - [Blocks](componentes/blocks.md) - Blocks pré-construídos (3 blocks: dashboard-01, flowtomic-dashboard, developer-panel)
-- [Hooks](componentes/hooks.md) - Hooks headless disponíveis (12 hooks)
+- [Hooks](componentes/hooks.md) - Hooks headless disponíveis (14 hooks)
 
-### 🛠️ CLI
+### CLI
 
 - [Documentação do CLI](../cli/README.md) - Documentação detalhada do CLI
 - [Comandos do CLI](cli/comandos.md) - Referência completa de comandos
 - [Uso do CLI](cli/uso.md) - Guias práticos de uso
 
-### 📋 Registry
+### Registry
 
 - [Documentação do Registry](../registry/README.md) - Sistema de registry
 - [Estrutura do Registry](registry/estrutura.md) - Como o registry funciona
 - [Adicionar Componentes ao Registry](registry/adicionar-componentes.md) - Como adicionar novos componentes
 
-### 💻 Desenvolvimento
+### Desenvolvimento
 
 - [Guia de Desenvolvimento](desenvolvimento/guia.md) - Como desenvolver no projeto
 - [Padrões de Código](desenvolvimento/padroes.md) - Padrões e convenções de código
@@ -57,14 +57,14 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 - [Testes](desenvolvimento/testes.md) - Estratégia e guia de testes
 - [Build e Deploy Local](desenvolvimento/build.md) - Como fazer build e testar localmente
 
-### 🚀 Deploy e Infraestrutura
+### Deploy e Infraestrutura
 
 - [Guia de Deploy](deploy/DEPLOYMENT.md) - Como fazer deploy do CLI e registry
 - [Setup de Produção](deploy/PRODUCTION_SETUP.md) - Configuração de ambiente de produção
 - [Publicação no NPM](deploy/npm.md) - Script automatizado de publicação dos packages no NPM
 - [Configuração do Registry](deploy/registry.md) - Como configurar o registry em produção
 
-## 🗺️ Como Usar Esta Documentação
+## Como Usar Esta Documentação
 
 ### Para Desenvolvedores
 
@@ -91,7 +91,7 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 2. **Produção**: Veja [Setup de Produção](deploy/PRODUCTION_SETUP.md)
 3. **Registry**: Acesse [Configuração do Registry](deploy/registry.md)
 
-## 📝 Estrutura de Documentação
+## Estrutura de Documentação
 
 ```text
 docs/
@@ -137,7 +137,7 @@ docs/
     └── registry.md
 ```
 
-## 🤝 Contribuindo com a Documentação
+## Contribuindo com a Documentação
 
 - [ ] **SEMPRE mantenha** documentação atualizada
 - [ ] **SEMPRE use** linguagem clara e objetiva
@@ -147,13 +147,13 @@ docs/
 - [ ] **SEMPRE atualize** este índice ao adicionar nova documentação
 - [ ] **SEMPRE verifique** se links estão funcionais
 
-## 📅 Atualizações
+## Atualizações
 
 - **Última atualização**: 2025-11-22
 - **Versão da documentação**: 1.3.0
 - **Próxima revisão**: 2025-12-22
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Problemas Comuns
 
@@ -171,7 +171,7 @@ docs/
 - [ ] **SEMPRE confirme** que referências estão corretas
 - [ ] **SEMPRE teste** links após atualizações
 
-## 📚 Recursos Adicionais
+## Recursos Adicionais
 
 ### Bibliotecas e Ferramentas
 

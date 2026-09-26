@@ -120,9 +120,7 @@ export type ToolInputProps = ComponentProps<"div"> & {
 export const ToolInput = React.forwardRef<HTMLDivElement, ToolInputProps>(
   ({ className, input, ...props }, ref) => (
     <div ref={ref} className={cn("space-y-2 overflow-hidden p-4", className)} {...props}>
-      <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
-        Parameters
-      </h4>
+      <h4 className="font-medium text-muted-foreground text-xs">Parameters</h4>
       <div className="rounded-md bg-muted/50">
         <CodeBlock code={JSON.stringify(input, null, 2)} language="json" />
       </div>
@@ -152,7 +150,7 @@ export const ToolOutput = React.forwardRef<HTMLDivElement, ToolOutputProps>(
 
     return (
       <div ref={ref} className={cn("space-y-2 p-4", className)} {...props}>
-        <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+        <h4 className="font-medium text-muted-foreground text-xs">
           {errorText ? "Error" : "Result"}
         </h4>
         <div

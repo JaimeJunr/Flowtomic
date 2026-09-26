@@ -213,7 +213,7 @@ export const ControlledMode: Story = {
 /**
  * Cores de texto personalizadas com seletor de paleta.
  * Grid com 28 cores predefinidas + opção para remover cor.
- * Use o botão de paleta (🎨) na toolbar para aplicar cores ao texto selecionado.
+ * Use o botão de paleta na toolbar para aplicar cores ao texto selecionado.
  */
 export const TextColorFeature: Story = {
   render: () => {
@@ -227,7 +227,7 @@ export const TextColorFeature: Story = {
             Cores de texto personalizadas
           </p>
           <p className="mt-1 text-xs text-teal-700 dark:text-teal-300">
-            Selecione texto e use o botão de paleta (🎨) para aplicar cores. Grid com 28 cores
+            Selecione texto e use o botão de paleta para aplicar cores. Grid com 28 cores
             predefinidas.
           </p>
         </div>

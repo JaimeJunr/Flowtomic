@@ -1,4 +1,4 @@
-# ⚛️ Flowtomic
+# Flowtomic
 
 > Biblioteca de componentes UI, hooks headless e ferramentas reutilizáveis para projetos React/TypeScript.
 
@@ -6,32 +6,32 @@
 [![npm version](https://img.shields.io/npm/v/@flowtomic/logic)](https://www.npmjs.com/package/@flowtomic/logic)
 [![npm version](https://img.shields.io/npm/v/flowtomic-cli)](https://www.npmjs.com/package/flowtomic-cli)
 
-## 📋 Sobre o Projeto
+## Sobre o Projeto
 
-O **Flowtomic** é um sistema de design moderno que oferece componentes UI prontos para uso e hooks headless para máxima flexibilidade. Construído sobre [Radix UI](https://www.radix-ui.com/) e inspirado em [shadcn/ui](https://ui.shadcn.com/), o Flowtomic permite que você acelere seu desenvolvimento mantendo controle total sobre customização.
+O **Flowtomic** é um sistema de design que oferece componentes UI prontos para uso e hooks headless para lógica reutilizável. Construído sobre [Radix UI](https://www.radix-ui.com/) e inspirado em [shadcn/ui](https://ui.shadcn.com/).
 
-### 🎯 Características Principais
+### Características Principais
 
-- ✅ **54 Atoms** - Componentes básicos reutilizáveis
-- ✅ **36 Molecules** - Componentes compostos
-- ✅ **23 Organisms** - Componentes complexos
-- ✅ **11 Hooks Headless** - Lógica reutilizável sem UI
-- ✅ **3 Blocks** - Templates pré-construídos
-- ✅ **Arquitetura Separada** - UI e lógica completamente desacopladas
-- ✅ **Customização Total** - Componentes copiados para seu projeto
-- ✅ **TypeScript First** - Tipagem completa e type-safe
-- ✅ **Acessibilidade** - Baseado em Radix UI (WAI-ARIA compliant)
+- **63 atoms** - componentes básicos reutilizáveis
+- **47 molecules** - componentes compostos
+- **30 organisms** - componentes complexos
+- **14 hooks headless** - lógica reutilizável sem UI
+- **3 blocks** - templates pré-construídos (`dashboard-01`, `flowtomic-dashboard`, `developer-panel`)
+- **Arquitetura separada**: UI e lógica em packages distintos
+- **Componentes copiados via CLI**: dá pra editar o código depois de instalar
+- **TypeScript**: tipagem completa
+- **Acessibilidade**: baseado em Radix UI
 
-## 🚀 Quick Start
+## Começando
 
 ### Instalação Rápida
 
 ```bash
 # 1. Inicializar configuração do Flowtomic
-npx flowtomic-cli@latest init
+bunx flowtomic-cli init
 
 # 2. Adicionar componentes desejados
-npx flowtomic-cli@latest add button card input
+bunx flowtomic-cli add button card input
 
 # 3. Usar no seu projeto
 ```
@@ -64,9 +64,9 @@ import { Button, Card } from "@flowtomic/ui";
 import { useStatCard } from "@flowtomic/logic";
 ```
 
-> **💡 Dica**: Para customização total, use o CLI. Para uso rápido sem customização, use os packages npm.
+> **Dica**: para poder editar o código do componente, use o CLI. Para uso rápido sem editar, use os packages npm.
 
-## 🎯 Filosofia do Projeto
+## Filosofia do Projeto
 
 No desenvolvimento de software, frequentemente nos deparamos com a repetição das mesmas lógicas, principalmente em projetos grandes. A engenharia de software desenvolveu paradigmas como a **Programação Orientada a Objetos (POO)** para modelar sistemas com base em entidades do mundo real, promovendo encapsulamento, abstração e reutilização. Posteriormente, surgiram princípios gerais como **Don't Repeat Yourself (DRY)** e, dentro do paradigma OO, os princípios **SOLID** (formulados por Robert C. Martin) como boas práticas.
 
@@ -74,14 +74,13 @@ O ambiente frontend, por sua vez, ainda está se desenvolvendo nessa questão. D
 
 ### Princípios Fundamentais
 
-- **Reutilização**: Componentes e hooks prontos para uso imediato
-- **Flexibilidade**: Customização total ou uso direto dos packages
-- **Separação de Responsabilidades**: UI e lógica completamente desacopladas
+- **Reutilização**: componentes e hooks prontos para uso imediato
+- **Flexibilidade**: edite o código via CLI ou use os packages direto
+- **Separação de responsabilidades**: UI e lógica em packages distintos
 - **Type Safety**: TypeScript em todo o projeto
-- **Acessibilidade**: Componentes acessíveis por padrão (WAI-ARIA)
-- **Performance**: Otimizado para produção
+- **Acessibilidade**: componentes acessíveis por padrão, via Radix UI
 
-## 🧩 Composition Pattern
+## Composition Pattern
 
 O Flowtomic adota o **Composition Pattern** como abordagem fundamental de design, construindo interfaces complexas a partir de componentes menores e reutilizáveis, em vez de usar herança. Essa técnica promove flexibilidade, reutilização de código e modularidade.
 
@@ -164,7 +163,7 @@ function MyCard() {
 4. **Testabilidade**: Componentes menores são mais fáceis de testar isoladamente
 5. **Performance**: Evita prop drilling e permite otimizações mais granulares
 
-## 📦 Estrutura
+## Estrutura
 
 ```text
 flowtomic/
@@ -188,7 +187,7 @@ flowtomic/
 └── .storybook/      # Configuração do Storybook
 ```
 
-## 🏗️ Arquitetura: Separação UI e Lógica
+## Arquitetura: Separação UI e Lógica
 
 O Flowtomic segue uma arquitetura de **separação clara entre UI e lógica**, permitindo máxima flexibilidade e reutilização:
 
@@ -226,11 +225,8 @@ function MyCustomStatCard() {
 
 **O que o hook fornece:**
 
-- ✅ Cálculo automático de delta/variação percentual
-- ✅ Formatação de valores (prefix, suffix, custom format)
-- ✅ Informações de tendência (direção, variante, porcentagem)
-- ✅ Estado e processamento de dados
-- ❌ **NÃO fornece**: markup, styles ou componentes visuais
+- Fornece: cálculo automático de delta/variação percentual, formatação de valores (prefix, suffix, custom format), informações de tendência (direção, variante, porcentagem) e estado/processamento de dados
+- Não fornece: markup, styles ou componentes visuais
 
 #### 2. Componente Visual (`StatCard` - `@flowtomic/ui`)
 
@@ -253,11 +249,8 @@ function Dashboard() {
 
 **O que o componente fornece:**
 
-- ✅ Markup completo (Card, Header, Content)
-- ✅ Estilos e animações
-- ✅ Ícones e badges visuais
-- ✅ Menu de ações (opcional)
-- ❌ **NÃO contém**: lógica de cálculo ou processamento complexo
+- Fornece: markup completo (Card, Header, Content), estilos e animações, ícones e badges visuais, menu de ações (opcional)
+- Não contém: lógica de cálculo ou processamento complexo
 
 ### Benefícios da Arquitetura
 
@@ -271,44 +264,43 @@ function Dashboard() {
 
 **Use o hook headless quando:**
 
-- ✅ Precisa de UI completamente customizada
-- ✅ Quer reutilizar a lógica em diferentes contextos
-- ✅ Está criando um design system próprio
-- ✅ Precisa de controle total sobre o markup
+- Precisa de uma UI própria, diferente da que o Flowtomic entrega
+- Quer reutilizar a lógica em diferentes contextos
+- Está criando um design system próprio
+- Precisa de controle sobre o markup
 
 **Use o componente visual quando:**
 
-- ✅ Precisa de uma solução rápida e pronta
-- ✅ O design padrão atende suas necessidades
-- ✅ Quer customizar apenas estilos (via `className` ou variáveis CSS)
-- ✅ Quer começar rápido e iterar depois
+- Precisa de uma solução rápida e pronta
+- O design padrão atende suas necessidades
+- Quer customizar apenas estilos (via `className` ou variáveis CSS)
+- Quer começar rápido e iterar depois
 
-## 📦 Instalação
+## Instalação
 
-### Método 1: CLI (Recomendado para Customização)
+### Método 1: CLI (recomendado quando você vai editar os componentes)
 
-O CLI copia os arquivos dos componentes diretamente para o seu projeto, permitindo customização total:
+O CLI copia os arquivos dos componentes diretamente para o seu projeto:
 
 ```bash
 # Inicializar configuração do Flowtomic
-npx flowtomic-cli@latest init
+bunx flowtomic-cli init
 
 # Adicionar componentes individuais
-npx flowtomic-cli@latest add button card input
+bunx flowtomic-cli add button card input
 
 # Adicionar blocks completos
-npx flowtomic-cli@latest add-block dashboard-01
+bunx flowtomic-cli add-block dashboard-01
 
 # Listar todos os componentes e blocks disponíveis
-npx flowtomic-cli@latest list
+bunx flowtomic-cli list
 ```
 
 **Vantagens do CLI:**
 
-- ✅ Customização total dos componentes
-- ✅ Componentes copiados para seu projeto
-- ✅ Imports ajustados automaticamente
-- ✅ Controle completo sobre o código
+- Você pode editar o código do componente depois de instalado
+- Componentes copiados para seu projeto
+- Imports ajustados automaticamente
 
 ### Método 2: Packages npm (Recomendado para Uso Rápido)
 
@@ -326,12 +318,12 @@ bun add @flowtomic/ui @flowtomic/logic
 
 **Vantagens dos packages npm:**
 
-- ✅ Instalação rápida
-- ✅ Atualizações via npm
-- ✅ Sem necessidade de copiar arquivos
-- ⚠️ Customização limitada (apenas via `className` e variáveis CSS)
+- Instalação rápida
+- Atualizações via npm
+- Sem necessidade de copiar arquivos
+- Customização limitada (apenas via `className` e variáveis CSS)
 
-### Método 3: Via shadcn CLI (Compatível)
+### Método 3: Via shadcn CLI (compatível)
 
 Use o registry do Flowtomic com o shadcn CLI:
 
@@ -340,9 +332,11 @@ Use o registry do Flowtomic com o shadcn CLI:
 npx shadcn@latest add https://registry.flowtomic.dev/all.json
 ```
 
+> **`registry.flowtomic.dev` está fora do ar** (o domínio não resolve no DNS, medido em 20/09/2026). Enquanto isso, use `bunx flowtomic-cli add <componente>` ou instale `@flowtomic/ui` via npm.
+
 > **Nota**: O CLI automaticamente baixa o repositório do GitHub quando necessário (via variável de ambiente ou caminho local).
 
-## 💻 Uso dos Packages
+## Uso dos Packages
 
 ### Componentes UI (`@flowtomic/ui`)
 
@@ -391,11 +385,11 @@ function ResponsiveComponent() {
 }
 ```
 
-> **💡 Dica**: Você pode combinar o uso dos packages npm com o CLI. Use os packages para componentes que não precisa customizar e o CLI para componentes que precisa modificar.
+> **Dica**: você pode combinar o uso dos packages npm com o CLI. Use os packages para componentes que não precisa modificar e o CLI para os que precisa.
 
-## 📚 Componentes Disponíveis
+## Componentes Disponíveis
 
-### Atoms (54)
+### Atoms (63)
 
 **Actions:**
 
@@ -483,7 +477,7 @@ function ResponsiveComponent() {
 - `pagination` - Paginação
 - `tabs` - Abas
 
-### Molecules (36)
+### Molecules (47)
 
 **Animation:**
 
@@ -551,7 +545,7 @@ function ResponsiveComponent() {
 
 - `animated-shiny-text` - Texto com efeito shimmer animado
 
-### Organisms (23)
+### Organisms (30)
 
 - `chain-of-thought` - Cadeia de raciocínio
 - `context` - Uso de contexto/tokens do modelo
@@ -578,7 +572,7 @@ function ResponsiveComponent() {
 - `toolbar` - Toolbar do @xyflow/react
 - `web-preview` - Visualizador de páginas web
 
-### Hooks (11)
+### Hooks (14)
 
 - `use-animated-indicator` - Hook para indicadores animados
 - `use-genealogy` - Hook para gerenciar genealogia/hierarquia
@@ -599,7 +593,7 @@ function ResponsiveComponent() {
 - `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
 - `developer-panel` - Painel de desenvolvedor com informações do sistema, ambiente, ferramentas de desenvolvimento e editor de scripts integrado
 
-## 🛠️ Desenvolvimento
+## Desenvolvimento
 
 ### Setup
 
@@ -652,36 +646,35 @@ bun run build        # Build
 bun run type-check   # Verificar tipos
 ```
 
-## 📖 Documentação
+## Documentação
 
-- [📚 Índice de Documentação](./docs/INDEX.md) - Guia central de toda a documentação
+- [Índice de Documentação](./docs/INDEX.md) - Guia central de toda a documentação
 - [Guia de Desenvolvimento](./docs/desenvolvimento/guia.md) - Guia completo de uso do monorepo e CLI
 - [cli/README.md](./cli/README.md) - Documentação detalhada do CLI
 
-## 🎯 Como Funciona
+## Como Funciona
 
 O Flowtomic oferece duas formas principais de uso:
 
-### 1. CLI (Customização Total)
+### 1. CLI (permite editar o componente)
 
-O CLI copia os arquivos dos componentes diretamente para o seu projeto (similar ao shadcn/ui), permitindo customização total:
+O CLI copia os arquivos dos componentes diretamente para o seu projeto (similar ao shadcn/ui):
 
 ```bash
 # Componentes são copiados para seu projeto
-npx flowtomic-cli@latest add button
+bunx flowtomic-cli add button
 
 # Arquivo criado: src/components/ui/button/button.tsx
-# Você pode modificar completamente o componente
+# Você pode modificar o componente à vontade
 ```
 
 **Vantagens:**
 
-- ✅ Customização total do código
-- ✅ Imports ajustados automaticamente
-- ✅ Controle completo sobre estilos e comportamento
-- ✅ Componentes fazem parte do seu projeto
+- Dá pra editar o código depois de instalado
+- Imports ajustados automaticamente
+- Componentes fazem parte do seu projeto
 
-### 2. Packages npm (Uso Rápido)
+### 2. Packages npm (uso rápido)
 
 Os packages npm fornecem componentes prontos para uso:
 
@@ -692,10 +685,10 @@ import { Button } from "@flowtomic/ui";
 
 **Vantagens:**
 
-- ✅ Instalação rápida
-- ✅ Atualizações via npm
-- ✅ Customização via `className` e variáveis CSS
-- ⚠️ Customização limitada (não pode modificar o código fonte)
+- Instalação rápida
+- Atualizações via npm
+- Customização via `className` e variáveis CSS
+- Não dá pra modificar o código fonte
 
 ### Estilo Padrão vs Customização
 
@@ -712,7 +705,7 @@ import { Button } from "@flowtomic/ui";
 
 Para mais detalhes sobre customização, consulte a [documentação de estilos](./docs/packages/ui.md).
 
-## 📝 Exemplos Práticos
+## Exemplos Práticos
 
 ### Exemplo 1: Formulário com Validação
 
@@ -801,11 +794,11 @@ function CustomStatCard() {
 }
 ```
 
-## 📖 Documentação Completa
+## Documentação Completa
 
 ### Documentação Principal
 
-- [📚 Índice de Documentação](./docs/INDEX.md) - Guia central de toda a documentação
+- [Índice de Documentação](./docs/INDEX.md) - Guia central de toda a documentação
 - [Guia de Desenvolvimento](./docs/desenvolvimento/guia.md) - Guia completo de uso do monorepo e CLI
 - [Documentação do CLI](./cli/README.md) - Documentação detalhada do CLI
 
@@ -814,8 +807,8 @@ function CustomStatCard() {
 - [Componentes Disponíveis](./docs/componentes/README.md) - Lista completa de componentes
 - [Atoms](./docs/componentes/atoms.md) - Componentes básicos (63 componentes)
 - [Molecules](./docs/componentes/molecules.md) - Componentes compostos (47 componentes)
-- [Organisms](./docs/componentes/organisms.md) - Componentes complexos (23 componentes)
-- [Hooks](./docs/componentes/hooks.md) - Hooks headless (11 hooks)
+- [Organisms](./docs/componentes/organisms.md) - Componentes complexos (30 componentes)
+- [Hooks](./docs/componentes/hooks.md) - Hooks headless (14 hooks)
 - [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (3 blocks)
 
 ### Documentação Técnica
@@ -826,13 +819,13 @@ function CustomStatCard() {
 - [Registry](./registry/README.md) - Sistema de registry
 - [Guia de Deploy](./docs/deploy/DEPLOYMENT.md) - Como fazer deploy
 
-## 📦 Packages Publicados
+## Packages Publicados
 
 O Flowtomic está publicado no npm em três packages principais:
 
 | Package                | Descrição                          | Instalação                      |
 | ---------------------- | ---------------------------------- | ------------------------------- |
-| **`flowtomic-cli`**    | CLI para instalação de componentes | `npx flowtomic-cli@latest init` |
+| **`flowtomic-cli`**    | CLI para instalação de componentes | `bunx flowtomic-cli init`       |
 | **`@flowtomic/ui`**    | Componentes UI reutilizáveis       | `npm install @flowtomic/ui`     |
 | **`@flowtomic/logic`** | Hooks headless e lógica            | `npm install @flowtomic/logic`  |
 
@@ -845,17 +838,19 @@ O registry está disponível em `https://registry.flowtomic.dev` e é compatíve
 npx shadcn@latest add https://registry.flowtomic.dev/all.json
 ```
 
-Para mais informações sobre publicação e deploy, consulte a [documentação de deploy](./docs/deploy/README.md).
+> **`registry.flowtomic.dev` está fora do ar** (domínio não resolve no DNS, medido em 20/09/2026). Use `bunx flowtomic-cli add <componente>` ou o pacote npm `@flowtomic/ui` enquanto isso.
 
-## 🤝 Contribuindo
+Para publicar os packages, use sempre o workflow **Publish** do GitHub Actions (trusted publishing) — nunca `bun run publish` direto da máquina.
+
+## Contribuindo
 
 Contribuições são bem-vindas! Por favor, consulte a [documentação de desenvolvimento](./docs/desenvolvimento/guia.md) para mais informações sobre como contribuir.
 
-## 📄 Licença
+## Licença
 
 Este projeto está sob licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 🙏 Agradecimentos
+## Agradecimentos
 
 O Flowtomic é construído sobre os ombros de projetos incríveis da comunidade open source:
 
