@@ -126,6 +126,27 @@ describe("Identidade Urucum no tema", () => {
     }
   });
 
+  it("texto no próprio tom passa AA sobre o tom tingido a 10% (Alert, tag)", () => {
+    // Tingido = 10% do tom sobre o background. Medido pela revisão de 26/09/2026: 4,1–4,4 no claro.
+    for (const selector of [":root", ".dark"]) {
+      const block = readBlock(globalsCss, selector);
+      const background = parseHsl(readToken(block, "--background"));
+      for (const name of ["--success", "--destructive", "--warning", "--info"]) {
+        const tone = parseHsl(readToken(block, name));
+        const tinted = tone.map((c, i) => c * 0.1 + background[i] * 0.9) as Rgb;
+        expect(contrast(tone, tinted), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("as cores do Tailwind leem a variável na hora, senão `dark` num painel não muda nada", () => {
+    // Com `@theme` sem `inline`, `--color-background: hsl(var(--background))` é resolvido uma vez
+    // no :root; um painel com a classe `dark` herdava o valor claro (terminal do script-editor).
+    const start = globalsCss.indexOf("--color-background: hsl(var(--background))");
+    const opener = globalsCss.lastIndexOf("@theme", start);
+    expect(globalsCss.slice(opener, globalsCss.indexOf("{", opener)).trim()).toBe("@theme inline");
+  });
+
   it("warning não se confunde com a marca: matiz a pelo menos 20° do brand-500", () => {
     const brand = hue(parseRgb(readToken(themeCss, "--color-brand-500")));
     const warning = hue(parseRgb(readToken(themeCss, "--color-warning-500")));
