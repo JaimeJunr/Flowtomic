@@ -57,6 +57,19 @@ function contrastWithWhite(rgb: Rgb): number {
   return 1.05 / (0.2126 * r + 0.7152 * g + 0.0722 * b + 0.05);
 }
 
+function luminance(rgb: Rgb): number {
+  const [r, g, b] = rgb.map((c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrast(a: Rgb, b: Rgb): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
 const isPurple = (rgb: Rgb) => hue(rgb) >= 240 && hue(rgb) <= 300;
 
 describe("Identidade Urucum no tema", () => {
@@ -79,6 +92,19 @@ describe("Identidade Urucum no tema", () => {
       const block = readBlock(globalsCss, selector);
       for (const name of ["--ring", "--secondary", "--accent", "--accent-foreground"]) {
         expect(isPurple(parseHsl(readToken(block, name))), `${selector} ${name}`).toBe(false);
+      }
+    }
+  });
+
+  it("secondary é superfície: texto normal e secondary-foreground legíveis em cima dele", () => {
+    // node, progress, task, message e context pintam bg-secondary e escrevem com a cor padrão
+    // do texto (convenção do shadcn). Um secondary escuro deixa esses títulos ilegíveis.
+    for (const selector of [":root", ".dark"]) {
+      const block = readBlock(globalsCss, selector);
+      const surface = parseHsl(readToken(block, "--secondary"));
+      for (const name of ["--foreground", "--secondary-foreground"]) {
+        const text = parseHsl(readToken(block, name));
+        expect(contrast(surface, text), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
       }
     }
   });

@@ -17,6 +17,14 @@ import {
 } from "@/components/atoms";
 import { cn } from "@/lib/utils";
 
+export interface WidgetConfigModalWidget {
+  id: string;
+  type: string;
+  /** Título humano do widget, exibido na descrição no lugar do tipo interno */
+  title?: string;
+  config?: Record<string, unknown>;
+}
+
 export interface WidgetConfigModalProps {
   /**
    * Se o modal está aberto
@@ -26,7 +34,7 @@ export interface WidgetConfigModalProps {
   /**
    * Widget a ser configurado
    */
-  widget: { id: string; type: string; config?: Record<string, unknown> } | null;
+  widget: WidgetConfigModalWidget | null;
 
   /**
    * Callback quando configuração é salva
@@ -42,7 +50,7 @@ export interface WidgetConfigModalProps {
    * Render prop para renderizar formulário de configuração customizado
    */
   renderConfigForm?: (
-    widget: { id: string; type: string; config?: Record<string, unknown> },
+    widget: WidgetConfigModalWidget,
     config: Record<string, unknown>,
     onUpdate: (config: Record<string, unknown>) => void
   ) => React.ReactNode;
@@ -105,7 +113,10 @@ export function WidgetConfigModal({
         <DialogHeader>
           <DialogTitle>{title || `Configurar Widget`}</DialogTitle>
           <DialogDescription>
-            {description || `Personalize os dados e configurações do widget "${widget.type}"`}
+            {description ||
+              (widget.title
+                ? `Personalize os dados e configurações de "${widget.title}"`
+                : "Personalize os dados e configurações do widget")}
           </DialogDescription>
         </DialogHeader>
 

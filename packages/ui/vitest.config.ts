@@ -9,6 +9,14 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    // streamdown importa katex/dist/katex.min.css no nível do módulo; sem inline
+    // o Vitest externaliza o pacote e o loader nativo do Node quebra em
+    // "Unknown file extension .css" (ver TextEditor/DocumentEditor).
+    server: {
+      deps: {
+        inline: [/streamdown/],
+      },
+    },
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],

@@ -223,7 +223,7 @@ export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorPro
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Clock className="size-3.5" />
-                <span>Última edição: {lastEdit.toLocaleTimeString()}</span>
+                <span>Última edição: {lastEdit.toLocaleTimeString("pt-BR")}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <FileText className="size-3.5" />

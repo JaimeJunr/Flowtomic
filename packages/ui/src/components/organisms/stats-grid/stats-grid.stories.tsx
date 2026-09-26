@@ -1,40 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { StatsGrid } from "./stats-grid";
+import { type StatItem, StatsGrid } from "./stats-grid";
 
-const sampleStats = [
+const sampleStats: StatItem[] = [
+  // delta calculado automaticamente: ((1240 - 1074) / 1074) * 100 = +15,5%
+  { id: "npm", title: "Downloads no npm, 7 dias", value: 1240, lastMonth: 1074 },
   {
-    id: "1",
-    title: "Receita Total",
-    value: 122380,
-    // delta calculado automaticamente: ((122380 - 105922) / 105922) * 100 = +15.5%
-    lastMonth: 105922,
-    prefix: "R$ ",
-    color: "blue" as const,
+    id: "componentes",
+    title: "Componentes publicados",
+    value: 140,
+    subtitle: "6 novos desde a 0.7.0",
   },
+  { id: "cobertura", title: "Cobertura de testes", value: "20,9%", subtitle: "meta 75%" },
+  // subir é ruim aqui: positive={false} pinta a subida de vermelho
   {
-    id: "2",
-    title: "Usuários Ativos",
-    value: 85000,
-    // delta calculado automaticamente: ((85000 - 92890) / 92890) * 100 = -8.5%
-    lastMonth: 92890,
-    color: "green" as const,
-  },
-  {
-    id: "3",
-    title: "Pedidos",
-    value: 2500,
-    // delta calculado automaticamente: ((2500 - 2228) / 2228) * 100 = +12.2%
-    lastMonth: 2228,
-    color: "orange" as const,
-  },
-  {
-    id: "4",
-    title: "Taxa de Conversão",
-    value: 50,
-    suffix: "%",
-    // delta calculado automaticamente: ((50 - 28) / 28) * 100 = +78.6%
-    lastMonth: 28,
-    color: "purple" as const,
+    id: "build",
+    title: "Build do registry",
+    value: 38,
+    lastMonth: 35,
+    suffix: " s",
+    positive: false,
   },
 ];
 
@@ -42,7 +26,13 @@ const meta = {
   title: "Flowtomic UI/Organisms/StatsGrid",
   component: StatsGrid,
   parameters: {
-    layout: "centered",
+    layout: "padded",
+    docs: {
+      description: {
+        component:
+          "Régua de métricas: rótulo, valor em JetBrains Mono e a variação contra o período anterior. Só a variação ganha cor, e `positive={false}` inverte o sentido para métricas em que subir é ruim.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -137,21 +127,15 @@ export const SingleColumn: Story = {
 export const AutoCalculatedDelta: Story = {
   args: {
     stats: [
+      // delta calculado automaticamente: +15,5%
+      { id: "npm", title: "Downloads no npm, 7 dias", value: 1240, lastMonth: 1074 },
+      // queda boa: com positive={false}, a descida fica verde
       {
-        id: "1",
-        title: "Taxa de Conversão",
-        value: 50,
-        suffix: "%",
-        lastMonth: 28, // delta calculado automaticamente: +78.6%
-        color: "purple" as const,
-      },
-      {
-        id: "2",
-        title: "Taxa de Engajamento",
-        value: 75,
-        suffix: "%",
-        lastMonth: 60, // delta calculado automaticamente: +25.0%
-        color: "green" as const,
+        id: "erros",
+        title: "Erros no console das stories",
+        value: 3,
+        lastMonth: 7,
+        positive: false,
       },
     ],
     layout: "grid",
