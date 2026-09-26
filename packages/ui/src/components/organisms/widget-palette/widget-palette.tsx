@@ -9,6 +9,18 @@ import { useDraggable } from "@dnd-kit/core";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Traduz a largura em unidades de grid (assume 12 colunas, o padrão do dashboard)
+ * para uma palavra que quem não mexe com grid entende. Buckets arbitrários, não
+ * frações contínuas — por isso w=3 e w=4 caem no mesmo "um terço".
+ */
+function widthLabel(w: number): string {
+  if (w <= 4) return "um terço da largura";
+  if (w <= 6) return "metade da largura";
+  if (w <= 9) return "dois terços da largura";
+  return "largura inteira";
+}
+
 export interface WidgetPaletteItem {
   /**
    * ID único do widget
@@ -102,25 +114,19 @@ function DraggableWidgetItem({ widget }: { widget: WidgetPaletteItem }) {
       {...listeners}
       {...attributes}
       className={cn(
-        "p-4 rounded-lg border-2 border-border bg-card",
-        "cursor-grab active:cursor-grabbing",
-        "hover:border-primary hover:shadow-md",
-        "transition-all duration-200",
+        "flex items-center gap-3 border-t border-border py-3 first:border-t-0",
+        "cursor-grab active:cursor-grabbing hover:bg-accent/50 transition-colors",
         isDragging && "opacity-50 z-50"
       )}
     >
-      <div className="flex items-start gap-3">
-        <div className="p-2 rounded-md bg-primary/10">
-          <Icon className="w-5 h-5 text-primary" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm text-foreground mb-1">{widget.name}</h4>
-          <p className="text-xs text-muted-foreground line-clamp-2">{widget.description}</p>
-          <div className="mt-2 text-xs text-muted-foreground">
-            {widget.defaultSize.w} × {widget.defaultSize.h}
-          </div>
-        </div>
+      <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-foreground">{widget.name}</p>
+        <p className="truncate text-xs text-muted-foreground">{widget.description}</p>
       </div>
+      <span className="shrink-0 text-xs text-muted-foreground">
+        {widthLabel(widget.defaultSize.w)}
+      </span>
     </div>
   );
 }
@@ -169,7 +175,7 @@ export function WidgetPalette({
       </div>
 
       {/* Widgets List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto px-4">
         {widgets.length === 0 ? (
           <div className="text-center py-8 text-sm text-muted-foreground">
             Nenhum widget disponível
@@ -177,14 +183,6 @@ export function WidgetPalette({
         ) : (
           widgets.map((widget) => <DraggableWidgetItem key={widget.id} widget={widget} />)
         )}
-      </div>
-
-      {/* Footer */}
-      <div className="p-4 border-t border-border bg-muted/50">
-        <p className="text-xs text-muted-foreground text-center">
-          {widgets.length} {widgets.length === 1 ? "widget" : "widgets"} disponível
-          {widgets.length !== 1 ? "eis" : ""}
-        </p>
       </div>
     </div>
   );

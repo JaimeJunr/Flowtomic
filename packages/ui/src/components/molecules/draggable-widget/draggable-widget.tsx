@@ -136,9 +136,11 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
         ref={setNodeRef}
         style={style}
         className={cn(
-          "relative group",
+          "relative group rounded-lg",
           isDragging && "opacity-50 z-50",
-          isEditMode && "ring-2 ring-primary/20",
+          // cor de marca só enquanto arrasta ou com foco (teclado) — repouso é a borda fina do conteúdo abaixo
+          isDragging && "ring-2 ring-ring",
+          "focus-within:ring-2 focus-within:ring-ring",
           className
         )}
       >

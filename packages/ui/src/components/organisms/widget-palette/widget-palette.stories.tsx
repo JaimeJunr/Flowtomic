@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Activity, BarChart3, Table, TrendingUp } from "lucide-react";
+import { BarChart3, List, Table, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import type { WidgetPaletteItem } from "./widget-palette";
 import { WidgetPalette } from "./widget-palette";
@@ -47,11 +47,11 @@ const defaultWidgets: WidgetPaletteItem[] = [
     defaultSize: { w: 12, h: 6 },
   },
   {
-    id: "movements",
-    type: "movements",
-    name: "Movimentações",
-    description: "Histórico de movimentações",
-    icon: Activity,
+    id: "list",
+    type: "list",
+    name: "Lista",
+    description: "Log de eventos recentes",
+    icon: List,
     defaultSize: { w: 6, h: 4 },
   },
 ];
