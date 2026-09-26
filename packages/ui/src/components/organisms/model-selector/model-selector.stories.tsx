@@ -27,16 +27,16 @@ export const Default: Story = {
   render: () => (
     <ModelSelector>
       <ModelSelectorTrigger asChild>
-        <Button>Select Model</Button>
+        <Button>Selecionar modelo</Button>
       </ModelSelectorTrigger>
       <ModelSelectorContent>
-        <ModelSelectorInput placeholder="Search models..." />
+        <ModelSelectorInput placeholder="Buscar modelo..." />
         <ModelSelectorList>
-          <ModelSelectorEmpty>No models found.</ModelSelectorEmpty>
-          <ModelSelectorGroup heading="Popular">
-            <ModelSelectorItem>GPT-4</ModelSelectorItem>
-            <ModelSelectorItem>Claude 3</ModelSelectorItem>
-            <ModelSelectorItem>Gemini Pro</ModelSelectorItem>
+          <ModelSelectorEmpty>Nenhum modelo encontrado.</ModelSelectorEmpty>
+          <ModelSelectorGroup heading="Mais usados">
+            <ModelSelectorItem>claude-sonnet-5</ModelSelectorItem>
+            <ModelSelectorItem>claude-opus-5-5</ModelSelectorItem>
+            <ModelSelectorItem>gpt-6</ModelSelectorItem>
           </ModelSelectorGroup>
         </ModelSelectorList>
       </ModelSelectorContent>

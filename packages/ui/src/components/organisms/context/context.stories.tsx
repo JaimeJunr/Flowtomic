@@ -30,7 +30,9 @@ export const Default: Story = {
         <ContextContent>
           <ContextContentHeader />
           <ContextContentBody>
-            <p className="text-xs text-muted-foreground">Token usage details</p>
+            <p className="text-xs text-muted-foreground">
+              Detalhe de uso de tokens da sessão no registry:build
+            </p>
           </ContextContentBody>
           <ContextContentFooter />
         </ContextContent>

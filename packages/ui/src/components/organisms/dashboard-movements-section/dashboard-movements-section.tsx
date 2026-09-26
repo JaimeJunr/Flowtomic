@@ -7,7 +7,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from "../../atoms";
+import { Button } from "../../atoms";
 
 export interface Movement {
   id: string;
@@ -92,7 +92,7 @@ export const DashboardMovementsSection = React.forwardRef<
           return "bg-success/10 text-success border border-success/30";
         case "RESERVADO":
         case "RESERVED":
-          return "bg-accent/10 text-accent border border-accent/30";
+          return "bg-accent text-accent-foreground border border-accent-hover";
         case "VENDIDO":
         case "SOLD":
           return "bg-muted-foreground/10 text-muted-foreground border border-muted-foreground/30";
@@ -101,9 +101,10 @@ export const DashboardMovementsSection = React.forwardRef<
       }
     };
 
-    // Função padrão para obter variante do botão
+    // Função padrão para obter variante do botão. Todas outline: com uma ação por linha,
+    // botão sólido em cada uma vira vários botões competindo pela atenção.
     const defaultGetButtonVariant = (
-      buttonText: string
+      _buttonText: string
     ):
       | "default"
       | "destructive"
@@ -114,85 +115,53 @@ export const DashboardMovementsSection = React.forwardRef<
       | "success"
       | "info"
       | undefined => {
-      const normalizedText = buttonText.toUpperCase();
-      if (normalizedText.includes("VENDER") || normalizedText.includes("ENTREGUE")) {
-        return "success";
-      }
-      if (normalizedText.includes("AGUARDANDO") || normalizedText.includes("WAITING")) {
-        return "info";
-      }
-      return "default";
+      return "outline";
     };
 
     const statusColorFn = getStatusColor || defaultGetStatusColor;
     const buttonVariantFn = getButtonVariant || defaultGetButtonVariant;
 
     return (
-      <Card
-        ref={ref}
-        className={cn(
-          "bg-card border border-border hover:shadow-lg transition-all duration-300",
-          className
-        )}
-        {...props}
-      >
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            {title}
-            {periodBadge && (
-              <Badge variant="secondary" className="text-xs">
-                {periodBadge}
-              </Badge>
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {movements.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">{emptyMessage}</div>
-          ) : (
-            <ul className="space-y-4" aria-label={`Lista de ${title.toLowerCase()}`}>
-              {movements.map((movement) => (
-                <li
-                  key={movement.id}
-                  className="flex items-center justify-between bg-background rounded-lg p-4 border border-border hover:border-ring hover:shadow-sm transition-all duration-200"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-primary-foreground font-semibold text-sm"
-                      aria-hidden="true"
-                    >
-                      {movement.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="font-medium text-sm text-foreground">{movement.name}</div>
-                      <div className="text-primary font-semibold text-sm">{movement.price}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      className={cn(
-                        "text-xs px-3 py-1 rounded-full font-medium",
-                        statusColorFn(movement.tag)
-                      )}
-                      aria-label={`Status: ${movement.tag}`}
-                    >
-                      {movement.tag}
-                    </Badge>
-                    <Button
-                      variant={buttonVariantFn(movement.buttonText)}
-                      size="sm"
-                      onClick={movement.onButtonClick}
-                      aria-label={`Ação: ${movement.buttonText}`}
-                    >
-                      {movement.buttonText}
-                    </Button>
-                  </div>
-                </li>
-              ))}
-            </ul>
+      <div ref={ref} className={cn("flex flex-col gap-3", className)} {...props}>
+        <div className="flex items-baseline gap-3">
+          <h2 className="font-display text-sm font-semibold">{title}</h2>
+          <span aria-hidden className="h-px flex-1 self-center bg-border" />
+          {periodBadge && (
+            <span className="font-mono text-xs text-muted-foreground">{periodBadge}</span>
           )}
-        </CardContent>
-      </Card>
+        </div>
+        {movements.length === 0 ? (
+          <p className="py-6 text-sm text-muted-foreground">{emptyMessage}</p>
+        ) : (
+          <ul className="text-sm" aria-label={`Lista de ${title.toLowerCase()}`}>
+            {movements.map((movement) => (
+              <li
+                key={movement.id}
+                className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border py-3 first:border-t-0"
+              >
+                <span className="min-w-0 flex-1 font-medium text-foreground">{movement.name}</span>
+                <span className="font-mono text-foreground/80">{movement.price}</span>
+                <span
+                  className={cn(
+                    "rounded-full px-2.5 py-0.5 text-xs font-medium",
+                    statusColorFn(movement.tag)
+                  )}
+                >
+                  {movement.tag}
+                </span>
+                <Button
+                  variant={buttonVariantFn(movement.buttonText)}
+                  size="sm"
+                  onClick={movement.onButtonClick}
+                  aria-label={`Ação: ${movement.buttonText}`}
+                >
+                  {movement.buttonText}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     );
   }
 );

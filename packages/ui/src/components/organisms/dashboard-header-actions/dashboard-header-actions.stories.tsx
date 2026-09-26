@@ -26,9 +26,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     dashboards: [
-      { id: "1", name: "Dashboard 1" },
-      { id: "2", name: "Dashboard 2" },
-      { id: "3", name: "Dashboard 3" },
+      { id: "1", name: "Componentes" },
+      { id: "2", name: "Publicações no npm" },
+      { id: "3", name: "Build do registry" },
     ],
     activeDashboardId: "1",
     layout: "grid",
@@ -41,7 +41,7 @@ export const Default: Story = {
 
 export const SingleDashboard: Story = {
   args: {
-    dashboards: [{ id: "1", name: "Dashboard Principal" }],
+    dashboards: [{ id: "1", name: "Componentes" }],
     activeDashboardId: "1",
     layout: "grid",
     onSaveAsNew: fn(),
@@ -53,8 +53,8 @@ export const SingleDashboard: Story = {
 export const ListLayout: Story = {
   args: {
     dashboards: [
-      { id: "1", name: "Dashboard 1" },
-      { id: "2", name: "Dashboard 2" },
+      { id: "1", name: "Componentes" },
+      { id: "2", name: "Publicações no npm" },
     ],
     activeDashboardId: "1",
     layout: "list",
@@ -68,8 +68,8 @@ export const ListLayout: Story = {
 export const Loading: Story = {
   args: {
     dashboards: [
-      { id: "1", name: "Dashboard 1" },
-      { id: "2", name: "Dashboard 2" },
+      { id: "1", name: "Componentes" },
+      { id: "2", name: "Publicações no npm" },
     ],
     activeDashboardId: "1",
     layout: "grid",
@@ -83,7 +83,7 @@ export const Loading: Story = {
 
 export const CustomLabels: Story = {
   args: {
-    dashboards: [{ id: "1", name: "Dashboard Principal" }],
+    dashboards: [{ id: "1", name: "Componentes" }],
     activeDashboardId: "1",
     layout: "grid",
     labels: {

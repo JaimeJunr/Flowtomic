@@ -37,50 +37,49 @@ export const Default: Story = {
 
 export const WithCustomScript: Story = {
   args: {
-    defaultScript: `// Script customizado de exemplo
-const numbers = [1, 2, 3, 4, 5];
-const doubled = numbers.map(n => n * 2);
-console.log("Resultado:", doubled);
-return { numbers, doubled };`,
+    defaultScript: `// Conta quantos componentes de cada tipo o registry expõe
+def registry = ctx.getBean("componentRegistryService")
+def porTipo = registry.findAll().groupBy { it.type }
+
+def resultado = porTipo.collectEntries { tipo, itens -> [(tipo): itens.size()] }
+resultado`,
   },
 };
 
 export const WithWebSocket: Story = {
   args: {
-    wsUrl: "ws://localhost:8080/ws/terminal",
-    defaultScript: `// Script que será executado via WebSocket
-console.log("Conectado via WebSocket");
-return { status: "connected", timestamp: new Date() };`,
+    wsUrl: "ws://localhost:8080/ws/registry",
+    defaultScript: `// Script executado via WebSocket, com o log chegando linha a linha
+def registry = ctx.getBean("componentRegistryService")
+registry.findAll().each { println "adicionado em \${it.addedAt}: \${it.name}" }`,
   },
 };
 
 export const WithHTTPFallback: Story = {
   args: {
     executeScript: async (script: string) => {
-      // Simulação de execução HTTP
+      // Simulação de execução HTTP, sem WebSocket disponível
       await new Promise((resolve) => setTimeout(resolve, 1500));
       return {
-        output: `Script executado: ${script.substring(0, 50)}...`,
+        output: `flowtomic-cli add stat-card\n${script.split("\n")[0]}`,
         result: {
-          message: "Script executado com sucesso",
-          timestamp: new Date().toISOString(),
-          scriptLength: script.length,
+          instalado: "stat-card",
+          arquivos: ["stat-card.tsx", "stat-card.stories.tsx", "index.ts"],
         },
       };
     },
-    defaultScript: `// Este script será executado via HTTP (fallback)
-const result = {
-  message: "Hello from HTTP!",
-  data: [1, 2, 3, 4, 5],
-};
-return result;`,
+    defaultScript: `// Este script roda via HTTP (fallback, sem WebSocket)
+// bunx flowtomic-cli add stat-card
+def resultado = ctx.getBean("cliService").add("stat-card")
+resultado`,
   },
 };
 
 export const Disconnected: Story = {
   args: {
     autoConnect: false,
-    defaultScript: `// WebSocket desabilitado
-console.log("Modo desconectado - use executeScript prop para HTTP");`,
+    defaultScript: `// WebSocket desabilitado — use a prop executeScript para HTTP
+def registry = ctx.getBean("componentRegistryService")
+registry.findAll().size()`,
   },
 };

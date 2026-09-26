@@ -46,7 +46,7 @@ export const MonthlySummary = React.forwardRef<HTMLDivElement, MonthlySummaryPro
       netProfit = 0,
       growthPercentage,
       className,
-      formatCurrency = (value: number) => value.toLocaleString(),
+      formatCurrency = (value: number) => value.toLocaleString("pt-BR"),
       labels = {},
       ...props
     },
@@ -87,7 +87,7 @@ export const MonthlySummary = React.forwardRef<HTMLDivElement, MonthlySummaryPro
               <span className="text-sm font-medium text-muted-foreground">{costsLabel}</span>
               <span className="font-bold text-lg text-destructive">{formatCurrency(costs)}</span>
             </div>
-            <div className="flex items-center justify-between p-5 rounded-lg bg-gradient-to-r from-primary to-primary/80 text-primary-foreground mt-2 shadow-md">
+            <div className="flex items-center justify-between gap-4 p-5 rounded-lg bg-card border border-border mt-2">
               <span className="text-sm font-semibold">{netProfitLabel}</span>
               <span className="font-bold text-2xl">{formatCurrency(netProfit)}</span>
             </div>

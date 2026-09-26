@@ -24,10 +24,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <OpenIn query="Example query">
+    <OpenIn query="bug no registry:build">
       <OpenInTrigger />
       <OpenInContent>
-        <OpenInLabel>Open in</OpenInLabel>
+        <OpenInLabel>Abrir em</OpenInLabel>
         <OpenInChatGPT />
         <OpenInClaude />
         <OpenInT3 />

@@ -92,7 +92,7 @@ const defaultSenderConfig: ChatMessageProps["senderConfig"] = {
 };
 
 const defaultFormatTimestamp = (timestamp: Date | string): string => {
-  return new Date(timestamp).toLocaleString();
+  return new Date(timestamp).toLocaleString("pt-BR");
 };
 
 export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(

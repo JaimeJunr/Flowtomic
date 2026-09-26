@@ -521,6 +521,15 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **Importar do barrel `@/components/organisms` quebra o Vitest** com `Unknown file
   extension ".css"`: o barrel puxa `message.tsx`, que importa `katex.min.css`. Em teste e em
   block, importe o organism pelo caminho direto (`@/components/organisms/script-editor`).
+- ⚠️ **Edge do React Flow não aparece em teste jsdom** se o node não vier com `measured`
+  (width/height) **e** `handles` explícitos: o `ResizeObserver` mockado no `setup.ts` nunca
+  dispara, então o React Flow nunca mede os handles. Ver `organisms/edge/edge.test.tsx`.
+- ⚠️ **`CalendarPopover` e `CalendarRange` estouram timeout na suíte inteira do `ui`** com a
+  máquina carregada (35 s, medido em 26/09/2026) e passam rodados sozinhos. Antes de caçar bug,
+  rode `bunx vitest run <arquivo>` isolado.
+- ⚠️ **Os testes guarda de tema só pegam roxo fixo e tells de template.** Cor fixa de Tailwind
+  (`text-gray-900` no `form-layout`) passou por eles até 26/09/2026 — ainda não há guarda
+  para `gray-`/`slate-`/hex nos componentes.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 

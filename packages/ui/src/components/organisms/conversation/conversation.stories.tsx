@@ -22,9 +22,9 @@ export const Default: Story = {
   render: () => (
     <Conversation className="h-[400px]">
       <ConversationContent>
-        <div>Message 1</div>
-        <div>Message 2</div>
-        <div>Message 3</div>
+        <div>adiciona o stat-card no dashboard</div>
+        <div>Feito — story e barrel export atualizados</div>
+        <div>roda `bunx vitest run src/components/atoms/stat-card`?</div>
       </ConversationContent>
       <ConversationScrollButton />
     </Conversation>

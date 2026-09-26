@@ -20,13 +20,18 @@ export const Default: Story = {
       <>
         <PlanHeader>
           <div>
-            <PlanTitle>Project Plan</PlanTitle>
-            <PlanDescription>Complete the implementation of the new feature</PlanDescription>
+            <PlanTitle>Publicar o logic 0.9.0</PlanTitle>
+            <PlanDescription>
+              Trusted publishing via workflow Publish, sem tocar a máquina
+            </PlanDescription>
           </div>
           <PlanTrigger />
         </PlanHeader>
         <PlanContent>
-          <p>This is the plan content that will be shown when expanded.</p>
+          <p>
+            1. Subir a versão em `packages/logic/package.json`. 2. Rodar `bun install` pro bun.lock
+            acompanhar. 3. Abrir PR e mergear na main. 4. GitHub Actions → Publish → logic.
+          </p>
         </PlanContent>
       </>
     ),
@@ -41,13 +46,15 @@ export const Streaming: Story = {
       <>
         <PlanHeader>
           <div>
-            <PlanTitle>Project Plan</PlanTitle>
-            <PlanDescription>Complete the implementation of the new feature</PlanDescription>
+            <PlanTitle>Publicar o logic 0.9.0</PlanTitle>
+            <PlanDescription>
+              Trusted publishing via workflow Publish, sem tocar a máquina
+            </PlanDescription>
           </div>
           <PlanTrigger />
         </PlanHeader>
         <PlanContent>
-          <p>Streaming plan content...</p>
+          <p>Montando o plano…</p>
         </PlanContent>
       </>
     ),

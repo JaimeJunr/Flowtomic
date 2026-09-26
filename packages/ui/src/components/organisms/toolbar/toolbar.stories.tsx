@@ -69,7 +69,7 @@ const ToolbarInCanvas = ({
       <Node handles={{ top: { type: "target" }, bottom: { type: "source" } }}>
         <Toolbar position={data.toolbarPosition}>{data.toolbarChildren}</Toolbar>
         <NodeHeader>
-          <NodeTitle>Node com Toolbar</NodeTitle>
+          <NodeTitle>flowtomic-cli add</NodeTitle>
         </NodeHeader>
         <NodeContent>
           <p className="text-sm">Passe o mouse sobre o node para ver o toolbar</p>
@@ -99,13 +99,13 @@ export const Default: Story = {
               type="button"
               className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs"
             >
-              Edit
+              Editar
             </button>
             <button
               type="button"
               className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs"
             >
-              Delete
+              Excluir
             </button>
           </div>
         }
@@ -125,13 +125,13 @@ export const TopPosition: Story = {
               type="button"
               className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs"
             >
-              Edit
+              Editar
             </button>
             <button
               type="button"
               className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs"
             >
-              Delete
+              Excluir
             </button>
           </div>
         }
@@ -150,25 +150,25 @@ export const MultipleActions: Story = {
               type="button"
               className="rounded bg-primary px-2 py-1 text-primary-foreground text-xs"
             >
-              Edit
+              Editar
             </button>
             <button
               type="button"
               className="rounded bg-secondary px-2 py-1 text-secondary-foreground text-xs"
             >
-              Copy
+              Duplicar
             </button>
             <button
               type="button"
               className="rounded bg-secondary px-2 py-1 text-secondary-foreground text-xs"
             >
-              Share
+              Compartilhar
             </button>
             <button
               type="button"
               className="rounded bg-destructive px-2 py-1 text-destructive-foreground text-xs"
             >
-              Delete
+              Excluir
             </button>
           </div>
         }

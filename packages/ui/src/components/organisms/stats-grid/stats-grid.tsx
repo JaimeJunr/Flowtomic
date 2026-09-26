@@ -1,7 +1,8 @@
 /**
  * StatsGrid - Organism Component
  *
- * Grid de cards de estatísticas reutilizável.
+ * Régua de métricas: rótulo, valor em mono e a variação contra o período anterior.
+ * Sem cards — a tipografia faz a hierarquia e só a variação ganha cor.
  * Componente genérico que pode ser usado em qualquer aplicação.
  *
  * @example
@@ -9,30 +10,30 @@
  * // Delta calculado automaticamente quando lastMonth é fornecido
  * <StatsGrid
  *   stats={[
- *     {
- *       id: "1",
- *       title: "Receita Total",
- *       value: 122380,
- *       lastMonth: 105922, // delta será calculado automaticamente: +15.5%
- *       prefix: "R$ ",
- *     },
+ *     { id: "npm", title: "Downloads no npm, 7 dias", value: 1240, lastMonth: 1074 },
+ *     { id: "build", title: "Build do registry", value: 38, lastMonth: 35, suffix: " s", positive: false },
  *   ]}
  * />
  * ```
  */
 
+import { type StatCardData, useStatCard } from "@flowtomic/logic";
 import React from "react";
-import { StatCard } from "@/components/molecules/data-display/stat-card/stat-card";
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader, Skeleton } from "../../atoms";
+import { Skeleton } from "../../atoms";
 
 export interface StatItem {
   id: string;
   title: string;
+  /** Número é formatado em pt-BR; texto aparece como veio (ex.: "20,9%") */
   value: string | number;
+  /** Substitui a comparação com o período anterior (ex.: "meta 75%") */
   subtitle?: string;
+  /** @deprecated a direção vem de `delta`/`lastMonth` */
   trend?: "up" | "down" | "neutral";
+  /** @deprecated a porcentagem vem de `delta`/`lastMonth` */
   trendPercentage?: string;
+  /** @deprecated o valor não ganha cor própria; só a variação é colorida */
   color?: "blue" | "green" | "orange" | "red" | "purple";
   /**
    * Percentual de variação (positivo ou negativo)
@@ -49,6 +50,7 @@ export interface StatItem {
   suffix?: string;
   format?: (value: number) => string;
   lastFormat?: (value: number) => string;
+  /** `false` quando subir é ruim (tempo de build, erros): a subida fica vermelha */
   positive?: boolean;
 }
 
@@ -56,7 +58,7 @@ export interface StatsGridProps {
   stats: StatItem[];
   layout?: "grid" | "list";
   /**
-   * Quando `true`, exibe skeletons de loading no lugar dos cards.
+   * Quando `true`, exibe skeletons de loading no lugar das métricas.
    * O número de skeletons será baseado no tamanho do array `stats` (se disponível) ou 3 por padrão.
    */
   loading?: boolean;
@@ -73,109 +75,142 @@ export interface StatsGridProps {
   };
 }
 
+const COLUMN_CLASSES: Record<"sm" | "md" | "lg", Record<number, string>> = {
+  sm: { 1: "sm:grid-cols-1", 2: "sm:grid-cols-2", 3: "sm:grid-cols-3", 4: "sm:grid-cols-4" },
+  md: { 1: "md:grid-cols-1", 2: "md:grid-cols-2", 3: "md:grid-cols-3", 4: "md:grid-cols-4" },
+  lg: { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4" },
+};
+
+function gridColumns(columns: StatsGridProps["columns"], count: number): string {
+  if (columns) {
+    const breakpoints = ["sm", "md", "lg"] as const;
+    return breakpoints.map((bp) => (columns[bp] ? COLUMN_CLASSES[bp][columns[bp]] : "")).join(" ");
+  }
+  return `sm:grid-cols-2 ${COLUMN_CLASSES.lg[Math.min(Math.max(count, 1), 4)]}`;
+}
+
+const PERCENT = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
+
+function trendClass(direction: "up" | "down" | "neutral", good: boolean): string {
+  if (direction === "neutral") return "text-muted-foreground";
+  return good ? "text-success" : "text-destructive";
+}
+
+function useMetric(stat: StatItem) {
+  const data: StatCardData = {
+    value: stat.value,
+    delta: stat.delta,
+    lastMonth: stat.lastMonth,
+    prefix: stat.prefix,
+    suffix: stat.suffix,
+    format: stat.format,
+    lastFormat: stat.lastFormat,
+  };
+  const { formattedValue, formattedLastMonth, trend } = useStatCard(data);
+  const hasTrend = stat.delta !== undefined || stat.lastMonth !== undefined;
+  // `positive` responde "subir é bom?"; o hook trata como "a variação foi boa?"
+  const good = (trend.direction === "up") === (stat.positive ?? true);
+  return {
+    value: typeof stat.value === "string" ? stat.value : formattedValue,
+    trendLabel: hasTrend
+      ? `${trend.direction === "down" ? "↓" : "↑"} ${PERCENT.format(trend.delta)}%`
+      : null,
+    trendColor: trendClass(trend.direction, good),
+    context: stat.subtitle ?? (formattedLastMonth ? `sobre ${formattedLastMonth}` : null),
+  };
+}
+
+function GridMetric({ stat }: { stat: StatItem }) {
+  const metric = useMetric(stat);
+  return (
+    <div className="flex flex-col gap-2 border-border py-5 sm:border-l sm:px-6 sm:first:border-l-0 sm:first:pl-0">
+      <dt className="text-sm text-muted-foreground">{stat.title}</dt>
+      <dd className="font-mono text-[32px] font-medium leading-none tracking-tight">
+        {metric.value}
+      </dd>
+      {(metric.trendLabel || metric.context) && (
+        <dd className="flex flex-wrap gap-1.5 text-[13px] text-muted-foreground">
+          {metric.trendLabel && (
+            <span className={cn("font-semibold", metric.trendColor)}>{metric.trendLabel}</span>
+          )}
+          {metric.context && <span>{metric.context}</span>}
+        </dd>
+      )}
+    </div>
+  );
+}
+
+function ListMetric({ stat }: { stat: StatItem }) {
+  const metric = useMetric(stat);
+  return (
+    <div className="contents">
+      <dt className="border-t border-border py-3 text-foreground/80">{stat.title}</dt>
+      <dd className="border-t border-border py-3 text-right font-mono">{metric.value}</dd>
+      <dd className="border-t border-border py-3 pl-6 text-muted-foreground">
+        {metric.trendLabel ? (
+          <span className={metric.trendColor}>{metric.trendLabel}</span>
+        ) : (
+          metric.context
+        )}
+      </dd>
+    </div>
+  );
+}
+
 const StatsGrid = React.forwardRef<HTMLDivElement, StatsGridProps>(
   (
     { stats, layout = "grid", loading = false, skeletonCount, className, columns, ...props },
     ref
   ) => {
-    // Colunas customizáveis ou padrão
-    const getGridCols = () => {
-      if (columns) {
-        const smMap: Record<number, string> = {
-          1: "sm:grid-cols-1",
-          2: "sm:grid-cols-2",
-          3: "sm:grid-cols-3",
-          4: "sm:grid-cols-4",
-        };
-        const mdMap: Record<number, string> = {
-          1: "md:grid-cols-1",
-          2: "md:grid-cols-2",
-          3: "md:grid-cols-3",
-          4: "md:grid-cols-4",
-        };
-        const lgMap: Record<number, string> = {
-          1: "lg:grid-cols-1",
-          2: "lg:grid-cols-2",
-          3: "lg:grid-cols-3",
-          4: "lg:grid-cols-4",
-        };
-        const smCols = columns.sm ? smMap[columns.sm] || "" : "";
-        const mdCols = columns.md ? mdMap[columns.md] || "" : "";
-        const lgCols = columns.lg ? lgMap[columns.lg] || "" : "";
-        return `grid-cols-1 ${smCols} ${mdCols} ${lgCols}`.trim();
-      }
-      return layout === "grid" ? "md:grid-cols-2 lg:grid-cols-3" : "lg:grid-cols-1";
-    };
-
-    const gridCols = getGridCols();
-
     if (loading) {
       // Determina o número de skeletons: usa skeletonCount, ou stats.length (se > 0), ou 3 por padrão
       const count = skeletonCount ?? (stats.length > 0 ? stats.length : 3);
-
-      // Gera IDs únicos para os skeletons
       const skeletonIds = Array.from({ length: count }, (_, i) => `stats-skeleton-${i}`);
-
       return (
-        <div ref={ref} className={cn("grid grid-cols-1 gap-6", gridCols, className)} {...props}>
+        <div
+          ref={ref}
+          aria-busy="true"
+          className={cn(
+            "grid grid-cols-1 border-t border-border",
+            gridColumns(columns, count),
+            className
+          )}
+        >
           {skeletonIds.map((id) => (
-            <Card key={id} className="transition-all duration-300 hover:shadow-lg border">
-              <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4 sm:pb-6 border-0">
-                <div className="space-y-1 flex-1 min-w-0 pr-2">
-                  {/* Skeleton do título (text-xs) */}
-                  <Skeleton className="h-3 w-24" />
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  {/* Skeleton do ícone (p-1.5 sm:p-2 rounded-lg) */}
-                  <Skeleton className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg" />
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-2.5">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5">
-                  {/* Skeleton do valor principal (text-xl sm:text-2xl) */}
-                  <Skeleton className="h-7 sm:h-8 w-32" />
-                  {/* Skeleton do badge (text-xs) */}
-                  <Skeleton className="h-5 w-16 rounded-full" />
-                </div>
-                {/* Skeleton do subtítulo (text-xs sm:text-sm) */}
-                <Skeleton className="h-3 sm:h-4 w-3/4" />
-              </CardContent>
-            </Card>
+            <div key={id} className="flex flex-col gap-3 py-5 sm:px-6 sm:first:pl-0">
+              <Skeleton className="h-3.5 w-28" />
+              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-3 w-20" />
+            </div>
           ))}
         </div>
       );
     }
 
+    if (layout === "list") {
+      return (
+        <div ref={ref} className={className} {...props}>
+          <dl className="grid max-w-3xl grid-cols-[minmax(0,1fr)_auto_minmax(160px,auto)] text-sm">
+            {stats.map((stat) => (
+              <ListMetric key={stat.id} stat={stat} />
+            ))}
+          </dl>
+        </div>
+      );
+    }
+
     return (
-      <div ref={ref} className={cn("grid grid-cols-1 gap-6", gridCols, className)} {...props}>
-        {stats.map((stat) => {
-          const colorMap: Record<
-            "blue" | "green" | "orange" | "red" | "purple",
-            "primary" | "success" | "warning" | "error" | "info"
-          > = {
-            blue: "info",
-            green: "success",
-            orange: "warning",
-            red: "error",
-            purple: "primary",
-          };
-          return (
-            <StatCard
-              key={stat.id}
-              title={stat.title}
-              value={stat.value}
-              subtitle={stat.subtitle}
-              color={stat.color ? colorMap[stat.color] : undefined}
-              delta={stat.delta}
-              lastMonth={stat.lastMonth}
-              prefix={stat.prefix}
-              suffix={stat.suffix}
-              format={stat.format}
-              lastFormat={stat.lastFormat}
-              positive={stat.positive}
-            />
-          );
-        })}
+      <div ref={ref} className={className} {...props}>
+        <dl
+          className={cn(
+            "grid grid-cols-1 border-t border-border",
+            gridColumns(columns, stats.length)
+          )}
+        >
+          {stats.map((stat) => (
+            <GridMetric key={stat.id} stat={stat} />
+          ))}
+        </dl>
       </div>
     );
   }

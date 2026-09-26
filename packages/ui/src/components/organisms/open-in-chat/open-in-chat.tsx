@@ -20,7 +20,7 @@ import {
 
 const providers = {
   github: {
-    title: "Open in GitHub",
+    title: "Abrir no GitHub",
     createUrl: (url: string) => url,
     icon: (
       <svg fill="currentColor" role="img" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@ const providers = {
     ),
   },
   chatgpt: {
-    title: "Open in ChatGPT",
+    title: "Abrir no ChatGPT",
     createUrl: (prompt: string) =>
       `https://chatgpt.com/?${new URLSearchParams({
         hints: "search",
@@ -44,7 +44,7 @@ const providers = {
     ),
   },
   claude: {
-    title: "Open in Claude",
+    title: "Abrir no Claude",
     createUrl: (q: string) =>
       `https://claude.ai/new?${new URLSearchParams({
         q,
@@ -61,7 +61,7 @@ const providers = {
     ),
   },
   t3: {
-    title: "Open in T3 Chat",
+    title: "Abrir no T3 Chat",
     createUrl: (q: string) =>
       `https://t3.chat/new?${new URLSearchParams({
         q,
@@ -127,7 +127,7 @@ export const OpenInTrigger = React.forwardRef<
   <DropdownMenuTrigger ref={ref} {...props} asChild>
     {children ?? (
       <Button type="button" variant="outline">
-        Open in chat
+        Abrir no chat
         <ChevronDownIcon className="size-4" />
       </Button>
     )}

@@ -111,10 +111,10 @@
     --primary-foreground: 0 0% 100%;
     --primary-hover: 17 89% 31%;
 
-    /* Secondary Colors - Urucum escuro (brand-700 / brand-800) */
-    --secondary: 17 89% 31%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 16 90% 25%;
+    /* Secondary - superfície neutra clara (convenção shadcn): node, progress, task e message escrevem por cima com a cor padrão do texto */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 221 39% 11%;
+    --secondary-hover: 220 13% 91%;
 
     /* Accent Colors - Urucum claro (brand-100 / brand-200) */
     --accent: 21 100% 89%;
@@ -122,9 +122,9 @@
     --accent-hover: 18 100% 82%;
 
     /* Success Colors - Verde com melhor contraste */
-    --success: 142 76% 36%;
+    --success: 142 72% 29%;
     --success-foreground: 0 0% 100%;
-    --success-hover: 142 76% 30%;
+    --success-hover: 143 64% 24%;
 
     /* Warning Colors - Amarelo com melhor contraste */
     --warning: 38 92% 50%;
@@ -140,8 +140,8 @@
     --error: 0 84% 60%;
     --error-foreground: 0 84% 20%;
     --error-hover: 0 84% 50%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 84% 20%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
     /* Muted Colors */
     --muted: 210 40% 96%;
@@ -211,10 +211,10 @@
     --primary-foreground: 0 0% 100%;
     --primary-hover: 17 89% 31%;
 
-    /* Secondary Colors - Urucum escuro */
-    --secondary: 17 89% 31%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 16 80% 39%;
+    /* Secondary - superfície neutra escura */
+    --secondary: 217 19% 18%;
+    --secondary-foreground: 210 20% 98%;
+    --secondary-hover: 215 14% 25%;
 
     /* Accent Colors - Urucum profundo */
     --accent: 16 96% 18%;
@@ -223,7 +223,7 @@
 
     /* Success Colors - Verde com melhor contraste para dark mode */
     --success: 142 76% 45%;
-    --success-foreground: 142 76% 85%;
+    --success-foreground: 144 61% 10%;
     --success-hover: 142 76% 55%;
 
     /* Warning Colors - Amarelo com melhor contraste para dark mode */
@@ -240,8 +240,8 @@
     --error: 0 84% 60%;
     --error-foreground: 0 84% 85%;
     --error-hover: 0 72% 70%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 84% 85%;
+    --destructive: 0 91% 71%;
+    --destructive-foreground: 0 75% 15%;
 
     /* Muted Colors */
     --muted: 217 32% 17%;

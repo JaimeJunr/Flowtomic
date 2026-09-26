@@ -28,26 +28,28 @@ export const Default: Story = {
     children: (
       <QueueSection>
         <QueueSectionTrigger>
-          <QueueSectionLabel count={3} label="Pending tasks" />
+          <QueueSectionLabel count={3} label="tarefas do build do registry" />
         </QueueSectionTrigger>
         <QueueSectionContent>
           <QueueList>
             <QueueItem>
               <div className="flex items-center gap-2">
                 <QueueItemIndicator />
-                <QueueItemContent>Task 1</QueueItemContent>
+                <QueueItemContent>registry:build</QueueItemContent>
               </div>
             </QueueItem>
             <QueueItem>
               <div className="flex items-center gap-2">
                 <QueueItemIndicator />
-                <QueueItemContent>Task 2</QueueItemContent>
+                <QueueItemContent>Publicar all.json na Vercel</QueueItemContent>
               </div>
             </QueueItem>
             <QueueItem>
               <div className="flex items-center gap-2">
                 <QueueItemIndicator completed />
-                <QueueItemContent completed>Task 3 (completed)</QueueItemContent>
+                <QueueItemContent completed>
+                  Invalidar cache do registry (concluído)
+                </QueueItemContent>
               </div>
             </QueueItem>
           </QueueList>

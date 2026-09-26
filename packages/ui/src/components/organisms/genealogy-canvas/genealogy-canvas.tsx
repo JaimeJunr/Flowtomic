@@ -48,6 +48,38 @@ interface GenealogyNodeData {
   isExpanded?: boolean;
 }
 
+// yyyy-mm-dd (com ou sem horário/timezone atrás, ex. "1950-01-01T00:00:00Z")
+const ISO_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})/;
+
+/**
+ * Formata uma data de nascimento/óbito em pt-BR (dd/mm/aaaa).
+ *
+ * Parseia y/m/d manualmente em vez de `new Date(string)`: o construtor trata
+ * "yyyy-mm-dd" como UTC, então em fusos negativos (ex. UTC-3) a data exibida
+ * volta um dia (1950-01-01 vira 31/12/1949). Quando não bate o formato ISO
+ * ou os componentes não formam uma data real, devolve o valor original.
+ */
+function formatPersonDate(value: string): string {
+  const match = ISO_DATE_PATTERN.exec(value);
+  if (!match) {
+    return value;
+  }
+
+  const [, yearStr, monthStr, dayStr] = match;
+  const year = Number(yearStr);
+  const month = Number(monthStr);
+  const day = Number(dayStr);
+  const date = new Date(year, month - 1, day);
+
+  const isRealDate =
+    date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+  if (!isRealDate) {
+    return value;
+  }
+
+  return date.toLocaleDateString("pt-BR");
+}
+
 /**
  * Componente de nó customizado para genealogia
  */
@@ -86,8 +118,8 @@ function GenealogyNode({ data }: { data: GenealogyNodeData }) {
         )}
         {person.birthDate && (
           <NodeDescription className="text-xs">
-            {person.birthDate}
-            {person.deathDate && ` - ${person.deathDate}`}
+            {formatPersonDate(person.birthDate)}
+            {person.deathDate && ` - ${formatPersonDate(person.deathDate)}`}
           </NodeDescription>
         )}
       </NodeHeader>

@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type * as React from "react";
 import { useState } from "react";
 import type { WidgetLayout } from "@/types/dashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "../../atoms";
+import { StatsGrid } from "../stats-grid/stats-grid";
 import { DraggableDashboardGrid } from "./draggable-dashboard-grid";
 
 const meta = {
@@ -21,31 +23,69 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+function NpmDownloadsCard() {
+  return (
+    <Card className="h-full">
+      <CardHeader>
+        <CardTitle>Downloads no npm</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <StatsGrid
+          layout="list"
+          stats={[
+            { id: "ui", title: "@flowtomic/ui", value: 1240, lastMonth: 1074 },
+            { id: "logic", title: "@flowtomic/logic", value: 842, lastMonth: 710 },
+          ]}
+        />
+      </CardContent>
+    </Card>
+  );
+}
+
+function RecentBuildsCard() {
+  return (
+    <Card className="h-full">
+      <CardHeader>
+        <CardTitle>Builds recentes</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ul className="divide-y divide-border text-sm">
+          <li className="flex items-center justify-between py-2">
+            <span>main</span>
+            <span className="font-mono text-success">passou</span>
+          </li>
+          <li className="flex items-center justify-between py-2">
+            <span>feat/organisms-sem-slop</span>
+            <span className="font-mono text-success">passou</span>
+          </li>
+          <li className="flex items-center justify-between py-2">
+            <span>fix/registry-build</span>
+            <span className="font-mono text-destructive">falhou</span>
+          </li>
+        </ul>
+      </CardContent>
+    </Card>
+  );
+}
+
 export const Default: Story = {
   render: (args) => {
     const [widgets, setWidgets] = useState<WidgetLayout[]>([
-      { id: "1", type: "card", x: 0, y: 0, w: 4, h: 2 },
-      { id: "2", type: "chart", x: 4, y: 0, w: 4, h: 3 },
-      { id: "3", type: "table", x: 8, y: 0, w: 4, h: 4 },
+      { id: "npm-downloads", type: "stats", x: 0, y: 0, w: 6, h: 3 },
+      { id: "recent-builds", type: "list", x: 6, y: 0, w: 6, h: 3 },
     ]);
+
+    const content: Record<string, React.ReactNode> = {
+      "npm-downloads": <NpmDownloadsCard />,
+      "recent-builds": <RecentBuildsCard />,
+    };
 
     return (
       <div className="p-8">
         <DraggableDashboardGrid
           {...args}
           widgets={widgets}
-          renderWidget={(widget) => (
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle>Widget {widget.id}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Tipo: {widget.type} | Tamanho: {widget.w}×{widget.h}
-                </p>
-              </CardContent>
-            </Card>
-          )}
+          renderWidget={(widget) => content[widget.id]}
           onMoveWidget={(id, x, y) => {
             setWidgets((prev) => prev.map((w) => (w.id === id ? { ...w, x, y } : w)));
           }}
@@ -61,28 +101,18 @@ export const Default: Story = {
 export const ViewMode: Story = {
   render: (args) => {
     const widgets: WidgetLayout[] = [
-      { id: "1", type: "card", x: 0, y: 0, w: 6, h: 3 },
-      { id: "2", type: "chart", x: 6, y: 0, w: 6, h: 3 },
+      { id: "npm-downloads", type: "stats", x: 0, y: 0, w: 6, h: 3 },
+      { id: "recent-builds", type: "list", x: 6, y: 0, w: 6, h: 3 },
     ];
+
+    const content: Record<string, React.ReactNode> = {
+      "npm-downloads": <NpmDownloadsCard />,
+      "recent-builds": <RecentBuildsCard />,
+    };
 
     return (
       <div className="p-8">
-        <DraggableDashboardGrid
-          {...args}
-          widgets={widgets}
-          renderWidget={(widget) => (
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle>Widget {widget.id}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Em modo de visualização, os widgets não podem ser movidos.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        />
+        <DraggableDashboardGrid {...args} widgets={widgets} renderWidget={(w) => content[w.id]} />
       </div>
     );
   },

@@ -34,11 +34,11 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     onSubmit: async (message) => {
-      console.log("Submitted:", message);
+      console.log("Enviado:", message);
     },
     children: (
       <>
-        <PromptInputTextarea placeholder="Type your message..." />
+        <PromptInputTextarea placeholder="adiciona o stat-card no dashboard" />
         <PromptInputFooter>
           <PromptInputSubmit />
         </PromptInputFooter>
@@ -50,25 +50,29 @@ export const Default: Story = {
 export const WithModelSelector: Story = {
   args: {
     onSubmit: async (message) => {
-      console.log("Submitted:", message);
+      console.log("Enviado:", message);
     },
     children: (
       <>
         <PromptInputToolbar>
-          <PromptInputModelSelect defaultValue="gpt-4">
+          <PromptInputModelSelect defaultValue="claude-sonnet-5">
             <PromptInputModelSelectTrigger>
-              <PromptInputModelSelectValue placeholder="Select model" />
+              <PromptInputModelSelectValue placeholder="Selecione o modelo" />
             </PromptInputModelSelectTrigger>
             <PromptInputModelSelectContent>
-              <PromptInputModelSelectItem value="gpt-4">GPT-4</PromptInputModelSelectItem>
-              <PromptInputModelSelectItem value="gpt-3.5">GPT-3.5</PromptInputModelSelectItem>
-              <PromptInputModelSelectItem value="claude">Claude</PromptInputModelSelectItem>
+              <PromptInputModelSelectItem value="claude-sonnet-5">
+                claude-sonnet-5
+              </PromptInputModelSelectItem>
+              <PromptInputModelSelectItem value="claude-opus-5-5">
+                claude-opus-5-5
+              </PromptInputModelSelectItem>
+              <PromptInputModelSelectItem value="gpt-6">gpt-6</PromptInputModelSelectItem>
             </PromptInputModelSelectContent>
           </PromptInputModelSelect>
         </PromptInputToolbar>
-        <PromptInputTextarea placeholder="What would you like to know?" />
+        <PromptInputTextarea placeholder="O que você gostaria de saber?" />
         <PromptInputFooter>
-          <PromptInputTools>{/* Tools can be added here */}</PromptInputTools>
+          <PromptInputTools>{/* Ferramentas extras entram aqui */}</PromptInputTools>
           <PromptInputSubmit />
         </PromptInputFooter>
       </>
@@ -79,11 +83,11 @@ export const WithModelSelector: Story = {
 export const WithCustomHeight: Story = {
   args: {
     onSubmit: async (message) => {
-      console.log("Submitted:", message);
+      console.log("Enviado:", message);
     },
     children: (
       <>
-        <PromptInputTextarea placeholder="Type your message..." minHeight={64} maxHeight={200} />
+        <PromptInputTextarea placeholder="roda o type-check do ui" minHeight={64} maxHeight={200} />
         <PromptInputFooter>
           <PromptInputSubmit />
         </PromptInputFooter>

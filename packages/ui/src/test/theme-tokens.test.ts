@@ -57,6 +57,19 @@ function contrastWithWhite(rgb: Rgb): number {
   return 1.05 / (0.2126 * r + 0.7152 * g + 0.0722 * b + 0.05);
 }
 
+function luminance(rgb: Rgb): number {
+  const [r, g, b] = rgb.map((c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrast(a: Rgb, b: Rgb): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
 const isPurple = (rgb: Rgb) => hue(rgb) >= 240 && hue(rgb) <= 300;
 
 describe("Identidade Urucum no tema", () => {
@@ -79,6 +92,36 @@ describe("Identidade Urucum no tema", () => {
       const block = readBlock(globalsCss, selector);
       for (const name of ["--ring", "--secondary", "--accent", "--accent-foreground"]) {
         expect(isPurple(parseHsl(readToken(block, name))), `${selector} ${name}`).toBe(false);
+      }
+    }
+  });
+
+  it("secondary é superfície: texto normal e secondary-foreground legíveis em cima dele", () => {
+    // node, progress, task, message e context pintam bg-secondary e escrevem com a cor padrão
+    // do texto (convenção do shadcn). Um secondary escuro deixa esses títulos ilegíveis.
+    for (const selector of [":root", ".dark"]) {
+      const block = readBlock(globalsCss, selector);
+      const surface = parseHsl(readToken(block, "--secondary"));
+      for (const name of ["--foreground", "--secondary-foreground"]) {
+        const text = parseHsl(readToken(block, name));
+        expect(contrast(surface, text), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("success e destructive servem de texto no fundo e de fundo sólido com o foreground", () => {
+    // A mesma cor vira texto (text-success na variação do StatsGrid) e botão/badge sólido
+    // (bg-destructive text-destructive-foreground). As duas leituras precisam passar AA.
+    for (const selector of [":root", ".dark"]) {
+      const block = readBlock(globalsCss, selector);
+      const background = parseHsl(readToken(block, "--background"));
+      for (const name of ["--success", "--destructive"]) {
+        const tone = parseHsl(readToken(block, name));
+        const onTone = parseHsl(readToken(block, `${name}-foreground`));
+        expect(contrast(tone, background), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
+        expect(contrast(tone, onTone), `${selector} ${name}-foreground`).toBeGreaterThanOrEqual(
+          4.5
+        );
       }
     }
   });

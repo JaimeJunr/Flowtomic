@@ -21,7 +21,8 @@ export const Default: Story = {
       <>
         <ReasoningTrigger />
         <ReasoningContent>
-          This is the reasoning content that shows the model's thinking process.
+          O componente stat-card já existe em `packages/ui/src/components/atoms/stat-card`. Falta
+          registrá-lo em `cli/src/utils/component-map.ts` e adicionar a story antes de publicar.
         </ReasoningContent>
       </>
     ),
@@ -35,7 +36,7 @@ export const Streaming: Story = {
     children: (
       <>
         <ReasoningTrigger />
-        <ReasoningContent>Streaming reasoning content...</ReasoningContent>
+        <ReasoningContent>Rodando `bunx flowtomic-cli add stats-grid`…</ReasoningContent>
       </>
     ),
   },

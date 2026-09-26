@@ -13,11 +13,22 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Note: This is a placeholder story since we need actual base64 data
+// PNG 8x8 xadrez, gerado só para a story (poucas centenas de bytes em base64).
+const base64Sample =
+  "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGUlEQVR4nGN4kGP169sHTJIBqyiQZBiUOgAVAYzBALw4hgAAAABJRU5ErkJggg==";
+
 export const Default: Story = {
-  render: () => (
-    <div className="text-sm text-muted-foreground">
-      Image component requires base64 data to display
-    </div>
-  ),
+  args: {
+    base64: base64Sample,
+    mediaType: "image/png",
+    alt: "Amostra xadrez gerada para a story",
+  },
+  render: (args) => <Image {...args} className="h-32 w-32" />,
+};
+
+export const SemDados: Story = {
+  name: "Sem dados base64",
+  args: {
+    mediaType: "image/png",
+  },
 };
