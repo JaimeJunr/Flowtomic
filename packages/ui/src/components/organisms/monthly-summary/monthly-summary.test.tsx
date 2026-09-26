@@ -29,12 +29,44 @@ describe("MonthlySummary", () => {
     expect(screen.getByText("80.000")).toBeInTheDocument();
   });
 
-  it("não usa mais o fundo em gradiente no card de lucro líquido", () => {
-    render(<MonthlySummary totalRevenue={125000} costs={45000} netProfit={80000} />);
+  it("não usa mais o fundo em gradiente nem card com sombra no lucro líquido", () => {
+    const { container } = render(
+      <MonthlySummary totalRevenue={125000} costs={45000} netProfit={80000} />
+    );
     const label = screen.getByText("Lucro Líquido");
-    const card = label.closest("div");
-    expect(card?.className).not.toMatch(/gradient/);
-    expect(card?.className).toMatch(/bg-card/);
-    expect(card?.className).toMatch(/border-border/);
+    const row = label.closest("div");
+    expect(row?.className).not.toMatch(/gradient/);
+    expect(row?.className).not.toMatch(/shadow/);
+    expect(container.querySelector(".shadow-lg")).not.toBeInTheDocument();
+  });
+
+  it("usa régua de 1px (dl com border-t) em vez de Card", () => {
+    const { container } = render(
+      <MonthlySummary totalRevenue={125000} costs={45000} netProfit={80000} />
+    );
+    const dl = container.querySelector("dl");
+    expect(dl).toBeInTheDocument();
+    expect(dl?.className).toMatch(/border-t/);
+  });
+
+  it("mostra seta pra baixo e percentual sem sinal duplicado quando a variação é negativa", () => {
+    const { container } = render(
+      <MonthlySummary totalRevenue={125000} costs={45000} netProfit={80000} growthPercentage={-3} />
+    );
+    expect(screen.queryByText(/\+-3%/)).not.toBeInTheDocument();
+    expect(screen.getByText("3%")).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-down")).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-up")).not.toBeInTheDocument();
+    expect(screen.getByText("3%").className).toMatch(/text-destructive/);
+  });
+
+  it("mostra seta pra cima e cor de sucesso quando a variação é positiva", () => {
+    const { container } = render(
+      <MonthlySummary totalRevenue={125000} costs={45000} netProfit={80000} growthPercentage={5} />
+    );
+    expect(screen.getByText("5%")).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-up")).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-down")).not.toBeInTheDocument();
+    expect(screen.getByText("5%").className).toMatch(/text-success/);
   });
 });

@@ -57,7 +57,8 @@ describe("Button", () => {
     it("deve aplicar variante link", () => {
       const { container } = render(<Button variant="link">Link</Button>);
       const button = container.querySelector("button");
-      expect(button).toHaveClass("text-primary");
+      // text-link (não text-primary): --primary mede 3,45:1 no escuro, abaixo de AA como texto.
+      expect(button).toHaveClass("text-link");
     });
 
     it("deve aplicar variante success", () => {

@@ -155,6 +155,9 @@
     /* Ring (Focus) - Urucum */
     --ring: 16 80% 39%;
 
+    /* Link - segue o --primary no claro; no escuro precisa de um tom mais claro (ver .dark) */
+    --link: 16 80% 39%;
+
     /* Radius */
     --radius: 0.625rem;
 
@@ -254,6 +257,9 @@
 
     /* Ring (Focus) - Urucum (brand-400) */
     --ring: 14 92% 64%;
+
+    /* Link - --primary mede 3,45:1 no escuro; brand-400 passa AA como texto */
+    --link: 14 92% 64%;
   }
 }
 
@@ -298,6 +304,7 @@
   --color-error-hover: hsl(var(--error-hover));
   --color-text-primary: hsl(var(--text-primary));
   --color-text-secondary: hsl(var(--text-secondary));
+  --color-link: hsl(var(--link));
 }
 
 @layer base {

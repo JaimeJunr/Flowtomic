@@ -204,7 +204,7 @@ Cantos suavemente arredondados: 8px em botão, campo e item de navegação; 10px
 ### Buttons
 - **Shape:** cantos de 8px, altura de 36px (32px no `sm`).
 - **Primary:** urucum com texto branco. **Um por tela** — a ação que a tela existe para fazer.
-- **Hover / Focus:** hover escurece para urucum fundo; foco com anel de 1px no `--ring`.
+- **Hover / Focus:** hover escurece para urucum fundo; foco com anel de 2px no `--ring` com 2px de afastamento (`ring-offset`).
 - **Outline / Ghost / Link:** todas as outras ações. Ações por linha de lista são outline. Atalhos para fora ("Ver os componentes") são link de texto com ícone `ExternalLink`.
 - **Botão que alterna:** a mesma posição troca de rótulo pelo estado ("Pausar" ↔ "Retomar", "Executar" ↔ "Parar"), em vez de dois botões lado a lado.
 

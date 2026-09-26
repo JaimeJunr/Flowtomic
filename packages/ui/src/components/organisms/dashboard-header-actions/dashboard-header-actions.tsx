@@ -87,10 +87,11 @@ export const DashboardHeaderActions = React.forwardRef<HTMLDivElement, Dashboard
     } = labels;
 
     return (
-      <div ref={ref} className={cn("flex items-center gap-2", className)} {...props}>
+      <div ref={ref} className={cn("flex flex-wrap items-center gap-2", className)} {...props}>
         {/* Seleção de Dashboard */}
         {dashboards.length > 1 && (
           <select
+            aria-label="Painel ativo"
             value={activeDashboardId || ""}
             onChange={(e) => onSwitchDashboard?.(e.target.value)}
             className="px-3 py-1.5 text-sm border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
@@ -107,21 +108,37 @@ export const DashboardHeaderActions = React.forwardRef<HTMLDivElement, Dashboard
         {(onSaveAsNew || onToggleLayout || onRefresh) && (
           <ButtonGroup equalWidth>
             {onSaveAsNew && (
-              <Button variant="outline" size="sm" onClick={onSaveAsNew}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-11 md:min-h-9"
+                onClick={onSaveAsNew}
+              >
                 <Save className="h-4 w-4 mr-2" />
                 {saveAsNew}
               </Button>
             )}
 
             {onToggleLayout && (
-              <Button variant="outline" size="sm" onClick={onToggleLayout}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-11 md:min-h-9"
+                onClick={onToggleLayout}
+              >
                 <Settings className="h-4 w-4 mr-2" />
                 {layout === "grid" ? listLayout : gridLayout}
               </Button>
             )}
 
             {onRefresh && (
-              <Button variant="outline" size="sm" onClick={onRefresh} disabled={isLoading}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-11 md:min-h-9"
+                onClick={onRefresh}
+                disabled={isLoading}
+              >
                 <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
                 {refresh}
               </Button>

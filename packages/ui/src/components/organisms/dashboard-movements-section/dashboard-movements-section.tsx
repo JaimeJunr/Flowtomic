@@ -77,7 +77,7 @@ export const DashboardMovementsSection = React.forwardRef<
       periodBadge = "7 dias",
       getStatusColor,
       getButtonVariant,
-      emptyMessage = "Nenhuma movimentação encontrada",
+      emptyMessage = "Nada novo neste período.",
       className,
       ...props
     },
@@ -152,6 +152,7 @@ export const DashboardMovementsSection = React.forwardRef<
                 <Button
                   variant={buttonVariantFn(movement.buttonText)}
                   size="sm"
+                  className="min-h-11 md:min-h-9"
                   onClick={movement.onButtonClick}
                   aria-label={`Ação: ${movement.buttonText}`}
                 >

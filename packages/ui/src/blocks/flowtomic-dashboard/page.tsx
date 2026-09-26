@@ -8,7 +8,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { Button } from "@/components/atoms";
 import { cn } from "@/lib/utils";
 
@@ -44,6 +44,9 @@ export interface FlowtomicDashboardProps {
   appName?: string;
   onNewDelivery?: () => void;
   onToggleTimer?: () => void;
+  /** Controla o campo de busca de fora; sem ela, o bloco guarda o texto sozinho. */
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
 }
 
 const DAY_MS = 86_400_000;
@@ -170,10 +173,23 @@ export default function FlowtomicDashboardPage({
   appName = "Flowtomic",
   onNewDelivery,
   onToggleTimer,
+  searchValue,
+  onSearchChange,
 }: FlowtomicDashboardProps) {
+  // Sem `onSearchChange`, o bloco assume o próprio estado de busca pra não quebrar quem já o usa sem essas props.
+  const [internalSearch, setInternalSearch] = useState("");
+  const search = searchValue ?? internalSearch;
+  const handleSearchChange = (value: string) => {
+    onSearchChange?.(value);
+    if (searchValue === undefined) setInternalSearch(value);
+  };
+
   const summary = summarize(deliveries ?? sampleDeliveries(today), today);
   const verdict = verdictOf(summary);
   const progress = Math.min(100, Math.round((summary.doneThisMonth / monthGoal) * 100));
+  const visibleOpen = summary.open.filter((d) =>
+    d.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
@@ -212,6 +228,8 @@ export default function FlowtomicDashboardPage({
             <input
               placeholder="Buscar entrega"
               aria-label="Buscar entrega"
+              value={search}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="h-full min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none"
             />
           </label>
@@ -231,7 +249,7 @@ export default function FlowtomicDashboardPage({
         </section>
 
         <div className="flex flex-col gap-12 lg:flex-row">
-          <DueTable open={summary.open} today={today} />
+          <DueTable open={visibleOpen} today={today} />
           <aside className="flex w-full flex-col gap-8 lg:w-75">
             <SideSection title="Mês">
               <p className={cn(MONO, "text-[28px] font-medium")}>
@@ -258,7 +276,7 @@ export default function FlowtomicDashboardPage({
                 <button
                   type="button"
                   onClick={onToggleTimer}
-                  className="-ml-2 min-h-11 self-start rounded-md px-2 text-sm font-medium text-accent-foreground hover:underline"
+                  className="-ml-2 min-h-11 self-start rounded-md px-2 text-sm font-medium text-link hover:underline"
                 >
                   {timer.running === false ? "Retomar" : "Pausar"}
                 </button>

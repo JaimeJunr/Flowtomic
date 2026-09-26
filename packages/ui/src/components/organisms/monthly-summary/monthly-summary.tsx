@@ -5,10 +5,11 @@
  * Tornado agnóstico de moeda e localização.
  */
 
-import { TrendingUp } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Badge, Card, CardContent, CardHeader, CardTitle } from "../../atoms";
+
+const PERCENT = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
 
 export interface MonthlySummaryProps {
   totalRevenue?: number;
@@ -60,47 +61,42 @@ export const MonthlySummary = React.forwardRef<HTMLDivElement, MonthlySummaryPro
       growthLabel = "vs mês anterior",
     } = labels;
 
+    // Sem `growthPercentage`, mantém o tom neutro (sucesso) que o componente sempre teve.
+    const isNegative = (growthPercentage ?? 0) < 0;
+    const growthColor = isNegative ? "text-destructive" : "text-success";
+    const GrowthIcon = isNegative ? TrendingDown : TrendingUp;
+
     return (
-      <Card
-        ref={ref}
-        className={cn(
-          "bg-card border border-border hover:shadow-lg transition-all duration-300",
-          className
+      <div ref={ref} className={className} {...props}>
+        <div className="flex items-center gap-3 border-b border-border pb-4">
+          <div className={cn("rounded-lg p-2", isNegative ? "bg-destructive/10" : "bg-success/10")}>
+            <GrowthIcon className={cn("h-5 w-5", growthColor)} />
+          </div>
+          <span className="text-base font-semibold text-foreground">{title}</span>
+        </div>
+        <dl className="border-t border-border">
+          <div className="flex items-center justify-between border-b border-border py-3">
+            <dt className="text-sm text-muted-foreground">{totalRevenueLabel}</dt>
+            <dd className="font-mono text-foreground">{formatCurrency(totalRevenue)}</dd>
+          </div>
+          <div className="flex items-center justify-between border-b border-border py-3">
+            <dt className="text-sm text-muted-foreground">{costsLabel}</dt>
+            <dd className="font-mono text-foreground">{formatCurrency(costs)}</dd>
+          </div>
+          <div className="flex items-center justify-between py-3">
+            <dt className="text-sm font-semibold text-foreground">{netProfitLabel}</dt>
+            <dd className="font-mono text-lg text-foreground">{formatCurrency(netProfit)}</dd>
+          </div>
+        </dl>
+        {growthPercentage !== undefined && (
+          <div className="flex items-center gap-1.5 pt-3 text-sm">
+            <span className={cn("font-semibold", growthColor)}>
+              {PERCENT.format(Math.abs(growthPercentage))}%
+            </span>
+            <span className="text-muted-foreground">{growthLabel}</span>
+          </div>
         )}
-        {...props}
-      >
-        <CardHeader className="border-b border-border pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-success/10">
-              <TrendingUp className="h-5 w-5 text-success" />
-            </div>
-            <CardTitle className="text-foreground font-semibold text-base">{title}</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-lg bg-background border border-border">
-              <span className="text-sm font-medium text-muted-foreground">{totalRevenueLabel}</span>
-              <span className="font-bold text-lg text-success">{formatCurrency(totalRevenue)}</span>
-            </div>
-            <div className="flex items-center justify-between p-4 rounded-lg bg-background border border-border">
-              <span className="text-sm font-medium text-muted-foreground">{costsLabel}</span>
-              <span className="font-bold text-lg text-destructive">{formatCurrency(costs)}</span>
-            </div>
-            <div className="flex items-center justify-between gap-4 p-5 rounded-lg bg-card border border-border mt-2">
-              <span className="text-sm font-semibold">{netProfitLabel}</span>
-              <span className="font-bold text-2xl">{formatCurrency(netProfit)}</span>
-            </div>
-            {growthPercentage !== undefined && (
-              <div className="pt-2">
-                <Badge variant="success" className="font-semibold">
-                  <TrendingUp className="h-3 w-3 mr-1" />+{growthPercentage}% {growthLabel}
-                </Badge>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+      </div>
     );
   }
 );

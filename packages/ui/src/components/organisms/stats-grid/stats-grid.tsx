@@ -89,6 +89,33 @@ function gridColumns(columns: StatsGridProps["columns"], count: number): string 
   return `sm:grid-cols-2 ${COLUMN_CLASSES.lg[Math.min(Math.max(count, 1), 4)]}`;
 }
 
+/**
+ * Número de colunas realmente ativo em `lg`: `columns.lg` quando informado,
+ * senão o mesmo cálculo que `gridColumns` usa no caminho padrão (capado em 1-4,
+ * o intervalo que `COLUMN_CLASSES` e `LG_ROW_START_CLASSES` cobrem).
+ */
+function effectiveLgColumns(columns: StatsGridProps["columns"], count: number): number {
+  const value = columns?.lg ?? count;
+  return Math.min(Math.max(value, 1), 4);
+}
+
+/**
+ * Primeiro item de cada linha, por número de colunas em `lg`.
+ *
+ * A régua zerada em `sm` (`nth-child(2n+1)`, abaixo) continua valendo em `lg`
+ * a menos que seja sobrescrita aqui — por isso toda entrada com N != 2 também
+ * reverte (restaura borda e padding) os itens que a regra do `sm` zerou por
+ * engano: eles são múltiplo de 2 mas não são o primeiro item de uma linha de N.
+ * Ex.: com N=3, o item 3 fecha a primeira linha (não abre a segunda), mas
+ * `nth-child(2n+1)` do `sm` o zera do mesmo jeito por ele ser ímpar.
+ */
+const LG_ROW_START_CLASSES: Record<number, string> = {
+  1: "lg:[&:nth-child(1n+1)]:border-l-0 lg:[&:nth-child(1n+1)]:pl-0",
+  2: "lg:[&:nth-child(2n+1)]:border-l-0 lg:[&:nth-child(2n+1)]:pl-0",
+  3: "lg:[&:nth-child(3n+1)]:border-l-0 lg:[&:nth-child(3n+1)]:pl-0 lg:[&:nth-child(6n+3)]:border-l lg:[&:nth-child(6n+3)]:pl-6 lg:[&:nth-child(6n+5)]:border-l lg:[&:nth-child(6n+5)]:pl-6",
+  4: "lg:[&:nth-child(4n+1)]:border-l-0 lg:[&:nth-child(4n+1)]:pl-0 lg:[&:nth-child(4n+3)]:border-l lg:[&:nth-child(4n+3)]:pl-6",
+};
+
 const PERCENT = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
 
 function trendClass(direction: "up" | "down" | "neutral", good: boolean): string {
@@ -120,10 +147,15 @@ function useMetric(stat: StatItem) {
   };
 }
 
-function GridMetric({ stat }: { stat: StatItem }) {
+function GridMetric({ stat, lgColumns }: { stat: StatItem; lgColumns: number }) {
   const metric = useMetric(stat);
   return (
-    <div className="flex flex-col gap-2 border-border py-5 sm:border-l sm:px-6 sm:first:border-l-0 sm:first:pl-0">
+    <div
+      className={cn(
+        "flex flex-col gap-2 border-border py-5 sm:border-l sm:px-6 sm:[&:nth-child(2n+1)]:border-l-0 sm:[&:nth-child(2n+1)]:pl-0",
+        LG_ROW_START_CLASSES[lgColumns]
+      )}
+    >
       <dt className="text-sm text-muted-foreground">{stat.title}</dt>
       <dd className="font-mono text-[32px] font-medium leading-none tracking-tight">
         {metric.value}
@@ -199,6 +231,7 @@ const StatsGrid = React.forwardRef<HTMLDivElement, StatsGridProps>(
       );
     }
 
+    const lgColumns = effectiveLgColumns(columns, stats.length);
     return (
       <div ref={ref} className={className} {...props}>
         <dl
@@ -208,7 +241,7 @@ const StatsGrid = React.forwardRef<HTMLDivElement, StatsGridProps>(
           )}
         >
           {stats.map((stat) => (
-            <GridMetric key={stat.id} stat={stat} />
+            <GridMetric key={stat.id} stat={stat} lgColumns={lgColumns} />
           ))}
         </dl>
       </div>

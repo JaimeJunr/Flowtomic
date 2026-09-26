@@ -97,12 +97,14 @@ export const WebPreviewNavigationButton = ({
   disabled,
   tooltip,
   children,
+  "aria-label": ariaLabel,
   ...props
 }: WebPreviewNavigationButtonProps) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
+          aria-label={ariaLabel ?? tooltip}
           className="h-8 w-8 p-0 hover:text-foreground"
           disabled={disabled}
           onClick={onClick}
@@ -218,7 +220,9 @@ export const WebPreviewConsole = ({
       >
         <div className="max-h-48 space-y-1 overflow-y-auto">
           {logs.length === 0 ? (
-            <p className="text-muted-foreground">Nenhuma saída no console</p>
+            <p className="text-muted-foreground">
+              O console aparece aqui quando a página registrar algo.
+            </p>
           ) : (
             logs.map((log, index) => (
               <div

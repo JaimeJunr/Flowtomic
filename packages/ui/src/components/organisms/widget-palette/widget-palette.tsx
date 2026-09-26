@@ -178,7 +178,7 @@ export function WidgetPalette({
       <div className="flex-1 overflow-y-auto px-4">
         {widgets.length === 0 ? (
           <div className="text-center py-8 text-sm text-muted-foreground">
-            Nenhum widget disponível
+            Todos os widgets já estão no painel.
           </div>
         ) : (
           widgets.map((widget) => <DraggableWidgetItem key={widget.id} widget={widget} />)

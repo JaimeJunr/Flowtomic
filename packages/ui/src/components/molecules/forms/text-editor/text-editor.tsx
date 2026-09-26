@@ -569,6 +569,8 @@ function ToolbarButton({ label, active, className, children, ...rest }: ToolbarB
             type="button"
             variant="ghost"
             size="sm"
+            aria-label={label}
+            aria-pressed={active}
             className={cn("h-7 w-7 p-0", active && "bg-accent text-accent-foreground", className)}
             {...rest}
           >

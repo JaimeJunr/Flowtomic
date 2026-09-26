@@ -147,6 +147,17 @@ describe("Identidade Urucum no tema", () => {
     expect(globalsCss.slice(opener, globalsCss.indexOf("{", opener)).trim()).toBe("@theme inline");
   });
 
+  it("o link passa AA como texto sobre o background nos dois modos", () => {
+    // text-primary mede 3,45:1 no escuro (medido em 26/09/2026) — --link segue o --primary no
+    // claro, mas no escuro precisa de um tom mais claro pra passar AA como texto.
+    for (const selector of [":root", ".dark"]) {
+      const block = readBlock(globalsCss, selector);
+      const background = parseHsl(readToken(block, "--background"));
+      const link = parseHsl(readToken(block, "--link"));
+      expect(contrast(link, background), selector).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
   it("warning não se confunde com a marca: matiz a pelo menos 20° do brand-500", () => {
     const brand = hue(parseRgb(readToken(themeCss, "--color-brand-500")));
     const warning = hue(parseRgb(readToken(themeCss, "--color-warning-500")));

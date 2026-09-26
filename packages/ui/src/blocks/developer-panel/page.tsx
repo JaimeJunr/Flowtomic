@@ -125,9 +125,9 @@ export default function DeveloperPanel({
   const apiUp = health?.status === "UP";
 
   return (
-    <div className="container mx-auto px-16 py-12">
+    <div className="container mx-auto px-4 py-6 md:px-16 md:py-12">
       <Tabs defaultValue="info" className="flex flex-col gap-10">
-        <header className="flex items-start justify-between gap-6">
+        <header className="flex flex-wrap items-start justify-between gap-6">
           <div className="flex flex-col gap-1">
             <h1 className="text-[22px] font-semibold tracking-tight leading-tight">
               Painel do desenvolvedor
@@ -362,7 +362,7 @@ function ToolLink({ href, onClick, children }: ToolLinkProps) {
           onClick();
         })
       }
-      className="inline-flex items-center gap-1.5 text-primary hover:underline"
+      className="inline-flex items-center gap-1.5 text-link hover:underline"
     >
       {children}
       <ExternalLink className="size-[13px]" aria-hidden />

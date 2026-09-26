@@ -49,7 +49,7 @@ export const ChatLog = React.forwardRef<HTMLDivElement, ChatLogProps>(
       onMessageViewContext,
       emptyState,
       emptyStateTitle = "Nenhuma mensagem ainda",
-      emptyStateDescription = "Comece a conversar para ver mensagens aqui",
+      emptyStateDescription = "Envie a primeira mensagem para começar.",
       headerActions,
       filters,
       className,

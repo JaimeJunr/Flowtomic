@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import FlowtomicDashboardPage, { type Delivery } from "./page";
 
@@ -149,6 +150,43 @@ describe("FlowtomicDashboardPage", () => {
       );
       expect(screen.getByRole("button", { name: "Retomar" })).toBeInTheDocument();
       expect(screen.getByText("pausado em Story do date-range-picker")).toBeInTheDocument();
+    });
+  });
+
+  describe("Busca de entregas", () => {
+    it("filtra a tabela pelo título, sem diferenciar maiúsculas", async () => {
+      render(<FlowtomicDashboardPage deliveries={deliveries} today={today} />);
+      const input = screen.getByRole("textbox", { name: "Buscar entrega" });
+      await userEvent.type(input, "REGISTRY");
+      expect(screen.getByText("Endpoint de health no registry")).toBeInTheDocument();
+      expect(screen.getByText("Build do registry na Vercel")).toBeInTheDocument();
+      expect(screen.queryByText("Onboarding do flowtomic-cli init")).not.toBeInTheDocument();
+      expect(screen.queryByText("Story do date-range-picker")).not.toBeInTheDocument();
+      expect(screen.queryByText("Migrar docs do deploy")).not.toBeInTheDocument();
+    });
+
+    it("controlada de fora, dispara onSearchChange e ainda filtra", async () => {
+      const onSearchChange = vi.fn();
+      function Controlled() {
+        const [value, setValue] = useState("");
+        return (
+          <FlowtomicDashboardPage
+            deliveries={deliveries}
+            today={today}
+            searchValue={value}
+            onSearchChange={(next) => {
+              onSearchChange(next);
+              setValue(next);
+            }}
+          />
+        );
+      }
+      render(<Controlled />);
+      const input = screen.getByRole("textbox", { name: "Buscar entrega" });
+      await userEvent.type(input, "registry");
+      expect(onSearchChange).toHaveBeenCalledWith("registry");
+      expect(screen.getByText("Endpoint de health no registry")).toBeInTheDocument();
+      expect(screen.queryByText("Onboarding do flowtomic-cli init")).not.toBeInTheDocument();
     });
   });
 
