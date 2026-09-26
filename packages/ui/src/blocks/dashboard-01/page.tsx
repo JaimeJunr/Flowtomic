@@ -48,7 +48,7 @@ export default function DashboardPage({
             A sidebar e o cabeçalho já estão montados. O conteúdo desta área fica em{" "}
             <code className="font-mono text-sm text-foreground">{pagePath}</code>.
           </p>
-          <pre className="mt-2 overflow-x-auto rounded-md bg-foreground px-4 py-4 font-mono text-sm text-background">
+          <pre className="dark mt-2 overflow-x-auto rounded-md border border-border bg-background px-4 py-4 font-mono text-sm text-foreground">
             <code>bunx flowtomic-cli add stat-card data-table</code>
           </pre>
           <a

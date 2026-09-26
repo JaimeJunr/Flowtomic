@@ -122,25 +122,25 @@
     --accent-hover: 18 100% 82%;
 
     /* Success Colors - Verde com melhor contraste */
-    --success: 142 72% 29%;
+    --success: 142 72% 26%;
     --success-foreground: 0 0% 100%;
-    --success-hover: 143 64% 24%;
+    --success-hover: 143 64% 22%;
 
     /* Warning Colors - Amarelo com melhor contraste */
-    --warning: 26 90% 37%;
+    --warning: 26 90% 33%;
     --warning-foreground: 0 0% 100%;
-    --warning-hover: 23 83% 31%;
+    --warning-hover: 23 83% 28%;
 
     /* Info Colors - Azul com melhor contraste */
-    --info: 221 83% 53%;
+    --info: 224 76% 48%;
     --info-foreground: 0 0% 100%;
-    --info-hover: 224 76% 48%;
+    --info-hover: 226 71% 40%;
 
     /* Error/Destructive Colors - Vermelho para erros e ações destrutivas */
     --error: 0 84% 60%;
     --error-foreground: 0 84% 20%;
     --error-hover: 0 84% 50%;
-    --destructive: 0 72% 51%;
+    --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
 
     /* Muted Colors */
@@ -154,6 +154,9 @@
 
     /* Ring (Focus) - Urucum */
     --ring: 16 80% 39%;
+
+    /* Link - segue o --primary no claro; no escuro precisa de um tom mais claro (ver .dark) */
+    --link: 16 80% 39%;
 
     /* Radius */
     --radius: 0.625rem;
@@ -254,10 +257,13 @@
 
     /* Ring (Focus) - Urucum (brand-400) */
     --ring: 14 92% 64%;
+
+    /* Link - --primary mede 3,45:1 no escuro; brand-400 passa AA como texto */
+    --link: 14 92% 64%;
   }
 }
 
-@theme {
+@theme inline {
   /* Cores customizadas mapeadas para o Tailwind v4 */
   /* Essas cores referenciam as variáveis CSS definidas em globals.css */
   --color-background: hsl(var(--background));
@@ -298,6 +304,7 @@
   --color-error-hover: hsl(var(--error-hover));
   --color-text-primary: hsl(var(--text-primary));
   --color-text-secondary: hsl(var(--text-secondary));
+  --color-link: hsl(var(--link));
 }
 
 @layer base {

@@ -885,7 +885,7 @@ export const PromptInputActionMenuTrigger = ({
   ...props
 }: PromptInputActionMenuTriggerProps) => (
   <DropdownMenuTrigger asChild>
-    <PromptInputButton className={className} {...props}>
+    <PromptInputButton aria-label="Adicionar anexo" className={className} {...props}>
       {children ?? <PlusIcon className="size-4" />}
     </PromptInputButton>
   </DropdownMenuTrigger>
@@ -1081,6 +1081,8 @@ export const PromptInputSpeechButton = ({
         isListening && "animate-pulse bg-accent text-accent-foreground",
         className
       )}
+      aria-label="Ditar por voz"
+      aria-pressed={isListening}
       disabled={!recognition}
       onClick={toggleListening}
       {...props}

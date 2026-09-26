@@ -243,7 +243,7 @@ export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorPro
 
         {/* Toolbar de navegação */}
         <div className="border-b bg-muted/30 px-4 py-2">
-          <div className="mx-auto flex max-w-4xl items-center justify-between">
+          <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2">
             {/* Modo de visualização */}
             <div className="flex items-center gap-2">
               <Button
@@ -313,11 +313,11 @@ export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorPro
         </div>
 
         {/* Área do editor */}
-        <div className="flex-1 overflow-auto bg-muted/20 p-8">
+        <div className="flex-1 overflow-auto bg-muted/20 p-4 md:p-8">
           <div className="mx-auto max-w-4xl space-y-8">
             {viewMode === "single" ? (
               /* Modo paginado - apenas página ativa */
-              <div className="min-h-[297mm] rounded-lg border bg-background p-16 shadow-sm">
+              <div className="min-h-[297mm] rounded-lg border bg-background p-6 md:p-16 shadow-sm">
                 <TextEditor
                   key={currentPage.id}
                   value={currentPage.content}

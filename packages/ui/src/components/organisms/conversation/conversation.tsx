@@ -59,7 +59,7 @@ export const ConversationEmptyState = React.forwardRef<HTMLDivElement, Conversat
     {
       className,
       title = "Nenhuma mensagem ainda",
-      description = "Comece uma conversa para ver as mensagens aqui",
+      description = "Envie a primeira mensagem para começar.",
       icon,
       children,
       ...props
@@ -107,6 +107,7 @@ export const ConversationScrollButton = React.forwardRef<
   return (
     <Button
       ref={ref}
+      aria-label="Ir para a última mensagem"
       className={cn("absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full", className)}
       onClick={handleScrollToBottom}
       size="icon"

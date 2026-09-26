@@ -58,4 +58,12 @@ describe("WidgetPalette", () => {
       expect(screen.getByText("Tabela")).toBeInTheDocument();
     });
   });
+
+  describe("Estado vazio", () => {
+    it("diz por que a lista está vazia, não 'Nenhum widget disponível'", () => {
+      render(<WidgetPalette isOpen widgets={[]} />);
+      expect(screen.getByText("Todos os widgets já estão no painel.")).toBeInTheDocument();
+      expect(screen.queryByText("Nenhum widget disponível")).not.toBeInTheDocument();
+    });
+  });
 });

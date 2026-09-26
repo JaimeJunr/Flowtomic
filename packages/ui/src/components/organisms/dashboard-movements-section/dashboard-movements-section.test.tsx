@@ -62,9 +62,10 @@ describe("DashboardMovementsSection", () => {
   });
 
   describe("Estado vazio", () => {
-    it("mostra a mensagem padrão sem lista", () => {
+    it("diz que não há nada no período, sem lista", () => {
       render(<DashboardMovementsSection />);
-      expect(screen.getByText("Nenhuma movimentação encontrada")).toBeInTheDocument();
+      expect(screen.getByText("Nada novo neste período.")).toBeInTheDocument();
+      expect(screen.queryByText("Nenhuma movimentação encontrada")).not.toBeInTheDocument();
       expect(screen.queryByRole("list")).not.toBeInTheDocument();
     });
   });
