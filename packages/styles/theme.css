@@ -1,9 +1,9 @@
-@theme {
+@theme static {
   /* FONT FAMILY */
-  --font-body: var(--font-inter, "Inter"), -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-display: var(--font-inter, "Inter"), -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-body: "Public Sans", -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-display: "Schibsted Grotesk", "Public Sans", -apple-system, "Segoe UI", Arial, sans-serif;
   --font-mono:
-    ui-monospace, "Roboto Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
 
   /* FONT SIZE */
@@ -155,18 +155,18 @@
   --color-alpha-white: rgb(255 255 255);
   --color-alpha-black: rgb(0 0 0);
 
-  --color-brand-25: rgb(250 250 255);
-  --color-brand-50: rgb(244 243 255);
-  --color-brand-100: rgb(235 233 254);
-  --color-brand-200: rgb(217 214 254);
-  --color-brand-300: rgb(189 180 254);
-  --color-brand-400: rgb(155 138 251);
-  --color-brand-500: rgb(122 90 248);
-  --color-brand-600: rgb(105 56 239);
-  --color-brand-700: rgb(89 37 220);
-  --color-brand-800: rgb(74 31 184);
-  --color-brand-900: rgb(62 28 150);
-  --color-brand-950: rgb(39 17 95);
+  --color-brand-25: rgb(255 245 238);
+  --color-brand-50: rgb(255 236 225);
+  --color-brand-100: rgb(255 217 197);
+  --color-brand-200: rgb(255 190 162);
+  --color-brand-300: rgb(255 155 119);
+  --color-brand-400: rgb(248 117 76);
+  --color-brand-500: rgb(216 88 46);
+  --color-brand-600: rgb(181 63 20);
+  --color-brand-700: rgb(151 49 9);
+  --color-brand-800: rgb(120 37 6);
+  --color-brand-900: rgb(91 25 2);
+  --color-brand-950: rgb(59 6 0);
 
   --color-error-25: rgb(255 251 250);
   --color-error-50: rgb(254 243 242);
@@ -181,18 +181,18 @@
   --color-error-900: rgb(122 39 26);
   --color-error-950: rgb(85 22 12);
 
-  --color-warning-25: rgb(255 252 245);
-  --color-warning-50: rgb(255 250 235);
-  --color-warning-100: rgb(254 240 199);
-  --color-warning-200: rgb(254 223 137);
-  --color-warning-300: rgb(254 200 75);
-  --color-warning-400: rgb(253 176 34);
-  --color-warning-500: rgb(247 144 9);
-  --color-warning-600: rgb(220 104 3);
-  --color-warning-700: rgb(181 71 8);
-  --color-warning-800: rgb(147 55 13);
-  --color-warning-900: rgb(122 46 14);
-  --color-warning-950: rgb(78 29 9);
+  --color-warning-25: rgb(255 253 245);
+  --color-warning-50: rgb(255 251 235);
+  --color-warning-100: rgb(254 243 199);
+  --color-warning-200: rgb(253 230 138);
+  --color-warning-300: rgb(252 211 77);
+  --color-warning-400: rgb(251 191 36);
+  --color-warning-500: rgb(245 158 11);
+  --color-warning-600: rgb(217 119 6);
+  --color-warning-700: rgb(180 83 9);
+  --color-warning-800: rgb(146 64 14);
+  --color-warning-900: rgb(120 53 15);
+  --color-warning-950: rgb(69 26 3);
 
   --color-success-25: rgb(246 254 249);
   --color-success-50: rgb(236 253 243);

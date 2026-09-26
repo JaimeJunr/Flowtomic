@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tw-animate-css";
 
@@ -90,7 +90,7 @@
   :root {
     /* Background & Surface */
     --background: 0 0% 100%;
-    --surface: 249 100% 98%;
+    --surface: 210 40% 98%;
     --surface-hover: 210 40% 96%;
 
     /* Foreground & Text */
@@ -106,20 +106,20 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Primary Colors - Purple */
-    --primary: 262 85% 58%;
+    /* Primary Colors - Urucum (brand-600 / brand-700) */
+    --primary: 16 80% 39%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 265 73% 50%;
+    --primary-hover: 17 89% 31%;
 
-    /* Secondary Colors - Purple */
-    --secondary: 258 90% 66%;
+    /* Secondary Colors - Urucum escuro (brand-700 / brand-800) */
+    --secondary: 17 89% 31%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 262 85% 58%;
+    --secondary-hover: 16 90% 25%;
 
-    /* Accent Colors - Purple */
-    --accent: 252 94% 76%;
-    --accent-foreground: 262 85% 58%;
-    --accent-hover: 258 90% 66%;
+    /* Accent Colors - Urucum claro (brand-100 / brand-200) */
+    --accent: 21 100% 89%;
+    --accent-foreground: 17 89% 31%;
+    --accent-hover: 18 100% 82%;
 
     /* Success Colors - Verde com melhor contraste */
     --success: 142 76% 36%;
@@ -152,17 +152,17 @@
     --border-hover: 213 31% 82%;
     --input: 214.3 31.8% 91.4%;
 
-    /* Ring (Focus) - Purple */
-    --ring: 262 85% 58%;
+    /* Ring (Focus) - Urucum */
+    --ring: 16 80% 39%;
 
     /* Radius */
-    --radius: 0.75rem;
+    --radius: 0.625rem;
 
     /* Design System Tokens */
     /* Componentes */
     --ds-button-radius: 0.375rem;
     --ds-input-radius: 0.375rem;
-    --ds-card-radius: 0.5rem;
+    --ds-card-radius: 0.625rem;
     --ds-table-radius: 0.375rem;
     --ds-card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --ds-table-header-height: 3rem;
@@ -206,20 +206,20 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary Colors - Purple */
-    --primary: 258 90% 66%;
+    /* Primary Colors - Urucum: o sólido fica no brand-600 também no escuro (o 500 reprova AA com branco) */
+    --primary: 16 80% 39%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 262 85% 58%;
+    --primary-hover: 17 89% 31%;
 
-    /* Secondary Colors - Purple */
-    --secondary: 252 94% 76%;
+    /* Secondary Colors - Urucum escuro */
+    --secondary: 17 89% 31%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 258 90% 66%;
+    --secondary-hover: 16 80% 39%;
 
-    /* Accent Colors - Purple */
-    --accent: 248 95% 85%;
+    /* Accent Colors - Urucum profundo */
+    --accent: 16 96% 18%;
     --accent-foreground: 0 0% 100%;
-    --accent-hover: 252 94% 76%;
+    --accent-hover: 16 90% 25%;
 
     /* Success Colors - Verde com melhor contraste para dark mode */
     --success: 142 76% 45%;
@@ -252,8 +252,8 @@
     --border-hover: 217 32% 25%;
     --input: 217 33% 30%;
 
-    /* Ring (Focus) - Purple */
-    --ring: 258 90% 66%;
+    /* Ring (Focus) - Urucum (brand-400) */
+    --ring: 14 92% 64%;
   }
 }
 
@@ -303,15 +303,20 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
-    font-family:
-      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-      "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
   }
 }
 
@@ -421,18 +426,18 @@
   --sidebar-accent: hsl(240 4.8% 95.9%);
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --sidebar-ring: hsl(16 80% 39%);
 }
 
 .dark {
   --sidebar: hsl(240 5.9% 10%);
   --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary: hsl(16 80% 39%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
   --sidebar-accent: hsl(240 3.7% 15.9%);
   --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
   --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --sidebar-ring: hsl(14 92% 64%);
 }
 
 @theme inline {

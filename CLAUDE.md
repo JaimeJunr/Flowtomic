@@ -488,6 +488,10 @@ cd packages/ui && bunx vitest run
 
 Cada uma já mordeu alguém neste repo.
 
+- ⚠️ **O `theme.css` precisa ser `@theme static`.** Sem o `static`, o Tailwind v4 só emite a
+  variável que algum utilitário usa. Até 26/09/2026 nada usava `--font-body`, então o body caía
+  no `ui-sans-serif` e o `font-mono` virava o default do Tailwind — nem a Inter antiga chegava
+  à tela. O `theme-tokens.test.ts` do `ui` trava isso.
 - ⚠️ **`clean` precisa apagar o `tsbuildinfo` junto com o `dist`.** Com `composite` e
   `incremental` ligados no `tsconfig.json` raiz, o `tsc --emitDeclarationOnly` lê o
   `tsbuildinfo`, conclui que nada mudou e **não re-emite**. Apagar só o `dist` deixa o pacote
