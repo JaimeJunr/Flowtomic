@@ -15,6 +15,7 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 ### Arquitetura e Design
 
+- [Design System](../DESIGN.md) - Tokens, tipografia, componentes e as regras visuais (o que conta como "cara de template")
 - [Arquitetura do Monorepo](arquitetura/monorepo.md) - Estrutura e organização do monorepo
 - [Decisões de Design](arquitetura/decisoes.md) - Decisões arquiteturais importantes
 - [Padrões Utilizados](arquitetura/padroes.md) - Padrões de código e convenções

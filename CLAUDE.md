@@ -6,6 +6,7 @@
 
 **SEMPRE consulte** a documentação antes de implementar:
 
+- **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
 - **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 47 molecules, 30 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
@@ -527,9 +528,15 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **`CalendarPopover` e `CalendarRange` estouram timeout na suíte inteira do `ui`** com a
   máquina carregada (35 s, medido em 26/09/2026) e passam rodados sozinhos. Antes de caçar bug,
   rode `bunx vitest run <arquivo>` isolado.
-- ⚠️ **Os testes guarda de tema só pegam roxo fixo e tells de template.** Cor fixa de Tailwind
-  (`text-gray-900` no `form-layout`) passou por eles até 26/09/2026 — ainda não há guarda
-  para `gray-`/`slate-`/hex nos componentes.
+- ⚠️ **Componente só usa token semântico** (`DESIGN.md`, *The Token-Only Rule*). Cor de paleta
+  (`gray-900`), hex, `rgba()` e a escala crua do `theme.css` (`bg-brand-600`) quebram o
+  `theme-tokens.test.ts`. A escala crua é traiçoeira: no Storybook `bg-brand-600` saía
+  **transparente, sem erro** — o botão Enviar do `chat-input` era branco no branco.
+- ⚠️ **Token novo no `:root` precisa do `--color-*` no bloco `@theme inline` do `globals.css`**,
+  senão a classe não gera CSS. Os `*-hover` ficaram assim até 26/09/2026
+  (`hover:bg-success-hover` do Button não fazia nada).
+- ⚠️ **Painel escuro nos dois modos (terminal, log) usa a classe `dark` no próprio elemento**,
+  não `bg-foreground text-background` — esse par inverte e vira painel branco no modo escuro.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 
