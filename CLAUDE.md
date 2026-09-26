@@ -537,6 +537,10 @@ Cada uma já mordeu alguém neste repo.
   (`hover:bg-success-hover` do Button não fazia nada).
 - ⚠️ **Painel escuro nos dois modos (terminal, log) usa a classe `dark` no próprio elemento**,
   não `bg-foreground text-background` — esse par inverte e vira painel branco no modo escuro.
+  ⚠️ Isso só funciona porque o bloco das `--color-*` no `globals.css` é `@theme inline`: sem o
+  `inline`, o Tailwind resolve `hsl(var(--background))` uma vez no `:root` e o painel herda a cor
+  clara (o terminal do `script-editor` saiu branco até 26/09/2026). Para provar no browser, **não**
+  ligue `dark` no `<html>` — isso mascara o bug; meça o painel com a página clara.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 
