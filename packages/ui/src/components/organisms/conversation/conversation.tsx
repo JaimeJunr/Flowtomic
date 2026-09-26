@@ -58,8 +58,8 @@ export const ConversationEmptyState = React.forwardRef<HTMLDivElement, Conversat
   (
     {
       className,
-      title = "No messages yet",
-      description = "Start a conversation to see messages here",
+      title = "Nenhuma mensagem ainda",
+      description = "Comece uma conversa para ver as mensagens aqui",
       icon,
       children,
       ...props

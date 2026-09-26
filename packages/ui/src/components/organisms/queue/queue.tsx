@@ -200,6 +200,8 @@ export type QueueSectionLabelProps = ComponentProps<"span"> & {
   icon?: React.ReactNode;
 };
 
+const countFormatter = new Intl.NumberFormat("pt-BR");
+
 export const QueueSectionLabel = ({
   count,
   label,
@@ -211,7 +213,7 @@ export const QueueSectionLabel = ({
     <ChevronDownIcon className="group-data-[state=closed]:-rotate-90 size-4 transition-transform" />
     {icon}
     <span>
-      {count} {label}
+      {count !== undefined ? countFormatter.format(count) : count} {label}
     </span>
   </span>
 );

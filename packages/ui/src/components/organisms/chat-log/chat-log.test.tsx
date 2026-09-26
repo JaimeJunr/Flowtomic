@@ -22,4 +22,10 @@ describe("ChatLog", () => {
     render(<ChatLog messages={messages} />);
     expect(screen.queryByText(/AM|PM/)).not.toBeInTheDocument();
   });
+
+  it("sem mensagens, mostra o estado vazio padrão em pt-BR", () => {
+    render(<ChatLog messages={[]} />);
+    expect(screen.getByText("Nenhuma mensagem ainda")).toBeInTheDocument();
+    expect(screen.getByText("Comece a conversar para ver mensagens aqui")).toBeInTheDocument();
+  });
 });

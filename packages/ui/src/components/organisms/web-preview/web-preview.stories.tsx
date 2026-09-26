@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    defaultUrl: "https://example.com",
+    defaultUrl: "http://localhost:6006",
     children: (
       <>
         <WebPreviewNavigation>

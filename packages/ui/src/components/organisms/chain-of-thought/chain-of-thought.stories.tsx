@@ -23,11 +23,23 @@ export const Default: Story = {
     defaultOpen: false,
     children: (
       <>
-        <ChainOfThoughtHeader>Reasoning Steps</ChainOfThoughtHeader>
+        <ChainOfThoughtHeader>Passos do raciocínio</ChainOfThoughtHeader>
         <ChainOfThoughtContent>
-          <ChainOfThoughtStep label="Step 1" description="Initial analysis" status="complete" />
-          <ChainOfThoughtStep label="Step 2" description="Data processing" status="active" />
-          <ChainOfThoughtStep label="Step 3" description="Final conclusion" status="pending" />
+          <ChainOfThoughtStep
+            label="Ler o pedido"
+            description="Adicionar o stat-card no dashboard"
+            status="complete"
+          />
+          <ChainOfThoughtStep
+            label="Checar o component-map"
+            description="stat-card ainda não está em cli/src/utils/component-map.ts"
+            status="active"
+          />
+          <ChainOfThoughtStep
+            label="Rodar o CLI"
+            description="bunx flowtomic-cli add stat-card"
+            status="pending"
+          />
         </ChainOfThoughtContent>
       </>
     ),
