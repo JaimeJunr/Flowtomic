@@ -171,7 +171,7 @@ export const MultiplePages: Story = {
       {
         id: "chapter-1",
         content:
-          "# Capítulo 1: Introdução\n\nEsta é a primeira página do livro.\n\n**Lorem ipsum** dolor sit amet.",
+          "# Capítulo 1: Introdução\n\nEsta é a primeira página do livro.\n\n**Bem-vindo** ao Flowtomic.",
       },
       {
         id: "chapter-2",

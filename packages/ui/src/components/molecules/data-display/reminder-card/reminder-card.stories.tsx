@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 const sampleReminders: Reminder[] = [
   {
     id: "1",
-    title: "Meeting with Arc Company",
+    title: "Revisão de PR com a mantenedora",
     time: "02.00 pm - 04.00 pm",
     description: "Quarterly review meeting",
   },
@@ -51,7 +51,7 @@ export const MultipleReminders: Story = {
     reminders: [
       {
         id: "1",
-        title: "Meeting with Arc Company",
+        title: "Revisão de PR com a mantenedora",
         time: "02.00 pm - 04.00 pm",
       },
       {

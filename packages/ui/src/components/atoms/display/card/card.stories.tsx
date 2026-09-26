@@ -85,7 +85,7 @@ export const StatCardStyle: Story = {
     <Card className="transition-all duration-300 hover:shadow-lg hover:scale-[1.01] border bg-card border-border">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4 sm:pb-6 border-0">
         <div className="space-y-1 flex-1 min-w-0 pr-2">
-          <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide truncate">
+          <CardTitle className="text-xs font-medium text-muted-foreground truncate">
             Receita Total
           </CardTitle>
         </div>

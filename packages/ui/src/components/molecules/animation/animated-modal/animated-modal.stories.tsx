@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Keyboard, MousePointerClick, Palette, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Button } from "../../../atoms";
@@ -37,10 +38,18 @@ export const Default: Story = {
               botão de fechar.
             </p>
             <div className="space-y-2">
-              <p className="text-sm">✨ Animações 3D com perspectiva</p>
-              <p className="text-sm">🎨 Backdrop blur suave</p>
-              <p className="text-sm">⌨️ Suporte a tecla ESC</p>
-              <p className="text-sm">👆 Fecha ao clicar fora</p>
+              <p className="flex items-center gap-2 text-sm">
+                <Sparkles className="h-4 w-4 text-muted-foreground" /> Animações 3D com perspectiva
+              </p>
+              <p className="flex items-center gap-2 text-sm">
+                <Palette className="h-4 w-4 text-muted-foreground" /> Backdrop blur suave
+              </p>
+              <p className="flex items-center gap-2 text-sm">
+                <Keyboard className="h-4 w-4 text-muted-foreground" /> Suporte a tecla ESC
+              </p>
+              <p className="flex items-center gap-2 text-sm">
+                <MousePointerClick className="h-4 w-4 text-muted-foreground" /> Fecha ao clicar fora
+              </p>
             </div>
           </ModalContent>
           <ModalFooter>

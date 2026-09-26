@@ -503,6 +503,9 @@ Cada uma já mordeu alguém neste repo.
   `ls packages/logic/dist/index.d.ts`.
 - ⚠️ **Subir versão no `package.json` sem rodar `bun install` quebra a CI.** O `bun.lock`
   registra a versão de cada workspace; o `--frozen-lockfile` do workflow rejeita o drift.
+  ⚠️ **E o `bun install` do bun 1.3.14 local não reescreve essa linha** (medido em 26/09/2026):
+  o lock fica com a versão velha e o `--frozen-lockfile` local passa, mas o bun 1.3.0 da CI
+  acusa. Depois do bump, confira `grep -A2 '"packages/ui": {' bun.lock` e acerte a versão na mão.
 - ⚠️ **`registry.flowtomic.dev` não resolve no DNS** (medido em 20/09/2026), mas continua
   citado no `README.md` e nos `docs/`.
 - ⚠️ **O `.npmrc` do repo pina só o escopo `@flowtomic`.** O `flowtomic-cli` não tem escopo e

@@ -254,7 +254,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
           <div className="space-y-1 flex-1 min-w-0 pr-2">
             <CardTitle
               className={cn(
-                "font-medium text-muted-foreground uppercase tracking-wide truncate",
+                "font-medium text-muted-foreground truncate",
                 isCompact ? "text-[10px]" : "text-xs"
               )}
             >

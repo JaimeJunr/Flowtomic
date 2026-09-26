@@ -6,9 +6,12 @@ Blocks são componentes completos e prontos para uso, combinando múltiplos orga
 
 ### `dashboard-01`
 
-Dashboard simples com cards usando componentes do Flowtomic.
+Esqueleto de app: sidebar, cabeçalho e uma área vazia que mostra onde fica o conteúdo
+(`pagePath`) e o comando para adicionar o primeiro componente.
 
-**Dependências**: `card`, `button`
+**Props**: `appName`, `pagePath`, `componentsUrl`
+
+**Dependências**: nenhuma
 
 **Arquivos**:
 
@@ -18,9 +21,14 @@ Dashboard simples com cards usando componentes do Flowtomic.
 
 ### `flowtomic-dashboard`
 
-Dashboard completo com sidebar, header, estatísticas, gráficos, listas de projetos e equipe, e timer.
+Entregas da semana. Responde de longe "o que está atrasado e o que vence até sexta?"
+(ex.: *1 atrasada, 3 vencem até sexta*) e mostra embaixo a tabela do que vence, a meta do mês, o
+cronômetro e quem está em quê.
 
-**Dependências**: `button`, `card`, `input`, `avatar`, `badge`, `progress`, `stat-card`, `sidebar-navigation`, `dashboard-header`, `bar-chart`, `circular-progress-chart`, `project-list`, `team-member-list`, `reminder-card`, `time-tracker`, `resizable-layout`
+**Props**: `deliveries` (`Delivery[]`), `today`, `monthGoal`, `timer`, `appName`,
+`onNewDelivery`, `onToggleTimer`. Sem `deliveries`, usa exemplos relativos a `today`.
+
+**Dependências**: `button`
 
 **Arquivos**:
 

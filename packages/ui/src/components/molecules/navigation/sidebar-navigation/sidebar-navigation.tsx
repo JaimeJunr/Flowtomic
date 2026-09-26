@@ -59,6 +59,8 @@ export interface SidebarNavigationProps {
 
   /**
    * Card de download mobile
+   * @deprecated um design system não tem app mobile para baixar. Mantido por compatibilidade —
+   * se você passar essa prop, o card ainda é renderizado normalmente.
    */
   mobileAppCard?: MobileAppCard;
 
@@ -89,20 +91,20 @@ export function SidebarNavigation({
     menuItems.length > 0
       ? menuItems
       : [
-          { id: "dashboard", label: "Dashboard", active: true },
-          { id: "tasks", label: "Tasks" },
-          { id: "calendar", label: "Calendar" },
-          { id: "analytics", label: "Analytics" },
-          { id: "team", label: "Team" },
+          { id: "dashboard", label: "Início", active: true },
+          { id: "tasks", label: "Tarefas" },
+          { id: "calendar", label: "Calendário" },
+          { id: "analytics", label: "Relatórios" },
+          { id: "team", label: "Equipe" },
         ];
 
   const defaultGeneralItems: NavigationItem[] =
     generalItems.length > 0
       ? generalItems
       : [
-          { id: "settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
-          { id: "help", label: "Help" },
-          { id: "logout", label: "Logout", icon: <LogOut className="h-4 w-4" /> },
+          { id: "settings", label: "Configurações", icon: <Settings className="h-4 w-4" /> },
+          { id: "help", label: "Ajuda" },
+          { id: "logout", label: "Sair", icon: <LogOut className="h-4 w-4" /> },
         ];
 
   const handleItemClick = (item: NavigationItem) => {
@@ -127,7 +129,7 @@ export function SidebarNavigation({
 
         {/* Menu Principal */}
         <SidebarGroup>
-          <SidebarGroupLabel>MENU</SidebarGroupLabel>
+          <SidebarGroupLabel>Navegação</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {defaultMenuItems.map((item) => (
@@ -159,7 +161,7 @@ export function SidebarNavigation({
 
         {/* Menu Geral */}
         <SidebarGroup>
-          <SidebarGroupLabel>GENERAL</SidebarGroupLabel>
+          <SidebarGroupLabel>Geral</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {defaultGeneralItems.map((item) => (
@@ -206,7 +208,7 @@ export function SidebarNavigation({
                       onClick={mobileAppCard.onDownload}
                     >
                       <Download className="h-4 w-4 mr-2" />
-                      {mobileAppCard.buttonText || "Download our Mobile App"}
+                      {mobileAppCard.buttonText || "Baixar app"}
                     </Button>
                   </div>
                 </CardContent>

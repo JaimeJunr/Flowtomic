@@ -1,35 +1,67 @@
 /**
- * Exemplo de Block - Dashboard 01
+ * Dashboard 01 — Esqueleto de app
  *
- * Este é um exemplo de block que pode ser instalado via CLI
+ * Sidebar, cabeçalho e uma área de conteúdo vazia que ensina o próximo passo.
+ * É o ponto de partida de quem instala o block via CLI.
  */
 
-import { Button, Card } from "@/components/atoms";
+import { ExternalLink } from "lucide-react";
 
-export default function DashboardPage() {
+export interface DashboardPageProps {
+  /** @default "Seu app" */
+  appName?: string;
+  /** Onde o conteúdo desta página mora no projeto de quem instalou. @default "app/dashboard/page.tsx" */
+  pagePath?: string;
+  /** @default "https://github.com/JaimeJunr/Flowtomic/blob/main/docs/componentes/README.md" */
+  componentsUrl?: string;
+}
+
+export default function DashboardPage({
+  appName = "Seu app",
+  pagePath = "app/dashboard/page.tsx",
+  componentsUrl = "https://github.com/JaimeJunr/Flowtomic/blob/main/docs/componentes/README.md",
+}: DashboardPageProps) {
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+    <div className="flex min-h-screen bg-background text-foreground">
+      <nav
+        aria-label="Principal"
+        className="flex w-58 shrink-0 flex-col gap-6 border-r border-border bg-surface px-4 py-6"
+      >
+        <span className="font-display px-2 text-lg font-bold">{appName}</span>
+        <a
+          href="/"
+          aria-current="page"
+          className="rounded-md bg-accent px-2 py-2 text-sm font-semibold text-accent-foreground"
+        >
+          Início
+        </a>
+      </nav>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-2">Card 1</h2>
-          <p className="text-muted-foreground mb-4">Este é um exemplo de card no dashboard.</p>
-          <Button>Ver mais</Button>
-        </Card>
+      <main className="flex flex-1 flex-col gap-8 px-10 py-8">
+        <h1 className="font-display text-base font-semibold text-muted-foreground">Início</h1>
 
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-2">Card 2</h2>
-          <p className="text-muted-foreground mb-4">Outro exemplo de card.</p>
-          <Button variant="outline">Ação</Button>
-        </Card>
-
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-2">Card 3</h2>
-          <p className="text-muted-foreground mb-4">Mais um card de exemplo.</p>
-          <Button variant="secondary">Explorar</Button>
-        </Card>
-      </div>
+        <section className="mt-20 flex max-w-140 flex-col gap-4">
+          <h2 className="font-display text-[32px] font-bold leading-tight tracking-tight">
+            Página vazia, pronta para o primeiro componente
+          </h2>
+          <p className="text-[15px] leading-relaxed text-foreground/80">
+            A sidebar e o cabeçalho já estão montados. O conteúdo desta área fica em{" "}
+            <code className="font-mono text-sm text-foreground">{pagePath}</code>.
+          </p>
+          <pre className="mt-2 rounded-md bg-foreground px-4 py-4 font-mono text-sm text-background">
+            <code>bunx flowtomic-cli add stat-card data-table</code>
+          </pre>
+          <a
+            href={componentsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 self-start text-sm font-medium text-accent-foreground hover:underline"
+          >
+            Ver os componentes
+            <ExternalLink aria-hidden className="size-3.5" />
+          </a>
+        </section>
+      </main>
     </div>
   );
 }

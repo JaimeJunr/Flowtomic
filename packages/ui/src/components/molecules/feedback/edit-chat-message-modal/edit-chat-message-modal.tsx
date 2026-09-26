@@ -5,7 +5,7 @@
  * de alterações não salvas e exibição de metadados
  */
 
-import { Edit, Save } from "lucide-react";
+import { Edit, Save, TriangleAlert } from "lucide-react";
 import type * as React from "react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -144,7 +144,8 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
               <span>{editedContent.length} caracteres</span>
               {hasChanges && (
                 <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
-                  <span>⚠️ Alterações não salvas</span>
+                  <TriangleAlert className="w-3.5 h-3.5" />
+                  <span>Alterações não salvas</span>
                 </div>
               )}
             </div>

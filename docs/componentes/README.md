@@ -1,24 +1,24 @@
-# 🧩 Componentes do Flowtomic
+# Componentes do Flowtomic
 
 > **Objetivo**: Documentação completa dos componentes disponíveis no Flowtomic, incluindo atoms, molecules, organisms, blocks e hooks.
 
-## 📚 Índice
+## Índice
 
 - [Atoms](atoms.md) - Componentes básicos (63 componentes)
 - [Molecules](molecules.md) - Componentes compostos (47 componentes)
-- [Organisms](organisms.md) - Componentes complexos (23 componentes)
+- [Organisms](organisms.md) - Componentes complexos (30 componentes)
 - [Blocks](blocks.md) - Blocks pré-construídos (3 blocks)
-- [Hooks](hooks.md) - Hooks headless (12 hooks)
+- [Hooks](hooks.md) - Hooks headless (14 hooks)
 
-## 📊 Estatísticas
+## Estatísticas
 
-- **Total de Atoms**: 54
-- **Total de Molecules**: 36
-- **Total de Organisms**: 23
-- **Total de Hooks**: 12
+- **Total de Atoms**: 63
+- **Total de Molecules**: 47
+- **Total de Organisms**: 30
+- **Total de Hooks**: 14
 - **Total de Blocks**: 3
 
-## 🎯 Como Usar
+## Como Usar
 
 ### Instalação via CLI
 
@@ -41,7 +41,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 ```
 
-## 📖 Documentação por Categoria
+## Documentação por Categoria
 
 **SEMPRE consulte** a documentação específica de cada categoria para mais detalhes sobre os componentes disponíveis:
 
@@ -51,7 +51,7 @@ import { Input } from "@/components/ui/input";
 - **Blocks**: Componentes pré-construídos completos
 - **Hooks**: Hooks headless para lógica reutilizável
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Problemas Comuns
 
@@ -65,7 +65,7 @@ import { Input } from "@/components/ui/input";
 - [ ] **SEMPRE confirme** que `components.json` existe
 - [ ] **SEMPRE valide** que aliases estão corretos
 
-## 📅 Atualizações
+## Atualizações
 
 - **Última atualização**: 2025-11-22
 - **Versão da documentação**: 1.3.0
