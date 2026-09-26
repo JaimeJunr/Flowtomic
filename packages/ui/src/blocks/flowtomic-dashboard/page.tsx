@@ -88,7 +88,7 @@ const projectListData: ProjectListProject[] = [
     id: "5",
     name: "Cross-Browser Testing",
     dueDate: new Date(2024, 11, 6),
-    icon: <TestTube className="h-5 w-5 text-purple-600" />,
+    icon: <TestTube className="h-5 w-5 text-brand-600" />,
     iconColor: "rgba(147, 51, 234, 0.1)",
   },
 ];

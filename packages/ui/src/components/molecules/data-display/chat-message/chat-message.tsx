@@ -168,9 +168,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
           ref={ref}
           id={`message-${message.id}`}
           className={cn(
-            message.isSummary
-              ? "bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500"
-              : "",
+            message.isSummary ? "bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500" : "",
             senderCfg.containerClassName,
             className
           )}
@@ -190,9 +188,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
         ref={ref}
         id={`message-${message.id}`}
         className={cn(
-          message.isSummary
-            ? "bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500"
-            : "",
+          message.isSummary ? "bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500" : "",
           typeConfig?.containerClassName || senderCfg.containerClassName,
           className
         )}
