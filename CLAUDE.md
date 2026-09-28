@@ -447,13 +447,17 @@ Vitest, configurado **por pacote**. O CI (`.github/workflows/ci.yml`, desde 20/0
 todo PR e push na `main`: Biome no repo inteiro, build + teste do `logic`, type-check + teste com
 cobertura do `ui`, teste do `registry` e do `cli`, e o `registry:build`. Serial, um pacote por vez.
 
-⚠️ **Cobertura global do `ui` medida em 20/09/2026: 20,9% de linhas.** O CI gera o relatório mas
-**não tem threshold** — pôr 75% agora nasceria vermelho. A meta é subir por área (os 27 atoms sem
-teste primeiro) e só então travar o número no `vitest.config.ts`.
+⚠️ **Cobertura global do `ui` medida em 27/09/2026: 51,9% de linhas, 72,7% de branches**
+(85 arquivos, 577 testes). Por área (linhas): blocks 92,6%, organisms 59,4%, atoms 57,2%,
+**molecules 41,5%** — a área mais fraca, mesmo depois de subir de 32,3% com o redesign das 7
+molecules de template. O CI gera o relatório mas **não tem threshold** — pôr 75% agora
+nasceria vermelho. A meta é subir por área (molecules primeiro) e só então travar o número no
+`vitest.config.ts`. Para remedir:
+`cd packages/ui && bunx vitest run --testTimeout=30000 --coverage --coverage.reporter=text-summary`.
 
 | pacote | arquivos de teste | script | ambiente |
 |---|---|---|---|
-| `packages/ui` | 41 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
+| `packages/ui` | 78 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
 | `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
 | `registry` | 1 | `test` | guarda o parser do component map |
 | `cli` | 2 | `test` | guarda o component map contra o disco nos dois sentidos: todo `path` existe, e toda pasta de componente em `packages/ui/src/components` tem entrada — componente novo sem entrada no mapa quebra a CI |
@@ -530,7 +534,10 @@ Cada uma já mordeu alguém neste repo.
   dispara, então o React Flow nunca mede os handles. Ver `organisms/edge/edge.test.tsx`.
 - ⚠️ **`CalendarPopover` e `CalendarRange` estouram timeout na suíte inteira do `ui`** com a
   máquina carregada (35 s, medido em 26/09/2026) e passam rodados sozinhos. Antes de caçar bug,
-  rode `bunx vitest run <arquivo>` isolado.
+  rode `bunx vitest run <arquivo>` isolado. ⚠️ **Com `--coverage` o estouro pega mais gente**
+  (o `DashboardHeader`, que abre dropdown do Radix, e o block `flowtomic-dashboard`, medido em
+  27/09/2026) e, com teste falhando, o relatório de cobertura **nem é gravado**. Para medir, use
+  `--testTimeout=30000`.
 - ⚠️ **Componente só usa token semântico** (`DESIGN.md`, *The Token-Only Rule*). Cor de paleta
   (`gray-900`), hex, `rgba()` e a escala crua do `theme.css` (`bg-brand-600`) quebram o
   `theme-tokens.test.ts`. A escala crua é traiçoeira: no Storybook `bg-brand-600` saía
@@ -573,6 +580,6 @@ Não promova nenhuma destas a fato no corpo sem verificar antes.
   transformar num wrapper que só dispara o workflow.
 - **O `bun@1.3.0` do `packageManager` está defasado?** A máquina de desenvolvimento roda
   1.3.14. Os dois aceitam o mesmo lock, mas a divergência existe.
-- **Quando travar o threshold de cobertura do `ui`?** O CI mede (20,9% em 20/09/2026) mas não
+- **Quando travar o threshold de cobertura do `ui`?** O CI mede (51,9% de linhas em 27/09/2026) mas não
   bloqueia. Resolve: subir cobertura por área e fixar o número no `vitest.config.ts` quando
   passar de 75%.
