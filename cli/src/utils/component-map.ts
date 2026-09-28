@@ -690,7 +690,7 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     type: "molecule",
     path: "packages/ui/src/components/molecules/data-display/bar-chart",
     files: ["bar-chart.tsx", "index.ts"],
-    dependencies: [],
+    dependencies: ["clsx", "tailwind-merge"],
   },
   "time-tracker": {
     name: "time-tracker",
@@ -711,14 +711,14 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     type: "molecule",
     path: "packages/ui/src/components/molecules/data-display/reminder-card",
     files: ["reminder-card.tsx", "index.ts"],
-    dependencies: ["lucide-react"],
+    dependencies: ["lucide-react", "clsx", "tailwind-merge"],
   },
   "circular-progress-chart": {
     name: "circular-progress-chart",
     type: "molecule",
     path: "packages/ui/src/components/molecules/data-display/circular-progress-chart",
     files: ["circular-progress-chart.tsx", "index.ts"],
-    dependencies: [],
+    dependencies: ["clsx", "tailwind-merge"],
   },
   "project-list": {
     name: "project-list",
