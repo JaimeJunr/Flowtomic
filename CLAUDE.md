@@ -306,7 +306,8 @@ código de 2 fatores na hora, e o pacote sai com proveniência.
 2. Abra PR e mergeie na `main`.
 3. GitHub → **Actions** → workflow **Publish** → *Run workflow* → escolha `logic`, `ui` ou
    `both`.
-4. Confirme: `npm view @flowtomic/logic version`.
+4. Confirme: `npm view @flowtomic/logic version`. ⚠️ O npm leva alguns minutos para mostrar a
+   versão nova: o log do job (`+ @flowtomic/ui@0.8.0`) é a prova imediata, o `npm view` atrasa.
 
 O `logic` é sempre buildado e testado antes do `ui`, porque o `ui` consome os tipos dele por
 project reference do TypeScript.
@@ -314,7 +315,9 @@ project reference do TypeScript.
 #### Pré-requisito de uma vez só, no npmjs.com
 
 Cada pacote precisa registrar este repositório em **Trusted Publisher**
-(`npmjs.com/package/<pacote>/access`):
+(`npmjs.com/package/<pacote>/access`). ✅ Feito para `@flowtomic/logic` e `@flowtomic/ui` em
+27/09/2026 (primeira publicação pela CI: logic 0.1.8 e ui 0.8.0). O `flowtomic-cli` ainda não tem.
+A ligação é **por pacote**: configurar só um faz o outro falhar com `E404` na mesma execução.
 
 | campo | valor |
 |---|---|
@@ -337,7 +340,7 @@ Cada mensagem aponta para um lugar diferente do que parece.
 
 | erro | causa real |
 |---|---|
-| `E404` no `PUT` | trusted publisher não configurado. O npm 404 em vez de 403 pra não confirmar que o pacote existe |
+| `E404` no `PUT` | trusted publisher não configurado **naquele pacote**. O npm 404 em vez de 403 pra não confirmar que o pacote existe. Com `both`, se o `logic` já saiu e só o `ui` falhou, rode de novo só com `ui` — republicar a mesma versão do `logic` dá erro |
 | `ENEEDAUTH` | falta `id-token: write` no job, ou o nome do workflow não bate com o registrado |
 | `E_STAGE_REQUIRED` | o trusted publisher só permite staged publish; falta marcar o publish direto |
 | `lockfile had changes` | subiu versão sem rodar `bun install` |
