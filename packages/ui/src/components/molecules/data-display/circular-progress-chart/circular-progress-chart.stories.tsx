@@ -8,7 +8,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "Gráfico circular de progresso usando SVG puro.",
+        component:
+          "Anel de progresso em SVG puro. A porcentagem no centro é a resposta; label e legenda ficam subordinados.",
       },
     },
   },
@@ -31,23 +32,22 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    value: 41,
-    label: "Project Ended",
-    title: "Project Progress",
-    size: 200,
+    value: 12,
+    max: 29,
+    label: "com teste",
+    title: "Molecules da 0.9.0",
   },
 };
 
 export const WithLegend: Story = {
   args: {
-    value: 41,
-    label: "Project Ended",
-    title: "Project Progress",
-    size: 200,
+    value: 12,
+    max: 29,
+    label: "com teste",
+    title: "Molecules da 0.9.0",
     legend: [
-      { label: "Completed", color: "hsl(var(--primary))" },
-      { label: "In Progress", color: "hsl(var(--success))" },
-      { label: "Pending", color: "hsl(var(--muted))" },
+      { label: "Com teste", color: "hsl(var(--primary))" },
+      { label: "Sem teste", color: "hsl(var(--muted))" },
     ],
   },
 };
@@ -55,10 +55,10 @@ export const WithLegend: Story = {
 export const CustomColors: Story = {
   args: {
     value: 75,
-    label: "75%",
-    title: "Custom Progress",
-    size: 250,
-    progressColor: "hsl(142, 76%, 36%)",
+    label: "dos builds passaram",
+    title: "Builds do registry",
+    size: 200,
+    progressColor: "hsl(var(--success))",
     trackColor: "hsl(var(--muted))",
   },
 };
@@ -66,11 +66,10 @@ export const CustomColors: Story = {
 export const WithColorRanges: Story = {
   args: {
     value: 65,
-    label: "65%",
-    title: "Progress with Ranges",
-    size: 200,
+    label: "de cobertura",
+    title: "Cobertura de branches",
     colorRanges: [
-      { min: 0, max: 33, color: "hsl(var(--error))" },
+      { min: 0, max: 33, color: "hsl(var(--destructive))" },
       { min: 34, max: 66, color: "hsl(var(--warning))" },
       { min: 67, max: 100, color: "hsl(var(--success))" },
     ],
@@ -80,8 +79,8 @@ export const WithColorRanges: Story = {
 export const Large: Story = {
   args: {
     value: 90,
-    label: "90%",
-    title: "Large Progress Chart",
+    label: "da documentação",
+    title: "Docs atualizadas",
     size: 300,
     strokeWidth: 16,
   },

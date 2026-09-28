@@ -8,7 +8,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "Card de lembretes com horário e botão de ação.",
+        component:
+          "Lista de lembretes: horário em mono, título e descrição, com uma ação contornada por linha.",
       },
     },
   },
@@ -22,27 +23,23 @@ const sampleReminders: Reminder[] = [
   {
     id: "1",
     title: "Revisão de PR com a mantenedora",
-    time: "02.00 pm - 04.00 pm",
-    description: "Quarterly review meeting",
+    time: "14:00–14:30",
+    description: "PR #30, molecules sem template",
   },
 ];
 
 export const Default: Story = {
   args: {
     reminders: sampleReminders,
-    title: "Reminders",
-    actionButtonText: "Start Meeting",
-    onStartMeeting: (reminder) => console.log("Start meeting:", reminder),
+    onStartMeeting: (reminder) => console.log("Começar:", reminder),
   },
 };
 
 export const WithDismiss: Story = {
   args: {
     reminders: sampleReminders,
-    title: "Reminders",
-    actionButtonText: "Start Meeting",
-    onStartMeeting: (reminder) => console.log("Start meeting:", reminder),
-    onDismiss: (reminder) => console.log("Dismiss:", reminder),
+    onStartMeeting: (reminder) => console.log("Começar:", reminder),
+    onDismiss: (reminder) => console.log("Dispensar:", reminder),
   },
 };
 
@@ -52,24 +49,21 @@ export const MultipleReminders: Story = {
       {
         id: "1",
         title: "Revisão de PR com a mantenedora",
-        time: "02.00 pm - 04.00 pm",
+        time: "14:00–14:30",
       },
       {
         id: "2",
-        title: "Team Standup",
-        time: "10.00 am - 10.30 am",
+        title: "Publicar @flowtomic/ui 0.9.0",
+        time: "16:00–16:15",
+        description: "Workflow Publish no GitHub Actions",
       },
     ],
-    title: "Reminders",
-    actionButtonText: "Start",
-    onStartMeeting: (reminder) => console.log("Start:", reminder),
+    onStartMeeting: (reminder) => console.log("Começar:", reminder),
   },
 };
 
 export const Empty: Story = {
   args: {
     reminders: [],
-    title: "Reminders",
-    actionButtonText: "Start Meeting",
   },
 };

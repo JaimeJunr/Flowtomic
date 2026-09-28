@@ -1,13 +1,15 @@
 /**
  * TimeTracker - Componente Visual
  *
- * Timer com controles usando o hook headless useTimeTracker
+ * Timer com controles usando o hook headless useTimeTracker. O tempo é a resposta da
+ * tela (mono grande); o botão principal troca de rótulo no mesmo lugar
+ * (Iniciar → Pausar → Retomar), e Parar fica contornado ao lado.
  */
 
 import { useTimeTracker } from "@flowtomic/logic";
 import { Pause, Play, Square } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button, Card, CardContent, CardHeader, CardTitle } from "../../../atoms";
+import { Button } from "../../../atoms";
 
 export interface TimeTrackerProps {
   /**
@@ -17,7 +19,8 @@ export interface TimeTrackerProps {
   initialTime?: number;
 
   /**
-   * Título do card
+   * Título da seção
+   * @default "Tempo"
    */
   title?: string;
 
@@ -53,7 +56,7 @@ export interface TimeTrackerProps {
   className?: string;
 
   /**
-   * Cor de fundo do card
+   * Cor de fundo da seção
    */
   backgroundColor?: string;
 }
@@ -63,7 +66,7 @@ export interface TimeTrackerProps {
  */
 export function TimeTracker({
   initialTime = 0,
-  title = "Time Tracker",
+  title = "Tempo",
   format = "HH:mm:ss",
   onPause,
   onStop,
@@ -72,63 +75,63 @@ export function TimeTracker({
   className,
   backgroundColor,
 }: TimeTrackerProps) {
-  const { formattedTime, isRunning, isPaused, isStopped, start, pause, stop, resume } =
-    useTimeTracker({
-      initialTime,
-      format,
-      onPause,
-      onStop,
-      onStart,
-      onResume,
-    });
+  const { formattedTime, isRunning, isPaused, start, pause, stop, resume } = useTimeTracker({
+    initialTime,
+    format,
+    onPause,
+    onStop,
+    onStart,
+    onResume,
+  });
+
+  const state = isRunning
+    ? { label: "Contando", dot: "bg-success" }
+    : isPaused
+      ? { label: "Pausado", dot: "bg-warning" }
+      : { label: "Parado", dot: "bg-border" };
 
   return (
-    <Card className={cn(className)} style={backgroundColor ? { backgroundColor } : undefined}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col items-center justify-center gap-4">
-          {/* Display do tempo */}
-          <div className="text-4xl font-mono font-bold text-foreground">{formattedTime}</div>
+    <section
+      className={cn("text-sm", className)}
+      style={backgroundColor ? { backgroundColor } : undefined}
+    >
+      <div className="flex items-center gap-3">
+        <h3 className="text-sm font-semibold">{title}</h3>
+        <div className="h-px flex-1 bg-border" />
+      </div>
 
-          {/* Controles */}
-          <div className="flex gap-2">
-            {isStopped && (
-              <Button onClick={start} size="sm" variant="default">
-                <Play className="h-4 w-4 mr-2" />
-                Start
-              </Button>
-            )}
+      <div className="mt-5 flex items-center gap-2 text-[13px] text-muted-foreground">
+        <span className={cn("size-2 rounded-full", state.dot)} aria-hidden="true" />
+        {state.label}
+      </div>
+      <div className="mt-1 font-mono text-[40px] font-medium leading-none tracking-tight">
+        {formattedTime}
+      </div>
 
-            {isRunning && (
-              <>
-                <Button onClick={pause} size="sm" variant="outline">
-                  <Pause className="h-4 w-4 mr-2" />
-                  Pause
-                </Button>
-                <Button onClick={stop} size="sm" variant="destructive">
-                  <Square className="h-4 w-4 mr-2" />
-                  Stop
-                </Button>
-              </>
-            )}
-
-            {isPaused && (
-              <>
-                <Button onClick={resume} size="sm" variant="default">
-                  <Play className="h-4 w-4 mr-2" />
-                  Resume
-                </Button>
-                <Button onClick={stop} size="sm" variant="destructive">
-                  <Square className="h-4 w-4 mr-2" />
-                  Stop
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      <div className="mt-5 flex gap-2">
+        {isRunning ? (
+          <Button onClick={pause}>
+            <Pause className="size-4" aria-hidden="true" />
+            Pausar
+          </Button>
+        ) : isPaused ? (
+          <Button onClick={resume}>
+            <Play className="size-4" aria-hidden="true" />
+            Retomar
+          </Button>
+        ) : (
+          <Button onClick={start}>
+            <Play className="size-4" aria-hidden="true" />
+            Iniciar
+          </Button>
+        )}
+        {(isRunning || isPaused) && (
+          <Button variant="outline" onClick={stop}>
+            <Square className="size-4" aria-hidden="true" />
+            Parar
+          </Button>
+        )}
+      </div>
+    </section>
   );
 }

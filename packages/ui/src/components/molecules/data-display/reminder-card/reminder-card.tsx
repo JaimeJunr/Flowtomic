@@ -1,16 +1,18 @@
 /**
  * ReminderCard - Componente Visual
  *
- * Card de lembretes com horário e botão de ação
+ * Lista de lembretes: horário em mono na frente, título e descrição, e uma ação
+ * contornada por linha (DESIGN.md: ação de linha é outline, não sólida).
  */
 
-import { Clock, X } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle } from "../../../atoms";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms";
 
 export interface Reminder {
   id: string;
   title: string;
-  time: string; // Formato: "02.00 pm - 04.00 pm"
+  time: string; // Texto livre, ex.: "14:00–14:30"
   description?: string;
 }
 
@@ -21,23 +23,24 @@ export interface ReminderCardProps {
   reminders: Reminder[];
 
   /**
-   * Título do card
+   * Título da seção
+   * @default "Lembretes"
    */
   title?: string;
 
   /**
-   * Texto do botão de ação principal
-   * @default "Start Meeting"
+   * Texto do botão de ação de cada lembrete
+   * @default "Começar"
    */
   actionButtonText?: string;
 
   /**
-   * Callback quando o botão de ação é clicado
+   * Callback quando o botão de ação é clicado. Sem ele, o botão não aparece.
    */
   onStartMeeting?: (reminder: Reminder) => void;
 
   /**
-   * Callback quando um lembrete é dispensado
+   * Callback quando um lembrete é dispensado. Sem ele, o botão de dispensar não aparece.
    */
   onDismiss?: (reminder: Reminder) => void;
 
@@ -48,77 +51,66 @@ export interface ReminderCardProps {
 }
 
 /**
- * Componente de card de lembretes
+ * Componente de lista de lembretes
  */
 export function ReminderCard({
   reminders,
-  title = "Reminders",
-  actionButtonText = "Start Meeting",
+  title = "Lembretes",
+  actionButtonText = "Começar",
   onStartMeeting,
   onDismiss,
   className,
 }: ReminderCardProps) {
-  if (!reminders || reminders.length === 0) {
-    return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center text-muted-foreground py-8">No reminders</div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Mostrar apenas o primeiro lembrete (ou todos se necessário)
-  const _primaryReminder = reminders[0];
+  const list = reminders ?? [];
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {reminders.map((reminder) => (
-            <div key={reminder.id} className="space-y-3">
-              {/* Título do lembrete */}
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="font-medium text-sm">{reminder.title}</div>
-                  {reminder.description && (
-                    <div className="text-xs text-muted-foreground mt-1">{reminder.description}</div>
-                  )}
-                </div>
-                {onDismiss && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 w-6 p-0"
-                    onClick={() => onDismiss(reminder)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+    <section className={cn("text-sm", className)}>
+      <div className="flex items-center gap-3">
+        <h3 className="text-sm font-semibold">{title}</h3>
+        <span className="font-mono text-[13px] text-muted-foreground">{list.length}</span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
+      {list.length === 0 ? (
+        <p className="mt-6 text-muted-foreground">Nenhum lembrete.</p>
+      ) : (
+        <ul className="mt-3">
+          {list.map((reminder) => (
+            <li
+              key={reminder.id}
+              className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border px-2 py-3 first:border-t-0"
+            >
+              <span className="w-24 shrink-0 font-mono text-[13px]">{reminder.time}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-medium">{reminder.title}</span>
+                {reminder.description && (
+                  <span className="block text-muted-foreground">{reminder.description}</span>
                 )}
-              </div>
-
-              {/* Horário */}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span>{reminder.time}</span>
-              </div>
-
-              {/* Botão de ação */}
-              {onStartMeeting && (
-                <Button onClick={() => onStartMeeting(reminder)} className="w-full" size="sm">
-                  {actionButtonText}
-                </Button>
+              </span>
+              {(onStartMeeting || onDismiss) && (
+                <span className="flex shrink-0 items-center gap-1">
+                  {onStartMeeting && (
+                    <Button variant="outline" size="sm" onClick={() => onStartMeeting(reminder)}>
+                      {actionButtonText}
+                    </Button>
+                  )}
+                  {onDismiss && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`Dispensar ${reminder.title}`}
+                      className="size-8 text-muted-foreground"
+                      onClick={() => onDismiss(reminder)}
+                    >
+                      <X className="size-4" aria-hidden="true" />
+                    </Button>
+                  )}
+                </span>
               )}
-            </div>
+            </li>
           ))}
-        </div>
-      </CardContent>
-    </Card>
+        </ul>
+      )}
+    </section>
   );
 }

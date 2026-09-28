@@ -1,22 +1,13 @@
 /**
  * TeamMemberList - Componente Visual
  *
- * Lista de membros da equipe com avatares, nomes, tarefas e status
+ * Lista densa de pessoas da equipe: nome, tarefa atual e estado, separados por régua
+ * de 1px (DESIGN.md, "Lista densa") em vez de um card por pessoa.
  */
 
-import { Plus, User } from "lucide-react";
+import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../../atoms";
+import { Button } from "../../../atoms";
 
 export type TeamMemberStatus = "completed" | "in-progress" | "pending";
 
@@ -35,23 +26,24 @@ export interface TeamMemberListProps {
   members: TeamMember[];
 
   /**
-   * Título do card
+   * Título da seção
+   * @default "Equipe"
    */
   title?: string;
 
   /**
-   * Callback quando um membro é clicado
+   * Callback quando um membro é clicado. Com ele, cada linha vira um botão.
    */
   onMemberClick?: (member: TeamMember) => void;
 
   /**
-   * Callback quando o botão "Add Member" é clicado
+   * Callback do botão de adicionar. Sem ele, o botão não aparece.
    */
   onAddMember?: () => void;
 
   /**
-   * Texto do botão de adicionar
-   * @default "+ Add Member"
+   * Texto do botão de adicionar (o ícone de "+" já vem junto)
+   * @default "Adicionar pessoa"
    */
   addButtonText?: string;
 
@@ -61,133 +53,105 @@ export interface TeamMemberListProps {
   className?: string;
 }
 
-/**
- * Obtém cor do status
- */
-function getStatusColor(status: TeamMemberStatus): string {
-  switch (status) {
-    case "completed":
-      return "text-success";
-    case "in-progress":
-      return "text-warning";
-    case "pending":
-      return "text-destructive";
-    default:
-      return "text-muted-foreground";
-  }
+const STATUS_LABEL: Record<TeamMemberStatus, string> = {
+  completed: "Concluída",
+  "in-progress": "Em andamento",
+  pending: "Pendente",
+};
+
+// Pendente é neutro: não é erro, então não usa destructive (DESIGN.md, "Color Means Something").
+const STATUS_TONE: Record<TeamMemberStatus, string> = {
+  completed: "bg-success/10 text-success",
+  "in-progress": "bg-info/10 text-info",
+  pending: "bg-muted text-foreground",
+};
+
+function StatusTag({ status }: { status: TeamMemberStatus }) {
+  return (
+    <span
+      className={cn(
+        "shrink-0 rounded-full px-2.5 py-0.5 text-[13px] font-medium leading-5",
+        STATUS_TONE[status]
+      )}
+    >
+      {STATUS_LABEL[status]}
+    </span>
+  );
 }
 
-/**
- * Obtém texto do status
- */
-function getStatusText(status: TeamMemberStatus): string {
-  switch (status) {
-    case "completed":
-      return "Completed";
-    case "in-progress":
-      return "In Progress";
-    case "pending":
-      return "Pending";
-    default:
-      return status;
-  }
+function MemberRowContent({ member, showPhoto }: { member: TeamMember; showPhoto: boolean }) {
+  return (
+    <>
+      {showPhoto && (
+        <img src={member.avatar} alt="" className="size-6 shrink-0 rounded-full object-cover" />
+      )}
+      <span className="font-medium sm:w-32 sm:shrink-0">{member.name}</span>
+      <span className="order-last basis-full text-muted-foreground sm:order-none sm:basis-auto sm:flex-1 sm:min-w-0 sm:text-foreground">
+        {member.task}
+      </span>
+      <span className="ml-auto sm:ml-0">
+        <StatusTag status={member.status} />
+      </span>
+    </>
+  );
 }
 
-/**
- * Obtém iniciais do nome
- */
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
+const ROW_CLASS = "flex flex-wrap items-center gap-x-4 gap-y-0.5 px-2 py-3";
 
 /**
  * Componente de lista de membros da equipe
  */
 export function TeamMemberList({
   members,
-  title = "Team Collaboration",
+  title = "Equipe",
   onMemberClick,
   onAddMember,
-  addButtonText = "+ Add Member",
+  addButtonText = "Adicionar pessoa",
   className,
 }: TeamMemberListProps) {
+  // Foto só se todos tiverem: metade com foto e metade sem desalinha a lista.
+  const showPhoto = members.length > 0 && members.every((m) => Boolean(m.avatar));
+
   return (
-    <Card className={className}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle>{title}</CardTitle>
+    <section className={cn("text-sm", className)}>
+      <div className="flex items-center gap-3">
+        <h3 className="text-sm font-semibold">{title}</h3>
+        <span className="font-mono text-[13px] text-muted-foreground">{members.length}</span>
+        <div className="h-px flex-1 bg-border" />
         {onAddMember && (
-          <Button variant="ghost" size="sm" onClick={onAddMember}>
-            <Plus className="h-4 w-4 mr-1" />
+          <Button variant="outline" size="sm" onClick={onAddMember}>
+            <Plus className="size-4" aria-hidden="true" />
             {addButtonText}
           </Button>
         )}
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {members.length === 0 ? (
-            <div className="text-center text-muted-foreground py-8">No team members</div>
-          ) : (
-            members.map((member) => (
-              <div
-                key={member.id}
-                {...(onMemberClick
-                  ? {
-                      role: "button",
-                      tabIndex: 0,
-                      onClick: () => onMemberClick(member),
-                      onKeyDown: (e: React.KeyboardEvent) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          onMemberClick(member);
-                        }
-                      },
-                    }
-                  : {})}
-                className={cn(
-                  "flex items-start gap-3 p-3 rounded-lg border transition-colors",
-                  onMemberClick &&
-                    "cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
-                )}
-              >
-                {/* Avatar */}
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={member.avatar} alt={member.name} />
-                  <AvatarFallback>
-                    {member.avatar ? <User className="h-5 w-5" /> : getInitials(member.name)}
-                  </AvatarFallback>
-                </Avatar>
+      </div>
 
-                {/* Informações */}
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm">{member.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">Working on {member.task}</div>
-                  <div className={cn("text-xs font-medium mt-1", getStatusColor(member.status))}>
-                    Status: {getStatusText(member.status)}
-                  </div>
-                </div>
-
-                {/* Status badge (opcional) */}
-                <Badge
-                  variant={
-                    member.status === "completed"
-                      ? "default"
-                      : member.status === "in-progress"
-                        ? "secondary"
-                        : "destructive"
-                  }
+      {members.length === 0 ? (
+        <p className="mt-6 text-muted-foreground">Ninguém na equipe ainda.</p>
+      ) : (
+        <ul className="mt-3">
+          {members.map((member) => (
+            <li key={member.id} className="border-t border-border first:border-t-0">
+              {onMemberClick ? (
+                <button
+                  type="button"
+                  onClick={() => onMemberClick(member)}
+                  className={cn(
+                    ROW_CLASS,
+                    "w-full rounded-lg text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  )}
                 >
-                  {getStatusText(member.status)}
-                </Badge>
-              </div>
-            ))
-          )}
-        </div>
-      </CardContent>
-    </Card>
+                  <MemberRowContent member={member} showPhoto={showPhoto} />
+                </button>
+              ) : (
+                <div className={ROW_CLASS}>
+                  <MemberRowContent member={member} showPhoto={showPhoto} />
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

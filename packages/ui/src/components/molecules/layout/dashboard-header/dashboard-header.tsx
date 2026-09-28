@@ -1,18 +1,19 @@
 /**
  * DashboardHeader - Componente Visual
  *
- * Header com busca, notificações e perfil do usuário
+ * Header com busca, mensagens, notificações e o usuário. Só mostra o que funciona:
+ * atalho de busca só se quem usa passar um, menu do perfil só com onProfileClick.
  */
 
-import { Bell, MessageSquare, Search, User } from "lucide-react";
+import { Bell, MessageSquare, Search } from "lucide-react";
+import type React from "react";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Input } from "../../../atoms";
+import { Button, Input } from "../../../atoms";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../atoms/actions/dropdown-menu";
 
@@ -41,14 +42,14 @@ export interface DashboardHeaderProps {
   onSearchChange?: (value: string) => void;
 
   /**
-   * Placeholder do campo de busca
-   * @default "Search task"
+   * Placeholder e nome acessível do campo de busca
+   * @default "Buscar"
    */
   searchPlaceholder?: string;
 
   /**
-   * Atalho de teclado para busca
-   * @default "⌘F"
+   * Atalho de teclado mostrado no campo. Só aparece se for passado — mostre apenas um
+   * atalho que a sua aplicação realmente implementa.
    */
   searchShortcut?: string;
 
@@ -78,7 +79,7 @@ export interface DashboardHeaderProps {
   onMessageClick?: (message: Notification) => void;
 
   /**
-   * Callback quando o perfil é clicado
+   * Callback do item "Perfil". Sem ele, o usuário aparece como texto, sem menu.
    */
   onProfileClick?: () => void;
 
@@ -88,16 +89,104 @@ export interface DashboardHeaderProps {
   className?: string;
 }
 
-/**
- * Obtém iniciais do nome
- */
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+function unreadLabel(name: string, unread: number): string {
+  if (unread === 0) return name;
+  return `${name}, ${unread} ${unread === 1 ? "não lida" : "não lidas"}`;
+}
+
+interface InboxMenuProps {
+  name: string;
+  icon: React.ReactNode;
+  items: Notification[];
+  onItemClick?: (item: Notification) => void;
+}
+
+function InboxMenu({ name, icon, items, onItemClick }: InboxMenuProps) {
+  const unread = items.filter((i) => i.unread).length;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative size-11"
+          aria-label={unreadLabel(name, unread)}
+        >
+          {icon}
+          {unread > 0 && (
+            <span
+              className="absolute right-0.5 top-1 min-w-4 rounded-full bg-primary px-1 font-mono text-[11px] leading-4 text-primary-foreground"
+              aria-hidden="true"
+            >
+              {unread}
+            </span>
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-80">
+        <DropdownMenuLabel>{name}</DropdownMenuLabel>
+        {items.map((item) => (
+          <DropdownMenuItem
+            key={item.id}
+            onClick={() => onItemClick?.(item)}
+            className="items-start gap-2"
+          >
+            <span
+              className={cn(
+                "mt-1.5 size-2 shrink-0 rounded-full",
+                item.unread ? "bg-primary" : "bg-transparent"
+              )}
+              aria-hidden="true"
+            />
+            <span className="flex flex-col">
+              <span className="font-medium">{item.title}</span>
+              {item.description && (
+                <span className="text-[13px] text-muted-foreground">{item.description}</span>
+              )}
+            </span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function UserIdentity({ user }: { user: DashboardUser }) {
+  return (
+    <>
+      {user.avatar && (
+        <img src={user.avatar} alt="" className="size-8 shrink-0 rounded-full object-cover" />
+      )}
+      <span className="flex min-w-0 max-w-44 flex-col items-start text-left sm:max-w-none">
+        <span className="max-w-full truncate text-sm font-medium leading-tight">{user.name}</span>
+        <span className="max-w-full truncate font-mono text-xs text-muted-foreground">
+          {user.email}
+        </span>
+      </span>
+    </>
+  );
+}
+
+function UserArea({ user, onProfileClick }: { user: DashboardUser; onProfileClick?: () => void }) {
+  if (!onProfileClick) {
+    return (
+      <div className="flex items-center gap-2 px-2">
+        <UserIdentity user={user} />
+      </div>
+    );
+  }
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-auto gap-2 py-1.5">
+          <UserIdentity user={user} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={onProfileClick}>Perfil</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
 
 /**
@@ -106,8 +195,8 @@ function getInitials(name: string): string {
 export function DashboardHeader({
   searchValue = "",
   onSearchChange,
-  searchPlaceholder = "Search task",
-  searchShortcut = "⌘F",
+  searchPlaceholder = "Buscar",
+  searchShortcut,
   user,
   notifications = [],
   messages = [],
@@ -116,136 +205,51 @@ export function DashboardHeader({
   onProfileClick,
   className,
 }: DashboardHeaderProps) {
-  const unreadNotifications = notifications.filter((n) => n.unread).length;
-  const unreadMessages = messages.filter((m) => m.unread).length;
-
   return (
     <header
       className={cn(
-        "flex items-center justify-between gap-4 border-b bg-background px-6 py-4",
+        "flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-background px-4 py-3 md:px-6",
         className
       )}
     >
-      {/* Busca */}
-      <div className="relative flex-1 max-w-md">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <div className="relative w-full md:max-w-md md:flex-1">
+        <Search
+          className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true"
+        />
         <Input
           type="search"
+          aria-label={searchPlaceholder}
           placeholder={searchPlaceholder}
           value={searchValue}
           onChange={(e) => onSearchChange?.(e.target.value)}
-          className="pl-9 pr-20"
+          className={cn("h-11 pl-9", searchShortcut && "pr-20")}
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-          {searchShortcut}
-        </div>
+        {searchShortcut && (
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-xs text-muted-foreground">
+            {searchShortcut}
+          </kbd>
+        )}
       </div>
 
-      {/* Ações do Header */}
-      <div className="flex items-center gap-2">
-        {/* Mensagens */}
+      <div className="ml-auto flex items-center gap-1">
         {messages.length > 0 && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <MessageSquare className="h-5 w-5" />
-                {unreadMessages > 0 && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                  >
-                    {unreadMessages}
-                  </Badge>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel>Messages</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {messages.map((message) => (
-                <DropdownMenuItem
-                  key={message.id}
-                  onClick={() => onMessageClick?.(message)}
-                  className={cn(message.unread && "bg-accent")}
-                >
-                  <div className="flex flex-col gap-1">
-                    <div className="font-medium">{message.title}</div>
-                    {message.description && (
-                      <div className="text-xs text-muted-foreground">{message.description}</div>
-                    )}
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <InboxMenu
+            name="Mensagens"
+            icon={<MessageSquare className="size-[18px]" aria-hidden="true" />}
+            items={messages}
+            onItemClick={onMessageClick}
+          />
         )}
-
-        {/* Notificações */}
         {notifications.length > 0 && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                {unreadNotifications > 0 && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                  >
-                    {unreadNotifications}
-                  </Badge>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {notifications.map((notification) => (
-                <DropdownMenuItem
-                  key={notification.id}
-                  onClick={() => onNotificationClick?.(notification)}
-                  className={cn(notification.unread && "bg-accent")}
-                >
-                  <div className="flex flex-col gap-1">
-                    <div className="font-medium">{notification.title}</div>
-                    {notification.description && (
-                      <div className="text-xs text-muted-foreground">
-                        {notification.description}
-                      </div>
-                    )}
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <InboxMenu
+            name="Notificações"
+            icon={<Bell className="size-[18px]" aria-hidden="true" />}
+            items={notifications}
+            onItemClick={onNotificationClick}
+          />
         )}
-
-        {/* Perfil do Usuário */}
-        {user && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2 h-auto py-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>
-                    {user.avatar ? <User className="h-4 w-4" /> : getInitials(user.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col items-start">
-                  <span className="text-sm font-medium">{user.name}</span>
-                  <span className="text-xs text-muted-foreground">{user.email}</span>
-                </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onProfileClick}>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+        {user && <UserArea user={user} onProfileClick={onProfileClick} />}
       </div>
     </header>
   );
