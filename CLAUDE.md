@@ -456,7 +456,7 @@ teste primeiro) e só então travar o número no `vitest.config.ts`.
 | `packages/ui` | 41 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
 | `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
 | `registry` | 1 | `test` | guarda o parser do component map |
-| `cli` | 2 | `test` | guarda os `path` do component map contra os arquivos em disco |
+| `cli` | 2 | `test` | guarda o component map contra o disco nos dois sentidos: todo `path` existe, e toda pasta de componente em `packages/ui/src/components` tem entrada — componente novo sem entrada no mapa quebra a CI |
 
 ⚠️ **`bun run test` no `packages/ui` entra em modo watch e não devolve o terminal.** O pacote
 não tem `test:run` (o `logic` tem). Para rodar uma vez:
