@@ -13,12 +13,11 @@ function renderSidebar(props: Parameters<typeof SidebarNavigation>[0] = {}) {
 
 describe("SidebarNavigation", () => {
   describe("Copy em português, sem template em inglês", () => {
-    it("usa os rótulos de grupo em português, não MENU/GENERAL", () => {
+    it("não põe rótulo de grupo em cima dos menus (Navegação, Geral, MENU, GENERAL)", () => {
       renderSidebar();
-      expect(screen.getByText("Navegação")).toBeInTheDocument();
-      expect(screen.getByText("Geral")).toBeInTheDocument();
-      expect(screen.queryByText("MENU")).not.toBeInTheDocument();
-      expect(screen.queryByText("GENERAL")).not.toBeInTheDocument();
+      for (const label of ["Navegação", "Geral", "MENU", "GENERAL"]) {
+        expect(screen.queryByText(label)).not.toBeInTheDocument();
+      }
     });
 
     it("usa itens de menu padrão em português quando nenhum é passado", () => {
@@ -39,6 +38,22 @@ describe("SidebarNavigation", () => {
       expect(screen.getByText("Sair")).toBeInTheDocument();
       expect(screen.queryByText("Settings")).not.toBeInTheDocument();
       expect(screen.queryByText("Logout")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Identidade e navegação", () => {
+    it("sem logo, mostra só o nome do app, sem ícone de logo inventado", () => {
+      renderSidebar();
+      const name = screen.getByText("Flowtomic");
+      expect(name.parentElement?.querySelector("svg")).toBeNull();
+    });
+
+    it("os dois menus são navegações com nome, e o item ativo é a página atual", () => {
+      renderSidebar();
+      expect(screen.getByRole("navigation", { name: "Principal" })).toBeInTheDocument();
+      expect(screen.getByRole("navigation", { name: "Conta" })).toBeInTheDocument();
+      expect(screen.getByText("Início").closest("button")).toHaveAttribute("aria-current", "page");
+      expect(screen.getByText("Tarefas").closest("button")).not.toHaveAttribute("aria-current");
     });
   });
 

@@ -1,39 +1,65 @@
 import { useReactTableFront } from "@flowtomic/logic";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ColumnDef } from "@tanstack/react-table";
-import { DataTablePagination } from "./data-table-pagination";
+import { DataTablePagination, type DataTablePaginationProps } from "./data-table-pagination";
 
-type User = {
+type ComponentItem = {
   id: string;
   name: string;
-  email: string;
-  role: string;
+  category: "atom" | "molecule" | "organism" | "block";
+  version: string;
+  status: "Publicado" | "Em revisão" | "Rascunho";
 };
 
-// Dados de exemplo para criar tabela
-const sampleData: User[] = Array.from({ length: 50 }, (_, i) => ({
+const components: Pick<ComponentItem, "name" | "category">[] = [
+  { name: "stats-grid", category: "block" },
+  { name: "team-member-list", category: "organism" },
+  { name: "project-list", category: "organism" },
+  { name: "developer-panel", category: "block" },
+  { name: "data-table", category: "molecule" },
+  { name: "button", category: "atom" },
+  { name: "chart-area-interactive", category: "molecule" },
+  { name: "sidebar-navigation", category: "molecule" },
+];
+const suffixes = [
+  "",
+  "-compacto",
+  "-responsivo",
+  "-com-filtro",
+  "-denso",
+  "-detalhado",
+  "-com-selecao",
+];
+const versions = ["0.7.2", "0.8.0", "0.9.0"];
+const statuses: ComponentItem["status"][] = ["Publicado", "Em revisão", "Rascunho"];
+
+const sampleData: ComponentItem[] = Array.from({ length: 50 }, (_, i) => ({
   id: `${i + 1}`,
-  name: `Usuário ${i + 1}`,
-  email: `usuario${i + 1}@exemplo.com`,
-  role: i % 3 === 0 ? "Admin" : i % 3 === 1 ? "Moderador" : "Usuário",
+  name: `${components[i % components.length].name}${suffixes[Math.floor(i / components.length)]}`,
+  category: components[i % components.length].category,
+  version: versions[i % versions.length],
+  status: statuses[i % statuses.length],
 }));
 
-const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<ComponentItem>[] = [
   {
     accessorKey: "name",
     header: "Nome",
   },
   {
-    accessorKey: "email",
-    header: "E-mail",
+    accessorKey: "category",
+    header: "Categoria",
   },
   {
-    accessorKey: "role",
-    header: "Função",
+    accessorKey: "version",
+    header: "Versão",
+  },
+  {
+    accessorKey: "status",
+    header: "Estado",
   },
 ];
 
-// Componente wrapper para criar tabela real
 function PaginationWrapper({
   paginationType = "text",
   enablePageSizeSelector = false,
@@ -66,15 +92,44 @@ function PaginationWrapper({
   });
 
   return (
-    <div className="w-full max-w-4xl rounded-xl border border-border bg-card shadow-sm">
+    <div className="w-full max-w-4xl rounded-[10px] border border-border bg-card">
       <div className="border-b border-border p-4">
-        <h3 className="text-lg font-semibold">Tabela de Exemplo</h3>
+        <h3 className="text-lg font-semibold">Componentes</h3>
       </div>
-      <div className="p-4">
-        <div className="text-sm text-muted-foreground">
-          Esta é uma tabela de exemplo para demonstrar a paginação. A tabela contém{" "}
-          {sampleData.length} itens.
-        </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-sm">
+          <thead className="border-b border-border text-muted-foreground">
+            <tr>
+              <th className="px-4 py-2 font-medium">Nome</th>
+              <th className="px-4 py-2 font-medium">Categoria</th>
+              <th className="px-4 py-2 font-medium">Versão</th>
+              <th className="px-4 py-2 font-medium">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map(({ original }) => (
+              <tr key={original.id} className="border-b border-border last:border-0">
+                <td className="px-4 py-2 font-mono">{original.name}</td>
+                <td className="px-4 py-2">{original.category}</td>
+                <td className="px-4 py-2 font-mono">{original.version}</td>
+                <td className="px-4 py-2">
+                  <span className="inline-flex items-center gap-2">
+                    <span
+                      className={`size-2 rounded-full ${
+                        original.status === "Publicado"
+                          ? "bg-success"
+                          : original.status === "Em revisão"
+                            ? "bg-warning"
+                            : "bg-muted-foreground"
+                      }`}
+                    />
+                    {original.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <DataTablePagination
         table={table}
@@ -89,15 +144,16 @@ function PaginationWrapper({
   );
 }
 
-// ============================================================================
-// DataTablePagination Stories
-// ============================================================================
-
 const paginationMeta = {
   title: "Flowtomic UI/Molecules/Data Display/DataTablePagination",
   component: DataTablePagination,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "Navega pelas páginas de uma lista de componentes do Flowtomic.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -113,10 +169,10 @@ const paginationMeta = {
       control: "boolean",
     },
   },
-} satisfies Meta<typeof DataTablePagination<User>>;
+} satisfies Meta<typeof DataTablePagination<ComponentItem>>;
 
 export default paginationMeta;
-type PaginationStory = StoryObj<typeof paginationMeta>;
+type PaginationStory = StoryObj<Omit<DataTablePaginationProps<ComponentItem>, "table">>;
 
 export const Default: PaginationStory = {
   render: (args) => <PaginationWrapper {...args} />,
@@ -200,10 +256,10 @@ export const WithServerSidePagination: PaginationStory = {
     size: "md",
     enablePageSizeSelector: false,
     paginationInfo: {
-      start: 21,
-      end: 40,
-      total: 150,
-      pageCount: 8,
+      start: 1,
+      end: 10,
+      total: 50,
+      pageCount: 5,
     },
   },
 };
@@ -214,8 +270,8 @@ export const WithCustomFooter: PaginationStory = {
       {...args}
       footerContent={
         <div className="flex w-full items-center justify-between">
-          <div className="text-sm text-muted-foreground">Conteúdo customizado do footer</div>
-          <div className="text-sm text-muted-foreground">Total: {sampleData.length} itens</div>
+          <div className="text-sm text-muted-foreground">Catálogo do Flowtomic</div>
+          <div className="text-sm text-muted-foreground">{sampleData.length} componentes</div>
         </div>
       }
     />
@@ -228,49 +284,7 @@ export const WithCustomFooter: PaginationStory = {
 };
 
 export const ManyPages: PaginationStory = {
-  render: (args) => {
-    // Criar dados para muitas páginas
-    const manyData = Array.from({ length: 200 }, (_, i) => ({
-      id: `${i + 1}`,
-      name: `Usuário ${i + 1}`,
-      email: `usuario${i + 1}@exemplo.com`,
-      role: "Usuário",
-    }));
-
-    function ManyPagesWrapper() {
-      const { table } = useReactTableFront({
-        data: manyData,
-        columns,
-        enablePagination: true,
-        pageSize: 10,
-        enableSorting: false,
-        enableGlobalFilter: false,
-      });
-
-      return (
-        <div className="w-full max-w-4xl rounded-xl border border-border bg-card shadow-sm">
-          <div className="border-b border-border p-4">
-            <h3 className="text-lg font-semibold">Tabela com Muitas Páginas</h3>
-          </div>
-          <div className="p-4">
-            <div className="text-sm text-muted-foreground">
-              Esta tabela contém {manyData.length} itens para demonstrar a paginação com muitas
-              páginas.
-            </div>
-          </div>
-          <DataTablePagination
-            table={table}
-            size={args.size}
-            paginationType={args.paginationType}
-            enablePageSizeSelector={args.enablePageSizeSelector}
-            pageSizeOptions={args.pageSizeOptions}
-          />
-        </div>
-      );
-    }
-
-    return <ManyPagesWrapper />;
-  },
+  render: (args) => <PaginationWrapper {...args} pageSize={5} />,
   args: {
     paginationType: "buttons",
     size: "md",

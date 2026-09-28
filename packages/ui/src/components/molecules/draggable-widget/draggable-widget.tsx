@@ -137,7 +137,7 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
         style={style}
         className={cn(
           "relative group rounded-lg",
-          isDragging && "opacity-50 z-50",
+          isDragging && "opacity-50 z-50 shadow-lg",
           // cor de marca só enquanto arrasta ou com foco (teclado) — repouso é a borda fina do conteúdo abaixo
           isDragging && "ring-2 ring-ring",
           "focus-within:ring-2 focus-within:ring-ring",
@@ -147,8 +147,8 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
         {/* Widget Content */}
         <div
           className={cn(
-            "h-full w-full bg-card rounded-lg border border-border shadow-sm overflow-hidden",
-            isEditMode && "hover:shadow-md transition-shadow"
+            // Sem sombra parado: DESIGN.md só permite sombra em sobreposição e ao arrastar widget.
+            "h-full w-full overflow-hidden rounded-lg border border-border bg-card"
           )}
         >
           {children}
@@ -164,10 +164,10 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
               {...listeners}
               className={cn(
                 "absolute top-2 left-2 p-1.5 rounded-md",
-                "bg-background/80 backdrop-blur-sm border border-border",
+                "bg-background border border-border",
                 "cursor-grab active:cursor-grabbing",
-                "opacity-0 group-hover:opacity-100 transition-opacity",
-                "hover:bg-background"
+                "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity",
+                "hover:bg-muted"
               )}
               tabIndex={0}
               aria-label="Arrastar widget"
@@ -181,15 +181,15 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
             </button>
 
             {/* Actions */}
-            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
               {onConfigure && (
                 <button
                   type="button"
                   onClick={handleConfigure}
                   className={cn(
                     "p-1.5 rounded-md",
-                    "bg-background/80 backdrop-blur-sm border border-border",
-                    "hover:bg-background text-muted-foreground hover:text-foreground",
+                    "bg-background border border-border",
+                    "hover:bg-muted text-muted-foreground hover:text-foreground",
                     "transition-colors"
                   )}
                   aria-label="Configurar widget"
@@ -203,7 +203,7 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
                   onClick={handleRemove}
                   className={cn(
                     "p-1.5 rounded-md",
-                    "bg-background/80 backdrop-blur-sm border border-border",
+                    "bg-background border border-border",
                     "hover:bg-destructive hover:text-destructive-foreground",
                     "text-muted-foreground transition-colors"
                   )}

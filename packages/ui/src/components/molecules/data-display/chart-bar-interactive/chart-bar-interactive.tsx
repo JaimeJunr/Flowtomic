@@ -1,24 +1,19 @@
 /**
  * ChartBarInteractive Component - Flowtomic UI
  *
- * Componente de gráfico de barras interativo com alternância entre desktop e mobile
+ * Gráfico de barras com alternância entre as duas séries. O total de cada série, em mono,
+ * é o próprio botão que a escolhe.
  */
 
 import * as React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { cn } from "@/lib/utils";
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "../../../atoms/data-display/chart";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../../atoms/display/card";
 
 export type ChartBarInteractiveDataPoint = {
   date: string;
@@ -36,11 +31,12 @@ export type ChartBarInteractiveProps = {
    */
   config?: ChartConfig;
   /**
-   * Título do card
+   * Título da seção
+   * @default "Visitas por dia"
    */
   title?: string;
   /**
-   * Descrição do card
+   * Texto abaixo do título. Só aparece quando é passado.
    */
   description?: string;
   /**
@@ -155,23 +151,40 @@ const defaultChartData: ChartBarInteractiveDataPoint[] = [
 
 const defaultChartConfig = {
   views: {
-    label: "Page Views",
+    label: "Visitas",
   },
   desktop: {
-    label: "Desktop",
-    color: "var(--chart-2)",
+    label: "Computador",
+    color: "hsl(var(--primary))",
   },
   mobile: {
-    label: "Mobile",
-    color: "var(--chart-1)",
+    label: "Celular",
+    color: "hsl(var(--muted-foreground))",
   },
 } satisfies ChartConfig;
+
+const MONTHS = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+// "2026-06-01" sozinho o Date lê como meia-noite UTC, que no Brasil ainda é 31/05.
+function parseDay(value: string | number | Date): Date {
+  if (typeof value === "string") {
+    const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (dateOnly)
+      return new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]));
+  }
+  return new Date(value);
+}
+
+function shortDay(value: string | number | Date): string {
+  const d = parseDay(value);
+  return `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+}
 
 export function ChartBarInteractive({
   data = defaultChartData,
   config = defaultChartConfig,
-  title = "Bar Chart - Interactive",
-  description = "Showing total visitors for the last 3 months",
+  title = "Visitas por dia",
+  description,
   defaultActiveChart = "desktop",
   height = "250px",
   className,
@@ -187,83 +200,61 @@ export function ChartBarInteractive({
   );
 
   return (
-    <Card className={`py-0 ${className || ""}`}>
-      <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:!py-0">
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </div>
-        <div className="flex">
-          {(["desktop", "mobile"] as const).map((key) => {
-            const chart = key as "desktop" | "mobile";
-            const isActive = activeChart === chart;
-
-            return (
-              <button
-                key={chart}
-                type="button"
-                data-active={isActive}
-                className="data-[active=true]:bg-muted/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
-                onClick={() => setActiveChart(chart)}
-                aria-label={`Show ${config[chart]?.label || chart} chart`}
-                aria-pressed={isActive}
-              >
-                <span className="text-muted-foreground text-xs">
-                  {config[chart]?.label || chart}
-                </span>
-                <span className="text-lg leading-none font-bold sm:text-3xl">
-                  {total[key].toLocaleString()}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </CardHeader>
-      <CardContent className="px-2 sm:p-6">
-        <ChartContainer config={config} className="aspect-auto w-full" style={{ height }}>
-          <BarChart
-            accessibilityLayer
-            data={data}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  className="w-[150px]"
-                  nameKey="views"
-                  labelFormatter={(value) => {
-                    return new Date(value as string | number | Date).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    });
-                  }}
-                />
-              }
-            />
-            <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <section className={cn("text-sm", className)}>
+      <div className="flex items-center gap-3">
+        <h3 className="text-sm font-semibold">{title}</h3>
+        <div className="h-px flex-1 bg-border" />
+      </div>
+      {description && <p className="mt-1 text-[13px] text-muted-foreground">{description}</p>}
+      <div className="mt-2 flex border-b border-border">
+        {(["desktop", "mobile"] as const).map((key) => {
+          const isActive = activeChart === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => setActiveChart(key)}
+              className={cn(
+                "-mb-px mr-6 flex flex-col items-start gap-1 border-b-2 py-3 pr-6 text-left outline-hidden focus-visible:ring-2 focus-visible:ring-ring",
+                isActive ? "border-primary" : "border-transparent"
+              )}
+            >
+              <span className="text-[13px] text-muted-foreground">{config[key]?.label || key}</span>
+              <span className="font-mono text-[32px] font-medium leading-none tracking-tight">
+                {total[key].toLocaleString("pt-BR")}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <ChartContainer config={config} className="mt-5 aspect-auto w-full" style={{ height }}>
+        <BarChart accessibilityLayer data={data} margin={{ left: 0, right: 0 }}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="date"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            minTickGap={32}
+            tickFormatter={shortDay}
+            className="font-mono"
+          />
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                className="w-[150px]"
+                nameKey="views"
+                labelFormatter={(value) =>
+                  parseDay(value as string | number | Date).toLocaleDateString("pt-BR")
+                }
+              />
+            }
+          />
+          <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} radius={[2, 2, 0, 0]} />
+        </BarChart>
+      </ChartContainer>
+    </section>
   );
 }
 

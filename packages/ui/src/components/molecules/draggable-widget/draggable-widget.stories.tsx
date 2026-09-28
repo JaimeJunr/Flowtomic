@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../atoms";
 import { DraggableWidget } from "./draggable-widget";
 
 const meta = {
@@ -8,6 +7,11 @@ const meta = {
   component: DraggableWidget,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "Mostra uma métrica que pode ser movida e redimensionada no painel.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -25,6 +29,18 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+function MetricContent({ label, value, change }: { label: string; value: string; change: string }) {
+  return (
+    <div className="flex h-full flex-col gap-2 p-5">
+      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="font-mono text-[32px] font-medium leading-none">{value}</span>
+      <span className="text-[13px] text-muted-foreground">
+        <span className="font-semibold text-success">{change}</span> sobre ontem
+      </span>
+    </div>
+  );
+}
 
 export const Default: Story = {
   render: (args) => {
@@ -55,19 +71,7 @@ export const Default: Story = {
             setHeight(h);
           }}
         >
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Widget Arrastável</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Este widget pode ser arrastado e redimensionado quando em modo de edição.
-              </p>
-              <p className="text-xs text-muted-foreground mt-2">
-                Tamanho: {width}×{height}
-              </p>
-            </CardContent>
-          </Card>
+          <MetricContent label="Builds hoje" value="9" change="↑ 2" />
         </DraggableWidget>
       </div>
     );
@@ -75,6 +79,8 @@ export const Default: Story = {
   args: {
     widgetId: "demo-widget",
     widgetType: "card",
+    children: null,
+    gridPosition: { gridColumnStart: 1, gridColumnEnd: 5, gridRowStart: 1, gridRowEnd: 4 },
     isEditMode: true,
     currentWidth: 4,
     currentHeight: 3,
@@ -103,22 +109,15 @@ export const ViewMode: Story = {
             gridRowEnd: 5,
           }}
         >
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Modo Visualização</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Em modo de visualização, o widget não pode ser arrastado ou redimensionado.
-              </p>
-            </CardContent>
-          </Card>
+          <MetricContent label="Downloads no npm" value="1.284" change="↑ 86" />
         </DraggableWidget>
       </div>
     );
   },
   args: {
     widgetId: "view-widget",
+    children: null,
+    gridPosition: { gridColumnStart: 1, gridColumnEnd: 7, gridRowStart: 1, gridRowEnd: 5 },
     isEditMode: false,
     currentWidth: 6,
     currentHeight: 4,
@@ -160,22 +159,15 @@ export const WithActions: Story = {
             alert(`Remover widget: ${id}`);
           }}
         >
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Widget com Ações</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Passe o mouse sobre o widget para ver os controles de configuração e remoção.
-              </p>
-            </CardContent>
-          </Card>
+          <MetricContent label="PRs revisados" value="12" change="↑ 3" />
         </DraggableWidget>
       </div>
     );
   },
   args: {
     widgetId: "actions-widget",
+    children: null,
+    gridPosition: { gridColumnStart: 1, gridColumnEnd: 6, gridRowStart: 1, gridRowEnd: 4 },
     isEditMode: true,
     currentWidth: 5,
     currentHeight: 3,

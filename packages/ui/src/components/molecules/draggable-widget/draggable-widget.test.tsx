@@ -38,6 +38,44 @@ describe("DraggableWidget", () => {
     });
   });
 
+  describe("Sombra só ao arrastar (DESIGN.md, Elevation)", () => {
+    it("parado, nem o conteúdo nem os controles têm sombra ou vidro fosco", () => {
+      const { container } = render(
+        <DraggableWidget
+          widgetId="1"
+          isEditMode
+          gridPosition={gridPosition}
+          currentWidth={4}
+          currentHeight={2}
+          onConfigure={() => {}}
+          onRemove={() => {}}
+        >
+          <p>conteúdo</p>
+        </DraggableWidget>
+      );
+      expect(container.innerHTML).not.toMatch(/shadow-(sm|md)|backdrop-blur/);
+    });
+  });
+
+  it("os controles de edição têm nome acessível", () => {
+    render(
+      <DraggableWidget
+        widgetId="1"
+        isEditMode
+        gridPosition={gridPosition}
+        currentWidth={4}
+        currentHeight={2}
+        onConfigure={() => {}}
+        onRemove={() => {}}
+      >
+        <p>conteúdo</p>
+      </DraggableWidget>
+    );
+    for (const name of ["Arrastar widget", "Configurar widget", "Remover widget"]) {
+      expect(screen.getByRole("button", { name })).toBeInTheDocument();
+    }
+  });
+
   it("renderiza o conteúdo do widget", () => {
     render(
       <DraggableWidget

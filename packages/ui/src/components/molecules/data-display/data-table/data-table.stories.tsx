@@ -3,47 +3,71 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { fn } from "storybook/test";
 import { DataTable } from "./data-table";
 
-type User = {
+type ComponentItem = {
   id: string;
   name: string;
-  email: string;
-  role: string;
-  status: "active" | "inactive";
+  category: "atom" | "molecule" | "organism" | "block";
+  version: string;
+  status: "Publicado" | "Em revisão" | "Rascunho";
 };
 
-const sampleData: User[] = [
-  { id: "1", name: "João Silva", email: "joao@exemplo.com", role: "Admin", status: "active" },
-  { id: "2", name: "Maria Santos", email: "maria@exemplo.com", role: "Usuário", status: "active" },
-  { id: "3", name: "Pedro Costa", email: "pedro@exemplo.com", role: "Usuário", status: "inactive" },
-  { id: "4", name: "Ana Oliveira", email: "ana@exemplo.com", role: "Moderador", status: "active" },
+const sampleData: ComponentItem[] = [
+  { id: "1", name: "stats-grid", category: "block", version: "0.9.0", status: "Publicado" },
   {
-    id: "5",
-    name: "Carlos Souza",
-    email: "carlos@exemplo.com",
-    role: "Usuário",
-    status: "inactive",
+    id: "2",
+    name: "team-member-list",
+    category: "organism",
+    version: "0.8.0",
+    status: "Publicado",
+  },
+  { id: "3", name: "project-list", category: "organism", version: "0.9.0", status: "Em revisão" },
+  { id: "4", name: "developer-panel", category: "block", version: "0.7.2", status: "Rascunho" },
+  { id: "5", name: "data-table", category: "molecule", version: "0.9.0", status: "Publicado" },
+  { id: "6", name: "button", category: "atom", version: "0.8.0", status: "Publicado" },
+  {
+    id: "7",
+    name: "chart-area-interactive",
+    category: "molecule",
+    version: "0.9.0",
+    status: "Em revisão",
+  },
+  {
+    id: "8",
+    name: "sidebar-navigation",
+    category: "molecule",
+    version: "0.7.2",
+    status: "Rascunho",
   },
 ];
 
-const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<ComponentItem>[] = [
   {
     accessorKey: "name",
     header: "Nome",
   },
   {
-    accessorKey: "email",
-    header: "E-mail",
+    accessorKey: "category",
+    header: "Categoria",
   },
   {
-    accessorKey: "role",
-    header: "Função",
+    accessorKey: "version",
+    header: "Versão",
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Estado",
     cell: ({ row }) => (
-      <span className={row.original.status === "active" ? "text-success" : "text-muted-foreground"}>
-        {row.original.status === "active" ? "Ativo" : "Inativo"}
+      <span className="inline-flex items-center gap-2">
+        <span
+          className={`size-2 rounded-full ${
+            row.original.status === "Publicado"
+              ? "bg-success"
+              : row.original.status === "Em revisão"
+                ? "bg-warning"
+                : "bg-muted-foreground"
+          }`}
+        />
+        {row.original.status}
       </span>
     ),
   },
@@ -54,6 +78,11 @@ const meta = {
   component: DataTable,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "Lista componentes do Flowtomic com busca, ordenação e seleção opcionais.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -74,14 +103,14 @@ const meta = {
       control: "boolean",
     },
   },
-} satisfies Meta<typeof DataTable<User>>;
+} satisfies Meta<typeof DataTable<ComponentItem>>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof DataTable<ComponentItem>>;
 
 export const Default: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: sampleData,
     columns,
   },
@@ -89,7 +118,7 @@ export const Default: Story = {
 
 export const WithPagination: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: sampleData,
     columns,
     enablePagination: true,
@@ -99,7 +128,7 @@ export const WithPagination: Story = {
 
 export const WithRowSelection: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: sampleData,
     columns,
     enableRowSelection: true,
@@ -109,17 +138,17 @@ export const WithRowSelection: Story = {
 
 export const WithGlobalFilter: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: sampleData,
     columns,
     enableGlobalFilter: true,
-    globalFilterPlaceholder: "Buscar usuários...",
+    globalFilterPlaceholder: "Buscar componentes...",
   },
 };
 
 export const WithSorting: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: sampleData,
     columns,
     enableSorting: true,
@@ -128,7 +157,7 @@ export const WithSorting: Story = {
 
 export const Small: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: sampleData,
     columns,
     size: "sm",
@@ -137,7 +166,7 @@ export const Small: Story = {
 
 export const Loading: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: [],
     columns,
     loading: true,
@@ -146,16 +175,16 @@ export const Loading: Story = {
 
 export const Empty: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: [],
     columns,
-    emptyMessage: "Nenhum usuário encontrado",
+    emptyMessage: "Nenhum componente encontrado",
   },
 };
 
 export const FullFeatured: Story = {
   args: {
-    title: "Usuários",
+    title: "Componentes",
     data: sampleData,
     columns,
     enableRowSelection: true,

@@ -7,13 +7,14 @@ const meta = {
   component: StatCard,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "Mostra uma métrica com valor, variação e ações opcionais.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
-    color: {
-      control: "select",
-      options: ["primary", "success", "warning", "error", "info"],
-    },
     variant: {
       control: "select",
       options: ["compact", "default", "detailed"],
@@ -29,50 +30,54 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    title: "Receita Total",
+    title: "Receita total",
     value: 122380,
     delta: 15.1,
     lastMonth: 105922,
     prefix: "R$ ",
+    locale: "pt-BR",
   },
 };
 
 export const PositiveTrend: Story = {
   args: {
-    title: "Vendas",
-    value: 250000,
-    delta: 25.0,
-    lastMonth: 200000,
-    prefix: "R$ ",
+    title: "Downloads no npm",
+    value: 18420,
+    delta: 12.4,
+    lastMonth: 16388,
+    locale: "pt-BR",
   },
 };
 
 export const NegativeTrend: Story = {
   args: {
-    title: "Usuários",
-    value: 85000,
-    delta: -8.5,
-    lastMonth: 92890,
+    title: "Builds com falha",
+    value: 7,
+    delta: 40,
+    lastMonth: 5,
+    positive: false,
+    locale: "pt-BR",
   },
 };
 
 export const WithSubtitle: Story = {
   args: {
-    title: "Usuários Ativos",
-    value: 1500000,
-    delta: 12.3,
-    lastMonth: 1336500,
-    subtitle: "Total de usuários ativos este mês",
+    title: "Builds do registry",
+    value: 148,
+    delta: 8.8,
+    lastMonth: 136,
+    subtitle: "Publicações de junho de 2026",
+    locale: "pt-BR",
   },
 };
 
 export const WithActions: Story = {
   args: {
-    title: "Receita",
-    value: 500000,
-    delta: 10.5,
-    lastMonth: 452500,
-    prefix: "R$ ",
+    title: "PRs revisados",
+    value: 32,
+    delta: 14.3,
+    lastMonth: 28,
+    locale: "pt-BR",
     showActions: true,
     onSettings: fn(),
     onAddAlert: fn(),
@@ -84,61 +89,85 @@ export const WithActions: Story = {
 
 export const NoDelta: Story = {
   args: {
-    title: "Total de Pedidos",
-    value: 1250,
-    prefix: "",
+    title: "Componentes publicados",
+    value: 86,
+    locale: "pt-BR",
   },
 };
 
 export const StringValue: Story = {
   args: {
-    title: "Status",
-    value: "Ativo",
-    subtitle: "Sistema funcionando normalmente",
+    title: "Versão do @flowtomic/ui",
+    value: "0.9.0",
+    subtitle: "Publicado em junho de 2026",
+    locale: "pt-BR",
   },
 };
 
 export const DifferentColors: Story = {
+  args: { title: "Downloads no npm", value: 18420 },
   render: () => (
-    <div className="grid grid-cols-2 gap-4 w-[800px]">
-      <StatCard title="Receita" value={122380} delta={15.1} color="primary" prefix="R$ " />
-      <StatCard title="Vendas" value={85000} delta={-8.5} color="success" prefix="R$ " />
-      <StatCard title="Usuários" value={50000} delta={25.0} color="warning" />
-      <StatCard title="Pedidos" value={2500} delta={12.3} color="error" />
+    <div className="grid w-[800px] grid-cols-2 gap-4">
+      <StatCard
+        title="Downloads no npm"
+        value={18420}
+        delta={12.4}
+        lastMonth={16388}
+        locale="pt-BR"
+      />
+      <StatCard
+        title="Builds com falha"
+        value={7}
+        delta={40}
+        lastMonth={5}
+        positive={false}
+        locale="pt-BR"
+      />
+      <StatCard title="PRs revisados" value={32} delta={14.3} lastMonth={28} locale="pt-BR" />
+      <StatCard
+        title="Erros no registry"
+        value={4}
+        delta={-20}
+        lastMonth={5}
+        positive={false}
+        locale="pt-BR"
+      />
     </div>
   ),
 };
 
 export const CompactVariant: Story = {
   args: {
-    title: "Receita Total",
+    title: "Receita total",
     value: 122380,
     delta: 15.1,
     lastMonth: 105922,
     prefix: "R$ ",
+    locale: "pt-BR",
     variant: "compact",
   },
 };
 
 export const DetailedVariant: Story = {
   args: {
-    title: "Receita Total",
+    title: "Receita total",
     value: 122380,
     delta: 15.1,
     lastMonth: 105922,
     prefix: "R$ ",
-    subtitle: "Total de receita acumulada no período atual",
+    subtitle: "Fechamento de junho de 2026",
+    locale: "pt-BR",
     variant: "detailed",
   },
 };
 
 export const WithHoverActions: Story = {
   args: {
-    title: "Receita",
-    value: 500000,
-    delta: 10.5,
-    lastMonth: 452500,
-    prefix: "R$ ",
+    title: "PRs revisados",
+    value: 32,
+    delta: 14.3,
+    lastMonth: 28,
+    locale: "pt-BR",
     showActions: true,
     onSettings: fn(),
     onAddAlert: fn(),
@@ -150,7 +179,7 @@ export const WithHoverActions: Story = {
 
 export const WithCurrency: Story = {
   args: {
-    title: "Receita Total",
+    title: "Receita total",
     value: 122380,
     delta: 15.1,
     lastMonth: 105922,
@@ -161,20 +190,21 @@ export const WithCurrency: Story = {
 
 export const WithCurrencyUSD: Story = {
   args: {
-    title: "Revenue",
+    title: "Receita de licenças",
     value: 50000,
     delta: 12.5,
     lastMonth: 44444,
-    currency: "USD",
-    locale: "en-US",
+    currency: "BRL",
+    locale: "pt-BR",
   },
 };
 
 export const WithLocaleFormatting: Story = {
+  args: { title: "Receita total", value: 122380 },
   render: () => (
-    <div className="grid grid-cols-2 gap-4 w-[800px]">
+    <div className="grid w-[800px] grid-cols-2 gap-4">
       <StatCard
-        title="Receita (pt-BR)"
+        title="Receita total"
         value={122380}
         delta={15.1}
         lastMonth={105922}
@@ -182,23 +212,15 @@ export const WithLocaleFormatting: Story = {
         currency="BRL"
       />
       <StatCard
-        title="Revenue (en-US)"
-        value={122380}
-        delta={15.1}
-        lastMonth={105922}
-        locale="en-US"
-        currency="USD"
+        title="Downloads no npm"
+        value={18420}
+        delta={12.4}
+        lastMonth={16388}
+        locale="pt-BR"
       />
+      <StatCard title="Builds do registry" value={148} delta={8.8} lastMonth={136} locale="pt-BR" />
       <StatCard
-        title="Einnahmen (de-DE)"
-        value={122380}
-        delta={15.1}
-        lastMonth={105922}
-        locale="de-DE"
-        currency="EUR"
-      />
-      <StatCard
-        title="Receita (sem currency)"
+        title="Receita de licenças"
         value={122380}
         delta={15.1}
         lastMonth={105922}

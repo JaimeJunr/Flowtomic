@@ -158,6 +158,27 @@ describe("Identidade Urucum no tema", () => {
     }
   });
 
+  it("a sidebar herda os tokens do tema, não os cinzas do shadcn", () => {
+    // Até 27/09/2026 os --sidebar-* eram hsl() fixos do shadcn: o item ativo saía cinza, não no
+    // wash de urucum do DESIGN.md. O .dark repete as referências porque custom property que usa
+    // var() é resolvida onde é declarada — sem isso, um painel `dark` herdaria o valor claro.
+    const expected: Record<string, string> = {
+      "--sidebar": "hsl(var(--surface))",
+      "--sidebar-foreground": "hsl(var(--foreground))",
+      "--sidebar-accent": "hsl(var(--accent))",
+      "--sidebar-accent-foreground": "hsl(var(--accent-foreground))",
+      "--sidebar-border": "hsl(var(--border))",
+      "--sidebar-ring": "hsl(var(--ring))",
+    };
+    const blocks = [...globalsCss.matchAll(/\n(:root|\.dark) \{\n([^}]*--sidebar:[^}]*)\}/g)];
+    expect(blocks.map((b) => b[1])).toEqual([":root", ".dark"]);
+    for (const [, selector, block] of blocks) {
+      for (const [name, value] of Object.entries(expected)) {
+        expect(readToken(block, `${name}`), `${selector} ${name}`).toBe(value);
+      }
+    }
+  });
+
   it("warning não se confunde com a marca: matiz a pelo menos 20° do brand-500", () => {
     const brand = hue(parseRgb(readToken(themeCss, "--color-brand-500")));
     const warning = hue(parseRgb(readToken(themeCss, "--color-warning-500")));

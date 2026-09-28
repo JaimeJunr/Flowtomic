@@ -1,10 +1,11 @@
 /**
  * SidebarNavigation - Componente Visual
  *
- * Menu lateral completo com logo, seções de navegação e card de download mobile
+ * Menu lateral: nome do app, navegação principal e itens de conta, separados por régua.
+ * Item de 44px; o ativo usa o wash de urucum via tokens --sidebar-* (DESIGN.md, Navigation).
  */
 
-import { CheckCircle2, Download, LogOut, Settings } from "lucide-react";
+import { Download, LogOut, Settings } from "lucide-react";
 import type React from "react";
 import { cn } from "@/lib/utils";
 import { Button, Card, CardContent, Separator } from "../../../atoms";
@@ -13,7 +14,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -115,77 +115,75 @@ export function SidebarNavigation({
   return (
     <Sidebar className={cn("border-r", className)}>
       <SidebarContent>
-        {/* Logo/Header */}
-        <div className="flex items-center gap-2 px-4 py-6">
-          {logo || (
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">{appName}</span>
-            </div>
-          )}
+        <div className="flex items-center gap-2 px-4 py-5">
+          {logo || <span className="font-display text-lg font-bold">{appName}</span>}
         </div>
 
         <Separator />
 
-        {/* Menu Principal */}
         <SidebarGroup>
-          <SidebarGroupLabel>Navegação</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {defaultMenuItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    onClick={() => handleItemClick(item)}
-                    isActive={item.active}
-                    asChild={!!item.href}
-                  >
-                    {item.href ? (
-                      <a href={item.href}>
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </a>
-                    ) : (
-                      <>
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </>
-                    )}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <nav aria-label="Principal">
+              <SidebarMenu>
+                {defaultMenuItems.map((item) => (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton
+                      onClick={() => handleItemClick(item)}
+                      isActive={item.active}
+                      aria-current={item.active ? "page" : undefined}
+                      className="h-11"
+                      asChild={!!item.href}
+                    >
+                      {item.href ? (
+                        <a href={item.href}>
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </a>
+                      ) : (
+                        <>
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </>
+                      )}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </nav>
           </SidebarGroupContent>
         </SidebarGroup>
 
         <Separator />
 
-        {/* Menu Geral */}
         <SidebarGroup>
-          <SidebarGroupLabel>Geral</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {defaultGeneralItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    onClick={() => handleItemClick(item)}
-                    isActive={item.active}
-                    asChild={!!item.href}
-                  >
-                    {item.href ? (
-                      <a href={item.href}>
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </a>
-                    ) : (
-                      <>
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </>
-                    )}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <nav aria-label="Conta">
+              <SidebarMenu>
+                {defaultGeneralItems.map((item) => (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton
+                      onClick={() => handleItemClick(item)}
+                      isActive={item.active}
+                      aria-current={item.active ? "page" : undefined}
+                      className="h-11"
+                      asChild={!!item.href}
+                    >
+                      {item.href ? (
+                        <a href={item.href}>
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </a>
+                      ) : (
+                        <>
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </>
+                      )}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </nav>
           </SidebarGroupContent>
         </SidebarGroup>
 
