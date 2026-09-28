@@ -124,7 +124,7 @@ const TableCardRoot: React.FC<TableCardRootProps> = ({
     <DataTableContext.Provider value={{ size }}>
       <div
         {...props}
-        className={cn("overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border", className)}
+        className={cn("overflow-hidden rounded-[10px] border border-border bg-card", className)}
       >
         {children}
       </div>
@@ -160,14 +160,7 @@ const TableCardHeader: React.FC<TableCardHeaderProps> = ({
       <div className="flex flex-1 flex-col gap-0.5">
         {title && (
           <div className="flex items-center gap-2">
-            <h2
-              className={cn(
-                "font-semibold text-foreground",
-                size === "sm" ? "text-base" : "text-lg"
-              )}
-            >
-              {title}
-            </h2>
+            <h2 className="text-sm font-semibold text-foreground">{title}</h2>
             {badge && (
               <Badge variant="default" className="text-xs">
                 {badge}
@@ -225,8 +218,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     <thead
       {...props}
       className={cn(
-        "relative bg-muted",
-        size === "sm" ? "h-9" : "h-11",
+        "relative",
+        size === "sm" ? "h-9" : "h-10",
         bordered &&
           "[&>tr>th]:after:pointer-events-none [&>tr>th]:after:absolute [&>tr>th]:after:inset-x-0 [&>tr>th]:after:bottom-0 [&>tr>th]:after:h-px [&>tr>th]:after:bg-border [&>tr>th]:focus-visible:after:bg-transparent",
         className
@@ -245,6 +238,8 @@ interface TableHeadProps extends ComponentPropsWithRef<"th"> {
   onSort?: () => void;
 }
 
+const ARIA_SORT = { asc: "ascending", desc: "descending", none: "none" } as const;
+
 const TableHead: React.FC<TableHeadProps> = ({
   className,
   tooltip,
@@ -257,39 +252,45 @@ const TableHead: React.FC<TableHeadProps> = ({
 }) => {
   // Se tem children (conteúdo do TanStack Table), renderizar diretamente
   const hasChildren = React.Children.count(children) > 0;
+  const content = (
+    <span className="text-[13px] font-medium whitespace-nowrap text-muted-foreground">
+      {hasChildren ? children : label}
+    </span>
+  );
+  const sortIcon = sorted ? (
+    <ArrowDown
+      className={cn("h-3 w-3 stroke-[3px] text-muted-foreground", sorted === "asc" && "rotate-180")}
+      aria-hidden="true"
+    />
+  ) : (
+    <ChevronsUpDown
+      size={12}
+      strokeWidth={3}
+      className="text-muted-foreground"
+      aria-hidden="true"
+    />
+  );
 
   return (
     <th
       {...props}
-      className={cn(
-        "relative p-0 px-6 py-2 outline-hidden focus-visible:z-1 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:ring-inset",
-        sortable && "cursor-pointer",
-        className
-      )}
-      onClick={sortable ? onSort : undefined}
+      aria-sort={sortable ? ARIA_SORT[sorted || "none"] : undefined}
+      className={cn("relative px-4 py-2 text-left", className)}
     >
       <div className="flex items-center gap-1">
-        <div className="flex items-center gap-1">
-          {hasChildren ? (
-            // Renderizar children diretamente (conteúdo do TanStack Table)
-            typeof children === "string" ? (
-              <span className="text-xs font-semibold whitespace-nowrap text-muted-foreground">
-                {children}
-              </span>
-            ) : (
-              <span className="text-xs font-semibold whitespace-nowrap text-muted-foreground">
-                {children}
-              </span>
-            )
-          ) : (
-            // Renderizar label se não houver children
-            label && (
-              <span className="text-xs font-semibold whitespace-nowrap text-muted-foreground">
-                {label}
-              </span>
-            )
-          )}
-        </div>
+        {sortable ? (
+          // Botão de verdade: o th com onClick só ordenava com o mouse.
+          <button
+            type="button"
+            onClick={onSort}
+            className="-mx-1 flex items-center gap-1 rounded-sm px-1 outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {content}
+            {sortIcon}
+          </button>
+        ) : (
+          content
+        )}
 
         {tooltip && (
           <div className="group relative">
@@ -299,18 +300,6 @@ const TableHead: React.FC<TableHeadProps> = ({
             </div>
           </div>
         )}
-
-        {sortable &&
-          (sorted ? (
-            <ArrowDown
-              className={cn(
-                "h-3 w-3 stroke-[3px] text-muted-foreground",
-                sorted === "asc" && "rotate-180"
-              )}
-            />
-          ) : (
-            <ChevronsUpDown size={12} strokeWidth={3} className="text-muted-foreground" />
-          ))}
       </div>
     </th>
   );
@@ -335,7 +324,7 @@ const TableRow: React.FC<TableRowProps> = ({
       {...props}
       className={cn(
         "relative outline-ring transition-colors after:pointer-events-none hover:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2",
-        size === "sm" ? "h-14" : "h-18",
+        size === "sm" ? "h-11" : "h-12",
         highlightSelectedRow && selected && "bg-muted",
         "[&>td]:after:absolute [&>td]:after:inset-x-0 [&>td]:after:bottom-0 [&>td]:after:h-px [&>td]:after:w-full [&>td]:after:bg-border last:[&>td]:after:hidden [&>td]:focus-visible:after:opacity-0",
         className
@@ -353,9 +342,9 @@ const TableCell: React.FC<ComponentPropsWithRef<"td">> = ({ className, children,
     <td
       {...props}
       className={cn(
-        "relative text-sm text-muted-foreground outline-ring focus-visible:z-1 focus-visible:outline-2 focus-visible:-outline-offset-2",
-        size === "sm" && "px-5 py-3",
-        size === "md" && "px-6 py-4",
+        "relative text-sm text-foreground outline-ring focus-visible:z-1 focus-visible:outline-2 focus-visible:-outline-offset-2",
+        size === "sm" && "px-4 py-2",
+        size === "md" && "px-4 py-3",
         className
       )}
     >
@@ -531,6 +520,7 @@ function DataTable<T extends Record<string, unknown>>({
             <div className="flex items-center gap-2">
               {enableGlobalFilter && (
                 <Input
+                  aria-label={globalFilterPlaceholder}
                   placeholder={globalFilterPlaceholder}
                   value={globalFilter}
                   onChange={(e) => setGlobalFilter(e.target.value)}

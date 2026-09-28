@@ -551,6 +551,16 @@ Cada uma já mordeu alguém neste repo.
   `inline`, o Tailwind resolve `hsl(var(--background))` uma vez no `:root` e o painel herda a cor
   clara (o terminal do `script-editor` saiu branco até 26/09/2026). Para provar no browser, **não**
   ligue `dark` no `<html>` — isso mascara o bug; meça o painel com a página clara.
+- ⚠️ **`--chart-1`…`--chart-5` não existem no tema.** O config padrão dos gráficos apontava
+  pra eles e as séries saíam pretas, sem erro. Gráfico usa token semântico
+  (`hsl(var(--primary))`, `hsl(var(--muted-foreground))`); os testes dos charts travam isso.
+- ⚠️ **Screenshot de gráfico Recharts sai pela metade com o browser pane escondido.** A
+  animação para quando a aba não está visível. Para provar, use Playwright headless com uma
+  espera de ~3 s antes do `screenshot`.
+- ⚠️ **`verify.mjs list` corta em 50 ids.** Para a lista inteira, leia
+  `http://localhost:6006/index.json` direto.
+- ⚠️ **O shell é zsh: `for id in $ids` não quebra a string em palavras.** O loop roda uma vez
+  só, sem erro, e os screenshots ficam velhos. Use array (`ids=(a b c)`).
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 

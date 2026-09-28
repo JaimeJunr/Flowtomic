@@ -24,13 +24,13 @@ Input de senha com toggle de visibilidade.
 
 ### `stat-card`
 
-Card de estatística com ícone e valor.
+Uma métrica no desenho da célula do `stats-grid`: rótulo, número em mono na cor do texto e variação colorida pelo sentido do que é bom (`positive: false` quando subir é ruim). `color` está obsoleto e é ignorado.
 
 **Dependências**: `flowtomic/logic`, `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `data-table`
 
-Tabela avançada com funcionalidades de ordenação e filtro.
+Tabela com ordenação (pelo teclado também), busca e paginação. Régua de 1px, sem sombra e sem fundo no cabeçalho.
 
 **Dependências**: `@tanstack/react-table`, `lucide-react`, `clsx`, `tailwind-merge`
 
@@ -316,6 +316,30 @@ Timer com o hook headless useTimeTracker. Mostra o estado (Parado, Contando, Pau
 
 **Localização**: `packages/ui/src/components/molecules/data-display/time-tracker`
 
+#### `chart-area-interactive`
+
+Gráfico de área (Recharts) com o seletor de período (7 dias, 30 dias, 3 meses) em botões sempre visíveis, inclusive no celular. Cores do tema (`--primary`, `--muted-foreground`), preenchimento chapado e datas em pt-BR sem o erro de fuso.
+
+**Dependências**: `recharts`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/chart-area-interactive`
+
+#### `chart-bar-interactive`
+
+Gráfico de barras (Recharts) com um botão por série, que mostra o total em mono e marca a série ativa com `aria-pressed`. Cores do tema e datas em pt-BR.
+
+**Dependências**: `recharts`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/data-display/chart-bar-interactive`
+
+#### `draggable-widget`
+
+Widget arrastável de painel. Parado, só a borda fina; a sombra aparece só enquanto arrasta. Os controles de edição têm nome acessível e aparecem também pelo teclado.
+
+**Dependências**: `@dnd-kit/core`, `@dnd-kit/utilities`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/draggable-widget`
+
 ### Layout
 
 #### `dashboard-header`
@@ -330,9 +354,9 @@ Header com busca, mensagens, notificações e o usuário. O atalho de busca só 
 
 #### `sidebar-navigation`
 
-Menu lateral completo com logo, seções de navegação e card de download mobile.
+Menu lateral: nome do app, navegação principal e itens de conta, com item de 44px. O ativo usa o tom urucum pelos tokens `--sidebar-*` do tema. `mobileAppCard` está obsoleto.
 
-**Dependências**: `button`, `card`, `sidebar`, `lucide-react`
+**Dependências**: `button`, `card`, `sidebar`, `separator`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/navigation/sidebar-navigation`
 
@@ -408,9 +432,9 @@ Lista de lembretes: horário em mono, título e descrição, e uma ação contor
 
 ### `sidebar-navigation` (Navigation)
 
-Menu lateral completo com logo, seções de navegação e card de download mobile.
+Menu lateral: nome do app, navegação principal e itens de conta, com item de 44px. O ativo usa o tom urucum pelos tokens `--sidebar-*` do tema. `mobileAppCard` está obsoleto.
 
-**Dependências**: `button`, `card`, `sidebar`, `lucide-react`
+**Dependências**: `button`, `card`, `sidebar`, `separator`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/navigation/sidebar-navigation`
 

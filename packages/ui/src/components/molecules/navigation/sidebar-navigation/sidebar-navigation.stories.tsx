@@ -19,7 +19,8 @@ const meta = {
     layout: "fullscreen",
     docs: {
       description: {
-        component: "Menu lateral completo com logo, seções de navegação e card de download mobile.",
+        component:
+          "Menu lateral: nome do app, navegação principal e itens de conta. O item ativo usa o tom urucum do tema.",
       },
     },
   },
@@ -39,20 +40,20 @@ type Story = StoryObj<typeof meta>;
 const menuItems: NavigationItem[] = [
   {
     id: "dashboard",
-    label: "Dashboard",
+    label: "Início",
     icon: <LayoutDashboard className="h-4 w-4" />,
     active: true,
   },
-  { id: "tasks", label: "Tasks", icon: <CheckCircle2 className="h-4 w-4" /> },
-  { id: "calendar", label: "Calendar", icon: <Calendar className="h-4 w-4" /> },
-  { id: "analytics", label: "Analytics", icon: <BarChart3 className="h-4 w-4" /> },
-  { id: "team", label: "Team", icon: <Users className="h-4 w-4" /> },
+  { id: "tasks", label: "Tarefas", icon: <CheckCircle2 className="h-4 w-4" /> },
+  { id: "calendar", label: "Calendário", icon: <Calendar className="h-4 w-4" /> },
+  { id: "analytics", label: "Relatórios", icon: <BarChart3 className="h-4 w-4" /> },
+  { id: "team", label: "Equipe", icon: <Users className="h-4 w-4" /> },
 ];
 
 const generalItems: NavigationItem[] = [
-  { id: "settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
-  { id: "help", label: "Help", icon: <HelpCircle className="h-4 w-4" /> },
-  { id: "logout", label: "Logout", icon: <LogOut className="h-4 w-4" /> },
+  { id: "settings", label: "Configurações", icon: <Settings className="h-4 w-4" /> },
+  { id: "help", label: "Ajuda", icon: <HelpCircle className="h-4 w-4" /> },
+  { id: "logout", label: "Sair", icon: <LogOut className="h-4 w-4" /> },
 ];
 
 export const Default: Story = {
@@ -60,13 +61,7 @@ export const Default: Story = {
     appName: "Flowtomic",
     menuItems,
     generalItems,
-    mobileAppCard: {
-      title: "Baixe o app",
-      description: "Continue de onde parou no celular",
-      buttonText: "Baixar",
-      onDownload: () => console.log("Baixar app"),
-    },
-    onNavigate: (item) => console.log("Navigate to:", item),
+    onNavigate: (item) => console.log("Navegar para:", item),
   },
 };
 
@@ -75,12 +70,12 @@ export const CustomLogo: Story = {
     logo: (
       <div className="flex items-center gap-2">
         <CheckCircle2 className="h-6 w-6 text-primary" />
-        <span className="font-bold text-lg">My App</span>
+        <span className="font-bold text-lg">Flowtomic UI</span>
       </div>
     ),
     menuItems,
     generalItems,
-    onNavigate: (item) => console.log("Navigate to:", item),
+    onNavigate: (item) => console.log("Navegar para:", item),
   },
 };
 
@@ -88,7 +83,6 @@ export const WithoutMobileCard: Story = {
   args: {
     appName: "Flowtomic",
     menuItems,
-    generalItems,
-    onNavigate: (item) => console.log("Navigate to:", item),
+    onNavigate: (item) => console.log("Navegar para:", item),
   },
 };
