@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ArrowRight, Code, Layers, TestTube, Zap } from "lucide-react";
+import { Globe, Layers, Package, Palette, Terminal } from "lucide-react";
 import { type Project, ProjectList } from "./project-list";
 
 const meta = {
@@ -9,7 +9,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "Lista de projetos com ícones, datas e ações.",
+        component:
+          'Lista densa de projetos: nome, prazo em pt-BR e estado. Prazo passado de projeto não concluído aparece como "venceu".',
       },
     },
   },
@@ -19,79 +20,78 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Datas relativas a hoje, para a story sempre ter um prazo vencido e os outros no futuro.
+const daysFromNow = (days: number): Date => {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d;
+};
+
 const sampleProjects: Project[] = [
   {
     id: "1",
-    name: "Develop API Endpoints",
-    dueDate: new Date(2024, 10, 26),
-    icon: <ArrowRight className="h-5 w-5 text-blue-600" />,
-    iconColor: "rgba(37, 99, 235, 0.1)",
+    name: "Release 0.9.0 do @flowtomic/ui",
+    dueDate: daysFromNow(9),
+    icon: <Package />,
     status: "active",
   },
   {
     id: "2",
-    name: "Onboarding Flow",
-    dueDate: new Date(2024, 10, 28),
-    icon: <Layers className="h-5 w-5 text-green-600" />,
-    iconColor: "rgba(22, 163, 74, 0.1)",
-    status: "active",
+    name: "Registry de volta no ar",
+    dueDate: daysFromNow(-5),
+    icon: <Globe />,
+    status: "pending",
   },
   {
     id: "3",
-    name: "Build Dashboard",
-    dueDate: new Date(2024, 10, 30),
-    icon: <Code className="h-5 w-5 text-yellow-600" />,
-    iconColor: "rgba(202, 138, 4, 0.1)",
+    name: "Molecules sem template",
+    dueDate: daysFromNow(6),
+    icon: <Layers />,
     status: "active",
   },
   {
     id: "4",
-    name: "Optimize Page Load",
-    dueDate: new Date(2024, 11, 5),
-    icon: <Zap className="h-5 w-5 text-orange-600" />,
-    iconColor: "rgba(234, 88, 12, 0.1)",
-    status: "pending",
+    name: "flowtomic-cli com proveniência",
+    dueDate: daysFromNow(20),
+    icon: <Terminal />,
+    status: "on-hold",
   },
   {
     id: "5",
-    name: "Cross-Browser Testing",
-    dueDate: new Date(2024, 11, 6),
-    icon: <TestTube className="h-5 w-5 text-purple-600" />,
-    iconColor: "rgba(147, 51, 234, 0.1)",
-    status: "pending",
+    name: "Tema Urucum",
+    dueDate: daysFromNow(-1),
+    icon: <Palette />,
+    status: "completed",
   },
 ];
 
 export const Default: Story = {
   args: {
     projects: sampleProjects,
-    title: "Project",
-    onAddNew: () => console.log("Add new project"),
+    onAddNew: () => console.log("Novo projeto"),
   },
 };
 
 export const WithClickHandler: Story = {
   args: {
     projects: sampleProjects,
-    title: "Project",
-    onProjectClick: (project) => console.log("Clicked:", project),
-    onAddNew: () => console.log("Add new project"),
+    onProjectClick: (project) => console.log("Projeto:", project),
+    onAddNew: () => console.log("Novo projeto"),
   },
 };
 
 export const Empty: Story = {
   args: {
     projects: [],
-    title: "Project",
-    onAddNew: () => console.log("Add new project"),
+    onAddNew: () => console.log("Novo projeto"),
   },
 };
 
 export const CustomTitle: Story = {
   args: {
     projects: sampleProjects.slice(0, 3),
-    title: "My Projects",
-    addButtonText: "Create Project",
-    onAddNew: () => console.log("Add new project"),
+    title: "Em andamento",
+    addButtonText: "Criar",
+    onAddNew: () => console.log("Novo projeto"),
   },
 };

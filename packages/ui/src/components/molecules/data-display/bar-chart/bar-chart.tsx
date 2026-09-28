@@ -1,10 +1,11 @@
 /**
  * BarChart - Componente Visual
  *
- * Gráfico de barras simples para analytics usando SVG puro
+ * Gráfico de barras simples em SVG puro. Valores e rótulos em mono; barra de valor
+ * zero vira um traço na linha de base, para o dia vazio não sumir do gráfico.
  */
 
-import { Card, CardContent, CardHeader, CardTitle } from "../../../atoms";
+import { cn } from "@/lib/utils";
 
 export interface BarChartDataPoint {
   /**
@@ -30,7 +31,7 @@ export interface BarChartProps {
   data: BarChartDataPoint[];
 
   /**
-   * Título do gráfico
+   * Título da seção
    */
   title?: string;
 
@@ -47,13 +48,13 @@ export interface BarChartProps {
   defaultColor?: string;
 
   /**
-   * Cor das barras inativas/pendentes
-   * @default "hsl(var(--muted))"
+   * Cor do traço de barra com valor zero
+   * @default "hsl(var(--muted-foreground))"
    */
   inactiveColor?: string;
 
   /**
-   * Se deve mostrar valores nas barras
+   * Se deve mostrar o valor acima de cada barra
    * @default false
    */
   showValues?: boolean;
@@ -64,6 +65,21 @@ export interface BarChartProps {
   className?: string;
 }
 
+const CHART_WIDTH = 300;
+const LABEL_SPACE = 20;
+const VALUE_SPACE = 18;
+const ZERO_BAR = 2;
+
+function SectionTitle({ title }: { title?: string }) {
+  if (!title) return null;
+  return (
+    <div className="mb-4 flex items-center gap-3">
+      <h3 className="text-sm font-semibold">{title}</h3>
+      <div className="h-px flex-1 bg-border" />
+    </div>
+  );
+}
+
 /**
  * Componente de gráfico de barras
  */
@@ -72,101 +88,77 @@ export function BarChart({
   title,
   height = 200,
   defaultColor = "hsl(var(--primary))",
-  inactiveColor = "hsl(var(--muted))",
+  inactiveColor = "hsl(var(--muted-foreground))",
   showValues = false,
   className,
 }: BarChartProps) {
   if (!data || data.length === 0) {
     return (
-      <Card className={className}>
-        {title && (
-          <CardHeader>
-            <CardTitle>{title}</CardTitle>
-          </CardHeader>
-        )}
-        <CardContent>
-          <div className="flex items-center justify-center h-[200px] text-muted-foreground">
-            No data available
-          </div>
-        </CardContent>
-      </Card>
+      <section className={cn("text-sm", className)}>
+        <SectionTitle title={title} />
+        <p className="text-muted-foreground">Nenhum valor para mostrar.</p>
+      </section>
     );
   }
 
-  // Calcular valores máximos para normalização
   const maxValue = Math.max(...data.map((d) => d.value));
-  const chartPadding = 40;
-  const _barWidth = Math.max(20, (height - chartPadding * 2) / data.length - 8);
-  const chartWidth = 300;
+  const baseline = height - LABEL_SPACE;
+  const plotHeight = baseline - VALUE_SPACE;
+  const slot = CHART_WIDTH / data.length;
+  const barWidth = Math.min(40, slot * 0.6);
 
   return (
-    <Card className={className}>
-      {title && (
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-      )}
-      <CardContent>
-        <div className="w-full">
-          <svg
-            width="100%"
-            height={height}
-            viewBox={`0 0 ${chartWidth} ${height}`}
-            className="overflow-visible"
-            role="img"
-            aria-label={title || "Bar chart"}
-          >
-            <title>{title || "Bar chart"}</title>
-            {data.map((point, index) => {
-              const barHeight =
-                maxValue > 0 ? (point.value / maxValue) * (height - chartPadding * 2) : 0;
-              const x = (index * chartWidth) / data.length + chartPadding / 2;
-              const y = height - chartPadding - barHeight;
-              const isActive = point.value > 0;
-              const fillColor = point.color || (isActive ? defaultColor : inactiveColor);
+    <section className={cn("text-sm", className)}>
+      <SectionTitle title={title} />
+      <svg
+        width="100%"
+        height={height}
+        viewBox={`0 0 ${CHART_WIDTH} ${height}`}
+        role="img"
+        aria-label={title || "Gráfico de barras"}
+        className="overflow-visible font-mono"
+      >
+        <line x1={0} x2={CHART_WIDTH} y1={baseline} y2={baseline} className="stroke-border" />
+        {data.map((point, index) => {
+          const barHeight =
+            point.value > 0 && maxValue > 0 ? (point.value / maxValue) * plotHeight : ZERO_BAR;
+          const center = index * slot + slot / 2;
+          const fill = point.color || (point.value > 0 ? defaultColor : inactiveColor);
 
-              return (
-                <g key={`bar-${point.label}-${index}`}>
-                  {/* Barra */}
-                  <rect
-                    x={x}
-                    y={y}
-                    width={(chartWidth - chartPadding) / data.length - 4}
-                    height={barHeight}
-                    fill={fillColor}
-                    rx={4}
-                    className="transition-all duration-300"
-                  />
-                  {/* Valor na barra (se showValues) */}
-                  {showValues && point.value > 0 && (
-                    <text
-                      x={x + (chartWidth - chartPadding) / data.length / 2 - 4}
-                      y={y - 5}
-                      fontSize="10"
-                      fill="currentColor"
-                      textAnchor="middle"
-                      className="fill-foreground"
-                    >
-                      {point.value}%
-                    </text>
-                  )}
-                  {/* Label */}
-                  <text
-                    x={x + (chartWidth - chartPadding) / data.length / 2 - 4}
-                    y={height - chartPadding + 15}
-                    fontSize="12"
-                    fill="currentColor"
-                    textAnchor="middle"
-                    className="fill-muted-foreground"
-                  >
-                    {point.label}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
-      </CardContent>
-    </Card>
+          return (
+            <g key={`bar-${point.label}-${index}`}>
+              <rect
+                x={center - barWidth / 2}
+                y={baseline - barHeight}
+                width={barWidth}
+                height={barHeight}
+                fill={fill}
+                rx={point.value > 0 ? 3 : 0}
+              />
+              {showValues && (
+                <text
+                  x={center}
+                  y={baseline - barHeight - 6}
+                  fontSize="11"
+                  textAnchor="middle"
+                  className={point.value > 0 ? "fill-foreground" : "fill-muted-foreground"}
+                >
+                  {point.value}
+                </text>
+              )}
+              <text
+                x={center}
+                y={height - 4}
+                fontSize="11"
+                textAnchor="middle"
+                className="fill-muted-foreground"
+              >
+                {point.label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    </section>
   );
 }

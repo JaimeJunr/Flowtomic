@@ -270,49 +270,49 @@ Seletor de intervalo de datas em popover, com atalhos opcionais de intervalo rá
 
 #### `bar-chart`
 
-Gráfico de barras simples para analytics usando SVG puro.
+Gráfico de barras em SVG puro. `showValues` mostra o número sem unidade; barra de valor zero vira um traço na linha de base.
 
-**Dependências**: `card`, `lucide-react`
+**Dependências**: nenhuma além do `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/bar-chart`
 
 #### `circular-progress-chart`
 
-Gráfico circular de progresso usando SVG puro.
+Anel de progresso em SVG puro. A porcentagem fica sempre no centro, em mono; `label` e `legend` ficam subordinados.
 
-**Dependências**: `card`, `lucide-react`
+**Dependências**: nenhuma além do `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/circular-progress-chart`
 
 #### `project-list`
 
-Lista de projetos com ícones, datas e ações.
+Lista densa de projetos: nome, prazo em pt-BR e estado. Prazo passado de projeto não concluído aparece como "venceu dd/mm/aaaa" em vermelho. `iconColor` está obsoleto e é ignorado.
 
-**Dependências**: `card`, `button`, `badge`, `lucide-react`
+**Dependências**: `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/project-list`
 
 #### `team-member-list`
 
-Lista de membros da equipe com avatares, nomes, tarefas e status.
+Lista densa de quem está na equipe: nome, tarefa atual e estado, com régua de 1px entre as linhas. A foto só aparece quando todas as pessoas têm `avatar`.
 
-**Dependências**: `card`, `avatar`, `badge`, `button`, `lucide-react`
+**Dependências**: `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/team-member-list`
 
 #### `reminder-card`
 
-Card de lembretes com horário e botão de ação.
+Lista de lembretes: horário em mono, título e descrição, e uma ação contornada por linha (não sólida).
 
-**Dependências**: `card`, `button`, `lucide-react`
+**Dependências**: `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/reminder-card`
 
 #### `time-tracker`
 
-Timer com controles de pause/stop usando o hook headless useTimeTracker.
+Timer com o hook headless useTimeTracker. Mostra o estado (Parado, Contando, Pausado) e o tempo em mono; o botão principal troca de rótulo no mesmo lugar e Parar fica contornado.
 
-**Dependências**: `@flowtomic/logic`, `card`, `button`, `lucide-react`
+**Dependências**: `@flowtomic/logic`, `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/time-tracker`
 
@@ -320,9 +320,9 @@ Timer com controles de pause/stop usando o hook headless useTimeTracker.
 
 #### `dashboard-header`
 
-Header com busca, notificações e perfil do usuário.
+Header com busca, mensagens, notificações e o usuário. O atalho de busca só aparece se `searchShortcut` for passado; o menu do perfil só existe com `onProfileClick` e tem apenas "Perfil".
 
-**Dependências**: `input`, `button`, `avatar`, `badge`, `dropdown-menu`, `lucide-react`
+**Dependências**: `input`, `button`, `dropdown-menu`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/layout/dashboard-header`
 
@@ -360,49 +360,49 @@ Texto com efeito shimmer animado para destacar conteúdo. Implementação especi
 
 ### `bar-chart` (Data Display)
 
-Gráfico de barras simples para analytics usando SVG puro.
+Gráfico de barras em SVG puro. `showValues` mostra o número sem unidade; barra de valor zero vira um traço na linha de base.
 
-**Dependências**: `card`, `lucide-react`
+**Dependências**: nenhuma além do `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/bar-chart`
 
 ### `circular-progress-chart` (Data Display)
 
-Gráfico circular de progresso usando SVG puro.
+Anel de progresso em SVG puro. A porcentagem fica sempre no centro, em mono; `label` e `legend` ficam subordinados.
 
-**Dependências**: `card`, `lucide-react`
+**Dependências**: nenhuma além do `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/circular-progress-chart`
 
 ### `time-tracker` (Data Display)
 
-Timer com controles de pause/stop usando o hook headless useTimeTracker.
+Timer com o hook headless useTimeTracker. Mostra o estado (Parado, Contando, Pausado) e o tempo em mono; o botão principal troca de rótulo no mesmo lugar e Parar fica contornado.
 
-**Dependências**: `@flowtomic/logic`, `card`, `button`, `lucide-react`
+**Dependências**: `@flowtomic/logic`, `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/time-tracker`
 
 ### `project-list` (Data Display)
 
-Lista de projetos com ícones, datas e ações.
+Lista densa de projetos: nome, prazo em pt-BR e estado. Prazo passado de projeto não concluído aparece como "venceu dd/mm/aaaa" em vermelho. `iconColor` está obsoleto e é ignorado.
 
-**Dependências**: `card`, `button`, `badge`, `lucide-react`
+**Dependências**: `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/project-list`
 
 ### `team-member-list` (Data Display)
 
-Lista de membros da equipe com avatares, nomes, tarefas e status.
+Lista densa de quem está na equipe: nome, tarefa atual e estado, com régua de 1px entre as linhas. A foto só aparece quando todas as pessoas têm `avatar`.
 
-**Dependências**: `card`, `avatar`, `badge`, `button`, `lucide-react`
+**Dependências**: `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/team-member-list`
 
 ### `reminder-card` (Data Display)
 
-Card de lembretes com horário e botão de ação.
+Lista de lembretes: horário em mono, título e descrição, e uma ação contornada por linha (não sólida).
 
-**Dependências**: `card`, `button`, `lucide-react`
+**Dependências**: `button`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/reminder-card`
 
@@ -416,9 +416,9 @@ Menu lateral completo com logo, seções de navegação e card de download mobil
 
 ### `dashboard-header` (Layout)
 
-Header com busca, notificações e perfil do usuário.
+Header com busca, mensagens, notificações e o usuário. O atalho de busca só aparece se `searchShortcut` for passado; o menu do perfil só existe com `onProfileClick` e tem apenas "Perfil".
 
-**Dependências**: `input`, `button`, `avatar`, `badge`, `dropdown-menu`, `lucide-react`
+**Dependências**: `input`, `button`, `dropdown-menu`, `lucide-react`
 
 **Localização**: `packages/ui/src/components/molecules/layout/dashboard-header`
 

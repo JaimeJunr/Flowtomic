@@ -8,7 +8,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "Lista de membros da equipe com avatares, nomes, tarefas e status.",
+        component:
+          "Lista densa de quem está na equipe: nome, tarefa atual e estado. A foto só aparece quando todas as pessoas têm `avatar`.",
       },
     },
   },
@@ -48,7 +49,6 @@ const sampleMembers: TeamMember[] = [
 export const Default: Story = {
   args: {
     members: sampleMembers,
-    title: "Team Collaboration",
     onAddMember: () => console.log("Add member"),
   },
 };
@@ -56,7 +56,6 @@ export const Default: Story = {
 export const WithClickHandler: Story = {
   args: {
     members: sampleMembers,
-    title: "Team Collaboration",
     onMemberClick: (member) => console.log("Clicked:", member),
     onAddMember: () => console.log("Add member"),
   },
@@ -65,7 +64,6 @@ export const WithClickHandler: Story = {
 export const Empty: Story = {
   args: {
     members: [],
-    title: "Team Collaboration",
     onAddMember: () => console.log("Add member"),
   },
 };
@@ -73,8 +71,8 @@ export const Empty: Story = {
 export const CustomTitle: Story = {
   args: {
     members: sampleMembers.slice(0, 2),
-    title: "My Team",
-    addButtonText: "Invite Member",
+    title: "Revisores",
+    addButtonText: "Convidar",
     onAddMember: () => console.log("Add member"),
   },
 };

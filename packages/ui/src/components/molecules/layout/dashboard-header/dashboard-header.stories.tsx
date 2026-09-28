@@ -8,7 +8,8 @@ const meta = {
     layout: "fullscreen",
     docs: {
       description: {
-        component: "Header com busca, notificações e perfil do usuário.",
+        component:
+          "Header com busca, mensagens, notificações e o usuário. O atalho de busca só aparece se for passado; o menu do perfil, só com onProfileClick.",
       },
     },
   },
@@ -26,20 +27,20 @@ const sampleUser: DashboardUser = {
 const sampleNotifications: Notification[] = [
   {
     id: "1",
-    title: "New project assigned",
-    description: "You have been assigned to a new project",
+    title: "Build do registry falhou",
+    description: "registry:build, há 12 min",
     unread: true,
   },
   {
     id: "2",
-    title: "Meeting reminder",
-    description: "Team meeting in 30 minutes",
+    title: "PR #29 mergeado",
+    description: "docs: trusted publishing",
     unread: true,
   },
   {
     id: "3",
-    title: "Task completed",
-    description: "Your task has been marked as completed",
+    title: "@flowtomic/ui 0.8.0 publicado",
+    description: "ontem",
     unread: false,
   },
 ];
@@ -53,8 +54,8 @@ const sampleMessages: Notification[] = [
   },
   {
     id: "2",
-    title: "Team update",
-    description: "Weekly team update available",
+    title: "Revisão pedida",
+    description: "PR #30, molecules sem template",
     unread: false,
   },
 ];
@@ -64,26 +65,26 @@ export const Default: Story = {
     user: sampleUser,
     notifications: sampleNotifications,
     messages: sampleMessages,
-    onSearchChange: (value) => console.log("Search:", value),
-    onNotificationClick: (notification) => console.log("Notification:", notification),
-    onMessageClick: (message) => console.log("Message:", message),
-    onProfileClick: () => console.log("Profile clicked"),
+    onSearchChange: (value) => console.log("Busca:", value),
+    onNotificationClick: (notification) => console.log("Notificação:", notification),
+    onMessageClick: (message) => console.log("Mensagem:", message),
+    onProfileClick: () => console.log("Perfil"),
   },
 };
 
 export const WithoutNotifications: Story = {
   args: {
     user: sampleUser,
-    onSearchChange: (value) => console.log("Search:", value),
+    onSearchChange: (value) => console.log("Busca:", value),
   },
 };
 
 export const WithSearch: Story = {
   args: {
     user: sampleUser,
-    searchValue: "dashboard",
-    searchPlaceholder: "Search anything...",
-    searchShortcut: "⌘K",
-    onSearchChange: (value) => console.log("Search:", value),
+    searchValue: "stats-grid",
+    searchPlaceholder: "Buscar componente",
+    searchShortcut: "Ctrl+K",
+    onSearchChange: (value) => console.log("Busca:", value),
   },
 };
