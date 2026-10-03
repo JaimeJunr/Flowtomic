@@ -44,6 +44,7 @@ export const PasswordInput = ({
   const [isFocused, setIsFocused] = useState(false);
   const [isManuallyVisible, setIsManuallyVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   // A senha é visível se estiver em foco OU se o usuário clicou no botão de mostrar
   const isPasswordVisible = isFocused || isManuallyVisible;
@@ -58,9 +59,8 @@ export const PasswordInput = ({
     setTimeout(() => {
       // Se o elemento ativo não for o input nem o botão, remove o foco
       const activeElement = document.activeElement;
-      const buttonElement = activeElement?.closest('button[type="button"]');
 
-      if (activeElement !== inputRef.current && !buttonElement) {
+      if (activeElement !== inputRef.current && activeElement !== toggleRef.current) {
         setIsFocused(false);
         // Se não estava manualmente visível, a senha já será escondida
         // porque isPasswordVisible = isFocused || isManuallyVisible
@@ -72,13 +72,8 @@ export const PasswordInput = ({
   const toggleVisibility = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsManuallyVisible(!isManuallyVisible);
-    // Manter foco no input se estiver focado
-    if (document.activeElement === inputRef.current || isFocused) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
-    }
+    setIsManuallyVisible(!isPasswordVisible);
+    setIsFocused(false);
   };
 
   // Separar props do input HTML das props customizadas
@@ -138,11 +133,11 @@ export const PasswordInput = ({
       <div className="relative">
         <input {...baseInputProps} className={inputClassName} />
         <button
+          ref={toggleRef}
           type="button"
           onClick={toggleVisibility}
           className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center bg-transparent border-0 p-0 cursor-pointer z-10 hover:opacity-70 transition-opacity"
           aria-label={isPasswordVisible ? "Ocultar senha" : "Mostrar senha"}
-          tabIndex={-1}
           onMouseDown={(e) => {
             // Prevenir que o blur seja acionado antes do clique
             e.preventDefault();

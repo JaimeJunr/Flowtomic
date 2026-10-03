@@ -105,6 +105,9 @@ const validateImageFile = (file: File, maxSize: number, accept: string): string 
   if (accept && accept !== "image/*") {
     const acceptedTypes = accept.split(",").map((t) => t.trim());
     const isValidType = acceptedTypes.some((type) => {
+      if (type.startsWith(".")) {
+        return file.name.toLowerCase().endsWith(type.toLowerCase());
+      }
       if (type.endsWith("/*")) {
         const baseType = type.split("/")[0];
         return file.type.startsWith(`${baseType}/`);
@@ -246,7 +249,11 @@ export const ImageDropzone = ({
         {preview ? (
           <div className="space-y-4">
             <div className="relative inline-block">
-              <img src={preview} alt="Preview" className="max-w-full max-h-48 rounded-lg" />
+              <img
+                src={preview}
+                alt="Prévia da imagem"
+                className="max-w-full max-h-48 rounded-lg"
+              />
               <button
                 type="button"
                 onClick={handleRemove}
@@ -311,7 +318,11 @@ export const ImageDropzone = ({
         )}
       </section>
 
-      {displayError && <p className="text-sm text-destructive">{displayError}</p>}
+      {displayError && (
+        <p role="alert" className="text-sm text-destructive">
+          {displayError}
+        </p>
+      )}
     </div>
   );
 };

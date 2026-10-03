@@ -8,11 +8,13 @@
 "use client";
 
 import {
+  MotionConfigContext,
   type MotionValue,
   motion,
   type SpringOptions,
   type UseInViewOptions,
   useInView,
+  useReducedMotion,
   useSpring,
   useTransform,
 } from "motion/react";
@@ -134,6 +136,8 @@ function SlidingNumber({
   },
   ...props
 }: SlidingNumberProps) {
+  const reducedMotion = React.useContext(MotionConfigContext).reducedMotion;
+  const shouldReduceMotion = useReducedMotion() || reducedMotion === "always";
   const localRef = React.useRef<HTMLSpanElement>(null);
   React.useImperativeHandle(ref, () => {
     if (!localRef.current) {
@@ -200,6 +204,7 @@ function SlidingNumber({
 
   const newDecValue = newDecStrRaw ? parseInt(newDecStrRaw, 10) : 0;
   const prevDecValue = adjustedPrevDec ? parseInt(adjustedPrevDec, 10) : 0;
+  const formattedNumber = `${isInView && Number(number) < 0 ? "-" : ""}${newIntStr}${newDecStrRaw ? decimalSeparator + newDecStrRaw : ""}`;
 
   return (
     <span
@@ -212,35 +217,42 @@ function SlidingNumber({
       }}
       {...props}
     >
-      {isInView && Number(number) < 0 && (
-        <span className="mr-1" style={{ color: "var(--animated-number-color, inherit)" }}>
-          -
-        </span>
-      )}
+      <span className={shouldReduceMotion ? undefined : "sr-only"}>{formattedNumber}</span>
+      {!shouldReduceMotion && (
+        <span aria-hidden="true" className="contents">
+          {isInView && Number(number) < 0 && (
+            <span className="mr-1" style={{ color: "var(--animated-number-color, inherit)" }}>
+              -
+            </span>
+          )}
 
-      {intPlaces.map((place) => (
-        <SlidingNumberRoller
-          key={`int-${place}`}
-          prevValue={parseInt(adjustedPrevInt, 10)}
-          value={parseInt(newIntStr ?? "0", 10)}
-          place={place}
-          transition={transition}
-        />
-      ))}
-
-      {newDecStrRaw && (
-        <>
-          <span style={{ color: "var(--animated-number-color, inherit)" }}>{decimalSeparator}</span>
-          {decPlaces.map((place) => (
+          {intPlaces.map((place) => (
             <SlidingNumberRoller
-              key={`dec-${place}`}
-              prevValue={prevDecValue}
-              value={newDecValue}
+              key={`int-${place}`}
+              prevValue={parseInt(adjustedPrevInt, 10)}
+              value={parseInt(newIntStr ?? "0", 10)}
               place={place}
               transition={transition}
             />
           ))}
-        </>
+
+          {newDecStrRaw && (
+            <>
+              <span style={{ color: "var(--animated-number-color, inherit)" }}>
+                {decimalSeparator}
+              </span>
+              {decPlaces.map((place) => (
+                <SlidingNumberRoller
+                  key={`dec-${place}`}
+                  prevValue={prevDecValue}
+                  value={newDecValue}
+                  place={place}
+                  transition={transition}
+                />
+              ))}
+            </>
+          )}
+        </span>
       )}
     </span>
   );

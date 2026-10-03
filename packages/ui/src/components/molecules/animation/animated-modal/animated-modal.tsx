@@ -8,8 +8,9 @@
 
 "use client";
 
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, MotionConfigContext, motion, useReducedMotion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -90,32 +91,13 @@ function Modal({ children, defaultOpen = false, open: controlledOpen, onOpenChan
     [isControlled, onOpenChange]
   );
 
-  // Lock body scroll when modal is open
-  React.useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  // Handle Escape key
-  React.useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && open) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [open, setOpen]);
-
-  return <ModalContext.Provider value={{ open, setOpen }}>{children}</ModalContext.Provider>;
+  return (
+    <ModalContext.Provider value={{ open, setOpen }}>
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
+        {children}
+      </DialogPrimitive.Root>
+    </ModalContext.Provider>
+  );
 }
 
 /**
@@ -123,31 +105,20 @@ function Modal({ children, defaultOpen = false, open: controlledOpen, onOpenChan
  */
 const ModalTrigger = React.forwardRef<HTMLButtonElement, ModalTriggerProps>(
   ({ children, className, asChild, ...props }, ref) => {
-    const { setOpen } = useModal();
+    useModal();
 
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, {
-        ...props,
-        ref,
-        onClick: (e: React.MouseEvent<HTMLElement>) => {
-          if (props.onClick) {
-            props.onClick(e as React.MouseEvent<HTMLButtonElement>);
-          }
-          setOpen(true);
-        },
-      } as React.HTMLAttributes<HTMLElement>);
+      return (
+        <DialogPrimitive.Trigger asChild ref={ref} className={className} {...props}>
+          {children}
+        </DialogPrimitive.Trigger>
+      );
     }
 
     return (
-      <button
-        ref={ref}
-        type="button"
-        className={cn(className)}
-        onClick={() => setOpen(true)}
-        {...props}
-      >
+      <DialogPrimitive.Trigger ref={ref} type="button" className={cn(className)} {...props}>
         {children}
-      </button>
+      </DialogPrimitive.Trigger>
     );
   }
 );
@@ -163,6 +134,8 @@ function ModalBody({
   showCloseButton = true,
 }: ModalBodyProps) {
   const { open, setOpen } = useModal();
+  const reducedMotion = React.useContext(MotionConfigContext).reducedMotion;
+  const shouldReduceMotion = useReducedMotion() || reducedMotion === "always";
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (closeOnOutsideClick && e.target === e.currentTarget) {
@@ -171,40 +144,58 @@ function ModalBody({
   };
 
   return (
-    <AnimatePresence>
-      {open && (
-        <>
-          <ModalOverlay />
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={cn("fixed inset-0 z-50 flex items-center justify-center p-4", className)}
-            onClick={handleBackdropClick}
-          >
+    <DialogPrimitive.Portal forceMount>
+      <AnimatePresence>
+        {open && (
+          <>
+            <ModalOverlay />
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, rotateX: 15 }}
-              animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-              exit={{ opacity: 0, scale: 0.9, rotateX: 15 }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-              }}
-              style={{
-                perspective: "1000px",
-                transformStyle: "preserve-3d",
-              }}
-              className="relative w-full max-w-lg"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className={cn("fixed inset-0 z-50 flex items-center justify-center p-4", className)}
+              style={{ pointerEvents: "auto" }}
+              onClick={handleBackdropClick}
             >
-              {showCloseButton && <CloseIcon />}
-              {children}
+              <DialogPrimitive.Content
+                asChild
+                forceMount
+                aria-modal="true"
+                aria-describedby={undefined}
+                onInteractOutside={(event) => event.preventDefault()}
+              >
+                <motion.div
+                  initial={
+                    shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.9, rotateX: 15 }
+                  }
+                  animate={
+                    shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, rotateX: 0 }
+                  }
+                  exit={
+                    shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.9, rotateX: 15 }
+                  }
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                  style={{
+                    perspective: "1000px",
+                    transformStyle: "preserve-3d",
+                  }}
+                  className="relative w-full max-w-lg"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <DialogPrimitive.Title className="sr-only">Modal</DialogPrimitive.Title>
+                  {showCloseButton && <CloseIcon />}
+                  {children}
+                </motion.div>
+              </DialogPrimitive.Content>
             </motion.div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+          </>
+        )}
+      </AnimatePresence>
+    </DialogPrimitive.Portal>
   );
 }
 
@@ -248,12 +239,14 @@ function ModalFooter({ children, className, align = "right" }: ModalFooterProps)
  */
 function ModalOverlay({ className }: { className?: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, backdropFilter: "blur(10px)" }}
-      exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-      className={cn("fixed inset-0 h-full w-full bg-black/50 z-40", className)}
-    />
+    <DialogPrimitive.Overlay asChild forceMount>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, backdropFilter: "blur(10px)" }}
+        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        className={cn("fixed inset-0 h-full w-full bg-black/50 z-40", className)}
+      />
+    </DialogPrimitive.Overlay>
   );
 }
 

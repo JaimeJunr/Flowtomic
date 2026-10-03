@@ -51,13 +51,20 @@ export interface WidgetRendererProps {
  */
 export const WidgetRenderer = memo<WidgetRendererProps>(
   ({ widget, data, isLoading = false, renderWidget, widgetRegistry, fallback }) => {
+    const loadingFallback = (
+      <output className="block" aria-label="Carregando widget">
+        <span className="sr-only">Carregando widget</span>
+        <CardSkeleton />
+      </output>
+    );
+
     if (isLoading) {
-      return <CardSkeleton />;
+      return loadingFallback;
     }
 
     // Prioridade 1: Render prop
     if (renderWidget) {
-      return <Suspense fallback={<CardSkeleton />}>{renderWidget(widget, data)}</Suspense>;
+      return <Suspense fallback={loadingFallback}>{renderWidget(widget, data)}</Suspense>;
     }
 
     // Prioridade 2: Registry
@@ -65,7 +72,7 @@ export const WidgetRenderer = memo<WidgetRendererProps>(
       const WidgetComponent = widgetRegistry.get(widget.type);
       if (WidgetComponent) {
         return (
-          <Suspense fallback={<CardSkeleton />}>
+          <Suspense fallback={loadingFallback}>
             <WidgetComponent widget={widget} data={data} />
           </Suspense>
         );
@@ -73,7 +80,7 @@ export const WidgetRenderer = memo<WidgetRendererProps>(
     }
 
     // Fallback: Widget não encontrado
-    if (fallback) {
+    if (fallback !== undefined) {
       return <>{fallback}</>;
     }
 
