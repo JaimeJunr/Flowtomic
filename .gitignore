@@ -53,3 +53,6 @@ testes-aceitacao-storybook-resultados.md
 sync-prompts.sh
 
 .lock
+# caches locais de ferramentas de agente
+.impeccable/hook.cache.json
+.agents/skills/*/shots/

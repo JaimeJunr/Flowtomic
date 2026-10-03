@@ -17,7 +17,7 @@ export const Artifact = React.forwardRef<HTMLDivElement, ArtifactProps>(
     <div
       ref={ref}
       className={cn(
-        "flex flex-col overflow-hidden rounded-lg border bg-background shadow-sm",
+        "flex flex-col overflow-hidden rounded-[10px] border border-border bg-background",
         className
       )}
       {...props}
@@ -32,7 +32,10 @@ export const ArtifactHeader = React.forwardRef<HTMLDivElement, ArtifactHeaderPro
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("flex items-center justify-between border-b bg-muted/50 px-4 py-3", className)}
+      className={cn(
+        "flex items-center justify-between border-border border-b bg-surface px-4 py-3",
+        className
+      )}
       {...props}
     />
   )
@@ -45,6 +48,7 @@ export const ArtifactClose = React.forwardRef<HTMLButtonElement, ArtifactClosePr
   ({ className, children, size = "sm", variant = "ghost", ...props }, ref) => (
     <Button
       ref={ref}
+      aria-label="Fechar"
       className={cn("size-8 p-0 text-muted-foreground hover:text-foreground", className)}
       size={size}
       type="button"
@@ -52,7 +56,7 @@ export const ArtifactClose = React.forwardRef<HTMLButtonElement, ArtifactClosePr
       {...props}
     >
       {children ?? <XIcon className="size-4" />}
-      <span className="sr-only">Close</span>
+      <span className="sr-only">Fechar</span>
     </Button>
   )
 );

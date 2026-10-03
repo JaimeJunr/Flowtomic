@@ -28,7 +28,7 @@ export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
 
 export const Suggestion = React.forwardRef<HTMLButtonElement, SuggestionProps>(
   (
-    { suggestion, onClick, className, variant = "outline", size = "sm", children, ...props },
+    { suggestion, onClick, className, variant = "outline", size = "default", children, ...props },
     ref
   ) => {
     const handleClick = () => {
@@ -38,7 +38,7 @@ export const Suggestion = React.forwardRef<HTMLButtonElement, SuggestionProps>(
     return (
       <Button
         ref={ref}
-        className={cn("cursor-pointer rounded-full px-4", className)}
+        className={cn("cursor-pointer rounded-md px-4 shadow-none", className)}
         onClick={handleClick}
         size={size}
         type="button"

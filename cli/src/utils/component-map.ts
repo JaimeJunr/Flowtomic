@@ -1040,7 +1040,7 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     dependencies: [
       "react-markdown",
       "lucide-react",
-      "@radix-ui/react-context-menu",
+      "@radix-ui/react-dropdown-menu",
       "clsx",
       "tailwind-merge",
     ],

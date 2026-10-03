@@ -10,14 +10,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import {
-  Button,
-  Textarea,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../../atoms";
+import { Button, Textarea } from "../../../atoms";
 
 export interface MessageTypeOption {
   value: string;
@@ -56,6 +49,69 @@ export interface ChatInputProps
   className?: string;
 }
 
+const COUNT = new Intl.NumberFormat("pt-BR");
+
+function counterLabel(remaining: number): string {
+  return `${COUNT.format(remaining)} ${remaining === 1 ? "restante" : "restantes"}`;
+}
+
+function counterClass(remaining: number, maxLength: number): string {
+  if (remaining <= 0) return "text-destructive";
+  if (remaining <= maxLength * 0.1) return "text-warning";
+  return "text-muted-foreground";
+}
+
+// O texto do atalho é exibido como o usuário vê no teclado, não como o nome da tecla no DOM
+function shortcutLabel(shortcut: string): string {
+  return shortcut.replace("Escape", "Esc").replace("Meta", "Cmd");
+}
+
+interface ChoiceOption {
+  value: string;
+  label: string;
+  icon?: ReactNode;
+}
+
+interface ChoiceGroupProps {
+  label: string;
+  options: ChoiceOption[];
+  selected?: string;
+  onSelect?: (value: string) => void;
+  describe?: (value: string) => string | undefined;
+}
+
+// Escolha exclusiva (radio) em vez de botão sólido: o único sólido da peça é o Enviar
+function ChoiceGroup({ label, options, selected, onSelect, describe }: ChoiceGroupProps) {
+  const name = React.useId();
+  return (
+    <fieldset className="mb-3 inline-flex w-fit flex-wrap gap-0.5 rounded-lg border border-border p-0.5">
+      <legend className="sr-only">{label}</legend>
+      {options.map((option) => (
+        <label
+          key={option.value}
+          title={describe?.(option.value)}
+          className={cn(
+            "inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-md px-3 text-[13px] transition-colors",
+            "text-muted-foreground hover:text-foreground has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
+            "has-[:checked]:bg-accent has-[:checked]:font-semibold has-[:checked]:text-accent-foreground"
+          )}
+        >
+          <input
+            type="radio"
+            name={name}
+            value={option.value}
+            checked={selected === option.value}
+            onChange={() => onSelect?.(option.value)}
+            className="sr-only"
+          />
+          {option.icon && <span aria-hidden="true">{option.icon}</span>}
+          {option.label}
+        </label>
+      ))}
+    </fieldset>
+  );
+}
+
 export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
   (
     {
@@ -69,7 +125,7 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
       modes,
       selectedMode,
       onModeChange,
-      placeholder = "Digite sua mensagem...",
+      placeholder = "Escreva sua mensagem",
       disabled = false,
       isLoading = false,
       shortcuts = { submit: "Ctrl+Enter", clear: "Escape" },
@@ -112,79 +168,37 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
 
     const renderMessageTypeButtons = (): ReactNode => {
       if (!messageTypes || messageTypes.length === 0) return null;
-
       return (
-        <div className="flex items-center gap-2 mb-3">
-          {messageTypes.map((type) => (
-            <Button
-              key={type.value}
-              type="button"
-              variant={selectedMessageType === type.value ? "default" : "outline"}
-              size="sm"
-              onClick={() => onMessageTypeChange?.(type.value)}
-              className={cn(
-                "text-xs font-medium transition-colors",
-                selectedMessageType === type.value
-                  ? "bg-primary text-primary-foreground hover:bg-primary-hover"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-              )}
-            >
-              {type.icon && <span className="mr-1">{type.icon}</span>}
-              {type.label}
-            </Button>
-          ))}
-        </div>
+        <ChoiceGroup
+          label="Tipo de mensagem"
+          options={messageTypes}
+          selected={selectedMessageType}
+          onSelect={onMessageTypeChange}
+        />
       );
     };
 
     const renderModeButtons = (): ReactNode => {
       if (!modes || modes.length === 0) return null;
-
       return (
-        <div className="flex items-center gap-3 mb-3">
-          {modes.map((mode) => (
-            <TooltipProvider key={mode.value}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    variant={selectedMode === mode.value ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => onModeChange?.(mode.value)}
-                    className={cn(
-                      "text-sm font-medium transition-all flex items-center gap-2",
-                      selectedMode === mode.value
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:text-foreground"
-                    )}
-                  >
-                    {mode.icon && <span>{mode.icon}</span>}
-                    <span className="font-semibold">{mode.label}</span>
-                  </Button>
-                </TooltipTrigger>
-                {mode.description && (
-                  <TooltipContent>
-                    <p>{mode.description}</p>
-                  </TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
-          ))}
-        </div>
+        <ChoiceGroup
+          label="Modo"
+          options={modes}
+          selected={selectedMode}
+          onSelect={onModeChange}
+          describe={(value) => modes.find((mode) => mode.value === value)?.description}
+        />
       );
     };
 
     return (
       <div
         ref={ref}
-        className={cn("border border-border/50 rounded-lg bg-popover", className)}
+        className={cn("rounded-[10px] border border-border bg-background", className)}
         {...props}
       >
         {showHeader && (
-          <header className="px-4 py-3 border-b border-border/50 flex items-center gap-2">
-            <span className="inline-flex w-5 h-5 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs">
-              ■
-            </span>
+          <header className="border-b border-border px-4 py-3">
             <div>
               {headerTitle && (
                 <h3 className="text-sm font-medium text-foreground">{headerTitle}</h3>
@@ -210,57 +224,53 @@ export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             maxLength={maxLength}
+            aria-label="Mensagem"
             disabled={disabled || isLoading}
             className={cn(
-              "w-full min-h-[80px] mb-2 rounded-md bg-background border border-input",
+              "w-full min-h-[80px] mb-3 rounded-md bg-background border border-input",
               "text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring",
               "p-3 resize-none disabled:opacity-50"
             )}
           />
 
           {/* Footer with counter, indicators and submit button */}
-          <div className="flex items-center justify-between pt-3 relative">
+          <div className="flex items-center justify-between">
             {showCounter && (
               <span
-                className={cn(
-                  "absolute left-4 bottom-14 text-[12px] font-bold select-none px-2 py-0.5 rounded-full shadow bg-popover/50 hover:bg-popover transition-colors hover:cursor-default",
-                  remaining > 0
-                    ? "text-success/70 hover:text-success"
-                    : "text-destructive/70 hover:text-destructive"
-                )}
-                style={{ zIndex: 5 }}
+                aria-live="polite"
+                className={cn("font-mono text-xs", counterClass(remaining, maxLength))}
               >
-                • {remaining} restantes
+                {counterLabel(remaining)}
               </span>
             )}
 
             {/* Custom indicators */}
-            {indicators && (
-              <div className="absolute right-4 bottom-14" style={{ zIndex: 5 }}>
-                {indicators}
-              </div>
-            )}
+            {indicators && <div className="ml-auto mr-3">{indicators}</div>}
 
             {/* Submit button */}
             <Button
               onClick={handleSubmit}
               disabled={!value.trim() || remaining < 0 || disabled || isLoading}
-              className="bg-primary hover:bg-primary-hover text-primary-foreground rounded-full px-5 py-2 flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className={cn("gap-2", !showCounter && !indicators && "ml-auto")}
             >
-              <Send className="w-4 h-4" />
+              <Send className="size-4" aria-hidden="true" />
               {isLoading ? "Enviando..." : "Enviar"}
             </Button>
           </div>
 
           {/* Shortcuts hint */}
           {shortcuts && (
-            <div className="flex items-center justify-between text-xs text-muted-foreground mt-2">
+            <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
               {shortcuts.submit && (
                 <span>
-                  {shortcuts.submit.replace("Ctrl", "Ctrl").replace("Meta", "Cmd")} para enviar
+                  <kbd className="font-mono">{shortcutLabel(shortcuts.submit)}</kbd> envia
                 </span>
               )}
-              {shortcuts.clear && <span>{shortcuts.clear} para limpar</span>}
+              {shortcuts.clear && (
+                <span>
+                  <kbd className="font-mono">{shortcutLabel(shortcuts.clear)}</kbd> limpa
+                </span>
+              )}
             </div>
           )}
         </div>

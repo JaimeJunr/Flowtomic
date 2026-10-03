@@ -6,34 +6,45 @@ const meta = {
   component: Task,
   parameters: {
     layout: "centered",
+    docs: { description: { component: "Etapas da consulta ao código e aos testes do DataTable." } },
   },
   tags: ["autodocs"],
+  argTypes: {
+    defaultOpen: { control: "boolean", description: "Mostra as etapas ao abrir a tarefa." },
+  },
 } satisfies Meta<typeof Task>;
-
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  name: "Consultando a ordenação",
   render: () => (
-    <Task className="w-[400px]">
-      <TaskTrigger title="Search for information" />
+    <Task className="w-[520px] max-w-[calc(100vw-2rem)]">
+      <TaskTrigger title="Conferindo a ordenação pelo teclado" />
       <TaskContent>
         <TaskItem>
-          Searching for information about React hooks
-          <TaskItemFile>file.tsx</TaskItemFile>
+          Localizando o botão do cabeçalho em <TaskItemFile>data-table.tsx</TaskItemFile>
         </TaskItem>
-        <TaskItem>Found 5 relevant results</TaskItem>
+        <TaskItem>
+          Conferindo os nomes acessíveis em <TaskItemFile>data-table.test.tsx</TaskItemFile>
+        </TaskItem>
+        <TaskItem>
+          Comparando o foco com <TaskItemFile>DESIGN.md</TaskItemFile>
+        </TaskItem>
       </TaskContent>
     </Task>
   ),
 };
-
 export const Closed: Story = {
+  name: "Consulta concluída",
   render: () => (
-    <Task defaultOpen={false} className="w-[400px]">
-      <TaskTrigger title="Completed task" />
+    <Task defaultOpen={false} className="w-[520px] max-w-[calc(100vw-2rem)]">
+      <TaskTrigger title="Ordenação e busca conferidas" />
       <TaskContent>
-        <TaskItem>This task is closed by default</TaskItem>
+        <TaskItem>O cabeçalho usa um botão; a busca precisa de um nome acessível.</TaskItem>
+        <TaskItem>
+          Veja os exemplos em <TaskItemFile>data-table.stories.tsx</TaskItemFile>
+        </TaskItem>
       </TaskContent>
     </Task>
   ),

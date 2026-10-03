@@ -1,0 +1,29 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "\\s*var\\(--font-display\\)/)",
+        "createdAt": "2026-09-28T03:13:39.851Z",
+        "reason": "falso positivo: regex no theme-tokens.test.ts que confere o uso de var(--font-display), não é fonte usada em UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "\\s*var\\(--font-body\\)/)",
+        "createdAt": "2026-09-28T03:13:39.863Z",
+        "reason": "falso positivo: regex no theme-tokens.test.ts que confere o uso de var(--font-body), não é fonte usada em UI"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "packages/ui/src/components/molecules/data-display/chat-message/chat-message.test.tsx"
+        ],
+        "createdAt": "2026-10-03T21:08:08.337Z",
+        "reason": "Claude: falso positivo, L29 é a regex do teste que garante a AUSÊNCIA de border-l-4"
+      }
+    ]
+  }
+}

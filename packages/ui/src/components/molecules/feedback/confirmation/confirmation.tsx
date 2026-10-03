@@ -164,6 +164,8 @@ ConfirmationActions.displayName = "ConfirmationActions";
 export type ConfirmationActionProps = ComponentProps<typeof Button>;
 
 export const ConfirmationAction = React.forwardRef<HTMLButtonElement, ConfirmationActionProps>(
-  (props, ref) => <Button ref={ref} className="h-8 px-3 text-sm" type="button" {...props} />
+  ({ className, ...props }, ref) => (
+    <Button ref={ref} type="button" className={cn("h-9 px-3.5", className)} {...props} />
+  )
 );
 ConfirmationAction.displayName = "ConfirmationAction";

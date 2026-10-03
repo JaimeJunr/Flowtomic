@@ -523,6 +523,14 @@ Cada uma já mordeu alguém neste repo.
   `bun install` até o GitHub matar o job. O `.npmrc` agora fixa `registry=` no npm público, mas
   antes de commitar lock confira: `grep -c codeartifact bun.lock` tem que dar `0`.
 - ⚠️ **`bun run test` no `packages/ui` trava em watch** — ver a seção *Testes*.
+- ⚠️ **O `tsconfig.json` do `ui` exclui stories e testes.** O
+  `bunx tsc --noEmit -p .` pode passar mesmo com story inválida (por exemplo, `Message`
+  sem `args.from`). Ao alterar stories/testes, confira também esses arquivos com uma
+  configuração temporária que estenda a do pacote e sobrescreva `include`/`exclude`.
+- ⚠️ **`vi.restoreAllMocks()` no Vitest 2 pode resetar os `vi.fn` do setup global.**
+  Nos testes de `message`, isso apagou a implementação do `ResizeObserver` entre casos
+  e fez o tooltip falhar com `resizeObserver.observe is not a function`. Restaure só
+  os spies criados pelo teste com `spy.mockRestore()`.
 - ⚠️ **`turbo run type-check` no `ui` depende do build do `logic`** (`dependsOn: ["^build"]`).
   Rodar `bun run type-check` direto dentro de `packages/ui`, fora do turbo, falha se o `dist`
   do `logic` não existir.
@@ -561,6 +569,14 @@ Cada uma já mordeu alguém neste repo.
   `http://localhost:6006/index.json` direto.
 - ⚠️ **O shell é zsh: `for id in $ids` não quebra a string em palavras.** O loop roda uma vez
   só, sem erro, e os screenshots ficam velhos. Use array (`ids=(a b c)`).
+- ⚠️ **`verify.mjs story|smoke` dá `Timeout 15000ms` em story de modal** (o
+  `EditChatMessageModal`, por exemplo). Não é story quebrada: o `Dialog` abre num portal
+  fora do `#storybook-root`, que o driver espera ver preenchido. Para provar, use Playwright
+  com espera fixa e screenshot da página inteira.
+- ⚠️ **`pgrep -f '<padrão>'` dentro de um laço de espera acha o próprio laço.** O
+  `until ! pgrep -f 'codex exec…'` ficou "rodando" para sempre depois que o worker já tinha
+  saído, porque o padrão estava na linha de comando do próprio shell. É a mesma raiz do
+  `pkill` do `run-flowtomic`: espere pelo PID (`while kill -0 $pid`), não pelo padrão.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 

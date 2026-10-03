@@ -5,7 +5,7 @@ const meta = {
   title: "Flowtomic UI/Molecules/Data Display/ChatMessage",
   component: ChatMessage,
   parameters: {
-    layout: "centered",
+    layout: "padded",
   },
   tags: ["autodocs"],
   argTypes: {
@@ -22,16 +22,24 @@ const meta = {
       description: "Se deve mostrar o timestamp",
     },
   },
+  decorators: [
+    (Story) => (
+      <div className="max-w-xl">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof ChatMessage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Data fixa para o horário não mudar a cada abertura da story
 const sampleMessage = {
   id: 1,
-  content: "Esta é uma **mensagem** de exemplo com *markdown*.",
+  content: "A porta da taverna **range**. Lá dentro, só o taverneiro e três canecas ainda cheias.",
   sender: "Mestre",
-  timestamp: new Date(),
+  timestamp: new Date(2026, 9, 2, 19, 15),
   messageType: "STORY" as const,
 };
 
@@ -47,7 +55,7 @@ export const ActionMessage: Story = {
       ...sampleMessage,
       messageType: "ACTION",
       sender: "Personagem",
-      content: "O personagem *ataca* o inimigo com sua espada!",
+      content: "Examino as canecas *sem tocar nelas*.",
     },
   },
 };
@@ -58,7 +66,7 @@ export const SayMessage: Story = {
       ...sampleMessage,
       messageType: "SAY",
       sender: "Personagem",
-      content: '"Olá, como você está?" disse o personagem.',
+      content: "“Quem saiu com tanta pressa que nem bebeu?”",
     },
   },
 };
@@ -68,7 +76,7 @@ export const SystemMessage: Story = {
     message: {
       ...sampleMessage,
       sender: "Sistema",
-      content: "O jogo começou!",
+      content: "Rolagem de Percepção: 14",
       messageType: undefined,
     },
   },
@@ -77,9 +85,9 @@ export const SystemMessage: Story = {
 export const WithActions: Story = {
   args: {
     message: sampleMessage,
-    onEdit: (id) => console.log("Edit", id),
-    onDelete: (id) => console.log("Delete", id),
-    onViewContext: (id) => console.log("View Context", id),
+    onEdit: () => {},
+    onDelete: () => {},
+    onViewContext: () => {},
   },
 };
 
@@ -95,7 +103,7 @@ export const SummaryMessage: Story = {
     message: {
       ...sampleMessage,
       isSummary: true,
-      content: "**Resumo do capítulo anterior:** Os heróis chegaram à cidade...",
+      content: "**Na sessão anterior:** o grupo chegou à cidade e alugou quartos na taverna.",
     },
   },
 };
@@ -103,10 +111,8 @@ export const SummaryMessage: Story = {
 export const CustomTimestamp: Story = {
   args: {
     message: sampleMessage,
-    formatTimestamp: (timestamp) => {
-      const date = new Date(timestamp);
-      return `${date.getHours()}:${date.getMinutes()}`;
-    },
+    formatTimestamp: (timestamp) =>
+      new Date(timestamp).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
   },
 };
 
@@ -114,15 +120,14 @@ export const CustomMessageType: Story = {
   args: {
     message: {
       ...sampleMessage,
-      messageType: "CUSTOM",
-      content: "Mensagem com tipo customizado",
+      messageType: "OOC",
+      sender: "Personagem",
+      content: "Vou ter que sair às dez hoje.",
     },
     messageTypeConfig: {
-      CUSTOM: {
-        label: "CUSTOM",
-        badgeClassName: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
-        containerClassName: "bg-purple-50 dark:bg-purple-900/20 border-purple-500",
-        senderClassName: "text-purple-700 dark:text-purple-400",
+      OOC: {
+        label: "Fora do jogo",
+        badgeClassName: "bg-muted-foreground",
       },
     },
   },
