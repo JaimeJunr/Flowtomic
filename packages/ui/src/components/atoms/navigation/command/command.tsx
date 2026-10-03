@@ -1,4 +1,4 @@
-import { Command as CommandPrimitive } from "cmdk";
+import { Command as CommandPrimitive, useCommandState } from "cmdk";
 import { Search } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -109,13 +109,21 @@ CommandGroup.displayName = CommandPrimitive.Group.displayName;
 const CommandSeparator = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Separator>,
   CommandSeparatorProps
->(({ className, ...props }, ref) => (
-  <CommandPrimitive.Separator
-    ref={ref}
-    className={cn("-mx-1 h-px bg-border", className)}
-    {...props}
-  />
-));
+>(({ className, alwaysRender, ...props }, ref) => {
+  // O CommandPrimitive.Separator força role="separator", que dentro do listbox viola
+  // aria-required-children. A linha é só visual; repete só o "some durante a busca" dele.
+  const searching = useCommandState((state) => state.search !== "");
+  if (searching && !alwaysRender) return null;
+  return (
+    <div
+      ref={ref}
+      cmdk-separator=""
+      role="none"
+      className={cn("-mx-1 h-px bg-border", className)}
+      {...props}
+    />
+  );
+});
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
 /**
