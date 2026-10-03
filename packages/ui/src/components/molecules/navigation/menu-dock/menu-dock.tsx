@@ -49,11 +49,11 @@ export interface MenuDockProps {
 }
 
 const defaultItems: MenuDockItem[] = [
-  { label: "home", icon: () => null },
-  { label: "work", icon: () => null },
-  { label: "calendar", icon: () => null },
-  { label: "security", icon: () => null },
-  { label: "settings", icon: () => null },
+  { label: "Início", icon: () => null },
+  { label: "Trabalho", icon: () => null },
+  { label: "Calendário", icon: () => null },
+  { label: "Segurança", icon: () => null },
+  { label: "Configurações", icon: () => null },
 ];
 
 export const MenuDock: React.FC<MenuDockProps> = ({
@@ -107,7 +107,11 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   };
 
   useEffect(() => {
-    if (animationType === "default" && activeIndex >= finalItems.length && !isControlled) {
+    if (
+      animationType === "default" &&
+      (activeIndex < 0 || activeIndex >= finalItems.length) &&
+      !isControlled
+    ) {
       setInternalActiveIndex(0);
     }
   }, [finalItems, activeIndex, isControlled, animationType]);
@@ -136,7 +140,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
           title: item.label,
           icon: <item.icon className="h-full w-full" />,
           href: item.href || item.path || "#",
-          onClick: item.onClick,
+          onClick: item.onClick ? () => item.onClick?.() : undefined,
         }))}
         desktopClassName={desktopClassName}
         mobileClassName={mobileClassName}
@@ -168,7 +172,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
         "p-2",
         className
       )}
-      aria-label="Menu dock"
+      aria-label="Menu de navegação"
     >
       {finalItems.map((item, index) => {
         const Icon = item.icon;
@@ -325,6 +329,7 @@ const FloatingDockMobile: React.FC<{
               >
                 <a
                   href={item.href}
+                  aria-label={item.title}
                   onClick={item.onClick}
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-muted"
                 >
@@ -339,7 +344,8 @@ const FloatingDockMobile: React.FC<{
         type="button"
         onClick={() => setOpen(!open)}
         className="flex h-10 w-10 items-center justify-center rounded-full bg-muted"
-        aria-label="Toggle menu"
+        aria-label="Alternar menu"
+        aria-expanded={open}
       >
         <Menu className="h-5 w-5 text-muted-foreground" />
       </button>
@@ -420,7 +426,7 @@ function IconContainer({
   const [hovered, setHovered] = useState(false);
 
   return (
-    <a href={href} onClick={onClick}>
+    <a href={href} aria-label={title} onClick={onClick}>
       <motion.div
         ref={ref}
         style={{ width, height }}

@@ -258,9 +258,9 @@ Pedido de aprovação de uma ação (“Permitir” / “Negar”), com os estad
 
 #### `animated-modal`
 
-Modal com animações suaves de entrada e saída.
+Modal com animação de entrada e saída sobre o Dialog do Radix: foco preso dentro, Esc fecha, o foco volta para o gatilho e a página não rola por baixo. Com movimento reduzido, só faz fade.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `@radix-ui/react-dialog`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/molecules/animation/animated-modal`
 

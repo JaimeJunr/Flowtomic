@@ -522,6 +522,10 @@ Cada uma já mordeu alguém neste repo.
   reescreveu os 1.223 `resolved` pro registry corporativo; a CI, sem credencial, ficou parada no
   `bun install` até o GitHub matar o job. O `.npmrc` agora fixa `registry=` no npm público, mas
   antes de commitar lock confira: `grep -c codeartifact bun.lock` tem que dar `0`.
+  ⚠️ **O `bun add` do bun 1.3.14 também troca a URL de todo pacote por `""`** no lock
+  (medido em 03/10/2026: 1.223 linhas mudadas para acrescentar uma devDependency). Para uma
+  dependência só, desfaça o lock (`git checkout bun.lock`), acrescente a linha na seção do
+  workspace à mão e confira com `bun install --frozen-lockfile`.
 - ⚠️ **`bun run test` no `packages/ui` trava em watch** — ver a seção *Testes*.
 - ⚠️ **O `tsconfig.json` do `ui` exclui stories e testes.** O
   `bunx tsc --noEmit -p .` pode passar mesmo com story inválida (por exemplo, `Message`
@@ -569,6 +573,10 @@ Cada uma já mordeu alguém neste repo.
   `http://localhost:6006/index.json` direto.
 - ⚠️ **O shell é zsh: `for id in $ids` não quebra a string em palavras.** O loop roda uma vez
   só, sem erro, e os screenshots ficam velhos. Use array (`ids=(a b c)`).
+- ⚠️ **Teste que espera animação de saída do motion fica instável na suíte inteira.** O
+  `waitFor` padrão espera 1 s e, com a máquina cheia, a saída passa disso (o `AnimatedModal` e
+  o `MenuDock` passavam sozinhos e falhavam juntos). No arquivo de teste, ligue
+  `MotionGlobalConfig.skipAnimations = true` no `beforeAll` e desligue no `afterAll`.
 - ⚠️ **`verify.mjs story|smoke` dá `Timeout 15000ms` em story de modal** (o
   `EditChatMessageModal`, por exemplo). Não é story quebrada: o `Dialog` abre num portal
   fora do `#storybook-root`, que o driver espera ver preenchido. Para provar, use Playwright

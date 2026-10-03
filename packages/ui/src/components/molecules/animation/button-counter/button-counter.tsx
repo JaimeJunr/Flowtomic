@@ -100,13 +100,16 @@ function ButtonCounter({
   if (showControls) {
     return (
       <div className={cn("inline-flex items-center gap-2", className)}>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div tabIndex={-1} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button
+            {...buttonProps}
             variant={variant}
             size={size}
-            onClick={handleDecrement}
+            onClick={(event) => {
+              buttonProps.onClick?.(event);
+              if (!event.defaultPrevented) handleDecrement();
+            }}
             disabled={isMin || buttonProps.disabled}
-            {...buttonProps}
           >
             -
           </Button>
@@ -131,13 +134,16 @@ function ButtonCounter({
           {suffix}
         </Button>
 
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div tabIndex={-1} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button
+            {...buttonProps}
             variant={variant}
             size={size}
-            onClick={handleIncrement}
+            onClick={(event) => {
+              buttonProps.onClick?.(event);
+              if (!event.defaultPrevented) handleIncrement();
+            }}
             disabled={isMax || buttonProps.disabled}
-            {...buttonProps}
           >
             +
           </Button>

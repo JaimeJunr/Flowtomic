@@ -766,7 +766,7 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     type: "molecule",
     path: "packages/ui/src/components/molecules/animation/animated-modal",
     files: ["animated-modal.tsx", "index.ts"],
-    dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
+    dependencies: ["motion", "@radix-ui/react-dialog", "lucide-react", "clsx", "tailwind-merge"],
   },
   "dashboard-header": {
     name: "dashboard-header",
