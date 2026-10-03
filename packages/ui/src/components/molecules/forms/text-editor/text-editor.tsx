@@ -34,6 +34,8 @@ import {
   Palette,
   Quote,
   Strikethrough,
+  Type,
+  X,
 } from "lucide-react";
 import * as React from "react";
 import { Streamdown } from "streamdown";
@@ -423,8 +425,14 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <PopoverTrigger asChild>
-                      <Button type="button" variant="ghost" size="sm" className="h-7 w-7 p-0">
-                        <Palette size={14} />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        aria-label="Cor do texto"
+                        className="h-7 w-7 p-0"
+                      >
+                        <Palette size={14} aria-hidden="true" />
                       </Button>
                     </PopoverTrigger>
                   </TooltipTrigger>
@@ -438,18 +446,20 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
                       key={color.value}
                       type="button"
                       onClick={() => e?.chain().focus().setColor(color.value).run()}
-                      className="size-6 rounded border border-border hover:scale-110 transition-transform"
-                      style={{ backgroundColor: color.value }}
+                      aria-label={color.label}
                       title={color.label}
+                      className="size-6 rounded border border-border hover:ring-2 hover:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      style={{ backgroundColor: color.value }}
                     />
                   ))}
                   <button
                     type="button"
                     onClick={() => e?.chain().focus().unsetColor().run()}
-                    className="size-6 rounded border border-border hover:scale-110 transition-transform bg-background flex items-center justify-center text-xs"
+                    aria-label="Remover cor"
                     title="Remover cor"
+                    className="flex size-6 items-center justify-center rounded border border-border bg-background text-muted-foreground hover:ring-2 hover:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    ✕
+                    <X className="size-3.5" aria-hidden="true" />
                   </button>
                 </div>
               </PopoverContent>
@@ -520,21 +530,21 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
             {effectiveModes.includes("rich") && (
               <TabsTrigger value="rich">
                 <span className="flex items-center gap-2">
-                  <Eye className="size-3.5" /> Rich
+                  <Type className="size-3.5" aria-hidden="true" /> Visual
                 </span>
               </TabsTrigger>
             )}
             {effectiveModes.includes("markdown") && (
               <TabsTrigger value="markdown">
                 <span className="flex items-center gap-2">
-                  <FileText className="size-3.5" /> Markdown
+                  <FileText className="size-3.5" aria-hidden="true" /> Markdown
                 </span>
               </TabsTrigger>
             )}
             {effectiveModes.includes("preview") && (
               <TabsTrigger value="preview">
                 <span className="flex items-center gap-2">
-                  <Eye className="size-3.5" /> Preview
+                  <Eye className="size-3.5" aria-hidden="true" /> Prévia
                 </span>
               </TabsTrigger>
             )}

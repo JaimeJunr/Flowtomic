@@ -42,7 +42,7 @@ export const ShortMessage: Story = {
 
 export const WithAnimation: Story = {
   args: {
-    message: "Esta mensagem de erro pode ser animada com framer-motion",
+    message: "Código expirado. Peça um novo código por e-mail.",
     animated: true,
   },
 };

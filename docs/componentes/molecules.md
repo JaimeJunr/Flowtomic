@@ -70,7 +70,7 @@ Link de navegação para páginas de autenticação.
 
 ### `auth-form-error-message`
 
-Mensagem de erro para formulários de autenticação.
+Mensagem de erro para formulários de autenticação, com `role="alert"` (o leitor de tela anuncia ao aparecer). `animated` entra com um fade curto por CSS (`tw-animate-css`) e some para quem pede menos movimento.
 
 **Dependências**: `clsx`, `tailwind-merge`
 
@@ -88,11 +88,19 @@ Grupo de input com addons e botões integrados.
 
 ### `numeric-filter-field`
 
-Campo de filtro numérico que combina um operador (`eq`, `gt`, `lt`, `gte`, `lte`) com um valor formatado. Suporta número puro, moeda (BRL) e percentual, com separadores pt-BR.
+Campo de filtro numérico que combina um operador (`eq`, `gt`, `lt`, `gte`, `lte`) com um valor formatado. Suporta número puro, moeda (BRL) e percentual, com separadores pt-BR. O operador tem nome acessível (“Operador”, cada símbolo lido por extenso) e o valor usa o `placeholder` como nome, ou “Valor”; `error` liga `aria-invalid` nos dois.
 
 **Dependências**: `react-number-format`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/molecules/forms/numeric-filter-field`
+
+### `text-editor`
+
+Editor de texto com modo visual (TipTap), Markdown e prévia, em abas “Visual”, “Markdown” e “Prévia”. Botões da barra com nome acessível e `aria-pressed`; o seletor “Cor do texto” tem amostras nomeadas e “Remover cor”. As cores das amostras são valores fixos de propósito: são a cor que a pessoa escolhe para o próprio texto, não cor de interface.
+
+**Dependências**: `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-color`, `@tiptap/extension-image`, `@tiptap/extension-placeholder`, `@tiptap/extension-text-align`, `@tiptap/extension-text-style`, `tiptap-markdown`, `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/forms/text-editor`
 
 ### `inline-datetime-editor`
 

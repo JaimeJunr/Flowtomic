@@ -572,7 +572,8 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **`verify.mjs story|smoke` dá `Timeout 15000ms` em story de modal** (o
   `EditChatMessageModal`, por exemplo). Não é story quebrada: o `Dialog` abre num portal
   fora do `#storybook-root`, que o driver espera ver preenchido. Para provar, use Playwright
-  com espera fixa e screenshot da página inteira.
+  com espera fixa e screenshot da página inteira. O mesmo falso alarme vem de story que de
+  propósito não renderiza nada (`AuthFormErrorMessage--no-message`).
 - ⚠️ **`pgrep -f '<padrão>'` dentro de um laço de espera acha o próprio laço.** O
   `until ! pgrep -f 'codex exec…'` ficou "rodando" para sempre depois que o worker já tinha
   saído, porque o padrão estava na linha de comando do próprio shell. É a mesma raiz do

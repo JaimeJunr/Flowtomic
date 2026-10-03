@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { Button } from "../../../atoms";
 import { TextEditor } from "./text-editor";
 
 const meta = {
@@ -41,7 +42,7 @@ type Story = StoryObj<typeof meta>;
 const INITIAL = `# Título\n\n**Negrito** e _itálico_.\n\n- Lista A\n- Lista B\n\n> Citação aqui.\n\n\`inline code\``;
 
 /**
- * Editor de texto básico com todos os modos disponíveis (Rich, Markdown e Preview).
+ * Editor de texto básico com todos os modos disponíveis (Visual, Markdown e Prévia).
  * Modo padrão permite alternar entre edição WYSIWYG e código markdown.
  */
 export const Basic: Story = {
@@ -95,14 +96,9 @@ export const RichModeOnly: Story = {
     const [value, setValue] = React.useState<string>(INITIAL);
     return (
       <div className="grid gap-4">
-        <div className="rounded-md border-l-4 border-blue-500 bg-blue-50 p-4 dark:bg-blue-950">
-          <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
-            Modo único: <code>availableModes={["rich"]}</code>
-          </p>
-          <p className="mt-1 text-xs text-blue-700 dark:text-blue-300">
-            Apenas editor WYSIWYG, sem abas (ideal para editores de documentos).
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Apenas editor WYSIWYG, sem abas (ideal para editores de documentos).
+        </p>
         <TextEditor value={value} onChange={setValue} availableModes={["rich"]} />
         <div className="rounded-md border p-3 text-sm">
           <strong>Valor (markdown):</strong>
@@ -114,7 +110,7 @@ export const RichModeOnly: Story = {
 };
 
 /**
- * Modo único: Markdown + Preview com abas.
+ * Modo único: Markdown + Prévia com abas.
  * Perfeito para edição de README.md, documentação e arquivos markdown.
  * Markdown sempre inclui preview automaticamente.
  */
@@ -123,14 +119,9 @@ export const MarkdownModeOnly: Story = {
     const [value, setValue] = React.useState<string>(INITIAL);
     return (
       <div className="grid gap-4">
-        <div className="rounded-md border-l-4 border-purple-500 bg-purple-50 p-4 dark:bg-purple-950">
-          <p className="text-sm font-medium text-purple-900 dark:text-purple-100">
-            Modo markdown: <code>availableModes={["markdown"]}</code>
-          </p>
-          <p className="mt-1 text-xs text-purple-700 dark:text-purple-300">
-            Markdown sempre inclui preview em abas (ideal para README.md, documentação).
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Markdown sempre inclui preview em abas (ideal para README.md, documentação).
+        </p>
         <TextEditor value={value} onChange={setValue} availableModes={["markdown"]} />
       </div>
     );
@@ -139,21 +130,16 @@ export const MarkdownModeOnly: Story = {
 
 /**
  * Todos os modos disponíveis com sistema de abas.
- * Permite alternar entre Rich, Markdown e Preview conforme necessário.
+ * Permite alternar entre Visual, Markdown e Prévia conforme necessário.
  */
 export const MultipleModesWithTabs: Story = {
   render: () => {
     const [value, setValue] = React.useState<string>(INITIAL);
     return (
       <div className="grid gap-4">
-        <div className="rounded-md border-l-4 border-green-500 bg-green-50 p-4 dark:bg-green-950">
-          <p className="text-sm font-medium text-green-900 dark:text-green-100">
-            Todos os modos: <code>availableModes={["rich", "markdown"]}</code>
-          </p>
-          <p className="mt-1 text-xs text-green-700 dark:text-green-300">
-            Rich + Markdown + Preview (markdown automaticamente adiciona preview).
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Visual, Markdown e Prévia (o modo Markdown traz a prévia junto).
+        </p>
         <TextEditor value={value} onChange={setValue} availableModes={["rich", "markdown"]} />
       </div>
     );
@@ -170,36 +156,34 @@ export const ControlledMode: Story = {
     const [mode, setMode] = React.useState<"rich" | "markdown" | "preview">("rich");
     return (
       <div className="grid gap-4">
-        <div className="rounded-md border-l-4 border-pink-500 bg-pink-50 p-4 dark:bg-pink-950">
-          <p className="text-sm font-medium text-pink-900 dark:text-pink-100">
-            Modo controlado externamente
-          </p>
-          <p className="mt-1 text-xs text-pink-700 dark:text-pink-300">
-            Use <code>mode</code> e <code>onModeChange</code> para controlar o modo atual.
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Use <code>mode</code> e <code>onModeChange</code> para controlar o modo atual.
+        </p>
         <div className="flex gap-2">
-          <button
-            type="button"
+          <Button
+            variant={mode === "rich" ? "secondary" : "outline"}
+            size="sm"
+            aria-pressed={mode === "rich"}
             onClick={() => setMode("rich")}
-            className="rounded-md bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-700"
           >
-            Rich
-          </button>
-          <button
-            type="button"
+            Visual
+          </Button>
+          <Button
+            variant={mode === "markdown" ? "secondary" : "outline"}
+            size="sm"
+            aria-pressed={mode === "markdown"}
             onClick={() => setMode("markdown")}
-            className="rounded-md bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-700"
           >
             Markdown
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant={mode === "preview" ? "secondary" : "outline"}
+            size="sm"
+            aria-pressed={mode === "preview"}
             onClick={() => setMode("preview")}
-            className="rounded-md bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-700"
           >
-            Preview
-          </button>
+            Prévia
+          </Button>
         </div>
         <TextEditor value={value} onChange={setValue} mode={mode} onModeChange={setMode} />
         <div className="rounded-md border p-3 text-sm">
@@ -222,15 +206,10 @@ export const TextColorFeature: Story = {
     );
     return (
       <div className="grid gap-4">
-        <div className="rounded-md border-l-4 border-teal-500 bg-teal-50 p-4 dark:bg-teal-950">
-          <p className="text-sm font-medium text-teal-900 dark:text-teal-100">
-            Cores de texto personalizadas
-          </p>
-          <p className="mt-1 text-xs text-teal-700 dark:text-teal-300">
-            Selecione texto e use o botão de paleta para aplicar cores. Grid com 28 cores
-            predefinidas.
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Selecione texto e use o botão de paleta para aplicar cores. Grid com 28 cores
+          predefinidas.
+        </p>
         <TextEditor value={value} onChange={setValue} availableModes={["rich"]} />
         <div className="rounded-md border p-3 text-sm">
           <strong>HTML gerado:</strong>
