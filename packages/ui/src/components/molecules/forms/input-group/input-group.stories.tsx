@@ -18,11 +18,11 @@ export const Default: Story = {
   render: () => (
     <InputGroup className="w-[400px]">
       <InputGroupAddon>
-        <Search className="h-4 w-4 text-muted-foreground" />
+        <Search className="size-4 text-muted-foreground" aria-hidden="true" />
       </InputGroupAddon>
-      <InputGroupTextarea placeholder="Type a message..." rows={1} />
-      <InputGroupButton size="icon-sm" variant="ghost">
-        <Send className="h-4 w-4" />
+      <InputGroupTextarea aria-label="Buscar componente" placeholder="Buscar componente" rows={1} />
+      <InputGroupButton size="icon" variant="ghost" aria-label="Buscar" className="size-8">
+        <Send className="size-4" aria-hidden="true" />
       </InputGroupButton>
     </InputGroup>
   ),
@@ -31,8 +31,8 @@ export const Default: Story = {
 export const WithButton: Story = {
   render: () => (
     <InputGroup className="w-[400px]">
-      <InputGroupTextarea placeholder="Type a message..." rows={1} />
-      <InputGroupButton>Send</InputGroupButton>
+      <InputGroupTextarea aria-label="Buscar componente" placeholder="Buscar componente" rows={1} />
+      <InputGroupButton>Buscar</InputGroupButton>
     </InputGroup>
   ),
 };
@@ -41,9 +41,9 @@ export const WithPrefix: Story = {
   render: () => (
     <InputGroup className="w-[400px]">
       <InputGroupAddon>
-        <span className="text-muted-foreground">@</span>
+        <span className="font-mono text-muted-foreground">@flowtomic/</span>
       </InputGroupAddon>
-      <InputGroupTextarea placeholder="username" rows={1} />
+      <InputGroupTextarea aria-label="Nome do pacote" placeholder="ui" rows={1} />
     </InputGroup>
   ),
 };

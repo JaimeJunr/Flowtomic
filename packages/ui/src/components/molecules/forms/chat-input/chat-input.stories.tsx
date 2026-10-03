@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Edit3, Wand2 } from "lucide-react";
-import { ChatInput } from "./chat-input";
+import { useState } from "react";
+import { ChatInput, type ChatInputProps } from "./chat-input";
 
 const meta = {
   title: "Flowtomic UI/Molecules/Forms/ChatInput",
   component: ChatInput,
   parameters: {
-    layout: "centered",
+    layout: "padded",
   },
   tags: ["autodocs"],
   argTypes: {
@@ -23,110 +23,103 @@ const meta = {
       description: "Se deve mostrar o header",
     },
   },
+  args: {
+    value: "",
+    onChange: () => {},
+    onSubmit: () => {},
+  },
+  // O campo é controlado: a story guarda o texto para dar para digitar de verdade
+  render: function ControlledChatInput(args: ChatInputProps) {
+    const [value, setValue] = useState(args.value);
+    const [messageType, setMessageType] = useState(args.selectedMessageType);
+    const [mode, setMode] = useState(args.selectedMode);
+    return (
+      <div className="max-w-xl">
+        <ChatInput
+          {...args}
+          value={value}
+          onChange={setValue}
+          selectedMessageType={messageType}
+          onMessageTypeChange={setMessageType}
+          selectedMode={mode}
+          onModeChange={setMode}
+        />
+      </div>
+    );
+  },
 } satisfies Meta<typeof ChatInput>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    value: "",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value) => console.log("Submit", value),
-  },
-};
+export const Default: Story = {};
 
 export const WithMessageTypes: Story = {
   args: {
-    value: "",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value, messageType) => console.log("Submit", value, messageType),
     messageTypes: [
-      { value: "STORY", label: "Narrar" },
+      { value: "STORY", label: "Narração" },
       { value: "ACTION", label: "Ação" },
       { value: "SAY", label: "Fala" },
     ],
-    selectedMessageType: "STORY",
-    onMessageTypeChange: (type) => console.log("Message type changed", type),
+    selectedMessageType: "ACTION",
   },
 };
 
 export const WithModes: Story = {
   args: {
-    value: "",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value, messageType, mode) => console.log("Submit", value, messageType, mode),
     modes: [
       {
-        value: "narrate",
-        label: "Escrever Diretamente",
-        icon: <Edit3 className="w-4 h-4" />,
-        description: "Você escreve e adiciona diretamente ao log da história",
+        value: "write",
+        label: "Escrever",
+        description: "O texto entra no log como você escreveu",
       },
       {
         value: "suggest",
-        label: "Pedir Sugestão IA",
-        icon: <Wand2 className="w-4 h-4" />,
-        description: "A IA criará uma sugestão baseada na sua descrição",
+        label: "Pedir sugestão",
+        description: "Você descreve a cena e recebe uma sugestão para revisar",
       },
     ],
-    selectedMode: "narrate",
-    onModeChange: (mode) => console.log("Mode changed", mode),
+    selectedMode: "write",
   },
 };
 
 export const WithHeader: Story = {
   args: {
-    value: "",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value) => console.log("Submit", value),
     showHeader: true,
-    headerTitle: "Entrada do Mestre",
-    headerDescription: "Digite sua mensagem aqui",
+    headerTitle: "Narração da mesa",
+    headerDescription: "O que você escrever aqui aparece para todos os jogadores",
   },
 };
 
 export const WithCustomPlaceholder: Story = {
   args: {
-    value: "",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value) => console.log("Submit", value),
-    placeholder: "Narrar a história...",
+    placeholder: "Descreva o que o personagem faz",
   },
 };
 
 export const Disabled: Story = {
   args: {
-    value: "Mensagem desabilitada",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value) => console.log("Submit", value),
+    value: "A porta da taverna range.",
     disabled: true,
   },
 };
 
 export const Loading: Story = {
   args: {
-    value: "Mensagem sendo enviada...",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value) => console.log("Submit", value),
+    value: "A porta da taverna range.",
     isLoading: true,
   },
 };
 
 export const WithoutCounter: Story = {
   args: {
-    value: "",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value) => console.log("Submit", value),
     showCounter: false,
   },
 };
 
 export const CustomMaxLength: Story = {
   args: {
-    value: "",
-    onChange: (value) => console.log("Change", value),
-    onSubmit: (value) => console.log("Submit", value),
-    maxLength: 500,
+    value: "Examino as canecas sem tocar nelas, procurando marcas",
+    maxLength: 60,
   },
 };

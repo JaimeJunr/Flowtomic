@@ -15,7 +15,7 @@ const messages: ChatMessageData[] = [
 describe("ChatLog", () => {
   it("mostra a data e o horário da mensagem em pt-BR (24h, sem AM/PM) por padrão", () => {
     render(<ChatLog messages={messages} />);
-    expect(screen.getByText("26/09/2026, 14:05:09")).toBeInTheDocument();
+    expect(screen.getByText("26/09, 14:05")).toBeInTheDocument();
   });
 
   it("não usa o formato en-US (com AM/PM) por padrão", () => {

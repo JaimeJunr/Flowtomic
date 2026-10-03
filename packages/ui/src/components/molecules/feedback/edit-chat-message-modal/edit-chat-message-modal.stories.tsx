@@ -21,80 +21,68 @@ type Story = StoryObj<typeof meta>;
 
 const sampleMessage = {
   id: 1,
-  content: "Esta é uma **mensagem** de exemplo que pode ser editada.",
+  content: "A porta da taverna range. Lá dentro, só o taverneiro e três canecas ainda cheias.",
   sender: "Mestre",
-  timestamp: new Date(),
+  // Data fixa para o horário não mudar a cada abertura da story
+  timestamp: new Date(2026, 9, 2, 19, 15),
   messageType: "STORY" as const,
 };
 
 export const Default: Story = {
   args: {
     isOpen: true,
-    onClose: () => console.log("Close"),
+    onClose: () => {},
     message: sampleMessage,
-    onSave: async (id, content) => {
-      console.log("Save", id, content);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    },
+    onSave: () => new Promise((resolve) => setTimeout(resolve, 1000)),
   },
 };
 
 export const WithActionMessage: Story = {
   args: {
     isOpen: true,
-    onClose: () => console.log("Close"),
+    onClose: () => {},
     message: {
       ...sampleMessage,
       messageType: "ACTION",
-      content: "O personagem *ataca* o inimigo!",
+      sender: "Personagem",
+      content: "Examino as canecas sem tocar nelas.",
     },
-    onSave: async (id, content) => {
-      console.log("Save", id, content);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    },
+    onSave: () => new Promise((resolve) => setTimeout(resolve, 1000)),
   },
 };
 
 export const WithSayMessage: Story = {
   args: {
     isOpen: true,
-    onClose: () => console.log("Close"),
+    onClose: () => {},
     message: {
       ...sampleMessage,
       messageType: "SAY",
-      content: '"Olá, como você está?" disse o personagem.',
+      sender: "Personagem",
+      content: "“Quem saiu com tanta pressa que nem bebeu?”",
     },
-    onSave: async (id, content) => {
-      console.log("Save", id, content);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    },
+    onSave: () => new Promise((resolve) => setTimeout(resolve, 1000)),
   },
 };
 
 export const Loading: Story = {
   args: {
     isOpen: true,
-    onClose: () => console.log("Close"),
+    onClose: () => {},
     message: sampleMessage,
     isLoading: true,
-    onSave: async (id, content) => {
-      console.log("Save", id, content);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    },
+    onSave: () => new Promise((resolve) => setTimeout(resolve, 2000)),
   },
 };
 
 export const WithoutMessageType: Story = {
   args: {
     isOpen: true,
-    onClose: () => console.log("Close"),
+    onClose: () => {},
     message: {
       ...sampleMessage,
       messageType: undefined,
     },
-    onSave: async (id, content) => {
-      console.log("Save", id, content);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    },
+    onSave: () => new Promise((resolve) => setTimeout(resolve, 1000)),
   },
 };

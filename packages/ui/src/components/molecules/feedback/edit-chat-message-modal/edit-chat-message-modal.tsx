@@ -5,19 +5,11 @@
  * de alterações não salvas e exibição de metadados
  */
 
-import { Edit, Save, TriangleAlert } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import type * as React from "react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import {
-  Badge,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  Textarea,
-} from "../../../atoms";
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../atoms";
 import type { ChatMessageData } from "../../data-display/chat-message";
 
 export interface EditChatMessageModalProps {
@@ -31,20 +23,31 @@ export interface EditChatMessageModalProps {
   className?: string;
 }
 
+const TIMESTAMP = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
 const defaultFormatTimestamp = (timestamp: Date | string): string => {
-  return new Date(timestamp).toLocaleString();
+  return TIMESTAMP.format(new Date(timestamp));
 };
 
+// Mesmos rótulos e cores dos tipos padrão do ChatMessage
+const TYPE_LABELS: Record<string, string> = { STORY: "Narração", ACTION: "Ação", SAY: "Fala" };
+
+// Pinta o ponto ao lado do tipo, não um selo
 const defaultGetMessageTypeBadgeClassName = (messageType?: string): string => {
   switch (messageType) {
     case "SAY":
-      return "bg-success/10 text-success";
+      return "bg-success";
     case "ACTION":
-      return "bg-warning/10 text-warning";
+      return "bg-warning";
     case "STORY":
-      return "bg-info/10 text-info";
+      return "bg-info";
     default:
-      return "bg-muted text-foreground";
+      return "bg-muted-foreground";
   }
 };
 
@@ -102,68 +105,67 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className={cn("max-w-2xl max-h-[80vh] overflow-hidden", className)}>
         <DialogHeader>
-          <div className="flex items-center gap-2">
-            <Edit className="w-5 h-5 text-info" />
-            <DialogTitle className="text-lg">Editar Mensagem</DialogTitle>
-          </div>
+          <DialogTitle>Editar mensagem</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Informações da mensagem */}
-          <div className="bg-muted rounded-lg p-3 border">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="font-medium text-foreground">{message.sender}</span>
-              {message.messageType && (
-                <Badge className={getMessageTypeBadgeClassName(message.messageType)}>
-                  {message.messageType}
-                </Badge>
-              )}
-              <span className="text-xs text-muted-foreground ml-auto">
-                {formatTimestamp(message.timestamp)}
-              </span>
+          <dl className="grid grid-cols-3 gap-3">
+            <div>
+              <dt className="text-[13px] text-muted-foreground">Remetente</dt>
+              <dd className="truncate">{message.sender}</dd>
             </div>
-          </div>
+            {message.messageType && (
+              <div>
+                <dt className="text-[13px] text-muted-foreground">Tipo</dt>
+                <dd className="flex items-center gap-1.5">
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "size-[7px] rounded-full",
+                      getMessageTypeBadgeClassName(message.messageType)
+                    )}
+                  />
+                  {TYPE_LABELS[message.messageType] ?? message.messageType}
+                </dd>
+              </div>
+            )}
+            <div>
+              <dt className="text-[13px] text-muted-foreground">Enviada</dt>
+              <dd className="font-mono text-sm">{formatTimestamp(message.timestamp)}</dd>
+            </div>
+          </dl>
 
           {/* Campo de edição */}
           <div className="space-y-2">
             <label htmlFor="message-content" className="text-sm font-medium text-foreground">
-              Conteúdo da Mensagem
+              Texto
             </label>
             <Textarea
               id="message-content"
               value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
               className="min-h-[200px] resize-none"
-              placeholder="Digite o conteúdo da mensagem..."
+              placeholder="Escreva o texto da mensagem"
               disabled={isLoading}
             />
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>{editedContent.length} caracteres</span>
-              {hasChanges && (
-                <div className="flex items-center gap-1 text-warning">
-                  <TriangleAlert className="w-3.5 h-3.5" />
-                  <span>Alterações não salvas</span>
-                </div>
-              )}
+              <span className="font-mono">{editedContent.length} caracteres</span>
+              {hasChanges && <span className="text-warning">Alterações não salvas</span>}
             </div>
           </div>
 
           {/* Botões de ação */}
-          <div className="flex items-center justify-end gap-2 pt-4 border-t">
+          <div className="flex items-center justify-end gap-2">
             <Button variant="outline" onClick={handleClose} disabled={isLoading}>
               Cancelar
             </Button>
             <Button
               onClick={handleSave}
               disabled={!hasChanges || isLoading || !editedContent.trim()}
-              className="flex items-center gap-2"
+              className="gap-2"
             >
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
-              ) : (
-                <Save className="w-4 h-4" />
-              )}
-              Salvar Alterações
+              {isLoading && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
+              {isLoading ? "Salvando" : "Salvar"}
             </Button>
           </div>
         </div>

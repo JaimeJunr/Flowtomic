@@ -61,8 +61,8 @@ export const MessageContent = React.forwardRef<HTMLDivElement, MessageContentPro
     <div
       ref={ref}
       className={cn(
-        "is-user:dark flex w-fit flex-col gap-2 overflow-hidden text-sm",
-        "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
+        "flex w-fit flex-col gap-2 overflow-hidden text-sm",
+        "group-[.is-user]:ml-auto group-[.is-user]:rounded-[10px] group-[.is-user]:bg-muted group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
         "group-[.is-assistant]:text-foreground",
         className
       )}
@@ -255,7 +255,7 @@ export const MessageBranchPrevious = React.forwardRef<
   return (
     <Button
       ref={ref}
-      aria-label="Previous branch"
+      aria-label="Versão anterior"
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
       size="icon-sm"
@@ -278,7 +278,7 @@ export const MessageBranchNext = React.forwardRef<HTMLButtonElement, MessageBran
     return (
       <Button
         ref={ref}
-        aria-label="Next branch"
+        aria-label="Próxima versão"
         disabled={totalBranches <= 1}
         onClick={goToNext}
         size="icon-sm"
@@ -302,10 +302,13 @@ export const MessageBranchPage = React.forwardRef<HTMLSpanElement, MessageBranch
     return (
       <ButtonGroupText
         ref={ref as React.ForwardedRef<HTMLDivElement>}
-        className={cn("border-none bg-transparent text-muted-foreground shadow-none", className)}
+        className={cn(
+          "border-none bg-transparent font-mono text-muted-foreground shadow-none",
+          className
+        )}
         {...props}
       >
-        {currentBranch + 1} of {totalBranches}
+        {currentBranch + 1} de {totalBranches}
       </ButtonGroupText>
     );
   }
@@ -625,10 +628,7 @@ const components: Options["components"] = {
     }
     return (
       <CodeBlock className={cn("my-4 h-auto", className)} code={code} language={language}>
-        <CodeBlockCopyButton
-          onCopy={() => console.log("Copied code to clipboard")}
-          onError={() => console.error("Failed to copy code to clipboard")}
-        />
+        <CodeBlockCopyButton aria-label="Copiar código" />
       </CodeBlock>
     );
   },
@@ -702,18 +702,18 @@ export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachm
     const filename = data.filename || "";
     const mediaType = data.mediaType?.startsWith("image/") && data.url ? "image" : "file";
     const isImage = mediaType === "image";
-    const attachmentLabel = filename || (isImage ? "Image" : "Attachment");
+    const attachmentLabel = filename || (isImage ? "Imagem" : "Anexo");
 
     return (
       <div
         ref={ref}
-        className={cn("group relative size-24 overflow-hidden rounded-lg", className)}
+        className={cn("group relative size-24 overflow-hidden rounded-[10px]", className)}
         {...props}
       >
         {isImage ? (
           <>
             <img
-              alt={filename || "attachment"}
+              alt={attachmentLabel}
               className="size-full object-cover"
               height={100}
               src={data.url}
@@ -721,8 +721,8 @@ export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachm
             />
             {onRemove && (
               <Button
-                aria-label="Remove attachment"
-                className="absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity hover:bg-background group-hover:opacity-100 [&>svg]:size-3"
+                aria-label="Remover anexo"
+                className="absolute top-2 right-2 size-6 rounded-md bg-background/80 p-0 opacity-0 transition-opacity hover:bg-background focus-visible:opacity-100 group-hover:opacity-100 [&>svg]:size-3"
                 onClick={(e) => {
                   e.stopPropagation();
                   onRemove();
@@ -731,7 +731,7 @@ export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachm
                 variant="ghost"
               >
                 <XIcon />
-                <span className="sr-only">Remove</span>
+                <span className="sr-only">Remover</span>
               </Button>
             )}
           </>
@@ -740,7 +740,11 @@ export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachm
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                  <div
+                    role="img"
+                    aria-label={attachmentLabel}
+                    className="flex size-full shrink-0 items-center justify-center rounded-[10px] bg-muted text-muted-foreground"
+                  >
                     <PaperclipIcon className="size-4" />
                   </div>
                 </TooltipTrigger>
@@ -751,8 +755,8 @@ export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachm
             </TooltipProvider>
             {onRemove && (
               <Button
-                aria-label="Remove attachment"
-                className="size-6 shrink-0 rounded-full p-0 opacity-0 transition-opacity hover:bg-accent group-hover:opacity-100 [&>svg]:size-3"
+                aria-label="Remover anexo"
+                className="absolute top-2 right-2 size-6 rounded-md bg-background/80 p-0 opacity-0 transition-opacity hover:bg-background focus-visible:opacity-100 group-hover:opacity-100 [&>svg]:size-3"
                 onClick={(e) => {
                   e.stopPropagation();
                   onRemove();
@@ -761,7 +765,7 @@ export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachm
                 variant="ghost"
               >
                 <XIcon />
-                <span className="sr-only">Remove</span>
+                <span className="sr-only">Remover</span>
               </Button>
             )}
           </>

@@ -125,21 +125,26 @@ Campo de autocomplete com busca e filtragem avançada. Usa hook headless `useAut
 
 ### `artifact`
 
-Container de artifact com header, actions e conteúdo.
+Contêiner de resultado com cabeçalho, ações e conteúdo. Usa cantos de 10px, borda
+semântica e nenhuma sombra em repouso; o cabeçalho usa `bg-surface`. A ação de fechar
+tem nome acessível “Fechar”. As stories mostram o resultado dos testes do DataTable.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `message`
 
-Componente de mensagem com suporte a branches e attachments.
+Mensagem com versões de resposta e anexos. A mensagem do usuário usa bolha `bg-muted`
+com cantos de 10px; a resposta do assistente fica sem bolha. A navegação usa “Versão
+anterior”, “Próxima versão” e contador em mono (“2 de 3”). Anexos sem nome usam
+“Imagem” ou “Anexo”; a ação “Remover anexo” aparece no hover e no foco pelo teclado.
 
 **Dependências**: `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`, `ai`
 
 ### `chat-message`
 
-Componente genérico de mensagem de chat com suporte a markdown, tipos de mensagem customizáveis, badges e context menu.
+Linha de log de chat com suporte a markdown: remetente na cor do texto, tipo como ponto de cor e rótulo (Narração, Ação, Fala por padrão; as chaves `STORY`, `ACTION` e `SAY` não mudam), horário em mono sem segundos e menu “Mais opções” que abre com clique e teclado. `badgeClassName` de um tipo pinta o ponto.
 
-**Dependências**: `react-markdown`, `lucide-react`, `@radix-ui/react-context-menu`, `clsx`, `tailwind-merge`
+**Dependências**: `react-markdown`, `lucide-react`, `@radix-ui/react-dropdown-menu`, `clsx`, `tailwind-merge`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/chat-message`
 
@@ -147,14 +152,14 @@ Componente genérico de mensagem de chat com suporte a markdown, tipos de mensag
 
 - Suporte a markdown via ReactMarkdown
 - Tipos de mensagem customizáveis (STORY, ACTION, SAY, etc.)
-- Badges e cores configuráveis
-- Context menu para editar/visualizar/deletar
+- Tipos e cores configuráveis
+- Menu para editar, ver contexto e excluir
 - Timestamp formatável
 - Suporte a diferentes senders (Sistema, Mestre, NPC, etc.)
 
 ### `chat-input`
 
-Componente de input para chat com suporte a tipos de mensagem, modos customizáveis, contador de caracteres e atalhos de teclado.
+Caixa de mensagem de chat. Tipo de mensagem e modo são escolhas de rádio (não botões sólidos), então Enviar é o único sólido. Contador em mono com milhar pt-BR, que fica âmbar perto do limite, e atalhos curtos (`Ctrl+Enter` envia, `Esc` limpa).
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
@@ -169,11 +174,11 @@ Componente de input para chat com suporte a tipos de mensagem, modos customizáv
 - Atalhos de teclado configuráveis (Ctrl+Enter para enviar, ESC para limpar)
 - Botão de envio
 - Suporte a indicadores customizados (triggers, etc.)
-- Header opcional com título e descrição
+- Cabeçalho opcional com título e descrição
 
 ### `edit-chat-message-modal`
 
-Modal genérico para editar mensagens de chat com validação de alterações não salvas e exibição de metadados.
+Modal para editar uma mensagem de chat. Metadados (remetente, tipo, horário em mono) numa lista de definição; aviso de alterações não salvas; Cancelar contornado e Salvar sólido.
 
 **Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `clsx`, `tailwind-merge`
 
@@ -190,37 +195,48 @@ Modal genérico para editar mensagens de chat com validação de alterações n�
 
 ### `suggestion`
 
-Lista de sugestões com scroll horizontal.
+Lista de sugestões com rolagem horizontal. Por padrão, as ações são outline, têm
+36px de altura e cantos de 8px, sem formato de pílula. `onClick` recebe o texto da
+sugestão; `variant`, `size` e conteúdo customizado continuam disponíveis.
 
 **Dependências**: `clsx`, `tailwind-merge`
 
 ### `sources`
 
-Lista de fontes colapsável.
+Lista de fontes colapsável com contador em pt-BR (“Usou 1 fonte” / “Usou 2 fontes”).
+O trigger usa texto neutro de 13px; os caminhos das fontes aparecem em mono com
+ícone de link externo.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `tool`
 
-Display de tool com collapsible para mostrar input/output.
+Ferramenta colapsável com nome em mono e seções “Parâmetros”, “Resultado” e “Erro”.
+Os estados são “Preparando”, “Executando”, “Aguardando aprovação”, “Respondida”,
+“Concluída”, “Falhou” e “Negada”. O estado usa ponto de 7px e texto, com ícone girando
+durante a execução. Sucesso, falha e aprovação usam seus tons semânticos; os demais
+estados usam `muted-foreground`. O contêiner tem cantos de 10px e nenhuma sombra.
 
 **Dependências**: `ai`, `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `task`
 
-Item de task com collapsible para mostrar detalhes.
+Tarefa colapsável para mostrar as etapas de uma consulta. Os chips de arquivo usam
+mono. As stories acompanham a revisão de ordenação e busca do DataTable.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `checkpoint`
 
-Checkpoint display com ícone e trigger.
+Ponto de restauração com régua dos dois lados e ação ghost com ícone Bookmark.
+As stories usam “Restaurar até aqui”. `CheckpointTrigger` inclui seu próprio
+`TooltipProvider` quando recebe `tooltip`; o consumidor não precisa adicionar um.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `confirmation`
 
-Confirmation dialog wrapper para aprovação de ações.
+Pedido de aprovação de uma ação (“Permitir” / “Negar”), com os estados pedido, aceito e negado. `className` de `ConfirmationAction` soma com o padrão em vez de substituí-lo.
 
 **Dependências**: `ai`, `clsx`, `tailwind-merge`
 
