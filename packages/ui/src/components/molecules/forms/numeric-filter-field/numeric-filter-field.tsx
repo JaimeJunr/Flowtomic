@@ -51,6 +51,15 @@ const defaultNumericValue: NumericFilterValue = {
   value: null,
 };
 
+// Símbolo na tela, nome por extenso para o leitor de tela
+const OPERATORS: { value: NumericFilterOperator; symbol: string; name: string }[] = [
+  { value: "eq", symbol: "=", name: "igual a" },
+  { value: "gt", symbol: ">", name: "maior que" },
+  { value: "lt", symbol: "<", name: "menor que" },
+  { value: "gte", symbol: "≥", name: "maior ou igual a" },
+  { value: "lte", symbol: "≤", name: "menor ou igual a" },
+];
+
 const inputErrorClassName = "border-destructive focus-visible:ring-destructive";
 
 export function NumericFilterField({
@@ -82,21 +91,25 @@ export function NumericFilterField({
           disabled={disabled}
         >
           <SelectTrigger
+            aria-label="Operador"
+            aria-invalid={error || undefined}
             className={cn("w-24 cursor-pointer shrink-0", error && inputErrorClassName)}
           >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="eq">=</SelectItem>
-            <SelectItem value="gt">&gt;</SelectItem>
-            <SelectItem value="lt">&lt;</SelectItem>
-            <SelectItem value="gte">≥</SelectItem>
-            <SelectItem value="lte">≤</SelectItem>
+            {OPERATORS.map((op) => (
+              <SelectItem key={op.value} value={op.value} aria-label={op.name}>
+                <span className="font-mono">{op.symbol}</span>
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <NumericFormat
           customInput={Input}
           placeholder={placeholder}
+          aria-label={placeholder ?? "Valor"}
+          aria-invalid={error || undefined}
           value={current.value ?? ""}
           maxLength={isCurrency ? undefined : 25}
           allowNegative={allowNegative}

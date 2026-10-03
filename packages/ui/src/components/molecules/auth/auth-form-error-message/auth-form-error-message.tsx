@@ -18,7 +18,8 @@ export interface AuthFormErrorMessageProps {
    */
   className?: string;
   /**
-   * Se deve usar animação (requer framer-motion se true)
+   * Entra com um fade curto (CSS do tw-animate, sem framer-motion). Quem pede menos
+   * movimento no sistema não vê a animação.
    */
   animated?: boolean;
 }
@@ -35,18 +36,17 @@ export function AuthFormErrorMessage({
 }: AuthFormErrorMessageProps) {
   if (!message) return null;
 
-  const content = (
-    <div className={cn("bg-destructive/10 border border-destructive/30 rounded-md p-3", className)}>
+  return (
+    <div
+      role="alert"
+      className={cn(
+        "rounded-md border border-destructive/30 bg-destructive/10 p-3",
+        animated &&
+          "animate-in fade-in-0 slide-in-from-top-1 duration-200 motion-reduce:animate-none",
+        className
+      )}
+    >
       <p className="text-sm text-destructive">{message}</p>
     </div>
   );
-
-  // Se animated for true, o projeto deve usar framer-motion
-  // Por padrão, retornamos sem animação para não forçar dependência
-  if (animated) {
-    // O projeto pode envolver isso com AnimatePresence e motion.div
-    return content;
-  }
-
-  return content;
 }

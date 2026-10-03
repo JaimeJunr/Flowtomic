@@ -32,12 +32,12 @@ export const Default: Story = {
           <FileText />
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>Documento 1</ItemTitle>
-          <ItemDescription>Descrição do documento</ItemDescription>
+          <ItemTitle>DESIGN.md</ItemTitle>
+          <ItemDescription>Tokens, tipografia e regras visuais</ItemDescription>
         </ItemContent>
         <ItemActions>
           <Button size="sm" variant="ghost">
-            Ações
+            Abrir
           </Button>
         </ItemActions>
       </Item>
@@ -47,12 +47,12 @@ export const Default: Story = {
           <FileText />
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>Documento 2</ItemTitle>
-          <ItemDescription>Outra descrição</ItemDescription>
+          <ItemTitle>docs/componentes/molecules.md</ItemTitle>
+          <ItemDescription>As 47 molecules, com dependências</ItemDescription>
         </ItemContent>
         <ItemActions>
           <Button size="sm" variant="ghost">
-            Ações
+            Abrir
           </Button>
         </ItemActions>
       </Item>
@@ -67,8 +67,8 @@ export const WithIcon: Story = {
         <FileText />
       </ItemMedia>
       <ItemContent>
-        <ItemTitle>Item com Ícone</ItemTitle>
-        <ItemDescription>Descrição do item</ItemDescription>
+        <ItemTitle>README.md</ItemTitle>
+        <ItemDescription>Como instalar e usar o pacote</ItemDescription>
       </ItemContent>
     </Item>
   ),
@@ -81,8 +81,8 @@ export const Outline: Story = {
         <FileText />
       </ItemMedia>
       <ItemContent>
-        <ItemTitle>Item Outline</ItemTitle>
-        <ItemDescription>Item com variante outline</ItemDescription>
+        <ItemTitle>CLAUDE.md</ItemTitle>
+        <ItemDescription>Regras do projeto para quem edita o código</ItemDescription>
       </ItemContent>
     </Item>
   ),

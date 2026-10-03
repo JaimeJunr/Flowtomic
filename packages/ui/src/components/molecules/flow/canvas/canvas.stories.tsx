@@ -12,7 +12,7 @@ const initialNodes: ReactFlowNode[] = [
     type: "custom",
     position: { x: 250, y: 100 },
     data: {
-      label: "Node 1",
+      label: "Build do logic",
     },
   },
   {
@@ -20,7 +20,7 @@ const initialNodes: ReactFlowNode[] = [
     type: "custom",
     position: { x: 250, y: 300 },
     data: {
-      label: "Node 2",
+      label: "Build do ui",
     },
   },
 ];
@@ -40,7 +40,7 @@ const CustomNode = ({ data }: { data: { label: string } }) => (
       <NodeTitle>{data.label}</NodeTitle>
     </NodeHeader>
     <NodeContent>
-      <p className="text-sm text-muted-foreground">Conteúdo do node</p>
+      <p className="font-mono text-sm text-muted-foreground">bun run build</p>
     </NodeContent>
   </Node>
 );

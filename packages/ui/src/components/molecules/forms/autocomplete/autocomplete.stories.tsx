@@ -30,14 +30,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const defaultOptions = [
-  { value: "1", label: "Apple" },
-  { value: "2", label: "Banana" },
-  { value: "3", label: "Cherry" },
-  { value: "4", label: "Date" },
-  { value: "5", label: "Elderberry" },
-  { value: "6", label: "Fig" },
-  { value: "7", label: "Grape" },
-  { value: "8", label: "Honeydew" },
+  { value: "1", label: "DataTable" },
+  { value: "2", label: "DatePicker" },
+  { value: "3", label: "StatCard" },
+  { value: "4", label: "TimeTracker" },
+  { value: "5", label: "ChatInput" },
+  { value: "6", label: "Sidebar" },
+  { value: "7", label: "Tooltip" },
+  { value: "8", label: "Tabs" },
 ];
 
 export const Default: Story = {
@@ -74,11 +74,11 @@ export const Disabled: Story = {
 export const WithDisabledItems: Story = {
   args: {
     options: [
-      { value: "1", label: "Apple" },
-      { value: "2", label: "Banana", disabled: true },
-      { value: "3", label: "Cherry" },
-      { value: "4", label: "Date", disabled: true },
-      { value: "5", label: "Elderberry" },
+      { value: "1", label: "DataTable" },
+      { value: "2", label: "DatePicker", disabled: true },
+      { value: "3", label: "StatCard" },
+      { value: "4", label: "TimeTracker", disabled: true },
+      { value: "5", label: "ChatInput" },
     ],
     placeholder: "Selecione uma fruta...",
   },
@@ -88,7 +88,7 @@ export const WithScroll: Story = {
   args: {
     options: Array.from({ length: 50 }, (_, i) => ({
       value: String(i + 1),
-      label: `Option ${i + 1}`,
+      label: `Opção ${i + 1}`,
     })),
     placeholder: "Selecione uma opção...",
     maxListboxHeight: "200px",
@@ -188,7 +188,7 @@ export const WithMaxHeight: Story = {
   args: {
     options: Array.from({ length: 20 }, (_, i) => ({
       value: String(i + 1),
-      label: `Option ${i + 1}`,
+      label: `Opção ${i + 1}`,
     })),
     placeholder: "Selecione uma opção...",
     maxListboxHeight: "150px",
@@ -213,7 +213,7 @@ export const FullyControlled: Story = {
             onClick={() => setValue("1")}
             className="px-3 py-1 text-sm border rounded"
           >
-            Selecionar Apple
+            Selecionar DataTable
           </button>
           <button
             type="button"
@@ -237,10 +237,10 @@ export const CompositionSimple: Story = {
     return (
       <Autocomplete placeholder="Selecione uma fruta...">
         <Autocomplete.List>
-          <Autocomplete.Item value="1">Apple</Autocomplete.Item>
-          <Autocomplete.Item value="2">Banana</Autocomplete.Item>
-          <Autocomplete.Item value="3">Cherry</Autocomplete.Item>
-          <Autocomplete.Item value="4">Date</Autocomplete.Item>
+          <Autocomplete.Item value="1">DataTable</Autocomplete.Item>
+          <Autocomplete.Item value="2">DatePicker</Autocomplete.Item>
+          <Autocomplete.Item value="3">StatCard</Autocomplete.Item>
+          <Autocomplete.Item value="4">TimeTracker</Autocomplete.Item>
         </Autocomplete.List>
       </Autocomplete>
     );
@@ -252,15 +252,15 @@ export const CompositionWithSections: Story = {
     return (
       <Autocomplete placeholder="Selecione uma opção...">
         <Autocomplete.List>
-          <Autocomplete.Section title="Frutas">
-            <Autocomplete.Item value="1">Apple</Autocomplete.Item>
-            <Autocomplete.Item value="2">Banana</Autocomplete.Item>
-            <Autocomplete.Item value="3">Cherry</Autocomplete.Item>
+          <Autocomplete.Section title="Molecules">
+            <Autocomplete.Item value="1">DataTable</Autocomplete.Item>
+            <Autocomplete.Item value="2">DatePicker</Autocomplete.Item>
+            <Autocomplete.Item value="3">StatCard</Autocomplete.Item>
           </Autocomplete.Section>
-          <Autocomplete.Section title="Vegetais">
-            <Autocomplete.Item value="4">Carrot</Autocomplete.Item>
-            <Autocomplete.Item value="5">Lettuce</Autocomplete.Item>
-            <Autocomplete.Item value="6">Tomato</Autocomplete.Item>
+          <Autocomplete.Section title="Atoms">
+            <Autocomplete.Item value="4">Button</Autocomplete.Item>
+            <Autocomplete.Item value="5">Badge</Autocomplete.Item>
+            <Autocomplete.Item value="6">Input</Autocomplete.Item>
           </Autocomplete.Section>
         </Autocomplete.List>
       </Autocomplete>
@@ -275,14 +275,14 @@ export const CompositionWithCustomContent: Story = {
         <Autocomplete.List>
           <Autocomplete.Item value="1">
             <div className="flex items-center gap-2">
-              <span className="font-semibold">Apple</span>
-              <span className="text-xs text-muted-foreground">Fruta</span>
+              <span className="font-semibold">DataTable</span>
+              <span className="text-xs text-muted-foreground">molecule</span>
             </div>
           </Autocomplete.Item>
           <Autocomplete.Item value="2">
             <div className="flex items-center gap-2">
-              <span className="font-semibold">Banana</span>
-              <span className="text-xs text-muted-foreground">Fruta</span>
+              <span className="font-semibold">DatePicker</span>
+              <span className="text-xs text-muted-foreground">molecule</span>
             </div>
           </Autocomplete.Item>
         </Autocomplete.List>
@@ -303,9 +303,9 @@ export const CompositionWithStates: Story = {
             <Autocomplete.Loading />
           ) : hasItems ? (
             <Autocomplete.List>
-              <Autocomplete.Item value="1">Apple</Autocomplete.Item>
-              <Autocomplete.Item value="2">Banana</Autocomplete.Item>
-              <Autocomplete.Item value="3">Cherry</Autocomplete.Item>
+              <Autocomplete.Item value="1">DataTable</Autocomplete.Item>
+              <Autocomplete.Item value="2">DatePicker</Autocomplete.Item>
+              <Autocomplete.Item value="3">StatCard</Autocomplete.Item>
             </Autocomplete.List>
           ) : (
             <Autocomplete.Empty>Nenhuma opção disponível</Autocomplete.Empty>
