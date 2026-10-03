@@ -12,6 +12,14 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }));
 
+// O embla (carousel) observa a visibilidade dos slides; o jsdom não tem IntersectionObserver
+global.IntersectionObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+  takeRecords: vi.fn(() => []),
+}));
+
 // Mock matchMedia
 Object.defineProperty(window, "matchMedia", {
   writable: true,
