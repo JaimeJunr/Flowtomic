@@ -16,10 +16,10 @@ const LoaderIcon = ({ size = 16 }: LoaderIconProps) => (
     height={size}
     strokeLinejoin="round"
     style={{ color: "currentcolor" }}
+    aria-hidden="true"
     viewBox="0 0 16 16"
     width={size}
   >
-    <title>Loader</title>
     <g clipPath="url(#clip0_2393_1490)">
       <path d="M8 0V4" stroke="currentColor" strokeWidth="1.5" />
       <path d="M8 16V12" opacity="0.5" stroke="currentColor" strokeWidth="1.5" />
@@ -86,8 +86,11 @@ export type LoaderProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export const Loader = React.forwardRef<HTMLDivElement, LoaderProps>(
   ({ className, size = 16, ...props }, ref) => (
+    // biome-ignore lint/a11y/useSemanticElements: trocar por <output> mudaria o tipo do ref (HTMLDivElement) da API pública
     <div
       ref={ref}
+      role="status"
+      aria-label="Carregando"
       className={cn("inline-flex animate-spin items-center justify-center", className)}
       {...props}
     >

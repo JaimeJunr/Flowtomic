@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export interface BreadcrumbProps extends React.ComponentProps<"nav"> {}
 
 function Breadcrumb({ ...props }: BreadcrumbProps) {
-  return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
+  return <nav aria-label="Trilha de navegação" data-slot="breadcrumb" {...props} />;
 }
 
 Breadcrumb.displayName = "Breadcrumb";
@@ -109,7 +109,7 @@ function BreadcrumbEllipsis({ className, ...props }: BreadcrumbEllipsisProps) {
       {...props}
     >
       <MoreHorizontal className="size-4" />
-      <span className="sr-only">More</span>
+      <span className="sr-only">Mais</span>
     </span>
   );
 }

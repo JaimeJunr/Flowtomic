@@ -93,4 +93,13 @@ describe("Sidebar", () => {
       expect(content).toBeInTheDocument();
     });
   });
+
+  it("o botão de abrir e fechar a barra tem nome em português", () => {
+    render(
+      <SidebarProvider>
+        <SidebarTrigger />
+      </SidebarProvider>
+    );
+    expect(screen.getByRole("button", { name: "Alternar barra lateral" })).toBeInTheDocument();
+  });
 });

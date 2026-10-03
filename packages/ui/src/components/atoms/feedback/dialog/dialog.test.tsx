@@ -73,4 +73,16 @@ describe("Dialog", () => {
       });
     });
   });
+
+  it("o botão de fechar tem nome em português", async () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogTitle>Editar componente</DialogTitle>
+        </DialogContent>
+      </Dialog>
+    );
+    expect(await screen.findByRole("button", { name: "Fechar" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Close" })).not.toBeInTheDocument();
+  });
 });
