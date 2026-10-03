@@ -12,15 +12,21 @@ Grupo de botões para ações relacionadas.
 
 ### `password-input`
 
-Input de senha com toggle de visibilidade.
+Input de senha com toggle de visibilidade acessível por Tab, Enter e Espaço. O botão troca entre “Mostrar senha” e “Ocultar senha” e permite ocultar mesmo com o campo focado. A visibilidade automática por foco termina ao sair para outro campo ou botão; a escolha manual de mostrar permanece. Para desabilitar sem alterar a API, coloque o componente dentro de `<fieldset disabled>`.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `image-dropzone`
 
-Área de upload de imagem com drag and drop.
+Área de upload de imagem por seletor ou drag and drop, com `value` controlado (File, URL ou null) e `onChange` recebendo File ou null. Valida o limite inclusivo de tamanho (5 MB por padrão) e `accept` por MIME, wildcard ou extensão, sem diferenciar maiúsculas nas extensões. Erros são anunciados com `role="alert"`; remover limpa a prévia, o erro de validação e o seletor, permitindo selecionar o mesmo arquivo novamente.
 
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+### `widget-renderer`
+
+Renderiza por `renderWidget(widget, data)` ou por um registry indexado pelo tipo do widget. A render prop tem prioridade, inclusive quando retorna null. Loading explícito e Suspense anunciam “Carregando widget” sem mudar o skeleton visual. Um `fallback` fornecido é respeitado mesmo quando vale `0`, `""`, null ou false; sem fallback, aparece o tipo desconhecido.
+
+**Localização**: `packages/ui/src/components/molecules/widget-renderer`
 
 ### `stat-card`
 

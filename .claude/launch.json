@@ -8,6 +8,10 @@
       "port": 6006
     },
     {
+      "name": "storybook-attach",
+      "url": "http://localhost:6006"
+    },
+    {
       "name": "registry",
       "runtimeExecutable": "bun",
       "runtimeArgs": ["run", "registry/server.ts"],
