@@ -123,6 +123,9 @@ function trendClass(direction: "up" | "down" | "neutral", good: boolean): string
   return good ? "text-success" : "text-destructive";
 }
 
+// Sem variação não há seta: "↑ 0%" lia como alta
+const TREND_ARROW = { up: "↑ ", down: "↓ ", neutral: "" } as const;
+
 function useMetric(stat: StatItem) {
   const data: StatCardData = {
     value: stat.value,
@@ -139,9 +142,7 @@ function useMetric(stat: StatItem) {
   const good = (trend.direction === "up") === (stat.positive ?? true);
   return {
     value: typeof stat.value === "string" ? stat.value : formattedValue,
-    trendLabel: hasTrend
-      ? `${trend.direction === "down" ? "↓" : "↑"} ${PERCENT.format(trend.delta)}%`
-      : null,
+    trendLabel: hasTrend ? `${TREND_ARROW[trend.direction]}${PERCENT.format(trend.delta)}%` : null,
     trendColor: trendClass(trend.direction, good),
     context: stat.subtitle ?? (formattedLastMonth ? `sobre ${formattedLastMonth}` : null),
   };
