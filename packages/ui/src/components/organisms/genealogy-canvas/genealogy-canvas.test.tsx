@@ -1,6 +1,7 @@
 import type { GenealogyData } from "@flowtomic/logic";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Position } from "@xyflow/react";
+import axe from "axe-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GenealogyCanvas } from "./genealogy-canvas";
 
@@ -218,7 +219,49 @@ describe("GenealogyCanvas: nós e conexões", () => {
     expect(onNodeClick).toHaveBeenCalledTimes(1);
   });
 
-  // Sem UI de expandir: o nó não tem botão, então onNodeExpand nunca dispara. Pôr o botão
-  // muda a tela e passa pelo canvas /design antes (convenção do repo).
-  it.todo("expandir um nó chama onNodeExpand");
+  it("o botão do nó recolhe e expande as ligações, avisando onNodeExpand", () => {
+    medicao.ligada = true;
+    const onNodeExpand = vi.fn();
+    const { container } = render(<GenealogyCanvas data={data} onNodeExpand={onNodeExpand} />);
+    const botao = screen.getByRole("button", { name: "Recolher ligações de Pai" });
+    expect(botao).toHaveAttribute("aria-expanded", "true");
+    expect(container.querySelector(".react-flow__edge-path")).toBeInTheDocument();
+
+    fireEvent.click(botao);
+    expect(onNodeExpand).toHaveBeenLastCalledWith("2", false);
+    expect(container.querySelector(".react-flow__edge-path")).not.toBeInTheDocument();
+    const reaberto = screen.getByRole("button", { name: "Expandir ligações de Pai" });
+    expect(reaberto).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(reaberto);
+    expect(onNodeExpand).toHaveBeenLastCalledWith("2", true);
+    expect(onNodeExpand).toHaveBeenCalledTimes(2);
+    expect(container.querySelector(".react-flow__edge-path")).toBeInTheDocument();
+  });
+
+  it("clicar no botão de expandir não seleciona o nó", () => {
+    // sem medição o React Flow deixa o nó com visibility: hidden, fora da árvore acessível
+    medicao.ligada = true;
+    const onNodeSelect = vi.fn();
+    render(<GenealogyCanvas data={data} onNodeSelect={onNodeSelect} />);
+    fireEvent.click(screen.getByRole("button", { name: "Recolher ligações de Pai" }));
+    expect(onNodeSelect).not.toHaveBeenCalled();
+  });
+
+  it("com o botão de expandir, o nó não tem violações automáticas de acessibilidade", async () => {
+    medicao.ligada = true;
+    const { container } = render(<GenealogyCanvas data={data} />);
+    const result = await axe.run(container, {
+      rules: { "color-contrast": { enabled: false }, region: { enabled: false } },
+    });
+    expect(result.violations).toEqual([]);
+  });
+
+  it("pessoa sem pais nem filhos não ganha botão de expandir", () => {
+    medicao.ligada = true;
+    render(
+      <GenealogyCanvas data={{ people: [{ id: "9", name: "Sozinho" }], relationships: [] }} />
+    );
+    expect(screen.queryByRole("button", { name: /ligações de Sozinho/ })).not.toBeInTheDocument();
+  });
 });
