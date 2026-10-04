@@ -148,7 +148,7 @@ export const WebPreviewUrl = ({ value, onChange, onKeyDown, ...props }: WebPrevi
   return (
     <Input
       className="h-8 flex-1 text-sm"
-      onChange={onChange ?? handleChange}
+      onChange={handleChange}
       onKeyDown={handleKeyDown}
       placeholder="Digite a URL..."
       value={value ?? inputValue}
@@ -157,7 +157,9 @@ export const WebPreviewUrl = ({ value, onChange, onKeyDown, ...props }: WebPrevi
   );
 };
 
-export type WebPreviewBodyProps = ComponentProps<"iframe"> & {
+// O `loading` nativo do iframe ("eager" | "lazy") sai: aqui ele é o conteúdo mostrado
+// enquanto carrega, e a interseção dos dois tipos não aceitava nenhum elemento.
+export type WebPreviewBodyProps = Omit<ComponentProps<"iframe">, "loading"> & {
   loading?: ReactNode;
 };
 
