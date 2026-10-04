@@ -171,11 +171,6 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
               )}
               tabIndex={0}
               aria-label="Arrastar widget"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                }
-              }}
             >
               <GripVertical className="w-4 h-4 text-muted-foreground" />
             </button>

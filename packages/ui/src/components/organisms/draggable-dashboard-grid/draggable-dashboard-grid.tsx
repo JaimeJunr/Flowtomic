@@ -5,7 +5,13 @@
  * Componente genérico e reutilizável para qualquer dashboard.
  */
 
-import type { DragEndEvent, DragMoveEvent, DragStartEvent } from "@dnd-kit/core";
+import type {
+  Announcements,
+  DragEndEvent,
+  DragMoveEvent,
+  DragStartEvent,
+  ScreenReaderInstructions,
+} from "@dnd-kit/core";
 import {
   closestCenter,
   DndContext,
@@ -78,6 +84,32 @@ export interface DraggableDashboardGridProps {
    * Classe CSS adicional
    */
   className?: string;
+}
+
+// O dnd-kit anuncia em inglês por padrão ("press the space bar").
+const INSTRUCTIONS: ScreenReaderInstructions = {
+  draggable:
+    "Para pegar um widget, pressione Espaço ou Enter. Use as setas para mover, Espaço ou Enter para soltar e Esc para cancelar.",
+};
+
+const ANNOUNCEMENTS: Announcements = {
+  onDragStart: ({ active }) => `Widget ${active.id} pego.`,
+  onDragMove: () => undefined,
+  onDragOver: () => undefined,
+  onDragEnd: ({ active }) => `Widget ${active.id} solto.`,
+  onDragCancel: ({ active }) => `Movimento do widget ${active.id} cancelado.`,
+};
+
+// Área de soltar para widgets da paleta. Precisa ser filha do DndContext do grid:
+// chamado no corpo do grid, o useDroppable registrava a área fora do contexto e
+// nada podia ser solto nela.
+function GridDropArea({ className, style, children }: React.ComponentProps<"div">) {
+  const { setNodeRef } = useDroppable({ id: "dashboard-grid", data: { type: "grid" } });
+  return (
+    <div ref={setNodeRef} className={className} style={style}>
+      {children}
+    </div>
+  );
 }
 
 /**
@@ -226,14 +258,6 @@ export function DraggableDashboardGrid({
     onResizeWidget?.(widgetId, w, h);
   };
 
-  // Droppable area para receber widgets da paleta
-  const { setNodeRef: setDroppableRef } = useDroppable({
-    id: "dashboard-grid",
-    data: {
-      type: "grid",
-    },
-  });
-
   // Empty state apenas quando está em modo de edição e não há widgets
   if (localWidgets.length === 0 && isEditMode) {
     if (emptyState) {
@@ -277,9 +301,9 @@ export function DraggableDashboardGrid({
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
+      accessibility={{ announcements: ANNOUNCEMENTS, screenReaderInstructions: INSTRUCTIONS }}
     >
-      <div
-        ref={setDroppableRef}
+      <GridDropArea
         className={cn(className)}
         style={{
           display: "grid",
@@ -309,7 +333,7 @@ export function DraggableDashboardGrid({
             </DraggableWidget>
           );
         })}
-      </div>
+      </GridDropArea>
 
       {/* Drag Overlay - Preview durante drag */}
       <DragOverlay>
