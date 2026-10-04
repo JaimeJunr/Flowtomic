@@ -20,14 +20,19 @@ import { type BundledLanguage, codeToHtml, type ShikiTransformer } from "shiki";
 import { cn } from "@/lib/utils";
 import { Button } from "../../actions/button";
 
+/** `text` é o texto puro do shiki, para linguagem que ele não conhece. */
+export type CodeBlockLanguage = BundledLanguage | "text";
+
 export type CodeBlockProps = HTMLAttributes<HTMLDivElement> & {
   code: string;
-  language: BundledLanguage;
+  language: CodeBlockLanguage;
   showLineNumbers?: boolean;
   /** Max height in pixels; overflow becomes scrollable when set. */
   maxHeight?: number;
   /** When true, scrollbars are visible when content overflows. */
   showScrollbars?: boolean;
+  /** Mostra a linguagem no cabeçalho. Sem ela e sem ações (`children`), não há cabeçalho. */
+  showLanguage?: boolean;
 };
 
 type CodeBlockContextType = {
@@ -61,7 +66,7 @@ const lineNumberTransformer: ShikiTransformer = {
 
 export async function highlightCode(
   code: string,
-  language: BundledLanguage,
+  language: CodeBlockLanguage,
   showLineNumbers = false
 ) {
   const transformers: ShikiTransformer[] = showLineNumbers ? [lineNumberTransformer] : [];
@@ -88,6 +93,7 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
       showLineNumbers = false,
       maxHeight,
       showScrollbars = false,
+      showLanguage = true,
       className,
       children,
       ...props
@@ -96,21 +102,32 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
   ) => {
     const [html, setHtml] = useState<string>("");
     const [darkHtml, setDarkHtml] = useState<string>("");
-    const mounted = useRef(false);
 
     useEffect(() => {
-      highlightCode(code, language, showLineNumbers).then(([light, dark]) => {
-        if (!mounted.current) {
-          setHtml(light);
-          setDarkHtml(dark);
-          mounted.current = true;
-        }
-      });
+      // cancelado por execução: um realce antigo que chega atrasado nunca entra na tela
+      let cancelled = false;
+      // espera o texto parar de mudar (streaming) antes de pedir o realce
+      const timer = setTimeout(() => {
+        highlightCode(code, language, showLineNumbers)
+          .then(([light, dark]) => {
+            if (cancelled) return;
+            setHtml(light);
+            setDarkHtml(dark);
+          })
+          .catch(() => {
+            // sem realce, o texto puro continua na tela
+          });
+      }, 100);
 
       return () => {
-        mounted.current = false;
+        cancelled = true;
+        clearTimeout(timer);
       };
     }, [code, language, showLineNumbers]);
+
+    const highlighted = html !== "";
+    const preClass =
+      "[&>pre]:m-0 [&>pre]:overflow-x-auto [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm";
 
     return (
       <CodeBlockContext.Provider value={{ code }}>
@@ -122,23 +139,44 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
             className
           )}
           style={maxHeight != null ? { maxHeight: `${maxHeight}px` } : undefined}
+          data-language={language}
           {...props}
         >
-          <div className="relative">
+          {showLanguage || children ? (
             <div
-              className="overflow-hidden dark:hidden [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: "this is needed for syntax highlighting"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-            <div
-              className="hidden overflow-hidden dark:block [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: "this is needed for syntax highlighting"
-              dangerouslySetInnerHTML={{ __html: darkHtml }}
-            />
-            {children && (
-              <div className="absolute top-2 right-2 flex items-center gap-2">{children}</div>
-            )}
-          </div>
+              data-slot="code-block-header"
+              className="flex min-h-9 items-center justify-between gap-2 border-b py-0.5 pr-1 pl-4"
+            >
+              <span
+                data-slot="code-block-language"
+                className="font-mono text-xs text-muted-foreground"
+              >
+                {language}
+              </span>
+              {children && <div className="flex items-center gap-1">{children}</div>}
+            </div>
+          ) : null}
+          {highlighted ? (
+            <>
+              <div
+                className={cn(preClass, "dark:hidden")}
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: "this is needed for syntax highlighting"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+              <div
+                className={cn(preClass, "hidden dark:block")}
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: "this is needed for syntax highlighting"
+                dangerouslySetInnerHTML={{ __html: darkHtml }}
+              />
+            </>
+          ) : (
+            <pre
+              data-slot="code-block-fallback"
+              className="m-0 overflow-x-auto p-4 font-mono text-sm"
+            >
+              <code>{code}</code>
+            </pre>
+          )}
         </div>
       </CodeBlockContext.Provider>
     );
@@ -156,6 +194,9 @@ export const CodeBlockCopyButton = React.forwardRef<HTMLButtonElement, CodeBlock
   ({ onCopy, onError, timeout = 2000, children, className, ...props }, ref) => {
     const [isCopied, setIsCopied] = useState(false);
     const { code } = useContext(CodeBlockContext);
+    const resetTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+    useEffect(() => () => clearTimeout(resetTimer.current), []);
 
     const copyToClipboard = async () => {
       if (typeof window === "undefined" || !navigator?.clipboard?.writeText) {
@@ -167,24 +208,32 @@ export const CodeBlockCopyButton = React.forwardRef<HTMLButtonElement, CodeBlock
         await navigator.clipboard.writeText(code);
         setIsCopied(true);
         onCopy?.();
-        setTimeout(() => setIsCopied(false), timeout);
+        clearTimeout(resetTimer.current);
+        resetTimer.current = setTimeout(() => setIsCopied(false), timeout);
       } catch (error) {
         onError?.(error as Error);
       }
     };
 
-    const Icon = isCopied ? CheckIcon : CopyIcon;
-
     return (
       <Button
         ref={ref}
-        className={cn("shrink-0", className)}
+        aria-label={isCopied ? "Copiado" : "Copiar código"}
+        className={cn("h-8 shrink-0 gap-1.5 px-2", isCopied && "text-success", className)}
         onClick={copyToClipboard}
-        size="icon"
+        size={isCopied ? "sm" : "icon-sm"}
         variant="ghost"
         {...props}
       >
-        {children ?? <Icon size={14} />}
+        {children ??
+          (isCopied ? (
+            <>
+              <CheckIcon aria-hidden="true" size={14} />
+              Copiado
+            </>
+          ) : (
+            <CopyIcon aria-hidden="true" size={14} />
+          ))}
       </Button>
     );
   }

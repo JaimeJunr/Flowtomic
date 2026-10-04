@@ -116,6 +116,7 @@ export const ToolInput = React.forwardRef<HTMLDivElement, ToolInputProps>(
           className="border-0 bg-surface font-mono text-[12.5px] [&_pre]:bg-surface! [&_pre]:text-[12.5px]! [&_code]:text-[12.5px]!"
           code={JSON.stringify(input, null, 2)}
           language="json"
+          showLanguage={false}
         />
       </div>
     </div>
@@ -142,6 +143,7 @@ export const ToolOutput = React.forwardRef<HTMLDivElement, ToolOutputProps>(
           className="border-0 bg-surface font-mono text-[12.5px] [&_pre]:bg-surface! [&_pre]:text-[12.5px]! [&_code]:text-[12.5px]!"
           code={JSON.stringify(output, null, 2)}
           language="json"
+          showLanguage={false}
         />
       );
     } else if (typeof output === "string") {
@@ -149,7 +151,8 @@ export const ToolOutput = React.forwardRef<HTMLDivElement, ToolOutputProps>(
         <CodeBlock
           className="border-0 bg-surface font-mono text-[12.5px] [&_pre]:bg-surface! [&_pre]:text-[12.5px]! [&_code]:text-[12.5px]!"
           code={output}
-          language="json"
+          language="text"
+          showLanguage={false}
         />
       );
     }

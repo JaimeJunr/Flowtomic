@@ -447,7 +447,13 @@ Spinner animado para indicar carregamento.
 
 #### `code-block`
 
-Bloco de código com syntax highlighting usando Shiki.
+Bloco de código com syntax highlighting usando Shiki. Enquanto o realce não chega, mostra
+o código em texto puro (não pisca vazio); espera 100 ms sem mudança antes de colorir, para
+não recolorir a cada pedaço durante o streaming, e um realce antigo que chega atrasado nunca
+substitui o atual. O cabeçalho mostra a linguagem (`showLanguage`, padrão `true`) e as
+ações passadas como `children`; sem os dois, não há cabeçalho. `language` aceita `"text"`
+para texto puro. Linha comprida rola de lado. `CodeBlockCopyButton` se chama “Copiar
+código” e vira “Copiado” depois de copiar.
 
 **Dependências**: `shiki`, `lucide-react`, `clsx`, `tailwind-merge`
 
