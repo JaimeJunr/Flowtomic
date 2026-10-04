@@ -237,6 +237,10 @@ Lista de fontes colapsável com contador em pt-BR (“Usou 1 fonte” / “Usou 
 O trigger usa texto neutro de 13px; os caminhos das fontes aparecem em mono com
 ícone de link externo.
 
+`Source` só vira link quando o endereço é http(s) ou relativo (`isSafeSourceUrl`);
+`javascript:`, `data:` e afins aparecem como texto, sem link. O link abre em nova aba com
+`rel="noopener noreferrer"`. `uniqueSources` tira fontes repetidas pela `url`.
+
 **Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
 
 ### `tool`

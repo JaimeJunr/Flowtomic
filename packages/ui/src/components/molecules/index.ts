@@ -141,7 +141,14 @@ export type {
   SourcesProps,
   SourcesTriggerProps,
 } from "./data-display/sources";
-export { Source, Sources, SourcesContent, SourcesTrigger } from "./data-display/sources";
+export {
+  isSafeSourceUrl,
+  Source,
+  Sources,
+  SourcesContent,
+  SourcesTrigger,
+  uniqueSources,
+} from "./data-display/sources";
 export type { StatCardProps } from "./data-display/stat-card";
 export { StatCard } from "./data-display/stat-card";
 export type { SuggestionProps, SuggestionsProps } from "./data-display/suggestion";
