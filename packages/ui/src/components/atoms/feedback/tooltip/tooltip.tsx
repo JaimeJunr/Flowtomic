@@ -197,7 +197,8 @@ export function TooltipWithMouseFollow({
       }
 
       // Verificar se ultrapassa a borda esquerda
-      if (absoluteX + finalX < 0) {
+      // finalX é relativo ao container: a borda real é containerRect.left + finalX
+      if (containerRect.left + finalX < 0) {
         finalX = -containerRect.left + 12;
       }
 
@@ -207,7 +208,7 @@ export function TooltipWithMouseFollow({
       }
 
       // Verificar se ultrapassa a borda superior
-      if (absoluteY + finalY < 0) {
+      if (containerRect.top + finalY < 0) {
         finalY = -containerRect.top + 12;
       }
 

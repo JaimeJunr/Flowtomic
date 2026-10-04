@@ -59,6 +59,13 @@ export interface WidgetResizeHandleProps {
   className?: string;
 }
 
+const KEY_STEPS: Record<string, { w: number; h: number }> = {
+  ArrowRight: { w: 1, h: 0 },
+  ArrowLeft: { w: -1, h: 0 },
+  ArrowDown: { w: 0, h: 1 },
+  ArrowUp: { w: 0, h: -1 },
+};
+
 /**
  * Handle para redimensionar widget
  *
@@ -147,6 +154,18 @@ export function WidgetResizeHandle({
     onResize,
   ]);
 
+  // Quem usa só teclado redimensiona pelas setas: uma célula por toque, dentro dos limites
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const step = KEY_STEPS[e.key];
+    if (!step) return;
+    e.preventDefault();
+    const newW = Math.max(minWidth, Math.min(maxWidth, currentWidth + step.w));
+    const newH = Math.max(minHeight, Math.min(maxHeight, currentHeight + step.h));
+    if (newW !== currentWidth || newH !== currentHeight) {
+      onResize(widgetId, newW, newH);
+    }
+  };
+
   return (
     <button
       type="button"
@@ -157,18 +176,14 @@ export function WidgetResizeHandle({
         "flex items-center justify-center",
         "bg-primary/20 border border-primary/40 rounded-tl-md",
         "cursor-nwse-resize",
-        "opacity-0 group-hover:opacity-100 transition-opacity",
+        "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity",
         "hover:bg-primary/30",
         isResizing && "opacity-100 bg-primary/40",
         className
       )}
       tabIndex={0}
       aria-label="Redimensionar widget"
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-        }
-      }}
+      onKeyDown={handleKeyDown}
     >
       <Maximize2 className="w-3 h-3 text-primary" />
     </button>
