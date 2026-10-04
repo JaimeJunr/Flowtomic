@@ -594,6 +594,14 @@ Cada uma já mordeu alguém neste repo.
   preferência uma vez e guarda. Componente que respeita movimento reduzido usa o critério do
   `sliding-number`: `useReducedMotion() || useContext(MotionConfigContext).reducedMotion ===
   "always"`, e o teste envolve a peça em `<MotionConfig reducedMotion="always">`.
+- ⚠️ **`FormControl` só nomeia o campo se o filho DIRETO for o controle.** Ele é um `Slot` que
+  passa `id`/`aria-*` ao filho; se o filho é Fragment, `div` ou `Select.Root`, o `<label for>`
+  aponta para o nada e o leitor de tela lê um campo sem nome (checkbox, switch, slider e select
+  do `form-layout` ficaram assim até 03/10/2026). Envolva o controle em si.
+- ⚠️ **O dnd-kit anuncia em inglês por padrão** ("press the space bar"). Todo `DndContext` passa
+  `accessibility={{ announcements, screenReaderInstructions }}` em português — ver
+  `organisms/draggable-dashboard-grid`. E `onKeyDown` próprio depois de `{...listeners}`
+  sobrescreve o do sensor de teclado: o arrasto por teclado morre sem erro.
 - ⚠️ **Clique em gatilho de `NavigationMenu` (Radix) fica instável com a máquina carregada**: o
   `userEvent.click` simula hover antes, e o Radix abre o menu sozinho 200 ms depois do hover.
   Se o timer vence antes do clique, o clique alterna para o lado errado (medido em 03/10/2026,
