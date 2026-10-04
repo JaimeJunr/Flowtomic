@@ -164,6 +164,22 @@ Componente complexo para input de prompt com suporte a attachments, speech recog
 
 **Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `clsx`, `tailwind-merge`
 
+### `questionnaire`
+
+Pergunta do assistente para a pessoa, uma por vez, dentro de um cartão flutuante.
+Cada `QuestionnaireQuestion` tem `id`, `title` e `choices`; a última opção é sempre
+“Outra resposta”, em texto livre. As teclas 1, 2, 3… escolhem a opção (menos enquanto se
+digita no campo livre), as setas andam entre elas (Radix `RadioGroup`) e Enter no campo
+livre avança. “Próxima” sem resposta mostra o erro e não avança; “Pular” avança marcando
+`skipped`. Ao trocar de pergunta, o foco vai para o título. Na última, o botão vira
+“Enviar” e `onSubmit` recebe `QuestionnaireAnswer[]` (`question`, `answer` com o rótulo
+escolhido ou o texto, `skipped`). Com `preparing`, mostra só “Preparando a pergunta…”.
+O progresso (“Pergunta 1 de 2”) só aparece com mais de uma pergunta.
+`QuestionnaireSummary` é o que fica no histórico: a pergunta apagada e a resposta em
+destaque. Usa os atoms `button` e `shimmer`. Inspirado no chatbot-template do shadcn (MIT).
+
+**Dependências**: `@radix-ui/react-radio-group`, `lucide-react`, `motion`, `clsx`, `tailwind-merge`
+
 ### `node`
 
 Componente Node para ReactFlow baseado em Card com handles.
