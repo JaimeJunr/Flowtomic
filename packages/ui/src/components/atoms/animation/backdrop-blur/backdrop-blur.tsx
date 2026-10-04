@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { MotionConfigContext, motion, useReducedMotion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -104,10 +104,15 @@ const BackdropBlur = React.forwardRef<HTMLDivElement, BackdropBlurProps>(
       };
     }, [backgroundColor, opacity]);
 
+    // Mesmo critério do sliding-number: preferência do sistema ou MotionConfig reducedMotion="always"
+    const reducedMotionConfig = React.useContext(MotionConfigContext).reducedMotion;
+    const shouldReduceMotion = useReducedMotion() || reducedMotionConfig === "always";
+
     if (disabled) {
       return (
         <div
           ref={ref}
+          aria-hidden="true"
           className={cn("fixed inset-0 z-40", className)}
           style={{
             backgroundColor: `${backgroundColor}${Math.round(opacity * 255)
@@ -119,9 +124,27 @@ const BackdropBlur = React.forwardRef<HTMLDivElement, BackdropBlurProps>(
       );
     }
 
+    // Com movimento reduzido o desfoque troca na hora, sem transição
+    if (shouldReduceMotion) {
+      return (
+        <div
+          ref={ref}
+          aria-hidden="true"
+          className={cn("fixed inset-0 z-40", className)}
+          style={{
+            backdropFilter: isOpen ? `blur(${blurIntensity}px)` : "blur(0px)",
+            backgroundColor: isOpen
+              ? backgroundColorWithOpacity.open
+              : backgroundColorWithOpacity.closed,
+          }}
+        />
+      );
+    }
+
     return (
       <motion.div
         ref={ref}
+        aria-hidden="true"
         initial={false}
         animate={
           isOpen
