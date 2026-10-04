@@ -9,7 +9,6 @@
 import type { ChatStatus, FileUIPart } from "ai";
 import {
   ImageIcon,
-  Loader2Icon,
   MicIcon,
   PaperclipIcon,
   PlusIcon,
@@ -624,6 +623,11 @@ export const PromptInput = ({
           return (formData.get("message") as string) || "";
         })();
 
+    // Enter ou clique com o campo vazio (e sem anexo) não manda mensagem em branco
+    if (!text.trim() && files.length === 0) {
+      return;
+    }
+
     if (!usingProvider) {
       form.reset();
     }
@@ -680,13 +684,17 @@ export const PromptInput = ({
       />
       <form
         className={cn(
-          "w-full divide-y overflow-hidden rounded-xl border bg-background shadow-sm",
+          "w-full overflow-hidden rounded-xl border border-input bg-background transition-[border-color,box-shadow]",
+          "focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/20",
           className
         )}
         onSubmit={handleSubmit}
         {...(props as Record<string, unknown>)}
       >
-        <InputGroup>{children}</InputGroup>
+        {/* a borda e o foco são do form; o grupo só organiza campo e barra */}
+        <InputGroup className="gap-0 rounded-none border-0 bg-transparent p-0 focus-within:ring-0 focus-within:ring-offset-0">
+          {children}
+        </InputGroup>
       </form>
     </>
   );
@@ -823,7 +831,7 @@ export type PromptInputFooterProps = Omit<ComponentProps<typeof InputGroupAddon>
 export const PromptInputFooter = ({ className, ...props }: PromptInputFooterProps) => (
   <InputGroupAddon
     align="block-end"
-    className={cn("justify-between gap-1", className)}
+    className={cn("justify-between gap-1 px-2 pb-2", className)}
     {...props}
   />
 );
@@ -907,24 +915,42 @@ export const PromptInputActionMenuItem = ({
 
 export type PromptInputSubmitProps = ComponentProps<typeof InputGroupButton> & {
   status?: ChatStatus;
+  /** Chamado pelo botão Parar enquanto a resposta chega (`submitted` ou `streaming`). */
+  onStop?: () => void;
 };
 
 export const PromptInputSubmit = ({
   className,
   variant = "default",
-  size = "icon",
+  size = "default",
   status,
+  onStop,
   children,
+  disabled,
   ...props
 }: PromptInputSubmitProps) => {
-  let Icon = <SendIcon className="size-4" />;
+  const busy = status === "submitted" || status === "streaming";
 
-  if (status === "submitted") {
-    Icon = <Loader2Icon className="size-4 animate-spin" />;
-  } else if (status === "streaming") {
-    Icon = <SquareIcon className="size-4" />;
-  } else if (status === "error") {
-    Icon = <XIcon className="size-4" />;
+  // Enviar e Parar ocupam o mesmo lugar; Parar não é submit, senão reenviaria a mensagem
+  if (busy) {
+    return (
+      <InputGroupButton
+        className={cn("gap-1.5 rounded-lg", className)}
+        size={size}
+        type="button"
+        variant={variant}
+        disabled={disabled || !onStop}
+        onClick={onStop}
+        {...(props as Record<string, unknown>)}
+      >
+        {children ?? (
+          <>
+            <SquareIcon aria-hidden="true" className="size-3.5 fill-current" />
+            Parar
+          </>
+        )}
+      </InputGroupButton>
+    );
   }
 
   return (
@@ -933,9 +959,15 @@ export const PromptInputSubmit = ({
       size={size}
       type="submit"
       variant={variant}
+      disabled={disabled}
       {...(props as Record<string, unknown>)}
     >
-      {children ?? Icon}
+      {children ?? (
+        <>
+          <SendIcon aria-hidden="true" className="size-4" />
+          Enviar
+        </>
+      )}
     </InputGroupButton>
   );
 };

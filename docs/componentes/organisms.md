@@ -166,6 +166,11 @@ Componente para exibir uso de contexto/tokens do modelo com cálculo de custos.
 ### `prompt-input`
 
 Componente complexo para input de prompt com suporte a attachments, speech recognition, e muito mais.
+O texto fica em cima e o `PromptInputFooter` embaixo (ferramentas à esquerda, envio à
+direita). Enter envia, Shift+Enter quebra a linha, e campo vazio sem anexo não envia.
+`PromptInputSubmit` mostra “Enviar”; com `status` `submitted` ou `streaming` vira “Parar”
+no mesmo lugar, como `type="button"` que chama `onStop` (sem `onStop`, fica
+desabilitado). O contêiner tem borda fina e anel de foco, sem sombra.
 
 **Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `clsx`, `tailwind-merge`
 

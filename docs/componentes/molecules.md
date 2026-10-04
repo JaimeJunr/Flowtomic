@@ -88,7 +88,10 @@ Botões de login social (Google, GitHub, etc.).
 
 ### `input-group`
 
-Grupo de input com addons e botões integrados.
+Grupo de input com addons e botões integrados. Addon com `align="inline-start"` ou
+`"inline-end"` fica na mesma linha do campo; com `"block-start"` ou `"block-end"` ocupa a
+linha inteira, em cima ou embaixo, e o grupo vira coluna (é o layout do campo de mensagem:
+texto em cima, barra embaixo). Cada addon expõe `data-align`.
 
 **Dependências**: `clsx`, `tailwind-merge`
 

@@ -9,7 +9,6 @@ import {
   PromptInputModelSelectValue,
   PromptInputSubmit,
   PromptInputTextarea,
-  PromptInputToolbar,
   PromptInputTools,
 } from "./prompt-input";
 
@@ -26,6 +25,13 @@ const meta = {
     },
   },
   tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <div className="w-[640px] max-w-[calc(100vw-2rem)]">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof PromptInput>;
 
 export default meta;
@@ -54,25 +60,24 @@ export const WithModelSelector: Story = {
     },
     children: (
       <>
-        <PromptInputToolbar>
-          <PromptInputModelSelect defaultValue="claude-sonnet-5">
-            <PromptInputModelSelectTrigger>
-              <PromptInputModelSelectValue placeholder="Selecione o modelo" />
-            </PromptInputModelSelectTrigger>
-            <PromptInputModelSelectContent>
-              <PromptInputModelSelectItem value="claude-sonnet-5">
-                claude-sonnet-5
-              </PromptInputModelSelectItem>
-              <PromptInputModelSelectItem value="claude-opus-5-5">
-                claude-opus-5-5
-              </PromptInputModelSelectItem>
-              <PromptInputModelSelectItem value="gpt-6">gpt-6</PromptInputModelSelectItem>
-            </PromptInputModelSelectContent>
-          </PromptInputModelSelect>
-        </PromptInputToolbar>
         <PromptInputTextarea placeholder="O que você gostaria de saber?" />
         <PromptInputFooter>
-          <PromptInputTools>{/* Ferramentas extras entram aqui */}</PromptInputTools>
+          <PromptInputTools>
+            <PromptInputModelSelect defaultValue="claude-sonnet-5">
+              <PromptInputModelSelectTrigger aria-label="Modelo">
+                <PromptInputModelSelectValue placeholder="Selecione o modelo" />
+              </PromptInputModelSelectTrigger>
+              <PromptInputModelSelectContent>
+                <PromptInputModelSelectItem value="claude-sonnet-5">
+                  claude-sonnet-5
+                </PromptInputModelSelectItem>
+                <PromptInputModelSelectItem value="claude-opus-5-5">
+                  claude-opus-5-5
+                </PromptInputModelSelectItem>
+                <PromptInputModelSelectItem value="gpt-6">gpt-6</PromptInputModelSelectItem>
+              </PromptInputModelSelectContent>
+            </PromptInputModelSelect>
+          </PromptInputTools>
           <PromptInputSubmit />
         </PromptInputFooter>
       </>
@@ -90,6 +95,22 @@ export const WithCustomHeight: Story = {
         <PromptInputTextarea placeholder="roda o type-check do ui" minHeight={64} maxHeight={200} />
         <PromptInputFooter>
           <PromptInputSubmit />
+        </PromptInputFooter>
+      </>
+    ),
+  },
+};
+
+export const Respondendo: Story = {
+  name: "Respondendo (Parar)",
+  args: {
+    onSubmit: async () => {},
+    children: (
+      <>
+        <PromptInputTextarea placeholder="Escreva sua mensagem" />
+        <PromptInputFooter>
+          <PromptInputTools />
+          <PromptInputSubmit status="streaming" onStop={() => console.log("Parou")} />
         </PromptInputFooter>
       </>
     ),
