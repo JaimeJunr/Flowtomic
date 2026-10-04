@@ -19,7 +19,8 @@
     "./dist/index.css": "./dist/index.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "repository": {
     "type": "git",

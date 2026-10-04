@@ -650,6 +650,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["tool.tsx", "index.ts"],
     dependencies: ["ai", "lucide-react", "clsx", "tailwind-merge"],
   },
+  "tool-status-line": {
+    name: "tool-status-line",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/tool-status-line",
+    files: ["tool-status-line.tsx", "index.ts"],
+    dependencies: ["lucide-react", "motion", "clsx", "tailwind-merge"],
+  },
   task: {
     name: "task",
     type: "molecule",
@@ -705,6 +712,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     path: "packages/ui/src/components/molecules/data-display/bar-chart",
     files: ["bar-chart.tsx", "index.ts"],
     dependencies: ["clsx", "tailwind-merge"],
+  },
+  bubble: {
+    name: "bubble",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/bubble",
+    files: ["bubble.tsx", "index.ts"],
+    dependencies: ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"],
   },
   "time-tracker": {
     name: "time-tracker",

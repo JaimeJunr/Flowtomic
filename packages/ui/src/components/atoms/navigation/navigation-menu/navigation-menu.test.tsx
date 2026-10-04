@@ -35,6 +35,10 @@ function Navegacao({ viewport }: { viewport?: boolean }) {
   );
 }
 
+// O Radix abre o NavigationMenu sozinho 200 ms depois do hover. O hover que o
+// userEvent.click simula fazia o clique alternar o estado errado com a máquina lenta.
+const usuario = userEvent.setup({ skipHover: true });
+
 describe("NavigationMenu", () => {
   it("mostra os itens de primeiro nível e esconde o conteúdo do submenu", () => {
     render(<Navegacao />);
@@ -50,32 +54,32 @@ describe("NavigationMenu", () => {
   it("clicar no gatilho abre o conteúdo e clicar de novo fecha", async () => {
     render(<Navegacao />);
     const gatilho = screen.getByRole("button", { name: "Produtos" });
-    await userEvent.click(gatilho);
+    await usuario.click(gatilho);
     expect(gatilho).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("link", { name: "Relatórios" })).toHaveAttribute("href", "/relatorios");
-    await userEvent.click(gatilho);
+    await usuario.click(gatilho);
     expect(gatilho).toHaveAttribute("aria-expanded", "false");
   });
 
   it("Esc fecha o conteúdo aberto", async () => {
     render(<Navegacao />);
-    await userEvent.click(screen.getByRole("button", { name: "Produtos" }));
+    await usuario.click(screen.getByRole("button", { name: "Produtos" }));
     expect(screen.getByRole("link", { name: "Relatórios" })).toBeInTheDocument();
-    await userEvent.keyboard("{Escape}");
+    await usuario.keyboard("{Escape}");
     expect(screen.queryByRole("link", { name: "Relatórios" })).not.toBeInTheDocument();
   });
 
   it("Enter no gatilho focado abre o conteúdo pelo teclado", async () => {
     render(<Navegacao />);
-    await userEvent.tab();
+    await usuario.tab();
     expect(screen.getByRole("button", { name: "Produtos" })).toHaveFocus();
-    await userEvent.keyboard("{Enter}");
+    await usuario.keyboard("{Enter}");
     expect(screen.getByRole("link", { name: "Relatórios" })).toBeInTheDocument();
   });
 
   it("marca como atual o link ativo", async () => {
     render(<Navegacao />);
-    await userEvent.click(screen.getByRole("button", { name: "Produtos" }));
+    await usuario.click(screen.getByRole("button", { name: "Produtos" }));
     expect(screen.getByRole("link", { name: "Painel" })).toHaveAttribute("aria-current", "page");
     expect(screen.getByRole("link", { name: "Relatórios" })).not.toHaveAttribute("aria-current");
   });
@@ -86,7 +90,7 @@ describe("NavigationMenu", () => {
       "data-viewport",
       "true"
     );
-    await userEvent.click(screen.getByRole("button", { name: "Produtos" }));
+    await usuario.click(screen.getByRole("button", { name: "Produtos" }));
     const viewport = container.querySelector('[data-slot="navigation-menu-viewport"]');
     expect(viewport).toContainElement(screen.getByRole("link", { name: "Relatórios" }));
   });
@@ -97,7 +101,7 @@ describe("NavigationMenu", () => {
       "data-viewport",
       "false"
     );
-    await userEvent.click(screen.getByRole("button", { name: "Produtos" }));
+    await usuario.click(screen.getByRole("button", { name: "Produtos" }));
     expect(screen.getByRole("link", { name: "Relatórios" })).toBeInTheDocument();
     expect(container.querySelector('[data-slot="navigation-menu-viewport"]')).toBeNull();
   });
@@ -108,7 +112,7 @@ describe("NavigationMenu", () => {
 
   it("não tem violações de acessibilidade", async () => {
     const { container } = render(<Navegacao />);
-    await userEvent.click(screen.getByRole("button", { name: "Produtos" }));
+    await usuario.click(screen.getByRole("button", { name: "Produtos" }));
     const result = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
     expect(result.violations).toEqual([]);
   });

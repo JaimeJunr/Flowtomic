@@ -13,7 +13,8 @@ const meta = {
   argTypes: {
     autoScroll: {
       control: "boolean",
-      description: "Se deve fazer scroll automático para a última mensagem",
+      description:
+        "Segue a última mensagem enquanto a pessoa está no fim. Desligado, não segue sozinho.",
     },
     showActions: {
       control: "boolean",

@@ -46,7 +46,10 @@ Componente redimensionável com sidebar que suporta persistência, snap automát
 
 ### `conversation`
 
-Container de conversa com scroll automático e empty state.
+Container de conversa com scroll automático e empty state. Segue o fim enquanto a
+pessoa está lá; se ela rolar para cima, para de seguir. `ConversationScrollButton`
+mostra “Ir para o fim” só nesse caso, entrando e saindo com transição (sem transição
+com `prefers-reduced-motion`). Escondido, fica fora do leitor de tela e do Tab.
 
 **Dependências**: `use-stick-to-bottom`, `lucide-react`, `clsx`, `tailwind-merge`
 
@@ -60,7 +63,9 @@ Container de mensagens de chat com scroll automático, suporte a filtros customi
 
 **Características**:
 - Container de mensagens de chat
-- Scroll automático para última mensagem
+- Segue a última mensagem pelo `Conversation`, sem puxar quem rolou para cima; botão
+  “Ir para o fim” quando a pessoa sai do fim
+- `autoScroll={false}`: a conversa não segue o fim sozinha a cada mensagem nova
 - Suporte a filtros customizáveis (via props)
 - Header com controles customizáveis (busca, capítulos, etc.)
 - Empty state customizável
@@ -161,6 +166,11 @@ Componente para exibir uso de contexto/tokens do modelo com cálculo de custos.
 ### `prompt-input`
 
 Componente complexo para input de prompt com suporte a attachments, speech recognition, e muito mais.
+O texto fica em cima e o `PromptInputFooter` embaixo (ferramentas à esquerda, envio à
+direita). Enter envia, Shift+Enter quebra a linha, e campo vazio sem anexo não envia.
+`PromptInputSubmit` mostra “Enviar”; com `status` `submitted` ou `streaming` vira “Parar”
+no mesmo lugar, como `type="button"` que chama `onStop` (sem `onStop`, fica
+desabilitado). O contêiner tem borda fina e anel de foco, sem sombra.
 
 **Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `clsx`, `tailwind-merge`
 

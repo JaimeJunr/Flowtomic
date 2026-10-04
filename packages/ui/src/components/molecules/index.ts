@@ -52,6 +52,19 @@ export {
 } from "./data-display/artifact";
 export type { BarChartDataPoint, BarChartProps } from "./data-display/bar-chart";
 export { BarChart } from "./data-display/bar-chart";
+export type {
+  BubbleContentProps,
+  BubbleGroupProps,
+  BubbleProps,
+  BubbleReactionsProps,
+} from "./data-display/bubble";
+export {
+  Bubble,
+  BubbleContent,
+  BubbleGroup,
+  BubbleReactions,
+  bubbleContentVariants,
+} from "./data-display/bubble";
 export type { CalendarPopoverProps } from "./data-display/calendar-popover";
 export { CalendarPopover, normalizeDate } from "./data-display/calendar-popover";
 export type { CalendarRangeProps } from "./data-display/calendar-range";
@@ -157,6 +170,11 @@ export type {
   ToolProps,
 } from "./data-display/tool";
 export { Tool, ToolContent, ToolHeader, ToolInput, ToolOutput } from "./data-display/tool";
+export type {
+  ToolStatusLineProps,
+  ToolStatusLineState,
+} from "./data-display/tool-status-line";
+export { ToolStatusLine } from "./data-display/tool-status-line";
 export type { DraggableWidgetProps } from "./draggable-widget";
 export { DraggableWidget } from "./draggable-widget";
 export type { EditModeToggleProps } from "./edit-mode-toggle";

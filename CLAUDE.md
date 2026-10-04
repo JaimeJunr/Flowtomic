@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (64 atoms, 48 molecules, 30 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (64 atoms, 50 molecules, 30 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (64)
-- **Molecules**: `docs/componentes/molecules.md` (48)
+- **Molecules**: `docs/componentes/molecules.md` (50)
 - **Organisms**: `docs/componentes/organisms.md` (30)
 - **Blocks**: `docs/componentes/blocks.md` (2)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -375,7 +375,7 @@ errado.
 Resumo:
 
 - **Atoms**: 64 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 48 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 50 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 30 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 2 blocks - Ver `docs/componentes/blocks.md`
@@ -447,17 +447,19 @@ Vitest, configurado **por pacote**. O CI (`.github/workflows/ci.yml`, desde 20/0
 todo PR e push na `main`: Biome no repo inteiro, build + teste do `logic`, type-check + teste com
 cobertura do `ui`, teste do `registry` e do `cli`, e o `registry:build`. Serial, um pacote por vez.
 
-⚠️ **Cobertura global do `ui` medida em 03/10/2026: 70,4% de linhas, 78,9% de branches**
-(111 arquivos, 871 testes). Por área (linhas): blocks 92,6%, **molecules 85,3%** (era 41,5% em
-27/09/2026, antes dos lotes da fase B), organisms 59,4%, **atoms 58,8%** — atoms e organisms
-são agora as áreas mais fracas. O CI gera o relatório mas **não tem threshold** — pôr 75% em
-linhas ainda nasceria vermelho. A meta é subir atoms e organisms e só então travar o número no
+⚠️ **Cobertura global do `ui` remedida em 03/10/2026, depois dos 5 lotes dos atoms: 82,5% de
+linhas, 83,4% de branches** (138 arquivos, 1173 testes; antes dos lotes, 70,4% / 78,9%). Por área
+(linhas / branches): **atoms 96,6% / 91,9%** (eram 58,8% de linhas), blocks 92,6% / 97,6%,
+molecules 85,3% / 83,4%, **organisms 59,4% / 62,3%** — a área mais fraca agora, e os únicos
+sem teste nenhum são `dashboard-layout` e `draggable-dashboard-grid`. O CI gera o relatório mas
+**não tem threshold**. O total já passa de 75%, mas travar o número continua pergunta em aberto
+(ver *Perguntas em aberto*). O próximo alvo é organisms; só então fixar o threshold no
 `vitest.config.ts`. Para remedir:
 `cd packages/ui && bunx vitest run --testTimeout=60000 --minWorkers=1 --maxWorkers=4 --coverage --coverage.reporter=text-summary`.
 
 | pacote | arquivos de teste | script | ambiente |
 |---|---|---|---|
-| `packages/ui` | 111 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
+| `packages/ui` | 138 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
 | `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
 | `registry` | 1 | `test` | guarda o parser do component map |
 | `cli` | 2 | `test` | guarda o component map contra o disco nos dois sentidos: todo `path` existe, e toda pasta de componente em `packages/ui/src/components` tem entrada — componente novo sem entrada no mapa quebra a CI |
@@ -540,7 +542,9 @@ Cada uma já mordeu alguém neste repo.
   Ela precisa também de `"rootDir": "../.."` (senão sai um `TS6059` por arquivo do `logic`),
   `"composite": false` e `"types": ["vitest/globals", "@testing-library/jest-dom"]`. ⚠️ Medido
   em 03/10/2026: **43 stories/testes já têm erro de tipo na `main`**. Compare a contagem por
-  arquivo antes e depois da sua mudança, em vez de esperar zero.
+  arquivo antes e depois da sua mudança, em vez de esperar zero. Para checar só a pasta do
+  componente:
+  `{"extends":"./tsconfig.json","compilerOptions":{"noEmit":true,"composite":false,"incremental":false,"rootDir":"../..","types":["@testing-library/jest-dom/vitest"]},"include":["<pasta do componente>/**/*"],"exclude":[]}`.
 - ⚠️ **`vi.restoreAllMocks()` no Vitest 2 pode resetar os `vi.fn` do setup global.**
   Nos testes de `message`, isso apagou a implementação do `ResizeObserver` entre casos
   e fez o tooltip falhar com `resizeObserver.observe is not a function`. Restaure só
@@ -598,6 +602,19 @@ Cada uma já mordeu alguém neste repo.
   preferência uma vez e guarda. Componente que respeita movimento reduzido usa o critério do
   `sliding-number`: `useReducedMotion() || useContext(MotionConfigContext).reducedMotion ===
   "always"`, e o teste envolve a peça em `<MotionConfig reducedMotion="always">`.
+- ⚠️ **`FormControl` só nomeia o campo se o filho DIRETO for o controle.** Ele é um `Slot` que
+  passa `id`/`aria-*` ao filho; se o filho é Fragment, `div` ou `Select.Root`, o `<label for>`
+  aponta para o nada e o leitor de tela lê um campo sem nome (checkbox, switch, slider e select
+  do `form-layout` ficaram assim até 03/10/2026). Envolva o controle em si.
+- ⚠️ **O dnd-kit anuncia em inglês por padrão** ("press the space bar"). Todo `DndContext` passa
+  `accessibility={{ announcements, screenReaderInstructions }}` em português — ver
+  `organisms/draggable-dashboard-grid`. E `onKeyDown` próprio depois de `{...listeners}`
+  sobrescreve o do sensor de teclado: o arrasto por teclado morre sem erro.
+- ⚠️ **Clique em gatilho de `NavigationMenu` (Radix) fica instável com a máquina carregada**: o
+  `userEvent.click` simula hover antes, e o Radix abre o menu sozinho 200 ms depois do hover.
+  Se o timer vence antes do clique, o clique alterna para o lado errado (medido em 03/10/2026,
+  só com `--coverage`). Use `userEvent.setup({ skipHover: true })`, como em
+  `atoms/navigation/navigation-menu/navigation-menu.test.tsx`.
 - ⚠️ **`verify.mjs story|smoke` dá `Timeout 15000ms` em story de modal** (o
   `EditChatMessageModal`, por exemplo). Não é story quebrada: o `Dialog` abre num portal
   fora do `#storybook-root`, que o driver espera ver preenchido. Para provar, use Playwright
@@ -609,6 +626,12 @@ Cada uma já mordeu alguém neste repo.
   `pkill` do `run-flowtomic`: espere pelo PID (`while kill -0 $pid`), não pelo padrão.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
+- ⚠️ **Numa worktree, o `up.sh` pode devolver o Storybook de outro checkout.** Ele só olha se
+  a 6006 responde (`"already":true`), não de qual pasta o processo veio — e a story nova da
+  worktree não existe lá. Confira com `readlink /proc/$(lsof -ti:6006)/cwd`; se for outro
+  checkout, suba o da worktree em outra porta (`bunx storybook dev -p 6106 --config-dir
+  .storybook --no-open --ci`, com `setsid nohup` para não morrer com o shell) e rode o driver
+  com `SB_URL=http://localhost:6106`.
 
 ## Checklist ao abrir PR
 
@@ -636,6 +659,7 @@ Não promova nenhuma destas a fato no corpo sem verificar antes.
   transformar num wrapper que só dispara o workflow.
 - **O `bun@1.3.0` do `packageManager` está defasado?** A máquina de desenvolvimento roda
   1.3.14. Os dois aceitam o mesmo lock, mas a divergência existe.
-- **Quando travar o threshold de cobertura do `ui`?** O CI mede (70,4% de linhas em 03/10/2026) mas não
-  bloqueia. Resolve: subir cobertura por área e fixar o número no `vitest.config.ts` quando
-  passar de 75%.
+- **Quando travar o threshold de cobertura do `ui`?** O CI mede (82,5% de linhas e 83,4% de
+  branches em 03/10/2026) mas não bloqueia. O total já passou dos 75% da meta antiga, mas
+  organisms segue em 59,4%. Resolve: o dono decidir se trava já um piso global (ex.: 80/80) ou
+  espera organisms subir.

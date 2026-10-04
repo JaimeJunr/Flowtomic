@@ -88,7 +88,10 @@ Botões de login social (Google, GitHub, etc.).
 
 ### `input-group`
 
-Grupo de input com addons e botões integrados.
+Grupo de input com addons e botões integrados. Addon com `align="inline-start"` ou
+`"inline-end"` fica na mesma linha do campo; com `"block-start"` ou `"block-end"` ocupa a
+linha inteira, em cima ou embaixo, e o grupo vira coluna (é o layout do campo de mensagem:
+texto em cima, barra embaixo). Cada addon expõe `data-align`.
 
 **Dependências**: `clsx`, `tailwind-merge`
 
@@ -221,6 +224,17 @@ Modal para editar uma mensagem de chat. Metadados (remetente, tipo, horário em 
 - Callbacks para salvar/cancelar
 - Formatação customizável de timestamp e badges
 
+### `bubble`
+
+Balão de mensagem. `Bubble` escolhe o lado (`align`: `end` para quem escreve, `start`
+para o outro lado) e a cor (`variant`: `muted`, `tinted`, `outline`, `destructive`).
+`BubbleContent` é o balão e aceita `asChild` para virar `<button>` ou `<a>`.
+`BubbleReactions` encosta as reações na borda de baixo, do mesmo lado do balão, e
+`BubbleGroup` junta mensagens seguidas. A resposta do assistente não usa balão.
+API inspirada no chatbot-template do shadcn (MIT), reescrita sobre Radix Slot.
+
+**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`
+
 ### `suggestion`
 
 Lista de sugestões com rolagem horizontal. Por padrão, as ações são outline, têm
@@ -246,6 +260,17 @@ durante a execução. Sucesso, falha e aprovação usam seus tons semânticos; o
 estados usam `muted-foreground`. O contêiner tem cantos de 10px e nenhuma sombra.
 
 **Dependências**: `ai`, `lucide-react`, `clsx`, `tailwind-merge`
+
+### `tool-status-line`
+
+Uma linha por chamada de ferramenta, dentro da resposta do assistente: “Buscou na web
+por `aria-sort table header`”. Mostra o resultado, não o mecanismo; o `tool` acima fica
+para depuração. `state` é `running` (spinner no lugar do ícone, rótulo com `Shimmer`,
+`aria-busy`), `done` (o `icon` recebido) ou `error` (alerta e tom destrutivo). `detail`
+sai em mono e aceita link; `meta` é um extra pequeno, como um código de erro. Usa o atom
+`shimmer` — instale os dois juntos pelo CLI.
+
+**Dependências**: `lucide-react`, `motion`, `clsx`, `tailwind-merge`
 
 ### `task`
 
