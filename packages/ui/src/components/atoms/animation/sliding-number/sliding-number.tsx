@@ -8,19 +8,18 @@
 "use client";
 
 import {
-  MotionConfigContext,
   type MotionValue,
   motion,
   type SpringOptions,
   type UseInViewOptions,
   useInView,
-  useReducedMotion,
   useSpring,
   useTransform,
 } from "motion/react";
 import * as React from "react";
 import useMeasure from "react-use-measure";
 
+import { useShouldReduceMotion } from "@/lib/use-should-reduce-motion";
 import { cn } from "@/lib/utils";
 
 type SlidingNumberRollerProps = {
@@ -136,8 +135,7 @@ function SlidingNumber({
   },
   ...props
 }: SlidingNumberProps) {
-  const reducedMotion = React.useContext(MotionConfigContext).reducedMotion;
-  const shouldReduceMotion = useReducedMotion() || reducedMotion === "always";
+  const shouldReduceMotion = useShouldReduceMotion();
   const localRef = React.useRef<HTMLSpanElement>(null);
   React.useImperativeHandle(ref, () => {
     if (!localRef.current) {
