@@ -531,6 +531,9 @@ Cada uma já mordeu alguém neste repo.
   `bunx tsc --noEmit -p .` pode passar mesmo com story inválida (por exemplo, `Message`
   sem `args.from`). Ao alterar stories/testes, confira também esses arquivos com uma
   configuração temporária que estenda a do pacote e sobrescreva `include`/`exclude`.
+  Ela precisa de `"rootDir": "../.."` (senão o `@flowtomic/logic` dá `TS6059`) e de
+  `"types": ["@testing-library/jest-dom/vitest"]` (senão todo `toHaveClass` vira `TS2339`):
+  `{"extends":"./tsconfig.json","compilerOptions":{"noEmit":true,"composite":false,"incremental":false,"rootDir":"../..","types":["@testing-library/jest-dom/vitest"]},"include":["<pasta do componente>/**/*"],"exclude":[]}`.
 - ⚠️ **`vi.restoreAllMocks()` no Vitest 2 pode resetar os `vi.fn` do setup global.**
   Nos testes de `message`, isso apagou a implementação do `ResizeObserver` entre casos
   e fez o tooltip falhar com `resizeObserver.observe is not a function`. Restaure só
