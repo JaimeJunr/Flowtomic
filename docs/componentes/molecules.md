@@ -244,6 +244,17 @@ estados usam `muted-foreground`. O contêiner tem cantos de 10px e nenhuma sombr
 
 **Dependências**: `ai`, `lucide-react`, `clsx`, `tailwind-merge`
 
+### `tool-status-line`
+
+Uma linha por chamada de ferramenta, dentro da resposta do assistente: “Buscou na web
+por `aria-sort table header`”. Mostra o resultado, não o mecanismo; o `tool` acima fica
+para depuração. `state` é `running` (spinner no lugar do ícone, rótulo com `Shimmer`,
+`aria-busy`), `done` (o `icon` recebido) ou `error` (alerta e tom destrutivo). `detail`
+sai em mono e aceita link; `meta` é um extra pequeno, como um código de erro. Usa o atom
+`shimmer` — instale os dois juntos pelo CLI.
+
+**Dependências**: `lucide-react`, `motion`, `clsx`, `tailwind-merge`
+
 ### `task`
 
 Tarefa colapsável para mostrar as etapas de uma consulta. Os chips de arquivo usam

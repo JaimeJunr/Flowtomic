@@ -141,6 +141,21 @@ export interface BaseFormFieldProps<T extends FieldValues> {
   control: Control<T>;
 }
 
+// O FormControl passa id/aria-* ao filho direto, que precisa ser o controle de verdade.
+// Nestes tipos o controle fica dentro de um wrapper (Fragment, div, Select.Root), então
+// cada caso envolve o próprio controle no FormControl, e o de fora sai do caminho.
+const TYPES_WITH_OWN_CONTROL = new Set<FormFieldType>(["checkbox", "switch", "slider", "select"]);
+
+function ControlSlot({
+  ownsControl,
+  children,
+}: {
+  ownsControl: boolean;
+  children: React.ReactNode;
+}) {
+  return ownsControl ? children : <FormControl>{children}</FormControl>;
+}
+
 /**
  * Campo de formulário base que renderiza diferentes tipos de input
  * baseado na configuração fornecida
@@ -203,7 +218,7 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
               </FormLabel>
             )}
 
-            <FormControl>
+            <ControlSlot ownsControl={TYPES_WITH_OWN_CONTROL.has(type)}>
               {(() => {
                 switch (type) {
                   case "text":
@@ -372,10 +387,7 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                         disabled={disabled}
                       >
                         <FormControl>
-                          <SelectTrigger
-                            id={String(name)}
-                            className={cn(isError && inputErrorClassName)}
-                          >
+                          <SelectTrigger className={cn(isError && inputErrorClassName)}>
                             <SelectValue placeholder={placeholder || "Selecione"} />
                           </SelectTrigger>
                         </FormControl>
@@ -421,11 +433,13 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                   case "checkbox":
                     return (
                       <>
-                        <Checkbox
-                          checked={!!field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={disabled}
-                        />
+                        <FormControl>
+                          <Checkbox
+                            checked={!!field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={disabled}
+                          />
+                        </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>{label}</FormLabel>
                           {description && !isError && (
@@ -439,11 +453,13 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                     return (
                       <div className="flex items-center justify-between">
                         <FormLabel>{label}</FormLabel>
-                        <Switch
-                          checked={!!field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={disabled}
-                        />
+                        <FormControl>
+                          <Switch
+                            checked={!!field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={disabled}
+                          />
+                        </FormControl>
                       </div>
                     );
 
@@ -470,14 +486,17 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                   case "slider":
                     return (
                       <div className={cn("space-y-2", isError && inputErrorClassName)}>
-                        <Slider
-                          value={[Number(field.value ?? sliderRange?.min ?? 0)]}
-                          onValueChange={(vals) => field.onChange(vals[0])}
-                          min={sliderRange?.min ?? 0}
-                          max={sliderRange?.max ?? 100}
-                          step={sliderRange?.step ?? 1}
-                          disabled={disabled}
-                        />
+                        <FormControl>
+                          <Slider
+                            aria-label={label}
+                            value={[Number(field.value ?? sliderRange?.min ?? 0)]}
+                            onValueChange={(vals) => field.onChange(vals[0])}
+                            min={sliderRange?.min ?? 0}
+                            max={sliderRange?.max ?? 100}
+                            step={sliderRange?.step ?? 1}
+                            disabled={disabled}
+                          />
+                        </FormControl>
                         {typeof field.value === "number" && (
                           <p className="text-xs text-muted-foreground">Valor: {field.value}</p>
                         )}
@@ -521,7 +540,7 @@ export function BaseFormField<T extends FieldValues>({ config, control }: BaseFo
                     return null;
                 }
               })()}
-            </FormControl>
+            </ControlSlot>
 
             {type !== "checkbox" && description && !isError && (
               <FormDescription>{description}</FormDescription>

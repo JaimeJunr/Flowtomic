@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 48 molecules, 31 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 49 molecules, 31 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (63)
-- **Molecules**: `docs/componentes/molecules.md` (48)
+- **Molecules**: `docs/componentes/molecules.md` (49)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (2)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -375,7 +375,7 @@ errado.
 Resumo:
 
 - **Atoms**: 63 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 48 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 49 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 2 blocks - Ver `docs/componentes/blocks.md`
@@ -536,7 +536,9 @@ Cada uma já mordeu alguém neste repo.
   Ela precisa também de `"rootDir": "../.."` (senão sai um `TS6059` por arquivo do `logic`),
   `"composite": false` e `"types": ["vitest/globals", "@testing-library/jest-dom"]`. ⚠️ Medido
   em 03/10/2026: **43 stories/testes já têm erro de tipo na `main`**. Compare a contagem por
-  arquivo antes e depois da sua mudança, em vez de esperar zero.
+  arquivo antes e depois da sua mudança, em vez de esperar zero. Para checar só a pasta do
+  componente:
+  `{"extends":"./tsconfig.json","compilerOptions":{"noEmit":true,"composite":false,"incremental":false,"rootDir":"../..","types":["@testing-library/jest-dom/vitest"]},"include":["<pasta do componente>/**/*"],"exclude":[]}`.
 - ⚠️ **`vi.restoreAllMocks()` no Vitest 2 pode resetar os `vi.fn` do setup global.**
   Nos testes de `message`, isso apagou a implementação do `ResizeObserver` entre casos
   e fez o tooltip falhar com `resizeObserver.observe is not a function`. Restaure só
@@ -594,6 +596,14 @@ Cada uma já mordeu alguém neste repo.
   preferência uma vez e guarda. Componente que respeita movimento reduzido usa o critério do
   `sliding-number`: `useReducedMotion() || useContext(MotionConfigContext).reducedMotion ===
   "always"`, e o teste envolve a peça em `<MotionConfig reducedMotion="always">`.
+- ⚠️ **`FormControl` só nomeia o campo se o filho DIRETO for o controle.** Ele é um `Slot` que
+  passa `id`/`aria-*` ao filho; se o filho é Fragment, `div` ou `Select.Root`, o `<label for>`
+  aponta para o nada e o leitor de tela lê um campo sem nome (checkbox, switch, slider e select
+  do `form-layout` ficaram assim até 03/10/2026). Envolva o controle em si.
+- ⚠️ **O dnd-kit anuncia em inglês por padrão** ("press the space bar"). Todo `DndContext` passa
+  `accessibility={{ announcements, screenReaderInstructions }}` em português — ver
+  `organisms/draggable-dashboard-grid`. E `onKeyDown` próprio depois de `{...listeners}`
+  sobrescreve o do sensor de teclado: o arrasto por teclado morre sem erro.
 - ⚠️ **Clique em gatilho de `NavigationMenu` (Radix) fica instável com a máquina carregada**: o
   `userEvent.click` simula hover antes, e o Radix abre o menu sozinho 200 ms depois do hover.
   Se o timer vence antes do clique, o clique alterna para o lado errado (medido em 03/10/2026,
