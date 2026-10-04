@@ -86,13 +86,13 @@ const colorClasses = {
 
 // Mapeamento de cores para variáveis CSS
 const colorCSSVars = {
-  default: "hsl(var(--foreground))",
-  primary: "hsl(var(--primary))",
-  secondary: "hsl(var(--secondary-foreground))",
-  muted: "hsl(var(--muted-foreground))",
-  success: "hsl(var(--success))",
-  warning: "hsl(var(--warning))",
-  error: "hsl(var(--destructive))",
+  default: "var(--foreground)",
+  primary: "var(--primary)",
+  secondary: "var(--secondary-foreground)",
+  muted: "var(--muted-foreground)",
+  success: "var(--success)",
+  warning: "var(--warning)",
+  error: "var(--destructive)",
   inherit: "inherit",
 };
 

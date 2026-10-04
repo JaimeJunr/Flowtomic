@@ -20,7 +20,7 @@ export const Connection: ConnectionLineComponent = ({ fromX, fromY, toX, toY }) 
     <circle
       cx={toX}
       cy={toY}
-      fill="hsl(var(--background))"
+      fill="var(--background)"
       r={3}
       stroke="var(--color-ring)"
       strokeWidth={1}

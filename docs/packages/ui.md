@@ -137,31 +137,33 @@ function App() {
 
 #### 2. Customização via Variáveis CSS (Recomendado para temas globais)
 
-Você pode sobrescrever as variáveis CSS do tema para personalizar todos os componentes de uma vez:
+Você pode sobrescrever as variáveis CSS do tema para personalizar todos os componentes de uma vez.
+Cada variável guarda a cor inteira em `oklch(L C H)`, como no shadcn. ⚠️ Até a versão 0.x o
+formato era o valor solto do HSL (`--primary: 16 80% 39%`); esse formato não funciona mais.
 
 ```css
 /* No seu arquivo CSS (após importar os estilos do Flowtomic) */
 :root {
   /* Customizar cores primárias */
-  --primary: 220 90% 56%;
-  --primary-foreground: 210 40% 98%;
-  --primary-hover: 220 90% 50%;
+  --primary: oklch(0.5742 0.2135 262.12);
+  --primary-foreground: oklch(0.9838 0.0035 247.86);
+  --primary-hover: oklch(0.5298 0.2389 262.38);
 
   /* Customizar raio de borda */
   --radius: 1rem;
 
   /* Customizar cores de sucesso */
-  --success: 142 76% 36%;
-  --success-foreground: 210 40% 98%;
-  --success-hover: 142 76% 30%;
+  --success: oklch(0.623 0.1688 149.18);
+  --success-foreground: oklch(0.9838 0.0035 247.86);
+  --success-hover: oklch(0.5457 0.1464 149.38);
 }
 
 .dark {
   /* Customizar tema escuro */
-  --primary: 220 90% 66%;
-  --primary-foreground: 222.2 84% 4.9%;
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
+  --primary: oklch(0.6612 0.1647 262.71);
+  --primary-foreground: oklch(0.1371 0.036 258.53);
+  --background: oklch(0.1371 0.036 258.53);
+  --foreground: oklch(0.9838 0.0035 247.86);
 }
 ```
 
@@ -179,12 +181,12 @@ Você pode sobrescrever as variáveis CSS do tema para personalizar todos os com
 /* Suas customizações */
 :root {
   /* Tema personalizado */
-  --primary: 262 83% 58%; /* Roxo */
+  --primary: oklch(0.5424 0.2454 293.02); /* Roxo */
   --radius: 0.5rem; /* Bordas mais arredondadas */
 }
 
 .dark {
-  --primary: 262 83% 68%;
+  --primary: oklch(0.6382 0.196 297.47);
 }
 ```
 

@@ -43,13 +43,13 @@ export interface BarChartProps {
 
   /**
    * Cor padrão das barras
-   * @default "hsl(var(--primary))"
+   * @default "var(--primary)"
    */
   defaultColor?: string;
 
   /**
    * Cor do traço de barra com valor zero
-   * @default "hsl(var(--muted-foreground))"
+   * @default "var(--muted-foreground)"
    */
   inactiveColor?: string;
 
@@ -87,8 +87,8 @@ export function BarChart({
   data,
   title,
   height = 200,
-  defaultColor = "hsl(var(--primary))",
-  inactiveColor = "hsl(var(--muted-foreground))",
+  defaultColor = "var(--primary)",
+  inactiveColor = "var(--muted-foreground)",
   showValues = false,
   className,
 }: BarChartProps) {

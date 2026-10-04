@@ -582,12 +582,12 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **Painel escuro nos dois modos (terminal, log) usa a classe `dark` no próprio elemento**,
   não `bg-foreground text-background` — esse par inverte e vira painel branco no modo escuro.
   ⚠️ Isso só funciona porque o bloco das `--color-*` no `globals.css` é `@theme inline`: sem o
-  `inline`, o Tailwind resolve `hsl(var(--background))` uma vez no `:root` e o painel herda a cor
+  `inline`, o Tailwind resolve `var(--background)` uma vez no `:root` e o painel herda a cor
   clara (o terminal do `script-editor` saiu branco até 26/09/2026). Para provar no browser, **não**
   ligue `dark` no `<html>` — isso mascara o bug; meça o painel com a página clara.
 - ⚠️ **`--chart-1`…`--chart-5` não existem no tema.** O config padrão dos gráficos apontava
   pra eles e as séries saíam pretas, sem erro. Gráfico usa token semântico
-  (`hsl(var(--primary))`, `hsl(var(--muted-foreground))`); os testes dos charts travam isso.
+  (`var(--primary)`, `var(--muted-foreground)`); os testes dos charts travam isso.
 - ⚠️ **`ResponsiveContainer` do Recharts nunca renderiza os filhos no jsdom**: ele espera medir
   o layout, e o jsdom mede tudo como zero. Tooltip e legenda somem do teste sem erro. No arquivo
   de teste, troque só ele por um repassador via `vi.mock("recharts", importOriginal)` (ver

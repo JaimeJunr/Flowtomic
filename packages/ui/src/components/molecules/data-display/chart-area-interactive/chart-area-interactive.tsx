@@ -157,11 +157,11 @@ const defaultChartConfig = {
   },
   desktop: {
     label: "Computador",
-    color: "hsl(var(--primary))",
+    color: "var(--primary)",
   },
   mobile: {
     label: "Celular",
-    color: "hsl(var(--muted-foreground))",
+    color: "var(--muted-foreground)",
   },
 } satisfies ChartConfig;
 

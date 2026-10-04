@@ -30,7 +30,7 @@ describe("ChartBarInteractive", () => {
     const { container } = render(<ChartBarInteractive data={data} />);
     const css = container.querySelector("style")?.textContent ?? "";
     expect(css).not.toMatch(/--chart-\d/);
-    expect(css).toMatch(/hsl\(var\(--primary\)\)/);
+    expect(css).toMatch(/var\(--primary\)/);
   });
 
   it("a descrição só aparece quando é passada", () => {

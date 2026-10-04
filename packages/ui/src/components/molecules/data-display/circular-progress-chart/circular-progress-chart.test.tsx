@@ -38,13 +38,13 @@ describe("CircularProgressChart", () => {
       <CircularProgressChart
         value={80}
         colorRanges={[
-          { min: 0, max: 50, color: "hsl(var(--destructive))" },
-          { min: 51, max: 100, color: "hsl(var(--success))" },
+          { min: 0, max: 50, color: "var(--destructive)" },
+          { min: 51, max: 100, color: "var(--success)" },
         ]}
       />
     );
     const progress = container.querySelectorAll("circle")[1];
-    expect(progress.getAttribute("stroke")).toBe("hsl(var(--success))");
+    expect(progress.getAttribute("stroke")).toBe("var(--success)");
   });
 
   it("mostra a legenda", () => {
@@ -52,8 +52,8 @@ describe("CircularProgressChart", () => {
       <CircularProgressChart
         value={41}
         legend={[
-          { label: "Com teste", color: "hsl(var(--primary))" },
-          { label: "Sem teste", color: "hsl(var(--muted))" },
+          { label: "Com teste", color: "var(--primary)" },
+          { label: "Sem teste", color: "var(--muted)" },
         ]}
       />
     );

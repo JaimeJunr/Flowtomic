@@ -53,7 +53,7 @@ export const CustomBackground: Story = {
   args: {
     initialTime: 0,
     format: "HH:mm:ss",
-    backgroundColor: "hsl(var(--muted))",
+    backgroundColor: "var(--muted)",
     className: "rounded-lg p-4",
   },
 };

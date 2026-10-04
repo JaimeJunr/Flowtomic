@@ -57,12 +57,12 @@ export const WithValues: Story = {
 export const CustomColors: Story = {
   args: {
     data: [
-      { label: "seg", value: 3, color: "hsl(var(--muted-foreground))" },
-      { label: "ter", value: 7, color: "hsl(var(--muted-foreground))" },
-      { label: "qua", value: 5, color: "hsl(var(--muted-foreground))" },
+      { label: "seg", value: 3, color: "var(--muted-foreground)" },
+      { label: "ter", value: 7, color: "var(--muted-foreground)" },
+      { label: "qua", value: 5, color: "var(--muted-foreground)" },
       { label: "qui", value: 0 },
-      { label: "sex", value: 9, color: "hsl(var(--primary))" },
-      { label: "sáb", value: 2, color: "hsl(var(--muted-foreground))" },
+      { label: "sex", value: 9, color: "var(--primary)" },
+      { label: "sáb", value: 2, color: "var(--muted-foreground)" },
       { label: "dom", value: 0 },
     ],
     title: "Builds do registry, hoje em destaque",

@@ -20,10 +20,10 @@ vi.mock("recharts", async (importOriginal) => {
 });
 
 const config: ChartConfig = {
-  vendas: { label: "Vendas", color: "hsl(var(--primary))" },
+  vendas: { label: "Vendas", color: "var(--primary)" },
   custos: {
     label: "Custos",
-    theme: { light: "hsl(var(--muted-foreground))", dark: "hsl(var(--foreground))" },
+    theme: { light: "var(--muted-foreground)", dark: "var(--foreground)" },
   },
   sem_cor: { label: "Sem cor" },
 };
@@ -68,10 +68,10 @@ describe("ChartContainer / ChartStyle", () => {
     expect(slot).toHaveAttribute("data-chart", "chart-vendas");
     const css = cssDoChart(container);
     expect(css).toContain("[data-chart=chart-vendas]");
-    expect(css).toContain("--color-vendas: hsl(var(--primary));");
-    expect(css).toContain("--color-custos: hsl(var(--muted-foreground));");
+    expect(css).toContain("--color-vendas: var(--primary);");
+    expect(css).toContain("--color-custos: var(--muted-foreground);");
     expect(css).toMatch(
-      /\.dark \[data-chart=chart-vendas\][^}]*--color-custos: hsl\(var\(--foreground\)\);/
+      /\.dark \[data-chart=chart-vendas\][^}]*--color-custos: var\(--foreground\);/
     );
   });
 
