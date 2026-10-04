@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ModelSelector, ModelSelectorContent } from "./model-selector";
+import { ModelSelector, ModelSelectorContent, ModelSelectorLogo } from "./model-selector";
 
 describe("ModelSelectorContent", () => {
   describe("Título padrão (leitor de tela) em pt-BR", () => {
@@ -22,5 +22,14 @@ describe("ModelSelectorContent", () => {
       expect(screen.getByText("Escolha o modelo do agente")).toBeInTheDocument();
       expect(screen.queryByText("Seletor de modelo")).not.toBeInTheDocument();
     });
+  });
+});
+
+describe("ModelSelectorLogo", () => {
+  it("é decorativo: o nome do modelo já está escrito ao lado, o leitor de tela não lê o logo", () => {
+    const { container } = render(<ModelSelectorLogo provider="anthropic" />);
+    const logo = container.querySelector("img");
+    expect(logo).toHaveAttribute("alt", "");
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
 });

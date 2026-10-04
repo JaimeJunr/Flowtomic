@@ -167,7 +167,7 @@ export const ModelSelectorLogo = React.forwardRef<HTMLImageElement, ModelSelecto
     <img
       ref={ref}
       {...props}
-      alt={`${provider} logo`}
+      alt=""
       className={cn("size-3", className)}
       height={12}
       src={`https://models.dev/logos/${provider}.svg`}
