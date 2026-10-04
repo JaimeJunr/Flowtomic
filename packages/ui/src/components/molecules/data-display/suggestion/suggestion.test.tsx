@@ -31,4 +31,41 @@ describe("Suggestion", () => {
     await userEvent.click(button);
     expect(onClick).not.toHaveBeenCalled();
   });
+
+  it("mostra um rótulo curto e envia o pedido completo", async () => {
+    const onClick = vi.fn();
+    render(
+      <Suggestion suggestion="Como faço o DataTable ordenar pelo teclado?" onClick={onClick}>
+        Ordenar tabela pelo teclado
+      </Suggestion>
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Ordenar tabela pelo teclado" }));
+    expect(onClick).toHaveBeenCalledWith("Como faço o DataTable ordenar pelo teclado?");
+  });
+});
+
+describe("Suggestions", () => {
+  it("no estado vazio quebra linha e centraliza, sem rolagem escondida", () => {
+    const { container } = render(
+      <Suggestions layout="wrap" data-testid="lista">
+        <Suggestion suggestion="Trocar a cor da marca" />
+        <Suggestion suggestion="Montar um block de login" />
+      </Suggestions>
+    );
+    const lista = screen.getByTestId("lista");
+    expect(lista).toHaveClass("flex-wrap", "justify-center");
+    expect(lista).not.toHaveClass("flex-nowrap");
+    expect(container.querySelector("[data-slot=scroll-area]")).toBeNull();
+    expect(screen.getAllByRole("button")).toHaveLength(2);
+  });
+
+  it("por padrão continua sendo uma faixa que rola de lado", () => {
+    const { container } = render(
+      <Suggestions>
+        <Suggestion suggestion="Trocar a cor da marca" />
+      </Suggestions>
+    );
+    expect(container.querySelector("[data-slot=scroll-area]")).not.toBeNull();
+    expect(container.querySelector(".flex-nowrap")).not.toBeNull();
+  });
 });

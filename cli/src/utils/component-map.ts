@@ -932,6 +932,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["prompt-input.tsx", "index.ts"],
     dependencies: ["ai", "nanoid", "lucide-react", "cmdk", "cn"],
   },
+  questionnaire: {
+    name: "questionnaire",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/questionnaire",
+    files: ["questionnaire.tsx", "index.ts"],
+    dependencies: ["@radix-ui/react-radio-group", "lucide-react", "motion", "cn"],
+  },
   canvas: {
     name: "canvas",
     type: "molecule",
