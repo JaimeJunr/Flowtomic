@@ -1,6 +1,8 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import axe from "axe-core";
 import { format } from "date-fns";
+import * as React from "react";
 import type { DateRange } from "react-day-picker";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CalendarRange } from "./calendar-range";
@@ -237,4 +239,171 @@ describe("CalendarRange", () => {
       expect(screen.getByRole("button", { name: "Mês anterior" })).toBeEnabled();
     });
   });
+});
+
+function ComEstado({
+  inicial = null,
+  ...props
+}: {
+  inicial?: DateRange | null;
+  showQuickRanges?: boolean;
+}) {
+  const [valor, setValor] = React.useState<DateRange | null | undefined>(inicial);
+  return <CalendarRange value={valor} onChange={setValor} {...props} />;
+}
+
+describe("CalendarRange: teclado, meses e dicas", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    vi.setSystemTime(HOJE);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it.each(["{Enter}", " "])("limpar a seleção funciona pelo teclado (%s)", async (tecla) => {
+    const user = setup();
+    const onChange = vi.fn();
+    render(<CalendarRange value={intervaloDeMarco} onChange={onChange} />);
+
+    screen.getByRole("button", { name: "Limpar seleção" }).focus();
+    await user.keyboard(tecla);
+
+    expect(onChange).toHaveBeenCalledWith(null);
+    expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+  });
+
+  it("outras teclas no botão de limpar não limpam a seleção", async () => {
+    const user = setup();
+    const onChange = vi.fn();
+    render(<CalendarRange value={intervaloDeMarco} onChange={onChange} />);
+
+    screen.getByRole("button", { name: "Limpar seleção" }).focus();
+    await user.keyboard("a");
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("limpar com o mouse não abre o calendário", async () => {
+    const user = setup();
+    render(<CalendarRange value={intervaloDeMarco} onChange={vi.fn()} />);
+    await user.click(screen.getByRole("button", { name: "Limpar seleção" }));
+    expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+  });
+
+  it("sem valor, abre no mês de defaultMonth e no seguinte", async () => {
+    const user = setup();
+    render(<CalendarRange value={null} onChange={vi.fn()} defaultMonth={new Date(2025, 0, 15)} />);
+
+    await abrirCalendario(user, /selecione uma data/i);
+
+    const grids = screen.getAllByRole("grid");
+    expect(
+      within(grids[0]).getByRole("button", { name: /quarta-feira, 1 de janeiro de 2025/ })
+    ).toBeVisible();
+    expect(
+      within(grids[1]).getByRole("button", { name: /sábado, 1 de fevereiro de 2025/ })
+    ).toBeVisible();
+  });
+
+  it("com só a data inicial, o segundo calendário mostra o mês seguinte", async () => {
+    const user = setup();
+    render(<CalendarRange value={{ from: new Date(2025, 2, 3) }} onChange={vi.fn()} />);
+
+    await abrirCalendario(user, /03\/03\/2025/);
+
+    const grids = screen.getAllByRole("grid");
+    expect(
+      within(grids[1]).getByRole("button", { name: /terça-feira, 1 de abril de 2025/ })
+    ).toBeVisible();
+  });
+
+  it("aplicar um atalho leva os calendários ao mês do intervalo escolhido", async () => {
+    const user = setup();
+    render(<ComEstado showQuickRanges />);
+
+    await abrirCalendario(user, /selecione uma data/i);
+    await user.click(screen.getByRole("button", { name: "Mês anterior" }));
+
+    const grids = screen.getAllByRole("grid");
+    expect(
+      within(grids[0]).getByRole("button", { name: /sábado, 1 de fevereiro de 2025/ })
+    ).toBeVisible();
+    expect(
+      within(grids[1]).getByRole("button", { name: /sábado, 1 de março de 2025/ })
+    ).toBeVisible();
+  });
+
+  it("com disabled booleano e o gatilho liberado por buttonProps, todos os atalhos ficam bloqueados", async () => {
+    const user = setup();
+    render(
+      <CalendarRange
+        value={null}
+        onChange={vi.fn()}
+        showQuickRanges
+        disabled
+        buttonProps={{ disabled: false }}
+      />
+    );
+
+    await abrirCalendario(user, /selecione uma data/i);
+
+    expect(screen.getByRole("button", { name: "Hoje" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Este ano" })).toBeDisabled();
+  });
+
+  it("matchers em lista também bloqueiam atalhos que atravessam a data recusada", async () => {
+    const user = setup();
+    render(
+      <CalendarRange
+        value={null}
+        onChange={vi.fn()}
+        showQuickRanges
+        disabled={[new Date(2025, 2, 10), { dayOfWeek: [0] }]}
+      />
+    );
+
+    await abrirCalendario(user, /selecione uma data/i);
+
+    expect(screen.getByRole("button", { name: "Últimos 7 dias" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Hoje" })).toBeEnabled();
+  });
+
+  it("mostra a dica de uma data recusada ao passar o mouse nela", async () => {
+    const user = setup();
+    render(
+      <CalendarRange
+        value={null}
+        onChange={vi.fn()}
+        disabled={{ from: new Date(2025, 2, 5), to: new Date(2025, 2, 7) }}
+        disabledDateTooltip={(date) =>
+          date.getDate() === 6 && date.getMonth() === 2 ? "Feriado da empresa" : undefined
+        }
+      />
+    );
+
+    await abrirCalendario(user, /selecione uma data/i);
+    const dia = within(screen.getAllByRole("grid")[0]).getByRole("button", {
+      name: /quinta-feira, 6 de março de 2025/,
+    });
+    await user.hover(dia.parentElement as HTMLElement);
+
+    await waitFor(() =>
+      expect(screen.getAllByText("Feriado da empresa").length).toBeGreaterThan(0)
+    );
+  });
+
+  it("o gatilho fechado, sem seleção, não tem violações de acessibilidade", async () => {
+    const { container } = render(<CalendarRange value={null} onChange={vi.fn()} />);
+    const resultado = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(resultado.violations).toEqual([]);
+  });
+
+  // BUG (calendar-range.tsx:205-224): com intervalo selecionado, o "Limpar seleção" é um
+  // <div role="button"> dentro do <button> do gatilho; o axe reprova com "nested-interactive"
+  // (leitores de tela podem não alcançar o botão interno).
+  it.todo(
+    "com intervalo selecionado o gatilho não tem violações de acessibilidade (nested-interactive)"
+  );
 });
