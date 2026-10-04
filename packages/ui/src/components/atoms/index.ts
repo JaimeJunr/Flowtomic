@@ -21,3 +21,5 @@ export * from "./forms";
 export * from "./layout";
 // Navigation
 export * from "./navigation";
+// Typography
+export * from "./typography";
