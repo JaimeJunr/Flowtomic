@@ -453,8 +453,10 @@ linhas, 94,4% de branches** (156 arquivos, 2171 testes; antes dos lotes das mole
 branches): organisms 98,9% / 95,1%, molecules 97,1% / 95,3% (eram 86,6%), atoms 96,5% / 92,6%,
 blocks 92,0% / 94,1%. Os `.tsx` mais fracos: `inline-citation` (68,8%), `message` (72%),
 `scroll-area` (74,1%), `drawer` (78,7%). O CI
-gera o relatório mas **não tem threshold** (ver *Perguntas em aberto*); o piso, quando decidido, vai no
-`vitest.config.ts`. Para remedir:
+gera o relatório e **barra o PR abaixo de 90%** em linhas, statements, functions e branches (piso
+global no `vitest.config.ts`, decidido em 04/10/2026). ⚠️ O piso conta o pacote inteiro: rodar
+`--coverage` numa pasta só sempre reprova (o resto do pacote entra como 0%). Para cobertura de
+uma pasta, passe `--coverage.thresholds.lines=0` etc., ou leia o relatório e ignore o exit code. Para remedir:
 `cd packages/ui && bunx vitest run --testTimeout=60000 --minWorkers=1 --maxWorkers=4 --coverage --coverage.reporter=text-summary`.
 
 | pacote | arquivos de teste | script | ambiente |
@@ -688,6 +690,4 @@ Não promova nenhuma destas a fato no corpo sem verificar antes.
   transformar num wrapper que só dispara o workflow.
 - **O `bun@1.3.0` do `packageManager` está defasado?** A máquina de desenvolvimento roda
   1.3.14. Os dois aceitam o mesmo lock, mas a divergência existe.
-- **Quando travar o threshold de cobertura do `ui`?** O CI mede (96,9% de linhas e 94,4% de
-  branches em 04/10/2026) mas não bloqueia. Todas as áreas passam de 92%. Resolve: o dono decidir
-  o piso (ex.: 90/88 global) e fixar no `vitest.config.ts`.
+

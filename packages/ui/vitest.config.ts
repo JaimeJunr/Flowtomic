@@ -27,6 +27,13 @@ export default defineConfig({
         "**/*.test.{ts,tsx}",
         "**/test/**",
       ],
+      // Piso decidido em 04/10/2026, com a medição em 96,9% de linhas e 94,4% de branches.
+      thresholds: {
+        lines: 90,
+        statements: 90,
+        functions: 90,
+        branches: 90,
+      },
     },
   },
   resolve: {
