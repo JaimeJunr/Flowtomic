@@ -64,25 +64,57 @@ export const SourcesContent = React.forwardRef<HTMLDivElement, SourcesContentPro
 );
 SourcesContent.displayName = "SourcesContent";
 
+/**
+ * Endereço que pode virar link: http(s) ou caminho relativo. `javascript:`, `data:` e afins
+ * (vindos do modelo ou de uma busca) não passam. Quem decide é o parser de URL do navegador,
+ * que já normaliza maiúsculas e espaços como `  JavaScript:`.
+ */
+export function isSafeSourceUrl(href: string | undefined): href is string {
+  if (!href) return false;
+  try {
+    const { protocol } = new URL(href, "https://flowtomic.invalid");
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+/** Tira fontes repetidas pela `url`, mantendo a ordem da primeira aparição. */
+export function uniqueSources<T extends { url: string }>(sources: T[]): T[] {
+  const seen = new Set<string>();
+  return sources.filter((source) => {
+    if (seen.has(source.url)) return false;
+    seen.add(source.url);
+    return true;
+  });
+}
+
 export type SourceProps = ComponentProps<"a">;
 
 export const Source = React.forwardRef<HTMLAnchorElement, SourceProps>(
-  ({ href, title, children, ...props }, ref) => (
-    <a
-      ref={ref}
-      className="flex items-center gap-2"
-      href={href}
-      rel="noreferrer"
-      target="_blank"
-      {...props}
-    >
-      {children ?? (
-        <>
-          <ExternalLink className="h-4 w-4" />
-          <span className="block font-mono">{title}</span>
-        </>
-      )}
-    </a>
-  )
+  ({ href, title, children, ...props }, ref) => {
+    const content = children ?? (
+      <>
+        <ExternalLink aria-hidden="true" className="h-4 w-4" />
+        <span className="block font-mono">{title}</span>
+      </>
+    );
+    // endereço perigoso: mostra o nome da fonte, mas sem link para clicar
+    if (!isSafeSourceUrl(href)) {
+      return <span className="flex items-center gap-2">{content}</span>;
+    }
+    return (
+      <a
+        ref={ref}
+        className="flex items-center gap-2"
+        href={href}
+        rel="noopener noreferrer"
+        target="_blank"
+        {...props}
+      >
+        {content}
+      </a>
+    );
+  }
 );
 Source.displayName = "Source";
