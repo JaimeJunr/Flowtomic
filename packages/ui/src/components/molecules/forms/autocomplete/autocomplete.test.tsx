@@ -219,16 +219,19 @@ describe("Autocomplete no modo composição", () => {
     expect(onValueChange).not.toHaveBeenCalled();
   });
 
-  // Bug suspeito: com a busca "stat", os itens que não casam (DataTable, TimeTracker) continuam na lista,
-  // porque o modo composição renderiza `children` direto em vez de `filteredItems`
-  // (autocomplete.tsx:204-205).
-  it.todo("no modo composição, a busca esconde os itens que não casam");
+  it("no modo composição, a busca esconde os itens que não casam", async () => {
+    renderComposed();
+    await userEvent.type(screen.getByRole("combobox", { name: "Componente" }), "stat");
+    expect(screen.getAllByRole("option").map((el) => el.textContent)).toEqual(["StatCard"]);
+  });
 
-  // Bug: o PopoverTrigger asChild põe aria-expanded/aria-haspopup num <div> sem papel
-  // (autocomplete.tsx:129-130), e o axe reprova com aria-allowed-attr.
-  // Bug: no modo composição, aria-controls do input aponta para um id (hook getInputProps) que só existe
-  // se a pessoa usar Autocomplete.List; sem ele o axe reprova com aria-valid-attr-value.
-  it.todo("não tem nenhuma violação de acessibilidade com a lista aberta (modo composição)");
+  it("não tem nenhuma violação de acessibilidade com a lista aberta (modo composição)", async () => {
+    const { container } = renderComposed();
+    await userEvent.click(screen.getByRole("combobox", { name: "Componente" }));
+    expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+    const result = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(result.violations).toEqual([]);
+  });
 
   it("fora o atributo aria no gatilho, a lista aberta não tem violações de acessibilidade", async () => {
     const { container } = renderComposed({
@@ -330,8 +333,13 @@ describe("Autocomplete (API de opções), estados e props", () => {
     expect(lista.parentElement).toHaveStyle({ maxHeight: "120px" });
   });
 
-  // Bug: ver o it.todo do modo composição, aria-allowed-attr no gatilho (autocomplete.tsx:129-130).
-  it.todo("não tem nenhuma violação de acessibilidade com a lista aberta (API de opções)");
+  it("não tem nenhuma violação de acessibilidade com a lista aberta (API de opções)", async () => {
+    const { container } = renderField();
+    await userEvent.type(screen.getByRole("combobox", { name: "Componente" }), "d");
+    expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+    const result = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(result.violations).toEqual([]);
+  });
 
   it("fora o atributo aria no gatilho, a lista aberta não tem violações de acessibilidade", async () => {
     const { container } = renderField();

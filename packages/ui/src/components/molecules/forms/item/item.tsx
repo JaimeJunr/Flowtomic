@@ -1,18 +1,26 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import type * as React from "react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "../../../atoms/display/separator/separator";
 
-export interface ItemGroupProps extends React.ComponentProps<"ul"> {}
+export interface ItemGroupProps extends React.ComponentProps<"div"> {}
+
+// Dentro de um ItemGroup, cada Item vira "listitem": o grupo é uma lista, e uma lista só pode ter
+// listitem como filho direto (um <ul> com <div> dentro reprova no axe).
+const ItemGroupContext = React.createContext(false);
 
 function ItemGroup({ className, ...props }: ItemGroupProps) {
   return (
-    <ul
-      data-slot="item-group"
-      className={cn("group/item-group flex flex-col list-none m-0 p-0", className)}
-      {...props}
-    />
+    <ItemGroupContext.Provider value={true}>
+      {/* biome-ignore lint/a11y/useSemanticElements: os filhos são <div> (Item), que um <ul> não pode conter */}
+      <div
+        data-slot="item-group"
+        role="list"
+        className={cn("group/item-group flex flex-col", className)}
+        {...props}
+      />
+    </ItemGroupContext.Provider>
   );
 }
 
@@ -66,9 +74,11 @@ function Item({
   ...props
 }: ItemProps) {
   const Comp = asChild ? Slot : "div";
+  const inGroup = React.useContext(ItemGroupContext);
   return (
     <Comp
       data-slot="item"
+      role={inGroup ? "listitem" : undefined}
       data-variant={variant}
       data-size={size}
       className={cn(itemVariants({ variant, size, className }))}

@@ -158,33 +158,45 @@ describe("Item e seus pedaços", () => {
     expect(screen.getByRole("separator")).toBeInTheDocument();
   });
 
-  // Bug: ItemGroup é um <ul> (item.tsx:8), mas o uso da story (item.stories.tsx:29-59) põe <Item> e
-  // <ItemSeparator> (<div>) direto dentro dele; o axe reprova com a regra `list`
-  // ("<ul> must only directly contain <li>").
-  it.todo("ItemGroup com Item e ItemSeparator direto dentro não tem violações de acessibilidade");
+  it("ItemGroup com Item e ItemSeparator direto dentro não tem violações de acessibilidade", async () => {
+    const { container } = render(
+      <ItemGroup aria-label="Componentes">
+        <Item>
+          <ItemContent>
+            <ItemTitle>Button</ItemTitle>
+          </ItemContent>
+        </Item>
+        <ItemSeparator />
+        <Item>
+          <ItemContent>
+            <ItemTitle>Input</ItemTitle>
+          </ItemContent>
+        </Item>
+      </ItemGroup>
+    );
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    const result = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(result.violations).toEqual([]);
+  });
 
   it("uma lista de itens montada com todas as peças não tem violações de acessibilidade", async () => {
     const { container } = render(
       <ItemGroup aria-label="Componentes">
-        <li>
-          <Item variant="outline">
-            <ItemMedia variant="icon">i</ItemMedia>
-            <ItemContent>
-              <ItemTitle>Button</ItemTitle>
-              <ItemDescription>Botão de ação</ItemDescription>
-            </ItemContent>
-            <ItemActions>
-              <a href="/button">Abrir</a>
-            </ItemActions>
-          </Item>
-        </li>
-        <li>
-          <Item size="sm">
-            <ItemContent>
-              <ItemTitle>Input</ItemTitle>
-            </ItemContent>
-          </Item>
-        </li>
+        <Item variant="outline">
+          <ItemMedia variant="icon">i</ItemMedia>
+          <ItemContent>
+            <ItemTitle>Button</ItemTitle>
+            <ItemDescription>Botão de ação</ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <a href="/button">Abrir</a>
+          </ItemActions>
+        </Item>
+        <Item size="sm">
+          <ItemContent>
+            <ItemTitle>Input</ItemTitle>
+          </ItemContent>
+        </Item>
       </ItemGroup>
     );
     const result = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });

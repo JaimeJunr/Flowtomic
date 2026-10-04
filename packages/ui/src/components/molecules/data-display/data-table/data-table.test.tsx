@@ -367,10 +367,18 @@ describe("DataTable, paginação", () => {
     expect(screen.queryByRole("button", { name: "Próxima página" })).not.toBeInTheDocument();
   });
 
-  // Bug: enablePagination={false} com footerContent quebra a tabela inteira: o rodapé lê
-  // table.getState().pagination, que não existe com a paginação desligada
-  // (data-table-pagination.tsx:112, TypeError "reading 'pageSize'").
-  it.todo("footerContent aparece mesmo com a paginação desligada");
+  it("footerContent aparece mesmo com a paginação desligada", () => {
+    render(
+      <DataTable
+        data={muitos}
+        columns={columns}
+        enablePagination={false}
+        footerContent={<span>Total: 25 componentes</span>}
+      />
+    );
+    expect(screen.getByText("Total: 25 componentes")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Próxima página" })).not.toBeInTheDocument();
+  });
 
   it("paginationType buttons mostra os números de página e navega por eles", async () => {
     render(<DataTable data={muitos} columns={columns} paginationType="buttons" />);

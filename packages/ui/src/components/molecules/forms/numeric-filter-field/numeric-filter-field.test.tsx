@@ -76,7 +76,7 @@ describe("NumericFilterField: operador, formatos e estados", () => {
     await user.type(screen.getByRole("textbox", { name: "Valor" }), "10");
 
     await user.click(screen.getByRole("combobox", { name: "Operador" }));
-    await user.click(await screen.findByRole("option", { name: "≥" }));
+    await user.click(await screen.findByRole("option", { name: "maior ou igual a" }));
 
     expect(spy).toHaveBeenLastCalledWith({ operator: "gte", value: 10 });
     expect(screen.getByRole("combobox", { name: "Operador" })).toHaveTextContent("≥");
@@ -86,20 +86,22 @@ describe("NumericFilterField: operador, formatos e estados", () => {
     const user = userEvent.setup({ skipHover: true });
     render(<Controlled />);
     await user.click(screen.getByRole("combobox", { name: "Operador" }));
-    const nomes = (await screen.findAllByRole("option")).map((o) => o.getAttribute("aria-label"));
-    expect(nomes).toEqual([
-      "igual a",
-      "maior que",
-      "menor que",
-      "maior ou igual a",
-      "menor ou igual a",
-    ]);
+    const opcoes = await screen.findAllByRole("option");
+    const nomes = ["igual a", "maior que", "menor que", "maior ou igual a", "menor ou igual a"];
+    expect(opcoes).toHaveLength(nomes.length);
+    opcoes.forEach((opcao, i) => {
+      expect(opcao).toHaveAccessibleName(nomes[i]);
+    });
   });
 
-  // BUG (numeric-filter-field.tsx:102): o aria-label com o nome por extenso ("maior ou igual a")
-  // no SelectItem perde para o aria-labelledby que o Radix põe no option, que aponta para o
-  // símbolo. O leitor de tela anuncia "≥", não o nome por extenso que o comentário do arquivo promete.
-  it.todo("cada opção de operador é anunciada pelo nome por extenso (ex.: maior ou igual a)");
+  it("cada opção de operador é anunciada pelo nome por extenso (ex.: maior ou igual a)", async () => {
+    const user = userEvent.setup({ skipHover: true });
+    render(<Controlled />);
+    await user.click(screen.getByRole("combobox", { name: "Operador" }));
+    expect(await screen.findByRole("option", { name: "maior ou igual a" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "igual a" })).toBeInTheDocument();
+    expect(screen.queryByRole("option", { name: "≥" })).not.toBeInTheDocument();
+  });
 
   it("o operador pode ser trocado pelo teclado", async () => {
     const user = userEvent.setup({ skipHover: true });
@@ -107,7 +109,7 @@ describe("NumericFilterField: operador, formatos e estados", () => {
     render(<Controlled spy={spy} />);
     screen.getByRole("combobox", { name: "Operador" }).focus();
     await user.keyboard("{Enter}");
-    await user.click(await screen.findByRole("option", { name: "<" }));
+    await user.click(await screen.findByRole("option", { name: "menor que" }));
     expect(spy).toHaveBeenLastCalledWith({ operator: "lt", value: null });
   });
 

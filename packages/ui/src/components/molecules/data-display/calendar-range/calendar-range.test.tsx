@@ -400,10 +400,14 @@ describe("CalendarRange: teclado, meses e dicas", () => {
     expect(resultado.violations).toEqual([]);
   });
 
-  // BUG (calendar-range.tsx:205-224): com intervalo selecionado, o "Limpar seleção" é um
-  // <div role="button"> dentro do <button> do gatilho; o axe reprova com "nested-interactive"
-  // (leitores de tela podem não alcançar o botão interno).
-  it.todo(
-    "com intervalo selecionado o gatilho não tem violações de acessibilidade (nested-interactive)"
-  );
+  it("com intervalo selecionado o gatilho não tem violações de acessibilidade (nested-interactive)", async () => {
+    const { container } = render(
+      <CalendarRange
+        value={{ from: new Date(2025, 0, 10), to: new Date(2025, 0, 20) }}
+        onChange={vi.fn()}
+      />
+    );
+    const resultado = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(resultado.violations).toEqual([]);
+  });
 });

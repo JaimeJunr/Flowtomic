@@ -170,60 +170,53 @@ export function CalendarRange({
     return <CalendarDayButton {...innerProps} />;
   }
 
+  const showClear = Boolean(value?.from) && !isButtonDisabled;
+
   return (
     <Popover {...popoverProps} open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          data-slot="calendar-range"
-          id={id}
-          variant="outline"
-          className={cn(
-            "hover:foreground justify-between text-left font-normal",
-            !value && "text-muted-foreground hover:text-muted-foreground",
-            className
-          )}
-          disabled={isButtonDisabled}
-          {...buttonProps}
-        >
-          <div className="flex items-center">
-            <CalendarDaysIcon className="mr-2 size-4" />
-            {value?.from ? (
-              value.to ? (
-                <>
-                  {format(value.from, "P", { locale: ptBR })} -{" "}
-                  {format(value.to, "P", { locale: ptBR })}
-                </>
-              ) : (
-                format(value.from, "P", { locale: ptBR })
-              )
-            ) : (
-              <span>{placeholder}</span>
+      <div className="relative flex">
+        <PopoverTrigger asChild>
+          <Button
+            data-slot="calendar-range"
+            id={id}
+            variant="outline"
+            className={cn(
+              "hover:foreground justify-between text-left font-normal",
+              !value && "text-muted-foreground hover:text-muted-foreground",
+              showClear && "pr-9",
+              className
             )}
-          </div>
-          {value?.from && !isButtonDisabled && (
-            // biome-ignore lint/a11y/useSemanticElements: clear action inside trigger button; cannot use nested <button>
-            <div
-              role="button"
-              tabIndex={0}
-              onClick={(e) => {
-                e.stopPropagation();
-                onChange(null);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onChange(null);
-                }
-              }}
-              className="cursor-pointer p-1"
-              aria-label="Limpar seleção"
-            >
-              <X className="size-4 opacity-50 hover:opacity-100" />
+            disabled={isButtonDisabled}
+            {...buttonProps}
+          >
+            <div className="flex items-center">
+              <CalendarDaysIcon className="mr-2 size-4" />
+              {value?.from ? (
+                value.to ? (
+                  <>
+                    {format(value.from, "P", { locale: ptBR })} -{" "}
+                    {format(value.to, "P", { locale: ptBR })}
+                  </>
+                ) : (
+                  format(value.from, "P", { locale: ptBR })
+                )
+              ) : (
+                <span>{placeholder}</span>
+              )}
             </div>
-          )}
-        </Button>
-      </PopoverTrigger>
+          </Button>
+        </PopoverTrigger>
+        {showClear && (
+          <button
+            type="button"
+            onClick={() => onChange(null)}
+            className="-translate-y-1/2 absolute top-1/2 right-2 cursor-pointer rounded-sm p-1"
+            aria-label="Limpar seleção"
+          >
+            <X className="size-4 opacity-50 hover:opacity-100" />
+          </button>
+        )}
+      </div>
 
       <PopoverContent className={cn("w-auto p-0", popoverContentClassName)} align="start">
         <div className="flex flex-col sm:flex-row">
