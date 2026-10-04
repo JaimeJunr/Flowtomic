@@ -4,7 +4,16 @@ import { type DayButton, DayPicker, getDefaultClassNames } from "react-day-picke
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../../actions/button/button";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+// Omit distributivo: os props do DayPicker são uma união por `mode`, e o Omit comum a achataria.
+// Sem tirar o captionLayout dele, a interseção some com o "buttons" que a API anuncia.
+type DayPickerPropsWithout<K extends PropertyKey> =
+  React.ComponentProps<typeof DayPicker> extends infer P
+    ? P extends unknown
+      ? Omit<P, K>
+      : never
+    : never;
+
+export type CalendarProps = DayPickerPropsWithout<"captionLayout"> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
   captionLayout?: "buttons" | "dropdown" | "dropdown-months" | "dropdown-years";
   /** Ano inicial para dropdown de anos (ex.: 1900). Repasse para DayPicker. */
