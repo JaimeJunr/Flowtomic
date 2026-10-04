@@ -35,134 +35,135 @@ export interface BackdropBlurProps {
    * Classe CSS adicional
    */
   className?: string;
+  /** Ref do elemento raiz (prop comum no React 19) */
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 /**
  * BackdropBlur - Componente de backdrop com blur animado
  */
-const BackdropBlur = React.forwardRef<HTMLDivElement, BackdropBlurProps>(
-  (
-    {
-      isOpen,
-      className,
-      blurIntensity = 10,
-      opacity = 0.5,
-      backgroundColor = "black",
-      disabled = false,
-      duration = 0.2,
-    },
-    ref
-  ) => {
-    // Converte backgroundColor para rgba incluindo a opacidade
-    // Usa useMemo para evitar recálculos desnecessários
-    // IMPORTANTE: Hook deve ser chamado antes de qualquer early return
-    const backgroundColorWithOpacity = React.useMemo(() => {
-      const convertToRgba = (color: string, opacityValue: number): string => {
-        // Se já é rgba, extrai os valores RGB e aplica nova opacidade
-        if (color.startsWith("rgba(")) {
-          const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-          if (match) {
-            return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${opacityValue})`;
-          }
+function BackdropBlur({
+  isOpen,
+  className,
+  blurIntensity = 10,
+  opacity = 0.5,
+  backgroundColor = "black",
+  disabled = false,
+  duration = 0.2,
+  ref,
+}: BackdropBlurProps) {
+  // Converte backgroundColor para rgba incluindo a opacidade
+  // Usa useMemo para evitar recálculos desnecessários
+  // IMPORTANTE: Hook deve ser chamado antes de qualquer early return
+  const backgroundColorWithOpacity = React.useMemo(() => {
+    const convertToRgba = (color: string, opacityValue: number): string => {
+      // Se já é rgba, extrai os valores RGB e aplica nova opacidade
+      if (color.startsWith("rgba(")) {
+        const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (match) {
+          return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${opacityValue})`;
         }
-        // Se é rgb, adiciona opacidade
-        if (color.startsWith("rgb(")) {
-          const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-          if (match) {
-            return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${opacityValue})`;
-          }
+      }
+      // Se é rgb, adiciona opacidade
+      if (color.startsWith("rgb(")) {
+        const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        if (match) {
+          return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${opacityValue})`;
         }
-        // Se é hex, converte para rgba
-        if (color.startsWith("#")) {
-          const hex = color.replace("#", "");
-          const r = parseInt(hex.substring(0, 2), 16);
-          const g = parseInt(hex.substring(2, 4), 16);
-          const b = parseInt(hex.substring(4, 6), 16);
-          return `rgba(${r}, ${g}, ${b}, ${opacityValue})`;
-        }
-        // Para cores nomeadas comuns, usa valores conhecidos
-        const namedColors: Record<string, [number, number, number]> = {
-          black: [0, 0, 0],
-          white: [255, 255, 255],
-          red: [255, 0, 0],
-          green: [0, 128, 0],
-          blue: [0, 0, 255],
-          transparent: [0, 0, 0],
-        };
-        const lowerColor = color.toLowerCase();
-        if (namedColors[lowerColor]) {
-          const [r, g, b] = namedColors[lowerColor];
-          return `rgba(${r}, ${g}, ${b}, ${opacityValue})`;
-        }
-        // Fallback: retorna a cor original (opacidade será aplicada via CSS)
-        return color;
+      }
+      // Se é hex, converte para rgba
+      if (color.startsWith("#")) {
+        const hex = color.replace("#", "");
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return `rgba(${r}, ${g}, ${b}, ${opacityValue})`;
+      }
+      // Para cores nomeadas comuns, usa valores conhecidos
+      const namedColors: Record<string, [number, number, number]> = {
+        black: [0, 0, 0],
+        white: [255, 255, 255],
+        red: [255, 0, 0],
+        green: [0, 128, 0],
+        blue: [0, 0, 255],
+        transparent: [0, 0, 0],
       };
+      const lowerColor = color.toLowerCase();
+      if (namedColors[lowerColor]) {
+        const [r, g, b] = namedColors[lowerColor];
+        return `rgba(${r}, ${g}, ${b}, ${opacityValue})`;
+      }
+      // Fallback: retorna a cor original (opacidade será aplicada via CSS)
+      return color;
+    };
 
-      return {
-        open: convertToRgba(backgroundColor, opacity),
-        closed: convertToRgba(backgroundColor, 0),
-      };
-    }, [backgroundColor, opacity]);
+    return {
+      open: convertToRgba(backgroundColor, opacity),
+      closed: convertToRgba(backgroundColor, 0),
+    };
+  }, [backgroundColor, opacity]);
 
-    // Mesmo critério do sliding-number: preferência do sistema ou MotionConfig reducedMotion="always"
-    const reducedMotionConfig = React.useContext(MotionConfigContext).reducedMotion;
-    const shouldReduceMotion = useReducedMotion() || reducedMotionConfig === "always";
+  // Mesmo critério do sliding-number: preferência do sistema ou MotionConfig reducedMotion="always"
+  const reducedMotionConfig = React.useContext(MotionConfigContext).reducedMotion;
+  const shouldReduceMotion = useReducedMotion() || reducedMotionConfig === "always";
 
-    if (disabled) {
-      return (
-        <div
-          ref={ref}
-          aria-hidden="true"
-          className={cn("fixed inset-0 z-40", className)}
-          style={{
-            backgroundColor: `${backgroundColor}${Math.round(opacity * 255)
-              .toString(16)
-              .padStart(2, "0")}`,
-            backdropFilter: isOpen ? `blur(${blurIntensity}px)` : "blur(0px)",
-          }}
-        />
-      );
-    }
-
-    // Com movimento reduzido o desfoque troca na hora, sem transição
-    if (shouldReduceMotion) {
-      return (
-        <div
-          ref={ref}
-          aria-hidden="true"
-          className={cn("fixed inset-0 z-40", className)}
-          style={{
-            backdropFilter: isOpen ? `blur(${blurIntensity}px)` : "blur(0px)",
-            backgroundColor: isOpen
-              ? backgroundColorWithOpacity.open
-              : backgroundColorWithOpacity.closed,
-          }}
-        />
-      );
-    }
-
+  if (disabled) {
     return (
-      <motion.div
+      <div
+        data-slot="backdrop-blur"
         ref={ref}
         aria-hidden="true"
-        initial={false}
-        animate={
-          isOpen
-            ? {
-                backdropFilter: `blur(${blurIntensity}px)`,
-                backgroundColor: backgroundColorWithOpacity.open,
-              }
-            : {
-                backdropFilter: "blur(0px)",
-                backgroundColor: backgroundColorWithOpacity.closed,
-              }
-        }
-        transition={{ duration }}
         className={cn("fixed inset-0 z-40", className)}
+        style={{
+          backgroundColor: `${backgroundColor}${Math.round(opacity * 255)
+            .toString(16)
+            .padStart(2, "0")}`,
+          backdropFilter: isOpen ? `blur(${blurIntensity}px)` : "blur(0px)",
+        }}
       />
     );
   }
-);
+
+  // Com movimento reduzido o desfoque troca na hora, sem transição
+  if (shouldReduceMotion) {
+    return (
+      <div
+        data-slot="backdrop-blur"
+        ref={ref}
+        aria-hidden="true"
+        className={cn("fixed inset-0 z-40", className)}
+        style={{
+          backdropFilter: isOpen ? `blur(${blurIntensity}px)` : "blur(0px)",
+          backgroundColor: isOpen
+            ? backgroundColorWithOpacity.open
+            : backgroundColorWithOpacity.closed,
+        }}
+      />
+    );
+  }
+
+  return (
+    <motion.div
+      data-slot="backdrop-blur"
+      ref={ref}
+      aria-hidden="true"
+      initial={false}
+      animate={
+        isOpen
+          ? {
+              backdropFilter: `blur(${blurIntensity}px)`,
+              backgroundColor: backgroundColorWithOpacity.open,
+            }
+          : {
+              backdropFilter: "blur(0px)",
+              backgroundColor: backgroundColorWithOpacity.closed,
+            }
+      }
+      transition={{ duration }}
+      className={cn("fixed inset-0 z-40", className)}
+    />
+  );
+}
 BackdropBlur.displayName = "BackdropBlur";
 
 export { BackdropBlur };

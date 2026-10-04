@@ -7,6 +7,7 @@ export interface SpinnerProps extends React.ComponentProps<"svg"> {}
 function Spinner({ className, ...props }: SpinnerProps) {
   return (
     <Loader2Icon
+      data-slot="spinner"
       role="status"
       aria-label="Carregando"
       className={cn("size-4 animate-spin", className)}

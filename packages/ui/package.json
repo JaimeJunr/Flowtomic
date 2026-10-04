@@ -45,8 +45,8 @@
     "build-storybook": "storybook build --config-dir ../../.storybook --output-dir ../../storybook-static"
   },
   "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-resizable-panels": "^4.6.5"
   },
   "dependencies": {

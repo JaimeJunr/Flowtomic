@@ -5,7 +5,7 @@
  * para o ícone nativo do calendário permanecer visível.
  */
 
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 
 const dateInputBaseClasses =
@@ -13,32 +13,30 @@ const dateInputBaseClasses =
 
 const dateInputDisabledClasses = "bg-muted text-muted-foreground";
 
-export interface DateInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+export interface DateInputProps extends Omit<React.ComponentProps<"input">, "type"> {
   /** Classes CSS adicionais */
   className?: string;
 }
 
-const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
-  ({ className, disabled, onFocus, ...props }, ref) => {
-    const isDisabled = Boolean(disabled);
-    return (
-      <span className="relative inline-block">
-        <input
-          type="date"
-          className={cn(dateInputBaseClasses, isDisabled && dateInputDisabledClasses, className)}
-          ref={ref}
-          tabIndex={isDisabled ? -1 : undefined}
-          aria-disabled={isDisabled ? true : undefined}
-          onFocus={isDisabled ? (e) => e.target.blur() : onFocus}
-          {...props}
-        />
-        {isDisabled && (
-          <span className="absolute inset-0 cursor-not-allowed rounded-md" aria-hidden />
-        )}
-      </span>
-    );
-  }
-);
+function DateInput({ className, disabled, onFocus, ...props }: DateInputProps) {
+  const isDisabled = Boolean(disabled);
+  return (
+    <span className="relative inline-block">
+      <input
+        data-slot="date-input"
+        type="date"
+        className={cn(dateInputBaseClasses, isDisabled && dateInputDisabledClasses, className)}
+        tabIndex={isDisabled ? -1 : undefined}
+        aria-disabled={isDisabled ? true : undefined}
+        onFocus={isDisabled ? (e) => e.target.blur() : onFocus}
+        {...props}
+      />
+      {isDisabled && (
+        <span className="absolute inset-0 cursor-not-allowed rounded-md" aria-hidden />
+      )}
+    </span>
+  );
+}
 DateInput.displayName = "DateInput";
 
 export { DateInput, dateInputBaseClasses, dateInputDisabledClasses };

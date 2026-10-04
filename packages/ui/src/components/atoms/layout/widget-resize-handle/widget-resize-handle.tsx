@@ -168,6 +168,7 @@ export function WidgetResizeHandle({
 
   return (
     <button
+      data-slot="widget-resize-handle"
       type="button"
       ref={handleRef}
       onMouseDown={handleMouseDown}

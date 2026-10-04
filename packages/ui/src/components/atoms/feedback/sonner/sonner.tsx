@@ -22,6 +22,7 @@ export interface ToasterProps extends Omit<SonnerToasterProps, "theme"> {
 export function Toaster({ theme = "light", ...props }: ToasterProps) {
   return (
     <SonnerToaster
+      data-slot="sonner"
       theme={theme === "dark" ? "dark" : "light"}
       position="top-right"
       className="toaster group"

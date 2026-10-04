@@ -5,11 +5,9 @@ import { AnimatePresence, motion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export type TooltipProps = React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>;
-export type TooltipTriggerProps = React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>;
-export type TooltipContentProps = React.ComponentPropsWithoutRef<
-  typeof TooltipPrimitive.Content
-> & {
+export type TooltipProps = React.ComponentProps<typeof TooltipPrimitive.Root>;
+export type TooltipTriggerProps = React.ComponentProps<typeof TooltipPrimitive.Trigger>;
+export type TooltipContentProps = React.ComponentProps<typeof TooltipPrimitive.Content> & {
   /**
    * Se o tooltip deve seguir o mouse
    * @default false
@@ -25,53 +23,63 @@ export type TooltipContentProps = React.ComponentPropsWithoutRef<
 /**
  * TooltipProvider - Provider do tooltip
  */
-const TooltipProvider = TooltipPrimitive.Provider;
+function TooltipProvider(props: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
+  return <TooltipPrimitive.Provider data-slot="tooltip-provider" {...props} />;
+}
 TooltipProvider.displayName = "TooltipProvider";
 
 /**
  * Tooltip - Container principal do tooltip
  */
-const Tooltip = TooltipPrimitive.Root;
+function Tooltip(props: TooltipProps) {
+  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
+}
 Tooltip.displayName = "Tooltip";
 
 /**
  * TooltipTrigger - Trigger do tooltip
  */
-const TooltipTrigger = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger> & {
-    "data-follow-mouse"?: boolean;
-  }
->(({ "data-follow-mouse": followMouse, ...props }, ref) => {
+function TooltipTrigger({
+  "data-follow-mouse": followMouse,
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Trigger> & {
+  "data-follow-mouse"?: boolean;
+}) {
   return (
     <TooltipPrimitive.Trigger
-      ref={ref}
+      data-slot="tooltip-trigger"
       data-radix-tooltip-trigger=""
       data-follow-mouse={followMouse}
       {...props}
     />
   );
-});
+}
 TooltipTrigger.displayName = "TooltipTrigger";
 
 /**
  * TooltipPortal - Portal do tooltip
  */
-const TooltipPortal = TooltipPrimitive.Portal;
+function TooltipPortal(props: React.ComponentProps<typeof TooltipPrimitive.Portal>) {
+  return <TooltipPrimitive.Portal data-slot="tooltip-portal" {...props} />;
+}
 TooltipPortal.displayName = "TooltipPortal";
 
 /**
  * TooltipContent - Conteúdo do tooltip com suporte a seguimento do mouse
  */
-const TooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
-  TooltipContentProps
->(({ className, sideOffset = 4, followMouse = false, minWidth = 240, children, ...props }, ref) => {
+function TooltipContent({
+  className,
+  sideOffset = 4,
+  followMouse = false,
+  minWidth = 240,
+  children,
+  ...props
+}: TooltipContentProps) {
   // Se não seguir o mouse, usar comportamento padrão do Radix
   if (!followMouse) {
     return (
       <TooltipPrimitive.Content
-        ref={ref}
+        data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
           "z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
@@ -87,7 +95,6 @@ const TooltipContent = React.forwardRef<
   // Comportamento com seguimento do mouse - implementação customizada baseada no Aceternity
   return (
     <TooltipContentWithMouseFollow
-      ref={ref}
       sideOffset={sideOffset}
       className={className}
       minWidth={minWidth}
@@ -96,22 +103,24 @@ const TooltipContent = React.forwardRef<
       {children}
     </TooltipContentWithMouseFollow>
   );
-});
+}
 
-TooltipContent.displayName = TooltipPrimitive.Content.displayName;
+TooltipContent.displayName = "TooltipContent";
 
 /**
  * TooltipContentWithMouseFollow - Versão com seguimento do mouse
  * Este componente não renderiza nada - o tooltip é renderizado via portal
  * O estado é gerenciado pelo TooltipWithMouseFollowWrapper
  */
-const TooltipContentWithMouseFollow = React.forwardRef<
-  HTMLDivElement,
-  Omit<TooltipContentProps, "followMouse"> & { minWidth: number }
->(({ className: _className, minWidth: _minWidth, children: _children, ..._props }, _ref) => {
+function TooltipContentWithMouseFollow({
+  className: _className,
+  minWidth: _minWidth,
+  children: _children,
+  ..._props
+}: Omit<TooltipContentProps, "followMouse"> & { minWidth: number }) {
   // Este componente não renderiza - o tooltip é gerenciado pelo wrapper
   return null;
-});
+}
 
 TooltipContentWithMouseFollow.displayName = "TooltipContentWithMouseFollow";
 
@@ -298,6 +307,7 @@ export function TooltipWithMouseFollow({
     // biome-ignore lint/a11y/noStaticElementInteractions: Trigger flexível
     <div
       ref={containerRef as React.RefObject<HTMLDivElement>}
+      data-slot="tooltip-with-mouse-follow"
       className={cn("relative inline-block", containerClassName)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
