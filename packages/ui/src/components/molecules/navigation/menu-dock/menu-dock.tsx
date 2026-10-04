@@ -163,6 +163,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
 
   return (
     <nav
+      data-slot="menu-dock"
       ref={containerRef}
       className={cn(
         "relative flex",
@@ -303,7 +304,7 @@ const FloatingDockMobile: React.FC<{
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={cn("relative block md:hidden", className)}>
+    <div data-slot="menu-dock-mobile" className={cn("relative block md:hidden", className)}>
       <AnimatePresence>
         {open && (
           <motion.div
@@ -361,6 +362,7 @@ const FloatingDockDesktop: React.FC<{
 
   return (
     <motion.div
+      data-slot="menu-dock-desktop"
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(

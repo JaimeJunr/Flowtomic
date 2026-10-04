@@ -78,7 +78,7 @@ export function NumericFilterField({
   const current = value ?? defaultNumericValue;
 
   return (
-    <div className={className}>
+    <div data-slot="numeric-filter-field" className={className}>
       <div className="flex gap-2">
         <Select
           value={current.operator ?? "eq"}

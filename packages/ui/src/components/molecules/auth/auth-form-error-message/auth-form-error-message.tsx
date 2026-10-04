@@ -38,6 +38,7 @@ export function AuthFormErrorMessage({
 
   return (
     <div
+      data-slot="auth-form-error-message"
       role="alert"
       className={cn(
         "rounded-md border border-destructive/30 bg-destructive/10 p-3",

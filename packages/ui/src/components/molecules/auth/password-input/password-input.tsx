@@ -121,7 +121,7 @@ export const PasswordInput = ({
   );
 
   return (
-    <div className="space-y-2">
+    <div data-slot="password-input" className="space-y-2">
       {label && (
         <label
           htmlFor={id}

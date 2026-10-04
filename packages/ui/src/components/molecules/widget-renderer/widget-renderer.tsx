@@ -52,7 +52,7 @@ export interface WidgetRendererProps {
 export const WidgetRenderer = memo<WidgetRendererProps>(
   ({ widget, data, isLoading = false, renderWidget, widgetRegistry, fallback }) => {
     const loadingFallback = (
-      <output className="block" aria-label="Carregando widget">
+      <output data-slot="widget-renderer" className="block" aria-label="Carregando widget">
         <span className="sr-only">Carregando widget</span>
         <CardSkeleton />
       </output>
@@ -85,7 +85,7 @@ export const WidgetRenderer = memo<WidgetRendererProps>(
     }
 
     return (
-      <div className="p-4">
+      <div data-slot="widget-renderer" className="p-4">
         <p className="text-muted-foreground">Tipo de widget desconhecido: {widget.type}</p>
       </div>
     );

@@ -62,7 +62,10 @@ export function AuthNavigationLink({
   );
 
   return (
-    <p className={`text-center text-sm text-muted-foreground ${className}`}>
+    <p
+      data-slot="auth-navigation-link"
+      className={`text-center text-sm text-muted-foreground ${className}`}
+    >
       {text} {linkContent}
     </p>
   );

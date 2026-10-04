@@ -174,6 +174,7 @@ export function CalendarRange({
     <Popover {...popoverProps} open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          data-slot="calendar-range"
           id={id}
           variant="outline"
           className={cn(

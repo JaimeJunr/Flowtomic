@@ -94,7 +94,7 @@ export function BarChart({
 }: BarChartProps) {
   if (!data || data.length === 0) {
     return (
-      <section className={cn("text-sm", className)}>
+      <section data-slot="bar-chart" className={cn("text-sm", className)}>
         <SectionTitle title={title} />
         <p className="text-muted-foreground">Nenhum valor para mostrar.</p>
       </section>
@@ -108,7 +108,7 @@ export function BarChart({
   const barWidth = Math.min(40, slot * 0.6);
 
   return (
-    <section className={cn("text-sm", className)}>
+    <section data-slot="bar-chart" className={cn("text-sm", className)}>
       <SectionTitle title={title} />
       <svg
         width="100%"

@@ -5,7 +5,6 @@
  */
 
 import type { ToolUIPart } from "ai";
-import * as React from "react";
 import { type ComponentProps, createContext, type ReactNode, useContext } from "react";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, Button } from "../../../atoms";
@@ -61,28 +60,30 @@ export type ConfirmationProps = ComponentProps<typeof Alert> & {
   state: ExtendedState;
 };
 
-export const Confirmation = React.forwardRef<HTMLDivElement, ConfirmationProps>(
-  ({ className, approval, state, ...props }, ref) => {
-    if (!approval || state === "input-streaming" || state === "input-available") {
-      return null;
-    }
-
-    return (
-      <ConfirmationContext.Provider value={{ approval, state }}>
-        <Alert ref={ref} className={cn("flex flex-col gap-2", className)} {...props} />
-      </ConfirmationContext.Provider>
-    );
+export function Confirmation({ className, approval, state, ...props }: ConfirmationProps) {
+  if (!approval || state === "input-streaming" || state === "input-available") {
+    return null;
   }
-);
+
+  return (
+    <ConfirmationContext.Provider value={{ approval, state }}>
+      <Alert data-slot="confirmation" className={cn("flex flex-col gap-2", className)} {...props} />
+    </ConfirmationContext.Provider>
+  );
+}
 Confirmation.displayName = "Confirmation";
 
 export type ConfirmationTitleProps = ComponentProps<typeof AlertDescription>;
 
-export const ConfirmationTitle = React.forwardRef<HTMLParagraphElement, ConfirmationTitleProps>(
-  ({ className, ...props }, ref) => (
-    <AlertDescription ref={ref} className={cn("inline", className)} {...props} />
-  )
-);
+export function ConfirmationTitle({ className, ...props }: ConfirmationTitleProps) {
+  return (
+    <AlertDescription
+      data-slot="confirmation-title"
+      className={cn("inline", className)}
+      {...props}
+    />
+  );
+}
 ConfirmationTitle.displayName = "ConfirmationTitle";
 
 export type ConfirmationRequestProps = {
@@ -141,31 +142,34 @@ ConfirmationRejected.displayName = "ConfirmationRejected";
 
 export type ConfirmationActionsProps = ComponentProps<"div">;
 
-export const ConfirmationActions = React.forwardRef<HTMLDivElement, ConfirmationActionsProps>(
-  ({ className, ...props }, ref) => {
-    const { state } = useConfirmation();
+export function ConfirmationActions({ className, ...props }: ConfirmationActionsProps) {
+  const { state } = useConfirmation();
 
-    // Only show when approval is requested
-    if (state !== "approval-requested") {
-      return null;
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={cn("flex items-center justify-end gap-2 self-end", className)}
-        {...props}
-      />
-    );
+  // Only show when approval is requested
+  if (state !== "approval-requested") {
+    return null;
   }
-);
+
+  return (
+    <div
+      data-slot="confirmation-actions"
+      className={cn("flex items-center justify-end gap-2 self-end", className)}
+      {...props}
+    />
+  );
+}
 ConfirmationActions.displayName = "ConfirmationActions";
 
 export type ConfirmationActionProps = ComponentProps<typeof Button>;
 
-export const ConfirmationAction = React.forwardRef<HTMLButtonElement, ConfirmationActionProps>(
-  ({ className, ...props }, ref) => (
-    <Button ref={ref} type="button" className={cn("h-9 px-3.5", className)} {...props} />
-  )
-);
+export function ConfirmationAction({ className, ...props }: ConfirmationActionProps) {
+  return (
+    <Button
+      data-slot="confirmation-action"
+      type="button"
+      className={cn("h-9 px-3.5", className)}
+      {...props}
+    />
+  );
+}
 ConfirmationAction.displayName = "ConfirmationAction";

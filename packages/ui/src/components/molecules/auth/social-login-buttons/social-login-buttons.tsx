@@ -40,7 +40,7 @@ export function SocialLoginButtons({
   className,
 }: SocialLoginButtonsProps) {
   return (
-    <div className={cn("space-y-4", className)}>
+    <div data-slot="social-login-buttons" className={cn("space-y-4", className)}>
       {/* Divisor */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">

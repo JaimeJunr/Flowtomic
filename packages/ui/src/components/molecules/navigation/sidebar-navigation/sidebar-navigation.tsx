@@ -123,7 +123,7 @@ export function SidebarNavigation({
 
         <SidebarGroup>
           <SidebarGroupContent>
-            <nav aria-label="Principal">
+            <nav data-slot="sidebar-navigation" aria-label="Principal">
               <SidebarMenu>
                 {defaultMenuItems.map((item) => (
                   <SidebarMenuItem key={item.id}>

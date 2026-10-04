@@ -64,7 +64,7 @@ export function ReminderCard({
   const list = reminders ?? [];
 
   return (
-    <section className={cn("text-sm", className)}>
+    <section data-slot="reminder-card" className={cn("text-sm", className)}>
       <div className="flex items-center gap-3">
         <h3 className="text-sm font-semibold">{title}</h3>
         <span className="font-mono text-[13px] text-muted-foreground">{list.length}</span>

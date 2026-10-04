@@ -6,31 +6,30 @@
 
 import { ChevronDownIcon, ExternalLink } from "lucide-react";
 import type { ComponentProps } from "react";
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../atoms";
 
 export type SourcesProps = ComponentProps<"div">;
 
-export const Sources = React.forwardRef<HTMLDivElement, SourcesProps>(
-  ({ className, ...props }, ref) => (
+export function Sources({ className, ...props }: SourcesProps) {
+  return (
     <Collapsible
-      ref={ref}
+      data-slot="sources"
       className={cn("not-prose mb-4 text-muted-foreground text-[13px]", className)}
       {...props}
     />
-  )
-);
+  );
+}
 Sources.displayName = "Sources";
 
 export type SourcesTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
   count: number;
 };
 
-export const SourcesTrigger = React.forwardRef<HTMLButtonElement, SourcesTriggerProps>(
-  ({ className, count, children, ...props }, ref) => (
+export function SourcesTrigger({ className, count, children, ...props }: SourcesTriggerProps) {
+  return (
     <CollapsibleTrigger
-      ref={ref}
+      data-slot="sources-trigger"
       className={cn("flex items-center gap-2 text-muted-foreground text-[13px]", className)}
       {...props}
     >
@@ -43,16 +42,16 @@ export const SourcesTrigger = React.forwardRef<HTMLButtonElement, SourcesTrigger
         </>
       )}
     </CollapsibleTrigger>
-  )
-);
+  );
+}
 SourcesTrigger.displayName = "SourcesTrigger";
 
 export type SourcesContentProps = ComponentProps<typeof CollapsibleContent>;
 
-export const SourcesContent = React.forwardRef<HTMLDivElement, SourcesContentProps>(
-  ({ className, ...props }, ref) => (
+export function SourcesContent({ className, ...props }: SourcesContentProps) {
+  return (
     <CollapsibleContent
-      ref={ref}
+      data-slot="sources-content"
       className={cn(
         "mt-3 flex w-fit flex-col gap-2",
         "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
@@ -60,8 +59,8 @@ export const SourcesContent = React.forwardRef<HTMLDivElement, SourcesContentPro
       )}
       {...props}
     />
-  )
-);
+  );
+}
 SourcesContent.displayName = "SourcesContent";
 
 /**
@@ -91,30 +90,32 @@ export function uniqueSources<T extends { url: string }>(sources: T[]): T[] {
 
 export type SourceProps = ComponentProps<"a">;
 
-export const Source = React.forwardRef<HTMLAnchorElement, SourceProps>(
-  ({ href, title, children, ...props }, ref) => {
-    const content = children ?? (
-      <>
-        <ExternalLink aria-hidden="true" className="h-4 w-4" />
-        <span className="block font-mono">{title}</span>
-      </>
-    );
-    // endereço perigoso: mostra o nome da fonte, mas sem link para clicar
-    if (!isSafeSourceUrl(href)) {
-      return <span className="flex items-center gap-2">{content}</span>;
-    }
+export function Source({ href, title, children, ...props }: SourceProps) {
+  const content = children ?? (
+    <>
+      <ExternalLink aria-hidden="true" className="h-4 w-4" />
+      <span className="block font-mono">{title}</span>
+    </>
+  );
+  // endereço perigoso: mostra o nome da fonte, mas sem link para clicar
+  if (!isSafeSourceUrl(href)) {
     return (
-      <a
-        ref={ref}
-        className="flex items-center gap-2"
-        href={href}
-        rel="noopener noreferrer"
-        target="_blank"
-        {...props}
-      >
+      <span data-slot="source" className="flex items-center gap-2">
         {content}
-      </a>
+      </span>
     );
   }
-);
+  return (
+    <a
+      data-slot="source"
+      className="flex items-center gap-2"
+      href={href}
+      rel="noopener noreferrer"
+      target="_blank"
+      {...props}
+    >
+      {content}
+    </a>
+  );
+}
 Source.displayName = "Source";

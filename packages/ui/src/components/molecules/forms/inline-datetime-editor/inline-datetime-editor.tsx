@@ -80,6 +80,7 @@ export function InlineDateTimeEditor({
   if (!isEditing) {
     return (
       <button
+        data-slot="inline-datetime-editor"
         type="button"
         onClick={onStartEdit}
         className={`text-sm text-muted-foreground hover:text-foreground hover:underline cursor-pointer text-left ${className}`.trim()}
@@ -92,7 +93,7 @@ export function InlineDateTimeEditor({
 
   const baseId = id ?? "inline-datetime";
   return (
-    <span className="flex flex-wrap items-center gap-2">
+    <span data-slot="inline-datetime-editor" className="flex flex-wrap items-center gap-2">
       <label className="sr-only" htmlFor={`${baseId}-date`}>
         Data (dia, mês e ano)
       </label>

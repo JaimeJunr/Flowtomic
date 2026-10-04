@@ -103,7 +103,10 @@ export const EditChatMessageModal: React.FC<EditChatMessageModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className={cn("max-w-2xl max-h-[80vh] overflow-hidden", className)}>
+      <DialogContent
+        data-slot="edit-chat-message-modal"
+        className={cn("max-w-2xl max-h-[80vh] overflow-hidden", className)}
+      >
         <DialogHeader>
           <DialogTitle>Editar mensagem</DialogTitle>
         </DialogHeader>

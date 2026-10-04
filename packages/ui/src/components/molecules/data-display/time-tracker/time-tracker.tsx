@@ -92,6 +92,7 @@ export function TimeTracker({
 
   return (
     <section
+      data-slot="time-tracker"
       className={cn("text-sm", className)}
       style={backgroundColor ? { backgroundColor } : undefined}
     >

@@ -6,8 +6,7 @@
  */
 
 import { Edit, Eye, MoreVertical, Trash2 } from "lucide-react";
-import type { HTMLAttributes, ReactNode } from "react";
-import * as React from "react";
+import type { ComponentProps, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import {
@@ -28,7 +27,7 @@ export interface ChatMessageData {
   isSummary?: boolean;
 }
 
-export interface ChatMessageProps extends HTMLAttributes<HTMLDivElement> {
+export interface ChatMessageProps extends ComponentProps<"div"> {
   message: ChatMessageData;
   onEdit?: (id: string | number) => void;
   onDelete?: (id: string | number) => void;
@@ -58,13 +57,13 @@ export interface ChatMessageProps extends HTMLAttributes<HTMLDivElement> {
 
 // O tipo vira um ponto de cor ao lado do rótulo: `badgeClassName` pinta o ponto, e a
 // mensagem não ganha caixa colorida em volta (DESIGN.md: cor só onde significa algo)
-const defaultMessageTypeConfig: ChatMessageProps["messageTypeConfig"] = {
+const defaultMessageTypeConfig: NonNullable<ChatMessageProps["messageTypeConfig"]> = {
   STORY: { label: "Narração", badgeClassName: "bg-info" },
   ACTION: { label: "Ação", badgeClassName: "bg-warning" },
   SAY: { label: "Fala", badgeClassName: "bg-success" },
 };
 
-const defaultSenderConfig: ChatMessageProps["senderConfig"] = {
+const defaultSenderConfig: NonNullable<ChatMessageProps["senderConfig"]> = {
   Sistema: { isSystem: true },
 };
 
@@ -129,117 +128,109 @@ function MessageActions({ id, onEdit, onDelete, onViewContext }: MessageActionsP
   );
 }
 
-export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
-  (
-    {
-      message,
-      onEdit,
-      onDelete,
-      onViewContext,
-      renderMarkdown = true,
-      messageTypeConfig = defaultMessageTypeConfig,
-      senderConfig = defaultSenderConfig,
-      formatTimestamp = defaultFormatTimestamp,
-      showActions = true,
-      showTimestamp = true,
-      className,
-      ...props
-    },
-    ref
-  ) => {
-    const typeConfig = message.messageType ? messageTypeConfig[message.messageType] : undefined;
-    const senderCfg = senderConfig[message.sender] ?? {};
-    const isSystem = senderCfg.isSystem || message.sender === "Sistema";
-    const hasActions = showActions && (onEdit || onDelete || onViewContext);
+export function ChatMessage({
+  message,
+  onEdit,
+  onDelete,
+  onViewContext,
+  renderMarkdown = true,
+  messageTypeConfig = defaultMessageTypeConfig,
+  senderConfig = defaultSenderConfig,
+  formatTimestamp = defaultFormatTimestamp,
+  showActions = true,
+  showTimestamp = true,
+  className,
+  ...props
+}: ChatMessageProps) {
+  const typeConfig = message.messageType ? messageTypeConfig[message.messageType] : undefined;
+  const senderCfg = senderConfig[message.sender] ?? {};
+  const isSystem = senderCfg.isSystem || message.sender === "Sistema";
+  const hasActions = showActions && (onEdit || onDelete || onViewContext);
 
-    const renderContent = (): ReactNode => {
-      if (!renderMarkdown) return <span>{message.content}</span>;
-      return (
-        <ReactMarkdown
-          components={{
-            strong: ({ ...props }) => <strong className="font-semibold" {...props} />,
-            em: ({ ...props }) => <em className="italic" {...props} />,
-            p: ({ ...props }) => <span {...props} />,
-          }}
-        >
-          {message.content}
-        </ReactMarkdown>
-      );
-    };
-
-    const timestamp = showTimestamp && (
-      <span className="ml-auto font-mono text-xs text-muted-foreground">
-        {formatTimestamp(message.timestamp)}
-      </span>
+  const renderContent = (): ReactNode => {
+    if (!renderMarkdown) return <span>{message.content}</span>;
+    return (
+      <ReactMarkdown
+        components={{
+          strong: ({ ...props }) => <strong className="font-semibold" {...props} />,
+          em: ({ ...props }) => <em className="italic" {...props} />,
+          p: ({ ...props }) => <span {...props} />,
+        }}
+      >
+        {message.content}
+      </ReactMarkdown>
     );
+  };
 
-    if (isSystem) {
-      return (
-        <div
-          ref={ref}
-          id={`message-${message.id}`}
-          className={cn(
-            "flex items-baseline gap-2.5 py-3.5 text-[13px] text-muted-foreground",
-            message.isSummary && "rounded-md bg-surface px-3",
-            senderCfg.containerClassName,
-            className
-          )}
-          {...props}
-        >
-          <span>{message.sender}</span>
-          <span className="text-foreground">{renderContent()}</span>
-          {timestamp}
-        </div>
-      );
-    }
+  const timestamp = showTimestamp && (
+    <span className="ml-auto font-mono text-xs text-muted-foreground">
+      {formatTimestamp(message.timestamp)}
+    </span>
+  );
 
+  if (isSystem) {
     return (
       <div
-        ref={ref}
+        data-slot="chat-message"
         id={`message-${message.id}`}
         className={cn(
-          "flex flex-col gap-1 border-b border-border py-3.5",
+          "flex items-baseline gap-2.5 py-3.5 text-[13px] text-muted-foreground",
           message.isSummary && "rounded-md bg-surface px-3",
-          typeConfig?.containerClassName ?? senderCfg.containerClassName,
+          senderCfg.containerClassName,
           className
         )}
         {...props}
       >
-        <div className="flex min-h-8 items-center gap-2.5">
-          <span
-            className={cn(
-              "font-semibold",
-              typeConfig?.senderClassName ?? senderCfg.senderClassName
-            )}
-          >
-            {message.sender}
-          </span>
-          {typeConfig && (
-            <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "size-[7px] rounded-full bg-muted-foreground",
-                  typeConfig.badgeClassName
-                )}
-              />
-              {typeConfig.label}
-            </span>
-          )}
-          {timestamp}
-          {hasActions && (
-            <MessageActions
-              id={message.id}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              onViewContext={onViewContext}
-            />
-          )}
-        </div>
-        <div className="text-foreground">{renderContent()}</div>
+        <span>{message.sender}</span>
+        <span className="text-foreground">{renderContent()}</span>
+        {timestamp}
       </div>
     );
   }
-);
+
+  return (
+    <div
+      data-slot="chat-message"
+      id={`message-${message.id}`}
+      className={cn(
+        "flex flex-col gap-1 border-b border-border py-3.5",
+        message.isSummary && "rounded-md bg-surface px-3",
+        typeConfig?.containerClassName ?? senderCfg.containerClassName,
+        className
+      )}
+      {...props}
+    >
+      <div className="flex min-h-8 items-center gap-2.5">
+        <span
+          className={cn("font-semibold", typeConfig?.senderClassName ?? senderCfg.senderClassName)}
+        >
+          {message.sender}
+        </span>
+        {typeConfig && (
+          <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
+            <span
+              aria-hidden="true"
+              className={cn(
+                "size-[7px] rounded-full bg-muted-foreground",
+                typeConfig.badgeClassName
+              )}
+            />
+            {typeConfig.label}
+          </span>
+        )}
+        {timestamp}
+        {hasActions && (
+          <MessageActions
+            id={message.id}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onViewContext={onViewContext}
+          />
+        )}
+      </div>
+      <div className="text-foreground">{renderContent()}</div>
+    </div>
+  );
+}
 
 ChatMessage.displayName = "ChatMessage";

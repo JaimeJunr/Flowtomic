@@ -113,7 +113,7 @@ export function TeamMemberList({
   const showPhoto = members.length > 0 && members.every((m) => Boolean(m.avatar));
 
   return (
-    <section className={cn("text-sm", className)}>
+    <section data-slot="team-member-list" className={cn("text-sm", className)}>
       <div className="flex items-center gap-3">
         <h3 className="text-sm font-semibold">{title}</h3>
         <span className="font-mono text-[13px] text-muted-foreground">{members.length}</span>

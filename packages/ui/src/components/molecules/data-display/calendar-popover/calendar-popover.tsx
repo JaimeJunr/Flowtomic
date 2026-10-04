@@ -93,6 +93,7 @@ export const CalendarPopover: React.FC<CalendarPopoverProps> = ({
     <Popover open={isOpen} onOpenChange={setIsOpen} {...popoverProps}>
       <PopoverTrigger asChild>
         <Button
+          data-slot="calendar-popover"
           id={id}
           variant="outline"
           className={cn(

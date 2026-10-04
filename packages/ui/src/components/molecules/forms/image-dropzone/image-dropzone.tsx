@@ -221,7 +221,7 @@ export const ImageDropzone = ({
   const displayError = error || validationError;
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div data-slot="image-dropzone" className={cn("space-y-2", className)}>
       <section
         aria-label="Dropzone de upload de arquivos"
         tabIndex={disabled ? -1 : 0}

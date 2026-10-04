@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 // `ref` é prop normal, então nada de forwardRef, e todo componente marca a raiz com data-slot.
 // As áreas entram aqui conforme cada uma é migrada.
 const COMPONENTS_DIR = path.resolve(__dirname, "../components");
-const MIGRATED_AREAS = ["atoms"];
+const MIGRATED_AREAS = ["atoms", "molecules"];
 
 function componentFiles(area: string): string[] {
   const files: string[] = [];
