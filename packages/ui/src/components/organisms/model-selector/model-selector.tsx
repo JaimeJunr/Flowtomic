@@ -43,7 +43,8 @@ export const ModelSelectorContent = React.forwardRef<
   React.ElementRef<typeof DialogContent>,
   ModelSelectorContentProps
 >(({ className, children, title = "Seletor de modelo", ...props }, ref) => (
-  <DialogContent ref={ref} className={cn("p-0", className)} {...props}>
+  // Sem descrição: o Radix pede aria-describedby={undefined} explícito para não avisar
+  <DialogContent ref={ref} aria-describedby={undefined} className={cn("p-0", className)} {...props}>
     <DialogTitle className="sr-only">{title}</DialogTitle>
     <Command className="**:data-[slot=command-input-wrapper]:h-auto">{children}</Command>
   </DialogContent>

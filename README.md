@@ -16,7 +16,7 @@ O **Flowtomic** é um sistema de design que oferece componentes UI prontos para 
 - **49 molecules** - componentes compostos
 - **31 organisms** - componentes complexos
 - **14 hooks headless** - lógica reutilizável sem UI
-- **3 blocks** - templates pré-construídos (`dashboard-01`, `flowtomic-dashboard`, `developer-panel`)
+- **4 blocks** - templates pré-construídos (`dashboard-01`, `flowtomic-dashboard`, `developer-panel`, `chatbot`)
 - **Arquitetura separada**: UI e lógica em packages distintos
 - **Componentes copiados via CLI**: dá pra editar o código depois de instalar
 - **TypeScript**: tipagem completa
@@ -590,11 +590,12 @@ function ResponsiveComponent() {
 - `use-theme-transition` - Hook para transições de tema com View Transitions API
 - `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
 
-### Blocks (3)
+### Blocks (4)
 
 - `dashboard-01` - Dashboard simples com cards
 - `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
 - `developer-panel` - Painel de desenvolvedor com informações do sistema, ambiente, ferramentas de desenvolvimento e editor de scripts integrado
+- `chatbot` - Conversa com assistente: sugestões, ferramentas em uma linha, fontes, pergunta do assistente e Enviar/Parar
 
 ## Desenvolvimento
 
@@ -812,7 +813,7 @@ function CustomStatCard() {
 - [Molecules](./docs/componentes/molecules.md) - Componentes compostos (49 componentes)
 - [Organisms](./docs/componentes/organisms.md) - Componentes complexos (31 componentes)
 - [Hooks](./docs/componentes/hooks.md) - Hooks headless (14 hooks)
-- [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (3 blocks)
+- [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (4 blocks)
 
 ### Documentação Técnica
 

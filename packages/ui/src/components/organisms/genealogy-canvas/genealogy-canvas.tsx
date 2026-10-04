@@ -270,6 +270,7 @@ export const GenealogyCanvas = ({
   onAddRelation,
   renderNode,
   className,
+  onNodeClick,
   ...canvasProps
 }: GenealogyCanvasProps) => {
   // Configurar opções do hook
@@ -286,7 +287,7 @@ export const GenealogyCanvas = ({
   };
 
   // Usar hook de genealogia
-  const { nodes: genealogyNodes, edges: genealogyEdges } = useGenealogy(hookOptions);
+  const { nodes: genealogyNodes, edges: genealogyEdges, selectNode } = useGenealogy(hookOptions);
 
   // Gerenciar estado dos nodes e edges do ReactFlow
   const [nodes, setNodes, onNodesChange] = useNodesState(
@@ -341,6 +342,11 @@ export const GenealogyCanvas = ({
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange as OnNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeClick={(event, node) => {
+          // selectNode é quem dispara o onNodeSelect; sem isto a prop nunca era chamada
+          selectNode(node.id);
+          onNodeClick?.(event, node);
+        }}
       />
     </div>
   );

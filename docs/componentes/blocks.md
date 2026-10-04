@@ -2,7 +2,7 @@
 
 Blocks são componentes completos e prontos para uso, combinando múltiplos organisms, molecules e atoms.
 
-## 📦 Blocks Disponíveis (3)
+## 📦 Blocks Disponíveis (4)
 
 ### `dashboard-01`
 
@@ -107,3 +107,33 @@ Após instalar `developer-panel`, você terá um painel completo de desenvolvedo
 - Acesso rápido a ferramentas de desenvolvimento (Swagger, API Docs)
 - Editor de scripts com terminal interativo
 - Suporte a cópia de informações (token, URLs, User Agent)
+
+### `chatbot`
+
+Conversa com assistente. Vazia, diz o que fazer (`emptyTitle`, `emptyHint`) e oferece
+sugestões que quebram linha (rótulo curto, pedido completo enviado). Com mensagens: a da
+pessoa num `Bubble`, a do assistente na largura toda, sem balão; cada chamada de ferramenta
+numa linha (`ToolStatusLine`); as fontes, sem repetir, só depois que a resposta termina;
+“Pensando…” até o primeiro pedaço chegar. Erro aparece colado no campo, com “Tentar de
+novo”. Pergunta do assistente (`question`) abre o `Questionnaire` e trava o campo, para
+haver um botão forte só. O botão Enviar vira Parar enquanto responde.
+
+O block não fala com nenhuma API: o app liga `messages`, `status` (os mesmos estados do
+`useChat` do AI SDK) e os callbacks.
+
+**Props**: `title`, `messages` (`ChatbotMessage[]`, cada uma com `parts` de tipo `text`,
+`tool`, `sources` ou `answers`), `status`, `error`, `emptyTitle`, `emptyHint`,
+`suggestions`, `question`, `models`, `model`, `onModelChange`, `onSend`, `onStop`,
+`onRetry`, `onAnswer`, `onNewChat`
+
+**Dependências**: `button`, `shimmer`, `bubble`, `message`, `sources`, `suggestion`,
+`tool-status-line`, `conversation`, `prompt-input`, `questionnaire`
+
+**Arquivos**:
+
+- `blocks/chatbot/page.tsx` → `app/chat/page.tsx`
+
+**Categoria**: `application`, `ai`
+
+Inspirado no [chatbot-template do shadcn](https://github.com/shadcn-ui/chatbot-template) (MIT).
+
