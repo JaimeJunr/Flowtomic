@@ -9,6 +9,7 @@ import { Edit, Eye, MoreVertical, Trash2 } from "lucide-react";
 import type { HTMLAttributes, ReactNode } from "react";
 import * as React from "react";
 import ReactMarkdown from "react-markdown";
+import { MessageResponse } from "@/components/molecules/data-display/message";
 import { cn } from "@/lib/utils";
 import {
   Button,
@@ -152,7 +153,8 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
     const isSystem = senderCfg.isSystem || message.sender === "Sistema";
     const hasActions = showActions && (onEdit || onDelete || onViewContext);
 
-    const renderContent = (): ReactNode => {
+    // a linha do sistema cabe numa linha só: só ênfase, parágrafo vira span
+    const renderInline = (): ReactNode => {
       if (!renderMarkdown) return <span>{message.content}</span>;
       return (
         <ReactMarkdown
@@ -165,6 +167,12 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
           {message.content}
         </ReactMarkdown>
       );
+    };
+
+    // mensagem normal: o mesmo markdown das respostas (lista, tabela, código, link filtrado)
+    const renderBlock = (): ReactNode => {
+      if (!renderMarkdown) return <span>{message.content}</span>;
+      return <MessageResponse>{message.content}</MessageResponse>;
     };
 
     const timestamp = showTimestamp && (
@@ -187,7 +195,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
           {...props}
         >
           <span>{message.sender}</span>
-          <span className="text-foreground">{renderContent()}</span>
+          <span className="text-foreground">{renderInline()}</span>
           {timestamp}
         </div>
       );
@@ -236,7 +244,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
             />
           )}
         </div>
-        <div className="text-foreground">{renderContent()}</div>
+        <div className="text-foreground">{renderBlock()}</div>
       </div>
     );
   }

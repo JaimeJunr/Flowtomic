@@ -65,6 +65,67 @@ describe("ChatMessage", () => {
     });
   });
 
+  describe("Markdown", () => {
+    const comMarkdown = (content: string): ChatMessageData => ({ ...narration, content });
+
+    it("lista vira lista de verdade, não texto corrido", () => {
+      render(<ChatMessage message={comMarkdown("Na mochila:\n\n- corda\n- tocha")} />);
+      const itens = screen.getAllByRole("listitem");
+      expect(itens.map((li) => li.textContent)).toEqual(["corda", "tocha"]);
+    });
+
+    it("bloco de código sai num bloco próprio, com o texto inteiro", async () => {
+      const { container } = render(
+        <ChatMessage message={comMarkdown("Rode:\n\n```bash\nbun run dev\n```")} />
+      );
+      expect(container.querySelector("pre")).not.toBeNull();
+      expect(await screen.findByText("bun run dev")).toBeInTheDocument();
+    });
+
+    it("tabela no formato do GitHub vira tabela", () => {
+      render(<ChatMessage message={comMarkdown("| dado | valor |\n|---|---|\n| d20 | 14 |")} />);
+      expect(screen.getByRole("table")).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "14" })).toBeInTheDocument();
+    });
+
+    it("link com javascript: não vira link clicável", () => {
+      render(<ChatMessage message={comMarkdown("[abrir](javascript:alert(1))")} />);
+      expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    });
+
+    it("parágrafo não fica dentro de span (HTML inválido)", () => {
+      const { container } = render(<ChatMessage message={comMarkdown("Primeiro.\n\nSegundo.")} />);
+      expect(container.querySelector("span p, span div, span ul")).toBeNull();
+      expect(container.querySelectorAll("p")).toHaveLength(2);
+    });
+
+    it("mensagem do sistema continua numa linha só, com negrito", () => {
+      const { container } = render(
+        <ChatMessage
+          message={{
+            id: 3,
+            sender: "Sistema",
+            content: "Rolagem: **14**",
+            timestamp: narration.timestamp,
+          }}
+        />
+      );
+      expect(screen.getByText("14").tagName).toBe("STRONG");
+      expect((container.firstChild as HTMLElement).querySelector("p, div")).toBeNull();
+    });
+
+    it("negrito continua sendo <strong>, com o peso de ênfase para o leitor de tela", () => {
+      render(<ChatMessage message={comMarkdown("Cuidado com o **dragão**.")} />);
+      expect(screen.getByText("dragão").tagName).toBe("STRONG");
+    });
+
+    it("com renderMarkdown={false}, mostra o texto cru", () => {
+      render(<ChatMessage message={comMarkdown("- não é lista")} renderMarkdown={false} />);
+      expect(screen.queryByRole("listitem")).not.toBeInTheDocument();
+      expect(screen.getByText("- não é lista")).toBeInTheDocument();
+    });
+  });
+
   describe("Menu da mensagem", () => {
     it("abre com clique normal e pelo nome acessível, e dispara a ação", async () => {
       const onEdit = vi.fn();
