@@ -80,14 +80,13 @@ const Catalogo = () => (
 );
 
 describe("ModelSelector: catálogo", () => {
-  it("lista os modelos agrupados por provedor, com logo nomeado e atalho", () => {
-    render(<Catalogo />);
+  it("lista os modelos agrupados por provedor, com logo decorativo e atalho", () => {
+    const { baseElement } = render(<Catalogo />);
     expect(screen.getByRole("group", { name: "Anthropic" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: /Claude/ })).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "anthropic logo" })).toHaveAttribute(
-      "src",
-      "https://models.dev/logos/anthropic.svg"
-    );
+    // o nome do modelo já está escrito ao lado; o logo não é lido de novo
+    const logo = baseElement.querySelector('img[src="https://models.dev/logos/anthropic.svg"]');
+    expect(logo).toHaveAttribute("alt", "");
     expect(screen.getByText("⌘1")).toBeInTheDocument();
   });
 
@@ -164,5 +163,13 @@ describe("ModelSelector: catálogo", () => {
       rules: { "color-contrast": { enabled: false }, region: { enabled: false } },
     });
     expect(result.violations).toEqual([]);
+  });
+});
+
+describe("ModelSelectorLogo", () => {
+  it("é decorativo: o nome do modelo já está escrito ao lado, o leitor de tela não lê o logo", () => {
+    const { container } = render(<ModelSelectorLogo provider="anthropic" />);
+    expect(container.querySelector("img")).toHaveAttribute("alt", "");
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
 });
