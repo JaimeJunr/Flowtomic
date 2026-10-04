@@ -110,6 +110,7 @@ function DraggableWidgetItem({ widget }: { widget: WidgetPaletteItem }) {
   return (
     <div
       ref={setNodeRef}
+      data-slot="widget-palette-item"
       style={style}
       {...listeners}
       {...attributes}
@@ -149,6 +150,7 @@ export function WidgetPalette({
 
   return (
     <div
+      data-slot="widget-palette"
       className={cn(
         "fixed right-0 top-0 h-full w-80 bg-background border-l border-border",
         "shadow-lg z-40 transition-transform duration-300",

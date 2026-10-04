@@ -106,7 +106,7 @@ const ANNOUNCEMENTS: Announcements = {
 function GridDropArea({ className, style, children }: React.ComponentProps<"div">) {
   const { setNodeRef } = useDroppable({ id: "dashboard-grid", data: { type: "grid" } });
   return (
-    <div ref={setNodeRef} className={className} style={style}>
+    <div ref={setNodeRef} data-slot="draggable-dashboard-grid" className={className} style={style}>
       {children}
     </div>
   );
@@ -265,7 +265,10 @@ export function DraggableDashboardGrid({
     }
 
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 text-center">
+      <div
+        data-slot="draggable-dashboard-grid"
+        className="flex flex-col items-center justify-center min-h-[400px] p-8 text-center"
+      >
         <div className="mb-4">
           <svg
             className="w-24 h-24 text-muted-foreground mx-auto"

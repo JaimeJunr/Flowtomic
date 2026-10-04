@@ -18,7 +18,7 @@
  */
 
 import { type StatCardData, useStatCard } from "@flowtomic/logic";
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../../atoms";
 
@@ -54,7 +54,7 @@ export interface StatItem {
   positive?: boolean;
 }
 
-export interface StatsGridProps {
+export interface StatsGridProps extends React.ComponentProps<"div"> {
   stats: StatItem[];
   layout?: "grid" | "list";
   /**
@@ -190,65 +190,69 @@ function ListMetric({ stat }: { stat: StatItem }) {
   );
 }
 
-const StatsGrid = React.forwardRef<HTMLDivElement, StatsGridProps>(
-  (
-    { stats, layout = "grid", loading = false, skeletonCount, className, columns, ...props },
-    ref
-  ) => {
-    if (loading) {
-      // Determina o número de skeletons: usa skeletonCount, ou stats.length (se > 0), ou 3 por padrão
-      const count = skeletonCount ?? (stats.length > 0 ? stats.length : 3);
-      const skeletonIds = Array.from({ length: count }, (_, i) => `stats-skeleton-${i}`);
-      return (
-        <div
-          ref={ref}
-          aria-busy="true"
-          className={cn(
-            "grid grid-cols-1 border-t border-border",
-            gridColumns(columns, count),
-            className
-          )}
-        >
-          {skeletonIds.map((id) => (
-            <div key={id} className="flex flex-col gap-3 py-5 sm:px-6 sm:first:pl-0">
-              <Skeleton className="h-3.5 w-28" />
-              <Skeleton className="h-8 w-24" />
-              <Skeleton className="h-3 w-20" />
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    if (layout === "list") {
-      return (
-        <div ref={ref} className={className} {...props}>
-          <dl className="grid max-w-3xl grid-cols-[minmax(0,1fr)_auto_minmax(160px,auto)] text-sm">
-            {stats.map((stat) => (
-              <ListMetric key={stat.id} stat={stat} />
-            ))}
-          </dl>
-        </div>
-      );
-    }
-
-    const lgColumns = effectiveLgColumns(columns, stats.length);
+function StatsGrid({
+  stats,
+  layout = "grid",
+  loading = false,
+  skeletonCount,
+  className,
+  columns,
+  ...props
+}: StatsGridProps) {
+  if (loading) {
+    // Determina o número de skeletons: usa skeletonCount, ou stats.length (se > 0), ou 3 por padrão
+    const count = skeletonCount ?? (stats.length > 0 ? stats.length : 3);
+    const skeletonIds = Array.from({ length: count }, (_, i) => `stats-skeleton-${i}`);
     return (
-      <div ref={ref} className={className} {...props}>
-        <dl
-          className={cn(
-            "grid grid-cols-1 border-t border-border",
-            gridColumns(columns, stats.length)
-          )}
-        >
+      <div
+        ref={props.ref}
+        data-slot="stats-grid"
+        aria-busy="true"
+        className={cn(
+          "grid grid-cols-1 border-t border-border",
+          gridColumns(columns, count),
+          className
+        )}
+      >
+        {skeletonIds.map((id) => (
+          <div key={id} className="flex flex-col gap-3 py-5 sm:px-6 sm:first:pl-0">
+            <Skeleton className="h-3.5 w-28" />
+            <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (layout === "list") {
+    return (
+      <div data-slot="stats-grid" className={className} {...props}>
+        <dl className="grid max-w-3xl grid-cols-[minmax(0,1fr)_auto_minmax(160px,auto)] text-sm">
           {stats.map((stat) => (
-            <GridMetric key={stat.id} stat={stat} lgColumns={lgColumns} />
+            <ListMetric key={stat.id} stat={stat} />
           ))}
         </dl>
       </div>
     );
   }
-);
+
+  const lgColumns = effectiveLgColumns(columns, stats.length);
+  return (
+    <div data-slot="stats-grid" className={className} {...props}>
+      <dl
+        className={cn(
+          "grid grid-cols-1 border-t border-border",
+          gridColumns(columns, stats.length)
+        )}
+      >
+        {stats.map((stat) => (
+          <GridMetric key={stat.id} stat={stat} lgColumns={lgColumns} />
+        ))}
+      </dl>
+    </div>
+  );
+}
 
 StatsGrid.displayName = "StatsGrid";
 

@@ -160,6 +160,8 @@ function ControlSlot({
  * Campo de formulário base que renderiza diferentes tipos de input
  * baseado na configuração fornecida
  */
+// Sem data-slot próprio: a raiz é o FormItem, que mantém o "form-item" (o layout e os testes
+// localizam o campo por ele)
 export function BaseFormField<T extends FieldValues>({ config, control }: BaseFormFieldProps<T>) {
   const baseId = useId();
   const {
@@ -609,6 +611,7 @@ export function FormLayout<T extends FieldValues>({
   return (
     <Form {...form}>
       <form
+        data-slot="form-layout"
         id={formId}
         ref={formRef as React.RefObject<HTMLFormElement>}
         onSubmit={form.handleSubmit(onSubmit, onError)}

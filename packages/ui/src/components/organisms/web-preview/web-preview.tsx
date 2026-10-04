@@ -67,6 +67,7 @@ export const WebPreview = ({
   return (
     <WebPreviewContext.Provider value={contextValue}>
       <div
+        data-slot="web-preview"
         className={cn("flex size-full flex-col rounded-lg border bg-card", className)}
         {...props}
       >
@@ -83,7 +84,11 @@ export const WebPreviewNavigation = ({
   children,
   ...props
 }: WebPreviewNavigationProps) => (
-  <div className={cn("flex items-center gap-1 border-b p-2", className)} {...props}>
+  <div
+    data-slot="web-preview-navigation"
+    className={cn("flex items-center gap-1 border-b p-2", className)}
+    {...props}
+  >
     {children}
   </div>
 );
@@ -104,6 +109,7 @@ export const WebPreviewNavigationButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
+          data-slot="web-preview-navigation-button"
           aria-label={ariaLabel ?? tooltip}
           className="h-8 w-8 p-0 hover:text-foreground"
           disabled={disabled}
@@ -147,6 +153,7 @@ export const WebPreviewUrl = ({ value, onChange, onKeyDown, ...props }: WebPrevi
 
   return (
     <Input
+      data-slot="web-preview-url"
       className="h-8 flex-1 text-sm"
       onChange={handleChange}
       onKeyDown={handleKeyDown}
@@ -167,7 +174,7 @@ export const WebPreviewBody = ({ className, loading, src, ...props }: WebPreview
   const { url } = useWebPreview();
 
   return (
-    <div className="flex-1">
+    <div data-slot="web-preview-body" className="flex-1">
       <iframe
         className={cn("size-full", className)}
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
@@ -198,6 +205,7 @@ export const WebPreviewConsole = ({
 
   return (
     <Collapsible
+      data-slot="web-preview-console"
       className={cn("border-t bg-muted/50 font-mono text-sm", className)}
       onOpenChange={setConsoleOpen}
       open={consoleOpen}

@@ -44,6 +44,30 @@ import {
   InputGroupButton,
 } from "@/components/molecules/forms/input-group";
 import { TextEditor } from "@/components/molecules/forms/text-editor";
+import { ChatLog } from "@/components/organisms/chat-log";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationEmptyState,
+  ConversationScrollButton,
+} from "@/components/organisms/conversation";
+import { DashboardHeaderActions } from "@/components/organisms/dashboard-header-actions";
+import { DashboardLayout } from "@/components/organisms/dashboard-layout";
+import { DashboardMovementsSection } from "@/components/organisms/dashboard-movements-section";
+import { DocumentEditor } from "@/components/organisms/document-editor";
+import { Image } from "@/components/organisms/image";
+import {
+  ModelSelector,
+  ModelSelectorContent,
+  ModelSelectorInput,
+  ModelSelectorLogo,
+  ModelSelectorLogoGroup,
+  ModelSelectorName,
+} from "@/components/organisms/model-selector";
+import { MonthlySummary } from "@/components/organisms/monthly-summary";
+import { OpenIn, OpenInContent, OpenInTrigger } from "@/components/organisms/open-in-chat";
+import { ScriptEditor } from "@/components/organisms/script-editor";
+import { StatsGrid } from "@/components/organisms/stats-grid";
 
 // Guarda da migração para React 19: `ref` é prop normal e a raiz carrega data-slot.
 describe("ref como prop e data-slot nos atoms", () => {
@@ -313,5 +337,160 @@ describe("ref como prop e data-slot nas molecules", () => {
     render(<EditModeToggle ref={ref} isEditMode={false} onToggle={() => {}} />);
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
     expect(ref.current?.getAttribute("data-slot")).toBe("edit-mode-toggle");
+  });
+});
+
+describe("ref como prop e data-slot nos organisms", () => {
+  it("Conversation e suas partes entregam o ref e marcam a raiz", () => {
+    const rootRef = React.createRef<HTMLDivElement>();
+    const emptyRef = React.createRef<HTMLDivElement>();
+    render(
+      <Conversation ref={rootRef}>
+        <ConversationContent data-testid="conteudo">
+          <ConversationEmptyState ref={emptyRef} />
+        </ConversationContent>
+      </Conversation>
+    );
+    expect(rootRef.current).toBeInstanceOf(HTMLDivElement);
+    expect(rootRef.current).toHaveAttribute("role", "log");
+    expect(rootRef.current?.getAttribute("data-slot")).toBe("conversation");
+    expect(screen.getByTestId("conteudo").getAttribute("data-slot")).toBe("conversation-content");
+    expect(emptyRef.current?.getAttribute("data-slot")).toBe("conversation-empty-state");
+  });
+
+  it("ConversationScrollButton entrega o ref do botão", () => {
+    const ref = React.createRef<HTMLButtonElement>();
+    render(
+      <Conversation>
+        <ConversationContent>x</ConversationContent>
+        <ConversationScrollButton ref={ref} />
+      </Conversation>
+    );
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+    expect(ref.current?.getAttribute("data-slot")).toBe("conversation-scroll-button");
+  });
+
+  it("ChatLog entrega o ref da raiz", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<ChatLog ref={ref} messages={[]} />);
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    expect(ref.current?.getAttribute("data-slot")).toBe("chat-log");
+  });
+
+  it("StatsGrid entrega o ref nos modos grade, lista e carregando", () => {
+    const stats = [{ id: "a", title: "Downloads", value: 10 }];
+    const gridRef = React.createRef<HTMLDivElement>();
+    const listRef = React.createRef<HTMLDivElement>();
+    const loadingRef = React.createRef<HTMLDivElement>();
+    render(
+      <>
+        <StatsGrid ref={gridRef} stats={stats} />
+        <StatsGrid ref={listRef} stats={stats} layout="list" />
+        <StatsGrid ref={loadingRef} stats={stats} loading />
+      </>
+    );
+    for (const ref of [gridRef, listRef, loadingRef]) {
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current?.getAttribute("data-slot")).toBe("stats-grid");
+    }
+    expect(loadingRef.current).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("ModelSelectorContent, Input, Logo, LogoGroup e Name entregam o ref", () => {
+    const contentRef = React.createRef<HTMLDivElement>();
+    const inputRef = React.createRef<HTMLInputElement>();
+    const groupRef = React.createRef<HTMLDivElement>();
+    const nameRef = React.createRef<HTMLSpanElement>();
+    const initialRef = React.createRef<HTMLImageElement | HTMLSpanElement>();
+    const imgRef = React.createRef<HTMLImageElement | HTMLSpanElement>();
+    render(
+      <ModelSelector defaultOpen>
+        <ModelSelectorContent ref={contentRef}>
+          <ModelSelectorInput ref={inputRef} placeholder="Buscar" />
+          <ModelSelectorLogoGroup ref={groupRef}>
+            <ModelSelectorLogo ref={initialRef} provider="anthropic" />
+            <ModelSelectorLogo ref={imgRef} provider="openai" src="/openai.svg" />
+          </ModelSelectorLogoGroup>
+          <ModelSelectorName ref={nameRef}>Claude</ModelSelectorName>
+        </ModelSelectorContent>
+      </ModelSelector>
+    );
+    expect(contentRef.current?.getAttribute("data-slot")).toBe("model-selector-content");
+    expect(inputRef.current).toBeInstanceOf(HTMLInputElement);
+    expect(inputRef.current?.getAttribute("data-slot")).toBe("model-selector-input");
+    expect(groupRef.current?.getAttribute("data-slot")).toBe("model-selector-logo-group");
+    expect(initialRef.current).toBeInstanceOf(HTMLSpanElement);
+    expect(imgRef.current).toBeInstanceOf(HTMLImageElement);
+    expect(nameRef.current?.getAttribute("data-slot")).toBe("model-selector-name");
+  });
+
+  it("Image entrega o ref da imagem e marca o fallback sem dados", () => {
+    const ref = React.createRef<HTMLImageElement>();
+    const { container } = render(
+      <>
+        <Image
+          ref={ref}
+          base64="AAAA"
+          mediaType="image/png"
+          alt="x"
+          uint8Array={new Uint8Array()}
+        />
+        <Image base64="" mediaType="image/png" uint8Array={new Uint8Array()} />
+      </>
+    );
+    expect(ref.current).toBeInstanceOf(HTMLImageElement);
+    expect(ref.current?.getAttribute("data-slot")).toBe("image");
+    expect(container.querySelectorAll("[data-slot=image]")).toHaveLength(2);
+  });
+
+  it("OpenInTrigger e OpenInContent entregam o ref", () => {
+    const triggerRef = React.createRef<HTMLButtonElement>();
+    const contentRef = React.createRef<HTMLDivElement>();
+    render(
+      <OpenIn query="olá" defaultOpen>
+        <OpenInTrigger ref={triggerRef} />
+        <OpenInContent ref={contentRef} />
+      </OpenIn>
+    );
+    expect(triggerRef.current).toBeInstanceOf(HTMLButtonElement);
+    expect(triggerRef.current?.getAttribute("data-slot")).toBe("open-in-trigger");
+    expect(contentRef.current?.getAttribute("data-slot")).toBe("open-in-content");
+  });
+
+  it("MonthlySummary entrega o ref da raiz", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<MonthlySummary ref={ref} />);
+    expect(ref.current?.getAttribute("data-slot")).toBe("monthly-summary");
+  });
+
+  it("DashboardHeaderActions entrega o ref da raiz", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<DashboardHeaderActions ref={ref} />);
+    expect(ref.current?.getAttribute("data-slot")).toBe("dashboard-header-actions");
+  });
+
+  it("DashboardLayout entrega o ref da raiz", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<DashboardLayout ref={ref}>conteúdo</DashboardLayout>);
+    expect(ref.current?.getAttribute("data-slot")).toBe("dashboard-layout");
+  });
+
+  it("DashboardMovementsSection entrega o ref da raiz", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<DashboardMovementsSection ref={ref} />);
+    expect(ref.current?.getAttribute("data-slot")).toBe("dashboard-movements-section");
+  });
+
+  it("DocumentEditor entrega o ref da raiz", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<DocumentEditor ref={ref} />);
+    expect(ref.current?.getAttribute("data-slot")).toBe("document-editor");
+  });
+
+  it("ScriptEditor entrega o ref da raiz e o log segue rolando", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<ScriptEditor ref={ref} autoConnect={false} />);
+    expect(ref.current?.getAttribute("data-slot")).toBe("script-editor");
+    expect(screen.getByRole("log")).toBeInTheDocument();
   });
 });

@@ -109,7 +109,10 @@ export function WidgetConfigModal({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className={cn("max-w-2xl max-h-[90vh] overflow-y-auto", className)}>
+      <DialogContent
+        data-slot="widget-config-modal"
+        className={cn("max-w-2xl max-h-[90vh] overflow-y-auto", className)}
+      >
         <DialogHeader>
           <DialogTitle>{title || `Configurar Widget`}</DialogTitle>
           <DialogDescription>

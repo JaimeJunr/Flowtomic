@@ -333,7 +333,7 @@ export const GenealogyCanvas = ({
   );
 
   return (
-    <div className={cn("h-full w-full", className)}>
+    <div data-slot="genealogy-canvas" className={cn("h-full w-full", className)}>
       <Canvas
         {...canvasProps}
         nodes={nodes}

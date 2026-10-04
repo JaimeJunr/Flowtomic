@@ -12,16 +12,14 @@ import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import { cn } from "@/lib/utils";
 import { Button } from "../../atoms";
 
-export type ConversationProps = ComponentProps<typeof StickToBottom>;
+export type ConversationProps = ComponentProps<typeof StickToBottom> & {
+  ref?: React.Ref<HTMLDivElement>;
+};
 
 // diz ao turno se ele surgiu depois da abertura (mensagem nova) ou veio com o histórico
 const ConversationOpenedContext = React.createContext<React.RefObject<boolean> | null>(null);
 
-export const Conversation = React.forwardRef<
-  React.ElementRef<typeof StickToBottom>,
-  ConversationProps
->(({ className, children, ...props }, _ref) => {
-  const { ref: _, ...stickToBottomProps } = props as { ref?: unknown; [key: string]: unknown };
+export function Conversation({ className, children, ...props }: ConversationProps) {
   const opened = useRef(false);
   useEffect(() => {
     opened.current = true;
@@ -29,32 +27,33 @@ export const Conversation = React.forwardRef<
   return (
     <ConversationOpenedContext.Provider value={opened}>
       <StickToBottom
+        data-slot="conversation"
         className={cn("relative flex-1 overflow-y-auto", className)}
         initial="smooth"
         resize="smooth"
         role="log"
-        {...stickToBottomProps}
+        {...props}
       >
         {children}
       </StickToBottom>
     </ConversationOpenedContext.Provider>
   );
-});
+}
 Conversation.displayName = "Conversation";
 
 export type ConversationContentProps = ComponentProps<typeof StickToBottom.Content>;
 
-export const ConversationContent = React.forwardRef<
-  React.ElementRef<typeof StickToBottom.Content>,
-  ConversationContentProps
->(({ className, children, ...props }, _ref) => {
-  const { ref: _, ...contentProps } = props as { ref?: unknown; [key: string]: unknown };
+export function ConversationContent({ className, children, ...props }: ConversationContentProps) {
   return (
-    <StickToBottom.Content className={cn("flex flex-col gap-8 p-4", className)} {...contentProps}>
+    <StickToBottom.Content
+      data-slot="conversation-content"
+      className={cn("flex flex-col gap-8 p-4", className)}
+      {...props}
+    >
       {children}
     </StickToBottom.Content>
   );
-});
+}
 ConversationContent.displayName = "ConversationContent";
 
 /** Folga entre o topo da área de rolagem e a mensagem ancorada. */
@@ -119,20 +118,17 @@ export type ConversationEmptyStateProps = ComponentProps<"div"> & {
   icon?: React.ReactNode;
 };
 
-export const ConversationEmptyState = React.forwardRef<HTMLDivElement, ConversationEmptyStateProps>(
-  (
-    {
-      className,
-      title = "Nenhuma mensagem ainda",
-      description = "Envie a primeira mensagem para começar.",
-      icon,
-      children,
-      ...props
-    },
-    ref
-  ) => (
+export function ConversationEmptyState({
+  className,
+  title = "Nenhuma mensagem ainda",
+  description = "Envie a primeira mensagem para começar.",
+  icon,
+  children,
+  ...props
+}: ConversationEmptyStateProps) {
+  return (
     <div
-      ref={ref}
+      data-slot="conversation-empty-state"
       className={cn(
         "flex size-full flex-col items-center justify-center gap-3 p-8 text-center",
         className
@@ -149,16 +145,13 @@ export const ConversationEmptyState = React.forwardRef<HTMLDivElement, Conversat
         </>
       )}
     </div>
-  )
-);
+  );
+}
 ConversationEmptyState.displayName = "ConversationEmptyState";
 
 export type ConversationScrollButtonProps = ComponentProps<typeof Button>;
 
-export const ConversationScrollButton = React.forwardRef<
-  HTMLButtonElement,
-  ConversationScrollButtonProps
->(({ className, ...props }, ref) => {
+export function ConversationScrollButton({ className, ...props }: ConversationScrollButtonProps) {
   const { isAtBottom, scrollToBottom } = useStickToBottomContext();
 
   const handleScrollToBottom = useCallback(() => {
@@ -169,7 +162,7 @@ export const ConversationScrollButton = React.forwardRef<
   // com transição; aria-hidden e tabIndex tiram ele do leitor de tela e do Tab.
   return (
     <Button
-      ref={ref}
+      data-slot="conversation-scroll-button"
       aria-hidden={isAtBottom ? true : undefined}
       tabIndex={isAtBottom ? -1 : undefined}
       data-state={isAtBottom ? "hidden" : "visible"}
@@ -189,5 +182,5 @@ export const ConversationScrollButton = React.forwardRef<
       Ir para o fim
     </Button>
   );
-});
+}
 ConversationScrollButton.displayName = "ConversationScrollButton";

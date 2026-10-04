@@ -55,6 +55,7 @@ export interface DocumentEditorProps {
   onViewModeChange?: (mode: "single" | "continuous") => void;
   /** Classe CSS adicional */
   className?: string;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 function generateId(): string {
@@ -69,308 +70,300 @@ function countCharacters(text: string): number {
   return text.length;
 }
 
-export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorProps>(
-  (
-    {
-      title: controlledTitle,
-      onTitleChange,
-      pages: controlledPages,
-      onPagesChange,
-      activePage: controlledActivePage,
-      onActivePageChange,
-      readOnly = false,
-      viewMode: controlledViewMode,
-      onViewModeChange,
-      className,
-    },
-    ref
-  ) => {
-    // Estado interno para título
-    const [internalTitle, setInternalTitle] = React.useState("Documento sem título");
-    const title = controlledTitle ?? internalTitle;
-    const handleTitleChange = (newTitle: string) => {
-      if (!readOnly) {
-        setInternalTitle(newTitle);
-        onTitleChange?.(newTitle);
-      }
-    };
-
-    // Estado interno para páginas
-    const [internalPages, setInternalPages] = React.useState<DocumentPage[]>([
-      { id: generateId(), content: "" },
-    ]);
-    const pages = controlledPages ?? internalPages;
-    const handlePagesChange = (newPages: DocumentPage[]) => {
-      setInternalPages(newPages);
-      onPagesChange?.(newPages);
-    };
-
-    // Estado interno para página ativa
-    const [internalActivePage, setInternalActivePage] = React.useState(0);
-    const activePage = controlledActivePage ?? internalActivePage;
-    const handleActivePageChange = React.useCallback(
-      (index: number) => {
-        setInternalActivePage(index);
-        onActivePageChange?.(index);
-      },
-      [onActivePageChange]
-    );
-
-    // Última edição (timestamp)
-    const [lastEdit, setLastEdit] = React.useState<Date>(new Date());
-
-    // Estado interno para modo de visualização
-    const [internalViewMode, setInternalViewMode] = React.useState<"single" | "continuous">(
-      "single"
-    );
-    const viewMode = controlledViewMode ?? internalViewMode;
-    const handleViewModeChange = (mode: "single" | "continuous") => {
-      setInternalViewMode(mode);
-      onViewModeChange?.(mode);
-    };
-
-    // Atualizar conteúdo da página ativa
-    const handlePageContentChange = (content: string) => {
-      if (readOnly) return;
-      const newPages = [...pages];
-      newPages[activePage] = { ...newPages[activePage], content };
-      handlePagesChange(newPages);
-      setLastEdit(new Date());
-    };
-
-    // Atualizar conteúdo de uma página específica (modo contínuo)
-    const handleSpecificPageContentChange = (index: number, content: string) => {
-      if (readOnly) return;
-      const newPages = [...pages];
-      newPages[index] = { ...newPages[index], content };
-      handlePagesChange(newPages);
-      setLastEdit(new Date());
-    };
-
-    // Adicionar nova página
-    const handleAddPage = () => {
-      if (readOnly) return;
-      const newPage: DocumentPage = { id: generateId(), content: "" };
-      handlePagesChange([...pages, newPage]);
-      handleActivePageChange(pages.length); // Ir para a nova página
-    };
-
-    // Remover página atual
-    const handleRemovePage = () => {
-      if (readOnly || pages.length <= 1) return;
-      const newPages = pages.filter((_, i) => i !== activePage);
-      handlePagesChange(newPages);
-      // Ajustar página ativa
-      if (activePage >= newPages.length) {
-        handleActivePageChange(newPages.length - 1);
-      }
-    };
-
-    // Navegar para página anterior
-    const handlePreviousPage = () => {
-      if (activePage > 0) {
-        handleActivePageChange(activePage - 1);
-      }
-    };
-
-    // Navegar para próxima página
-    const handleNextPage = () => {
-      if (activePage < pages.length - 1) {
-        handleActivePageChange(activePage + 1);
-      }
-    };
-
-    // Calcular estatísticas do documento
-    const totalWords = React.useMemo(() => {
-      return pages.reduce((sum, page) => sum + countWords(page.content), 0);
-    }, [pages]);
-
-    const totalCharacters = React.useMemo(() => {
-      return pages.reduce((sum, page) => sum + countCharacters(page.content), 0);
-    }, [pages]);
-
-    // Garantir que activePage está dentro do range válido
-    const safeActivePage = Math.min(Math.max(0, activePage), pages.length - 1);
-    const currentPage = pages[safeActivePage];
-
-    // Sincronizar activePage se estiver fora do range
-    React.useEffect(() => {
-      if (activePage !== safeActivePage) {
-        handleActivePageChange(safeActivePage);
-      }
-    }, [activePage, safeActivePage, handleActivePageChange]);
-
-    if (!currentPage) {
-      return null; // Fallback de segurança
+export function DocumentEditor({
+  title: controlledTitle,
+  onTitleChange,
+  pages: controlledPages,
+  onPagesChange,
+  activePage: controlledActivePage,
+  onActivePageChange,
+  readOnly = false,
+  viewMode: controlledViewMode,
+  onViewModeChange,
+  className,
+  ref,
+}: DocumentEditorProps) {
+  // Estado interno para título
+  const [internalTitle, setInternalTitle] = React.useState("Documento sem título");
+  const title = controlledTitle ?? internalTitle;
+  const handleTitleChange = (newTitle: string) => {
+    if (!readOnly) {
+      setInternalTitle(newTitle);
+      onTitleChange?.(newTitle);
     }
+  };
 
-    return (
-      <div ref={ref} className={cn("flex h-full flex-col", className)}>
-        {/* Header com título e metadata */}
-        <div className="border-b bg-background p-4">
-          <div className="mx-auto max-w-4xl space-y-3">
-            {/* Título editável */}
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-              disabled={readOnly}
-              className="w-full border-none bg-transparent text-2xl font-semibold outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
-              placeholder="Documento sem título"
-            />
+  // Estado interno para páginas
+  const [internalPages, setInternalPages] = React.useState<DocumentPage[]>([
+    { id: generateId(), content: "" },
+  ]);
+  const pages = controlledPages ?? internalPages;
+  const handlePagesChange = (newPages: DocumentPage[]) => {
+    setInternalPages(newPages);
+    onPagesChange?.(newPages);
+  };
 
-            {/* Metadata */}
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1.5">
-                <Clock className="size-3.5" />
-                <span>Última edição: {lastEdit.toLocaleTimeString("pt-BR")}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <FileText className="size-3.5" />
-                <span>
-                  {pages.length} página{pages.length !== 1 ? "s" : ""}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Type className="size-3.5" />
-                <span>
-                  {`${totalWords} palavra${totalWords !== 1 ? "s" : ""} · ${totalCharacters} caractere${totalCharacters !== 1 ? "s" : ""}`}
-                </span>
-              </div>
+  // Estado interno para página ativa
+  const [internalActivePage, setInternalActivePage] = React.useState(0);
+  const activePage = controlledActivePage ?? internalActivePage;
+  const handleActivePageChange = React.useCallback(
+    (index: number) => {
+      setInternalActivePage(index);
+      onActivePageChange?.(index);
+    },
+    [onActivePageChange]
+  );
+
+  // Última edição (timestamp)
+  const [lastEdit, setLastEdit] = React.useState<Date>(new Date());
+
+  // Estado interno para modo de visualização
+  const [internalViewMode, setInternalViewMode] = React.useState<"single" | "continuous">("single");
+  const viewMode = controlledViewMode ?? internalViewMode;
+  const handleViewModeChange = (mode: "single" | "continuous") => {
+    setInternalViewMode(mode);
+    onViewModeChange?.(mode);
+  };
+
+  // Atualizar conteúdo da página ativa
+  const handlePageContentChange = (content: string) => {
+    if (readOnly) return;
+    const newPages = [...pages];
+    newPages[activePage] = { ...newPages[activePage], content };
+    handlePagesChange(newPages);
+    setLastEdit(new Date());
+  };
+
+  // Atualizar conteúdo de uma página específica (modo contínuo)
+  const handleSpecificPageContentChange = (index: number, content: string) => {
+    if (readOnly) return;
+    const newPages = [...pages];
+    newPages[index] = { ...newPages[index], content };
+    handlePagesChange(newPages);
+    setLastEdit(new Date());
+  };
+
+  // Adicionar nova página
+  const handleAddPage = () => {
+    if (readOnly) return;
+    const newPage: DocumentPage = { id: generateId(), content: "" };
+    handlePagesChange([...pages, newPage]);
+    handleActivePageChange(pages.length); // Ir para a nova página
+  };
+
+  // Remover página atual
+  const handleRemovePage = () => {
+    if (readOnly || pages.length <= 1) return;
+    const newPages = pages.filter((_, i) => i !== activePage);
+    handlePagesChange(newPages);
+    // Ajustar página ativa
+    if (activePage >= newPages.length) {
+      handleActivePageChange(newPages.length - 1);
+    }
+  };
+
+  // Navegar para página anterior
+  const handlePreviousPage = () => {
+    if (activePage > 0) {
+      handleActivePageChange(activePage - 1);
+    }
+  };
+
+  // Navegar para próxima página
+  const handleNextPage = () => {
+    if (activePage < pages.length - 1) {
+      handleActivePageChange(activePage + 1);
+    }
+  };
+
+  // Calcular estatísticas do documento
+  const totalWords = React.useMemo(() => {
+    return pages.reduce((sum, page) => sum + countWords(page.content), 0);
+  }, [pages]);
+
+  const totalCharacters = React.useMemo(() => {
+    return pages.reduce((sum, page) => sum + countCharacters(page.content), 0);
+  }, [pages]);
+
+  // Garantir que activePage está dentro do range válido
+  const safeActivePage = Math.min(Math.max(0, activePage), pages.length - 1);
+  const currentPage = pages[safeActivePage];
+
+  // Sincronizar activePage se estiver fora do range
+  React.useEffect(() => {
+    if (activePage !== safeActivePage) {
+      handleActivePageChange(safeActivePage);
+    }
+  }, [activePage, safeActivePage, handleActivePageChange]);
+
+  if (!currentPage) {
+    return null; // Fallback de segurança
+  }
+
+  return (
+    <div ref={ref} data-slot="document-editor" className={cn("flex h-full flex-col", className)}>
+      {/* Header com título e metadata */}
+      <div className="border-b bg-background p-4">
+        <div className="mx-auto max-w-4xl space-y-3">
+          {/* Título editável */}
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => handleTitleChange(e.target.value)}
+            disabled={readOnly}
+            className="w-full border-none bg-transparent text-2xl font-semibold outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
+            placeholder="Documento sem título"
+          />
+
+          {/* Metadata */}
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <Clock className="size-3.5" />
+              <span>Última edição: {lastEdit.toLocaleTimeString("pt-BR")}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <FileText className="size-3.5" />
+              <span>
+                {pages.length} página{pages.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Type className="size-3.5" />
+              <span>
+                {`${totalWords} palavra${totalWords !== 1 ? "s" : ""} · ${totalCharacters} caractere${totalCharacters !== 1 ? "s" : ""}`}
+              </span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Toolbar de navegação */}
-        <div className="border-b bg-muted/30 px-4 py-2">
-          <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2">
-            {/* Modo de visualização */}
+      {/* Toolbar de navegação */}
+      <div className="border-b bg-muted/30 px-4 py-2">
+        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2">
+          {/* Modo de visualização */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant={viewMode === "single" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => handleViewModeChange("single")}
+            >
+              <Columns className="size-4" />
+              Paginado
+            </Button>
+            <Button
+              variant={viewMode === "continuous" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => handleViewModeChange("continuous")}
+            >
+              <List className="size-4" />
+              Contínuo
+            </Button>
+          </div>
+
+          {/* Navegação (apenas em modo single) */}
+          {viewMode === "single" && (
             <div className="flex items-center gap-2">
               <Button
-                variant={viewMode === "single" ? "default" : "ghost"}
+                variant="ghost"
                 size="sm"
-                onClick={() => handleViewModeChange("single")}
+                onClick={handlePreviousPage}
+                disabled={safeActivePage === 0}
               >
-                <Columns className="size-4" />
-                Paginado
+                <ChevronLeft className="size-4" />
+                Anterior
               </Button>
+              <span className="text-sm text-muted-foreground">
+                Página {safeActivePage + 1} de {pages.length}
+              </span>
               <Button
-                variant={viewMode === "continuous" ? "default" : "ghost"}
+                variant="ghost"
                 size="sm"
-                onClick={() => handleViewModeChange("continuous")}
+                onClick={handleNextPage}
+                disabled={safeActivePage === pages.length - 1}
               >
-                <List className="size-4" />
-                Contínuo
+                Próxima
+                <ChevronRight className="size-4" />
               </Button>
             </div>
+          )}
 
-            {/* Navegação (apenas em modo single) */}
+          {/* Ações de página */}
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={handleAddPage} disabled={readOnly}>
+              <Plus className="size-4" />
+              Adicionar página
+            </Button>
             {viewMode === "single" && (
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handlePreviousPage}
-                  disabled={safeActivePage === 0}
-                >
-                  <ChevronLeft className="size-4" />
-                  Anterior
-                </Button>
-                <span className="text-sm text-muted-foreground">
-                  Página {safeActivePage + 1} de {pages.length}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleNextPage}
-                  disabled={safeActivePage === pages.length - 1}
-                >
-                  Próxima
-                  <ChevronRight className="size-4" />
-                </Button>
-              </div>
-            )}
-
-            {/* Ações de página */}
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={handleAddPage} disabled={readOnly}>
-                <Plus className="size-4" />
-                Adicionar página
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleRemovePage}
+                disabled={readOnly || pages.length <= 1}
+              >
+                <Trash2 className="size-4" />
+                Remover página
               </Button>
-              {viewMode === "single" && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleRemovePage}
-                  disabled={readOnly || pages.length <= 1}
-                >
-                  <Trash2 className="size-4" />
-                  Remover página
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Área do editor */}
-        <div className="flex-1 overflow-auto bg-muted/20 p-4 md:p-8">
-          <div className="mx-auto max-w-4xl space-y-8">
-            {viewMode === "single" ? (
-              /* Modo paginado - apenas página ativa */
-              <div className="min-h-[297mm] rounded-lg border bg-background p-6 md:p-16 shadow-sm">
-                <TextEditor
-                  key={currentPage.id}
-                  aria-label={`Página ${safeActivePage + 1}`}
-                  value={currentPage.content}
-                  onChange={handlePageContentChange}
-                  availableModes={["rich"]}
-                  editable={!readOnly}
-                  placeholder="Comece a digitar..."
-                />
-              </div>
-            ) : (
-              /* Modo contínuo - todas as páginas */
-              pages.map((page, index) => (
-                <div key={page.id} className="relative">
-                  {/* Indicador de número da página */}
-                  <div className="mb-2 flex items-center justify-between text-sm text-muted-foreground">
-                    <span>Página {index + 1}</span>
-                    {!readOnly && pages.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          if (pages.length <= 1) return;
-                          const newPages = pages.filter((_, i) => i !== index);
-                          handlePagesChange(newPages);
-                        }}
-                      >
-                        <Trash2 className="size-3" />
-                        Remover
-                      </Button>
-                    )}
-                  </div>
-                  <div className="min-h-[297mm] rounded-lg border bg-background p-16 shadow-sm">
-                    <TextEditor
-                      key={page.id}
-                      aria-label={`Página ${index + 1}`}
-                      value={page.content}
-                      onChange={(content: string) =>
-                        handleSpecificPageContentChange(index, content)
-                      }
-                      availableModes={["rich"]}
-                      editable={!readOnly}
-                      placeholder="Comece a digitar..."
-                    />
-                  </div>
-                </div>
-              ))
             )}
           </div>
         </div>
       </div>
-    );
-  }
-);
+
+      {/* Área do editor */}
+      <div className="flex-1 overflow-auto bg-muted/20 p-4 md:p-8">
+        <div className="mx-auto max-w-4xl space-y-8">
+          {viewMode === "single" ? (
+            /* Modo paginado - apenas página ativa */
+            <div className="min-h-[297mm] rounded-lg border bg-background p-6 md:p-16 shadow-sm">
+              <TextEditor
+                key={currentPage.id}
+                aria-label={`Página ${safeActivePage + 1}`}
+                value={currentPage.content}
+                onChange={handlePageContentChange}
+                availableModes={["rich"]}
+                editable={!readOnly}
+                placeholder="Comece a digitar..."
+              />
+            </div>
+          ) : (
+            /* Modo contínuo - todas as páginas */
+            pages.map((page, index) => (
+              <div key={page.id} className="relative">
+                {/* Indicador de número da página */}
+                <div className="mb-2 flex items-center justify-between text-sm text-muted-foreground">
+                  <span>Página {index + 1}</span>
+                  {!readOnly && pages.length > 1 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        if (pages.length <= 1) return;
+                        const newPages = pages.filter((_, i) => i !== index);
+                        handlePagesChange(newPages);
+                      }}
+                    >
+                      <Trash2 className="size-3" />
+                      Remover
+                    </Button>
+                  )}
+                </div>
+                <div className="min-h-[297mm] rounded-lg border bg-background p-16 shadow-sm">
+                  <TextEditor
+                    key={page.id}
+                    aria-label={`Página ${index + 1}`}
+                    value={page.content}
+                    onChange={(content: string) => handleSpecificPageContentChange(index, content)}
+                    availableModes={["rich"]}
+                    editable={!readOnly}
+                    placeholder="Comece a digitar..."
+                  />
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 DocumentEditor.displayName = "DocumentEditor";
