@@ -220,6 +220,9 @@ export function PromptInputProvider({
 
 const LocalAttachmentsContext = createContext<AttachmentsContext | null>(null);
 
+// Se o campo tem algo para enviar (texto ou anexo). null = fora de um PromptInput.
+const PromptInputHasContentContext = createContext<boolean | null>(null);
+
 export const usePromptInputAttachments = () => {
   const provider = useOptionalProviderAttachments();
   const local = useContext(LocalAttachmentsContext);
@@ -408,6 +411,10 @@ export const PromptInput = ({
 
   const [items, setItems] = useState<(FileUIPart & { id: string })[]>([]);
   const files = usingProvider ? controller.attachments.files : items;
+  // sem provider o textarea não é controlado; o form escuta o input para saber se há texto
+  const [localText, setLocalText] = useState("");
+  const currentText = usingProvider ? controller.textInput.value : localText;
+  const hasContent = currentText.trim() !== "" || files.length > 0;
 
   const openFileDialogLocal = useCallback(() => {
     inputRef.current?.click();
@@ -626,6 +633,7 @@ export const PromptInput = ({
 
     if (!usingProvider) {
       form.reset();
+      setLocalText("");
     }
 
     Promise.all(
@@ -684,14 +692,22 @@ export const PromptInput = ({
           className
         )}
         onSubmit={handleSubmit}
+        onInput={(event) => {
+          const target = event.target;
+          if (target instanceof HTMLTextAreaElement && target.name === "message") {
+            setLocalText(target.value);
+          }
+        }}
         {...(props as Record<string, unknown>)}
         // Depois do spread: o drop de arquivo é registrado neste form
         ref={formRef}
       >
         {/* a borda e o foco são do form; o grupo só organiza campo e barra */}
-        <InputGroup className="gap-0 rounded-none border-0 bg-transparent p-0 focus-within:ring-0 focus-within:ring-offset-0">
-          {children}
-        </InputGroup>
+        <PromptInputHasContentContext.Provider value={hasContent}>
+          <InputGroup className="gap-0 rounded-none border-0 bg-transparent p-0 focus-within:ring-0 focus-within:ring-offset-0">
+            {children}
+          </InputGroup>
+        </PromptInputHasContentContext.Provider>
       </form>
     </>
   );
@@ -929,6 +945,7 @@ export const PromptInputSubmit = ({
   ...props
 }: PromptInputSubmitProps) => {
   const busy = status === "submitted" || status === "streaming";
+  const hasContent = useContext(PromptInputHasContentContext);
 
   // Enviar e Parar ocupam o mesmo lugar; Parar não é submit, senão reenviaria a mensagem
   if (busy) {
@@ -958,7 +975,7 @@ export const PromptInputSubmit = ({
       size={size}
       type="submit"
       variant={variant}
-      disabled={disabled}
+      disabled={disabled || hasContent === false}
       {...(props as Record<string, unknown>)}
     >
       {children ?? (
