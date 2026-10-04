@@ -223,6 +223,9 @@ hooks, mais os 3 blocks.
 - **Screenshot sem `animations: "disabled"` pega o meio da animação.** Os
   componentes usam Framer Motion; o print sai translúcido, com o modal a meio
   caminho, e parece bug de opacidade. O driver já congela.
+- **Screenshot sem esperar as webfonts sai em Arial** e parece fonte quebrada (a
+  `bubble--nao-enviada` saiu assim em 3 prints seguidos, com a Public Sans carregada
+  de fato). O driver espera `document.fonts.ready` antes de cada print, por até 5 s.
 - **Storybook 10 removeu `@storybook/addons`.** A API é `storybook/manager-api`
   (`.storybook/manager.ts`). O import antigo não é warning: o esbuild do manager
   falha e o Storybook morre no boot antes de servir qualquer coisa.

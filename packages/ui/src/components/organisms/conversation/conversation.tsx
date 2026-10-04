@@ -100,22 +100,28 @@ export const ConversationScrollButton = React.forwardRef<
     scrollToBottom();
   }, [scrollToBottom]);
 
-  if (isAtBottom) {
-    return null;
-  }
-
+  // Fica no DOM quando a conversa está no fim, só escondido, para poder entrar e sair
+  // com transição; aria-hidden e tabIndex tiram ele do leitor de tela e do Tab.
   return (
     <Button
       ref={ref}
-      aria-label="Ir para a última mensagem"
-      className={cn("absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full", className)}
+      aria-hidden={isAtBottom ? true : undefined}
+      tabIndex={isAtBottom ? -1 : undefined}
+      data-state={isAtBottom ? "hidden" : "visible"}
+      className={cn(
+        "absolute bottom-4 left-1/2 -translate-x-1/2 gap-1.5 rounded-full bg-background shadow-md",
+        "transition-[opacity,translate] duration-200 motion-reduce:transition-none",
+        isAtBottom ? "pointer-events-none translate-y-2 opacity-0" : "translate-y-0 opacity-100",
+        className
+      )}
       onClick={handleScrollToBottom}
-      size="icon"
+      size="sm"
       type="button"
       variant="outline"
       {...props}
     >
-      <ArrowDownIcon className="size-4" />
+      <ArrowDownIcon aria-hidden="true" className="size-3.5" />
+      Ir para o fim
     </Button>
   );
 });

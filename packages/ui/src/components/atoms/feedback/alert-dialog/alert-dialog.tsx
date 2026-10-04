@@ -139,14 +139,10 @@ const AlertDialogContent = React.forwardRef<
   ) => {
     const is3D = animation === "3d";
     const isOpen = (props as { "data-state"?: string })["data-state"] === "open";
-    const contentRef = React.useRef<HTMLDivElement>(null);
-
-    // Merge refs
-    React.useImperativeHandle(ref, () => contentRef.current as HTMLDivElement, []);
 
     const content = (
       <AlertDialogPrimitive.Content
-        ref={contentRef}
+        ref={ref}
         className={cn(
           alertDialogContentVariants({ animation }),
           is3D && "opacity-0", // Desabilita animações CSS para 3D - Framer Motion controla

@@ -8,7 +8,7 @@ export interface PaginationProps extends React.ComponentProps<"nav"> {}
 function Pagination({ className, ...props }: PaginationProps) {
   return (
     <nav
-      aria-label="pagination"
+      aria-label="Paginação"
       data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}
@@ -70,13 +70,13 @@ export interface PaginationPreviousProps extends PaginationLinkProps {}
 function PaginationPrevious({ className, ...props }: PaginationPreviousProps) {
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label="Página anterior"
       size="default"
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
     >
-      <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <ChevronLeftIcon aria-hidden="true" />
+      <span className="hidden sm:block">Anterior</span>
     </PaginationLink>
   );
 }
@@ -88,13 +88,13 @@ export interface PaginationNextProps extends PaginationLinkProps {}
 function PaginationNext({ className, ...props }: PaginationNextProps) {
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label="Próxima página"
       size="default"
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
-      <ChevronRightIcon />
+      <span className="hidden sm:block">Próxima</span>
+      <ChevronRightIcon aria-hidden="true" />
     </PaginationLink>
   );
 }
@@ -112,7 +112,7 @@ function PaginationEllipsis({ className, ...props }: PaginationEllipsisProps) {
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">Mais páginas</span>
     </span>
   );
 }

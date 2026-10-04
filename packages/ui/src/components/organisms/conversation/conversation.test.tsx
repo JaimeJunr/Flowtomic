@@ -1,16 +1,21 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ConversationEmptyState, ConversationScrollButton } from "./conversation";
 
 // isAtBottom parte de `true` no use-stick-to-bottom (ver useStickToBottom.js) e o efeito de
 // resize/scroll que o recalcularia não roda no jsdom — sem esse mock o botão sempre retorna
-// null e o teste de a11y nunca alcança o <button>.
+// null e o teste de a11y nunca alcança o <button>. O objeto é mutável para cada teste
+// escolher se a conversa está no fim ou não.
+const stick = vi.hoisted(() => ({ isAtBottom: false, scrollToBottom: vi.fn() }));
 vi.mock("use-stick-to-bottom", async (importOriginal) => {
   const actual = await importOriginal<typeof import("use-stick-to-bottom")>();
-  return {
-    ...actual,
-    useStickToBottomContext: () => ({ isAtBottom: false, scrollToBottom: vi.fn() }),
-  };
+  return { ...actual, useStickToBottomContext: () => stick };
+});
+
+beforeEach(() => {
+  stick.isAtBottom = false;
+  stick.scrollToBottom.mockClear();
 });
 
 describe("ConversationEmptyState", () => {
@@ -42,8 +47,22 @@ describe("ConversationEmptyState", () => {
 });
 
 describe("ConversationScrollButton", () => {
-  it("expõe nome acessível para quem usa leitor de tela", () => {
+  it("aparece com texto quando a pessoa rolou para cima e leva de volta ao fim", async () => {
     render(<ConversationScrollButton />);
-    expect(screen.getByRole("button", { name: "Ir para a última mensagem" })).toBeInTheDocument();
+    const button = screen.getByRole("button", { name: "Ir para o fim" });
+    expect(button).toHaveAttribute("data-state", "visible");
+    expect(button).toHaveClass("rounded-full", "shadow-md");
+    await userEvent.click(button);
+    expect(stick.scrollToBottom).toHaveBeenCalledTimes(1);
+  });
+
+  it("no fim da conversa some da tela e do teclado, mas fica no DOM para a transição", () => {
+    stick.isAtBottom = true;
+    const { container } = render(<ConversationScrollButton />);
+    expect(screen.queryByRole("button", { name: "Ir para o fim" })).not.toBeInTheDocument();
+    const button = container.querySelector("button");
+    expect(button).toHaveAttribute("data-state", "hidden");
+    expect(button).toHaveAttribute("tabindex", "-1");
+    expect(button).toHaveClass("opacity-0", "pointer-events-none", "motion-reduce:transition-none");
   });
 });

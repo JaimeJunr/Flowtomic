@@ -19,7 +19,13 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn("animate-pulse rounded-md bg-muted", className)} {...props}>
+      <div
+        ref={ref}
+        // Sem conteúdo é só enfeite; com conteúdo, o texto precisa continuar legível
+        aria-hidden={children ? undefined : true}
+        className={cn("animate-pulse motion-reduce:animate-none rounded-md bg-muted", className)}
+        {...props}
+      >
         {children}
       </div>
     );

@@ -92,4 +92,16 @@ describe("Sheet", () => {
       });
     });
   });
+
+  it("o botão de fechar tem nome em português", async () => {
+    render(
+      <Sheet defaultOpen>
+        <SheetContent>
+          <SheetTitle>Editar componente</SheetTitle>
+        </SheetContent>
+      </Sheet>
+    );
+    expect(await screen.findByRole("button", { name: "Fechar" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Close" })).not.toBeInTheDocument();
+  });
 });
