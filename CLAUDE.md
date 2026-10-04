@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 47 molecules, 30 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 48 molecules, 30 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (63)
-- **Molecules**: `docs/componentes/molecules.md` (47)
+- **Molecules**: `docs/componentes/molecules.md` (48)
 - **Organisms**: `docs/componentes/organisms.md` (30)
 - **Blocks**: `docs/componentes/blocks.md` (2)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -375,7 +375,7 @@ errado.
 Resumo:
 
 - **Atoms**: 63 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 47 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 48 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 30 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 2 blocks - Ver `docs/componentes/blocks.md`
@@ -610,6 +610,12 @@ Cada uma já mordeu alguém neste repo.
   `pkill` do `run-flowtomic`: espere pelo PID (`while kill -0 $pid`), não pelo padrão.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
+- ⚠️ **Numa worktree, o `up.sh` pode devolver o Storybook de outro checkout.** Ele só olha se
+  a 6006 responde (`"already":true`), não de qual pasta o processo veio — e a story nova da
+  worktree não existe lá. Confira com `readlink /proc/$(lsof -ti:6006)/cwd`; se for outro
+  checkout, suba o da worktree em outra porta (`bunx storybook dev -p 6106 --config-dir
+  .storybook --no-open --ci`, com `setsid nohup` para não morrer com o shell) e rode o driver
+  com `SB_URL=http://localhost:6106`.
 
 ## Checklist ao abrir PR
 

@@ -692,6 +692,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["bar-chart.tsx", "index.ts"],
     dependencies: ["clsx", "tailwind-merge"],
   },
+  bubble: {
+    name: "bubble",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/bubble",
+    files: ["bubble.tsx", "index.ts"],
+    dependencies: ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"],
+  },
   "time-tracker": {
     name: "time-tracker",
     type: "molecule",

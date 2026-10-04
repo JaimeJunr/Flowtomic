@@ -207,6 +207,17 @@ Modal para editar uma mensagem de chat. Metadados (remetente, tipo, horário em 
 - Callbacks para salvar/cancelar
 - Formatação customizável de timestamp e badges
 
+### `bubble`
+
+Balão de mensagem. `Bubble` escolhe o lado (`align`: `end` para quem escreve, `start`
+para o outro lado) e a cor (`variant`: `muted`, `tinted`, `outline`, `destructive`).
+`BubbleContent` é o balão e aceita `asChild` para virar `<button>` ou `<a>`.
+`BubbleReactions` encosta as reações na borda de baixo, do mesmo lado do balão, e
+`BubbleGroup` junta mensagens seguidas. A resposta do assistente não usa balão.
+API inspirada no chatbot-template do shadcn (MIT), reescrita sobre Radix Slot.
+
+**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`
+
 ### `suggestion`
 
 Lista de sugestões com rolagem horizontal. Por padrão, as ações são outline, têm

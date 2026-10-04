@@ -52,6 +52,19 @@ export {
 } from "./data-display/artifact";
 export type { BarChartDataPoint, BarChartProps } from "./data-display/bar-chart";
 export { BarChart } from "./data-display/bar-chart";
+export type {
+  BubbleContentProps,
+  BubbleGroupProps,
+  BubbleProps,
+  BubbleReactionsProps,
+} from "./data-display/bubble";
+export {
+  Bubble,
+  BubbleContent,
+  BubbleGroup,
+  BubbleReactions,
+  bubbleContentVariants,
+} from "./data-display/bubble";
 export type { CalendarPopoverProps } from "./data-display/calendar-popover";
 export { CalendarPopover, normalizeDate } from "./data-display/calendar-popover";
 export type { CalendarRangeProps } from "./data-display/calendar-range";
