@@ -13,7 +13,7 @@ O **Flowtomic** é um sistema de design que oferece componentes UI prontos para 
 ### Características Principais
 
 - **63 atoms** - componentes básicos reutilizáveis
-- **48 molecules** - componentes compostos
+- **49 molecules** - componentes compostos
 - **30 organisms** - componentes complexos
 - **14 hooks headless** - lógica reutilizável sem UI
 - **3 blocks** - templates pré-construídos (`dashboard-01`, `flowtomic-dashboard`, `developer-panel`)
@@ -477,7 +477,7 @@ function ResponsiveComponent() {
 - `pagination` - Paginação
 - `tabs` - Abas
 
-### Molecules (48)
+### Molecules (49)
 
 **Animation:**
 
@@ -512,6 +512,7 @@ function ResponsiveComponent() {
 - `team-member-list` - Lista de membros da equipe
 - `time-tracker` - Timer com controles
 - `tool` - Display de tool
+- `tool-status-line` - Uma linha por chamada de ferramenta no chat
 
 **Feedback:**
 
@@ -807,7 +808,7 @@ function CustomStatCard() {
 
 - [Componentes Disponíveis](./docs/componentes/README.md) - Lista completa de componentes
 - [Atoms](./docs/componentes/atoms.md) - Componentes básicos (63 componentes)
-- [Molecules](./docs/componentes/molecules.md) - Componentes compostos (48 componentes)
+- [Molecules](./docs/componentes/molecules.md) - Componentes compostos (49 componentes)
 - [Organisms](./docs/componentes/organisms.md) - Componentes complexos (30 componentes)
 - [Hooks](./docs/componentes/hooks.md) - Hooks headless (14 hooks)
 - [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (3 blocks)

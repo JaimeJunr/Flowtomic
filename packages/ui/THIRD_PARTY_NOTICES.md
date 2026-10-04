@@ -6,10 +6,11 @@ de cada um vem abaixo, como ela própria exige.
 ## shadcn-ui/chatbot-template
 
 - Origem: https://github.com/shadcn-ui/chatbot-template (commit `55c9330`)
-- O que veio de lá: a API e o comportamento dos componentes de chat (`Bubble`, e os que
-  vierem depois). Foram reescritos sobre Radix e os tokens do Flowtomic, sem
+- O que veio de lá: a API e o comportamento dos componentes de chat (`Bubble`, `ToolStatusLine`
+  e os que vierem depois). Foram reescritos sobre Radix e os tokens do Flowtomic, sem
   `@base-ui/react` nem `@shadcn/react`.
-- Arquivos: `src/components/molecules/data-display/bubble/`
+- Arquivos: `src/components/molecules/data-display/bubble/`,
+  `src/components/molecules/data-display/tool-status-line/`
 
 ```text
 MIT License

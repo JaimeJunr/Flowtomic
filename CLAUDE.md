@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 48 molecules, 30 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 49 molecules, 30 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (63)
-- **Molecules**: `docs/componentes/molecules.md` (48)
+- **Molecules**: `docs/componentes/molecules.md` (49)
 - **Organisms**: `docs/componentes/organisms.md` (30)
 - **Blocks**: `docs/componentes/blocks.md` (2)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -375,7 +375,7 @@ errado.
 Resumo:
 
 - **Atoms**: 63 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 48 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 49 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 30 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 2 blocks - Ver `docs/componentes/blocks.md`
@@ -536,7 +536,9 @@ Cada uma já mordeu alguém neste repo.
   Ela precisa também de `"rootDir": "../.."` (senão sai um `TS6059` por arquivo do `logic`),
   `"composite": false` e `"types": ["vitest/globals", "@testing-library/jest-dom"]`. ⚠️ Medido
   em 03/10/2026: **43 stories/testes já têm erro de tipo na `main`**. Compare a contagem por
-  arquivo antes e depois da sua mudança, em vez de esperar zero.
+  arquivo antes e depois da sua mudança, em vez de esperar zero. Para checar só a pasta do
+  componente:
+  `{"extends":"./tsconfig.json","compilerOptions":{"noEmit":true,"composite":false,"incremental":false,"rootDir":"../..","types":["@testing-library/jest-dom/vitest"]},"include":["<pasta do componente>/**/*"],"exclude":[]}`.
 - ⚠️ **`vi.restoreAllMocks()` no Vitest 2 pode resetar os `vi.fn` do setup global.**
   Nos testes de `message`, isso apagou a implementação do `ResizeObserver` entre casos
   e fez o tooltip falhar com `resizeObserver.observe is not a function`. Restaure só
