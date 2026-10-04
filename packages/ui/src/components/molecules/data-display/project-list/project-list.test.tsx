@@ -1,4 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import axe from "axe-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type Project, ProjectList } from "./project-list";
 
@@ -64,5 +66,100 @@ describe("ProjectList", () => {
     render(<ProjectList projects={[]} />);
     expect(screen.getByText("Nenhum projeto ainda.")).toBeInTheDocument();
     expect(screen.queryByRole("list")).not.toBeInTheDocument();
+  });
+
+  describe("prazos, ícones e ações", () => {
+    it("aceita o prazo como Date", () => {
+      render(
+        <ProjectList projects={[{ id: "d", name: "Com Date", dueDate: new Date(2026, 10, 3) }]} />
+      );
+      expect(screen.getByText("03/11/2026")).toBeInTheDocument();
+    });
+
+    it("aceita o prazo como data e hora ISO", () => {
+      render(
+        <ProjectList
+          projects={[
+            { id: "d", name: "Com ISO", dueDate: new Date(2026, 10, 3, 12).toISOString() },
+          ]}
+        />
+      );
+      expect(screen.getByText("03/11/2026")).toBeInTheDocument();
+    });
+
+    it("prazo no dia de hoje ainda não venceu", () => {
+      render(
+        <ProjectList
+          projects={[{ id: "h", name: "Hoje", dueDate: "2026-09-27", status: "active" }]}
+        />
+      );
+      expect(screen.getByText("27/09/2026").className).not.toMatch(/destructive/);
+    });
+
+    it("projeto sem estado também vence quando o prazo passou", () => {
+      render(<ProjectList projects={[{ id: "s", name: "Sem estado", dueDate: "2026-09-01" }]} />);
+      expect(screen.getByText("venceu 01/09/2026")).toBeInTheDocument();
+    });
+
+    it("projeto sem estado não mostra selo de estado", () => {
+      render(<ProjectList projects={[{ id: "s", name: "Sem estado", dueDate: "2026-10-01" }]} />);
+      for (const label of ["Ativo", "Pendente", "Concluído", "Em espera"]) {
+        expect(screen.queryByText(label)).not.toBeInTheDocument();
+      }
+    });
+
+    it("mostra o ícone do projeto, escondido do leitor de tela", () => {
+      render(
+        <ProjectList
+          projects={[
+            {
+              id: "i",
+              name: "Com ícone",
+              dueDate: "2026-10-01",
+              icon: <svg data-testid="icone-projeto" />,
+            },
+          ]}
+        />
+      );
+      expect(screen.getByTestId("icone-projeto").parentElement).toHaveAttribute(
+        "aria-hidden",
+        "true"
+      );
+    });
+
+    it("usa o título passado por quem chama", () => {
+      render(<ProjectList projects={projects} title="Entregas" />);
+      expect(screen.getByRole("heading", { name: "Entregas" })).toBeInTheDocument();
+    });
+
+    it("o botão de adicionar usa o texto passado e dispara onAddNew", async () => {
+      const onAddNew = vi.fn();
+      render(<ProjectList projects={projects} onAddNew={onAddNew} addButtonText="Criar entrega" />);
+      await userEvent.click(screen.getByRole("button", { name: "Criar entrega" }));
+      expect(onAddNew).toHaveBeenCalledTimes(1);
+    });
+
+    it("sem onAddNew não há botão de adicionar", () => {
+      render(<ProjectList projects={projects} />);
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    });
+
+    it("com onProjectClick a linha abre pelo teclado", async () => {
+      const onClick = vi.fn();
+      render(<ProjectList projects={projects} onProjectClick={onClick} />);
+      screen.getByRole("button", { name: /Registry de volta no ar/ }).focus();
+      await userEvent.keyboard("{Enter}");
+      expect(onClick).toHaveBeenCalledWith(projects[1]);
+    });
+
+    it("não tem violações de acessibilidade", async () => {
+      const { container } = render(
+        <ProjectList projects={projects} onProjectClick={() => {}} onAddNew={() => {}} />
+      );
+      const resultado = await axe.run(container, {
+        rules: { "color-contrast": { enabled: false } },
+      });
+      expect(resultado.violations).toEqual([]);
+    });
   });
 });

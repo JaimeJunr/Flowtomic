@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import axe from "axe-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ButtonCounter } from "./button-counter";
 
@@ -202,5 +203,73 @@ describe("ButtonCounter", () => {
       [expect.objectContaining({ type: "click", target: button, defaultPrevented: true })],
     ]);
     expect(onValueChange).not.toHaveBeenCalled();
+  });
+});
+
+describe("ButtonCounter: aparência do número e do contêiner", () => {
+  it("com controles, hideNumberBackground tira fundo e borda só do botão do número", () => {
+    render(<ButtonCounter value={7} onValueChange={vi.fn()} showControls hideNumberBackground />);
+    const numero = screen.getByRole("button", { name: "7" });
+    expect(numero).toHaveClass("bg-transparent", "border-none", "shadow-none");
+    expect(screen.getByRole("button", { name: "+" })).not.toHaveClass("bg-transparent");
+    expect(screen.getByRole("button", { name: "-" })).not.toHaveClass("bg-transparent");
+  });
+
+  it("sem hideNumberBackground o botão do número mantém o visual do botão", () => {
+    render(<ButtonCounter value={7} onValueChange={vi.fn()} showControls />);
+    expect(screen.getByRole("button", { name: "7" })).not.toHaveClass("bg-transparent");
+  });
+
+  it.each([
+    false,
+    true,
+  ])("o número herda a cor do botão por padrão (showControls=%s)", (showControls) => {
+    render(<ButtonCounter value={7} onValueChange={vi.fn()} showControls={showControls} />);
+    const botao = screen.getByRole("button", { name: "7" });
+    expect(botao.querySelector(".font-medium")).not.toBeNull();
+    expect(botao.querySelector(".text-primary, .text-foreground, .text-success")).toBeNull();
+  });
+
+  it.each([
+    false,
+    true,
+  ])("animatedNumberProps muda cor e classe do número (showControls=%s)", (showControls) => {
+    render(
+      <ButtonCounter
+        value={7}
+        onValueChange={vi.fn()}
+        showControls={showControls}
+        animatedNumberProps={{ color: "primary", className: "numero-extra" }}
+      />
+    );
+    const numero = screen.getByRole("button", { name: "7" }).querySelector(".numero-extra");
+    expect(numero).toHaveClass("font-medium");
+    expect(numero?.closest(".text-primary")).not.toBeNull();
+  });
+
+  it("sem controles, className vai para o botão; com controles, para o contêiner", () => {
+    const { rerender } = render(
+      <ButtonCounter value={7} onValueChange={vi.fn()} className="classe-de-fora" />
+    );
+    expect(screen.getByRole("button", { name: "7" })).toHaveClass("classe-de-fora");
+
+    rerender(
+      <ButtonCounter value={7} onValueChange={vi.fn()} className="classe-de-fora" showControls />
+    );
+    expect(screen.getByRole("button", { name: "7" })).not.toHaveClass("classe-de-fora");
+    expect(screen.getByRole("button", { name: "7" }).parentElement).toHaveClass("classe-de-fora");
+  });
+
+  it("prefixo e sufixo também aparecem no botão do número com controles", () => {
+    render(
+      <ButtonCounter value={7} onValueChange={vi.fn()} showControls prefix="R$" suffix="un" />
+    );
+    expect(screen.getByRole("button", { name: "R$ 7 un" })).toBeInTheDocument();
+  });
+
+  it("não tem violações de acessibilidade com os controles", async () => {
+    const { container } = render(<ButtonCounter value={7} onValueChange={vi.fn()} showControls />);
+    const resultado = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(resultado.violations).toEqual([]);
   });
 });

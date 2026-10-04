@@ -332,3 +332,46 @@ describe("ImageDropzone", () => {
     expect(result.violations).toEqual([]);
   });
 });
+
+describe("ImageDropzone: arrastar sobre a área", () => {
+  const area = () => screen.getByRole("region", { name: "Dropzone de upload de arquivos" });
+
+  it("ao arrastar um arquivo sobre a área ela fica destacada, e sai do destaque ao sair ou soltar", () => {
+    render(<ImageDropzone />);
+    expect(area().className).not.toContain("border-primary");
+
+    fireEvent.dragEnter(area());
+    expect(area().className).toContain("border-primary");
+
+    fireEvent.dragLeave(area());
+    expect(area().className).not.toContain("border-primary");
+
+    fireEvent.dragEnter(area());
+    dropFiles([png()]);
+    expect(area().className).not.toContain("border-primary");
+  });
+
+  it("desabilitada, a área não ganha destaque ao arrastar", () => {
+    render(<ImageDropzone disabled />);
+    fireEvent.dragEnter(area());
+    expect(area().className).not.toContain("border-primary");
+  });
+
+  it("dragover cancela o comportamento padrão do navegador, para a área aceitar o drop", () => {
+    render(<ImageDropzone />);
+    const naoCancelado = fireEvent.dragOver(area());
+    expect(naoCancelado).toBe(false);
+  });
+
+  it("com limite zero a mensagem de tamanho diz 0 Bytes", () => {
+    render(<ImageDropzone maxSize={0} />);
+    dropFiles([png()]);
+    expect(screen.getByRole("alert")).toHaveTextContent("O arquivo deve ter no máximo 0 Bytes");
+  });
+
+  it("o limite em KB aparece com a unidade certa na mensagem", () => {
+    render(<ImageDropzone maxSize={2048} />);
+    dropFiles([new File([new Uint8Array(3000)], "a.png", { type: "image/png" })]);
+    expect(screen.getByRole("alert")).toHaveTextContent("O arquivo deve ter no máximo 2 KB");
+  });
+});
