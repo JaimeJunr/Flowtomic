@@ -1,8 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import axe from "axe-core";
 import { useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ThemeToggleButton } from "./theme-toggle-button";
+import { type StartPosition, ThemeToggleButton } from "./theme-toggle-button";
 
 const themes = [
   ["light", "Alternar para tema escuro", "dark", false],
@@ -120,5 +121,198 @@ describe("ThemeToggleButton", () => {
       "aria-pressed",
       "false"
     );
+  });
+});
+
+// Nome claro: simula a View Transitions API do navegador, que o jsdom não tem.
+type FakeViewTransition = {
+  finished: Promise<void>;
+  updateCallbackDone: Promise<void>;
+  ready: Promise<void>;
+};
+type DocumentWithTransition = {
+  startViewTransition?: (callback: () => void) => FakeViewTransition | undefined;
+};
+
+function installFakeViewTransitions(returnsTransition = true) {
+  const documentWithTransition = document as unknown as DocumentWithTransition;
+  const startViewTransition = vi.fn((callback: () => void) => {
+    callback();
+    if (!returnsTransition) return undefined;
+    return {
+      finished: Promise.resolve(),
+      updateCallbackDone: Promise.resolve(),
+      ready: Promise.resolve(),
+    };
+  });
+  documentWithTransition.startViewTransition = startViewTransition;
+  return {
+    startViewTransition,
+    uninstall: () => {
+      delete documentWithTransition.startViewTransition;
+    },
+  };
+}
+
+const transitionStyle = () => document.head.querySelector("style[id^='theme-transition-']");
+
+describe("ThemeToggleButton com View Transitions", () => {
+  it("troca o tema dentro da transição do navegador e reabilita o botão no fim", async () => {
+    const fake = installFakeViewTransitions();
+    try {
+      const onThemeChange = vi.fn();
+      render(<ThemeToggleButton theme="light" onThemeChange={onThemeChange} />);
+      const button = screen.getByRole("button", { name: "Alternar para tema escuro" });
+      await userEvent.click(button);
+      expect(fake.startViewTransition).toHaveBeenCalledTimes(1);
+      expect(onThemeChange.mock.calls).toEqual([["dark"]]);
+      await waitFor(() => expect(button).toBeEnabled());
+      // não usa o fallback por classe quando a API existe
+      expect(document.documentElement).not.toHaveClass("theme-transitioning");
+    } finally {
+      fake.uninstall();
+    }
+  });
+
+  it("remove o estilo da animação depois que a transição termina", async () => {
+    const fake = installFakeViewTransitions();
+    try {
+      render(<ThemeToggleButton theme="light" onThemeChange={() => {}} />);
+      await userEvent.click(screen.getByRole("button", { name: "Alternar para tema escuro" }));
+      expect(transitionStyle()).toBeInTheDocument();
+      await waitFor(() => expect(transitionStyle()).not.toBeInTheDocument());
+    } finally {
+      fake.uninstall();
+    }
+  });
+
+  it.each([
+    ["center", "50% 50%"],
+    ["top-left", "0% 0%"],
+    ["top-right", "100% 0%"],
+    ["bottom-left", "0% 100%"],
+    ["bottom-right", "100% 100%"],
+  ] as [StartPosition, string][])("start=%s abre o círculo em %s", async (start, origem) => {
+    const fake = installFakeViewTransitions();
+    try {
+      render(<ThemeToggleButton theme="light" start={start} onThemeChange={() => {}} />);
+      await userEvent.click(screen.getByRole("button", { name: "Alternar para tema escuro" }));
+      expect(transitionStyle()?.textContent).toContain(`circle(0% at ${origem})`);
+      await waitFor(() => expect(transitionStyle()).not.toBeInTheDocument());
+    } finally {
+      fake.uninstall();
+    }
+  });
+
+  it("se o navegador não devolver a transição, reabilita o botão e limpa o estilo mesmo assim", async () => {
+    const fake = installFakeViewTransitions(false);
+    try {
+      const onThemeChange = vi.fn();
+      render(<ThemeToggleButton theme="dark" onThemeChange={onThemeChange} />);
+      const button = screen.getByRole("button", { name: "Alternar para tema claro" });
+      await userEvent.click(button);
+      expect(onThemeChange.mock.calls).toEqual([["light"]]);
+      expect(button).toBeDisabled();
+      await waitFor(() => expect(button).toBeEnabled(), { timeout: 2000 });
+      expect(transitionStyle()).not.toBeInTheDocument();
+    } finally {
+      fake.uninstall();
+    }
+  });
+
+  it("sem tema nem callback, a transição também alterna o tema interno", async () => {
+    const fake = installFakeViewTransitions();
+    try {
+      render(<ThemeToggleButton />);
+      await userEvent.click(screen.getByRole("button", { name: "Alternar para tema escuro" }));
+      const claro = await screen.findByRole("button", { name: "Alternar para tema claro" });
+      await waitFor(() => expect(claro).toBeEnabled());
+    } finally {
+      fake.uninstall();
+    }
+  });
+});
+
+describe("ThemeToggleButton, tema do sistema e tamanhos", () => {
+  it("sem a prop theme, começa no escuro quando o sistema prefere escuro", () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({
+      matches: query === "(prefers-color-scheme: dark)",
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    })) as typeof window.matchMedia;
+    try {
+      render(<ThemeToggleButton />);
+      expect(screen.getByRole("button", { name: "Alternar para tema claro" })).toHaveAttribute(
+        "aria-pressed",
+        "true"
+      );
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
+  it("sem a prop theme e com o sistema claro, começa no claro", () => {
+    render(<ThemeToggleButton />);
+    expect(screen.getByRole("button", { name: "Alternar para tema escuro" })).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
+  });
+
+  it("a prop theme vale mais que a preferência do sistema", () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({
+      matches: true,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    })) as typeof window.matchMedia;
+    try {
+      render(<ThemeToggleButton theme="light" />);
+      expect(screen.getByRole("button", { name: "Alternar para tema escuro" })).toHaveAttribute(
+        "aria-pressed",
+        "false"
+      );
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
+  it.each([
+    ["sm", "16"],
+    ["md", "24"],
+    ["lg", "24"],
+    ["icon", "24"],
+  ] as const)("size=%s desenha os ícones com %spx", (size, px) => {
+    render(<ThemeToggleButton size={size} theme="light" />);
+    const icones = screen.getByRole("button").querySelectorAll("svg");
+    expect(icones).toHaveLength(2);
+    for (const icone of icones) {
+      expect(icone).toHaveAttribute("width", px);
+    }
+  });
+
+  it("className chega ao botão", () => {
+    render(<ThemeToggleButton className="minha-classe" theme="light" />);
+    expect(screen.getByRole("button")).toHaveClass("minha-classe");
+  });
+
+  it("não tem violações de acessibilidade nos dois temas", async () => {
+    const { container, rerender } = render(<ThemeToggleButton theme="light" />);
+    const claro = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(claro.violations).toEqual([]);
+    rerender(<ThemeToggleButton theme="dark" />);
+    const escuro = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(escuro.violations).toEqual([]);
   });
 });
