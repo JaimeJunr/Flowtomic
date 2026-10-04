@@ -320,7 +320,7 @@ export function useScriptEditor(options: UseScriptEditorOptions = {}): UseScript
   // Executar script
   const executeScript = useCallback(async () => {
     if (!script.trim()) {
-      addTerminalLine("error", "❌ Script vazio");
+      addTerminalLine("error", "Script vazio");
       return;
     }
 
@@ -351,16 +351,16 @@ export function useScriptEditor(options: UseScriptEditorOptions = {}): UseScript
         } catch (error) {
           addTerminalLine(
             "error",
-            `❌ Erro na requisição: ${error instanceof Error ? error.message : "Erro desconhecido"}`
+            `Erro na requisição: ${error instanceof Error ? error.message : "Erro desconhecido"}`
           );
         }
       } else {
-        addTerminalLine("error", "❌ Nenhuma forma de execução disponível (WebSocket ou HTTP)");
+        addTerminalLine("error", "Nenhuma forma de execução disponível (WebSocket ou HTTP)");
       }
     } catch (error) {
       addTerminalLine(
         "error",
-        `❌ Erro ao executar: ${error instanceof Error ? error.message : "Erro desconhecido"}`
+        `Erro ao executar: ${error instanceof Error ? error.message : "Erro desconhecido"}`
       );
     } finally {
       setIsRunning(false);

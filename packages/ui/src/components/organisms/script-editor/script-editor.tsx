@@ -98,11 +98,12 @@ export const ScriptEditor = forwardRef<HTMLDivElement, ScriptEditorProps>(
     const logRef = useRef<HTMLDivElement>(null);
 
     // Mantém a última linha do log visível conforme o servidor emite saída
+    // biome-ignore lint/correctness/useExhaustiveDependencies: terminalLines é o gatilho, não é lido no corpo
     useEffect(() => {
       if (logRef.current) {
         logRef.current.scrollTop = logRef.current.scrollHeight;
       }
-    }, []);
+    }, [terminalLines]);
 
     const lineCount = Math.max(1, script.split("\n").length);
     const ultimaExecucao = terminalLines.at(-1)?.timestamp;
@@ -200,7 +201,12 @@ export const ScriptEditor = forwardRef<HTMLDivElement, ScriptEditorProps>(
                 Limpar
               </button>
             </div>
-            <div ref={logRef} className={cn(MONO, "flex min-h-0 flex-1 flex-col overflow-auto")}>
+            <div
+              ref={logRef}
+              role="log"
+              aria-label="Log de execução"
+              className={cn(MONO, "flex min-h-0 flex-1 flex-col overflow-auto")}
+            >
               <div className="flex flex-col gap-0.5 px-4 py-3.5 text-muted-foreground">
                 {terminalLines.length === 0 && !isRunning && (
                   <span>Execute o script para ver o log aqui.</span>
