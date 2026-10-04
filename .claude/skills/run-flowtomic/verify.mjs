@@ -100,6 +100,23 @@ async function openStory(page, id) {
   return { rendered, errors: [...new Set(errors)] };
 }
 
+/**
+ * Espera as webfonts antes do print. Sem isso a story sai em Arial e parece
+ * fonte quebrada (medido em 03/10/2026 na bubble--nao-enviada). O prazo é curto
+ * e a falha é engolida: fonte que não vem não pode derrubar o screenshot.
+ */
+async function waitForFonts(page) {
+  // O timer roda no browser, não no Node: assim não segura o processo vivo.
+  await page
+    .evaluate(() =>
+      Promise.race([
+        document.fonts.ready.then(() => true),
+        new Promise((resolve) => setTimeout(() => resolve(false), 5000)),
+      ])
+    )
+    .catch(() => {});
+}
+
 async function main() {
   mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch();
@@ -132,6 +149,7 @@ async function main() {
         expected = expect;
       }
 
+      await waitForFonts(page);
       await page.screenshot({ path: shot, animations: "disabled" });
       const failed = !rendered.ok;
       out(
@@ -164,6 +182,7 @@ async function main() {
         try {
           const { rendered, errors } = await openStory(p, s.id);
           if (!rendered.ok) {
+            await waitForFonts(p);
             await p.screenshot({
               path: path.join(SHOTS, `FALHA-${s.id}.png`),
               animations: "disabled",
@@ -173,6 +192,7 @@ async function main() {
             noisy.push({ id: s.id, consoleError: errors[0] });
           }
         } catch (e) {
+          await waitForFonts(p);
           await p
             .screenshot({ path: path.join(SHOTS, `FALHA-${s.id}.png`), animations: "disabled" })
             .catch(() => {});
