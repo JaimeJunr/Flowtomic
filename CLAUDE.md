@@ -588,6 +588,10 @@ Cada uma já mordeu alguém neste repo.
   `waitFor` padrão espera 1 s e, com a máquina cheia, a saída passa disso (o `AnimatedModal` e
   o `MenuDock` passavam sozinhos e falhavam juntos). No arquivo de teste, ligue
   `MotionGlobalConfig.skipAnimations = true` no `beforeAll` e desligue no `afterAll`.
+- ⚠️ **Mockar `matchMedia` não liga o `useReducedMotion()` do motion em teste**: o motion lê a
+  preferência uma vez e guarda. Componente que respeita movimento reduzido usa o critério do
+  `sliding-number`: `useReducedMotion() || useContext(MotionConfigContext).reducedMotion ===
+  "always"`, e o teste envolve a peça em `<MotionConfig reducedMotion="always">`.
 - ⚠️ **`verify.mjs story|smoke` dá `Timeout 15000ms` em story de modal** (o
   `EditChatMessageModal`, por exemplo). Não é story quebrada: o `Dialog` abre num portal
   fora do `#storybook-root`, que o driver espera ver preenchido. Para provar, use Playwright

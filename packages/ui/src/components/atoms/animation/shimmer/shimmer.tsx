@@ -4,8 +4,8 @@
  * Componente de texto com efeito shimmer animado
  */
 
-import { motion } from "motion/react";
-import { type CSSProperties, type ElementType, type JSX, memo, useMemo } from "react";
+import { MotionConfigContext, motion, useReducedMotion } from "motion/react";
+import { type CSSProperties, type ElementType, type JSX, memo, useContext, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
 export type TextShimmerProps = {
@@ -37,6 +37,10 @@ function ShimmerComponent({
     [Component]
   );
 
+  // Mesmo critério do sliding-number: preferência do sistema ou MotionConfig reducedMotion="always"
+  const reducedMotionConfig = useContext(MotionConfigContext).reducedMotion;
+  const shouldReduceMotion = useReducedMotion() || reducedMotionConfig === "always";
+
   const dynamicSpread = useMemo(() => (children?.length ?? 0) * spread, [children, spread]);
 
   const shimmerClassName = cn(
@@ -50,7 +54,7 @@ function ShimmerComponent({
       "var(--bg), linear-gradient(var(--color-muted-foreground), var(--color-muted-foreground))",
   } as CSSProperties;
 
-  if (createMotionComponent && typeof MotionComponent !== "string") {
+  if (createMotionComponent && typeof MotionComponent !== "string" && !shouldReduceMotion) {
     return (
       <MotionComponent
         animate={{ backgroundPosition: "0% center" }}
@@ -68,7 +72,7 @@ function ShimmerComponent({
     );
   }
 
-  const Element = (MotionComponent as ElementType) ?? "p";
+  const Element = shouldReduceMotion ? Component : ((MotionComponent as ElementType) ?? "p");
   return (
     <Element className={shimmerClassName} style={shimmerStyle}>
       {children}

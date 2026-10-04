@@ -1,4 +1,4 @@
-import { motion, type Transition } from "motion/react";
+import { MotionConfigContext, motion, type Transition, useReducedMotion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -83,6 +83,10 @@ const Animated3D = React.forwardRef<HTMLDivElement, Animated3DProps>(
       ...transition,
     };
 
+    // Mesmo critério do sliding-number: preferência do sistema ou MotionConfig reducedMotion="always"
+    const reducedMotionConfig = React.useContext(MotionConfigContext).reducedMotion;
+    const shouldReduceMotion = useReducedMotion() || reducedMotionConfig === "always";
+
     if (disabled) {
       return (
         <div ref={ref} className={className}>
@@ -111,15 +115,18 @@ const Animated3D = React.forwardRef<HTMLDivElement, Animated3DProps>(
                   rotateY: 0,
                   z: 0,
                 }
-              : {
-                  opacity: initialOpacity,
-                  scale: initialScale,
-                  rotateX: initialRotateX,
-                  rotateY: initialRotateY,
-                  z: initialTranslateZ,
-                }
+              : shouldReduceMotion
+                ? // Com movimento reduzido, fechar só esmaece: sem girar, encolher ou afundar
+                  { opacity: initialOpacity, scale: 1, rotateX: 0, rotateY: 0, z: 0 }
+                : {
+                    opacity: initialOpacity,
+                    scale: initialScale,
+                    rotateX: initialRotateX,
+                    rotateY: initialRotateY,
+                    z: initialTranslateZ,
+                  }
           }
-          transition={defaultTransition}
+          transition={shouldReduceMotion ? { duration: 0 } : defaultTransition}
           style={{
             transformStyle: "preserve-3d",
           }}
