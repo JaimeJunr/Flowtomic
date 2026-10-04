@@ -22,7 +22,7 @@ Os atoms estão organizados em categorias lógicas para facilitar a navegação 
 
 Botão com variantes de estilo e tamanho.
 
-**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/actions/button`
 
@@ -30,7 +30,7 @@ Botão com variantes de estilo e tamanho.
 
 Badge/etiqueta para destacar informações.
 
-**Dependências**: `class-variance-authority`, `clsx`, `tailwind-merge`
+**Dependências**: `class-variance-authority`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/actions/badge`
 
@@ -38,7 +38,7 @@ Badge/etiqueta para destacar informações.
 
 Menu dropdown para ações e navegação.
 
-**Dependências**: `@radix-ui/react-dropdown-menu`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-dropdown-menu`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/actions/dropdown-menu`
 
@@ -46,7 +46,7 @@ Menu dropdown para ações e navegação.
 
 Menu de contexto que aparece ao clicar com botão direito.
 
-**Dependências**: `@radix-ui/react-context-menu`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-context-menu`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/actions/context-menu`
 
@@ -56,7 +56,7 @@ Menu de contexto que aparece ao clicar com botão direito.
 
 Campo de entrada de texto.
 
-**Dependências**: `@radix-ui/react-label`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-label`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/input`
 
@@ -64,7 +64,7 @@ Campo de entrada de texto.
 
 Campo de seleção com suporte a grupos e busca.
 
-**Dependências**: `@radix-ui/react-select`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-select`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/select`
 
@@ -72,7 +72,7 @@ Campo de seleção com suporte a grupos e busca.
 
 Select nativo do navegador com visual alinhado ao `select`; inclui `NativeSelectOption` e `NativeSelectOptGroup`.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/native-select`
 
@@ -80,7 +80,7 @@ Select nativo do navegador com visual alinhado ao `select`; inclui `NativeSelect
 
 Checkbox para seleção múltipla.
 
-**Dependências**: `@radix-ui/react-checkbox`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-checkbox`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/checkbox`
 
@@ -88,7 +88,7 @@ Checkbox para seleção múltipla.
 
 Campo de formulário completo com label, input e mensagem de erro.
 
-**Dependências**: `class-variance-authority`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `class-variance-authority`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/field`
 
@@ -96,7 +96,7 @@ Campo de formulário completo com label, input e mensagem de erro.
 
 Wrapper de formulário com React Hook Form e validação.
 
-**Dependências**: `@radix-ui/react-label`, `@radix-ui/react-slot`, `react-hook-form`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-label`, `@radix-ui/react-slot`, `react-hook-form`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/form`
 
@@ -104,7 +104,7 @@ Wrapper de formulário com React Hook Form e validação.
 
 Input para códigos OTP (One-Time Password) com múltiplos campos.
 
-**Dependências**: `input-otp`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `input-otp`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/input-otp`
 
@@ -112,7 +112,7 @@ Input para códigos OTP (One-Time Password) com múltiplos campos.
 
 Label para formulários com suporte a Radix UI.
 
-**Dependências**: `@radix-ui/react-label`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-label`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/label`
 
@@ -120,7 +120,7 @@ Label para formulários com suporte a Radix UI.
 
 Grupo de radio buttons para seleção única.
 
-**Dependências**: `@radix-ui/react-radio-group`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-radio-group`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/radio-group`
 
@@ -128,7 +128,7 @@ Grupo de radio buttons para seleção única.
 
 Slider de valores numéricos com controle deslizante.
 
-**Dependências**: `@radix-ui/react-slider`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-slider`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/slider`
 
@@ -136,7 +136,7 @@ Slider de valores numéricos com controle deslizante.
 
 Switch toggle para alternar estados.
 
-**Dependências**: `@radix-ui/react-switch`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-switch`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/switch`
 
@@ -144,7 +144,7 @@ Switch toggle para alternar estados.
 
 Campo de texto multilinha.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/textarea`
 
@@ -152,7 +152,7 @@ Campo de texto multilinha.
 
 Toggle button para ações de alternância.
 
-**Dependências**: `@radix-ui/react-toggle`, `class-variance-authority`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-toggle`, `class-variance-authority`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/toggle`
 
@@ -160,7 +160,7 @@ Toggle button para ações de alternância.
 
 Entrada de data (`input type="date"`) com estilo do design system. Quando `disabled`, um overlay bloqueia a interação sem usar o atributo nativo, mantendo o ícone do calendário visível.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/date-input`
 
@@ -168,7 +168,7 @@ Entrada de data (`input type="date"`) com estilo do design system. Quando `disab
 
 Entrada de hora (`input type="time"`) com estilo do design system. Segue a mesma estratégia de `date-input` para o estado desabilitado, preservando o ícone nativo do relógio.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/time-input`
 
@@ -178,7 +178,7 @@ Entrada de hora (`input type="time"`) com estilo do design system. Segue a mesma
 
 Calendário para seleção de datas.
 
-**Dependências**: `react-day-picker`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `react-day-picker`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/data-display/calendar`
 
@@ -186,7 +186,7 @@ Calendário para seleção de datas.
 
 Carrossel para exibir conteúdo em slides.
 
-**Dependências**: `embla-carousel-react`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `embla-carousel-react`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/data-display/carousel`
 
@@ -194,7 +194,7 @@ Carrossel para exibir conteúdo em slides.
 
 Componente base para gráficos usando Recharts.
 
-**Dependências**: `recharts`, `clsx`, `tailwind-merge`
+**Dependências**: `recharts`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/data-display/chart`
 
@@ -204,7 +204,7 @@ Componente base para gráficos usando Recharts.
 
 Container de card para agrupar conteúdo.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/display/card`
 
@@ -212,7 +212,7 @@ Container de card para agrupar conteúdo.
 
 Tabela base para exibição de dados.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/display/table`
 
@@ -220,7 +220,7 @@ Tabela base para exibição de dados.
 
 Separador horizontal ou vertical.
 
-**Dependências**: `@radix-ui/react-separator`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-separator`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/display/separator`
 
@@ -228,7 +228,7 @@ Separador horizontal ou vertical.
 
 Componente de loading skeleton.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/display/skeleton`
 
@@ -236,7 +236,7 @@ Componente de loading skeleton.
 
 Componente de avatar com imagem e fallback.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/display/avatar`
 
@@ -244,7 +244,7 @@ Componente de avatar com imagem e fallback.
 
 Componente para exibir estado vazio.
 
-**Dependências**: `class-variance-authority`, `clsx`, `tailwind-merge`
+**Dependências**: `class-variance-authority`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/display/empty`
 
@@ -252,7 +252,7 @@ Componente para exibir estado vazio.
 
 Componente para exibir teclas de atalho.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/display/kbd`
 
@@ -262,7 +262,7 @@ Componente para exibir teclas de atalho.
 
 Sistema de abas para organização de conteúdo.
 
-**Dependências**: `@radix-ui/react-tabs`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-tabs`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/navigation/tabs`
 
@@ -270,7 +270,7 @@ Sistema de abas para organização de conteúdo.
 
 Command palette/menu para busca e navegação rápida.
 
-**Dependências**: `cmdk`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `cmdk`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/navigation/command`
 
@@ -278,7 +278,7 @@ Command palette/menu para busca e navegação rápida.
 
 Breadcrumb navigation para indicar localização na hierarquia.
 
-**Dependências**: `@radix-ui/react-slot`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-slot`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/navigation/breadcrumb`
 
@@ -286,7 +286,7 @@ Breadcrumb navigation para indicar localização na hierarquia.
 
 Barra de menu horizontal para navegação.
 
-**Dependências**: `@radix-ui/react-menubar`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-menubar`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/navigation/menubar`
 
@@ -294,7 +294,7 @@ Barra de menu horizontal para navegação.
 
 Menu de navegação com suporte a dropdowns e links.
 
-**Dependências**: `@radix-ui/react-navigation-menu`, `class-variance-authority`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-navigation-menu`, `class-variance-authority`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/navigation/navigation-menu`
 
@@ -302,7 +302,7 @@ Menu de navegação com suporte a dropdowns e links.
 
 Paginação para navegar entre páginas de resultados.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/navigation/pagination`
 
@@ -312,7 +312,7 @@ Paginação para navegar entre páginas de resultados.
 
 Alerta para exibir mensagens importantes.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/alert`
 
@@ -320,7 +320,7 @@ Alerta para exibir mensagens importantes.
 
 Diálogo de confirmação para ações importantes.
 
-**Dependências**: `@radix-ui/react-alert-dialog`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-alert-dialog`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/alert-dialog`
 
@@ -328,7 +328,7 @@ Diálogo de confirmação para ações importantes.
 
 Modal/diálogo para exibir conteúdo sobreposto.
 
-**Dependências**: `@radix-ui/react-dialog`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-dialog`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/dialog`
 
@@ -336,7 +336,7 @@ Modal/diálogo para exibir conteúdo sobreposto.
 
 Sistema de notificações toast.
 
-**Dependências**: `sonner`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `sonner`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/sonner`
 
@@ -357,7 +357,7 @@ Tooltip para exibir informações adicionais ao passar o mouse. Suporta dois mod
 - `@radix-ui/react-tooltip` (modo padrão)
 - `@react-aria/tooltip`, `@react-aria/interactions`, `@react-aria/overlays`, `@react-stately/tooltip` (modo seguimento do mouse)
 - `motion/react` (animações)
-- `clsx`, `tailwind-merge`
+- `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/tooltip`
 
@@ -365,7 +365,7 @@ Tooltip para exibir informações adicionais ao passar o mouse. Suporta dois mod
 
 Card que aparece ao passar o mouse sobre um elemento.
 
-**Dependências**: `@radix-ui/react-hover-card`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-hover-card`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/hover-card`
 
@@ -373,7 +373,7 @@ Card que aparece ao passar o mouse sobre um elemento.
 
 Citação inline com hover card para exibir fontes.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/inline-citation`
 
@@ -381,7 +381,7 @@ Citação inline com hover card para exibir fontes.
 
 Popover flutuante para exibir conteúdo adicional.
 
-**Dependências**: `@radix-ui/react-popover`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-popover`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/popover`
 
@@ -389,7 +389,7 @@ Popover flutuante para exibir conteúdo adicional.
 
 Sheet lateral deslizante para exibir conteúdo.
 
-**Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/sheet`
 
@@ -399,7 +399,7 @@ Sheet lateral deslizante para exibir conteúdo.
 
 Componente com animação 3D.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/animated-3d`
 
@@ -407,7 +407,7 @@ Componente com animação 3D.
 
 Componente com efeito de blur no fundo.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/backdrop-blur`
 
@@ -415,7 +415,7 @@ Componente com efeito de blur no fundo.
 
 Componente de loading spinner animado.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/loader`
 
@@ -423,7 +423,7 @@ Componente de loading spinner animado.
 
 Barra de progresso animada.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/progress`
 
@@ -431,7 +431,7 @@ Barra de progresso animada.
 
 Texto com efeito shimmer animado usando motion.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/shimmer`
 
@@ -439,7 +439,7 @@ Texto com efeito shimmer animado usando motion.
 
 Número com animação de deslizamento.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/sliding-number`
 
@@ -447,7 +447,7 @@ Número com animação de deslizamento.
 
 Spinner animado para indicar carregamento.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/spinner`
 
@@ -463,7 +463,7 @@ ações passadas como `children`; sem os dois, não há cabeçalho. `language` a
 para texto puro. Linha comprida rola de lado. `CodeBlockCopyButton` se chama “Copiar
 código” e vira “Copiado” depois de copiar.
 
-**Dependências**: `shiki`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `shiki`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/code/code-block`
 
@@ -471,7 +471,7 @@ código” e vira “Copiado” depois de copiar.
 
 Snippet de código inline com botão de copiar.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/code/snippet`
 
@@ -481,7 +481,7 @@ Snippet de código inline com botão de copiar.
 
 Container colapsável para mostrar/ocultar conteúdo.
 
-**Dependências**: `@radix-ui/react-collapsible`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-collapsible`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/layout/collapsible`
 
@@ -489,7 +489,7 @@ Container colapsável para mostrar/ocultar conteúdo.
 
 Área de scroll customizada com scrollbar estilizada.
 
-**Dependências**: `@radix-ui/react-scroll-area`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-scroll-area`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/layout/scroll-area`
 
@@ -497,7 +497,7 @@ Container colapsável para mostrar/ocultar conteúdo.
 
 Componente redimensionável com painéis.
 
-**Dependências**: `react-resizable-panels`, `clsx`, `tailwind-merge`
+**Dependências**: `react-resizable-panels`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/layout/resizable`
 
@@ -505,7 +505,7 @@ Componente redimensionável com painéis.
 
 Container colapsável em acordeão para organizar conteúdo.
 
-**Dependências**: `@radix-ui/react-accordion`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-accordion`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/layout/accordion`
 
@@ -521,7 +521,7 @@ Container com proporção fixa para manter dimensões.
 
 Drawer lateral deslizante para mobile.
 
-**Dependências**: `vaul`, `clsx`, `tailwind-merge`
+**Dependências**: `vaul`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/layout/drawer`
 
@@ -529,7 +529,7 @@ Drawer lateral deslizante para mobile.
 
 Sidebar navegável com suporte a responsividade.
 
-**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `lucide-react`, `@flowtomic/logic`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `lucide-react`, `@flowtomic/logic`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/layout/sidebar`
 
@@ -537,7 +537,7 @@ Sidebar navegável com suporte a responsividade.
 
 Grupo de toggles para seleção múltipla.
 
-**Dependências**: `@radix-ui/react-toggle-group`, `class-variance-authority`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-toggle-group`, `class-variance-authority`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/layout/toggle-group`
 
