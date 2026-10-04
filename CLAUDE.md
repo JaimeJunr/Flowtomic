@@ -600,6 +600,11 @@ Cada uma já mordeu alguém neste repo.
   passa `id`/`aria-*` ao filho; se o filho é Fragment, `div` ou `Select.Root`, o `<label for>`
   aponta para o nada e o leitor de tela lê um campo sem nome (checkbox, switch, slider e select
   do `form-layout` ficaram assim até 03/10/2026). Envolva o controle em si.
+- ⚠️ **A área editável do TipTap não tem papel nem nome**: o `aria-label` passado ao `TextEditor`
+  ia para o wrapper. O `TextEditor` agora põe `role="textbox"`, `aria-multiline` e o rótulo via
+  `editorProps.attributes`. Em teste, a área monta depois do primeiro render: use `findByRole`.
+- ⚠️ **`DialogContent` sem `DialogDescription` faz o Radix avisar em todo uso.** Quando não há
+  descrição, passe `aria-describedby={undefined}` explícito (ver `organisms/model-selector`).
 - ⚠️ **O dnd-kit anuncia em inglês por padrão** ("press the space bar"). Todo `DndContext` passa
   `accessibility={{ announcements, screenReaderInstructions }}` em português — ver
   `organisms/draggable-dashboard-grid`. E `onKeyDown` próprio depois de `{...listeners}`
