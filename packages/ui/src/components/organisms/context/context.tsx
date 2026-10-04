@@ -39,6 +39,7 @@ const useContextValue = () => {
 
 export type ContextProps = ComponentProps<typeof HoverCard> & ContextSchema;
 
+// O HoverCard raiz não renderiza elemento próprio, então não há onde pôr o data-slot
 export const Context = ({ usedTokens, maxTokens, usage, modelId, ...props }: ContextProps) => (
   <ContextContext.Provider
     value={{
@@ -106,7 +107,7 @@ export const ContextTrigger = ({ children, ...props }: ContextTriggerProps) => {
   return (
     <HoverCardTrigger asChild>
       {children ?? (
-        <Button type="button" variant="ghost" {...props}>
+        <Button data-slot="context-trigger" type="button" variant="ghost" {...props}>
           <span className="font-medium text-muted-foreground">{renderedPercent}</span>
           <ContextIcon />
         </Button>
@@ -118,7 +119,11 @@ export const ContextTrigger = ({ children, ...props }: ContextTriggerProps) => {
 export type ContextContentProps = ComponentProps<typeof HoverCardContent>;
 
 export const ContextContent = ({ className, ...props }: ContextContentProps) => (
-  <HoverCardContent className={cn("min-w-60 divide-y overflow-hidden p-0", className)} {...props} />
+  <HoverCardContent
+    data-slot="context-content"
+    className={cn("min-w-60 divide-y overflow-hidden p-0", className)}
+    {...props}
+  />
 );
 
 export type ContextContentHeaderProps = ComponentProps<"div">;
@@ -142,7 +147,11 @@ export const ContextContentHeader = ({
   }).format(maxTokens);
 
   return (
-    <div className={cn("w-full space-y-2 p-3", className)} {...props}>
+    <div
+      data-slot="context-content-header"
+      className={cn("w-full space-y-2 p-3", className)}
+      {...props}
+    >
       {children ?? (
         <>
           <div className="flex items-center justify-between gap-3 text-xs">
@@ -167,7 +176,7 @@ export const ContextContentHeader = ({
 export type ContextContentBodyProps = ComponentProps<"div">;
 
 export const ContextContentBody = ({ children, className, ...props }: ContextContentBodyProps) => (
-  <div className={cn("w-full p-3", className)} {...props}>
+  <div data-slot="context-content-body" className={cn("w-full p-3", className)} {...props}>
     {children}
   </div>
 );
@@ -196,6 +205,7 @@ export const ContextContentFooter = ({
 
   return (
     <div
+      data-slot="context-content-footer"
       className={cn(
         "flex w-full items-center justify-between gap-3 bg-secondary p-3 text-xs",
         className
@@ -238,7 +248,11 @@ export const ContextInputUsage = ({ className, children, ...props }: ContextInpu
   }).format(inputCost ?? 0);
 
   return (
-    <div className={cn("flex items-center justify-between text-xs", className)} {...props}>
+    <div
+      data-slot="context-input-usage"
+      className={cn("flex items-center justify-between text-xs", className)}
+      {...props}
+    >
       <span className="text-muted-foreground">Entrada</span>
       <TokensWithCost costText={inputCostText} tokens={inputTokens} />
     </div>
@@ -271,7 +285,11 @@ export const ContextOutputUsage = ({ className, children, ...props }: ContextOut
   }).format(outputCost ?? 0);
 
   return (
-    <div className={cn("flex items-center justify-between text-xs", className)} {...props}>
+    <div
+      data-slot="context-output-usage"
+      className={cn("flex items-center justify-between text-xs", className)}
+      {...props}
+    >
       <span className="text-muted-foreground">Saída</span>
       <TokensWithCost costText={outputCostText} tokens={outputTokens} />
     </div>
@@ -308,7 +326,11 @@ export const ContextReasoningUsage = ({
   }).format(reasoningCost ?? 0);
 
   return (
-    <div className={cn("flex items-center justify-between text-xs", className)} {...props}>
+    <div
+      data-slot="context-reasoning-usage"
+      className={cn("flex items-center justify-between text-xs", className)}
+      {...props}
+    >
       <span className="text-muted-foreground">Raciocínio</span>
       <TokensWithCost costText={reasoningCostText} tokens={reasoningTokens} />
     </div>
@@ -341,7 +363,11 @@ export const ContextCacheUsage = ({ className, children, ...props }: ContextCach
   }).format(cacheCost ?? 0);
 
   return (
-    <div className={cn("flex items-center justify-between text-xs", className)} {...props}>
+    <div
+      data-slot="context-cache-usage"
+      className={cn("flex items-center justify-between text-xs", className)}
+      {...props}
+    >
       <span className="text-muted-foreground">Cache</span>
       <TokensWithCost costText={cacheCostText} tokens={cacheTokens} />
     </div>

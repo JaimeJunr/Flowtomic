@@ -6,12 +6,12 @@
  */
 
 import { RefreshCw, Save, Settings } from "lucide-react";
-import React from "react";
+import type React from "react";
 import { Button } from "@/components/atoms";
 import { ButtonGroup } from "@/components/molecules/forms/button-group/button-group";
 import { cn } from "@/lib/utils";
 
-export interface DashboardHeaderActionsProps {
+export interface DashboardHeaderActionsProps extends React.ComponentProps<"div"> {
   /**
    * Lista de dashboards/views disponíveis
    */
@@ -62,92 +62,91 @@ export interface DashboardHeaderActionsProps {
  * Componente complexo que agrupa todas as ações do header do dashboard
  * Composto por múltiplas moléculas e átomos
  */
-export const DashboardHeaderActions = React.forwardRef<HTMLDivElement, DashboardHeaderActionsProps>(
-  (
-    {
-      dashboards = [],
-      activeDashboardId,
-      layout = "grid",
-      isLoading = false,
-      onSwitchDashboard,
-      onSaveAsNew,
-      onToggleLayout,
-      onRefresh,
-      labels = {},
-      className,
-      ...props
-    },
-    ref
-  ) => {
-    const {
-      saveAsNew = "Salvar Como",
-      gridLayout = "Grade",
-      listLayout = "Lista",
-      refresh = "Atualizar",
-    } = labels;
+export function DashboardHeaderActions({
+  dashboards = [],
+  activeDashboardId,
+  layout = "grid",
+  isLoading = false,
+  onSwitchDashboard,
+  onSaveAsNew,
+  onToggleLayout,
+  onRefresh,
+  labels = {},
+  className,
+  ...props
+}: DashboardHeaderActionsProps) {
+  const {
+    saveAsNew = "Salvar Como",
+    gridLayout = "Grade",
+    listLayout = "Lista",
+    refresh = "Atualizar",
+  } = labels;
 
-    return (
-      <div ref={ref} className={cn("flex flex-wrap items-center gap-2", className)} {...props}>
-        {/* Seleção de Dashboard */}
-        {dashboards.length > 1 && (
-          <select
-            aria-label="Painel ativo"
-            value={activeDashboardId || ""}
-            onChange={(e) => onSwitchDashboard?.(e.target.value)}
-            className="px-3 py-1.5 text-sm border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            {dashboards.map((dashboard) => (
-              <option key={dashboard.id} value={dashboard.id}>
-                {dashboard.name}
-              </option>
-            ))}
-          </select>
-        )}
+  return (
+    <div
+      data-slot="dashboard-header-actions"
+      className={cn("flex flex-wrap items-center gap-2", className)}
+      {...props}
+    >
+      {/* Seleção de Dashboard */}
+      {dashboards.length > 1 && (
+        <select
+          aria-label="Painel ativo"
+          value={activeDashboardId || ""}
+          onChange={(e) => onSwitchDashboard?.(e.target.value)}
+          className="px-3 py-1.5 text-sm border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          {dashboards.map((dashboard) => (
+            <option key={dashboard.id} value={dashboard.id}>
+              {dashboard.name}
+            </option>
+          ))}
+        </select>
+      )}
 
-        {/* Grupo de Botões de Ação (Salvar, Layout, Atualizar) */}
-        {(onSaveAsNew || onToggleLayout || onRefresh) && (
-          <ButtonGroup equalWidth>
-            {onSaveAsNew && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-11 md:min-h-9"
-                onClick={onSaveAsNew}
-              >
-                <Save className="h-4 w-4 mr-2" />
-                {saveAsNew}
-              </Button>
-            )}
+      {/* Grupo de Botões de Ação (Salvar, Layout, Atualizar) */}
+      {(onSaveAsNew || onToggleLayout || onRefresh) && (
+        <ButtonGroup equalWidth>
+          {onSaveAsNew && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="min-h-11 md:min-h-9"
+              onClick={onSaveAsNew}
+            >
+              <Save className="h-4 w-4 mr-2" />
+              {saveAsNew}
+            </Button>
+          )}
 
-            {onToggleLayout && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-11 md:min-h-9"
-                onClick={onToggleLayout}
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                {layout === "grid" ? listLayout : gridLayout}
-              </Button>
-            )}
+          {onToggleLayout && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="min-h-11 md:min-h-9"
+              onClick={onToggleLayout}
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              {layout === "grid" ? listLayout : gridLayout}
+            </Button>
+          )}
 
-            {onRefresh && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-11 md:min-h-9"
-                onClick={onRefresh}
-                disabled={isLoading}
-              >
-                <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
-                {refresh}
-              </Button>
-            )}
-          </ButtonGroup>
-        )}
-      </div>
-    );
-  }
-);
+          {onRefresh && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="min-h-11 md:min-h-9"
+              onClick={onRefresh}
+              disabled={isLoading}
+            >
+              <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
+              {refresh}
+            </Button>
+          )}
+        </ButtonGroup>
+      )}
+    </div>
+  );
+}
 
 DashboardHeaderActions.displayName = "DashboardHeaderActions";

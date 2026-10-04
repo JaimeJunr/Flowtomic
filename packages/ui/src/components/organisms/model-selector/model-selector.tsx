@@ -4,8 +4,8 @@
  * Componente de model selector dialog
  */
 
+import type * as React from "react";
 import type { ComponentProps, ReactNode } from "react";
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
   Command,
@@ -25,13 +25,14 @@ import {
 
 export type ModelSelectorProps = ComponentProps<typeof Dialog>;
 
+// O Dialog raiz não renderiza elemento próprio, então não há onde pôr o data-slot
 export const ModelSelector = (props: ModelSelectorProps) => <Dialog {...props} />;
 ModelSelector.displayName = "ModelSelector";
 
 export type ModelSelectorTriggerProps = ComponentProps<typeof DialogTrigger>;
 
 export const ModelSelectorTrigger = (props: ModelSelectorTriggerProps) => (
-  <DialogTrigger {...props} />
+  <DialogTrigger data-slot="model-selector-trigger" {...props} />
 );
 ModelSelectorTrigger.displayName = "ModelSelectorTrigger";
 
@@ -39,72 +40,87 @@ export type ModelSelectorContentProps = ComponentProps<typeof DialogContent> & {
   title?: ReactNode;
 };
 
-export const ModelSelectorContent = React.forwardRef<
-  React.ElementRef<typeof DialogContent>,
-  ModelSelectorContentProps
->(({ className, children, title = "Seletor de modelo", ...props }, ref) => (
+export const ModelSelectorContent = ({
+  className,
+  children,
+  title = "Seletor de modelo",
+  ...props
+}: ModelSelectorContentProps) => (
   // Sem descrição: o Radix pede aria-describedby={undefined} explícito para não avisar
-  <DialogContent ref={ref} aria-describedby={undefined} className={cn("p-0", className)} {...props}>
+  <DialogContent
+    data-slot="model-selector-content"
+    aria-describedby={undefined}
+    className={cn("p-0", className)}
+    {...props}
+  >
     <DialogTitle className="sr-only">{title}</DialogTitle>
     <Command className="**:data-[slot=command-input-wrapper]:h-auto">{children}</Command>
   </DialogContent>
-));
+);
 ModelSelectorContent.displayName = "ModelSelectorContent";
 
 export type ModelSelectorDialogProps = ComponentProps<typeof CommandDialog>;
 
 export const ModelSelectorDialog = (props: ModelSelectorDialogProps) => (
-  <CommandDialog {...props} />
+  <CommandDialog data-slot="model-selector-dialog" {...props} />
 );
 ModelSelectorDialog.displayName = "ModelSelectorDialog";
 
 export type ModelSelectorInputProps = ComponentProps<typeof CommandInput>;
 
-export const ModelSelectorInput = React.forwardRef<
-  React.ElementRef<typeof CommandInput>,
-  ModelSelectorInputProps
->(({ className, ...props }, ref) => (
-  <CommandInput ref={ref} className={cn("h-auto py-3.5", className)} {...props} />
-));
+export const ModelSelectorInput = ({ className, ...props }: ModelSelectorInputProps) => (
+  <CommandInput
+    data-slot="model-selector-input"
+    className={cn("h-auto py-3.5", className)}
+    {...props}
+  />
+);
 ModelSelectorInput.displayName = "ModelSelectorInput";
 
 export type ModelSelectorListProps = ComponentProps<typeof CommandList>;
 
-export const ModelSelectorList = (props: ModelSelectorListProps) => <CommandList {...props} />;
+export const ModelSelectorList = (props: ModelSelectorListProps) => (
+  <CommandList data-slot="model-selector-list" {...props} />
+);
 ModelSelectorList.displayName = "ModelSelectorList";
 
 export type ModelSelectorEmptyProps = ComponentProps<typeof CommandEmpty>;
 
-export const ModelSelectorEmpty = (props: ModelSelectorEmptyProps) => <CommandEmpty {...props} />;
+export const ModelSelectorEmpty = (props: ModelSelectorEmptyProps) => (
+  <CommandEmpty data-slot="model-selector-empty" {...props} />
+);
 ModelSelectorEmpty.displayName = "ModelSelectorEmpty";
 
 export type ModelSelectorGroupProps = ComponentProps<typeof CommandGroup>;
 
-export const ModelSelectorGroup = (props: ModelSelectorGroupProps) => <CommandGroup {...props} />;
+export const ModelSelectorGroup = (props: ModelSelectorGroupProps) => (
+  <CommandGroup data-slot="model-selector-group" {...props} />
+);
 ModelSelectorGroup.displayName = "ModelSelectorGroup";
 
 export type ModelSelectorItemProps = ComponentProps<typeof CommandItem>;
 
 export const ModelSelectorItem = ({ className, ...props }: ModelSelectorItemProps) => (
-  <CommandItem className={cn("gap-2", className)} {...props} />
+  <CommandItem data-slot="model-selector-item" className={cn("gap-2", className)} {...props} />
 );
 ModelSelectorItem.displayName = "ModelSelectorItem";
 
 export type ModelSelectorShortcutProps = ComponentProps<typeof CommandShortcut>;
 
 export const ModelSelectorShortcut = (props: ModelSelectorShortcutProps) => (
-  <CommandShortcut {...props} />
+  <CommandShortcut data-slot="model-selector-shortcut" {...props} />
 );
 ModelSelectorShortcut.displayName = "ModelSelectorShortcut";
 
 export type ModelSelectorSeparatorProps = ComponentProps<typeof CommandSeparator>;
 
 export const ModelSelectorSeparator = (props: ModelSelectorSeparatorProps) => (
-  <CommandSeparator {...props} />
+  <CommandSeparator data-slot="model-selector-separator" {...props} />
 );
 ModelSelectorSeparator.displayName = "ModelSelectorSeparator";
 
-export type ModelSelectorLogoProps = Omit<ComponentProps<"img">, "src" | "alt"> & {
+export type ModelSelectorLogoProps = Omit<ComponentProps<"img">, "src" | "alt" | "ref"> & {
+  ref?: React.Ref<HTMLImageElement | HTMLSpanElement>;
   /**
    * Imagem do logo, servida pelo app. Sem ela, aparece a inicial do provedor: a lib não
    * busca logo em site de fora (sumia offline e vazava o uso para terceiros).
@@ -170,10 +186,13 @@ export type ModelSelectorLogoProps = Omit<ComponentProps<"img">, "src" | "alt"> 
     | (string & {});
 };
 
-export const ModelSelectorLogo = React.forwardRef<
-  HTMLImageElement | HTMLSpanElement,
-  ModelSelectorLogoProps
->(({ provider, src, className, ...props }, ref) => {
+export const ModelSelectorLogo = ({
+  provider,
+  src,
+  className,
+  ref,
+  ...props
+}: ModelSelectorLogoProps) => {
   // o nome do modelo já está escrito ao lado: o logo é decorativo nos dois casos
   if (!src) {
     return (
@@ -202,30 +221,30 @@ export const ModelSelectorLogo = React.forwardRef<
       width={16}
     />
   );
-});
+};
 ModelSelectorLogo.displayName = "ModelSelectorLogo";
 
 export type ModelSelectorLogoGroupProps = ComponentProps<"div">;
 
-export const ModelSelectorLogoGroup = React.forwardRef<HTMLDivElement, ModelSelectorLogoGroupProps>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "-space-x-1 flex shrink-0 items-center [&>*]:rounded-full [&>*]:ring-1 [&>*]:ring-border [&>img]:bg-background [&>img]:p-px",
-        className
-      )}
-      {...props}
-    />
-  )
+export const ModelSelectorLogoGroup = ({ className, ...props }: ModelSelectorLogoGroupProps) => (
+  <div
+    data-slot="model-selector-logo-group"
+    className={cn(
+      "-space-x-1 flex shrink-0 items-center [&>*]:rounded-full [&>*]:ring-1 [&>*]:ring-border [&>img]:bg-background [&>img]:p-px",
+      className
+    )}
+    {...props}
+  />
 );
 ModelSelectorLogoGroup.displayName = "ModelSelectorLogoGroup";
 
 export type ModelSelectorNameProps = ComponentProps<"span">;
 
-export const ModelSelectorName = React.forwardRef<HTMLSpanElement, ModelSelectorNameProps>(
-  ({ className, ...props }, ref) => (
-    <span ref={ref} className={cn("flex-1 truncate text-left", className)} {...props} />
-  )
+export const ModelSelectorName = ({ className, ...props }: ModelSelectorNameProps) => (
+  <span
+    data-slot="model-selector-name"
+    className={cn("flex-1 truncate text-left", className)}
+    {...props}
+  />
 );
 ModelSelectorName.displayName = "ModelSelectorName";

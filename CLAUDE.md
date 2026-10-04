@@ -513,6 +513,10 @@ Cada uma já mordeu alguém neste repo.
   disfarçam de bug de tipo** em `stat-card`, `autocomplete` e `stats-grid` — componentes sem
   relação aparente com o `logic`. Antes de investigar qualquer `TS2339` no `ui`, rode
   `ls packages/logic/dist/index.d.ts`.
+  ⚠️ **Existir não basta: o `dist` velho também engana.** Os testes do `ui` usam o `logic`
+  compilado. Em 04/10/2026, com o `dist` de 20/09, dois testes do `DataTable` falhavam igual na
+  `main` e passaram depois de `cd packages/logic && bun run build`. Teste do `ui` que falha "também
+  na main" e mexe com hook do `logic`: recompile o `logic` antes de concluir.
 - ⚠️ **Subir versão no `package.json` sem rodar `bun install` quebra a CI.** O `bun.lock`
   registra a versão de cada workspace; o `--frozen-lockfile` do workflow rejeita o drift.
   ⚠️ **E o `bun install` do bun 1.3.14 local não reescreve essa linha** (medido em 26/09/2026):

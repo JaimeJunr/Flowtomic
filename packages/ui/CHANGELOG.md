@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.0] - 2026-10-04
+
+Alinhamento com o shadcn/ui ([changelog](https://ui.shadcn.com/docs/changelog)).
+
+### ⚠️ Breaking
+
+- **React 19 obrigatório.** `react` e `react-dom` em `^19.0.0` nas `peerDependencies`. Nenhum
+  componente usa mais `forwardRef`: o `ref` é prop normal, e no React 18 ele não chega no elemento.
+- **Tema em `oklch()`.** As variáveis do `globals.css` guardam a cor inteira
+  (`--primary: oklch(0.5254 0.1599 38.05)`), não mais o valor solto do HSL (`16 80% 39%`). Quem
+  sobrescreve o tema no formato antigo perde as cores. `hsl(var(--x))` vira `var(--x)`.
+- **`cn` vem do pacote `cn`** (do shadcn). `clsx` e `tailwind-merge` saíram das dependências. O
+  `lib/utils.ts` continua exportando `cn`.
+
+### Added
+
+- **`data-slot`** na raiz de todo componente exportado (atoms, molecules e organisms).
+- **NativeSelect** (atom): o `<select>` do navegador com a cara do `Select`.
+- **Combobox** (molecule): busca, teclado, limpar, grupos e escolha múltipla com chips. Primeiro
+  componente em Base UI (`@base-ui/react`).
+
 ## [Unreleased]
 
 ### Added

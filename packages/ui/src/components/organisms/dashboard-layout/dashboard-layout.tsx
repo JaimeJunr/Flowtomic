@@ -5,10 +5,10 @@
  * Componente genérico e reutilizável para qualquer aplicação.
  */
 
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 
-export interface DashboardLayoutProps {
+export interface DashboardLayoutProps extends React.ComponentProps<"div"> {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
@@ -23,41 +23,47 @@ export interface DashboardLayoutProps {
  * Este componente renderiza apenas o conteúdo da página.
  * Pode ser usado em qualquer aplicação que precise de um layout de dashboard.
  */
-const DashboardLayout = React.forwardRef<HTMLDivElement, DashboardLayoutProps>(
-  ({ children, title, subtitle, actions, className, maxWidth = "7xl", ...props }, ref) => {
-    const maxWidthClasses = {
-      sm: "max-w-sm",
-      md: "max-w-md",
-      lg: "max-w-lg",
-      xl: "max-w-xl",
-      "2xl": "max-w-2xl",
-      "7xl": "max-w-7xl",
-      full: "max-w-full",
-    };
+function DashboardLayout({
+  children,
+  title,
+  subtitle,
+  actions,
+  className,
+  maxWidth = "7xl",
+  ...props
+}: DashboardLayoutProps) {
+  const maxWidthClasses = {
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    "2xl": "max-w-2xl",
+    "7xl": "max-w-7xl",
+    full: "max-w-full",
+  };
 
-    return (
-      <div className="h-full w-full" ref={ref} {...props}>
-        <div className={cn("p-6 h-full", className)}>
-          <div className={cn("mx-auto space-y-12", maxWidthClasses[maxWidth])}>
-            {/* Cabeçalho da página */}
-            {(title || subtitle || actions) && (
-              <div className="mb-8 flex justify-between items-start">
-                <div>
-                  {title && <h1 className="text-3xl font-bold text-foreground">{title}</h1>}
-                  {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
-                </div>
-                {actions && <div className="flex items-center space-x-2">{actions}</div>}
+  return (
+    <div data-slot="dashboard-layout" className="h-full w-full" {...props}>
+      <div className={cn("p-6 h-full", className)}>
+        <div className={cn("mx-auto space-y-12", maxWidthClasses[maxWidth])}>
+          {/* Cabeçalho da página */}
+          {(title || subtitle || actions) && (
+            <div className="mb-8 flex justify-between items-start">
+              <div>
+                {title && <h1 className="text-3xl font-bold text-foreground">{title}</h1>}
+                {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
               </div>
-            )}
+              {actions && <div className="flex items-center space-x-2">{actions}</div>}
+            </div>
+          )}
 
-            {/* Conteúdo da página */}
-            {children}
-          </div>
+          {/* Conteúdo da página */}
+          {children}
         </div>
       </div>
-    );
-  }
-);
+    </div>
+  );
+}
 
 DashboardLayout.displayName = "DashboardLayout";
 

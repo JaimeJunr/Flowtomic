@@ -5,7 +5,6 @@
  */
 
 import { ChevronDownIcon, ExternalLinkIcon, MessageCircleIcon } from "lucide-react";
-import * as React from "react";
 import { type ComponentProps, createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -84,6 +83,7 @@ export type OpenInProps = ComponentProps<typeof DropdownMenu> & {
   query: string;
 };
 
+// O DropdownMenu raiz não renderiza elemento próprio, então não há onde pôr o data-slot
 export const OpenIn = ({ query, ...props }: OpenInProps) => (
   <OpenInContext.Provider value={{ query }}>
     <DropdownMenu {...props} />
@@ -93,46 +93,49 @@ OpenIn.displayName = "OpenIn";
 
 export type OpenInContentProps = ComponentProps<typeof DropdownMenuContent>;
 
-export const OpenInContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuContent>,
-  OpenInContentProps
->(({ className, ...props }, ref) => (
-  <DropdownMenuContent ref={ref} align="start" className={cn("w-[240px]", className)} {...props} />
-));
+export const OpenInContent = ({ className, ...props }: OpenInContentProps) => (
+  <DropdownMenuContent
+    data-slot="open-in-content"
+    align="start"
+    className={cn("w-[240px]", className)}
+    {...props}
+  />
+);
 OpenInContent.displayName = "OpenInContent";
 
 export type OpenInItemProps = ComponentProps<typeof DropdownMenuItem>;
 
-export const OpenInItem = (props: OpenInItemProps) => <DropdownMenuItem {...props} />;
+export const OpenInItem = (props: OpenInItemProps) => (
+  <DropdownMenuItem data-slot="open-in-item" {...props} />
+);
 OpenInItem.displayName = "OpenInItem";
 
 export type OpenInLabelProps = ComponentProps<typeof DropdownMenuLabel>;
 
-export const OpenInLabel = (props: OpenInLabelProps) => <DropdownMenuLabel {...props} />;
+export const OpenInLabel = (props: OpenInLabelProps) => (
+  <DropdownMenuLabel data-slot="open-in-label" {...props} />
+);
 OpenInLabel.displayName = "OpenInLabel";
 
 export type OpenInSeparatorProps = ComponentProps<typeof DropdownMenuSeparator>;
 
 export const OpenInSeparator = (props: OpenInSeparatorProps) => (
-  <DropdownMenuSeparator {...props} />
+  <DropdownMenuSeparator data-slot="open-in-separator" {...props} />
 );
 OpenInSeparator.displayName = "OpenInSeparator";
 
 export type OpenInTriggerProps = ComponentProps<typeof DropdownMenuTrigger>;
 
-export const OpenInTrigger = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuTrigger>,
-  OpenInTriggerProps
->(({ children, ...props }, ref) => (
-  <DropdownMenuTrigger ref={ref} {...props} asChild>
+export const OpenInTrigger = ({ children, ...props }: OpenInTriggerProps) => (
+  <DropdownMenuTrigger data-slot="open-in-trigger" {...props} asChild>
     {children ?? (
-      <Button type="button" variant="outline">
+      <Button data-slot="open-in-trigger" type="button" variant="outline">
         Abrir no chat
         <ChevronDownIcon className="size-4" />
       </Button>
     )}
   </DropdownMenuTrigger>
-));
+);
 OpenInTrigger.displayName = "OpenInTrigger";
 
 export type OpenInChatGPTProps = ComponentProps<typeof DropdownMenuItem>;
@@ -140,7 +143,7 @@ export type OpenInChatGPTProps = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInChatGPT = (props: OpenInChatGPTProps) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem asChild data-slot="open-in-chatgpt" {...props}>
       <a
         className="flex items-center gap-2"
         href={providers.chatgpt.createUrl(query)}
@@ -161,7 +164,7 @@ export type OpenInClaudeProps = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInClaude = (props: OpenInClaudeProps) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem asChild data-slot="open-in-claude" {...props}>
       <a
         className="flex items-center gap-2"
         href={providers.claude.createUrl(query)}
@@ -182,7 +185,7 @@ export type OpenInT3Props = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInT3 = (props: OpenInT3Props) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem asChild data-slot="open-in-t3" {...props}>
       <a
         className="flex items-center gap-2"
         href={providers.t3.createUrl(query)}
