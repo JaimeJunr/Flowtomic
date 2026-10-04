@@ -24,6 +24,9 @@ const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
       ref={ref}
       className={cn(
         "flex w-full items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        // addon de bloco (cabeçalho/rodapé) empilha o grupo: campo numa linha, barra na outra
+        "has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:flex-col",
+        "has-[>[data-align=block-end]]:items-stretch has-[>[data-align=block-start]]:items-stretch",
         className
       )}
       {...props}
@@ -41,10 +44,11 @@ const InputGroupAddon = React.forwardRef<HTMLDivElement, InputGroupAddonProps>(
   ({ className, align = "inline-start", children, ...props }, ref) => (
     <div
       ref={ref}
+      data-align={align}
       className={cn(
         "flex items-center",
-        align === "block-start" && "self-start",
-        align === "block-end" && "self-end",
+        align === "block-start" && "order-first w-full",
+        align === "block-end" && "order-last w-full",
         align === "inline-start" && "order-first",
         align === "inline-end" && "order-last",
         className
