@@ -211,7 +211,7 @@ export function ChartAreaInteractive({
   }, [data, timeRange]);
 
   return (
-    <section className={cn("text-sm", className)}>
+    <section data-slot="chart-area-interactive" className={cn("text-sm", className)}>
       <div className="flex flex-wrap items-center gap-3">
         <h3 className="text-sm font-semibold">{title}</h3>
         <div className="h-px flex-1 bg-border" />

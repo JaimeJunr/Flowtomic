@@ -4,24 +4,24 @@
  * Componente para agrupar inputs com addons e botões
  */
 
-import * as React from "react";
+import type * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "../../../atoms";
 
-export type InputGroupProps = React.HTMLAttributes<HTMLDivElement>;
-export type InputGroupAddonProps = React.HTMLAttributes<HTMLDivElement> & {
+export type InputGroupProps = React.ComponentProps<"div">;
+export type InputGroupAddonProps = React.ComponentProps<"div"> & {
   align?: "block-start" | "block-end" | "inline-start" | "inline-end";
 };
 export type InputGroupButtonProps = ButtonProps;
-export type InputGroupTextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+export type InputGroupTextareaProps = React.ComponentProps<"textarea">;
 
 /**
  * InputGroup - Container principal do input group
  */
-const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
-  ({ className, children, ...props }, ref) => (
+function InputGroup({ className, children, ...props }: InputGroupProps) {
+  return (
     <div
-      ref={ref}
+      data-slot="input-group"
       className={cn(
         "flex w-full items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
         // addon de bloco (cabeçalho/rodapé) empilha o grupo: campo numa linha, barra na outra
@@ -33,17 +33,22 @@ const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
     >
       {children}
     </div>
-  )
-);
+  );
+}
 InputGroup.displayName = "InputGroup";
 
 /**
  * InputGroupAddon - Addon do input group (para ícones, prefixos, sufixos)
  */
-const InputGroupAddon = React.forwardRef<HTMLDivElement, InputGroupAddonProps>(
-  ({ className, align = "inline-start", children, ...props }, ref) => (
+function InputGroupAddon({
+  className,
+  align = "inline-start",
+  children,
+  ...props
+}: InputGroupAddonProps) {
+  return (
     <div
-      ref={ref}
+      data-slot="input-group-addon"
       data-align={align}
       className={cn(
         "flex items-center",
@@ -57,35 +62,33 @@ const InputGroupAddon = React.forwardRef<HTMLDivElement, InputGroupAddonProps>(
     >
       {children}
     </div>
-  )
-);
+  );
+}
 InputGroupAddon.displayName = "InputGroupAddon";
 
 /**
  * InputGroupButton - Botão do input group
  */
-const InputGroupButton = React.forwardRef<HTMLButtonElement, InputGroupButtonProps>(
-  ({ className, ...props }, ref) => (
-    <Button ref={ref} className={cn("shrink-0", className)} {...props} />
-  )
-);
+function InputGroupButton({ className, ...props }: InputGroupButtonProps) {
+  return <Button data-slot="input-group-button" className={cn("shrink-0", className)} {...props} />;
+}
 InputGroupButton.displayName = "InputGroupButton";
 
 /**
  * InputGroupTextarea - Textarea do input group
  */
-const InputGroupTextarea = React.forwardRef<HTMLTextAreaElement, InputGroupTextareaProps>(
-  ({ className, ...props }, ref) => (
+function InputGroupTextarea({ className, ...props }: InputGroupTextareaProps) {
+  return (
     <textarea
-      ref={ref}
+      data-slot="input-group-textarea"
       className={cn(
         "flex-1 resize-none bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
     />
-  )
-);
+  );
+}
 InputGroupTextarea.displayName = "InputGroupTextarea";
 
 export { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea };

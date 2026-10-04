@@ -7,25 +7,24 @@
 import type { ToolUIPart } from "ai";
 import { ChevronDownIcon, Loader2, WrenchIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
-import * as React from "react";
 import { isValidElement } from "react";
 import { cn } from "@/lib/utils";
 import { CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../atoms";
 
 export type ToolProps = ComponentProps<typeof Collapsible>;
 
-export const Tool = React.forwardRef<React.ElementRef<typeof Collapsible>, ToolProps>(
-  ({ className, ...props }, ref) => (
+export function Tool({ className, ...props }: ToolProps) {
+  return (
     <Collapsible
-      ref={ref}
+      data-slot="tool"
       className={cn("not-prose mb-4 w-full rounded-[10px] border border-border", className)}
       {...props}
     />
-  )
-);
+  );
+}
 Tool.displayName = "Tool";
 
-export type ToolHeaderProps = {
+export type ToolHeaderProps = Omit<ComponentProps<typeof CollapsibleTrigger>, "type" | "title"> & {
   title?: string;
   type: ToolUIPart["type"];
   state: ToolUIPart["state"];
@@ -69,10 +68,10 @@ const getStatusLabel = (status: ToolUIPart["state"]) => {
   );
 };
 
-export const ToolHeader = React.forwardRef<HTMLButtonElement, ToolHeaderProps>(
-  ({ className, title, type, state, ...props }, ref) => (
+export function ToolHeader({ className, title, type, state, ...props }: ToolHeaderProps) {
+  return (
     <CollapsibleTrigger
-      ref={ref}
+      data-slot="tool-header"
       className={cn("flex w-full items-center justify-between gap-4 p-3", className)}
       {...props}
     >
@@ -83,33 +82,37 @@ export const ToolHeader = React.forwardRef<HTMLButtonElement, ToolHeaderProps>(
       </div>
       <ChevronDownIcon className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
     </CollapsibleTrigger>
-  )
-);
+  );
+}
 ToolHeader.displayName = "ToolHeader";
 
 export type ToolContentProps = ComponentProps<typeof CollapsibleContent>;
 
-export const ToolContent = React.forwardRef<HTMLDivElement, ToolContentProps>(
-  ({ className, ...props }, ref) => (
+export function ToolContent({ className, ...props }: ToolContentProps) {
+  return (
     <CollapsibleContent
-      ref={ref}
+      data-slot="tool-content"
       className={cn(
         "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 text-popover-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
         className
       )}
       {...props}
     />
-  )
-);
+  );
+}
 ToolContent.displayName = "ToolContent";
 
 export type ToolInputProps = ComponentProps<"div"> & {
   input: ToolUIPart["input"];
 };
 
-export const ToolInput = React.forwardRef<HTMLDivElement, ToolInputProps>(
-  ({ className, input, ...props }, ref) => (
-    <div ref={ref} className={cn("space-y-2 overflow-hidden p-4", className)} {...props}>
+export function ToolInput({ className, input, ...props }: ToolInputProps) {
+  return (
+    <div
+      data-slot="tool-input"
+      className={cn("space-y-2 overflow-hidden p-4", className)}
+      {...props}
+    >
       <h4 className="font-medium text-muted-foreground text-[13px]">Parâmetros</h4>
       <div className="rounded-md bg-surface">
         <CodeBlock
@@ -120,8 +123,8 @@ export const ToolInput = React.forwardRef<HTMLDivElement, ToolInputProps>(
         />
       </div>
     </div>
-  )
-);
+  );
+}
 ToolInput.displayName = "ToolInput";
 
 export type ToolOutputProps = ComponentProps<"div"> & {
@@ -129,55 +132,53 @@ export type ToolOutputProps = ComponentProps<"div"> & {
   errorText: ToolUIPart["errorText"];
 };
 
-export const ToolOutput = React.forwardRef<HTMLDivElement, ToolOutputProps>(
-  ({ className, output, errorText, ...props }, ref) => {
-    if (!(output || errorText)) {
-      return null;
-    }
+export function ToolOutput({ className, output, errorText, ...props }: ToolOutputProps) {
+  if (!(output || errorText)) {
+    return null;
+  }
 
-    let Output: ReactNode = <div>{output as ReactNode}</div>;
+  let Output: ReactNode = <div>{output as ReactNode}</div>;
 
-    if (typeof output === "object" && !isValidElement(output)) {
-      Output = (
-        <CodeBlock
-          className="border-0 bg-surface font-mono text-[12.5px] [&_pre]:bg-surface! [&_pre]:text-[12.5px]! [&_code]:text-[12.5px]!"
-          code={JSON.stringify(output, null, 2)}
-          language="json"
-          showLanguage={false}
-        />
-      );
-    } else if (typeof output === "string") {
-      Output = (
-        <CodeBlock
-          className="border-0 bg-surface font-mono text-[12.5px] [&_pre]:bg-surface! [&_pre]:text-[12.5px]! [&_code]:text-[12.5px]!"
-          code={output}
-          language="text"
-          showLanguage={false}
-        />
-      );
-    }
-
-    return (
-      <div ref={ref} className={cn("space-y-2 p-4", className)} {...props}>
-        <h4
-          className={cn(
-            "font-medium text-[13px]",
-            errorText ? "text-destructive" : "text-muted-foreground"
-          )}
-        >
-          {errorText ? "Erro" : "Resultado"}
-        </h4>
-        <div
-          className={cn(
-            "overflow-x-auto rounded-md font-mono text-[12.5px] [&_table]:w-full",
-            errorText ? "bg-destructive/10 text-destructive" : "bg-surface text-foreground"
-          )}
-        >
-          {errorText && <div>{errorText}</div>}
-          {Output}
-        </div>
-      </div>
+  if (typeof output === "object" && !isValidElement(output)) {
+    Output = (
+      <CodeBlock
+        className="border-0 bg-surface font-mono text-[12.5px] [&_pre]:bg-surface! [&_pre]:text-[12.5px]! [&_code]:text-[12.5px]!"
+        code={JSON.stringify(output, null, 2)}
+        language="json"
+        showLanguage={false}
+      />
+    );
+  } else if (typeof output === "string") {
+    Output = (
+      <CodeBlock
+        className="border-0 bg-surface font-mono text-[12.5px] [&_pre]:bg-surface! [&_pre]:text-[12.5px]! [&_code]:text-[12.5px]!"
+        code={output}
+        language="text"
+        showLanguage={false}
+      />
     );
   }
-);
+
+  return (
+    <div data-slot="tool-output" className={cn("space-y-2 p-4", className)} {...props}>
+      <h4
+        className={cn(
+          "font-medium text-[13px]",
+          errorText ? "text-destructive" : "text-muted-foreground"
+        )}
+      >
+        {errorText ? "Erro" : "Resultado"}
+      </h4>
+      <div
+        className={cn(
+          "overflow-x-auto rounded-md font-mono text-[12.5px] [&_table]:w-full",
+          errorText ? "bg-destructive/10 text-destructive" : "bg-surface text-foreground"
+        )}
+      >
+        {errorText && <div>{errorText}</div>}
+        {Output}
+      </div>
+    </div>
+  );
+}
 ToolOutput.displayName = "ToolOutput";

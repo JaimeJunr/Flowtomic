@@ -99,7 +99,7 @@ function ButtonCounter({
 
   if (showControls) {
     return (
-      <div className={cn("inline-flex items-center gap-2", className)}>
+      <div data-slot="button-counter" className={cn("inline-flex items-center gap-2", className)}>
         <motion.div tabIndex={-1} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button
             {...buttonProps}
@@ -153,7 +153,13 @@ function ButtonCounter({
   }
 
   return (
-    <Button variant={variant} size={size} className={cn("gap-2", className)} {...buttonProps}>
+    <Button
+      data-slot="button-counter"
+      variant={variant}
+      size={size}
+      className={cn("gap-2", className)}
+      {...buttonProps}
+    >
       {prefix}
       <AnimatedSlidingNumber
         value={value}

@@ -152,7 +152,7 @@ function stripMarkdown(md: string): string {
     .trim();
 }
 
-type BaseDivProps = Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">;
+type BaseDivProps = Omit<React.ComponentProps<"div">, "onChange">;
 
 export interface TextEditorProps extends BaseDivProps {
   value?: string;
@@ -170,417 +170,412 @@ export interface TextEditorProps extends BaseDivProps {
   availableModes?: ("rich" | "markdown")[];
 }
 
-export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
-  (
-    {
-      className,
-      value: controlledValue,
-      defaultValue,
-      onChange,
-      placeholder = "Escreva algo...",
-      editable = true,
-      mode: controlledMode,
-      onModeChange,
-      toolbar = true,
-      allowedActions = DEFAULT_ACTIONS,
-      onUploadImage,
-      outputFormat = "markdown",
-      availableModes = ["rich", "markdown"],
-      // Vai para a área de digitação, não para o wrapper: é ela que o leitor de tela anuncia
-      "aria-label": ariaLabel,
-      ...props
-    },
-    ref
-  ) => {
-    const initial = controlledValue ?? defaultValue ?? "";
-    const {
-      value: internalMarkdown,
-      setValue: setInternalMarkdown,
-      isControlled,
-    } = useMarkdownState(controlledValue, initial);
+export function TextEditor({
+  className,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  placeholder = "Escreva algo...",
+  editable = true,
+  mode: controlledMode,
+  onModeChange,
+  toolbar = true,
+  allowedActions = DEFAULT_ACTIONS,
+  onUploadImage,
+  outputFormat = "markdown",
+  availableModes = ["rich", "markdown"],
+  // Vai para a área de digitação, não para o wrapper: é ela que o leitor de tela anuncia
+  "aria-label": ariaLabel,
+  ...props
+}: TextEditorProps) {
+  const initial = controlledValue ?? defaultValue ?? "";
+  const {
+    value: internalMarkdown,
+    setValue: setInternalMarkdown,
+    isControlled,
+  } = useMarkdownState(controlledValue, initial);
 
-    // Expandir modos: se markdown está presente, adicionar preview automaticamente
-    const effectiveModes = React.useMemo<TextEditorMode[]>(() => {
-      const unique = availableModes.filter((m, i, arr) => arr.indexOf(m) === i);
-      const expanded: TextEditorMode[] = [];
+  // Expandir modos: se markdown está presente, adicionar preview automaticamente
+  const effectiveModes = React.useMemo<TextEditorMode[]>(() => {
+    const unique = availableModes.filter((m, i, arr) => arr.indexOf(m) === i);
+    const expanded: TextEditorMode[] = [];
 
-      if (unique.includes("rich")) expanded.push("rich");
-      if (unique.includes("markdown")) {
-        expanded.push("markdown");
-        expanded.push("preview"); // markdown sempre vem com preview
-      }
-
-      return expanded.length > 0 ? expanded : ["rich"];
-    }, [availableModes]);
-
-    const [mode, setMode] = React.useState<TextEditorMode>(
-      controlledMode && effectiveModes.includes(controlledMode) ? controlledMode : effectiveModes[0]
-    );
-    const setModeSafe = React.useCallback(
-      (m: TextEditorMode) => {
-        if (!effectiveModes.includes(m)) return;
-        setMode(m);
-        onModeChange?.(m);
-      },
-      [effectiveModes, onModeChange]
-    );
-
-    const editor = useEditor({
-      editable,
-      // O contenteditable do ProseMirror não tem papel: sem isto o leitor de tela não sabe que é campo
-      editorProps: {
-        attributes: {
-          role: "textbox",
-          "aria-multiline": "true",
-          ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
-        },
-      },
-      extensions: [
-        Markdown.configure({ html: false, transformPastedText: true, transformCopiedText: true }),
-        StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
-        TextStyle,
-        Color,
-        TextAlign.configure({ types: ["heading", "paragraph"] }),
-        Placeholder.configure({ placeholder }),
-        Image,
-      ],
-      content: internalMarkdown ? undefined : "",
-      onUpdate: ({ editor }) => {
-        try {
-          // Acesso ao storage markdown da extensão tiptap-markdown
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const md: string =
-            (
-              editor?.storage as Record<string, { getMarkdown?: () => string }>
-            )?.markdown?.getMarkdown?.() ?? "";
-          if (typeof md === "string") {
-            if (!isControlled) setInternalMarkdown(md);
-            if (outputFormat === "text") {
-              onChange?.(editor.getText());
-            } else {
-              onChange?.(md);
-            }
-          }
-        } catch {
-          /* silencioso */
-        }
-      },
-    });
-
-    React.useEffect(() => {
-      if (!editor) return;
-      if (controlledValue === undefined) return;
-      const nextMarkdown = controlledValue; // já é markdown ou texto; se texto não temos conversão -> usar direto
-      // @ts-expect-error comando da extensão markdown
-      if (editor.commands?.setMarkdown) {
-        // @ts-expect-error
-        editor.commands.setMarkdown(nextMarkdown);
-      } else {
-        editor.commands.setContent(nextMarkdown);
-      }
-    }, [editor, controlledValue]);
-
-    const handleImageInsert = React.useCallback(async () => {
-      if (!editor) return;
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
-      input.onchange = async () => {
-        const file = input.files?.[0];
-        if (!file) return;
-        const url = onUploadImage ? await onUploadImage(file) : URL.createObjectURL(file);
-        editor.chain().focus().setImage({ src: url, alt: file.name }).run();
-      };
-      input.click();
-    }, [editor, onUploadImage]);
-
-    // O Editor do TipTap mantém a mesma referência entre transações; sem este número
-    // nas deps o useMemo nunca recalcula isActive() e a toolbar congela o estado ativo.
-    const editorTransaction = useEditorState({
-      editor,
-      selector: ({ transactionNumber }) => transactionNumber,
-    });
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: editorTransaction só força o recálculo de isActive()
-    const Toolbar = React.useMemo(() => {
-      if (!toolbar) return null;
-      const e = editor as Editor | null;
-      const run = (cb: (ed: Editor) => void) => () => e && cb(e);
-      return (
-        <div className="flex flex-wrap items-center gap-1 rounded-md border bg-muted/40 p-1">
-          {allowedActions.includes("bold") && (
-            <ToolbarButton
-              label="Negrito"
-              active={e?.isActive("bold")}
-              onClick={run((ed) => ed.chain().focus().toggleBold().run())}
-            >
-              <Bold size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("italic") && (
-            <ToolbarButton
-              label="Itálico"
-              active={e?.isActive("italic")}
-              onClick={run((ed) => ed.chain().focus().toggleItalic().run())}
-            >
-              <Italic size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("strike") && (
-            <ToolbarButton
-              label="Tachado"
-              active={e?.isActive("strike")}
-              onClick={run((ed) => ed.chain().focus().toggleStrike().run())}
-            >
-              <Strikethrough size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("code") && (
-            <ToolbarButton
-              label="Código inline"
-              active={e?.isActive("code")}
-              onClick={run((ed) => ed.chain().focus().toggleCode().run())}
-            >
-              <Code size={14} />
-            </ToolbarButton>
-          )}
-          <Separator orientation="vertical" className="mx-1 h-6" />
-          {allowedActions.includes("h1") && (
-            <ToolbarButton
-              label="Título H1"
-              active={e?.isActive("heading", { level: 1 })}
-              onClick={run((ed) => ed.chain().focus().toggleHeading({ level: 1 }).run())}
-            >
-              <Heading1 size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("h2") && (
-            <ToolbarButton
-              label="Título H2"
-              active={e?.isActive("heading", { level: 2 })}
-              onClick={run((ed) => ed.chain().focus().toggleHeading({ level: 2 }).run())}
-            >
-              <Heading2 size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("h3") && (
-            <ToolbarButton
-              label="Título H3"
-              active={e?.isActive("heading", { level: 3 })}
-              onClick={run((ed) => ed.chain().focus().toggleHeading({ level: 3 }).run())}
-            >
-              <Heading3 size={14} />
-            </ToolbarButton>
-          )}
-          <Separator orientation="vertical" className="mx-1 h-6" />
-          {allowedActions.includes("bulletList") && (
-            <ToolbarButton
-              label="Lista não ordenada"
-              active={e?.isActive("bulletList")}
-              onClick={run((ed) => ed.chain().focus().toggleBulletList().run())}
-            >
-              <ListIcon size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("orderedList") && (
-            <ToolbarButton
-              label="Lista ordenada"
-              active={e?.isActive("orderedList")}
-              onClick={run((ed) => ed.chain().focus().toggleOrderedList().run())}
-            >
-              <ListOrdered size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("blockquote") && (
-            <ToolbarButton
-              label="Citação"
-              active={e?.isActive("blockquote")}
-              onClick={run((ed) => ed.chain().focus().toggleBlockquote().run())}
-            >
-              <Quote size={14} />
-            </ToolbarButton>
-          )}
-          <Separator orientation="vertical" className="mx-1 h-6" />
-          {allowedActions.includes("alignLeft") && (
-            <ToolbarButton
-              label="Alinhar à esquerda"
-              active={e?.isActive({ textAlign: "left" })}
-              onClick={run((ed) => ed.chain().focus().setTextAlign("left").run())}
-            >
-              <AlignLeft size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("alignCenter") && (
-            <ToolbarButton
-              label="Centralizar"
-              active={e?.isActive({ textAlign: "center" })}
-              onClick={run((ed) => ed.chain().focus().setTextAlign("center").run())}
-            >
-              <AlignCenter size={14} />
-            </ToolbarButton>
-          )}
-          {allowedActions.includes("alignRight") && (
-            <ToolbarButton
-              label="Alinhar à direita"
-              active={e?.isActive({ textAlign: "right" })}
-              onClick={run((ed) => ed.chain().focus().setTextAlign("right").run())}
-            >
-              <AlignRight size={14} />
-            </ToolbarButton>
-          )}
-          <Separator orientation="vertical" className="mx-1 h-6" />
-          {allowedActions.includes("textColor") && (
-            <Popover>
-              <TooltipProvider delayDuration={300} skipDelayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <PopoverTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        aria-label="Cor do texto"
-                        className="h-7 w-7 p-0"
-                      >
-                        <Palette size={14} aria-hidden="true" />
-                      </Button>
-                    </PopoverTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent sideOffset={4}>Cor do texto</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <PopoverContent className="w-auto p-2">
-                <div className="grid grid-cols-6 gap-1">
-                  {PRESET_COLORS.map((color) => (
-                    <button
-                      key={color.value}
-                      type="button"
-                      onClick={() => e?.chain().focus().setColor(color.value).run()}
-                      aria-label={color.label}
-                      title={color.label}
-                      className="size-6 rounded border border-border hover:ring-2 hover:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      style={{ backgroundColor: color.value }}
-                    />
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => e?.chain().focus().unsetColor().run()}
-                    aria-label="Remover cor"
-                    title="Remover cor"
-                    className="flex size-6 items-center justify-center rounded border border-border bg-background text-muted-foreground hover:ring-2 hover:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    <X className="size-3.5" aria-hidden="true" />
-                  </button>
-                </div>
-              </PopoverContent>
-            </Popover>
-          )}
-          <Separator orientation="vertical" className="mx-1 h-6" />
-          {allowedActions.includes("image") && (
-            <ToolbarButton label="Inserir imagem" onClick={handleImageInsert}>
-              <ImageIcon size={14} />
-            </ToolbarButton>
-          )}
-        </div>
-      );
-    }, [editor, editorTransaction, toolbar, allowedActions, handleImageInsert]);
-
-    const richView = (
-      <div className="grid gap-2">
-        {Toolbar}
-        <div
-          className={cn(
-            "prose dark:prose-invert prose-sm max-w-none rounded-md border bg-background p-3",
-            "focus-within:ring-ring/50 focus-within:ring-[3px]"
-          )}
-        >
-          <EditorContent editor={editor} className="min-h-40" />
-        </div>
-      </div>
-    );
-
-    const markdownEditor = (
-      <Textarea
-        aria-label={ariaLabel}
-        className="font-mono text-sm"
-        rows={14}
-        value={internalMarkdown}
-        onChange={(e) => {
-          const next = e.target.value;
-          setInternalMarkdown(next);
-          if (outputFormat === "text") {
-            onChange?.(stripMarkdown(next));
-          } else {
-            onChange?.(next);
-          }
-        }}
-        placeholder={placeholder}
-      />
-    );
-
-    const previewView = (
-      <div className="rounded-md border bg-background p-3">
-        <Streamdown>{internalMarkdown}</Streamdown>
-      </div>
-    );
-
-    // Renderização sem abas (apenas rich sozinho)
-    if (effectiveModes.length === 1 && effectiveModes[0] === "rich") {
-      return (
-        <div ref={ref} className={cn("grid gap-2", className)} {...props}>
-          {richView}
-        </div>
-      );
+    if (unique.includes("rich")) expanded.push("rich");
+    if (unique.includes("markdown")) {
+      expanded.push("markdown");
+      expanded.push("preview"); // markdown sempre vem com preview
     }
 
-    // Com abas (markdown sempre inclui preview automaticamente)
-    return (
-      <div ref={ref} className={cn("grid gap-2", className)} {...props}>
-        <Tabs value={mode} onValueChange={(v) => setModeSafe(v as TextEditorMode)}>
-          <TabsList className="w-fit">
-            {effectiveModes.includes("rich") && (
-              <TabsTrigger value="rich">
-                <span className="flex items-center gap-2">
-                  <Type className="size-3.5" aria-hidden="true" /> Visual
-                </span>
-              </TabsTrigger>
-            )}
-            {effectiveModes.includes("markdown") && (
-              <TabsTrigger value="markdown">
-                <span className="flex items-center gap-2">
-                  <FileText className="size-3.5" aria-hidden="true" /> Markdown
-                </span>
-              </TabsTrigger>
-            )}
-            {effectiveModes.includes("preview") && (
-              <TabsTrigger value="preview">
-                <span className="flex items-center gap-2">
-                  <Eye className="size-3.5" aria-hidden="true" /> Prévia
-                </span>
-              </TabsTrigger>
-            )}
-          </TabsList>
+    return expanded.length > 0 ? expanded : ["rich"];
+  }, [availableModes]);
 
-          {effectiveModes.includes("rich") && (
-            <TabsContent value="rich" className="mt-2">
-              {richView}
-            </TabsContent>
-          )}
-          {effectiveModes.includes("markdown") && (
-            <TabsContent value="markdown" className="mt-2">
-              {markdownEditor}
-            </TabsContent>
-          )}
-          {effectiveModes.includes("preview") && (
-            <TabsContent value="preview" className="mt-2">
-              {previewView}
-            </TabsContent>
-          )}
-        </Tabs>
+  const [mode, setMode] = React.useState<TextEditorMode>(
+    controlledMode && effectiveModes.includes(controlledMode) ? controlledMode : effectiveModes[0]
+  );
+  const setModeSafe = React.useCallback(
+    (m: TextEditorMode) => {
+      if (!effectiveModes.includes(m)) return;
+      setMode(m);
+      onModeChange?.(m);
+    },
+    [effectiveModes, onModeChange]
+  );
+
+  const editor = useEditor({
+    editable,
+    // O contenteditable do ProseMirror não tem papel: sem isto o leitor de tela não sabe que é campo
+    editorProps: {
+      attributes: {
+        role: "textbox",
+        "aria-multiline": "true",
+        ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
+      },
+    },
+    extensions: [
+      Markdown.configure({ html: false, transformPastedText: true, transformCopiedText: true }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      TextStyle,
+      Color,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Placeholder.configure({ placeholder }),
+      Image,
+    ],
+    content: internalMarkdown ? undefined : "",
+    onUpdate: ({ editor }) => {
+      try {
+        // Acesso ao storage markdown da extensão tiptap-markdown
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const md: string =
+          (
+            editor?.storage as Record<string, { getMarkdown?: () => string }>
+          )?.markdown?.getMarkdown?.() ?? "";
+        if (typeof md === "string") {
+          if (!isControlled) setInternalMarkdown(md);
+          if (outputFormat === "text") {
+            onChange?.(editor.getText());
+          } else {
+            onChange?.(md);
+          }
+        }
+      } catch {
+        /* silencioso */
+      }
+    },
+  });
+
+  React.useEffect(() => {
+    if (!editor) return;
+    if (controlledValue === undefined) return;
+    const nextMarkdown = controlledValue; // já é markdown ou texto; se texto não temos conversão -> usar direto
+    // @ts-expect-error comando da extensão markdown
+    if (editor.commands?.setMarkdown) {
+      // @ts-expect-error
+      editor.commands.setMarkdown(nextMarkdown);
+    } else {
+      editor.commands.setContent(nextMarkdown);
+    }
+  }, [editor, controlledValue]);
+
+  const handleImageInsert = React.useCallback(async () => {
+    if (!editor) return;
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      const url = onUploadImage ? await onUploadImage(file) : URL.createObjectURL(file);
+      editor.chain().focus().setImage({ src: url, alt: file.name }).run();
+    };
+    input.click();
+  }, [editor, onUploadImage]);
+
+  // O Editor do TipTap mantém a mesma referência entre transações; sem este número
+  // nas deps o useMemo nunca recalcula isActive() e a toolbar congela o estado ativo.
+  const editorTransaction = useEditorState({
+    editor,
+    selector: ({ transactionNumber }) => transactionNumber,
+  });
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: editorTransaction só força o recálculo de isActive()
+  const Toolbar = React.useMemo(() => {
+    if (!toolbar) return null;
+    const e = editor as Editor | null;
+    const run = (cb: (ed: Editor) => void) => () => e && cb(e);
+    return (
+      <div className="flex flex-wrap items-center gap-1 rounded-md border bg-muted/40 p-1">
+        {allowedActions.includes("bold") && (
+          <ToolbarButton
+            label="Negrito"
+            active={e?.isActive("bold")}
+            onClick={run((ed) => ed.chain().focus().toggleBold().run())}
+          >
+            <Bold size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("italic") && (
+          <ToolbarButton
+            label="Itálico"
+            active={e?.isActive("italic")}
+            onClick={run((ed) => ed.chain().focus().toggleItalic().run())}
+          >
+            <Italic size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("strike") && (
+          <ToolbarButton
+            label="Tachado"
+            active={e?.isActive("strike")}
+            onClick={run((ed) => ed.chain().focus().toggleStrike().run())}
+          >
+            <Strikethrough size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("code") && (
+          <ToolbarButton
+            label="Código inline"
+            active={e?.isActive("code")}
+            onClick={run((ed) => ed.chain().focus().toggleCode().run())}
+          >
+            <Code size={14} />
+          </ToolbarButton>
+        )}
+        <Separator orientation="vertical" className="mx-1 h-6" />
+        {allowedActions.includes("h1") && (
+          <ToolbarButton
+            label="Título H1"
+            active={e?.isActive("heading", { level: 1 })}
+            onClick={run((ed) => ed.chain().focus().toggleHeading({ level: 1 }).run())}
+          >
+            <Heading1 size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("h2") && (
+          <ToolbarButton
+            label="Título H2"
+            active={e?.isActive("heading", { level: 2 })}
+            onClick={run((ed) => ed.chain().focus().toggleHeading({ level: 2 }).run())}
+          >
+            <Heading2 size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("h3") && (
+          <ToolbarButton
+            label="Título H3"
+            active={e?.isActive("heading", { level: 3 })}
+            onClick={run((ed) => ed.chain().focus().toggleHeading({ level: 3 }).run())}
+          >
+            <Heading3 size={14} />
+          </ToolbarButton>
+        )}
+        <Separator orientation="vertical" className="mx-1 h-6" />
+        {allowedActions.includes("bulletList") && (
+          <ToolbarButton
+            label="Lista não ordenada"
+            active={e?.isActive("bulletList")}
+            onClick={run((ed) => ed.chain().focus().toggleBulletList().run())}
+          >
+            <ListIcon size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("orderedList") && (
+          <ToolbarButton
+            label="Lista ordenada"
+            active={e?.isActive("orderedList")}
+            onClick={run((ed) => ed.chain().focus().toggleOrderedList().run())}
+          >
+            <ListOrdered size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("blockquote") && (
+          <ToolbarButton
+            label="Citação"
+            active={e?.isActive("blockquote")}
+            onClick={run((ed) => ed.chain().focus().toggleBlockquote().run())}
+          >
+            <Quote size={14} />
+          </ToolbarButton>
+        )}
+        <Separator orientation="vertical" className="mx-1 h-6" />
+        {allowedActions.includes("alignLeft") && (
+          <ToolbarButton
+            label="Alinhar à esquerda"
+            active={e?.isActive({ textAlign: "left" })}
+            onClick={run((ed) => ed.chain().focus().setTextAlign("left").run())}
+          >
+            <AlignLeft size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("alignCenter") && (
+          <ToolbarButton
+            label="Centralizar"
+            active={e?.isActive({ textAlign: "center" })}
+            onClick={run((ed) => ed.chain().focus().setTextAlign("center").run())}
+          >
+            <AlignCenter size={14} />
+          </ToolbarButton>
+        )}
+        {allowedActions.includes("alignRight") && (
+          <ToolbarButton
+            label="Alinhar à direita"
+            active={e?.isActive({ textAlign: "right" })}
+            onClick={run((ed) => ed.chain().focus().setTextAlign("right").run())}
+          >
+            <AlignRight size={14} />
+          </ToolbarButton>
+        )}
+        <Separator orientation="vertical" className="mx-1 h-6" />
+        {allowedActions.includes("textColor") && (
+          <Popover>
+            <TooltipProvider delayDuration={300} skipDelayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      aria-label="Cor do texto"
+                      className="h-7 w-7 p-0"
+                    >
+                      <Palette size={14} aria-hidden="true" />
+                    </Button>
+                  </PopoverTrigger>
+                </TooltipTrigger>
+                <TooltipContent sideOffset={4}>Cor do texto</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <PopoverContent className="w-auto p-2">
+              <div className="grid grid-cols-6 gap-1">
+                {PRESET_COLORS.map((color) => (
+                  <button
+                    key={color.value}
+                    type="button"
+                    onClick={() => e?.chain().focus().setColor(color.value).run()}
+                    aria-label={color.label}
+                    title={color.label}
+                    className="size-6 rounded border border-border hover:ring-2 hover:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    style={{ backgroundColor: color.value }}
+                  />
+                ))}
+                <button
+                  type="button"
+                  onClick={() => e?.chain().focus().unsetColor().run()}
+                  aria-label="Remover cor"
+                  title="Remover cor"
+                  className="flex size-6 items-center justify-center rounded border border-border bg-background text-muted-foreground hover:ring-2 hover:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <X className="size-3.5" aria-hidden="true" />
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
+        <Separator orientation="vertical" className="mx-1 h-6" />
+        {allowedActions.includes("image") && (
+          <ToolbarButton label="Inserir imagem" onClick={handleImageInsert}>
+            <ImageIcon size={14} />
+          </ToolbarButton>
+        )}
+      </div>
+    );
+  }, [editor, editorTransaction, toolbar, allowedActions, handleImageInsert]);
+
+  const richView = (
+    <div className="grid gap-2">
+      {Toolbar}
+      <div
+        className={cn(
+          "prose dark:prose-invert prose-sm max-w-none rounded-md border bg-background p-3",
+          "focus-within:ring-ring/50 focus-within:ring-[3px]"
+        )}
+      >
+        <EditorContent editor={editor} className="min-h-40" />
+      </div>
+    </div>
+  );
+
+  const markdownEditor = (
+    <Textarea
+      aria-label={ariaLabel}
+      className="font-mono text-sm"
+      rows={14}
+      value={internalMarkdown}
+      onChange={(e) => {
+        const next = e.target.value;
+        setInternalMarkdown(next);
+        if (outputFormat === "text") {
+          onChange?.(stripMarkdown(next));
+        } else {
+          onChange?.(next);
+        }
+      }}
+      placeholder={placeholder}
+    />
+  );
+
+  const previewView = (
+    <div className="rounded-md border bg-background p-3">
+      <Streamdown>{internalMarkdown}</Streamdown>
+    </div>
+  );
+
+  // Renderização sem abas (apenas rich sozinho)
+  if (effectiveModes.length === 1 && effectiveModes[0] === "rich") {
+    return (
+      <div data-slot="text-editor" className={cn("grid gap-2", className)} {...props}>
+        {richView}
       </div>
     );
   }
-);
+
+  // Com abas (markdown sempre inclui preview automaticamente)
+  return (
+    <div data-slot="text-editor" className={cn("grid gap-2", className)} {...props}>
+      <Tabs value={mode} onValueChange={(v) => setModeSafe(v as TextEditorMode)}>
+        <TabsList className="w-fit">
+          {effectiveModes.includes("rich") && (
+            <TabsTrigger value="rich">
+              <span className="flex items-center gap-2">
+                <Type className="size-3.5" aria-hidden="true" /> Visual
+              </span>
+            </TabsTrigger>
+          )}
+          {effectiveModes.includes("markdown") && (
+            <TabsTrigger value="markdown">
+              <span className="flex items-center gap-2">
+                <FileText className="size-3.5" aria-hidden="true" /> Markdown
+              </span>
+            </TabsTrigger>
+          )}
+          {effectiveModes.includes("preview") && (
+            <TabsTrigger value="preview">
+              <span className="flex items-center gap-2">
+                <Eye className="size-3.5" aria-hidden="true" /> Prévia
+              </span>
+            </TabsTrigger>
+          )}
+        </TabsList>
+
+        {effectiveModes.includes("rich") && (
+          <TabsContent value="rich" className="mt-2">
+            {richView}
+          </TabsContent>
+        )}
+        {effectiveModes.includes("markdown") && (
+          <TabsContent value="markdown" className="mt-2">
+            {markdownEditor}
+          </TabsContent>
+        )}
+        {effectiveModes.includes("preview") && (
+          <TabsContent value="preview" className="mt-2">
+            {previewView}
+          </TabsContent>
+        )}
+      </Tabs>
+    </div>
+  );
+}
 
 TextEditor.displayName = "TextEditor";
 

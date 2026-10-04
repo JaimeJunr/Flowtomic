@@ -137,6 +137,7 @@ function DataTablePagination<TData>({
   if (footerContent) {
     return (
       <div
+        data-slot="data-table-pagination"
         className={cn(
           "flex items-center justify-between border-t border-border bg-card px-4",
           size === "sm" ? "py-3 md:px-5" : "py-4 md:px-6",
@@ -150,6 +151,7 @@ function DataTablePagination<TData>({
 
   return (
     <div
+      data-slot="data-table-pagination"
       className={cn(
         "flex items-center justify-between border-t border-border bg-card px-4",
         size === "sm" ? "py-3 md:px-5" : "py-4 md:px-6",
@@ -292,6 +294,7 @@ export interface DataTablePaginationSkeletonProps {
 function DataTablePaginationSkeleton({ size = "md", className }: DataTablePaginationSkeletonProps) {
   return (
     <div
+      data-slot="data-table-pagination-skeleton"
       className={cn(
         "flex items-center justify-between border-t border-border bg-card px-4",
         size === "sm" ? "py-3 md:px-5" : "py-4 md:px-6",

@@ -5,7 +5,6 @@
  */
 
 import type { ComponentProps } from "react";
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button, ScrollArea, ScrollBar } from "../../../atoms";
 
@@ -17,28 +16,31 @@ export type SuggestionsProps = ComponentProps<typeof ScrollArea> & {
   layout?: "scroll" | "wrap";
 };
 
-export const Suggestions = React.forwardRef<React.ElementRef<typeof ScrollArea>, SuggestionsProps>(
-  ({ className, children, layout = "scroll", ...props }, ref) => {
-    if (layout === "wrap") {
-      return (
-        <div
-          ref={ref}
-          className={cn("flex flex-wrap items-center justify-center gap-2", className)}
-          {...props}
-        >
-          {children}
-        </div>
-      );
-    }
+export function Suggestions({
+  className,
+  children,
+  layout = "scroll",
+  ...props
+}: SuggestionsProps) {
+  if (layout === "wrap") {
     return (
-      <ScrollArea ref={ref} className="w-full overflow-x-auto whitespace-nowrap" {...props}>
-        <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>{children}</div>
-        {/* barra visível: sem ela, quem usa mouse não descobre as sugestões escondidas */}
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      <div
+        data-slot="suggestions"
+        className={cn("flex flex-wrap items-center justify-center gap-2", className)}
+        {...props}
+      >
+        {children}
+      </div>
     );
   }
-);
+  return (
+    <ScrollArea className="w-full overflow-x-auto whitespace-nowrap" {...props}>
+      <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>{children}</div>
+      {/* barra visível: sem ela, quem usa mouse não descobre as sugestões escondidas */}
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
+  );
+}
 Suggestions.displayName = "Suggestions";
 
 export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
@@ -46,28 +48,31 @@ export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
   onClick?: (suggestion: string) => void;
 };
 
-export const Suggestion = React.forwardRef<HTMLButtonElement, SuggestionProps>(
-  (
-    { suggestion, onClick, className, variant = "outline", size = "default", children, ...props },
-    ref
-  ) => {
-    const handleClick = () => {
-      onClick?.(suggestion);
-    };
+export function Suggestion({
+  suggestion,
+  onClick,
+  className,
+  variant = "outline",
+  size = "default",
+  children,
+  ...props
+}: SuggestionProps) {
+  const handleClick = () => {
+    onClick?.(suggestion);
+  };
 
-    return (
-      <Button
-        ref={ref}
-        className={cn("cursor-pointer rounded-md px-4 shadow-none", className)}
-        onClick={handleClick}
-        size={size}
-        type="button"
-        variant={variant}
-        {...props}
-      >
-        {children || suggestion}
-      </Button>
-    );
-  }
-);
+  return (
+    <Button
+      data-slot="suggestion"
+      className={cn("cursor-pointer rounded-md px-4 shadow-none", className)}
+      onClick={handleClick}
+      size={size}
+      type="button"
+      variant={variant}
+      {...props}
+    >
+      {children || suggestion}
+    </Button>
+  );
+}
 Suggestion.displayName = "Suggestion";

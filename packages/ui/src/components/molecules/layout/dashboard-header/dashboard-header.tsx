@@ -207,6 +207,7 @@ export function DashboardHeader({
 }: DashboardHeaderProps) {
   return (
     <header
+      data-slot="dashboard-header"
       className={cn(
         "flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-background px-4 py-3 md:px-6",
         className

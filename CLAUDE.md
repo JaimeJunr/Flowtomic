@@ -423,7 +423,7 @@ Stack principal:
 3. **Sempre** atualizar `cli/src/utils/component-map.ts` ao adicionar componentes
 4. **Sempre** verificar se o CLI funciona após mudanças
 5. **Nunca** quebrar a API pública sem documentar mudanças
-6. **Sempre** assumir React 19 (obrigatório a partir da 1.0): `ref` é prop normal, sem `forwardRef`, e todo componente marca a raiz com `data-slot`
+6. **Sempre** assumir React 19 (obrigatório a partir da 1.0): `ref` é prop normal, sem `forwardRef`, e todo componente marca a raiz com `data-slot`. O `src/test/react19-conventions.test.ts` reprova na CI componente novo com `forwardRef` ou sem `data-slot` nas áreas já migradas (`MIGRATED_AREAS`); modelo a copiar: `atoms/display/card/card.tsx`
 7. **Sempre** usar Tailwind CSS v4 para estilização
 8. **Sempre** usar Radix UI ou Base UI para acessibilidade em componentes interativos (Base UI em piloto desde o Combobox, 03/10/2026; migração em avaliação)
 9. **SEMPRE criar** story (`.stories.tsx`) para cada componente ou hook

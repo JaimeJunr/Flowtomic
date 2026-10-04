@@ -7,8 +7,8 @@
 import type { FileUIPart, UIMessage } from "ai";
 import * as _hardenReactMarkdown from "harden-react-markdown";
 import { ChevronLeftIcon, ChevronRightIcon, PaperclipIcon, XIcon } from "lucide-react";
+import type * as React from "react";
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react";
-import * as React from "react";
 import {
   createContext,
   isValidElement,
@@ -47,14 +47,14 @@ const _hardenFn =
       ? (_hardenReactMarkdown as { default: (arg: unknown) => unknown }).default
       : null;
 
-export type MessageProps = HTMLAttributes<HTMLDivElement> & {
+export type MessageProps = ComponentProps<"div"> & {
   from: UIMessage["role"];
 };
 
-export const Message = React.forwardRef<HTMLDivElement, MessageProps>(
-  ({ className, from, ...props }, ref) => (
+export function Message({ className, from, ...props }: MessageProps) {
+  return (
     <div
-      ref={ref}
+      data-slot="message"
       className={cn(
         "group flex w-full max-w-[80%] gap-2",
         from === "user" ? "is-user ml-auto justify-end" : "is-assistant",
@@ -62,16 +62,16 @@ export const Message = React.forwardRef<HTMLDivElement, MessageProps>(
       )}
       {...props}
     />
-  )
-);
+  );
+}
 Message.displayName = "Message";
 
-export type MessageContentProps = HTMLAttributes<HTMLDivElement>;
+export type MessageContentProps = ComponentProps<"div">;
 
-export const MessageContent = React.forwardRef<HTMLDivElement, MessageContentProps>(
-  ({ children, className, ...props }, ref) => (
+export function MessageContent({ children, className, ...props }: MessageContentProps) {
+  return (
     <div
-      ref={ref}
+      data-slot="message-content"
       className={cn(
         "flex w-fit flex-col gap-2 overflow-hidden text-sm",
         "group-[.is-user]:ml-auto group-[.is-user]:rounded-[10px] group-[.is-user]:bg-muted group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
@@ -82,19 +82,23 @@ export const MessageContent = React.forwardRef<HTMLDivElement, MessageContentPro
     >
       {children}
     </div>
-  )
-);
+  );
+}
 MessageContent.displayName = "MessageContent";
 
 export type MessageActionsProps = ComponentProps<"div">;
 
-export const MessageActions = React.forwardRef<HTMLDivElement, MessageActionsProps>(
-  ({ className, children, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center gap-1", className)} {...props}>
+export function MessageActions({ className, children, ...props }: MessageActionsProps) {
+  return (
+    <div
+      data-slot="message-actions"
+      className={cn("flex items-center gap-1", className)}
+      {...props}
+    >
       {children}
     </div>
-  )
-);
+  );
+}
 MessageActions.displayName = "MessageActions";
 
 export type MessageActionProps = ComponentProps<typeof Button> & {
@@ -102,31 +106,36 @@ export type MessageActionProps = ComponentProps<typeof Button> & {
   label?: string;
 };
 
-export const MessageAction = React.forwardRef<HTMLButtonElement, MessageActionProps>(
-  ({ tooltip, children, label, variant = "ghost", size = "icon-sm", ...props }, ref) => {
-    const button = (
-      <Button ref={ref} size={size} type="button" variant={variant} {...props}>
-        {children}
-        <span className="sr-only">{label || tooltip}</span>
-      </Button>
+export function MessageAction({
+  tooltip,
+  children,
+  label,
+  variant = "ghost",
+  size = "icon-sm",
+  ...props
+}: MessageActionProps) {
+  const button = (
+    <Button data-slot="message-action" size={size} type="button" variant={variant} {...props}>
+      {children}
+      <span className="sr-only">{label || tooltip}</span>
+    </Button>
+  );
+
+  if (tooltip) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltip}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
-
-    if (tooltip) {
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>{button}</TooltipTrigger>
-            <TooltipContent>
-              <p>{tooltip}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
-    }
-
-    return button;
   }
-);
+
+  return button;
+}
 MessageAction.displayName = "MessageAction";
 
 type MessageBranchContextType = {
@@ -150,123 +159,123 @@ const useMessageBranch = () => {
   return context;
 };
 
-export type MessageBranchProps = HTMLAttributes<HTMLDivElement> & {
+export type MessageBranchProps = ComponentProps<"div"> & {
   defaultBranch?: number;
   onBranchChange?: (branchIndex: number) => void;
 };
 
-export const MessageBranch = React.forwardRef<HTMLDivElement, MessageBranchProps>(
-  ({ defaultBranch = 0, onBranchChange, className, ...props }, ref) => {
-    const [currentBranch, setCurrentBranch] = useState(defaultBranch);
-    const [branches, setBranches] = useState<ReactElement[]>([]);
+export function MessageBranch({
+  defaultBranch = 0,
+  onBranchChange,
+  className,
+  ...props
+}: MessageBranchProps) {
+  const [currentBranch, setCurrentBranch] = useState(defaultBranch);
+  const [branches, setBranches] = useState<ReactElement[]>([]);
 
-    const handleBranchChange = (newBranch: number) => {
-      setCurrentBranch(newBranch);
-      onBranchChange?.(newBranch);
-    };
+  const handleBranchChange = (newBranch: number) => {
+    setCurrentBranch(newBranch);
+    onBranchChange?.(newBranch);
+  };
 
-    const goToPrevious = () => {
-      const newBranch = currentBranch > 0 ? currentBranch - 1 : branches.length - 1;
-      handleBranchChange(newBranch);
-    };
+  const goToPrevious = () => {
+    const newBranch = currentBranch > 0 ? currentBranch - 1 : branches.length - 1;
+    handleBranchChange(newBranch);
+  };
 
-    const goToNext = () => {
-      const newBranch = currentBranch < branches.length - 1 ? currentBranch + 1 : 0;
-      handleBranchChange(newBranch);
-    };
+  const goToNext = () => {
+    const newBranch = currentBranch < branches.length - 1 ? currentBranch + 1 : 0;
+    handleBranchChange(newBranch);
+  };
 
-    const contextValue: MessageBranchContextType = {
-      currentBranch,
-      totalBranches: branches.length,
-      goToPrevious,
-      goToNext,
-      branches,
-      setBranches,
-    };
+  const contextValue: MessageBranchContextType = {
+    currentBranch,
+    totalBranches: branches.length,
+    goToPrevious,
+    goToNext,
+    branches,
+    setBranches,
+  };
 
-    return (
-      <MessageBranchContext.Provider value={contextValue}>
-        <div ref={ref} className={cn("grid w-full gap-2 [&>div]:pb-0", className)} {...props} />
-      </MessageBranchContext.Provider>
-    );
-  }
-);
+  return (
+    <MessageBranchContext.Provider value={contextValue}>
+      <div
+        data-slot="message-branch"
+        className={cn("grid w-full gap-2 [&>div]:pb-0", className)}
+        {...props}
+      />
+    </MessageBranchContext.Provider>
+  );
+}
 MessageBranch.displayName = "MessageBranch";
 
-export type MessageBranchContentProps = HTMLAttributes<HTMLDivElement>;
+export type MessageBranchContentProps = ComponentProps<"div">;
 
-export const MessageBranchContent = React.forwardRef<HTMLDivElement, MessageBranchContentProps>(
-  ({ children, ...props }, ref) => {
-    const { currentBranch, setBranches, branches } = useMessageBranch();
-    const childrenArray = Array.isArray(children) ? children : [children];
+export function MessageBranchContent({ children, ...props }: MessageBranchContentProps) {
+  const { currentBranch, setBranches, branches } = useMessageBranch();
+  const childrenArray = Array.isArray(children) ? children : [children];
 
-    // Use useEffect to update branches when they change
-    useEffect(() => {
-      if (branches.length !== childrenArray.length) {
-        setBranches(childrenArray);
-      }
-    }, [childrenArray, branches, setBranches]);
+  // Use useEffect to update branches when they change
+  useEffect(() => {
+    if (branches.length !== childrenArray.length) {
+      setBranches(childrenArray);
+    }
+  }, [childrenArray, branches, setBranches]);
 
-    return (
-      <>
-        {childrenArray.map((branch, index) => (
-          <div
-            ref={ref}
-            className={cn(
-              "grid gap-2 overflow-hidden [&>div]:pb-0",
-              index === currentBranch ? "block" : "hidden"
-            )}
-            key={branch.key || index}
-            {...props}
-          >
-            {branch}
-          </div>
-        ))}
-      </>
-    );
-  }
-);
+  return (
+    <>
+      {childrenArray.map((branch, index) => (
+        <div
+          data-slot="message-branch-content"
+          className={cn(
+            "grid gap-2 overflow-hidden [&>div]:pb-0",
+            index === currentBranch ? "block" : "hidden"
+          )}
+          key={branch.key || index}
+          {...props}
+        >
+          {branch}
+        </div>
+      ))}
+    </>
+  );
+}
 MessageBranchContent.displayName = "MessageBranchContent";
 
-export type MessageBranchSelectorProps = HTMLAttributes<HTMLDivElement> & {
+export type MessageBranchSelectorProps = ComponentProps<"div"> & {
   from: UIMessage["role"];
 };
 
-export const MessageBranchSelector = React.forwardRef<HTMLDivElement, MessageBranchSelectorProps>(
-  ({ className, from, ...props }, ref) => {
-    const { totalBranches } = useMessageBranch();
+export function MessageBranchSelector({ className, from, ...props }: MessageBranchSelectorProps) {
+  const { totalBranches } = useMessageBranch();
 
-    // Don't render if there's only one branch
-    if (totalBranches <= 1) {
-      return null;
-    }
-
-    return (
-      <ButtonGroup
-        ref={ref as React.ForwardedRef<HTMLFieldSetElement>}
-        className={cn(
-          "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md",
-          className
-        )}
-        orientation="horizontal"
-        {...(props as Omit<React.HTMLAttributes<HTMLFieldSetElement>, "className" | "orientation">)}
-      />
-    );
+  // Don't render if there's only one branch
+  if (totalBranches <= 1) {
+    return null;
   }
-);
+
+  return (
+    <ButtonGroup
+      data-slot="message-branch-selector"
+      className={cn(
+        "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md",
+        className
+      )}
+      orientation="horizontal"
+      {...(props as Omit<React.ComponentProps<"fieldset">, "className" | "orientation">)}
+    />
+  );
+}
 MessageBranchSelector.displayName = "MessageBranchSelector";
 
 export type MessageBranchPreviousProps = ComponentProps<typeof Button>;
 
-export const MessageBranchPrevious = React.forwardRef<
-  HTMLButtonElement,
-  MessageBranchPreviousProps
->(({ children, ...props }, ref) => {
+export function MessageBranchPrevious({ children, ...props }: MessageBranchPreviousProps) {
   const { goToPrevious, totalBranches } = useMessageBranch();
 
   return (
     <Button
-      ref={ref}
+      data-slot="message-branch-previous"
       aria-label="Versão anterior"
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
@@ -278,53 +287,49 @@ export const MessageBranchPrevious = React.forwardRef<
       {children ?? <ChevronLeftIcon size={14} />}
     </Button>
   );
-});
+}
 MessageBranchPrevious.displayName = "MessageBranchPrevious";
 
 export type MessageBranchNextProps = ComponentProps<typeof Button>;
 
-export const MessageBranchNext = React.forwardRef<HTMLButtonElement, MessageBranchNextProps>(
-  ({ children, className, ...props }, ref) => {
-    const { goToNext, totalBranches } = useMessageBranch();
+export function MessageBranchNext({ children, className, ...props }: MessageBranchNextProps) {
+  const { goToNext, totalBranches } = useMessageBranch();
 
-    return (
-      <Button
-        ref={ref}
-        aria-label="Próxima versão"
-        disabled={totalBranches <= 1}
-        onClick={goToNext}
-        size="icon-sm"
-        type="button"
-        variant="ghost"
-        {...props}
-      >
-        {children ?? <ChevronRightIcon size={14} />}
-      </Button>
-    );
-  }
-);
+  return (
+    <Button
+      data-slot="message-branch-next"
+      aria-label="Próxima versão"
+      disabled={totalBranches <= 1}
+      onClick={goToNext}
+      size="icon-sm"
+      type="button"
+      variant="ghost"
+      {...props}
+    >
+      {children ?? <ChevronRightIcon size={14} />}
+    </Button>
+  );
+}
 MessageBranchNext.displayName = "MessageBranchNext";
 
-export type MessageBranchPageProps = HTMLAttributes<HTMLSpanElement>;
+export type MessageBranchPageProps = ComponentProps<"span">;
 
-export const MessageBranchPage = React.forwardRef<HTMLSpanElement, MessageBranchPageProps>(
-  ({ className, ...props }, ref) => {
-    const { currentBranch, totalBranches } = useMessageBranch();
+export function MessageBranchPage({ className, ...props }: MessageBranchPageProps) {
+  const { currentBranch, totalBranches } = useMessageBranch();
 
-    return (
-      <ButtonGroupText
-        ref={ref as React.ForwardedRef<HTMLDivElement>}
-        className={cn(
-          "border-none bg-transparent font-mono text-muted-foreground shadow-none",
-          className
-        )}
-        {...props}
-      >
-        {currentBranch + 1} de {totalBranches}
-      </ButtonGroupText>
-    );
-  }
-);
+  return (
+    <ButtonGroupText
+      data-slot="message-branch-page"
+      className={cn(
+        "border-none bg-transparent font-mono text-muted-foreground shadow-none",
+        className
+      )}
+      {...(props as React.ComponentProps<"div">)}
+    >
+      {currentBranch + 1} de {totalBranches}
+    </ButtonGroupText>
+  );
+}
 MessageBranchPage.displayName = "MessageBranchPage";
 
 /**
@@ -656,7 +661,7 @@ const components: Options["components"] = {
   },
 };
 
-export type MessageResponseProps = HTMLAttributes<HTMLDivElement> & {
+export type MessageResponseProps = ComponentProps<"div"> & {
   options?: Options;
   children: Options["children"];
   allowedImagePrefixes?: string[];
@@ -665,47 +670,42 @@ export type MessageResponseProps = HTMLAttributes<HTMLDivElement> & {
   parseIncompleteMarkdown?: boolean;
 };
 
-const MessageResponseComponent = React.forwardRef<HTMLDivElement, MessageResponseProps>(
-  (
-    {
-      className,
-      options,
-      children,
-      allowedImagePrefixes,
-      allowedLinkPrefixes,
-      defaultOrigin,
-      parseIncompleteMarkdown: shouldParseIncompleteMarkdown = true,
-      ...props
-    },
-    ref
-  ) => {
-    // Parse the children to remove incomplete markdown tokens if enabled
-    const parsedChildren =
-      typeof children === "string" && shouldParseIncompleteMarkdown
-        ? parseIncompleteMarkdown(children)
-        : children;
+function MessageResponseComponent({
+  className,
+  options,
+  children,
+  allowedImagePrefixes,
+  allowedLinkPrefixes,
+  defaultOrigin,
+  parseIncompleteMarkdown: shouldParseIncompleteMarkdown = true,
+  ...props
+}: MessageResponseProps) {
+  // Parse the children to remove incomplete markdown tokens if enabled
+  const parsedChildren =
+    typeof children === "string" && shouldParseIncompleteMarkdown
+      ? parseIncompleteMarkdown(children)
+      : children;
 
-    return (
-      <div
-        ref={ref}
-        className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
-        {...(props as HTMLAttributes<HTMLElement>)}
+  return (
+    <div
+      data-slot="message-response"
+      className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
+      {...(props as HTMLAttributes<HTMLElement>)}
+    >
+      <HardenedMarkdown
+        allowedImagePrefixes={allowedImagePrefixes ?? ["*"]}
+        allowedLinkPrefixes={allowedLinkPrefixes ?? ["*"]}
+        components={components}
+        defaultOrigin={defaultOrigin}
+        rehypePlugins={[rehypeKatex]}
+        remarkPlugins={[remarkGfm, remarkMath]}
+        {...options}
       >
-        <HardenedMarkdown
-          allowedImagePrefixes={allowedImagePrefixes ?? ["*"]}
-          allowedLinkPrefixes={allowedLinkPrefixes ?? ["*"]}
-          components={components}
-          defaultOrigin={defaultOrigin}
-          rehypePlugins={[rehypeKatex]}
-          remarkPlugins={[remarkGfm, remarkMath]}
-          {...options}
-        >
-          {parsedChildren}
-        </HardenedMarkdown>
-      </div>
-    );
-  }
-);
+        {parsedChildren}
+      </HardenedMarkdown>
+    </div>
+  );
+}
 MessageResponseComponent.displayName = "MessageResponse";
 
 export const MessageResponse = memo(
@@ -713,123 +713,119 @@ export const MessageResponse = memo(
   (prevProps, nextProps) => prevProps.children === nextProps.children
 );
 
-export type MessageAttachmentProps = HTMLAttributes<HTMLDivElement> & {
+export type MessageAttachmentProps = ComponentProps<"div"> & {
   data: FileUIPart;
   className?: string;
   onRemove?: () => void;
 };
 
-export const MessageAttachment = React.forwardRef<HTMLDivElement, MessageAttachmentProps>(
-  ({ data, className, onRemove, ...props }, ref) => {
-    const filename = data.filename || "";
-    const mediaType = data.mediaType?.startsWith("image/") && data.url ? "image" : "file";
-    const isImage = mediaType === "image";
-    const attachmentLabel = filename || (isImage ? "Imagem" : "Anexo");
+export function MessageAttachment({ data, className, onRemove, ...props }: MessageAttachmentProps) {
+  const filename = data.filename || "";
+  const mediaType = data.mediaType?.startsWith("image/") && data.url ? "image" : "file";
+  const isImage = mediaType === "image";
+  const attachmentLabel = filename || (isImage ? "Imagem" : "Anexo");
 
-    return (
-      <div
-        ref={ref}
-        className={cn("group relative size-24 overflow-hidden rounded-[10px]", className)}
-        {...props}
-      >
-        {isImage ? (
-          <>
-            <img
-              alt={attachmentLabel}
-              className="size-full object-cover"
-              height={100}
-              src={data.url}
-              width={100}
-            />
-            {onRemove && (
-              <Button
-                aria-label="Remover anexo"
-                className="absolute top-2 right-2 size-6 rounded-md bg-background/80 p-0 opacity-0 transition-opacity hover:bg-background focus-visible:opacity-100 group-hover:opacity-100 [&>svg]:size-3"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemove();
-                }}
-                type="button"
-                variant="ghost"
-              >
-                <XIcon />
-                <span className="sr-only">Remover</span>
-              </Button>
-            )}
-          </>
-        ) : (
-          <>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div
-                    role="img"
-                    aria-label={attachmentLabel}
-                    className="flex size-full shrink-0 items-center justify-center rounded-[10px] bg-muted text-muted-foreground"
-                  >
-                    <PaperclipIcon className="size-4" />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{attachmentLabel}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            {onRemove && (
-              <Button
-                aria-label="Remover anexo"
-                className="absolute top-2 right-2 size-6 rounded-md bg-background/80 p-0 opacity-0 transition-opacity hover:bg-background focus-visible:opacity-100 group-hover:opacity-100 [&>svg]:size-3"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemove();
-                }}
-                type="button"
-                variant="ghost"
-              >
-                <XIcon />
-                <span className="sr-only">Remover</span>
-              </Button>
-            )}
-          </>
-        )}
-      </div>
-    );
-  }
-);
+  return (
+    <div
+      data-slot="message-attachment"
+      className={cn("group relative size-24 overflow-hidden rounded-[10px]", className)}
+      {...props}
+    >
+      {isImage ? (
+        <>
+          <img
+            alt={attachmentLabel}
+            className="size-full object-cover"
+            height={100}
+            src={data.url}
+            width={100}
+          />
+          {onRemove && (
+            <Button
+              aria-label="Remover anexo"
+              className="absolute top-2 right-2 size-6 rounded-md bg-background/80 p-0 opacity-0 transition-opacity hover:bg-background focus-visible:opacity-100 group-hover:opacity-100 [&>svg]:size-3"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove();
+              }}
+              type="button"
+              variant="ghost"
+            >
+              <XIcon />
+              <span className="sr-only">Remover</span>
+            </Button>
+          )}
+        </>
+      ) : (
+        <>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  role="img"
+                  aria-label={attachmentLabel}
+                  className="flex size-full shrink-0 items-center justify-center rounded-[10px] bg-muted text-muted-foreground"
+                >
+                  <PaperclipIcon className="size-4" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{attachmentLabel}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          {onRemove && (
+            <Button
+              aria-label="Remover anexo"
+              className="absolute top-2 right-2 size-6 rounded-md bg-background/80 p-0 opacity-0 transition-opacity hover:bg-background focus-visible:opacity-100 group-hover:opacity-100 [&>svg]:size-3"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove();
+              }}
+              type="button"
+              variant="ghost"
+            >
+              <XIcon />
+              <span className="sr-only">Remover</span>
+            </Button>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
 MessageAttachment.displayName = "MessageAttachment";
 
 export type MessageAttachmentsProps = ComponentProps<"div">;
 
-export const MessageAttachments = React.forwardRef<HTMLDivElement, MessageAttachmentsProps>(
-  ({ children, className, ...props }, ref) => {
-    if (!children) {
-      return null;
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={cn("ml-auto flex w-fit flex-wrap items-start gap-2", className)}
-        {...props}
-      >
-        {children}
-      </div>
-    );
+export function MessageAttachments({ children, className, ...props }: MessageAttachmentsProps) {
+  if (!children) {
+    return null;
   }
-);
+
+  return (
+    <div
+      data-slot="message-attachments"
+      className={cn("ml-auto flex w-fit flex-wrap items-start gap-2", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
 MessageAttachments.displayName = "MessageAttachments";
 
 export type MessageToolbarProps = ComponentProps<"div">;
 
-export const MessageToolbar = React.forwardRef<HTMLDivElement, MessageToolbarProps>(
-  ({ className, children, ...props }, ref) => (
+export function MessageToolbar({ className, children, ...props }: MessageToolbarProps) {
+  return (
     <div
-      ref={ref}
+      data-slot="message-toolbar"
       className={cn("mt-4 flex w-full items-center justify-between gap-4", className)}
       {...props}
     >
       {children}
     </div>
-  )
-);
+  );
+}
 MessageToolbar.displayName = "MessageToolbar";

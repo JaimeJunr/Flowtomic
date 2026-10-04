@@ -4,10 +4,10 @@
  * Subcomponente para modo composição
  */
 
-import * as React from "react";
+import type * as React from "react";
 import { cn } from "@/lib/utils";
 
-export interface AutocompleteSectionProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AutocompleteSectionProps extends React.ComponentProps<"div"> {
   /**
    * Título da seção
    */
@@ -19,25 +19,23 @@ export interface AutocompleteSectionProps extends React.HTMLAttributes<HTMLDivEl
   children?: React.ReactNode;
 }
 
-const AutocompleteSection = React.forwardRef<HTMLDivElement, AutocompleteSectionProps>(
-  ({ className, title, children, ...props }, ref) => {
-    return (
-      // biome-ignore lint/a11y/useSemanticElements: Agrupamento em menu de autocomplete
-      <div
-        ref={ref}
-        {...props}
-        className={cn("space-y-1", className)}
-        role="group"
-        aria-label={title}
-      >
-        {title && (
-          <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{title}</div>
-        )}
-        <ul className="space-y-0.5">{children}</ul>
-      </div>
-    );
-  }
-);
+function AutocompleteSection({ className, title, children, ...props }: AutocompleteSectionProps) {
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: Agrupamento em menu de autocomplete
+    <div
+      data-slot="autocomplete-section"
+      {...props}
+      className={cn("space-y-1", className)}
+      role="group"
+      aria-label={title}
+    >
+      {title && (
+        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{title}</div>
+      )}
+      <ul className="space-y-0.5">{children}</ul>
+    </div>
+  );
+}
 
 AutocompleteSection.displayName = "AutocompleteSection";
 

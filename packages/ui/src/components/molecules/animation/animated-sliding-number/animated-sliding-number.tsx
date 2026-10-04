@@ -133,6 +133,7 @@ function AnimatedSlidingNumber({
 
   return (
     <span
+      data-slot="animated-sliding-number"
       className={containerClasses}
       style={
         {

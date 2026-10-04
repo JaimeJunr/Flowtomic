@@ -243,7 +243,7 @@ export function ThemeToggleButton({
   }, [disabled, start, toggleTheme]);
 
   if (!mounted) {
-    return <div className={cn("h-9 w-9 rounded-lg", className)} />;
+    return <div data-slot="theme-toggle-button" className={cn("h-9 w-9 rounded-lg", className)} />;
   }
 
   const buttonSize = buttonSizeMap[size];
@@ -251,6 +251,7 @@ export function ThemeToggleButton({
 
   return (
     <Button
+      data-slot="theme-toggle-button"
       variant="outline"
       size={buttonSize}
       onClick={handleToggle}

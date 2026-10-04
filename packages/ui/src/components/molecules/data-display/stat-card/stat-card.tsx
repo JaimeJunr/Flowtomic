@@ -10,7 +10,7 @@
 
 import { type StatCardData, useStatCard } from "@flowtomic/logic";
 import { MoreHorizontal, Pin, Settings, Share2, Trash, TriangleAlert } from "lucide-react";
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 import {
   Button,
@@ -129,104 +129,97 @@ function ActionsMenu({ onSettings, onAddAlert, onPin, onShare, onRemove }: Actio
   );
 }
 
-const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
-  (
-    {
-      title,
-      value,
-      subtitle,
-      delta,
-      lastMonth,
-      prefix,
-      suffix,
-      locale,
-      currency,
-      currencyDisplay,
-      format,
-      lastFormat,
-      positive,
-      color: _color,
-      variant = "default",
-      className,
-      children,
-      showActions = false,
-      onSettings,
-      onAddAlert,
-      onPin,
-      onShare,
-      onRemove,
-      ...props
-    },
-    ref
-  ) => {
-    const isCompact = variant === "compact";
-    const isNumericValue = typeof value === "number";
+function StatCard({
+  title,
+  value,
+  subtitle,
+  delta,
+  lastMonth,
+  prefix,
+  suffix,
+  locale,
+  currency,
+  currencyDisplay,
+  format,
+  lastFormat,
+  positive,
+  color: _color,
+  variant = "default",
+  className,
+  children,
+  showActions = false,
+  onSettings,
+  onAddAlert,
+  onPin,
+  onShare,
+  onRemove,
+  ...props
+}: StatCardProps & React.ComponentProps<"div">) {
+  const isCompact = variant === "compact";
+  const isNumericValue = typeof value === "number";
 
-    const { formattedValue, formattedLastMonth, trend } = useStatCard({
-      value: isNumericValue ? value : 0,
-      delta,
-      lastMonth,
-      prefix,
-      suffix,
-      locale,
-      currency,
-      currencyDisplay,
-      format,
-      lastFormat,
-    });
+  const { formattedValue, formattedLastMonth, trend } = useStatCard({
+    value: isNumericValue ? value : 0,
+    delta,
+    lastMonth,
+    prefix,
+    suffix,
+    locale,
+    currency,
+    currencyDisplay,
+    format,
+    lastFormat,
+  });
 
-    const hasTrend = delta !== undefined || lastMonth !== undefined;
-    // `positive` responde "subir é bom?"; o hook trata como "a variação foi boa?"
-    const good = (trend.direction === "up") === (positive ?? true);
-    const trendLabel = `${trend.direction === "down" ? "↓" : "↑"} ${PERCENT.format(trend.delta)}%`;
+  const hasTrend = delta !== undefined || lastMonth !== undefined;
+  // `positive` responde "subir é bom?"; o hook trata como "a variação foi boa?"
+  const good = (trend.direction === "up") === (positive ?? true);
+  const trendLabel = `${trend.direction === "down" ? "↓" : "↑"} ${PERCENT.format(trend.delta)}%`;
 
-    return (
-      <div ref={ref} className={cn("relative flex flex-col gap-2", className)} {...props}>
-        <span className={cn("truncate text-sm text-muted-foreground", showActions && "pr-10")}>
-          {title}
-        </span>
-        {showActions && (
-          <ActionsMenu
-            onSettings={onSettings}
-            onAddAlert={onAddAlert}
-            onPin={onPin}
-            onShare={onShare}
-            onRemove={onRemove}
-          />
+  return (
+    <div data-slot="stat-card" className={cn("relative flex flex-col gap-2", className)} {...props}>
+      <span className={cn("truncate text-sm text-muted-foreground", showActions && "pr-10")}>
+        {title}
+      </span>
+      {showActions && (
+        <ActionsMenu
+          onSettings={onSettings}
+          onAddAlert={onAddAlert}
+          onPin={onPin}
+          onShare={onShare}
+          onRemove={onRemove}
+        />
+      )}
+      <span
+        className={cn(
+          "font-mono font-medium leading-none tracking-tight break-words",
+          isCompact ? "text-2xl" : "text-[32px]"
         )}
-        <span
+      >
+        {isNumericValue ? formattedValue : value}
+      </span>
+      {hasTrend && (
+        <span className="flex flex-wrap gap-1.5 text-[13px] text-muted-foreground">
+          <span className={cn("font-semibold", trendClass(trend.direction, good))}>
+            {trendLabel}
+          </span>
+          {formattedLastMonth && !isCompact && <span>sobre {formattedLastMonth}</span>}
+        </span>
+      )}
+      {subtitle && !isCompact && (
+        <p
           className={cn(
-            "font-mono font-medium leading-none tracking-tight break-words",
-            isCompact ? "text-2xl" : "text-[32px]"
+            "text-muted-foreground",
+            variant === "detailed" ? "text-sm sm:text-base" : "text-[13px]"
           )}
         >
-          {isNumericValue ? formattedValue : value}
-        </span>
-        {hasTrend && (
-          <span className="flex flex-wrap gap-1.5 text-[13px] text-muted-foreground">
-            <span className={cn("font-semibold", trendClass(trend.direction, good))}>
-              {trendLabel}
-            </span>
-            {formattedLastMonth && !isCompact && <span>sobre {formattedLastMonth}</span>}
-          </span>
-        )}
-        {subtitle && !isCompact && (
-          <p
-            className={cn(
-              "text-muted-foreground",
-              variant === "detailed" ? "text-sm sm:text-base" : "text-[13px]"
-            )}
-          >
-            {subtitle}
-          </p>
-        )}
-        {children && !isCompact && (
-          <div className="mt-2 border-t border-border pt-3">{children}</div>
-        )}
-      </div>
-    );
-  }
-);
+          {subtitle}
+        </p>
+      )}
+      {children && !isCompact && <div className="mt-2 border-t border-border pt-3">{children}</div>}
+    </div>
+  );
+}
 
 StatCard.displayName = "StatCard";
 

@@ -44,7 +44,7 @@ export interface ModalProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export interface ModalTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ModalTriggerProps extends React.ComponentProps<"button"> {
   children: React.ReactNode;
   className?: string;
   asChild?: boolean;
@@ -103,25 +103,28 @@ function Modal({ children, defaultOpen = false, open: controlledOpen, onOpenChan
 /**
  * ModalTrigger - Botão que abre o modal
  */
-const ModalTrigger = React.forwardRef<HTMLButtonElement, ModalTriggerProps>(
-  ({ children, className, asChild, ...props }, ref) => {
-    useModal();
+function ModalTrigger({ children, className, asChild, ...props }: ModalTriggerProps) {
+  useModal();
 
-    if (asChild && React.isValidElement(children)) {
-      return (
-        <DialogPrimitive.Trigger asChild ref={ref} className={className} {...props}>
-          {children}
-        </DialogPrimitive.Trigger>
-      );
-    }
-
+  if (asChild && React.isValidElement(children)) {
     return (
-      <DialogPrimitive.Trigger ref={ref} type="button" className={cn(className)} {...props}>
+      <DialogPrimitive.Trigger data-slot="modal-trigger" asChild className={className} {...props}>
         {children}
       </DialogPrimitive.Trigger>
     );
   }
-);
+
+  return (
+    <DialogPrimitive.Trigger
+      data-slot="modal-trigger"
+      type="button"
+      className={cn(className)}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Trigger>
+  );
+}
 ModalTrigger.displayName = "ModalTrigger";
 
 /**
@@ -150,6 +153,7 @@ function ModalBody({
           <>
             <ModalOverlay />
             <motion.div
+              data-slot="modal-body"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -205,6 +209,7 @@ function ModalBody({
 function ModalContent({ children, className, maxHeight = "80vh" }: ModalContentProps) {
   return (
     <div
+      data-slot="modal-content"
       className={cn(
         "relative w-full rounded-lg border bg-background p-6 shadow-lg",
         "overflow-y-auto",
@@ -228,7 +233,10 @@ function ModalFooter({ children, className, align = "right" }: ModalFooterProps)
   };
 
   return (
-    <div className={cn("flex items-center gap-2 mt-6", alignClasses[align], className)}>
+    <div
+      data-slot="modal-footer"
+      className={cn("flex items-center gap-2 mt-6", alignClasses[align], className)}
+    >
       {children}
     </div>
   );
@@ -241,6 +249,7 @@ function ModalOverlay({ className }: { className?: string }) {
   return (
     <DialogPrimitive.Overlay asChild forceMount>
       <motion.div
+        data-slot="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, backdropFilter: "blur(10px)" }}
         exit={{ opacity: 0, backdropFilter: "blur(0px)" }}

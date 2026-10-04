@@ -123,6 +123,7 @@ const TableCardRoot: React.FC<TableCardRootProps> = ({
   return (
     <DataTableContext.Provider value={{ size }}>
       <div
+        data-slot="data-table"
         {...props}
         className={cn("overflow-hidden rounded-[10px] border border-border bg-card", className)}
       >
@@ -151,6 +152,7 @@ const TableCardHeader: React.FC<TableCardHeaderProps> = ({
 
   return (
     <div
+      data-slot="data-table-card-header"
       className={cn(
         "relative flex flex-col items-start gap-4 border-b border-border bg-card px-4 md:flex-row",
         size === "sm" ? "py-4 md:px-5" : "py-5 md:px-6",
@@ -191,6 +193,7 @@ const TableRoot: React.FC<TableRootProps> = ({ className, size = "md", ...props 
     <DataTableContext.Provider value={{ size: context?.size ?? size }}>
       <div className="overflow-x-auto">
         <table
+          data-slot="data-table-table"
           className={cn(
             "w-full overflow-x-hidden",
             typeof className === "function" ? className({}) : className
@@ -216,6 +219,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   return (
     <thead
+      data-slot="data-table-header"
       {...props}
       className={cn(
         "relative",
@@ -273,6 +277,7 @@ const TableHead: React.FC<TableHeadProps> = ({
 
   return (
     <th
+      data-slot="data-table-head"
       {...props}
       aria-sort={sortable ? ARIA_SORT[sorted || "none"] : undefined}
       className={cn("relative px-4 py-2 text-left", className)}
@@ -321,6 +326,7 @@ const TableRow: React.FC<TableRowProps> = ({
 
   return (
     <tr
+      data-slot="data-table-row"
       {...props}
       className={cn(
         "relative outline-ring transition-colors after:pointer-events-none hover:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2",
@@ -340,6 +346,7 @@ const TableCell: React.FC<ComponentPropsWithRef<"td">> = ({ className, children,
 
   return (
     <td
+      data-slot="data-table-cell"
       {...props}
       className={cn(
         "relative text-sm text-foreground outline-ring focus-visible:z-1 focus-visible:outline-2 focus-visible:-outline-offset-2",
@@ -355,7 +362,7 @@ const TableCell: React.FC<ComponentPropsWithRef<"td">> = ({ className, children,
 
 const TableBody: React.FC<ComponentPropsWithRef<"tbody">> = ({ children, className, ...props }) => {
   return (
-    <tbody className={cn(className)} {...props}>
+    <tbody data-slot="data-table-body" className={cn(className)} {...props}>
       {children}
     </tbody>
   );

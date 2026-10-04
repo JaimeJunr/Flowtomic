@@ -109,7 +109,7 @@ export function CircularProgressChart({
   const spoken = label ? `${rounded}% ${label}` : `${rounded}%`;
 
   return (
-    <section className={cn("text-sm", className)}>
+    <section data-slot="circular-progress-chart" className={cn("text-sm", className)}>
       {title && (
         <div className="mb-5 flex items-center gap-3">
           <h3 className="text-sm font-semibold">{title}</h3>

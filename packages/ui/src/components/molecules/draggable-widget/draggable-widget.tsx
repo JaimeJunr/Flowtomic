@@ -133,6 +133,7 @@ export const DraggableWidget = memo<DraggableWidgetProps>(
 
     return (
       <div
+        data-slot="draggable-widget"
         ref={setNodeRef}
         style={style}
         className={cn(
