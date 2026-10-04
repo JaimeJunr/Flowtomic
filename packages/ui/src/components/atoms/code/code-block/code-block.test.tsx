@@ -16,7 +16,7 @@ afterEach(() => {
 describe("CodeBlock", () => {
   it("destaca o código com o shiki e mostra o texto na tela", async () => {
     const { container } = render(<CodeBlock code={"const x = 1;"} language="typescript" />);
-    await waitFor(() => expect(container.querySelector("pre")).not.toBeNull());
+    await waitFor(() => expect(container.querySelector("pre.shiki")).not.toBeNull());
     expect(container).toHaveTextContent("const x = 1;");
   });
 
@@ -24,7 +24,7 @@ describe("CodeBlock", () => {
     const { container } = render(
       <CodeBlock code={"a\nb\nc"} language="javascript" showLineNumbers />
     );
-    await waitFor(() => expect(container.querySelector("pre")).not.toBeNull());
+    await waitFor(() => expect(container.querySelector("pre.shiki")).not.toBeNull());
     const numeros = Array.from(container.querySelectorAll(".select-none")).map(
       (n) => n.textContent
     );
@@ -33,7 +33,7 @@ describe("CodeBlock", () => {
 
   it("sem showLineNumbers não aparece numeração", async () => {
     const { container } = render(<CodeBlock code={"a\nb"} language="javascript" />);
-    await waitFor(() => expect(container.querySelector("pre")).not.toBeNull());
+    await waitFor(() => expect(container.querySelector("pre.shiki")).not.toBeNull());
     expect(container.querySelector(".select-none")).toBeNull();
   });
 
@@ -106,5 +106,67 @@ describe("CodeBlock", () => {
   it("sem filhos não renderiza a área de ações", () => {
     render(<CodeBlock code="x" language="bash" />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
+  it("mostra o código em texto puro enquanto o realce não chega, sem piscar vazio", () => {
+    const { container } = render(<CodeBlock code="const x = 1;" language="typescript" />);
+    expect(container.querySelector("pre.shiki")).toBeNull();
+    expect(container.querySelector("[data-slot=code-block-fallback]")).toHaveTextContent(
+      "const x = 1;"
+    );
+  });
+
+  it("mostra a linguagem no cabeçalho, junto das ações", () => {
+    render(
+      <CodeBlock code="echo oi" language="bash">
+        <CodeBlockCopyButton />
+      </CodeBlock>
+    );
+    const cabecalho = screen.getByText("bash").closest("[data-slot=code-block-header]");
+    expect(cabecalho).not.toBeNull();
+    expect(cabecalho).toContainElement(screen.getByRole("button", { name: "Copiar código" }));
+  });
+
+  it("o botão diz Copiado depois de copiar e volta sozinho", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    definirClipboard(vi.fn().mockResolvedValue(undefined));
+    render(
+      <CodeBlock code="echo oi" language="bash">
+        <CodeBlockCopyButton timeout={1000} />
+      </CodeBlock>
+    );
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Copiar código" }));
+    });
+    expect(screen.getByRole("button", { name: "Copiado" })).toHaveTextContent("Copiado");
+    await act(async () => {
+      vi.advanceTimersByTime(1000);
+    });
+    expect(screen.getByRole("button", { name: "Copiar código" })).toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
+  it("linguagem que o realce não conhece fica em texto puro, sem quebrar", async () => {
+    const { container } = render(<CodeBlock code="x := 1" language="text" />);
+    await waitFor(() => expect(container.querySelector("pre.shiki")).not.toBeNull());
+    expect(container).toHaveTextContent("x := 1");
+  });
+
+  it("com showLanguage desligado e sem ações, não desenha cabeçalho", () => {
+    const { container } = render(<CodeBlock code="{}" language="json" showLanguage={false} />);
+    expect(container.querySelector("[data-slot=code-block-header]")).toBeNull();
+  });
+
+  it("linha comprida rola de lado em vez de ser cortada", async () => {
+    const { container } = render(
+      <CodeBlock code={"bunx vitest run ".repeat(20)} language="bash" />
+    );
+    expect(container.querySelector("[data-slot=code-block-fallback]")).toHaveClass(
+      "overflow-x-auto"
+    );
+    await waitFor(() => expect(container.querySelector("pre.shiki")).not.toBeNull());
+    expect(container.querySelector("pre.shiki")?.parentElement).toHaveClass(
+      "[&>pre]:overflow-x-auto"
+    );
   });
 });

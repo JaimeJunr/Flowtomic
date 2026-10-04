@@ -90,4 +90,13 @@ describe("Tool", () => {
     const { container } = render(<ToolOutput output={null} errorText={undefined} />);
     expect(container).toBeEmptyDOMElement();
   });
+
+  it("resultado em texto puro não vira json e os blocos não repetem a linguagem", () => {
+    const { container } = render(
+      <ToolOutput output="Arquivo salvo em docs/INDEX.md" errorText={undefined} />
+    );
+    expect(container.querySelector("[data-slot=code-block-header]")).toBeNull();
+    expect(container.querySelector("[data-language]")).toHaveAttribute("data-language", "text");
+    expect(screen.getByText("Arquivo salvo em docs/INDEX.md")).toBeInTheDocument();
+  });
 });
