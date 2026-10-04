@@ -7,7 +7,8 @@
 
 import type { HTMLAttributes, ReactNode } from "react";
 import * as React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { useStickToBottomContext } from "use-stick-to-bottom";
 import {
   ChatMessage,
   type ChatMessageData,
@@ -17,6 +18,7 @@ import {
   Conversation,
   ConversationContent,
   ConversationEmptyState,
+  ConversationScrollButton,
 } from "@/components/organisms/conversation";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +40,17 @@ export interface ChatLogProps extends HTMLAttributes<HTMLDivElement> {
   showActions?: boolean;
   showTimestamp?: boolean;
   autoScroll?: boolean;
+}
+
+// Com autoScroll desligado, solta a trava do StickToBottom a cada mensagem nova, para a
+// conversa não seguir o fim sozinha. Precisa morar dentro do <Conversation> (usa o contexto).
+function ReleaseScrollLock({ messageCount }: { messageCount: number }) {
+  const { stopScroll } = useStickToBottomContext();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: roda de novo a cada mensagem nova, de propósito
+  useEffect(() => {
+    stopScroll();
+  }, [stopScroll, messageCount]);
+  return null;
 }
 
 export const ChatLog = React.forwardRef<HTMLDivElement, ChatLogProps>(
@@ -64,18 +77,6 @@ export const ChatLog = React.forwardRef<HTMLDivElement, ChatLogProps>(
     },
     ref
   ) => {
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-
-    const scrollToBottom = React.useCallback(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, []);
-
-    useEffect(() => {
-      if (autoScroll && messages.length > 0) {
-        scrollToBottom();
-      }
-    }, [messages, autoScroll, scrollToBottom]);
-
     return (
       <div ref={ref} className={cn("h-full flex flex-col", className)} {...props}>
         {/* Header com controles */}
@@ -89,7 +90,10 @@ export const ChatLog = React.forwardRef<HTMLDivElement, ChatLogProps>(
         {filters && <div className="border-b border-border">{filters}</div>}
 
         {/* Container de mensagens com scroll */}
-        <Conversation className="flex-1 overflow-y-auto px-1 sm:px-2 bg-muted/50 rounded-lg border border-border">
+        <Conversation
+          initial={autoScroll ? "smooth" : false}
+          className="flex-1 overflow-y-auto px-1 sm:px-2 bg-muted/50 rounded-lg border border-border"
+        >
           <ConversationContent className="p-4 text-foreground leading-relaxed space-y-3 sm:space-y-4">
             {messages.length === 0
               ? emptyState || (
@@ -114,7 +118,8 @@ export const ChatLog = React.forwardRef<HTMLDivElement, ChatLogProps>(
                   />
                 ))}
           </ConversationContent>
-          <div ref={messagesEndRef} />
+          {autoScroll ? null : <ReleaseScrollLock messageCount={messages.length} />}
+          <ConversationScrollButton />
         </Conversation>
       </div>
     );
