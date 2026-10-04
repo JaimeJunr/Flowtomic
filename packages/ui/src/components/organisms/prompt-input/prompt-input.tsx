@@ -404,15 +404,7 @@ export const PromptInput = ({
   const usingProvider = !!controller;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const anchorRef = useRef<HTMLSpanElement>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
-
-  useEffect(() => {
-    const root = anchorRef.current?.closest("form");
-    if (root instanceof HTMLFormElement) {
-      formRef.current = root;
-    }
-  }, []);
 
   const [items, setItems] = useState<(FileUIPart & { id: string })[]>([]);
   const files = usingProvider ? controller.attachments.files : items;
@@ -572,15 +564,19 @@ export const PromptInput = ({
     };
   }, [add, globalDrop]);
 
+  // Remover e limpar já revogam a URL de quem sai; aqui só o que ainda está na tela ao desmontar.
+  // Rodar a cada mudança de `files` revogava a miniatura dos anexos que continuavam na tela.
+  const filesRef = useRef(files);
+  filesRef.current = files;
   useEffect(
     () => () => {
       if (!usingProvider) {
-        for (const f of files) {
+        for (const f of filesRef.current) {
           if (f.url) URL.revokeObjectURL(f.url);
         }
       }
     },
-    [usingProvider, files]
+    [usingProvider]
   );
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -671,7 +667,6 @@ export const PromptInput = ({
 
   const inner = (
     <>
-      <span aria-hidden="true" className="hidden" ref={anchorRef} />
       <input
         accept={accept}
         aria-label="Enviar arquivos"
@@ -690,6 +685,8 @@ export const PromptInput = ({
         )}
         onSubmit={handleSubmit}
         {...(props as Record<string, unknown>)}
+        // Depois do spread: o drop de arquivo é registrado neste form
+        ref={formRef}
       >
         {/* a borda e o foco são do form; o grupo só organiza campo e barra */}
         <InputGroup className="gap-0 rounded-none border-0 bg-transparent p-0 focus-within:ring-0 focus-within:ring-offset-0">
@@ -742,7 +739,9 @@ export const PromptInputTextarea = ({
       e.preventDefault();
 
       const form = e.currentTarget.form;
-      if (form) {
+      // requestSubmit() sem submitter ignora o disabled do botão Enviar
+      const submit = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (form && !submit?.disabled) {
         form.requestSubmit();
       }
     }
@@ -862,7 +861,7 @@ export const PromptInputButton = ({
   size,
   ...props
 }: PromptInputButtonProps) => {
-  const newSize = (size ?? Children.count(props.children) > 1) ? "default" : "icon";
+  const newSize = size ?? (Children.count(props.children) > 1 ? "default" : "icon");
 
   return (
     <InputGroupButton
@@ -1072,7 +1071,12 @@ export const PromptInputSpeechButton = ({
           const currentValue = textarea.value;
           const newValue = currentValue + (currentValue ? " " : "") + finalTranscript;
 
-          textarea.value = newValue;
+          // Atribuir .value direto atualiza o rastreador do React, e o onChange de um campo
+          // controlado (PromptInputProvider) nunca dispara; o setter nativo evita isso.
+          Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set?.call(
+            textarea,
+            newValue
+          );
           textarea.dispatchEvent(new Event("input", { bubbles: true }));
           onTranscriptionChange?.(newValue);
         }
