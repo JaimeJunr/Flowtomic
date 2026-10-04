@@ -5,7 +5,7 @@
  * para o ícone nativo do relógio permanecer visível.
  */
 
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 
 const timeInputBaseClasses =
@@ -13,32 +13,30 @@ const timeInputBaseClasses =
 
 const timeInputDisabledClasses = "bg-muted text-muted-foreground";
 
-export interface TimeInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+export interface TimeInputProps extends Omit<React.ComponentProps<"input">, "type"> {
   /** Classes CSS adicionais */
   className?: string;
 }
 
-const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
-  ({ className, disabled, onFocus, ...props }, ref) => {
-    const isDisabled = Boolean(disabled);
-    return (
-      <span className="relative inline-block">
-        <input
-          type="time"
-          className={cn(timeInputBaseClasses, isDisabled && timeInputDisabledClasses, className)}
-          ref={ref}
-          tabIndex={isDisabled ? -1 : undefined}
-          aria-disabled={isDisabled ? true : undefined}
-          onFocus={isDisabled ? (e) => e.target.blur() : onFocus}
-          {...props}
-        />
-        {isDisabled && (
-          <span className="absolute inset-0 cursor-not-allowed rounded-md" aria-hidden />
-        )}
-      </span>
-    );
-  }
-);
+function TimeInput({ className, disabled, onFocus, ...props }: TimeInputProps) {
+  const isDisabled = Boolean(disabled);
+  return (
+    <span className="relative inline-block">
+      <input
+        data-slot="time-input"
+        type="time"
+        className={cn(timeInputBaseClasses, isDisabled && timeInputDisabledClasses, className)}
+        tabIndex={isDisabled ? -1 : undefined}
+        aria-disabled={isDisabled ? true : undefined}
+        onFocus={isDisabled ? (e) => e.target.blur() : onFocus}
+        {...props}
+      />
+      {isDisabled && (
+        <span className="absolute inset-0 cursor-not-allowed rounded-md" aria-hidden />
+      )}
+    </span>
+  );
+}
 TimeInput.displayName = "TimeInput";
 
 export { TimeInput, timeInputBaseClasses, timeInputDisabledClasses };

@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -25,49 +25,58 @@ const alertVariants = cva(
 );
 
 export interface AlertProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends React.ComponentProps<"div">,
     VariantProps<typeof alertVariants> {}
 
 export interface AlertProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends React.ComponentProps<"div">,
     VariantProps<typeof alertVariants> {}
 
 /** Alert - Container principal do alert. */
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ className, variant, ...props }, ref) => (
-    <div ref={ref} role="alert" className={cn(alertVariants({ variant }), className)} {...props} />
-  )
-);
+function Alert({ className, variant, ...props }: AlertProps) {
+  return (
+    <div
+      data-slot="alert"
+      role="alert"
+      className={cn(alertVariants({ variant }), className)}
+      {...props}
+    />
+  );
+}
 Alert.displayName = "Alert";
 
 /**
  * Props do componente AlertTitle.
  */
-export type AlertTitleProps = React.HTMLAttributes<HTMLHeadingElement>;
+export type AlertTitleProps = React.ComponentProps<"h5">;
 
 /** AlertTitle - Título do alert. */
-const AlertTitle = React.forwardRef<HTMLParagraphElement, AlertTitleProps>(
-  ({ className, ...props }, ref) => (
+function AlertTitle({ className, ...props }: AlertTitleProps) {
+  return (
     <h5
-      ref={ref}
+      data-slot="alert-title"
       className={cn("mb-1 font-medium leading-none tracking-tight", className)}
       {...props}
     />
-  )
-);
+  );
+}
 AlertTitle.displayName = "AlertTitle";
 
 /**
  * Props do componente AlertDescription.
  */
-export type AlertDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
+export type AlertDescriptionProps = React.ComponentProps<"div">;
 
 /** AlertDescription - Descrição do alert. */
-const AlertDescription = React.forwardRef<HTMLParagraphElement, AlertDescriptionProps>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("text-sm [&_p]:leading-relaxed", className)} {...props} />
-  )
-);
+function AlertDescription({ className, ...props }: AlertDescriptionProps) {
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn("text-sm [&_p]:leading-relaxed", className)}
+      {...props}
+    />
+  );
+}
 AlertDescription.displayName = "AlertDescription";
 
 export { Alert, AlertTitle, AlertDescription };

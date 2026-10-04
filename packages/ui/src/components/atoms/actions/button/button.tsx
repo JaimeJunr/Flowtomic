@@ -1,7 +1,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { type HTMLMotionProps, motion, type Transition } from "motion/react";
-import * as React from "react";
+import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -42,7 +42,7 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "transition">,
+  extends Omit<React.ComponentProps<"button">, "transition">,
     VariantProps<typeof buttonVariants> {
   /**
    * Quando `true`, o Button não renderiza um elemento próprio, mas passa suas props
@@ -66,36 +66,42 @@ export interface ButtonProps
 }
 
 /** Elemento interativo para acionar ações, com variantes semânticas e composição via `asChild`. */
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, animated = false, transition, ...props }, ref) => {
-    const baseClassName = cn(buttonVariants({ variant, size, className }));
+function Button({
+  className,
+  variant,
+  size,
+  asChild = false,
+  animated = false,
+  transition,
+  ...props
+}: ButtonProps) {
+  const baseClassName = cn(buttonVariants({ variant, size, className }));
 
-    if (animated && !asChild) {
-      const { onDrag: _onDrag, ...motionProps } = props;
-      return (
-        <motion.button
-          ref={ref}
-          className={baseClassName}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          transition={
-            transition || {
-              type: "spring",
-              stiffness: 400,
-              damping: 17,
-            }
+  if (animated && !asChild) {
+    const { onDrag: _onDrag, ...motionProps } = props;
+    return (
+      <motion.button
+        data-slot="button"
+        className={baseClassName}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        transition={
+          transition || {
+            type: "spring",
+            stiffness: 400,
+            damping: 17,
           }
-          {...(motionProps as Omit<HTMLMotionProps<"button">, "onDrag" | "ref">)}
-        />
-      );
-    }
-
-    if (asChild) {
-      return <Slot className={baseClassName} ref={ref} {...props} />;
-    }
-    return <button className={baseClassName} ref={ref} {...props} />;
+        }
+        {...(motionProps as Omit<HTMLMotionProps<"button">, "onDrag">)}
+      />
+    );
   }
-);
+
+  if (asChild) {
+    return <Slot data-slot="button" className={baseClassName} {...props} />;
+  }
+  return <button data-slot="button" className={baseClassName} {...props} />;
+}
 Button.displayName = "Button";
 
 export { Button, buttonVariants };

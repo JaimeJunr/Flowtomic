@@ -126,7 +126,7 @@ Informações essenciais:
 
 - Usar TypeScript estrito
 - Exportar tipos junto com implementações
-- Manter compatibilidade com React 18 e 19
+- React 19 obrigatório a partir da 1.0 (convenções do shadcn: `ref` como prop, sem `forwardRef`, `data-slot` na raiz)
 - Usar `peerDependencies` para React
 
 ### Testes e Qualidade
@@ -423,7 +423,7 @@ Stack principal:
 3. **Sempre** atualizar `cli/src/utils/component-map.ts` ao adicionar componentes
 4. **Sempre** verificar se o CLI funciona após mudanças
 5. **Nunca** quebrar a API pública sem documentar mudanças
-6. **Sempre** manter compatibilidade com React 18 e 19
+6. **Sempre** assumir React 19 (obrigatório a partir da 1.0): `ref` é prop normal, sem `forwardRef`, e todo componente marca a raiz com `data-slot`
 7. **Sempre** usar Tailwind CSS v4 para estilização
 8. **Sempre** usar Radix UI ou Base UI para acessibilidade em componentes interativos (Base UI em piloto desde o Combobox, 03/10/2026; migração em avaliação)
 9. **SEMPRE criar** story (`.stories.tsx`) para cada componente ou hook
@@ -535,6 +535,11 @@ Cada uma já mordeu alguém neste repo.
   `https://registry.npmjs.org/<nome>/-/<base>-<versão>.tgz` só nos novos. Ficou com 25 linhas
   de diff; confira `grep -c '"", {' bun.lock` = `0`.
 - ⚠️ **`bun run test` no `packages/ui` trava em watch** — ver a seção *Testes*.
+- ⚠️ **Com Node 25+ (esta máquina roda o 26), 14 testes do `resizable-layout` falham com
+  `Cannot read properties of undefined (reading 'getItem')`.** O Node tem um `localStorage`
+  próprio, experimental, que tapa o do jsdom. A CI usa Node 24 e passa. Não é bug do
+  componente (medido em 04/10/2026, falha igual na `main`): rode com
+  `NODE_OPTIONS=--no-experimental-webstorage bunx vitest run ...`.
 - ⚠️ **O `tsconfig.json` do `ui` exclui stories e testes.** O
   `bunx tsc --noEmit -p .` pode passar mesmo com story inválida (por exemplo, `Message`
   sem `args.from`). Ao alterar stories/testes, confira também esses arquivos com uma

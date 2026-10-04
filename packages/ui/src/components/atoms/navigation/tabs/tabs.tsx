@@ -19,12 +19,12 @@ interface TabsContextValue {
 
 const TabsContext = React.createContext<TabsContextValue | undefined>(undefined);
 
-const Tabs = TabsPrimitive.Root;
+function Tabs(props: React.ComponentProps<typeof TabsPrimitive.Root>) {
+  return <TabsPrimitive.Root data-slot="tabs" {...props} />;
+}
+Tabs.displayName = "Tabs";
 
-const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => {
+function TabsList({ className, ref, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
   const listRef = React.useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
@@ -63,6 +63,7 @@ const TabsList = React.forwardRef<
   return (
     <TabsContext.Provider value={contextValue}>
       <TabsPrimitive.List
+        data-slot="tabs-list"
         ref={(node) => {
           if (typeof ref === "function") {
             ref(node);
@@ -110,13 +111,15 @@ const TabsList = React.forwardRef<
       </TabsPrimitive.List>
     </TabsContext.Provider>
   );
-});
-TabsList.displayName = TabsPrimitive.List.displayName;
+}
+TabsList.displayName = "TabsList";
 
-const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, value, ...props }, ref) => {
+function TabsTrigger({
+  className,
+  value,
+  ref,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
   const context = React.useContext(TabsContext);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
@@ -131,6 +134,7 @@ const TabsTrigger = React.forwardRef<
 
   return (
     <TabsPrimitive.Trigger
+      data-slot="tabs-trigger"
       ref={(node) => {
         if (typeof ref === "function") {
           ref(node);
@@ -155,18 +159,19 @@ const TabsTrigger = React.forwardRef<
       <span className="relative z-10">{props.children}</span>
     </TabsPrimitive.Trigger>
   );
-});
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+}
+TabsTrigger.displayName = "TabsTrigger";
 
-const TabsContent = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, value, ...props }, ref) => {
+function TabsContent({
+  className,
+  value,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Content>) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
     <TabsPrimitive.Content
-      ref={ref}
+      data-slot="tabs-content"
       value={value}
       className={cn(
         "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -204,7 +209,7 @@ const TabsContent = React.forwardRef<
       </motion.div>
     </TabsPrimitive.Content>
   );
-});
-TabsContent.displayName = TabsPrimitive.Content.displayName;
+}
+TabsContent.displayName = "TabsContent";
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };

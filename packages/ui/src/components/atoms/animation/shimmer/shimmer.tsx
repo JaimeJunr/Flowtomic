@@ -57,6 +57,7 @@ function ShimmerComponent({
   if (createMotionComponent && typeof MotionComponent !== "string" && !shouldReduceMotion) {
     return (
       <MotionComponent
+        data-slot="shimmer"
         animate={{ backgroundPosition: "0% center" }}
         className={shimmerClassName}
         initial={{ backgroundPosition: "100% center" }}
@@ -74,7 +75,7 @@ function ShimmerComponent({
 
   const Element = shouldReduceMotion ? Component : ((MotionComponent as ElementType) ?? "p");
   return (
-    <Element className={shimmerClassName} style={shimmerStyle}>
+    <Element data-slot="shimmer" className={shimmerClassName} style={shimmerStyle}>
       {children}
     </Element>
   );

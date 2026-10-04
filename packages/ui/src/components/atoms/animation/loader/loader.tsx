@@ -4,7 +4,7 @@
  * Componente de loading spinner
  */
 
-import * as React from "react";
+import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 type LoaderIconProps = {
@@ -80,15 +80,15 @@ const LoaderIcon = ({ size = 16 }: LoaderIconProps) => (
   </svg>
 );
 
-export type LoaderProps = React.HTMLAttributes<HTMLDivElement> & {
+export type LoaderProps = React.ComponentProps<"div"> & {
   size?: number;
 };
 
-export const Loader = React.forwardRef<HTMLDivElement, LoaderProps>(
-  ({ className, size = 16, ...props }, ref) => (
+export function Loader({ className, size = 16, ...props }: LoaderProps) {
+  return (
     // biome-ignore lint/a11y/useSemanticElements: trocar por <output> mudaria o tipo do ref (HTMLDivElement) da API pública
     <div
-      ref={ref}
+      data-slot="loader"
       role="status"
       aria-label="Carregando"
       className={cn("inline-flex animate-spin items-center justify-center", className)}
@@ -96,6 +96,6 @@ export const Loader = React.forwardRef<HTMLDivElement, LoaderProps>(
     >
       <LoaderIcon size={size} />
     </div>
-  )
-);
+  );
+}
 Loader.displayName = "Loader";
