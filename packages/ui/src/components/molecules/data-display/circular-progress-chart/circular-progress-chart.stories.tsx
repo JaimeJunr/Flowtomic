@@ -46,8 +46,8 @@ export const WithLegend: Story = {
     label: "com teste",
     title: "Molecules da 0.9.0",
     legend: [
-      { label: "Com teste", color: "hsl(var(--primary))" },
-      { label: "Sem teste", color: "hsl(var(--muted))" },
+      { label: "Com teste", color: "var(--primary)" },
+      { label: "Sem teste", color: "var(--muted)" },
     ],
   },
 };
@@ -58,8 +58,8 @@ export const CustomColors: Story = {
     label: "dos builds passaram",
     title: "Builds do registry",
     size: 200,
-    progressColor: "hsl(var(--success))",
-    trackColor: "hsl(var(--muted))",
+    progressColor: "var(--success)",
+    trackColor: "var(--muted)",
   },
 };
 
@@ -69,9 +69,9 @@ export const WithColorRanges: Story = {
     label: "de cobertura",
     title: "Cobertura de branches",
     colorRanges: [
-      { min: 0, max: 33, color: "hsl(var(--destructive))" },
-      { min: 34, max: 66, color: "hsl(var(--warning))" },
-      { min: 67, max: 100, color: "hsl(var(--success))" },
+      { min: 0, max: 33, color: "var(--destructive)" },
+      { min: 34, max: 66, color: "var(--warning)" },
+      { min: 67, max: 100, color: "var(--success)" },
     ],
   },
 };

@@ -43,13 +43,13 @@ export interface CircularProgressChartProps {
 
   /**
    * Cor da linha de progresso
-   * @default "hsl(var(--primary))"
+   * @default "var(--primary)"
    */
   progressColor?: string;
 
   /**
    * Cor da linha de fundo
-   * @default "hsl(var(--muted))"
+   * @default "var(--muted)"
    */
   trackColor?: string;
 
@@ -95,8 +95,8 @@ export function CircularProgressChart({
   title,
   size = 160,
   strokeWidth = 10,
-  progressColor = "hsl(var(--primary))",
-  trackColor = "hsl(var(--muted))",
+  progressColor = "var(--primary)",
+  trackColor = "var(--muted)",
   colorRanges,
   legend,
   className,

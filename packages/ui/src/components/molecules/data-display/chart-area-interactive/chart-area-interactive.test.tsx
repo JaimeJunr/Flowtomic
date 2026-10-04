@@ -33,6 +33,6 @@ describe("ChartAreaInteractive", () => {
     const { container } = render(<ChartAreaInteractive data={data} />);
     const css = container.querySelector("style")?.textContent ?? "";
     expect(css).not.toMatch(/--chart-\d/);
-    expect(css).toMatch(/hsl\(var\(--primary\)\)/);
+    expect(css).toMatch(/var\(--primary\)/);
   });
 });

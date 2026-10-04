@@ -48,7 +48,7 @@ const FrameHandle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
     <div
       ref={ref}
       className={cn(
-        "size-3 rounded-tl border-t-2 border-l-2 border-[hsl(var(--primary))]", // use primary token
+        "size-3 rounded-tl border-t-2 border-l-2 border-[var(--primary)]", // use primary token
         className
       )}
       {...props}
@@ -64,7 +64,7 @@ const GradientScan = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
       ref={ref}
       aria-hidden
       className={cn(
-        "absolute bottom-0 h-1/2 w-full border-t border-[hsl(var(--primary))] bg-[hsl(var(--primary))/0.10]",
+        "absolute bottom-0 h-1/2 w-full border-t border-[var(--primary)] bg-[var(--primary)/0.10]",
         "[mask-image:radial-gradient(52.19%_100%_at_50%_0%,_#000_0%,_rgba(0,0,0,0)_95.31%)]",
         "[webkit-mask-image:radial-gradient(52.19%_100%_at_50%_0%,_#000_0%,_rgba(0,0,0,0)_95.31%)]",
         className

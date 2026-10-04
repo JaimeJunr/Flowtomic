@@ -30,15 +30,25 @@ function parseRgb(value: string): Rgb {
   return [Number(match[1]), Number(match[2]), Number(match[3])];
 }
 
-function parseHsl(value: string): Rgb {
-  const match = value.match(/^([\d.]+) ([\d.]+)% ([\d.]+)%$/);
+// OKLCH → OKLab → LMS → sRGB linear → sRGB, pelas matrizes de Björn Ottosson (CSS Color 4).
+function parseOklch(value: string): Rgb {
+  const match = value.match(/^oklch\(([\d.]+) ([\d.]+) ([\d.]+)\)$/);
   if (!match)
-    throw new Error(`cor inválida: received ${JSON.stringify(value)}, expected "H S% L%"`);
-  const [h, s, l] = [Number(match[1]), Number(match[2]) / 100, Number(match[3]) / 100];
-  const k = (n: number) => (n + h / 30) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n: number) => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
-  return [f(0) * 255, f(8) * 255, f(4) * 255];
+    throw new Error(`cor inválida: received ${JSON.stringify(value)}, expected "oklch(L C H)"`);
+  const [l, c, h] = [Number(match[1]), Number(match[2]), (Number(match[3]) * Math.PI) / 180];
+  const [a, b] = [c * Math.cos(h), c * Math.sin(h)];
+  const lms = [
+    (l + 0.3963377774 * a + 0.2158037573 * b) ** 3,
+    (l - 0.1055613458 * a - 0.0638541728 * b) ** 3,
+    (l - 0.0894841775 * a - 1.291485548 * b) ** 3,
+  ];
+  const linear = [
+    4.0767416621 * lms[0] - 3.3077115913 * lms[1] + 0.2309699292 * lms[2],
+    -1.2684380046 * lms[0] + 2.6097574011 * lms[1] - 0.3413193965 * lms[2],
+    -0.0041960863 * lms[0] - 0.7034186147 * lms[1] + 1.707614701 * lms[2],
+  ];
+  const gamma = (x: number) => (x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055);
+  return linear.map((x) => Math.min(1, Math.max(0, gamma(x))) * 255) as Rgb;
 }
 
 function hue([r, g, b]: Rgb): number {
@@ -81,7 +91,7 @@ describe("Identidade Urucum no tema", () => {
 
   it("o primary do shadcn segue a marca no claro e no escuro, com texto branco legível", () => {
     for (const selector of [":root", ".dark"]) {
-      const primary = parseHsl(readToken(readBlock(globalsCss, selector), "--primary"));
+      const primary = parseOklch(readToken(readBlock(globalsCss, selector), "--primary"));
       expect(isPurple(primary), selector).toBe(false);
       expect(contrastWithWhite(primary), selector).toBeGreaterThanOrEqual(4.5);
     }
@@ -91,7 +101,7 @@ describe("Identidade Urucum no tema", () => {
     for (const selector of [":root", ".dark"]) {
       const block = readBlock(globalsCss, selector);
       for (const name of ["--ring", "--secondary", "--accent", "--accent-foreground"]) {
-        expect(isPurple(parseHsl(readToken(block, name))), `${selector} ${name}`).toBe(false);
+        expect(isPurple(parseOklch(readToken(block, name))), `${selector} ${name}`).toBe(false);
       }
     }
   });
@@ -101,9 +111,9 @@ describe("Identidade Urucum no tema", () => {
     // do texto (convenção do shadcn). Um secondary escuro deixa esses títulos ilegíveis.
     for (const selector of [":root", ".dark"]) {
       const block = readBlock(globalsCss, selector);
-      const surface = parseHsl(readToken(block, "--secondary"));
+      const surface = parseOklch(readToken(block, "--secondary"));
       for (const name of ["--foreground", "--secondary-foreground"]) {
-        const text = parseHsl(readToken(block, name));
+        const text = parseOklch(readToken(block, name));
         expect(contrast(surface, text), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
       }
     }
@@ -114,10 +124,10 @@ describe("Identidade Urucum no tema", () => {
     // (bg-destructive text-destructive-foreground). As duas leituras precisam passar AA.
     for (const selector of [":root", ".dark"]) {
       const block = readBlock(globalsCss, selector);
-      const background = parseHsl(readToken(block, "--background"));
+      const background = parseOklch(readToken(block, "--background"));
       for (const name of ["--success", "--destructive", "--warning", "--info"]) {
-        const tone = parseHsl(readToken(block, name));
-        const onTone = parseHsl(readToken(block, `${name}-foreground`));
+        const tone = parseOklch(readToken(block, name));
+        const onTone = parseOklch(readToken(block, `${name}-foreground`));
         expect(contrast(tone, background), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
         expect(contrast(tone, onTone), `${selector} ${name}-foreground`).toBeGreaterThanOrEqual(
           4.5
@@ -130,9 +140,9 @@ describe("Identidade Urucum no tema", () => {
     // Tingido = 10% do tom sobre o background. Medido pela revisão de 26/09/2026: 4,1–4,4 no claro.
     for (const selector of [":root", ".dark"]) {
       const block = readBlock(globalsCss, selector);
-      const background = parseHsl(readToken(block, "--background"));
+      const background = parseOklch(readToken(block, "--background"));
       for (const name of ["--success", "--destructive", "--warning", "--info"]) {
-        const tone = parseHsl(readToken(block, name));
+        const tone = parseOklch(readToken(block, name));
         const tinted = tone.map((c, i) => c * 0.1 + background[i] * 0.9) as Rgb;
         expect(contrast(tone, tinted), `${selector} ${name}`).toBeGreaterThanOrEqual(4.5);
       }
@@ -140,11 +150,41 @@ describe("Identidade Urucum no tema", () => {
   });
 
   it("as cores do Tailwind leem a variável na hora, senão `dark` num painel não muda nada", () => {
-    // Com `@theme` sem `inline`, `--color-background: hsl(var(--background))` é resolvido uma vez
+    // Com `@theme` sem `inline`, `--color-background: var(--background)` é resolvido uma vez
     // no :root; um painel com a classe `dark` herdava o valor claro (terminal do script-editor).
-    const start = globalsCss.indexOf("--color-background: hsl(var(--background))");
+    const start = globalsCss.indexOf("--color-background: var(--background)");
     const opener = globalsCss.lastIndexOf("@theme", start);
     expect(globalsCss.slice(opener, globalsCss.indexOf("{", opener)).trim()).toBe("@theme inline");
+  });
+
+  it("as cores do tema são oklch(), como no shadcn desde fev/2025", () => {
+    // Valor triplo ("16 80% 39%") só funcionava embrulhado em hsl(var(...)). Com a cor inteira na
+    // variável, var(--x) basta e o Tailwind mistura transparência (bg-primary/10) em oklch.
+    const colorLine = /^\s*(--[a-z0-9-]+):\s*([^;]+);/gm;
+    for (const selector of [":root", ".dark"]) {
+      const block = readBlock(globalsCss, selector);
+      for (const [, name, value] of block.matchAll(colorLine)) {
+        if (/^[\d.]+ [\d.]+% [\d.]+%$/.test(value) || value.startsWith("hsl")) {
+          throw new Error(`${selector} ${name}: received ${value}, expected oklch(L C H) ou var()`);
+        }
+      }
+    }
+    expect(globalsCss).not.toMatch(/hsl\(var\(--/);
+  });
+
+  it("nenhum componente embrulha token em hsl()", () => {
+    const offenders: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (/\.(tsx?|css)$/.test(entry.name) && full !== __filename) {
+          if (/hsl\(var\(--/.test(readFileSync(full, "utf8"))) offenders.push(full);
+        }
+      }
+    };
+    walk(path.resolve(__dirname, ".."));
+    expect(offenders).toEqual([]);
   });
 
   it("o link passa AA como texto sobre o background nos dois modos", () => {
@@ -152,8 +192,8 @@ describe("Identidade Urucum no tema", () => {
     // claro, mas no escuro precisa de um tom mais claro pra passar AA como texto.
     for (const selector of [":root", ".dark"]) {
       const block = readBlock(globalsCss, selector);
-      const background = parseHsl(readToken(block, "--background"));
-      const link = parseHsl(readToken(block, "--link"));
+      const background = parseOklch(readToken(block, "--background"));
+      const link = parseOklch(readToken(block, "--link"));
       expect(contrast(link, background), selector).toBeGreaterThanOrEqual(4.5);
     }
   });
@@ -163,12 +203,12 @@ describe("Identidade Urucum no tema", () => {
     // wash de urucum do DESIGN.md. O .dark repete as referências porque custom property que usa
     // var() é resolvida onde é declarada — sem isso, um painel `dark` herdaria o valor claro.
     const expected: Record<string, string> = {
-      "--sidebar": "hsl(var(--surface))",
-      "--sidebar-foreground": "hsl(var(--foreground))",
-      "--sidebar-accent": "hsl(var(--accent))",
-      "--sidebar-accent-foreground": "hsl(var(--accent-foreground))",
-      "--sidebar-border": "hsl(var(--border))",
-      "--sidebar-ring": "hsl(var(--ring))",
+      "--sidebar": "var(--surface)",
+      "--sidebar-foreground": "var(--foreground)",
+      "--sidebar-accent": "var(--accent)",
+      "--sidebar-accent-foreground": "var(--accent-foreground)",
+      "--sidebar-border": "var(--border)",
+      "--sidebar-ring": "var(--ring)",
     };
     const blocks = [...globalsCss.matchAll(/\n(:root|\.dark) \{\n([^}]*--sidebar:[^}]*)\}/g)];
     expect(blocks.map((b) => b[1])).toEqual([":root", ".dark"]);

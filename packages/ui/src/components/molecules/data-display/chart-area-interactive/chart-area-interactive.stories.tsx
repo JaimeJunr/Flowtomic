@@ -39,8 +39,8 @@ const sampleData: ChartAreaInteractiveDataPoint[] = Array.from({ length: 91 }, (
 
 const chartConfig = {
   visitors: { label: "Acessos" },
-  desktop: { label: "Computador", color: "hsl(var(--primary))" },
-  mobile: { label: "Celular", color: "hsl(var(--muted-foreground))" },
+  desktop: { label: "Computador", color: "var(--primary)" },
+  mobile: { label: "Celular", color: "var(--muted-foreground)" },
 };
 
 export const Default: Story = {

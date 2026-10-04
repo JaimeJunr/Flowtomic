@@ -45,12 +45,12 @@ export function Toaster({ theme = "light", ...props }: ToasterProps) {
       }}
       style={
         {
-          "--normal-bg": "hsl(var(--background))",
-          "--normal-text": "hsl(var(--foreground))",
-          "--normal-border": "hsl(var(--border))",
-          "--success-bg": "hsl(var(--success))",
-          "--success-text": "hsl(var(--success-foreground))",
-          "--success-border": "hsl(var(--success))",
+          "--normal-bg": "var(--background)",
+          "--normal-text": "var(--foreground)",
+          "--normal-border": "var(--border)",
+          "--success-bg": "var(--success)",
+          "--success-text": "var(--success-foreground)",
+          "--success-border": "var(--success)",
           "--border-radius": "calc(var(--radius) - 2px)",
         } as React.CSSProperties
       }
