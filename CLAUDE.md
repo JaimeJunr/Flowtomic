@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (64 atoms, 50 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (65 atoms, 50 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (64)
+- **Atoms**: `docs/componentes/atoms.md` (65)
 - **Molecules**: `docs/componentes/molecules.md` (50)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -374,7 +374,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 64 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 65 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 50 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
@@ -479,6 +479,11 @@ cd packages/ui && bunx vitest run
 ## Convenções
 
 - **Branch default:** `main` — confirmado com `git remote show origin | grep 'HEAD branch'`.
+- **Efeitos inspirados no React Bits são clean room** (decidido em 04/10/2026). A licença deles
+  (MIT + Commons Clause) proíbe redistribuir "ported version". Quem escreve a spec só vê a demo e
+  a tabela de props em `reactbits.dev`, **nunca a aba Code nem o GitHub**, e grava em
+  `docs/clean-room/react-bits/<nome>.md`. Quem implementa recebe só a spec. Não cole código deles
+  em prompt nem em PR. Dependências: só `motion` + `src/lib/webgl` (sem gsap, ogl, matter-js).
 - **Rastreamento:** ⚠️ **não há board nem prefixo de ticket.** Projeto pessoal
   (`JaimeJunr`, não `investtools`). Se um board for adotado, registre aqui.
 - **Branches:** a partir de `main`. Nunca commit direto nela.

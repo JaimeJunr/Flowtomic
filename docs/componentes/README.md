@@ -4,7 +4,7 @@
 
 ## Índice
 
-- [Atoms](atoms.md) - Componentes básicos (64 componentes)
+- [Atoms](atoms.md) - Componentes básicos (65 componentes)
 - [Molecules](molecules.md) - Componentes compostos (50 componentes)
 - [Organisms](organisms.md) - Componentes complexos (31 componentes)
 - [Blocks](blocks.md) - Blocks pré-construídos (4 blocks)
@@ -12,7 +12,7 @@
 
 ## Estatísticas
 
-- **Total de Atoms**: 64
+- **Total de Atoms**: 65
 - **Total de Molecules**: 50
 - **Total de Organisms**: 31
 - **Total de Hooks**: 14
