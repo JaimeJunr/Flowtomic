@@ -85,7 +85,9 @@ ModelSelectorGroup.displayName = "ModelSelectorGroup";
 
 export type ModelSelectorItemProps = ComponentProps<typeof CommandItem>;
 
-export const ModelSelectorItem = (props: ModelSelectorItemProps) => <CommandItem {...props} />;
+export const ModelSelectorItem = ({ className, ...props }: ModelSelectorItemProps) => (
+  <CommandItem className={cn("gap-2", className)} {...props} />
+);
 ModelSelectorItem.displayName = "ModelSelectorItem";
 
 export type ModelSelectorShortcutProps = ComponentProps<typeof CommandShortcut>;
@@ -103,6 +105,11 @@ export const ModelSelectorSeparator = (props: ModelSelectorSeparatorProps) => (
 ModelSelectorSeparator.displayName = "ModelSelectorSeparator";
 
 export type ModelSelectorLogoProps = Omit<ComponentProps<"img">, "src" | "alt"> & {
+  /**
+   * Imagem do logo, servida pelo app. Sem ela, aparece a inicial do provedor: a lib não
+   * busca logo em site de fora (sumia offline e vazava o uso para terceiros).
+   */
+  src?: string;
   provider:
     | "moonshotai-cn"
     | "lucidquery"
@@ -163,19 +170,39 @@ export type ModelSelectorLogoProps = Omit<ComponentProps<"img">, "src" | "alt"> 
     | (string & {});
 };
 
-export const ModelSelectorLogo = React.forwardRef<HTMLImageElement, ModelSelectorLogoProps>(
-  ({ provider, className, ...props }, ref) => (
+export const ModelSelectorLogo = React.forwardRef<
+  HTMLImageElement | HTMLSpanElement,
+  ModelSelectorLogoProps
+>(({ provider, src, className, ...props }, ref) => {
+  // o nome do modelo já está escrito ao lado: o logo é decorativo nos dois casos
+  if (!src) {
+    return (
+      <span
+        ref={ref as React.Ref<HTMLSpanElement>}
+        aria-hidden="true"
+        data-slot="model-selector-logo"
+        className={cn(
+          "inline-flex size-4 shrink-0 items-center justify-center rounded-sm bg-muted font-mono text-[10px] font-semibold uppercase leading-none text-muted-foreground",
+          className
+        )}
+      >
+        {provider.charAt(0)}
+      </span>
+    );
+  }
+  return (
     <img
-      ref={ref}
+      ref={ref as React.Ref<HTMLImageElement>}
       {...props}
       alt=""
-      className={cn("size-3", className)}
-      height={12}
-      src={`https://models.dev/logos/${provider}.svg`}
-      width={12}
+      data-slot="model-selector-logo"
+      className={cn("size-4", className)}
+      height={16}
+      src={src}
+      width={16}
     />
-  )
-);
+  );
+});
 ModelSelectorLogo.displayName = "ModelSelectorLogo";
 
 export type ModelSelectorLogoGroupProps = ComponentProps<"div">;
@@ -185,7 +212,7 @@ export const ModelSelectorLogoGroup = React.forwardRef<HTMLDivElement, ModelSele
     <div
       ref={ref}
       className={cn(
-        "-space-x-1 flex shrink-0 items-center [&>img]:rounded-full [&>img]:bg-background [&>img]:p-px [&>img]:ring-1 [&>img]:ring-border",
+        "-space-x-1 flex shrink-0 items-center [&>*]:rounded-full [&>*]:ring-1 [&>*]:ring-border [&>img]:bg-background [&>img]:p-px",
         className
       )}
       {...props}

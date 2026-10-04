@@ -85,8 +85,8 @@ describe("ModelSelector: catálogo", () => {
     expect(screen.getByRole("group", { name: "Anthropic" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: /Claude/ })).toBeInTheDocument();
     // o nome do modelo já está escrito ao lado; o logo não é lido de novo
-    const logo = baseElement.querySelector('img[src="https://models.dev/logos/anthropic.svg"]');
-    expect(logo).toHaveAttribute("alt", "");
+    const logo = baseElement.querySelector("[data-slot=model-selector-logo]");
+    expect(logo).toHaveAttribute("aria-hidden", "true");
     expect(screen.getByText("⌘1")).toBeInTheDocument();
   });
 
@@ -167,9 +167,31 @@ describe("ModelSelector: catálogo", () => {
 });
 
 describe("ModelSelectorLogo", () => {
-  it("é decorativo: o nome do modelo já está escrito ao lado, o leitor de tela não lê o logo", () => {
+  it("sem src, não busca nada fora: mostra a inicial do provedor", () => {
     const { container } = render(<ModelSelectorLogo provider="anthropic" />);
-    expect(container.querySelector("img")).toHaveAttribute("alt", "");
+    expect(container.querySelector("img")).toBeNull();
+    const logo = container.querySelector("[data-slot=model-selector-logo]");
+    expect(logo).toHaveTextContent("a");
+    expect(logo).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("com src, usa a imagem do app e continua decorativo", () => {
+    const { container } = render(
+      <ModelSelectorLogo provider="anthropic" src="/logos/anthropic.svg" />
+    );
+    const img = container.querySelector("img");
+    expect(img).toHaveAttribute("src", "/logos/anthropic.svg");
+    expect(img).toHaveAttribute("alt", "");
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  });
+
+  it("nenhum logo aponta para models.dev", () => {
+    const { container } = render(
+      <ModelSelectorLogoGroup>
+        <ModelSelectorLogo provider="openai" />
+        <ModelSelectorLogo provider="google" />
+      </ModelSelectorLogoGroup>
+    );
+    expect(container.innerHTML).not.toContain("models.dev");
   });
 });
