@@ -233,6 +233,30 @@ export type {
   ModeOption,
 } from "./forms/chat-input";
 export { ChatInput } from "./forms/chat-input";
+export type {
+  ComboboxChipProps,
+  ComboboxContentProps,
+  ComboboxInputProps,
+} from "./forms/combobox";
+export {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxClear,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+  ComboboxTrigger,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "./forms/combobox";
 export type { ImageDropzoneProps } from "./forms/image-dropzone";
 export { ImageDropzone } from "./forms/image-dropzone";
 export type { InlineDateTimeEditorProps } from "./forms/inline-datetime-editor";

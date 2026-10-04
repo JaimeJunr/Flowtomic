@@ -433,6 +433,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["select.tsx", "index.ts"],
     dependencies: ["@radix-ui/react-select", "lucide-react", "clsx", "tailwind-merge"],
   },
+  "native-select": {
+    name: "native-select",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/forms/native-select",
+    files: ["native-select.tsx", "index.ts"],
+    dependencies: ["lucide-react", "clsx", "tailwind-merge"],
+  },
   avatar: {
     name: "avatar",
     type: "atom",
@@ -581,6 +588,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     path: "packages/ui/src/components/molecules/forms/inline-datetime-editor",
     files: ["inline-datetime-editor.tsx", "index.ts"],
     dependencies: ["clsx", "tailwind-merge"],
+  },
+  combobox: {
+    name: "combobox",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/forms/combobox",
+    files: ["combobox.tsx", "index.ts"],
+    dependencies: ["@base-ui/react", "lucide-react", "clsx", "tailwind-merge"],
   },
   autocomplete: {
     name: "autocomplete",

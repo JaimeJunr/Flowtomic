@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 49 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (64 atoms, 50 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,8 +37,8 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (63)
-- **Molecules**: `docs/componentes/molecules.md` (49)
+- **Atoms**: `docs/componentes/atoms.md` (64)
+- **Molecules**: `docs/componentes/molecules.md` (50)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -83,7 +83,7 @@ useMobile/
 
 ### Dependências
 
-- **UI**: Baseado em Radix UI, Tailwind CSS v4.1.14, class-variance-authority, clsx, tailwind-merge
+- **UI**: Baseado em Radix UI (e Base UI `@base-ui/react`, em piloto desde o Combobox), Tailwind CSS v4.1.14, class-variance-authority, clsx, tailwind-merge
   - **React Aria**: `@react-aria/tooltip`, `@react-aria/interactions`, `@react-aria/overlays`, `@react-stately/tooltip` (para tooltip com seguimento do mouse)
   - **Animações**: `motion/react` (Framer Motion) para animações avançadas
 - **Logic**: Hooks headless sem dependências de UI (apenas React, zustand e dependências específicas como @tanstack/react-table, react-resizable-panels)
@@ -374,8 +374,8 @@ errado.
 
 Resumo:
 
-- **Atoms**: 63 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 49 componentes - Ver `docs/componentes/molecules.md`
+- **Atoms**: 64 componentes - Ver `docs/componentes/atoms.md`
+- **Molecules**: 50 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -425,7 +425,7 @@ Stack principal:
 5. **Nunca** quebrar a API pública sem documentar mudanças
 6. **Sempre** manter compatibilidade com React 18 e 19
 7. **Sempre** usar Tailwind CSS v4 para estilização
-8. **Sempre** usar Radix UI para acessibilidade em componentes interativos
+8. **Sempre** usar Radix UI ou Base UI para acessibilidade em componentes interativos (Base UI em piloto desde o Combobox, 03/10/2026; migração em avaliação)
 9. **SEMPRE criar** story (`.stories.tsx`) para cada componente ou hook
 10. **NUNCA criar** componente/hook sem story correspondente
 11. **SEMPRE seguir** o padrão de estrutura: `pasta/index.ts + story + component`
@@ -528,6 +528,12 @@ Cada uma já mordeu alguém neste repo.
   (medido em 03/10/2026: 1.223 linhas mudadas para acrescentar uma devDependency). Para uma
   dependência só, desfaça o lock (`git checkout bun.lock`), acrescente a linha na seção do
   workspace à mão e confira com `bun install --frozen-lockfile`.
+  ⚠️ **Isso não basta se a dependência traz outras junto** (o `@base-ui/react` trouxe 10, em
+  03/10/2026): o `bun install` precisa gravar as entradas novas, e também zera todas as URLs.
+  O que funcionou: deixar o `bun install` gravar e depois, com um script, devolver a linha do
+  lock antigo (`git show HEAD:bun.lock`) a todo pacote que já existia, e montar a URL
+  `https://registry.npmjs.org/<nome>/-/<base>-<versão>.tgz` só nos novos. Ficou com 25 linhas
+  de diff; confira `grep -c '"", {' bun.lock` = `0`.
 - ⚠️ **`bun run test` no `packages/ui` trava em watch** — ver a seção *Testes*.
 - ⚠️ **O `tsconfig.json` do `ui` exclui stories e testes.** O
   `bunx tsc --noEmit -p .` pode passar mesmo com story inválida (por exemplo, `Message`
