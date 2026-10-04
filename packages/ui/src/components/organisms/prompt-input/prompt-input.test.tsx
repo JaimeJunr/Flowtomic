@@ -57,6 +57,25 @@ describe("PromptInputSubmit", () => {
     expect(botao).toHaveTextContent("Enviar");
   });
 
+  it("fica desabilitado com o campo vazio, liga ao digitar e desliga de novo depois de enviar", async () => {
+    const onSubmit = renderPrompt();
+    const enviar = screen.getByRole("button", { name: "Enviar" });
+    expect(enviar).toBeDisabled();
+    const campo = screen.getByRole("textbox", { name: "Mensagem" });
+    await userEvent.type(campo, "   ");
+    expect(enviar).toBeDisabled();
+    await userEvent.type(campo, "oi");
+    expect(enviar).toBeEnabled();
+    await userEvent.type(campo, "{Enter}");
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(enviar).toBeDisabled());
+  });
+
+  it("fora de um PromptInput não se desabilita sozinho", () => {
+    render(<PromptInputSubmit />);
+    expect(screen.getByRole("button", { name: "Enviar" })).toBeEnabled();
+  });
+
   it("com erro, continua sendo Enviar, para tentar de novo", () => {
     renderPrompt(vi.fn(), { status: "error" });
     expect(screen.getByRole("button", { name: "Enviar" })).toHaveAttribute("type", "submit");
