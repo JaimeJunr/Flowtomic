@@ -636,6 +636,11 @@ Cada uma já mordeu alguém neste repo.
   `editorProps.attributes`. Em teste, a área monta depois do primeiro render: use `findByRole`.
 - ⚠️ **`DialogContent` sem `DialogDescription` faz o Radix avisar em todo uso.** Quando não há
   descrição, passe `aria-describedby={undefined}` explícito (ver `organisms/model-selector`).
+- ⚠️ **Componente que importa helper de `@/lib/` (além do `utils`) depende do `cli/src/utils/lib-files.ts`**
+  para chegar inteiro no projeto de quem usa o `flowtomic-cli add`: ele segue os imports `@/lib/...` e
+  relativos e copia o que falta. Antes dele (até 04/10/2026), só o `utils.ts` era copiado e o
+  `sliding-number` chegaria com import quebrado. ⚠️ O `registry/build-registry.ts` **ainda não** leva
+  esses helpers no JSON do shadcn.
 - ⚠️ **O dnd-kit anuncia em inglês por padrão** ("press the space bar"). Todo `DndContext` passa
   `accessibility={{ announcements, screenReaderInstructions }}` em português — ver
   `organisms/draggable-dashboard-grid`. E `onKeyDown` próprio depois de `{...listeners}`

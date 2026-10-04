@@ -3,11 +3,12 @@
  */
 
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { findComponent, listComponents, listHooks } from "../utils/component-map";
 import { copyAndAdjustImports, ensureUtilsFile } from "../utils/file-utils";
+import { copyLibDependencies } from "../utils/lib-files";
 import { resolveComponentPath, resolveFlowtomicRepo } from "../utils/resolve-repo";
 
 interface ComponentsConfig {
@@ -76,13 +77,18 @@ export async function add(components: string[]) {
 
   // Adicionar cada componente
   for (const componentName of components) {
-    await addComponent(componentName, config, repoPath);
+    await addComponent(componentName, config, repoPath, dirname(utilsPath));
   }
 
   console.log(chalk.green("\n✅ Componentes adicionados com sucesso!"));
 }
 
-async function addComponent(componentName: string, config: ComponentsConfig, repoPath: string) {
+async function addComponent(
+  componentName: string,
+  config: ComponentsConfig,
+  repoPath: string,
+  targetLibRoot: string
+) {
   const component = findComponent(componentName);
 
   if (!component) {
@@ -116,6 +122,7 @@ async function addComponent(componentName: string, config: ComponentsConfig, rep
         hooksAlias: config.aliases.hooks,
       });
       console.log(chalk.green(`   ✅ ${file}`));
+      copyLibHelpers(sourcePath, repoPath, targetLibRoot);
     } catch (error) {
       console.log(chalk.red(`   ❌ Erro ao copiar ${file}: ${error}`));
     }
@@ -126,4 +133,12 @@ async function addComponent(componentName: string, config: ComponentsConfig, rep
     console.log(chalk.blue(`   📦 Dependências necessárias: ${component.dependencies.join(", ")}`));
     console.log(chalk.yellow(`   💡 Certifique-se de que todas as dependências estão instaladas`));
   }
+}
+
+function copyLibHelpers(sourcePath: string, repoPath: string, targetLibRoot: string): void {
+  const copied = copyLibDependencies(readFileSync(sourcePath, "utf-8"), {
+    repoLibRoot: join(repoPath, "packages", "ui", "src", "lib"),
+    targetLibRoot,
+  });
+  for (const path of copied) console.log(chalk.green(`   ✅ lib/${path}`));
 }
