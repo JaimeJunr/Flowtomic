@@ -37,7 +37,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface UseReactTableFrontOptions<T extends Record<string, unknown>> {
   /** Dados da tabela */
@@ -168,16 +168,19 @@ export function useReactTableFront<T extends Record<string, unknown>>(
     manualSorting: false,
   });
 
-  // Notificar mudanças na seleção
+  // Notificar mudanças na seleção. `table` é estável entre renders: sem rowSelection nas deps,
+  // o efeito só rodava na montagem e quem usa nunca recebia a seleção nova.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rowSelection é o gatilho; a leitura vem de table
   useEffect(() => {
     if (onSelectionChange && enableRowSelection) {
       const selectedRows = table.getFilteredSelectedRowModel().rows.map((row) => row.original);
       onSelectionChange(selectedRows);
     }
-  }, [table, onSelectionChange, enableRowSelection]);
+  }, [table, onSelectionChange, enableRowSelection, rowSelection]);
 
-  // Calcular informações de paginação
-  const paginationInfo = useMemo(() => {
+  // Calcular informações de paginação. Sem useMemo: as deps antigas ([table, pagination]) não
+  // mudavam com a busca, e o rodapé ficava com o total de antes do filtro. A conta é barata.
+  const paginationInfo = (() => {
     const filteredCount = table.getFilteredRowModel().rows.length;
 
     // Se a paginação estiver desabilitada, retornar valores padrão
@@ -198,7 +201,7 @@ export function useReactTableFront<T extends Record<string, unknown>>(
       total: filteredCount,
       pageCount: table.getPageCount(),
     };
-  }, [table, pagination, enablePagination]);
+  })();
 
   return {
     table,
