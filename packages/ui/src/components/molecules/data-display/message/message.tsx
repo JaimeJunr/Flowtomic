@@ -506,9 +506,9 @@ const components: Options["components"] = {
     />
   ),
   strong: ({ node, children, className, ...props }) => (
-    <span className={cn("font-semibold", className)} {...(props as HTMLAttributes<HTMLElement>)}>
+    <strong className={cn("font-semibold", className)} {...(props as HTMLAttributes<HTMLElement>)}>
       {children}
-    </span>
+    </strong>
   ),
   a: ({ node, children, className, ...props }) => (
     <a

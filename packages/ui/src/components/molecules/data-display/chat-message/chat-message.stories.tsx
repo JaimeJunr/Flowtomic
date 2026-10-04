@@ -91,6 +91,17 @@ export const WithActions: Story = {
   },
 };
 
+/** Lista, tabela e código saem como nas respostas do assistente. */
+export const MarkdownCompleto: Story = {
+  args: {
+    message: {
+      ...sampleMessage,
+      content:
+        "O baú tem três coisas:\n\n- uma corda de **15 m**\n- duas tochas\n- um mapa rasgado\n\n| teste | dado | resultado |\n|---|---|---|\n| Percepção | d20 | 14 |\n| Furtividade | d20 | 9 |\n\nPara rolar de novo:\n\n```bash\n/roll 1d20+3\n```",
+    },
+  },
+};
+
 export const WithoutMarkdown: Story = {
   args: {
     message: sampleMessage,
