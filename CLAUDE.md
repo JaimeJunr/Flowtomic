@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 49 molecules, 31 organisms, 14 hooks, 2 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (63 atoms, 49 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -40,7 +40,7 @@ Estrutura básica:
 - **Atoms**: `docs/componentes/atoms.md` (63)
 - **Molecules**: `docs/componentes/molecules.md` (49)
 - **Organisms**: `docs/componentes/organisms.md` (31)
-- **Blocks**: `docs/componentes/blocks.md` (2)
+- **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
 
 ### Convenções de Arquivos
@@ -378,7 +378,7 @@ Resumo:
 - **Molecules**: 49 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
-- **Blocks**: 2 blocks - Ver `docs/componentes/blocks.md`
+- **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
 
 ## Registry
 
@@ -620,6 +620,11 @@ Cada uma já mordeu alguém neste repo.
   `pkill` do `run-flowtomic`: espere pelo PID (`while kill -0 $pid`), não pelo padrão.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
+- ⚠️ **PR empilhado (base em outra branch) não roda CI, nem depois de trocar a base.** Medido em
+  03/10/2026: o #42 tinha base `feat/chatbot-template` (sem checks); com o #41 mergeado e a base
+  trocada para `main` (`gh pr edit --base main`), continuou sem checks e ainda virou `CONFLICTING`.
+  Só depois de `git merge origin/main` + push na branch dele a CI rodou. E o repo **não permite
+  auto-merge**: mergear é à mão, depois de conferir a CI.
 - ⚠️ **Numa worktree, o `up.sh` pode devolver o Storybook de outro checkout.** Ele só olha se
   a 6006 responde (`"already":true`), não de qual pasta o processo veio — e a story nova da
   worktree não existe lá. Confira com `readlink /proc/$(lsof -ti:6006)/cwd`; se for outro
