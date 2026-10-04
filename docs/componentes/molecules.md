@@ -8,19 +8,19 @@ Componentes moleculares do Flowtomic. São combinações de atoms que formam com
 
 Grupo de botões para ações relacionadas.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `password-input`
 
 Input de senha com toggle de visibilidade acessível por Tab, Enter e Espaço. O botão troca entre “Mostrar senha” e “Ocultar senha” e permite ocultar mesmo com o campo focado. A visibilidade automática por foco termina ao sair para outro campo ou botão; a escolha manual de mostrar permanece. Para desabilitar sem alterar a API, coloque o componente dentro de `<fieldset disabled>`.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `image-dropzone`
 
 Área de upload de imagem por seletor ou drag and drop, com `value` controlado (File, URL ou null) e `onChange` recebendo File ou null. Valida o limite inclusivo de tamanho (5 MB por padrão) e `accept` por MIME, wildcard ou extensão, sem diferenciar maiúsculas nas extensões. Erros são anunciados com `role="alert"`; remover limpa a prévia, o erro de validação e o seletor, permitindo selecionar o mesmo arquivo novamente.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `widget-renderer`
 
@@ -32,19 +32,19 @@ Renderiza por `renderWidget(widget, data)` ou por um registry indexado pelo tipo
 
 Uma métrica no desenho da célula do `stats-grid`: rótulo, número em mono na cor do texto e variação colorida pelo sentido do que é bom (`positive: false` quando subir é ruim). `color` está obsoleto e é ignorado.
 
-**Dependências**: `flowtomic/logic`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `flowtomic/logic`, `lucide-react`, `cn`
 
 ### `data-table`
 
 Tabela com ordenação (pelo teclado também), busca e paginação. Régua de 1px, sem sombra e sem fundo no cabeçalho.
 
-**Dependências**: `@tanstack/react-table`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@tanstack/react-table`, `lucide-react`, `cn`
 
 ### `menu-dock`
 
 Dock de menu para navegação.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `theme-toggle-button`
 
@@ -66,25 +66,25 @@ export function ThemeButton() {
 }
 ```
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `auth-navigation-link`
 
 Link de navegação para páginas de autenticação.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `auth-form-error-message`
 
 Mensagem de erro para formulários de autenticação, com `role="alert"` (o leitor de tela anuncia ao aparecer). `animated` entra com um fade curto por CSS (`tw-animate-css`) e some para quem pede menos movimento.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `social-login-buttons`
 
 Botões de login social (Google, GitHub, etc.).
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `input-group`
 
@@ -93,13 +93,13 @@ Grupo de input com addons e botões integrados. Addon com `align="inline-start"`
 linha inteira, em cima ou embaixo, e o grupo vira coluna (é o layout do campo de mensagem:
 texto em cima, barra embaixo). Cada addon expõe `data-align`.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `numeric-filter-field`
 
 Campo de filtro numérico que combina um operador (`eq`, `gt`, `lt`, `gte`, `lte`) com um valor formatado. Suporta número puro, moeda (BRL) e percentual, com separadores pt-BR. O operador tem nome acessível (“Operador”, cada símbolo lido por extenso) e o valor usa o `placeholder` como nome, ou “Valor”; `error` liga `aria-invalid` nos dois.
 
-**Dependências**: `react-number-format`, `clsx`, `tailwind-merge`
+**Dependências**: `react-number-format`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/forms/numeric-filter-field`
 
@@ -107,7 +107,7 @@ Campo de filtro numérico que combina um operador (`eq`, `gt`, `lt`, `gte`, `lte
 
 Editor de texto com modo visual (TipTap), Markdown e prévia, em abas “Visual”, “Markdown” e “Prévia”. Botões da barra com nome acessível e `aria-pressed`; o seletor “Cor do texto” tem amostras nomeadas e “Remover cor”. As cores das amostras são valores fixos de propósito: são a cor que a pessoa escolhe para o próprio texto, não cor de interface.
 
-**Dependências**: `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-color`, `@tiptap/extension-image`, `@tiptap/extension-placeholder`, `@tiptap/extension-text-align`, `@tiptap/extension-text-style`, `tiptap-markdown`, `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-color`, `@tiptap/extension-image`, `@tiptap/extension-placeholder`, `@tiptap/extension-text-align`, `@tiptap/extension-text-style`, `tiptap-markdown`, `streamdown`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/forms/text-editor`
 
@@ -115,7 +115,7 @@ Editor de texto com modo visual (TipTap), Markdown e prévia, em abas “Visual�
 
 Editor inline de data e hora. Exibe o valor formatado e, ao ativar a edição, alterna para `date-input` + `time-input` com botões Salvar/Cancelar. O estado de edição é controlado pelo parent via `isEditing`/`onStartEdit`; o valor trafega em ISO-8601.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/molecules/forms/inline-datetime-editor`
 
@@ -136,7 +136,7 @@ Campo de autocomplete com busca e filtragem avançada. Usa hook headless `useAut
 
 - `@radix-ui/react-popover`
 - `flowtomic/logic` (hook `useAutocomplete`)
-- `lucide-react`, `clsx`, `tailwind-merge`
+- `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/forms/autocomplete`
 
@@ -150,7 +150,7 @@ Input com lista filtrável (busca + seleção única ou múltipla com chips). Pr
 
 - `@base-ui/react`
 - `button` e `input-group` (atoms/molecules da lib)
-- `lucide-react`, `clsx`, `tailwind-merge`
+- `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/forms/combobox`
 
@@ -160,7 +160,7 @@ Contêiner de resultado com cabeçalho, ações e conteúdo. Usa cantos de 10px,
 semântica e nenhuma sombra em repouso; o cabeçalho usa `bg-surface`. A ação de fechar
 tem nome acessível “Fechar”. As stories mostram o resultado dos testes do DataTable.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `message`
 
@@ -169,13 +169,13 @@ com cantos de 10px; a resposta do assistente fica sem bolha. A navegação usa �
 anterior”, “Próxima versão” e contador em mono (“2 de 3”). Anexos sem nome usam
 “Imagem” ou “Anexo”; a ação “Remover anexo” aparece no hover e no foco pelo teclado.
 
-**Dependências**: `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`, `ai`
+**Dependências**: `streamdown`, `lucide-react`, `cn`, `ai`
 
 ### `chat-message`
 
 Linha de log de chat com suporte a markdown: remetente na cor do texto, tipo como ponto de cor e rótulo (Narração, Ação, Fala por padrão; as chaves `STORY`, `ACTION` e `SAY` não mudam), horário em mono sem segundos e menu “Mais opções” que abre com clique e teclado. `badgeClassName` de um tipo pinta o ponto.
 
-**Dependências**: `react-markdown`, `lucide-react`, `@radix-ui/react-dropdown-menu`, `clsx`, `tailwind-merge`
+**Dependências**: `react-markdown`, `lucide-react`, `@radix-ui/react-dropdown-menu`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/chat-message`
 
@@ -192,7 +192,7 @@ Linha de log de chat com suporte a markdown: remetente na cor do texto, tipo com
 
 Caixa de mensagem de chat. Tipo de mensagem e modo são escolhas de rádio (não botões sólidos), então Enviar é o único sólido. Contador em mono com milhar pt-BR, que fica âmbar perto do limite, e atalhos curtos (`Ctrl+Enter` envia, `Esc` limpa).
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/forms/chat-input`
 
@@ -211,7 +211,7 @@ Caixa de mensagem de chat. Tipo de mensagem e modo são escolhas de rádio (não
 
 Modal para editar uma mensagem de chat. Metadados (remetente, tipo, horário em mono) numa lista de definição; aviso de alterações não salvas; Cancelar contornado e Salvar sólido.
 
-**Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/feedback/edit-chat-message-modal`
 
@@ -233,7 +233,7 @@ para o outro lado) e a cor (`variant`: `muted`, `tinted`, `outline`, `destructiv
 `BubbleGroup` junta mensagens seguidas. A resposta do assistente não usa balão.
 API inspirada no chatbot-template do shadcn (MIT), reescrita sobre Radix Slot.
 
-**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-slot`, `class-variance-authority`, `cn`
 
 ### `suggestion`
 
@@ -241,7 +241,7 @@ Lista de sugestões com rolagem horizontal. Por padrão, as ações são outline
 36px de altura e cantos de 8px, sem formato de pílula. `onClick` recebe o texto da
 sugestão; `variant`, `size` e conteúdo customizado continuam disponíveis.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `sources`
 
@@ -249,7 +249,7 @@ Lista de fontes colapsável com contador em pt-BR (“Usou 1 fonte” / “Usou 
 O trigger usa texto neutro de 13px; os caminhos das fontes aparecem em mono com
 ícone de link externo.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `tool`
 
@@ -259,7 +259,7 @@ Os estados são “Preparando”, “Executando”, “Aguardando aprovação”
 durante a execução. Sucesso, falha e aprovação usam seus tons semânticos; os demais
 estados usam `muted-foreground`. O contêiner tem cantos de 10px e nenhuma sombra.
 
-**Dependências**: `ai`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `ai`, `lucide-react`, `cn`
 
 ### `tool-status-line`
 
@@ -270,14 +270,14 @@ para depuração. `state` é `running` (spinner no lugar do ícone, rótulo com 
 sai em mono e aceita link; `meta` é um extra pequeno, como um código de erro. Usa o atom
 `shimmer` — instale os dois juntos pelo CLI.
 
-**Dependências**: `lucide-react`, `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `motion`, `cn`
 
 ### `task`
 
 Tarefa colapsável para mostrar as etapas de uma consulta. Os chips de arquivo usam
 mono. As stories acompanham a revisão de ordenação e busca do DataTable.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `checkpoint`
 
@@ -285,13 +285,13 @@ Ponto de restauração com régua dos dois lados e ação ghost com ícone Bookm
 As stories usam “Restaurar até aqui”. `CheckpointTrigger` inclui seu próprio
 `TooltipProvider` quando recebe `tooltip`; o consumidor não precisa adicionar um.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `confirmation`
 
 Pedido de aprovação de uma ação (“Permitir” / “Negar”), com os estados pedido, aceito e negado. `className` de `ConfirmationAction` soma com o padrão em vez de substituí-lo.
 
-**Dependências**: `ai`, `clsx`, `tailwind-merge`
+**Dependências**: `ai`, `cn`
 
 ### Animation
 
@@ -299,7 +299,7 @@ Pedido de aprovação de uma ação (“Permitir” / “Negar”), com os estad
 
 Modal com animação de entrada e saída sobre o Dialog do Radix: foco preso dentro, Esc fecha, o foco volta para o gatilho e a página não rola por baixo. Com movimento reduzido, só faz fade.
 
-**Dependências**: `motion`, `@radix-ui/react-dialog`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `@radix-ui/react-dialog`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/animation/animated-modal`
 
@@ -307,7 +307,7 @@ Modal com animação de entrada e saída sobre o Dialog do Radix: foco preso den
 
 Número com animação de deslizamento usando motion.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/animation/animated-sliding-number`
 
@@ -315,7 +315,7 @@ Número com animação de deslizamento usando motion.
 
 Contador com botões de incremento/decremento.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/animation/button-counter`
 
@@ -325,7 +325,7 @@ Contador com botões de incremento/decremento.
 
 Seletor de data única em popover, com botão gatilho formatado em pt-BR. Permite desabilitar datas por função ou por conjunto (`disabledDates`), além de estados de carregamento. Por padrão bloqueia datas futuras e fins de semana (`disableFuture` e `disableWeekends`).
 
-**Dependências**: `date-fns`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `date-fns`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/calendar-popover`
 
@@ -333,7 +333,7 @@ Seletor de data única em popover, com botão gatilho formatado em pt-BR. Permit
 
 Seletor de intervalo de datas em popover, com atalhos opcionais de intervalo rápido (`showQuickRanges`) e tooltip para datas desabilitadas. Aceita `Matcher` do `react-day-picker` para regras de bloqueio.
 
-**Dependências**: `date-fns`, `react-day-picker`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `date-fns`, `react-day-picker`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/calendar-range`
 
@@ -389,7 +389,7 @@ Timer com o hook headless useTimeTracker. Mostra o estado (Parado, Contando, Pau
 
 Gráfico de área (Recharts) com o seletor de período (7 dias, 30 dias, 3 meses) em botões sempre visíveis, inclusive no celular. Cores do tema (`--primary`, `--muted-foreground`), preenchimento chapado e datas em pt-BR sem o erro de fuso.
 
-**Dependências**: `recharts`, `clsx`, `tailwind-merge`
+**Dependências**: `recharts`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/chart-area-interactive`
 
@@ -397,7 +397,7 @@ Gráfico de área (Recharts) com o seletor de período (7 dias, 30 dias, 3 meses
 
 Gráfico de barras (Recharts) com um botão por série, que mostra o total em mono e marca a série ativa com `aria-pressed`. Cores do tema e datas em pt-BR.
 
-**Dependências**: `recharts`, `clsx`, `tailwind-merge`
+**Dependências**: `recharts`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/data-display/chart-bar-interactive`
 
@@ -405,7 +405,7 @@ Gráfico de barras (Recharts) com um botão por série, que mostra o total em mo
 
 Widget arrastável de painel. Parado, só a borda fina; a sombra aparece só enquanto arrasta. Os controles de edição têm nome acessível e aparecem também pelo teclado.
 
-**Dependências**: `@dnd-kit/core`, `@dnd-kit/utilities`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@dnd-kit/core`, `@dnd-kit/utilities`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/draggable-widget`
 
@@ -433,7 +433,7 @@ Menu lateral: nome do app, navegação principal e itens de conta, com item de 4
 
 Componente ConnectionLineComponent do @xyflow/react para renderizar linhas de conexão temporárias.
 
-**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+**Dependências**: `@xyflow/react`, `cn`
 
 ### `canvas`
 
@@ -447,7 +447,7 @@ Wrapper do ReactFlow do @xyflow/react para visualização de grafos.
 
 Texto com efeito shimmer animado para destacar conteúdo. Implementação especializada que usa o componente atômico Shimmer.
 
-**Dependências**: `motion`, `clsx`, `tailwind-merge`
+**Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/molecules/typography/animated-shiny-text`
 

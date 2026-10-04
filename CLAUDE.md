@@ -83,7 +83,7 @@ useMobile/
 
 ### Dependências
 
-- **UI**: Baseado em Radix UI (e Base UI `@base-ui/react`, em piloto desde o Combobox), Tailwind CSS v4.1.14, class-variance-authority, clsx, tailwind-merge
+- **UI**: Baseado em Radix UI (e Base UI `@base-ui/react`, em piloto desde o Combobox), Tailwind CSS v4.1.14, class-variance-authority, `cn` (pacote do shadcn que substitui clsx + tailwind-merge)
   - **React Aria**: `@react-aria/tooltip`, `@react-aria/interactions`, `@react-aria/overlays`, `@react-stately/tooltip` (para tooltip com seguimento do mouse)
   - **Animações**: `motion/react` (Framer Motion) para animações avançadas
 - **Logic**: Hooks headless sem dependências de UI (apenas React, zustand e dependências específicas como @tanstack/react-table, react-resizable-panels)
@@ -571,6 +571,11 @@ Cada uma já mordeu alguém neste repo.
   (`gray-900`), hex, `rgba()` e a escala crua do `theme.css` (`bg-brand-600`) quebram o
   `theme-tokens.test.ts`. A escala crua é traiçoeira: no Storybook `bg-brand-600` saía
   **transparente, sem erro** — o botão Enviar do `chat-input` era branco no branco.
+- ⚠️ **`cn("text-display-lg", "text-foreground")` apaga o tamanho.** O merge de classes não
+  conhece os tamanhos próprios do tema (`text-display-*`), acha que são cor e deixa só a última.
+  Vale para o `clsx`+`tailwind-merge` antigo e para o pacote `cn` (medido em 03/10/2026, os dois
+  dão o mesmo resultado). `shadow-xs shadow-skeumorphic` também não se fundem. Ao passar tamanho
+  `display` por `className`, não junte com cor de texto no mesmo `cn`.
 - ⚠️ **Token novo no `:root` precisa do `--color-*` no bloco `@theme inline` do `globals.css`**,
   senão a classe não gera CSS. Os `*-hover` ficaram assim até 26/09/2026
   (`hover:bg-success-hover` do Button não fazia nada).

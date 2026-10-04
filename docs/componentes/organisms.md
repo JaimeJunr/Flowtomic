@@ -8,37 +8,37 @@ Componentes organizacionais do Flowtomic. São componentes complexos que combina
 
 Layout completo de dashboard com sidebar e header.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `stats-grid`
 
 Grid de estatísticas para exibir múltiplos cards de estatística.
 
-**Dependências**: `clsx`, `tailwind-merge`
+**Dependências**: `cn`
 
 ### `monthly-summary`
 
 Resumo mensal com gráficos e estatísticas.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `dashboard-header-actions`
 
 Ações do header do dashboard (notificações, perfil, etc.).
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `dashboard-movements-section`
 
 Seção de movimentações do dashboard com tabela e filtros.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `resizable-layout`
 
 Componente redimensionável com sidebar que suporta persistência, snap automático e modo mobile.
 
-**Dependências**: `@flowtomic/logic`, `react-resizable-panels`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@flowtomic/logic`, `react-resizable-panels`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/organisms/resizable-layout`
 
@@ -51,13 +51,13 @@ pessoa está lá; se ela rolar para cima, para de seguir. `ConversationScrollBut
 mostra “Ir para o fim” só nesse caso, entrando e saindo com transição (sem transição
 com `prefers-reduced-motion`). Escondido, fica fora do leitor de tela e do Tab.
 
-**Dependências**: `use-stick-to-bottom`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `use-stick-to-bottom`, `lucide-react`, `cn`
 
 ### `chat-log`
 
 Container de mensagens de chat com scroll automático, suporte a filtros customizáveis, header com controles e empty state.
 
-**Dependências**: `use-stick-to-bottom`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `use-stick-to-bottom`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/organisms/chat-log`
 
@@ -77,67 +77,67 @@ Container de mensagens de chat com scroll automático, suporte a filtros customi
 
 Seletor de modelo com dialog e command palette.
 
-**Dependências**: `cmdk`, `clsx`, `tailwind-merge`
+**Dependências**: `cmdk`, `cn`
 
 ### `image`
 
 Display de imagem gerada com suporte a base64.
 
-**Dependências**: `ai`, `clsx`, `tailwind-merge`
+**Dependências**: `ai`, `cn`
 
 ### `open-in-chat`
 
 Dropdown para abrir conversas em diferentes plataformas (ChatGPT, Claude, etc.).
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `panel`
 
 Wrapper do Panel do @xyflow/react para posicionar elementos sobre o canvas.
 
-**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+**Dependências**: `@xyflow/react`, `cn`
 
 ### `toolbar`
 
 Wrapper do NodeToolbar do @xyflow/react para exibir ações em nodes.
 
-**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+**Dependências**: `@xyflow/react`, `cn`
 
 ### `controls`
 
 Wrapper do Controls do @xyflow/react para controles de zoom e pan.
 
-**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+**Dependências**: `@xyflow/react`, `cn`
 
 ### `queue`
 
 Componente de fila para exibir mensagens e tarefas com seções colapsáveis.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `reasoning`
 
 Componente para exibir raciocínio/thinking do modelo com suporte a streaming.
 
-**Dependências**: `@radix-ui/react-use-controllable-state`, `streamdown`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-use-controllable-state`, `streamdown`, `lucide-react`, `cn`
 
 ### `plan`
 
 Componente para exibir planos do modelo com suporte a streaming.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `web-preview`
 
 Componente para visualizar páginas web em iframe com console e navegação.
 
-**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `lucide-react`, `cn`
 
 ### `script-editor`
 
 Componente para editar e executar scripts com terminal interativo em tempo real.
 
-**Dependências**: `@flowtomic/logic`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@flowtomic/logic`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/organisms/script-editor`
 
@@ -155,13 +155,13 @@ Componente para editar e executar scripts com terminal interativo em tempo real.
 
 Componente para exibir cadeia de raciocínio com steps e status.
 
-**Dependências**: `@radix-ui/react-use-controllable-state`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `@radix-ui/react-use-controllable-state`, `lucide-react`, `cn`
 
 ### `context`
 
 Componente para exibir uso de contexto/tokens do modelo com cálculo de custos.
 
-**Dependências**: `tokenlens`, `ai`, `lucide-react`, `clsx`, `tailwind-merge`
+**Dependências**: `tokenlens`, `ai`, `lucide-react`, `cn`
 
 ### `prompt-input`
 
@@ -172,25 +172,25 @@ direita). Enter envia, Shift+Enter quebra a linha, e campo vazio sem anexo não 
 no mesmo lugar, como `type="button"` que chama `onStop` (sem `onStop`, fica
 desabilitado). O contêiner tem borda fina e anel de foco, sem sombra.
 
-**Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `clsx`, `tailwind-merge`
+**Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `cn`
 
 ### `node`
 
 Componente Node para ReactFlow baseado em Card com handles.
 
-**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+**Dependências**: `@xyflow/react`, `cn`
 
 ### `edge`
 
 Componentes Edge para ReactFlow (Temporary e Animated).
 
-**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+**Dependências**: `@xyflow/react`, `cn`
 
 ### `genealogy-canvas`
 
 Canvas de genealogia para visualização de hierarquias e relacionamentos.
 
-**Dependências**: `@xyflow/react`, `clsx`, `tailwind-merge`
+**Dependências**: `@xyflow/react`, `cn`
 
 **Localização**: `packages/ui/src/components/organisms/genealogy-canvas`
 
