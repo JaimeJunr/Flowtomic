@@ -8,6 +8,8 @@ import {
   ModelSelectorInput,
   ModelSelectorItem,
   ModelSelectorList,
+  ModelSelectorLogo,
+  ModelSelectorName,
   ModelSelectorTrigger,
 } from "./model-selector";
 
@@ -37,6 +39,39 @@ export const Default: Story = {
             <ModelSelectorItem>claude-sonnet-5</ModelSelectorItem>
             <ModelSelectorItem>claude-opus-5-5</ModelSelectorItem>
             <ModelSelectorItem>gpt-6</ModelSelectorItem>
+          </ModelSelectorGroup>
+        </ModelSelectorList>
+      </ModelSelectorContent>
+    </ModelSelector>
+  ),
+};
+
+/** Sem `src`, o logo é a inicial do provedor: nada é buscado fora do app. */
+export const ComLogos: Story = {
+  render: () => (
+    <ModelSelector defaultOpen>
+      <ModelSelectorTrigger asChild>
+        <Button>Selecionar modelo</Button>
+      </ModelSelectorTrigger>
+      <ModelSelectorContent>
+        <ModelSelectorInput placeholder="Buscar modelo..." />
+        <ModelSelectorList>
+          <ModelSelectorEmpty>Nenhum modelo encontrado.</ModelSelectorEmpty>
+          <ModelSelectorGroup heading="Anthropic">
+            <ModelSelectorItem>
+              <ModelSelectorLogo provider="anthropic" />
+              <ModelSelectorName>claude-sonnet-5</ModelSelectorName>
+            </ModelSelectorItem>
+            <ModelSelectorItem>
+              <ModelSelectorLogo provider="anthropic" />
+              <ModelSelectorName>claude-opus-5-5</ModelSelectorName>
+            </ModelSelectorItem>
+          </ModelSelectorGroup>
+          <ModelSelectorGroup heading="OpenAI">
+            <ModelSelectorItem>
+              <ModelSelectorLogo provider="openai" />
+              <ModelSelectorName>gpt-6</ModelSelectorName>
+            </ModelSelectorItem>
           </ModelSelectorGroup>
         </ModelSelectorList>
       </ModelSelectorContent>

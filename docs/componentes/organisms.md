@@ -77,6 +77,11 @@ Container de mensagens de chat com scroll automático, suporte a filtros customi
 
 Seletor de modelo com dialog e command palette.
 
+**Logo do provedor**: `ModelSelectorLogo` não busca imagem em site de fora. Sem `src`, mostra a
+inicial do provedor; para o logo de verdade, sirva o arquivo no app e passe
+`<ModelSelectorLogo provider="anthropic" src="/logos/anthropic.svg" />`. ⚠️ Até a 0.8 o logo vinha
+sozinho de `models.dev`.
+
 **Dependências**: `cmdk`, `cn`
 
 ### `image`
