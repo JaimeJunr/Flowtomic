@@ -194,13 +194,15 @@ export function useReactTableBack<T extends Record<string, unknown>>(
         : undefined,
   });
 
-  // Notificar mudanças na seleção
+  // Notificar mudanças na seleção. `table` é estável entre renders: sem rowSelection nas deps,
+  // o efeito só rodava na montagem e quem usa nunca recebia a seleção nova.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rowSelection é o gatilho; a leitura vem de table
   useEffect(() => {
     if (onSelectionChange && enableRowSelection) {
       const selectedRows = table.getFilteredSelectedRowModel().rows.map((row) => row.original);
       onSelectionChange(selectedRows);
     }
-  }, [table, onSelectionChange, enableRowSelection]);
+  }, [table, onSelectionChange, enableRowSelection, rowSelection]);
 
   // Calcular informações de paginação
   const paginationInfo = useMemo(() => {

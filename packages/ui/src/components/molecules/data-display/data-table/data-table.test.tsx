@@ -297,12 +297,19 @@ describe("DataTable, seleção de linhas", () => {
     }
   });
 
-  // Bug: onSelectionChange nunca recebe a seleção nova. O useEffect do hook depende só de
-  // [table, onSelectionChange, enableRowSelection] e `table` é estável, então o callback roda na montagem
-  // (com []) e não volta a rodar ao marcar linhas
-  // (packages/logic/src/hooks/useReactTableFront/useReactTableFront.ts:172-177, e o mesmo em
-  // useReactTableBack.ts).
-  it.todo("marcar uma linha chama onSelectionChange com as linhas selecionadas");
+  it("marcar uma linha chama onSelectionChange com as linhas selecionadas", async () => {
+    const onSelectionChange = vi.fn();
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        enableRowSelection
+        onSelectionChange={onSelectionChange}
+      />
+    );
+    await userEvent.click(screen.getAllByRole("checkbox", { name: "Selecionar linha" })[0]);
+    expect(onSelectionChange).toHaveBeenLastCalledWith([data[0]]);
+  });
 
   it("sem enableRowSelection, não há caixas de seleção", () => {
     render(<DataTable data={data} columns={columns} />);
@@ -404,10 +411,14 @@ describe("DataTable, paginação", () => {
     expect(bodyRows()).toHaveLength(9);
   });
 
-  // Bug: depois de buscar, o rodapé continua dizendo "Mostrando 1 a 10 de 25 itens" e "Página 1 de 3".
-  // O paginationInfo do hook é um useMemo com deps [table, pagination, enablePagination], que não mudam
-  // com o filtro (packages/logic/src/hooks/useReactTableFront/useReactTableFront.ts:196-216).
-  it.todo("a busca recalcula o total e a faixa mostrada no rodapé");
+  it("a busca recalcula o total e a faixa mostrada no rodapé", () => {
+    render(<DataTable data={muitos} columns={columns} />);
+    fireEvent.change(screen.getByRole("textbox", { name: "Buscar..." }), {
+      target: { value: "componente-0" },
+    });
+    expect(screen.getByText(/Mostrando 1 a 9 de 9 itens/)).toBeInTheDocument();
+    expect(screen.getByText("Página 1 de 1")).toBeInTheDocument();
+  });
 });
 
 describe("DataTable no servidor", () => {
