@@ -137,6 +137,20 @@ Campo de autocomplete com busca e filtragem avançada. Usa hook headless `useAut
 
 **Localização**: `packages/ui/src/components/molecules/forms/autocomplete`
 
+### `combobox`
+
+Input com lista filtrável (busca + seleção única ou múltipla com chips). Primeiro componente da lib em **Base UI** (piloto de migração a partir do Radix, 03/10/2026), portado do combobox do shadcn/ui.
+
+**Componentes exportados**: `Combobox`, `ComboboxInput` (`showTrigger`, `showClear`), `ComboboxContent`, `ComboboxList`, `ComboboxItem`, `ComboboxGroup`, `ComboboxLabel`, `ComboboxCollection`, `ComboboxEmpty`, `ComboboxSeparator`, `ComboboxChips`, `ComboboxChip`, `ComboboxChipsInput`, `ComboboxTrigger`, `ComboboxClear`, `ComboboxValue`, `useComboboxAnchor`
+
+**Dependências**:
+
+- `@base-ui/react`
+- `button` e `input-group` (atoms/molecules da lib)
+- `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/molecules/forms/combobox`
+
 ### `artifact`
 
 Contêiner de resultado com cabeçalho, ações e conteúdo. Usa cantos de 10px, borda

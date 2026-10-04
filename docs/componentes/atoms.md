@@ -68,6 +68,14 @@ Campo de seleção com suporte a grupos e busca.
 
 **Localização**: `packages/ui/src/components/atoms/forms/select`
 
+#### `native-select`
+
+Select nativo do navegador com visual alinhado ao `select`; inclui `NativeSelectOption` e `NativeSelectOptGroup`.
+
+**Dependências**: `lucide-react`, `clsx`, `tailwind-merge`
+
+**Localização**: `packages/ui/src/components/atoms/forms/native-select`
+
 #### `checkbox`
 
 Checkbox para seleção múltipla.

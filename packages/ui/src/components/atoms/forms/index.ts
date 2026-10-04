@@ -59,6 +59,8 @@ export type {
 export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "./input-otp";
 export type { LabelProps } from "./label";
 export { Label } from "./label";
+export type { NativeSelectProps } from "./native-select";
+export { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "./native-select";
 export type { RadioGroupItemProps, RadioGroupProps } from "./radio-group";
 export { RadioGroup, RadioGroupItem } from "./radio-group";
 export {
