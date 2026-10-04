@@ -186,7 +186,7 @@ export const Erro: Story = {
 };
 
 const resposta =
-  "Tem, desde a versão 0.8: o `DataTableToolbar` aceita `searchLabel`, que vira o nome acessível do campo.";
+  'Tem, desde a versão 0.8: o `DataTableToolbar` aceita `searchLabel`, que vira o nome acessível do campo.\n\nSem ele, o leitor de tela anuncia só “campo de edição”, e a pessoa não sabe o que a busca filtra. O `placeholder` não serve de nome: some quando ela começa a digitar.\n\n```tsx\n<DataTableToolbar\n  table={table}\n  searchColumn="nome"\n  searchLabel="Buscar por nome"\n/>\n```\n\nSe a tabela filtra mais de uma coluna, diga quais no rótulo: “Buscar por nome ou e-mail”.';
 
 function ChatbotDemo() {
   const [messages, setMessages] = useState<ChatbotMessage[]>([]);

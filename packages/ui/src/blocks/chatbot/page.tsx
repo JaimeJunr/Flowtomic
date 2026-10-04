@@ -25,6 +25,7 @@ import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
+  ConversationTurn,
 } from "@/components/organisms/conversation";
 import {
   PromptInput,
@@ -279,6 +280,21 @@ export default function Chatbot({
   const hasMessages = messages.length > 0;
   const responding = status === "submitted" || status === "streaming";
   const waitingFirstToken = status === "submitted" && messages.at(-1)?.role === "user";
+  // a última pergunta e o que veio depois dela formam o turno que sobe pro topo ao enviar
+  let turnStart = messages.length;
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === "user") {
+      turnStart = i;
+      break;
+    }
+  }
+  const renderMessage = (message: ChatbotMessage, i: number) => (
+    <ChatbotMessageView
+      key={message.id}
+      message={message}
+      finished={!(responding && i === messages.length - 1)}
+    />
+  );
 
   return (
     <div className={cn("flex h-svh min-h-0 flex-col bg-background text-foreground", className)}>
@@ -287,17 +303,18 @@ export default function Chatbot({
       {hasMessages ? (
         <Conversation className="min-h-0 flex-1">
           <ConversationContent className="mx-auto w-full max-w-[720px] gap-7 px-5 py-8">
-            {messages.map((message, i) => (
-              <ChatbotMessageView
-                key={message.id}
-                message={message}
-                finished={!(responding && i === messages.length - 1)}
-              />
-            ))}
-            {waitingFirstToken ? (
-              <Shimmer as="span" className="text-sm">
-                Pensando…
-              </Shimmer>
+            {messages.slice(0, turnStart).map(renderMessage)}
+            {turnStart < messages.length ? (
+              <ConversationTurn key={messages[turnStart].id} anchor>
+                {messages
+                  .slice(turnStart)
+                  .map((message, i) => renderMessage(message, turnStart + i))}
+                {waitingFirstToken ? (
+                  <Shimmer as="span" className="text-sm">
+                    Pensando…
+                  </Shimmer>
+                ) : null}
+              </ConversationTurn>
             ) : null}
           </ConversationContent>
           <ConversationScrollButton />

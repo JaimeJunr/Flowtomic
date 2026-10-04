@@ -54,12 +54,14 @@ export type {
   ConversationEmptyStateProps,
   ConversationProps,
   ConversationScrollButtonProps,
+  ConversationTurnProps,
 } from "./conversation";
 export {
   Conversation,
   ConversationContent,
   ConversationEmptyState,
   ConversationScrollButton,
+  ConversationTurn,
 } from "./conversation";
 export type { DashboardHeaderActionsProps } from "./dashboard-header-actions";
 export { DashboardHeaderActions } from "./dashboard-header-actions";

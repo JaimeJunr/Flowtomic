@@ -7,28 +7,37 @@
 import { ArrowDownIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import { cn } from "@/lib/utils";
 import { Button } from "../../atoms";
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
+// diz ao turno se ele surgiu depois da abertura (mensagem nova) ou veio com o histórico
+const ConversationOpenedContext = React.createContext<React.RefObject<boolean> | null>(null);
+
 export const Conversation = React.forwardRef<
   React.ElementRef<typeof StickToBottom>,
   ConversationProps
 >(({ className, children, ...props }, _ref) => {
   const { ref: _, ...stickToBottomProps } = props as { ref?: unknown; [key: string]: unknown };
+  const opened = useRef(false);
+  useEffect(() => {
+    opened.current = true;
+  }, []);
   return (
-    <StickToBottom
-      className={cn("relative flex-1 overflow-y-auto", className)}
-      initial="smooth"
-      resize="smooth"
-      role="log"
-      {...stickToBottomProps}
-    >
-      {children}
-    </StickToBottom>
+    <ConversationOpenedContext.Provider value={opened}>
+      <StickToBottom
+        className={cn("relative flex-1 overflow-y-auto", className)}
+        initial="smooth"
+        resize="smooth"
+        role="log"
+        {...stickToBottomProps}
+      >
+        {children}
+      </StickToBottom>
+    </ConversationOpenedContext.Provider>
   );
 });
 Conversation.displayName = "Conversation";
@@ -47,6 +56,62 @@ export const ConversationContent = React.forwardRef<
   );
 });
 ConversationContent.displayName = "ConversationContent";
+
+/** Folga entre o topo da área de rolagem e a mensagem ancorada. */
+const TURN_TOP_GAP_PX = 16;
+
+export type ConversationTurnProps = ComponentProps<"div"> & {
+  /**
+   * Turno mais recente (a mensagem da pessoa e a resposta que vem depois). Quando ele surge
+   * depois da abertura, sobe pro topo e a rolagem para de seguir a resposta; se ela passar da
+   * tela, o `ConversationScrollButton` aparece. Com o histórico aberto, nada muda.
+   */
+  anchor?: boolean;
+};
+
+export const ConversationTurn = ({
+  anchor = false,
+  className,
+  ...props
+}: ConversationTurnProps) => {
+  const turnRef = useRef<HTMLDivElement>(null);
+  const opened = useContext(ConversationOpenedContext);
+  const { scrollRef, contentRef, state, stopScroll } = useStickToBottomContext();
+
+  useLayoutEffect(() => {
+    const turn = turnRef.current;
+    const scroller = scrollRef.current;
+    if (!anchor || !opened?.current || !turn || !scroller) return;
+    const content = contentRef.current;
+    const paddingBottom = content ? Number.parseFloat(getComputedStyle(content).paddingBottom) : 0;
+    // sem esse espaço, um turno curto não tem como subir até o topo
+    turn.style.minHeight = `${Math.max(
+      scroller.clientHeight - TURN_TOP_GAP_PX - (paddingBottom || 0),
+      0
+    )}px`;
+    const top =
+      turn.getBoundingClientRect().top -
+      scroller.getBoundingClientRect().top +
+      scroller.scrollTop -
+      TURN_TOP_GAP_PX;
+    // solta a trava antes de mover: a lib ignora esse scroll e não volta a seguir o fim
+    stopScroll();
+    state.scrollTop = Math.max(top, 0);
+    return () => {
+      turn.style.minHeight = "";
+    };
+  }, [anchor, opened, scrollRef, contentRef, state, stopScroll]);
+
+  return (
+    <div
+      ref={turnRef}
+      data-slot="conversation-turn"
+      className={cn("flex flex-col gap-[inherit]", className)}
+      {...props}
+    />
+  );
+};
+ConversationTurn.displayName = "ConversationTurn";
 
 export type ConversationEmptyStateProps = ComponentProps<"div"> & {
   title?: string;

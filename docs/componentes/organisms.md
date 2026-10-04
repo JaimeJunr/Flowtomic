@@ -51,6 +51,11 @@ pessoa está lá; se ela rolar para cima, para de seguir. `ConversationScrollBut
 mostra “Ir para o fim” só nesse caso, entrando e saindo com transição (sem transição
 com `prefers-reduced-motion`). Escondido, fica fora do leitor de tela e do Tab.
 
+`ConversationTurn anchor` envolve a última pergunta e a resposta dela. Quando a pessoa
+envia, o turno sobe pro topo e a rolagem para de seguir a resposta; se ela passar da tela,
+o “Ir para o fim” aparece. Ao abrir uma conversa que já existe, nada muda (vai para o fim).
+Dê ao turno a `key` da pergunta, para cada envio montar um turno novo — ver o block `chatbot`.
+
 **Dependências**: `use-stick-to-bottom`, `lucide-react`, `cn`
 
 ### `chat-log`
