@@ -531,6 +531,10 @@ Cada uma já mordeu alguém neste repo.
   `bunx tsc --noEmit -p .` pode passar mesmo com story inválida (por exemplo, `Message`
   sem `args.from`). Ao alterar stories/testes, confira também esses arquivos com uma
   configuração temporária que estenda a do pacote e sobrescreva `include`/`exclude`.
+  Ela precisa também de `"rootDir": "../.."` (senão sai um `TS6059` por arquivo do `logic`),
+  `"composite": false` e `"types": ["vitest/globals", "@testing-library/jest-dom"]`. ⚠️ Medido
+  em 03/10/2026: **43 stories/testes já têm erro de tipo na `main`**. Compare a contagem por
+  arquivo antes e depois da sua mudança, em vez de esperar zero.
 - ⚠️ **`vi.restoreAllMocks()` no Vitest 2 pode resetar os `vi.fn` do setup global.**
   Nos testes de `message`, isso apagou a implementação do `ResizeObserver` entre casos
   e fez o tooltip falhar com `resizeObserver.observe is not a function`. Restaure só
@@ -569,6 +573,10 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **`--chart-1`…`--chart-5` não existem no tema.** O config padrão dos gráficos apontava
   pra eles e as séries saíam pretas, sem erro. Gráfico usa token semântico
   (`hsl(var(--primary))`, `hsl(var(--muted-foreground))`); os testes dos charts travam isso.
+- ⚠️ **`ResponsiveContainer` do Recharts nunca renderiza os filhos no jsdom**: ele espera medir
+  o layout, e o jsdom mede tudo como zero. Tooltip e legenda somem do teste sem erro. No arquivo
+  de teste, troque só ele por um repassador via `vi.mock("recharts", importOriginal)` (ver
+  `atoms/data-display/chart/chart.test.tsx`).
 - ⚠️ **Screenshot de gráfico Recharts sai pela metade com o browser pane escondido.** A
   animação para quando a aba não está visível. Para provar, use Playwright headless com uma
   espera de ~3 s antes do `screenshot`.
