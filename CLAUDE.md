@@ -600,6 +600,13 @@ Cada uma já mordeu alguém neste repo.
   passa `id`/`aria-*` ao filho; se o filho é Fragment, `div` ou `Select.Root`, o `<label for>`
   aponta para o nada e o leitor de tela lê um campo sem nome (checkbox, switch, slider e select
   do `form-layout` ficaram assim até 03/10/2026). Envolva o controle em si.
+- ⚠️ **Prop com nome de atributo nativo vira interseção impossível.** `ComponentProps<"iframe"> &
+  { loading?: ReactNode }` cruza com o `loading: "eager" | "lazy"` do iframe e não aceita nenhum
+  elemento; o mesmo aconteceu com o `captionLayout` do `Calendar`. Tire o nativo antes:
+  `Omit<ComponentProps<"iframe">, "loading">` (ou um Omit distributivo, se o tipo for união).
+- ⚠️ **Escrever `.value` direto num campo controlado não chega ao `onChange` do React**, mesmo
+  disparando `input` depois. Use o setter nativo (`Object.getOwnPropertyDescriptor(
+  HTMLTextAreaElement.prototype, "value").set.call(el, v)`) — ver o ditado do `prompt-input`.
 - ⚠️ **A área editável do TipTap não tem papel nem nome**: o `aria-label` passado ao `TextEditor`
   ia para o wrapper. O `TextEditor` agora põe `role="textbox"`, `aria-multiline` e o rótulo via
   `editorProps.attributes`. Em teste, a área monta depois do primeiro render: use `findByRole`.
