@@ -51,7 +51,8 @@ const defaultNumericValue: NumericFilterValue = {
   value: null,
 };
 
-// Símbolo na tela, nome por extenso para o leitor de tela
+// Símbolo na tela, nome por extenso para o leitor de tela (o Radix nomeia a opção pelo ItemText,
+// que vence qualquer aria-label no item)
 const OPERATORS: { value: NumericFilterOperator; symbol: string; name: string }[] = [
   { value: "eq", symbol: "=", name: "igual a" },
   { value: "gt", symbol: ">", name: "maior que" },
@@ -99,8 +100,11 @@ export function NumericFilterField({
           </SelectTrigger>
           <SelectContent>
             {OPERATORS.map((op) => (
-              <SelectItem key={op.value} value={op.value} aria-label={op.name}>
-                <span className="font-mono">{op.symbol}</span>
+              <SelectItem key={op.value} value={op.value}>
+                <span aria-hidden="true" className="font-mono">
+                  {op.symbol}
+                </span>
+                <span className="sr-only">{op.name}</span>
               </SelectItem>
             ))}
           </SelectContent>

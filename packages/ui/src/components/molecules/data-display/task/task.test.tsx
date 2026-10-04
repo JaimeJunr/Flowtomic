@@ -100,7 +100,22 @@ describe("Task: gatilho padrão e estado inicial", () => {
     expect(resultado.violations).toEqual([]);
   });
 
-  // BUG (task.tsx:58-63): o gatilho padrão é uma <div> sob CollapsibleTrigger asChild — sem role
-  // "button", sem tabindex: não recebe foco nem responde a Enter/Espaço, só a clique.
-  it.todo("o gatilho padrão (sem filhos) é um botão focável e abre/fecha pelo teclado");
+  it("o gatilho padrão (sem filhos) é um botão focável e abre/fecha pelo teclado", async () => {
+    const user = userEvent.setup();
+    render(
+      <Task>
+        <TaskTrigger title="Consultar" />
+        <TaskContent>
+          <TaskItem>Detalhe</TaskItem>
+        </TaskContent>
+      </Task>
+    );
+    const gatilho = screen.getByRole("button", { name: "Consultar" });
+    await user.tab();
+    expect(gatilho).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(screen.queryByText("Detalhe")).not.toBeInTheDocument();
+    await user.keyboard(" ");
+    expect(screen.getByText("Detalhe")).toBeVisible();
+  });
 });

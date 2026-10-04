@@ -48,6 +48,12 @@ export interface AutocompleteProps
   children?: React.ReactNode;
 }
 
+const triggerAriaReset = {
+  "aria-haspopup": undefined,
+  "aria-expanded": undefined,
+  "aria-controls": undefined,
+};
+
 function AutocompleteRoot({
   options = [],
   value: controlledValue,
@@ -107,9 +113,20 @@ function AutocompleteRoot({
     className: cn(inputVariants({ size }), "pr-8", inputClassName),
   });
 
+  const { extractItemsFromChildren } = hookReturn;
+  const composedItems = React.useMemo(
+    () => (useComposition ? extractItemsFromChildren(children) : undefined),
+    [useComposition, extractItemsFromChildren, children]
+  );
+
+  // No modo composição a lista pode não usar Autocomplete.List (dona do id do hook); então o
+  // input aponta para o próprio popover, que sempre existe quando aberto.
+  const popoverId = `${getListProps().id}-popover`;
+
   // Context value
   const contextValue: AutocompleteContextValue = {
     ...hookReturn,
+    composedItems,
     size,
     disabled,
     maxListboxHeight,
@@ -121,8 +138,14 @@ function AutocompleteRoot({
       <div data-slot="autocomplete" className={cn("relative w-full", className)}>
         <Popover>
           <PopoverTrigger asChild>
-            <div className="relative">
-              <input {...inputProps} ref={ref} />
+            {/* O gatilho é um <div> que só envolve o input (o combobox de verdade): os atributos
+                aria do Popover não valem num div sem papel (aria-allowed-attr), então saem. */}
+            <div className="relative" {...triggerAriaReset}>
+              <input
+                {...inputProps}
+                aria-controls={useComposition ? popoverId : inputProps["aria-controls"]}
+                ref={ref}
+              />
               <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
                 {selectedValue && !disabled && (
                   <button
@@ -153,6 +176,7 @@ function AutocompleteRoot({
           </PopoverTrigger>
           <PopoverContent
             {...getPopoverProps()}
+            id={useComposition ? popoverId : undefined}
             className={cn(
               "bg-popover text-popover-foreground",
               "data-[state=open]:animate-in data-[state=closed]:animate-out",

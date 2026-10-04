@@ -108,7 +108,8 @@ function DataTablePagination<TData>({
   className,
   paginationInfo,
 }: DataTablePaginationProps<TData>) {
-  const pagination = table.getState().pagination;
+  // Com enablePagination={false} o estado não tem `pagination`; só o footerContent é renderizado
+  const pagination = table.getState().pagination ?? { pageIndex: 0, pageSize: 0 };
   const pageSize = pagination.pageSize;
 
   // Usar paginationInfo se fornecido (server-side), senão calcular do table

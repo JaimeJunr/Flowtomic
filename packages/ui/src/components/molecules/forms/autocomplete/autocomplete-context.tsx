@@ -4,7 +4,7 @@
  * Fornece estado e helpers do hook useAutocomplete para subcomponentes
  */
 
-import type { UseAutocompleteReturn } from "@flowtomic/logic";
+import type { AutocompleteOption, UseAutocompleteReturn } from "@flowtomic/logic";
 import * as React from "react";
 
 export interface AutocompleteContextValue extends UseAutocompleteReturn {
@@ -12,6 +12,8 @@ export interface AutocompleteContextValue extends UseAutocompleteReturn {
   disabled?: boolean;
   maxListboxHeight?: string;
   emptyMessage?: string;
+  /** Itens extraídos dos children (modo composição), antes do filtro da busca */
+  composedItems?: AutocompleteOption[];
 }
 
 export const AutocompleteContext = React.createContext<AutocompleteContextValue | undefined>(

@@ -39,6 +39,11 @@ function AutocompleteItem({
   // Encontrar o item correspondente
   const item = context.filteredItems.find((i: AutocompleteOption) => i.value === value);
 
+  // Item que a busca descartou: sai da lista (só some se o hook o extraiu dos children)
+  if (!item && context.composedItems?.some((i: AutocompleteOption) => i.value === value)) {
+    return null;
+  }
+
   if (!item) {
     // Se não encontrou, criar um item temporário para composição
     const tempItem = {
