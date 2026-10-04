@@ -170,6 +170,11 @@ export type {
   ToolProps,
 } from "./data-display/tool";
 export { Tool, ToolContent, ToolHeader, ToolInput, ToolOutput } from "./data-display/tool";
+export type {
+  ToolStatusLineProps,
+  ToolStatusLineState,
+} from "./data-display/tool-status-line";
+export { ToolStatusLine } from "./data-display/tool-status-line";
 export type { DraggableWidgetProps } from "./draggable-widget";
 export { DraggableWidget } from "./draggable-widget";
 export type { EditModeToggleProps } from "./edit-mode-toggle";
