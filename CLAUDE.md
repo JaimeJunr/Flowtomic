@@ -447,19 +447,19 @@ Vitest, configurado **por pacote**. O CI (`.github/workflows/ci.yml`, desde 20/0
 todo PR e push na `main`: Biome no repo inteiro, build + teste do `logic`, type-check + teste com
 cobertura do `ui`, teste do `registry` e do `cli`, e o `registry:build`. Serial, um pacote por vez.
 
-⚠️ **Cobertura global do `ui` remedida em 03/10/2026, depois dos 5 lotes dos atoms: 82,5% de
-linhas, 83,4% de branches** (138 arquivos, 1173 testes; antes dos lotes, 70,4% / 78,9%). Por área
-(linhas / branches): **atoms 96,6% / 91,9%** (eram 58,8% de linhas), blocks 92,6% / 97,6%,
-molecules 85,3% / 83,4%, **organisms 59,4% / 62,3%** — a área mais fraca agora, e os únicos
-sem teste nenhum são `dashboard-layout` e `draggable-dashboard-grid`. O CI gera o relatório mas
-**não tem threshold**. O total já passa de 75%, mas travar o número continua pergunta em aberto
-(ver *Perguntas em aberto*). O próximo alvo é organisms; só então fixar o threshold no
+⚠️ **Cobertura global do `ui` remedida em 04/10/2026, depois dos 4 lotes dos organisms: 92,9% de
+linhas, 90,9% de branches** (149 arquivos, 1763 testes; em 03/10/2026 eram 82,5% / 83,4%, e antes
+dos lotes dos atoms, 70,4% / 78,9%). Por área (linhas / branches): organisms 98,9% / 95,1% (eram
+59,4%), atoms 96,7% / 92,2%, blocks 91,9% / 94,5%, **molecules 86,6% / 85,2%** — a área mais fraca
+agora. Os arquivos mais fracos são molecules: `autocomplete-item` (12,8%), `connection` (15%),
+`autocomplete-section`, `data-table-pagination`, `item`, `autocomplete-context`, `message`. O CI
+gera o relatório mas **não tem threshold** (ver *Perguntas em aberto*); o piso, quando decidido, vai no
 `vitest.config.ts`. Para remedir:
 `cd packages/ui && bunx vitest run --testTimeout=60000 --minWorkers=1 --maxWorkers=4 --coverage --coverage.reporter=text-summary`.
 
 | pacote | arquivos de teste | script | ambiente |
 |---|---|---|---|
-| `packages/ui` | 138 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
+| `packages/ui` | 149 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
 | `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
 | `registry` | 1 | `test` | guarda o parser do component map |
 | `cli` | 2 | `test` | guarda o component map contra o disco nos dois sentidos: todo `path` existe, e toda pasta de componente em `packages/ui/src/components` tem entrada — componente novo sem entrada no mapa quebra a CI |
@@ -681,7 +681,6 @@ Não promova nenhuma destas a fato no corpo sem verificar antes.
   transformar num wrapper que só dispara o workflow.
 - **O `bun@1.3.0` do `packageManager` está defasado?** A máquina de desenvolvimento roda
   1.3.14. Os dois aceitam o mesmo lock, mas a divergência existe.
-- **Quando travar o threshold de cobertura do `ui`?** O CI mede (82,5% de linhas e 83,4% de
-  branches em 03/10/2026) mas não bloqueia. O total já passou dos 75% da meta antiga, mas
-  organisms segue em 59,4%. Resolve: o dono decidir se trava já um piso global (ex.: 80/80) ou
-  espera organisms subir.
+- **Quando travar o threshold de cobertura do `ui`?** O CI mede (92,9% de linhas e 90,9% de
+  branches em 04/10/2026) mas não bloqueia. Todas as áreas passam de 85%. Resolve: o dono decidir
+  o piso (ex.: 90/88 global) e fixar no `vitest.config.ts`.
