@@ -234,7 +234,7 @@ export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorPro
               <div className="flex items-center gap-1.5">
                 <Type className="size-3.5" />
                 <span>
-                  {totalWords} palavras · {totalCharacters} caracteres
+                  {`${totalWords} palavra${totalWords !== 1 ? "s" : ""} · ${totalCharacters} caractere${totalCharacters !== 1 ? "s" : ""}`}
                 </span>
               </div>
             </div>
@@ -320,6 +320,7 @@ export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorPro
               <div className="min-h-[297mm] rounded-lg border bg-background p-6 md:p-16 shadow-sm">
                 <TextEditor
                   key={currentPage.id}
+                  aria-label={`Página ${safeActivePage + 1}`}
                   value={currentPage.content}
                   onChange={handlePageContentChange}
                   availableModes={["rich"]}
@@ -352,6 +353,7 @@ export const DocumentEditor = React.forwardRef<HTMLDivElement, DocumentEditorPro
                   <div className="min-h-[297mm] rounded-lg border bg-background p-16 shadow-sm">
                     <TextEditor
                       key={page.id}
+                      aria-label={`Página ${index + 1}`}
                       value={page.content}
                       onChange={(content: string) =>
                         handleSpecificPageContentChange(index, content)

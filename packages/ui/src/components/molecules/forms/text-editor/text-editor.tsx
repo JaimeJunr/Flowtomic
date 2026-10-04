@@ -186,6 +186,8 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
       onUploadImage,
       outputFormat = "markdown",
       availableModes = ["rich", "markdown"],
+      // Vai para a área de digitação, não para o wrapper: é ela que o leitor de tela anuncia
+      "aria-label": ariaLabel,
       ...props
     },
     ref
@@ -225,6 +227,14 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
 
     const editor = useEditor({
       editable,
+      // O contenteditable do ProseMirror não tem papel: sem isto o leitor de tela não sabe que é campo
+      editorProps: {
+        attributes: {
+          role: "textbox",
+          "aria-multiline": "true",
+          ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
+        },
+      },
       extensions: [
         Markdown.configure({ html: false, transformPastedText: true, transformCopiedText: true }),
         StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
@@ -491,6 +501,7 @@ export const TextEditor = React.forwardRef<HTMLDivElement, TextEditorProps>(
 
     const markdownEditor = (
       <Textarea
+        aria-label={ariaLabel}
         className="font-mono text-sm"
         rows={14}
         value={internalMarkdown}
