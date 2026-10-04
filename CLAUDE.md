@@ -447,19 +447,19 @@ Vitest, configurado **por pacote**. O CI (`.github/workflows/ci.yml`, desde 20/0
 todo PR e push na `main`: Biome no repo inteiro, build + teste do `logic`, type-check + teste com
 cobertura do `ui`, teste do `registry` e do `cli`, e o `registry:build`. Serial, um pacote por vez.
 
-⚠️ **Cobertura global do `ui` remedida em 04/10/2026, depois dos 4 lotes dos organisms: 92,9% de
-linhas, 90,9% de branches** (149 arquivos, 1763 testes; em 03/10/2026 eram 82,5% / 83,4%, e antes
-dos lotes dos atoms, 70,4% / 78,9%). Por área (linhas / branches): organisms 98,9% / 95,1% (eram
-59,4%), atoms 96,7% / 92,2%, blocks 91,9% / 94,5%, **molecules 86,6% / 85,2%** — a área mais fraca
-agora. Os arquivos mais fracos são molecules: `autocomplete-item` (12,8%), `connection` (15%),
-`autocomplete-section`, `data-table-pagination`, `item`, `autocomplete-context`, `message`. O CI
+⚠️ **Cobertura global do `ui` remedida em 04/10/2026, depois dos lotes das molecules: 96,9% de
+linhas, 94,4% de branches** (156 arquivos, 2171 testes; antes dos lotes das molecules, 92,9% /
+90,9%; em 03/10/2026, 82,5% / 83,4%; antes dos lotes dos atoms, 70,4% / 78,9%). Por área (linhas /
+branches): organisms 98,9% / 95,1%, molecules 97,1% / 95,3% (eram 86,6%), atoms 96,5% / 92,6%,
+blocks 92,0% / 94,1%. Os `.tsx` mais fracos: `inline-citation` (68,8%), `message` (72%),
+`scroll-area` (74,1%), `drawer` (78,7%). O CI
 gera o relatório mas **não tem threshold** (ver *Perguntas em aberto*); o piso, quando decidido, vai no
 `vitest.config.ts`. Para remedir:
 `cd packages/ui && bunx vitest run --testTimeout=60000 --minWorkers=1 --maxWorkers=4 --coverage --coverage.reporter=text-summary`.
 
 | pacote | arquivos de teste | script | ambiente |
 |---|---|---|---|
-| `packages/ui` | 149 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
+| `packages/ui` | 156 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
 | `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
 | `registry` | 1 | `test` | guarda o parser do component map |
 | `cli` | 2 | `test` | guarda o component map contra o disco nos dois sentidos: todo `path` existe, e toda pasta de componente em `packages/ui/src/components` tem entrada — componente novo sem entrada no mapa quebra a CI |
@@ -596,7 +596,9 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **`ResponsiveContainer` do Recharts nunca renderiza os filhos no jsdom**: ele espera medir
   o layout, e o jsdom mede tudo como zero. Tooltip e legenda somem do teste sem erro. No arquivo
   de teste, troque só ele por um repassador via `vi.mock("recharts", importOriginal)` (ver
-  `atoms/data-display/chart/chart.test.tsx`).
+  `atoms/data-display/chart/chart.test.tsx`). ⚠️ No recharts 3.7, nem assim saem rótulo de eixo,
+  tooltip e legenda: para conferir formatador, mocke também `XAxis`/`Tooltip`/`Legend` registrando
+  as props e chame o formatador direto (ver `molecules/data-display/chart-bar-interactive`).
 - ⚠️ **Screenshot de gráfico Recharts sai pela metade com o browser pane escondido.** A
   animação para quando a aba não está visível. Para provar, use Playwright headless com uma
   espera de ~3 s antes do `screenshot`.
@@ -686,6 +688,6 @@ Não promova nenhuma destas a fato no corpo sem verificar antes.
   transformar num wrapper que só dispara o workflow.
 - **O `bun@1.3.0` do `packageManager` está defasado?** A máquina de desenvolvimento roda
   1.3.14. Os dois aceitam o mesmo lock, mas a divergência existe.
-- **Quando travar o threshold de cobertura do `ui`?** O CI mede (92,9% de linhas e 90,9% de
-  branches em 04/10/2026) mas não bloqueia. Todas as áreas passam de 85%. Resolve: o dono decidir
+- **Quando travar o threshold de cobertura do `ui`?** O CI mede (96,9% de linhas e 94,4% de
+  branches em 04/10/2026) mas não bloqueia. Todas as áreas passam de 92%. Resolve: o dono decidir
   o piso (ex.: 90/88 global) e fixar no `vitest.config.ts`.
