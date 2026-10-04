@@ -77,6 +77,31 @@ describe("Chatbot", () => {
       expect(screen.getByText("Usou 2 fontes")).toBeInTheDocument();
     });
 
+    it("a última pergunta e a resposta dela ficam juntas no turno que sobe pro topo", () => {
+      const historico: ChatbotMessage[] = [
+        ...conversa,
+        { id: "3", role: "user", parts: [{ type: "text", text: "E o campo de busca?" }] },
+        { id: "4", role: "assistant", parts: [{ type: "text", text: "Falta o label." }] },
+      ];
+      render(<Chatbot messages={historico} />);
+      const turno = screen
+        .getByText("E o campo de busca?")
+        .closest("[data-slot=conversation-turn]");
+      expect(turno).not.toBeNull();
+      expect(turno).toContainElement(screen.getByText("Falta o label."));
+      expect(turno).not.toContainElement(
+        screen.getByText("Como faço o DataTable ordenar pelo teclado?")
+      );
+    });
+
+    it("o aviso de pensando fica no turno da pergunta que acabou de sair", () => {
+      render(<Chatbot messages={conversa.slice(0, 1)} status="submitted" />);
+      const turno = screen.getByText("Pensando…").closest("[data-slot=conversation-turn]");
+      expect(turno).toContainElement(
+        screen.getByText("Como faço o DataTable ordenar pelo teclado?")
+      );
+    });
+
     it("avisa que está pensando enquanto a resposta não começou", () => {
       render(<Chatbot messages={conversa.slice(0, 1)} status="submitted" />);
       expect(screen.getByText("Pensando…")).toBeInTheDocument();
