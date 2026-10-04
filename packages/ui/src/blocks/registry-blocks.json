@@ -50,6 +50,34 @@
         }
       ],
       "categories": ["developer", "admin", "tools"]
+    },
+    {
+      "name": "chatbot",
+      "author": "flowtomic (https://flowtomic.dev)",
+      "title": "Chatbot",
+      "description": "Conversa com assistente: estado vazio com sugestões, resposta sem balão, uma linha por ferramenta, fontes no fim, pergunta do assistente e campo com Enviar/Parar. Liga no useChat ou no que o app usar.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "button",
+        "shimmer",
+        "bubble",
+        "message",
+        "sources",
+        "suggestion",
+        "tool-status-line",
+        "conversation",
+        "prompt-input",
+        "questionnaire"
+      ],
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "blocks/chatbot/page.tsx",
+          "type": "registry:page",
+          "target": "app/chat/page.tsx"
+        }
+      ],
+      "categories": ["application", "ai"]
     }
   ]
 }

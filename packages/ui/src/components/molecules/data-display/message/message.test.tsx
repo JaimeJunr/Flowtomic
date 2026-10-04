@@ -160,4 +160,15 @@ describe("Message", () => {
     expect(writeText).toHaveBeenCalledTimes(1);
     expect(error).not.toHaveBeenCalled();
   });
+
+  it("lê a linguagem do bloco de código em vez de chutar javascript", () => {
+    render(<MessageResponse>{"```tsx\nconst a = <b />;\n```"}</MessageResponse>);
+    expect(screen.getByText("tsx")).toHaveAttribute("data-slot", "code-block-language");
+  });
+
+  it("linguagem desconhecida vira text e o código continua visível", () => {
+    render(<MessageResponse>{"```linguagem-inventada\nfaz algo\n```"}</MessageResponse>);
+    expect(screen.getByText("text")).toHaveAttribute("data-slot", "code-block-language");
+    expect(screen.getByText("faz algo")).toBeInTheDocument();
+  });
 });
