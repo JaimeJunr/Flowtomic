@@ -50,3 +50,31 @@ export const WithOnClick: Story = {
   name: "Selecionar uma pergunta",
   render: () => <SuggestionsExample />,
 };
+
+const pedidos = [
+  { rotulo: "Ordenar tabela pelo teclado", pedido: "Como faço o DataTable ordenar pelo teclado?" },
+  {
+    rotulo: "Trocar a cor da marca",
+    pedido: "Quais tokens do theme.css eu mudo para trocar a cor da marca?",
+  },
+  {
+    rotulo: "Montar um block de login",
+    pedido: "Monte um block de login com os componentes que já existem",
+  },
+  { rotulo: "O que falta testar", pedido: "Quais componentes ainda não têm teste?" },
+];
+
+export const EstadoVazio: Story = {
+  name: "Estado vazio (quebra linha)",
+  render: () => (
+    <div className="w-[560px] max-w-[calc(100vw-2rem)]">
+      <Suggestions layout="wrap">
+        {pedidos.map(({ rotulo, pedido }) => (
+          <Suggestion key={rotulo} suggestion={pedido}>
+            {rotulo}
+          </Suggestion>
+        ))}
+      </Suggestions>
+    </div>
+  ),
+};

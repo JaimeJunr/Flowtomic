@@ -4,4 +4,11 @@ export type {
   SourcesProps,
   SourcesTriggerProps,
 } from "./sources";
-export { Source, Sources, SourcesContent, SourcesTrigger } from "./sources";
+export {
+  isSafeSourceUrl,
+  Source,
+  Sources,
+  SourcesContent,
+  SourcesTrigger,
+  uniqueSources,
+} from "./sources";

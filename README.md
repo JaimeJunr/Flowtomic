@@ -14,9 +14,9 @@ O **Flowtomic** é um sistema de design que oferece componentes UI prontos para 
 
 - **63 atoms** - componentes básicos reutilizáveis
 - **49 molecules** - componentes compostos
-- **30 organisms** - componentes complexos
+- **31 organisms** - componentes complexos
 - **14 hooks headless** - lógica reutilizável sem UI
-- **3 blocks** - templates pré-construídos (`dashboard-01`, `flowtomic-dashboard`, `developer-panel`)
+- **4 blocks** - templates pré-construídos (`dashboard-01`, `flowtomic-dashboard`, `developer-panel`, `chatbot`)
 - **Arquitetura separada**: UI e lógica em packages distintos
 - **Componentes copiados via CLI**: dá pra editar o código depois de instalar
 - **TypeScript**: tipagem completa
@@ -547,7 +547,7 @@ function ResponsiveComponent() {
 
 - `animated-shiny-text` - Texto com efeito shimmer animado
 
-### Organisms (30)
+### Organisms (31)
 
 - `chain-of-thought` - Cadeia de raciocínio
 - `context` - Uso de contexto/tokens do modelo
@@ -566,6 +566,7 @@ function ResponsiveComponent() {
 - `panel` - Panel do @xyflow/react
 - `plan` - Exibição de planos do modelo
 - `prompt-input` - Input de prompt complexo
+- `questionnaire` - Pergunta do assistente com opções numeradas e resposta livre
 - `queue` - Fila de mensagens e tarefas
 - `reasoning` - Exibição de raciocínio do modelo
 - `resizable-layout` - Componente redimensionável com sidebar
@@ -589,11 +590,12 @@ function ResponsiveComponent() {
 - `use-theme-transition` - Hook para transições de tema com View Transitions API
 - `use-time-tracker` - Hook para gerenciar timer (start, pause, stop, resume, format)
 
-### Blocks (3)
+### Blocks (4)
 
 - `dashboard-01` - Dashboard simples com cards
 - `flowtomic-dashboard` - Dashboard completo com sidebar, header, estatísticas, gráficos, listas e timer
 - `developer-panel` - Painel de desenvolvedor com informações do sistema, ambiente, ferramentas de desenvolvimento e editor de scripts integrado
+- `chatbot` - Conversa com assistente: sugestões, ferramentas em uma linha, fontes, pergunta do assistente e Enviar/Parar
 
 ## Desenvolvimento
 
@@ -809,9 +811,9 @@ function CustomStatCard() {
 - [Componentes Disponíveis](./docs/componentes/README.md) - Lista completa de componentes
 - [Atoms](./docs/componentes/atoms.md) - Componentes básicos (63 componentes)
 - [Molecules](./docs/componentes/molecules.md) - Componentes compostos (49 componentes)
-- [Organisms](./docs/componentes/organisms.md) - Componentes complexos (30 componentes)
+- [Organisms](./docs/componentes/organisms.md) - Componentes complexos (31 componentes)
 - [Hooks](./docs/componentes/hooks.md) - Hooks headless (14 hooks)
-- [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (3 blocks)
+- [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (4 blocks)
 
 ### Documentação Técnica
 

@@ -9,12 +9,20 @@ import * as _hardenReactMarkdown from "harden-react-markdown";
 import { ChevronLeftIcon, ChevronRightIcon, PaperclipIcon, XIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react";
 import * as React from "react";
-import { createContext, isValidElement, memo, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  isValidElement,
+  memo,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import ReactMarkdown, { type Options } from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import type { BundledLanguage } from "shiki";
+import { type BundledLanguage, bundledLanguages } from "shiki";
 import {
   Button,
   Tooltip,
@@ -22,7 +30,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/atoms";
-import { CodeBlock, CodeBlockCopyButton } from "@/components/atoms/code/code-block";
+import {
+  CodeBlock,
+  CodeBlockCopyButton,
+  type CodeBlockLanguage,
+} from "@/components/atoms/code/code-block";
 import { ButtonGroup, ButtonGroupText } from "@/components/molecules/forms/button-group";
 import { cn } from "@/lib/utils";
 import "katex/dist/katex.min.css";
@@ -450,6 +462,21 @@ const HardenedMarkdown: MarkdownComponentType = (
   typeof _hardenFn === "function" ? _hardenFn(ReactMarkdown) : ReactMarkdown
 ) as MarkdownComponentType;
 
+// A linguagem do bloco ("```tsx") vem no className do <code> filho, não no <pre>:
+// react-markdown passa string no elemento e array no nó hast. Linguagem que o shiki
+// não conhece vira "text" (texto puro), em vez de quebrar o realce.
+function resolveCodeLanguage(children: ReactNode, node: unknown): CodeBlockLanguage {
+  const fromElement = isValidElement(children)
+    ? (children.props as { className?: unknown }).className
+    : undefined;
+  const fromNode = (
+    node as { children?: Array<{ properties?: { className?: unknown } }> } | undefined
+  )?.children?.[0]?.properties?.className;
+  const classes = [fromElement, fromNode].flat().filter((c): c is string => typeof c === "string");
+  const lang = classes.join(" ").match(/language-([\w+#-]+)/)?.[1];
+  return lang && lang in bundledLanguages ? (lang as BundledLanguage) : "text";
+}
+
 const components: Options["components"] = {
   ol: ({ node, children, className, ...props }) => (
     <ol
@@ -609,12 +636,7 @@ const components: Options["components"] = {
     );
   },
   pre: ({ node, className, children }) => {
-    let language: BundledLanguage = "javascript";
-    if (typeof node?.properties?.className === "string") {
-      const lang = node.properties.className.replace("language-", "");
-      // Validate that it's a valid BundledLanguage, fallback to javascript
-      language = (lang as BundledLanguage) || "javascript";
-    }
+    const language = resolveCodeLanguage(children, node);
     // Extract code content from children safely
     let code = "";
     if (

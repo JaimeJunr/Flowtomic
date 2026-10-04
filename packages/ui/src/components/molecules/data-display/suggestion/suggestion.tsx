@@ -9,15 +9,35 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button, ScrollArea, ScrollBar } from "../../../atoms";
 
-export type SuggestionsProps = ComponentProps<typeof ScrollArea>;
+export type SuggestionsProps = ComponentProps<typeof ScrollArea> & {
+  /**
+   * `scroll` (padrão): faixa de uma linha que rola de lado, acima do campo de mensagem.
+   * `wrap`: quebra linha e centraliza, para o estado vazio da conversa.
+   */
+  layout?: "scroll" | "wrap";
+};
 
 export const Suggestions = React.forwardRef<React.ElementRef<typeof ScrollArea>, SuggestionsProps>(
-  ({ className, children, ...props }, ref) => (
-    <ScrollArea ref={ref} className="w-full overflow-x-auto whitespace-nowrap" {...props}>
-      <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>{children}</div>
-      <ScrollBar className="hidden" orientation="horizontal" />
-    </ScrollArea>
-  )
+  ({ className, children, layout = "scroll", ...props }, ref) => {
+    if (layout === "wrap") {
+      return (
+        <div
+          ref={ref}
+          className={cn("flex flex-wrap items-center justify-center gap-2", className)}
+          {...props}
+        >
+          {children}
+        </div>
+      );
+    }
+    return (
+      <ScrollArea ref={ref} className="w-full overflow-x-auto whitespace-nowrap" {...props}>
+        <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>{children}</div>
+        {/* barra visível: sem ela, quem usa mouse não descobre as sugestões escondidas */}
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    );
+  }
 );
 Suggestions.displayName = "Suggestions";
 

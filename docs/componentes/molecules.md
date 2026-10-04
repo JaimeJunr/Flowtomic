@@ -237,9 +237,11 @@ API inspirada no chatbot-template do shadcn (MIT), reescrita sobre Radix Slot.
 
 ### `suggestion`
 
-Lista de sugestões com rolagem horizontal. Por padrão, as ações são outline, têm
-36px de altura e cantos de 8px, sem formato de pílula. `onClick` recebe o texto da
-sugestão; `variant`, `size` e conteúdo customizado continuam disponíveis.
+Lista de sugestões. Por padrão (`layout="scroll"`) é uma faixa de uma linha que rola de
+lado, com a barra visível; `layout="wrap"` quebra linha e centraliza, para o estado vazio
+da conversa. As ações são outline, têm 36px de altura e cantos de 8px, sem formato de
+pílula. `onClick` recebe `suggestion` (o pedido completo); `children` vira o rótulo curto
+do botão. `variant` e `size` continuam disponíveis.
 
 **Dependências**: `cn`
 
@@ -248,6 +250,10 @@ sugestão; `variant`, `size` e conteúdo customizado continuam disponíveis.
 Lista de fontes colapsável com contador em pt-BR (“Usou 1 fonte” / “Usou 2 fontes”).
 O trigger usa texto neutro de 13px; os caminhos das fontes aparecem em mono com
 ícone de link externo.
+
+`Source` só vira link quando o endereço é http(s) ou relativo (`isSafeSourceUrl`);
+`javascript:`, `data:` e afins aparecem como texto, sem link. O link abre em nova aba com
+`rel="noopener noreferrer"`. `uniqueSources` tira fontes repetidas pela `url`.
 
 **Dependências**: `lucide-react`, `cn`
 
