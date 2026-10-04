@@ -272,7 +272,8 @@ function generateNodes(
       data: {
         person: entity,
         hierarchy: entityHierarchy,
-        isExpanded: expansionState[entity.id] ?? false,
+        // Mesmo default das edges (generateEdges): sem estado, o nó está expandido
+        isExpanded: expansionState[entity.id] ?? true,
       },
     });
   });
@@ -499,19 +500,14 @@ export function useGenealogy({
   // Função para expandir/colapsar um nó
   const expandNode = useCallback(
     (nodeId: string, expanded?: boolean) => {
-      setExpansionState((prev) => {
-        const newState = { ...prev };
-        const isCurrentlyExpanded = prev[nodeId] ?? false;
-        newState[nodeId] = expanded ?? !isCurrentlyExpanded;
-
-        if (onNodeExpand) {
-          onNodeExpand(nodeId, newState[nodeId]);
-        }
-
-        return newState;
-      });
+      // O default `?? true` é o mesmo das edges: com `?? false`, o primeiro clique num nó fora do
+      // initialExpanded "expandia" o que já aparecia na tela. O callback fica fora do updater do
+      // setState, que o StrictMode chama duas vezes.
+      const next = expanded ?? !(expansionState[nodeId] ?? true);
+      setExpansionState((prev) => ({ ...prev, [nodeId]: next }));
+      onNodeExpand?.(nodeId, next);
     },
-    [onNodeExpand]
+    [expansionState, onNodeExpand]
   );
 
   // Função para colapsar um nó

@@ -18,6 +18,7 @@ import {
   useInternalNode,
   useNodesState,
 } from "@xyflow/react";
+import { ChevronDownIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { useEffect, useMemo } from "react";
 import { Canvas } from "@/components/molecules/flow/canvas";
@@ -46,6 +47,8 @@ interface GenealogyNodeData {
     siblings: Array<{ id: string; name: string }>;
   };
   isExpanded?: boolean;
+  /** Alterna as ligações do nó com pais e filhos (o mesmo que expandNode do useGenealogy) */
+  onToggleExpand?: () => void;
 }
 
 // yyyy-mm-dd (com ou sem horário/timezone atrás, ex. "1950-01-01T00:00:00Z")
@@ -84,8 +87,9 @@ function formatPersonDate(value: string): string {
  * Componente de nó customizado para genealogia
  */
 function GenealogyNode({ data }: { data: GenealogyNodeData }) {
-  const { person } = data;
+  const { person, hierarchy, isExpanded = true, onToggleExpand } = data;
   const imageUrl = person.image || person.photo;
+  const hasLinks = Boolean(hierarchy?.parents.length || hierarchy?.children.length);
 
   // Usar Node com handles em cima e embaixo para conexões verticais
   return (
@@ -111,7 +115,25 @@ function GenealogyNode({ data }: { data: GenealogyNodeData }) {
         </div>
       )}
 
-      <NodeHeader>
+      <NodeHeader className="relative">
+        {hasLinks && onToggleExpand && (
+          <button
+            type="button"
+            aria-expanded={isExpanded}
+            aria-label={`${isExpanded ? "Recolher" : "Expandir"} ligações de ${person.name}`}
+            // nodrag: o React Flow não começa arrasto; stopPropagation: não seleciona o nó
+            className="nodrag absolute top-2 right-2 inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            onClick={(event) => {
+              event.stopPropagation();
+              onToggleExpand();
+            }}
+          >
+            <ChevronDownIcon
+              aria-hidden="true"
+              className={cn("size-4 transition-transform", !isExpanded && "-rotate-90")}
+            />
+          </button>
+        )}
         <NodeTitle>{person.name}</NodeTitle>
         {person.type && (
           <NodeDescription className="text-xs capitalize">{person.type}</NodeDescription>
@@ -287,7 +309,22 @@ export const GenealogyCanvas = ({
   };
 
   // Usar hook de genealogia
-  const { nodes: genealogyNodes, edges: genealogyEdges, selectNode } = useGenealogy(hookOptions);
+  const {
+    nodes: hookNodes,
+    edges: genealogyEdges,
+    selectNode,
+    expandNode,
+  } = useGenealogy(hookOptions);
+
+  // O botão do nó precisa do expandNode; vai nos dados para valer também no renderNode
+  const genealogyNodes = useMemo(
+    () =>
+      hookNodes.map((node: ReactFlowNode) => ({
+        ...node,
+        data: { ...node.data, onToggleExpand: () => expandNode(node.id) },
+      })),
+    [hookNodes, expandNode]
+  );
 
   // Gerenciar estado dos nodes e edges do ReactFlow
   const [nodes, setNodes, onNodesChange] = useNodesState(
