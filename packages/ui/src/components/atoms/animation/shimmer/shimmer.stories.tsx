@@ -17,6 +17,19 @@ const meta = {
       control: "number",
       description: "Spread multiplier for the shimmer effect",
     },
+    direction: {
+      control: "inline-radio",
+      options: ["start", "end"],
+      description: "Lado de onde o brilho parte",
+    },
+    repeatDelayMs: {
+      control: "number",
+      description: "Pausa entre passadas do brilho, em ms",
+    },
+    pauseOnHover: {
+      control: "boolean",
+      description: "Congela o brilho enquanto o ponteiro está sobre o texto",
+    },
   },
 } satisfies Meta<typeof Shimmer>;
 
@@ -47,6 +60,27 @@ export const CustomDuration: Story = {
   args: {
     children: "Slow Shimmer",
     duration: 4,
+  },
+};
+
+export const FromEnd: Story = {
+  args: {
+    children: "Conciliando posições da carteira",
+    direction: "end",
+  },
+};
+
+export const WithRepeatDelay: Story = {
+  args: {
+    children: "Aguardando confirmação do administrador",
+    repeatDelayMs: 1500,
+  },
+};
+
+export const PauseOnHover: Story = {
+  args: {
+    children: "Passe o mouse para pausar o brilho",
+    pauseOnHover: true,
   },
 };
 

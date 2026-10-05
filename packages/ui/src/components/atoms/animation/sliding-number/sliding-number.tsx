@@ -22,6 +22,11 @@ import useMeasure from "react-use-measure";
 import { useShouldReduceMotion } from "@/lib/use-should-reduce-motion";
 import { cn } from "@/lib/utils";
 
+export function groupThousands(intDigits: string, separator: string): string {
+  if (!separator) return intDigits;
+  return intDigits.replace(/\B(?=(\d{3})+$)/g, separator);
+}
+
 type SlidingNumberRollerProps = {
   prevValue: number;
   value: number;
@@ -115,6 +120,8 @@ export interface SlidingNumberProps extends React.ComponentProps<"span"> {
   padStart?: boolean;
   decimalSeparator?: string;
   decimalPlaces?: number;
+  /** Separador de milhar, ex.: "." para 1.234.567. Vazio = sem agrupamento. */
+  thousandsSeparator?: string;
   transition?: SpringOptions;
 }
 
@@ -128,6 +135,7 @@ function SlidingNumber({
   padStart = false,
   decimalSeparator = ".",
   decimalPlaces = 0,
+  thousandsSeparator = "",
   transition = {
     stiffness: 200,
     damping: 20,
@@ -202,7 +210,7 @@ function SlidingNumber({
 
   const newDecValue = newDecStrRaw ? parseInt(newDecStrRaw, 10) : 0;
   const prevDecValue = adjustedPrevDec ? parseInt(adjustedPrevDec, 10) : 0;
-  const formattedNumber = `${isInView && Number(number) < 0 ? "-" : ""}${newIntStr}${newDecStrRaw ? decimalSeparator + newDecStrRaw : ""}`;
+  const formattedNumber = `${isInView && Number(number) < 0 ? "-" : ""}${groupThousands(newIntStr ?? "", thousandsSeparator)}${newDecStrRaw ? decimalSeparator + newDecStrRaw : ""}`;
 
   return (
     <span
@@ -224,14 +232,23 @@ function SlidingNumber({
             </span>
           )}
 
-          {intPlaces.map((place) => (
-            <SlidingNumberRoller
-              key={`int-${place}`}
-              prevValue={parseInt(adjustedPrevInt, 10)}
-              value={parseInt(newIntStr ?? "0", 10)}
-              place={place}
-              transition={transition}
-            />
+          {intPlaces.map((place, index) => (
+            <React.Fragment key={`int-${place}`}>
+              {thousandsSeparator && index > 0 && (intDigitCount - index) % 3 === 0 && (
+                <span
+                  data-slot="sliding-number-separator"
+                  style={{ color: "var(--animated-number-color, inherit)" }}
+                >
+                  {thousandsSeparator}
+                </span>
+              )}
+              <SlidingNumberRoller
+                prevValue={parseInt(adjustedPrevInt, 10)}
+                value={parseInt(newIntStr ?? "0", 10)}
+                place={place}
+                transition={transition}
+              />
+            </React.Fragment>
           ))}
 
           {newDecStrRaw && (

@@ -22,6 +22,10 @@ const meta = {
     decimalPlaces: {
       control: "number",
     },
+    thousandsSeparator: {
+      control: "text",
+      description: 'Separador de milhar, ex.: "." para 1.234.567',
+    },
   },
 } satisfies Meta<typeof SlidingNumber>;
 
@@ -65,6 +69,24 @@ export const WithDecimals: Story = {
   args: {
     number: 123.45,
     decimalPlaces: 2,
+  },
+};
+
+export const ThousandsSeparator: Story = {
+  args: {
+    number: 1284350,
+    thousandsSeparator: ".",
+    className: "text-4xl font-bold",
+  },
+};
+
+export const CurrencyStyle: Story = {
+  args: {
+    number: 1284350.75,
+    decimalPlaces: 2,
+    decimalSeparator: ",",
+    thousandsSeparator: ".",
+    className: "text-4xl font-bold",
   },
 };
 

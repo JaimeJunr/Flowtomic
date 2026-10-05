@@ -461,6 +461,38 @@ Texto que entra palavra a palavra (ou letra a letra) ao aparecer na tela, saindo
 
 **Localização**: `packages/ui/src/components/atoms/typography/blur-text`
 
+#### `count-up`
+
+Número que conta de um valor a outro ao entrar na tela, desacelerando no fim; formata com Intl.NumberFormat (pt-BR por padrão) e conta para baixo quando `from > to`. Respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/count-up`
+
+#### `gradient-text`
+
+Texto preenchido por um degradê que desliza sem parar, com moldura arredondada opcional e pausa no hover. O padrão usa só tokens do tema; o contraste das cores passadas é de quem usa. Respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/gradient-text`
+
+#### `rotating-text`
+
+Palavra que se troca sozinha dentro de uma frase fixa, com os caracteres subindo e descendo. Pausa fora da tela, com a aba escondida e no hover ou foco; aceita índice controlado. Respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/rotating-text`
+
+#### `circular-text`
+
+Texto curto disposto em círculo, girando como um selo, com conteúdo fixo opcional no centro e hover que acelera, desacelera ou pausa o giro. Respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/circular-text`
+
 ### Code
 
 #### `code-block`

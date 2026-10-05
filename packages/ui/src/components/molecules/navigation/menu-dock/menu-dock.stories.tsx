@@ -150,6 +150,22 @@ interface MenuDockItem {
         category: "Eventos",
       },
     },
+    dockItemSize: {
+      control: { type: "number", min: 24 },
+      description:
+        'Tamanho do item longe do ponteiro, em px. Só vale com `animationType="floating"`.',
+      table: { type: { summary: "number" }, defaultValue: { summary: "40" }, category: "Lupa" },
+    },
+    dockMagnification: {
+      control: { type: "number", min: 24 },
+      description: "Tamanho do item sob o ponteiro ou com foco de teclado, em px.",
+      table: { type: { summary: "number" }, defaultValue: { summary: "80" }, category: "Lupa" },
+    },
+    dockMagnifyDistance: {
+      control: { type: "number", min: 1 },
+      description: "Distância do ponteiro, em px, a partir da qual o item volta ao tamanho base.",
+      table: { type: { summary: "number" }, defaultValue: { summary: "150" }, category: "Lupa" },
+    },
     className: {
       control: "text",
       description: "Classes CSS adicionais para o container principal do dock.",
@@ -354,6 +370,41 @@ export const FloatingDesktop: Story = {
 - Dashboards ou aplicações de produtividade
 
 **Nota:** Os itens devem ter \`href\` ou \`onClick\` definidos para funcionar corretamente.`,
+      },
+    },
+  },
+};
+
+export const FloatingBigMagnification: Story = {
+  args: {
+    items: defaultItems.map((item) => ({ ...item, href: `#${item.label.toLowerCase()}` })),
+    animationType: "floating",
+    dockItemSize: 48,
+    dockMagnification: 112,
+    dockMagnifyDistance: 220,
+    desktopClassName: "mx-auto",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Lupa maior e mais ampla: itens de 48px que chegam a 112px, com influência de 220px ao redor do ponteiro.",
+      },
+    },
+  },
+};
+
+export const FloatingKeyboardFocus: Story = {
+  args: {
+    items: defaultItems.map((item) => ({ ...item, href: `#${item.label.toLowerCase()}` })),
+    animationType: "floating",
+    desktopClassName: "mx-auto",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Use Tab para percorrer o dock: o item com foco de teclado cresce ao tamanho máximo, como se o ponteiro estivesse sobre ele.",
       },
     },
   },

@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MotionConfig } from "motion/react";
 import { describe, expect, it, vi } from "vitest";
-import { Shimmer } from "./shimmer";
+import { buildShimmerMotion, Shimmer } from "./shimmer";
 
 describe("Shimmer", () => {
   it("mostra o texto como parágrafo por padrão", () => {
@@ -55,6 +55,66 @@ describe("Shimmer", () => {
   it("sem pedido de movimento reduzido, a varredura começa da direita", () => {
     render(<Shimmer>Pensando...</Shimmer>);
     expect(screen.getByText("Pensando...").style.backgroundPosition).toBe("100% center");
+  });
+});
+
+describe("buildShimmerMotion", () => {
+  it("sem props novas mantém initial, animate e transition de antes", () => {
+    expect(buildShimmerMotion({ direction: "start", duration: 2 })).toEqual({
+      initial: { backgroundPosition: "100% center" },
+      animate: { backgroundPosition: "0% center" },
+      transition: { repeat: Number.POSITIVE_INFINITY, duration: 2, ease: "linear" },
+    });
+  });
+
+  it("direction end troca as posições inicial e final", () => {
+    const motion = buildShimmerMotion({ direction: "end", duration: 2 });
+    expect(motion.initial).toEqual({ backgroundPosition: "0% center" });
+    expect(motion.animate).toEqual({ backgroundPosition: "100% center" });
+  });
+
+  it("repeatDelayMs entra na transição em segundos", () => {
+    const motion = buildShimmerMotion({ direction: "start", duration: 2, repeatDelayMs: 1500 });
+    expect(motion.transition.repeatDelay).toBe(1.5);
+  });
+
+  it("rejeita repeatDelayMs negativo informando o valor recebido", () => {
+    expect(() =>
+      buildShimmerMotion({ direction: "start", duration: 2, repeatDelayMs: -5 })
+    ).toThrow(/received -5, expected a non-negative number/);
+  });
+});
+
+describe("Shimmer props novas", () => {
+  it("direction end começa da esquerda no DOM", () => {
+    render(<Shimmer direction="end">Pensando...</Shimmer>);
+    expect(screen.getByText("Pensando...").style.backgroundPosition).toBe("0% center");
+  });
+
+  it("sem pauseOnHover não expõe data-paused", () => {
+    render(<Shimmer>Pensando...</Shimmer>);
+    expect(screen.getByText("Pensando...")).not.toHaveAttribute("data-paused");
+  });
+
+  it("pauseOnHover pausa no hover e retoma ao sair", () => {
+    render(<Shimmer pauseOnHover>Pensando...</Shimmer>);
+    const texto = screen.getByText("Pensando...");
+    expect(texto).toHaveAttribute("data-paused", "false");
+    fireEvent.pointerEnter(texto);
+    expect(texto).toHaveAttribute("data-paused", "true");
+    fireEvent.pointerLeave(texto);
+    expect(texto).toHaveAttribute("data-paused", "false");
+  });
+
+  it("com movimento reduzido o pauseOnHover não altera o texto estático", () => {
+    render(
+      <MotionConfig reducedMotion="always">
+        <Shimmer pauseOnHover>Pensando...</Shimmer>
+      </MotionConfig>
+    );
+    const texto = screen.getByText("Pensando...");
+    fireEvent.pointerEnter(texto);
+    expect(texto.style.backgroundPosition).toBe("");
   });
 });
 

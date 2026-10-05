@@ -14,12 +14,12 @@ import {
   type MotionValue,
   motion,
   useMotionValue,
-  useReducedMotion,
   useSpring,
   useTransform,
 } from "motion/react";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useShouldReduceMotion } from "@/lib/use-should-reduce-motion";
 import { cn } from "@/lib/utils";
 
 type IconComponentType = React.ElementType<{ className?: string }>;
@@ -46,7 +46,56 @@ export interface MenuDockProps {
   onActiveIndexChange?: (index: number) => void;
   desktopClassName?: string;
   mobileClassName?: string;
+  /** Tamanho do item longe do ponteiro, em px. Só vale com `animationType="floating"`. */
+  dockItemSize?: number;
+  /** Tamanho do item sob o ponteiro (ou com foco), em px. Só vale com `animationType="floating"`. */
+  dockMagnification?: number;
+  /** Distância do ponteiro, em px, a partir da qual o item volta ao tamanho base. */
+  dockMagnifyDistance?: number;
 }
+
+type DockMagnifyOptions = Pick<
+  MenuDockProps,
+  "dockItemSize" | "dockMagnification" | "dockMagnifyDistance"
+>;
+
+const DOCK_ITEM_SIZE = 40;
+const DOCK_MAGNIFICATION = 80;
+const DOCK_MAGNIFY_DISTANCE = 150;
+
+/** Faixas de entrada/saída das transformações da lupa; o ícone é sempre metade do item. */
+export function buildDockRanges({
+  itemSize = DOCK_ITEM_SIZE,
+  magnification = DOCK_MAGNIFICATION,
+  magnifyDistance = DOCK_MAGNIFY_DISTANCE,
+}: {
+  itemSize?: number;
+  magnification?: number;
+  magnifyDistance?: number;
+}) {
+  if (!(itemSize > 0)) {
+    throw new RangeError(
+      `invalid itemSize: received ${itemSize}, expected a positive number of pixels`
+    );
+  }
+  if (!(magnifyDistance > 0)) {
+    throw new RangeError(
+      `invalid magnifyDistance: received ${magnifyDistance}, expected a positive number of pixels`
+    );
+  }
+  if (!(magnification >= itemSize)) {
+    throw new RangeError(
+      `invalid magnification: received magnification ${magnification}, expected a number >= itemSize ${itemSize}`
+    );
+  }
+  return {
+    distance: [-magnifyDistance, 0, magnifyDistance],
+    size: [itemSize, magnification, itemSize],
+    icon: [itemSize / 2, magnification / 2, itemSize / 2],
+  };
+}
+
+type DockRanges = ReturnType<typeof buildDockRanges>;
 
 const defaultItems: MenuDockItem[] = [
   { label: "Início", icon: () => null },
@@ -69,6 +118,9 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   onActiveIndexChange,
   desktopClassName,
   mobileClassName,
+  dockItemSize,
+  dockMagnification,
+  dockMagnifyDistance,
 }) => {
   const finalItems = useMemo(() => {
     const isValid = items && Array.isArray(items) && items.length >= 2 && items.length <= 8;
@@ -84,7 +136,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   const isControlled = controlledActiveIndex !== undefined;
   const activeIndex = isControlled ? controlledActiveIndex : internalActiveIndex;
   const containerRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useShouldReduceMotion();
   const textRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const shouldUseIndicator = showLabels && orientation === "horizontal";
@@ -145,6 +197,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
         desktopClassName={desktopClassName}
         mobileClassName={mobileClassName}
         className={className}
+        magnify={{ dockItemSize, dockMagnification, dockMagnifyDistance }}
       />
     );
   }
@@ -274,6 +327,7 @@ interface FloatingDockProps {
   desktopClassName?: string;
   mobileClassName?: string;
   className?: string;
+  magnify: DockMagnifyOptions;
 }
 
 /**
@@ -288,10 +342,15 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
   desktopClassName,
   mobileClassName,
   className,
+  magnify,
 }) => {
   return (
     <>
-      <FloatingDockDesktop items={items} className={desktopClassName || className} />
+      <FloatingDockDesktop
+        items={items}
+        className={desktopClassName || className}
+        magnify={magnify}
+      />
       <FloatingDockMobile items={items} className={mobileClassName || className} />
     </>
   );
@@ -357,8 +416,19 @@ const FloatingDockMobile: React.FC<{
 const FloatingDockDesktop: React.FC<{
   items: FloatingDockItem[];
   className?: string;
-}> = ({ items, className }) => {
+  magnify: DockMagnifyOptions;
+}> = ({ items, className, magnify }) => {
   const mouseX = useMotionValue(Infinity);
+  const { dockItemSize, dockMagnification, dockMagnifyDistance } = magnify;
+  const ranges = useMemo(
+    () =>
+      buildDockRanges({
+        itemSize: dockItemSize,
+        magnification: dockMagnification,
+        magnifyDistance: dockMagnifyDistance,
+      }),
+    [dockItemSize, dockMagnification, dockMagnifyDistance]
+  );
 
   return (
     <motion.div
@@ -371,67 +441,74 @@ const FloatingDockDesktop: React.FC<{
       )}
     >
       {items.map((item) => (
-        <IconContainer mouseX={mouseX} key={item.title} {...item} />
+        <IconContainer mouseX={mouseX} ranges={ranges} key={item.title} {...item} />
       ))}
     </motion.div>
   );
 };
 
+// :focus-visible separa foco de teclado de foco por clique; sem suporte, trata como teclado
+function isKeyboardFocus(element: HTMLElement): boolean {
+  try {
+    return element.matches(":focus-visible");
+  } catch {
+    return true;
+  }
+}
+
+const DOCK_SPRING = { mass: 0.1, stiffness: 150, damping: 12 };
+
 function IconContainer({
   mouseX,
+  ranges,
   title,
   icon,
   href,
   onClick,
 }: {
   mouseX: MotionValue<number>;
+  ranges: DockRanges;
   title: string;
   icon: React.ReactNode;
   href: string;
   onClick?: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const distance = useTransform(mouseX, (val) => {
+  const shouldReduceMotion = useShouldReduceMotion();
+  // 1 = foco de teclado: o item se comporta como se o ponteiro estivesse sobre ele
+  const keyboardFocus = useMotionValue(0);
+  const distance = useTransform([mouseX, keyboardFocus], ([val, focused]: number[]) => {
+    if (focused) return 0;
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
     return val - bounds.x - bounds.width / 2;
   });
 
-  const widthTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
-  const heightTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
-  const widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
-  const heightTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
+  const widthTransform = useTransform(distance, ranges.distance, ranges.size);
+  const heightTransform = useTransform(distance, ranges.distance, ranges.size);
+  const widthTransformIcon = useTransform(distance, ranges.distance, ranges.icon);
+  const heightTransformIcon = useTransform(distance, ranges.distance, ranges.icon);
 
-  const width = useSpring(widthTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
+  const width = useSpring(widthTransform, DOCK_SPRING);
+  const height = useSpring(heightTransform, DOCK_SPRING);
+  const widthIcon = useSpring(widthTransformIcon, DOCK_SPRING);
+  const heightIcon = useSpring(heightTransformIcon, DOCK_SPRING);
 
-  const height = useSpring(heightTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  const widthIcon = useSpring(widthTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  const heightIcon = useSpring(heightTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
+  const baseSize = ranges.size[0] ?? DOCK_ITEM_SIZE;
+  const baseIconSize = ranges.icon[0] ?? DOCK_ITEM_SIZE / 2;
 
   const [hovered, setHovered] = useState(false);
 
   return (
-    <a href={href} aria-label={title} onClick={onClick}>
+    <a
+      href={href}
+      aria-label={title}
+      onClick={onClick}
+      onFocus={(event) => keyboardFocus.set(isKeyboardFocus(event.currentTarget) ? 1 : 0)}
+      onBlur={() => keyboardFocus.set(0)}
+    >
       <motion.div
         ref={ref}
-        style={{ width, height }}
+        style={shouldReduceMotion ? { width: baseSize, height: baseSize } : { width, height }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         className="relative flex aspect-square items-center justify-center rounded-full bg-secondary"
@@ -449,7 +526,11 @@ function IconContainer({
           )}
         </AnimatePresence>
         <motion.div
-          style={{ width: widthIcon, height: heightIcon }}
+          style={
+            shouldReduceMotion
+              ? { width: baseIconSize, height: baseIconSize }
+              : { width: widthIcon, height: heightIcon }
+          }
           className="flex items-center justify-center"
         >
           {icon}

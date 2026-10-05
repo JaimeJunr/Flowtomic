@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (65 atoms, 50 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (69 atoms, 50 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (65)
+- **Atoms**: `docs/componentes/atoms.md` (69)
 - **Molecules**: `docs/componentes/molecules.md` (50)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -374,7 +374,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 65 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 69 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 50 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
@@ -646,6 +646,13 @@ Cada uma já mordeu alguém neste repo.
   relativos e copia o que falta. Antes dele (até 04/10/2026), só o `utils.ts` era copiado e o
   `sliding-number` chegaria com import quebrado. ⚠️ O `registry/build-registry.ts` **ainda não** leva
   esses helpers no JSON do shadcn.
+- ⚠️ **`layout` do motion num elemento inline não faz o texto vizinho deslizar**: a animação é
+  por `transform`, então o vizinho pula de uma vez (medido em 04/10/2026 no `rotating-text`: 9 px
+  num quadro). Para o vizinho acompanhar, meça a largura nova e anime `width` de verdade. Para
+  provar, leia a posição do vizinho a cada `requestAnimationFrame` com Playwright.
+- ⚠️ **A fonte de título (Schibsted Grotesk) só é carregada em 600/700.** `font-display` sem
+  `font-semibold` em `<p>`/`<span>` (peso 400) sai em fallback no print headless e parece outra
+  fonte. Em story de título, use `font-display font-semibold`.
 - ⚠️ **O dnd-kit anuncia em inglês por padrão** ("press the space bar"). Todo `DndContext` passa
   `accessibility={{ announcements, screenReaderInstructions }}` em português — ver
   `organisms/draggable-dashboard-grid`. E `onKeyDown` próprio depois de `{...listeners}`

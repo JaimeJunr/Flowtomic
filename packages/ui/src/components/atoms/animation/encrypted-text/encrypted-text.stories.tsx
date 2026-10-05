@@ -33,6 +33,20 @@ const meta = {
       control: "text",
       description: "Classe CSS para estilizar caracteres revelados",
     },
+    trigger: {
+      control: "inline-radio",
+      options: ["view", "hover", "click"],
+      description: "O que dispara a revelação",
+    },
+    revealFrom: {
+      control: "inline-radio",
+      options: ["start", "end", "center"],
+      description: "De onde a revelação começa",
+    },
+    scrambleWithOwnCharacters: {
+      control: "boolean",
+      description: "Embaralha só com os caracteres do próprio texto",
+    },
   },
 } satisfies Meta<typeof EncryptedText>;
 
@@ -101,5 +115,40 @@ export const CustomCharset: Story = {
     charset: "01",
     revealDelayMs: 50,
     flipDelayMs: 50,
+  },
+};
+
+export const RevealFromEnd: Story = {
+  args: {
+    text: "Saldo conciliado com a custódia",
+    revealFrom: "end",
+  },
+};
+
+export const RevealFromCenter: Story = {
+  args: {
+    text: "Carteira consolidada",
+    revealFrom: "center",
+  },
+};
+
+export const OwnCharacters: Story = {
+  args: {
+    text: "Contrato registrado na câmara",
+    scrambleWithOwnCharacters: true,
+  },
+};
+
+export const OnHover: Story = {
+  args: {
+    text: "Passe o mouse para revelar o número da conta",
+    trigger: "hover",
+  },
+};
+
+export const OnClick: Story = {
+  args: {
+    text: "Clique para revelar o código de autorização",
+    trigger: "click",
   },
 };
