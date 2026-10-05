@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MotionConfig, MotionGlobalConfig } from "motion/react";
 import { createRef } from "react";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { SlidingNumber } from "./sliding-number";
+import { groupThousands, SlidingNumber } from "./sliding-number";
 
 beforeAll(() => {
   MotionGlobalConfig.skipAnimations = true;
@@ -73,5 +73,70 @@ describe("SlidingNumber", () => {
     render(<SlidingNumber number={1} ref={ref} className="text-lg" />);
     expect(ref.current).toHaveAttribute("data-slot", "sliding-number");
     expect(ref.current).toHaveClass("text-lg");
+  });
+});
+
+describe("groupThousands", () => {
+  it("agrupa de 3 em 3 da direita para a esquerda", () => {
+    expect(groupThousands("1234567", ".")).toBe("1.234.567");
+    expect(groupThousands("12345", " ")).toBe("12 345");
+  });
+
+  it("não agrupa até 3 dígitos nem sem separador", () => {
+    expect(groupThousands("999", ".")).toBe("999");
+    expect(groupThousands("1234567", "")).toBe("1234567");
+  });
+
+  it("agrupa também com zero à esquerda do padStart", () => {
+    expect(groupThousands("01234", ".")).toBe("01.234");
+  });
+});
+
+describe("SlidingNumber thousandsSeparator", () => {
+  it("1234567 com separador anuncia 1.234.567 e mantém 7 rolos", () => {
+    const { container } = render(<SlidingNumber number={1234567} thousandsSeparator="." />);
+    expect(container.querySelector(".sr-only")).toHaveTextContent(/^1\.234\.567$/);
+    expect(container.querySelectorAll('[data-slot="sliding-number-roller"]')).toHaveLength(7);
+  });
+
+  it("o separador é estático: aparece 2 vezes fora dos rolos", () => {
+    const { container } = render(<SlidingNumber number={1234567} thousandsSeparator="." />);
+    const separators = container.querySelectorAll('[data-slot="sliding-number-separator"]');
+    expect(separators).toHaveLength(2);
+    expect(separators[0]).toHaveTextContent(".");
+    expect(separators[0]?.closest('[data-slot="sliding-number-roller"]')).toBeNull();
+  });
+
+  it("negativo com decimais usa os dois separadores", () => {
+    render(
+      <SlidingNumber
+        number={-1234.5}
+        decimalPlaces={1}
+        thousandsSeparator="."
+        decimalSeparator=","
+      />
+    );
+    expect(screen.getByText("-1.234,5")).toBeInTheDocument();
+  });
+
+  it("999 não leva separador", () => {
+    const { container } = render(<SlidingNumber number={999} thousandsSeparator="." />);
+    expect(container.querySelector(".sr-only")).toHaveTextContent(/^999$/);
+    expect(container.querySelectorAll('[data-slot="sliding-number-separator"]')).toHaveLength(0);
+  });
+
+  it("com movimento reduzido o texto simples sai agrupado", () => {
+    render(
+      <MotionConfig reducedMotion="always">
+        <SlidingNumber number={1234567} thousandsSeparator="." />
+      </MotionConfig>
+    );
+    expect(screen.getByText("1.234.567")).not.toHaveClass("sr-only");
+  });
+
+  it("sem a prop a saída é igual à de antes", () => {
+    const { container } = render(<SlidingNumber number={1234567} />);
+    expect(container.querySelector(".sr-only")).toHaveTextContent(/^1234567$/);
+    expect(container.querySelectorAll('[data-slot="sliding-number-separator"]')).toHaveLength(0);
   });
 });

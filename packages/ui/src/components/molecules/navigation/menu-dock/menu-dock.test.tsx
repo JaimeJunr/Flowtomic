@@ -2,9 +2,9 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { Folder, Home } from "lucide-react";
-import { MotionGlobalConfig } from "motion/react";
+import { MotionConfig, MotionGlobalConfig } from "motion/react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { MenuDock, type MenuDockItem } from "./menu-dock";
+import { buildDockRanges, MenuDock, type MenuDockItem } from "./menu-dock";
 
 function items(onHome = vi.fn(), onProjects = vi.fn()): MenuDockItem[] {
   return [
@@ -280,5 +280,75 @@ describe("MenuDock", () => {
     if (open) await userEvent.click(screen.getByRole("button", { name: "Alternar menu" }));
     const result = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
     expect(result.violations).toEqual([]);
+  });
+});
+
+describe("buildDockRanges", () => {
+  it("sem argumentos mantém as faixas de antes (40, 80, 150)", () => {
+    expect(buildDockRanges({})).toEqual({
+      distance: [-150, 0, 150],
+      size: [40, 80, 40],
+      icon: [20, 40, 20],
+    });
+  });
+
+  it("as props novas alteram as faixas e o ícone fica na metade do item", () => {
+    expect(buildDockRanges({ itemSize: 48, magnification: 96, magnifyDistance: 200 })).toEqual({
+      distance: [-200, 0, 200],
+      size: [48, 96, 48],
+      icon: [24, 48, 24],
+    });
+  });
+
+  it("rejeita distância não positiva informando o valor recebido", () => {
+    expect(() => buildDockRanges({ magnifyDistance: 0 })).toThrow(
+      /received 0, expected a positive number of pixels/
+    );
+  });
+
+  it("rejeita magnificação menor que o tamanho base", () => {
+    expect(() => buildDockRanges({ itemSize: 60, magnification: 40 })).toThrow(
+      /received magnification 40, expected a number >= itemSize 60/
+    );
+  });
+});
+
+describe("MenuDock floating com lupa configurável", () => {
+  const baseSize = (label: string) =>
+    (screen.getByRole("link", { name: label }).firstElementChild as HTMLElement).style.width;
+
+  it("sem props o item longe do ponteiro tem 40px", () => {
+    render(<MenuDock items={items()} animationType="floating" />);
+    expect(baseSize("Início")).toBe("40px");
+  });
+
+  it("dockItemSize muda o tamanho base", () => {
+    render(<MenuDock items={items()} animationType="floating" dockItemSize={56} />);
+    expect(baseSize("Início")).toBe("56px");
+  });
+
+  it("com movimento reduzido o item fica fixo em dockItemSize, mesmo com foco", async () => {
+    render(
+      <MotionConfig reducedMotion="always">
+        <MenuDock items={items()} animationType="floating" dockItemSize={48} />
+      </MotionConfig>
+    );
+    const link = screen.getByRole("link", { name: "Início" });
+    preventNavigation(link);
+    await userEvent.setup().tab();
+    expect(link).toHaveFocus();
+    expect(baseSize("Início")).toBe("48px");
+  });
+
+  it("o foco por teclado amplia o item ao tamanho máximo e o blur devolve ao base", async () => {
+    render(<MenuDock items={items()} animationType="floating" dockMagnification={90} />);
+    const user = userEvent.setup();
+    await user.tab();
+    expect(screen.getByRole("link", { name: "Início" })).toHaveFocus();
+    await waitFor(() => expect(baseSize("Início")).toBe("90px"));
+    expect(baseSize("Projetos")).toBe("40px");
+
+    await user.tab();
+    await waitFor(() => expect(baseSize("Início")).toBe("40px"));
   });
 });
