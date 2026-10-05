@@ -46,6 +46,12 @@ Dock de menu para navegação.
 
 **Dependências**: `cn`
 
+### `scroll-velocity`
+
+Faixas de texto em sentidos alternados que aceleram com a velocidade do scroll e invertem ao rolar para cima. Paradas com movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
