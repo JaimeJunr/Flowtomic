@@ -451,6 +451,16 @@ Spinner animado para indicar carregamento.
 
 **Localização**: `packages/ui/src/components/atoms/animation/spinner`
 
+### Typography
+
+#### `blur-text`
+
+Texto que entra palavra a palavra (ou letra a letra) ao aparecer na tela, saindo de borrado e deslocado para nítido. Respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/blur-text`
+
 ### Code
 
 #### `code-block`
