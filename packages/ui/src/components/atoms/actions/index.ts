@@ -52,3 +52,5 @@ export {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+export type { HoldButtonProps } from "./hold-button";
+export { HoldButton } from "./hold-button";

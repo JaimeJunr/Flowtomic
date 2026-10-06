@@ -26,6 +26,14 @@ Botão com variantes de estilo e tamanho.
 
 **Localização**: `packages/ui/src/components/atoms/actions/button`
 
+#### `hold-button`
+
+Botão de ação irreversível que só executa ao segurar: líquido enche o botão, o texto troca de cor na borda e o rótulo vira "feito". Clique rápido só mostra a dica. Clean room (`docs/clean-room/react-bits/hold-button.md`).
+
+**Dependências**: `motion`, `cn`, `Button` (`buttonVariants`)
+
+**Localização**: `packages/ui/src/components/atoms/actions/hold-button`
+
 #### `badge`
 
 Badge/etiqueta para destacar informações.

@@ -164,6 +164,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["shimmer.tsx", "index.ts"],
     dependencies: ["motion", "cn"],
   },
+  "hold-button": {
+    name: "hold-button",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/actions/hold-button",
+    files: ["hold-button.tsx", "hold-button-utils.ts", "index.ts"],
+    dependencies: ["motion", "cn"],
+  },
   "blur-text": {
     name: "blur-text",
     type: "atom",
