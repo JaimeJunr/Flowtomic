@@ -68,7 +68,7 @@ function ButtonGroupSeparator({
 }
 ButtonGroupSeparator.displayName = "ButtonGroupSeparator";
 
-export interface ButtonGroupTextProps extends React.ComponentProps<"div"> {}
+export type ButtonGroupTextProps = React.ComponentProps<"div">;
 
 function ButtonGroupText({ className, ...props }: ButtonGroupTextProps) {
   return (

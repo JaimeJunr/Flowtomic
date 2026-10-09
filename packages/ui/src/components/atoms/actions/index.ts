@@ -36,6 +36,8 @@ export {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "./context-menu";
+export type { DictationButtonProps, DictationStopReason } from "./dictation-button";
+export { DictationButton } from "./dictation-button";
 export type {
   DropdownMenuContentProps,
   DropdownMenuItemProps,
@@ -58,3 +60,14 @@ export type { LikeButtonProps } from "./like-button";
 export { LikeButton } from "./like-button";
 export type { NotifyToggleProps } from "./notify-toggle";
 export { NotifyToggle } from "./notify-toggle";
+export type { PullSendButtonProps } from "./pull-send-button";
+export { PullSendButton } from "./pull-send-button";
+export type { SlideToConfirmProps } from "./slide-to-confirm";
+export { SlideToConfirm } from "./slide-to-confirm";
+export type {
+  UndoFuseButtonProps,
+  UndoFuseCommitReason,
+  UndoFusePhase,
+  UndoFuseSettle,
+} from "./undo-fuse-button";
+export { UndoFuseButton } from "./undo-fuse-button";

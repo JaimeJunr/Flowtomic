@@ -50,6 +50,12 @@ export {
   DialogTitle,
   DialogTrigger,
 } from "./dialog";
+export type { FuseToastCloseReason, FuseToastProps } from "./fuse-toast";
+export { FuseToast } from "./fuse-toast";
+export type { GlideTooltipGroupProps, GlideTooltipProps } from "./glide-tooltip";
+export { GlideTooltip, GlideTooltipGroup } from "./glide-tooltip";
+export type { GridLoaderPattern, GridLoaderProps } from "./grid-loader";
+export { GridLoader } from "./grid-loader";
 export type {
   HoverCardContentProps,
   HoverCardProps,
@@ -107,6 +113,12 @@ export {
 } from "./sheet";
 export type { ToasterProps } from "./sonner";
 export { Toaster, toast } from "./sonner";
+export type { TaskStatus, TaskStatusMarkProps } from "./task-status-mark";
+export { TaskStatusMark } from "./task-status-mark";
+export type { ThinkingLineGlyph, ThinkingLineProps } from "./thinking-line";
+export { ThinkingLine } from "./thinking-line";
+export type { ToolCallChipProps, ToolCallStatus } from "./tool-call-chip";
+export { ToolCallChip } from "./tool-call-chip";
 export type {
   TooltipContentProps,
   TooltipProps,

@@ -7,15 +7,7 @@
 "use client";
 
 import type { ChatStatus, FileUIPart } from "ai";
-import {
-  ImageIcon,
-  MicIcon,
-  PaperclipIcon,
-  PlusIcon,
-  SendIcon,
-  SquareIcon,
-  XIcon,
-} from "lucide-react";
+import { ImageIcon, MicIcon, PaperclipIcon, PlusIcon, XIcon } from "lucide-react";
 import { nanoid } from "nanoid";
 import {
   type ChangeEvent,
@@ -38,6 +30,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
 import {
   Button,
@@ -67,7 +60,22 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@/components/molecules/forms/input-group";
+import { useShouldReduceMotion } from "@/lib/use-should-reduce-motion";
 import { cn } from "@/lib/utils";
+import {
+  PromptInputExtrasContext,
+  PromptInputSparkLayer,
+  useOptionalPromptInputExtras,
+  usePromptInputExtrasStore,
+} from "./prompt-input-extras-context";
+import { PromptInputSubmitIcon } from "./prompt-input-submit-icon";
+
+export { PromptInputEffort, type PromptInputEffortProps } from "./prompt-input-effort";
+export type { PromptInputMenuItem } from "./prompt-input-extras-utils";
+export {
+  PromptInputTriggerMenu,
+  type PromptInputTriggerMenuProps,
+} from "./prompt-input-trigger-menu";
 
 export type AttachmentsContext = {
   files: (FileUIPart & { id: string })[];
@@ -411,6 +419,8 @@ export const PromptInput = ({
 }: PromptInputProps) => {
   const controller = useOptionalPromptInputController();
   const usingProvider = !!controller;
+  const extras = usePromptInputExtrasStore();
+  const reduceMotion = useShouldReduceMotion();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -486,35 +496,34 @@ export const PromptInput = ({
     [matchesAccept, maxFiles, maxFileSize, onError]
   );
 
-  const add = usingProvider
-    ? (files: File[] | FileList) => controller.attachments.add(files)
-    : addLocal;
+  const removeLocal = useCallback((id: string) => {
+    setItems((prev) => {
+      const found = prev.find((file) => file.id === id);
+      if (found?.url) {
+        URL.revokeObjectURL(found.url);
+      }
+      return prev.filter((file) => file.id !== id);
+    });
+  }, []);
 
-  const remove = usingProvider
-    ? (id: string) => controller.attachments.remove(id)
-    : (id: string) =>
-        setItems((prev) => {
-          const found = prev.find((file) => file.id === id);
-          if (found?.url) {
-            URL.revokeObjectURL(found.url);
-          }
-          return prev.filter((file) => file.id !== id);
-        });
+  const clearLocal = useCallback(() => {
+    setItems((prev) => {
+      for (const file of prev) {
+        if (file.url) {
+          URL.revokeObjectURL(file.url);
+        }
+      }
+      return [];
+    });
+  }, []);
 
-  const clear = usingProvider
-    ? () => controller.attachments.clear()
-    : () =>
-        setItems((prev) => {
-          for (const file of prev) {
-            if (file.url) {
-              URL.revokeObjectURL(file.url);
-            }
-          }
-          return [];
-        });
-
+  // As funções do provider já são estáveis; reembrulhá-las a cada render reinscrevia os ouvintes de
+  // soltar arquivo (efeitos abaixo) a cada tecla digitada.
+  const add = usingProvider ? controller.attachments.add : addLocal;
+  const remove = usingProvider ? controller.attachments.remove : removeLocal;
+  const clear = usingProvider ? controller.attachments.clear : clearLocal;
   const openFileDialog = usingProvider
-    ? () => controller.attachments.openFileDialog()
+    ? controller.attachments.openFileDialog
     : openFileDialogLocal;
 
   useEffect(() => {
@@ -580,7 +589,9 @@ export const PromptInput = ({
   // Remover e limpar já revogam a URL de quem sai; aqui só o que ainda está na tela ao desmontar.
   // Rodar a cada mudança de `files` revogava a miniatura dos anexos que continuavam na tela.
   const filesRef = useRef(files);
-  filesRef.current = files;
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
   useEffect(
     () => () => {
       if (!usingProvider) {
@@ -673,7 +684,7 @@ export const PromptInput = ({
             controller.textInput.clear();
           }
         }
-      } catch (_error) {
+      } catch {
         // Don't clear on error
       }
     });
@@ -696,8 +707,11 @@ export const PromptInput = ({
         className={cn(
           "w-full overflow-hidden rounded-xl border border-input bg-background transition-[border-color,box-shadow]",
           "focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/20",
+          // nível máximo do PromptInputEffort: brilho estático na cor da marca
+          "relative data-[effort=max]:border-primary/40 data-[effort=max]:bg-[color-mix(in_oklab,var(--primary)_6%,var(--background))]",
           className
         )}
+        data-effort={extras.effort ? (extras.effort.max ? "max" : "default") : undefined}
         onSubmit={handleSubmit}
         onInput={(event) => {
           const target = event.target;
@@ -710,11 +724,16 @@ export const PromptInput = ({
         ref={formRef}
       >
         {/* a borda e o foco são do form; o grupo só organiza campo e barra */}
-        <PromptInputHasContentContext.Provider value={hasContent}>
-          <InputGroup className="gap-0 rounded-none border-0 bg-transparent p-0 focus-within:ring-0 focus-within:ring-offset-0">
-            {children}
-          </InputGroup>
-        </PromptInputHasContentContext.Provider>
+        <PromptInputExtrasContext.Provider value={extras}>
+          <PromptInputHasContentContext.Provider value={hasContent}>
+            {extras.effort?.max && extras.effort.sparks && !reduceMotion ? (
+              <PromptInputSparkLayer subscribeKeystroke={extras.subscribeKeystroke} />
+            ) : null}
+            <InputGroup className="gap-0 rounded-none border-0 bg-transparent p-0 focus-within:ring-0 focus-within:ring-offset-0">
+              {children}
+            </InputGroup>
+          </PromptInputHasContentContext.Provider>
+        </PromptInputExtrasContext.Provider>
       </form>
     </>
   );
@@ -743,13 +762,24 @@ export const PromptInputTextarea = ({
   placeholder = "O que você gostaria de saber?",
   minHeight = 48,
   maxHeight = 164,
+  ref,
   ...props
 }: PromptInputTextareaProps) => {
   const controller = useOptionalPromptInputController();
+  const extras = useOptionalPromptInputExtras();
   const attachments = usePromptInputAttachments();
   const [isComposing, setIsComposing] = useState(false);
 
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
+    if (extras && !isComposing && !e.nativeEvent.isComposing) {
+      // Menus de gatilho abertos consomem ↑ ↓ Enter Tab Escape antes do envio
+      if (extras.runKeyHandlers(e)) {
+        return;
+      }
+      if (e.key.length === 1 || e.key === "Backspace") {
+        extras.noteKeystroke();
+      }
+    }
     if (e.key === "Enter") {
       if (isComposing || e.nativeEvent.isComposing) {
         return;
@@ -824,6 +854,22 @@ export const PromptInputTextarea = ({
         className
       )}
       name="message"
+      ref={(node) => {
+        if (extras) {
+          extras.textareaRef.current = node;
+        }
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      }}
+      {...(extras?.menuAria
+        ? {
+            "aria-controls": extras.menuAria.controls,
+            "aria-activedescendant": extras.menuAria.activeDescendant,
+          }
+        : {})}
       onCompositionEnd={() => setIsComposing(false)}
       onCompositionStart={() => setIsComposing(true)}
       onKeyDown={handleKeyDown}
@@ -978,42 +1024,21 @@ export const PromptInputSubmit = ({
   const hasContent = useContext(PromptInputHasContentContext);
 
   // Enviar e Parar ocupam o mesmo lugar; Parar não é submit, senão reenviaria a mensagem
-  if (busy) {
-    return (
-      <InputGroupButton
-        data-slot="prompt-input-submit"
-        className={cn("gap-1.5 rounded-lg", className)}
-        size={size}
-        type="button"
-        variant={variant}
-        disabled={disabled || !onStop}
-        onClick={onStop}
-        {...(props as Record<string, unknown>)}
-      >
-        {children ?? (
-          <>
-            <SquareIcon aria-hidden="true" className="size-3.5 fill-current" />
-            Parar
-          </>
-        )}
-      </InputGroupButton>
-    );
-  }
-
   return (
     <InputGroupButton
       data-slot="prompt-input-submit"
       className={cn("gap-1.5 rounded-lg", className)}
       size={size}
-      type="submit"
+      type={busy ? "button" : "submit"}
       variant={variant}
-      disabled={disabled || hasContent === false}
+      disabled={busy ? disabled || !onStop : disabled || hasContent === false}
+      onClick={busy ? onStop : undefined}
       {...(props as Record<string, unknown>)}
     >
       {children ?? (
         <>
-          <SendIcon aria-hidden="true" className="size-4" />
-          Enviar
+          <PromptInputSubmitIcon busy={busy} />
+          {busy ? "Parar" : "Enviar"}
         </>
       )}
     </InputGroupButton>
@@ -1074,6 +1099,10 @@ export type PromptInputSpeechButtonProps = ComponentProps<typeof PromptInputButt
   onTranscriptionChange?: (text: string) => void;
 };
 
+const subscribeToNothing = () => () => {};
+const hasSpeechRecognition = () =>
+  "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+
 export const PromptInputSpeechButton = ({
   className,
   textareaRef,
@@ -1081,14 +1110,12 @@ export const PromptInputSpeechButton = ({
   ...props
 }: PromptInputSpeechButtonProps) => {
   const [isListening, setIsListening] = useState(false);
-  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  // No servidor (e na hidratação) não há `window`: começa sem suporte e o cliente corrige em seguida.
+  const isSupported = useSyncExternalStore(subscribeToNothing, hasSpeechRecognition, () => false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
-    ) {
+    if (isSupported) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const speechRecognition = new SpeechRecognition();
 
@@ -1137,7 +1164,6 @@ export const PromptInputSpeechButton = ({
       };
 
       recognitionRef.current = speechRecognition;
-      setRecognition(speechRecognition);
     }
 
     return () => {
@@ -1145,9 +1171,10 @@ export const PromptInputSpeechButton = ({
         recognitionRef.current.stop();
       }
     };
-  }, [textareaRef, onTranscriptionChange]);
+  }, [isSupported, textareaRef, onTranscriptionChange]);
 
   const toggleListening = useCallback(() => {
+    const recognition = recognitionRef.current;
     if (!recognition) {
       return;
     }
@@ -1157,7 +1184,7 @@ export const PromptInputSpeechButton = ({
     } else {
       recognition.start();
     }
-  }, [recognition, isListening]);
+  }, [isListening]);
 
   return (
     <PromptInputButton
@@ -1169,7 +1196,7 @@ export const PromptInputSpeechButton = ({
       )}
       aria-label="Ditar por voz"
       aria-pressed={isListening}
-      disabled={!recognition}
+      disabled={!isSupported}
       onClick={toggleListening}
       {...props}
     >

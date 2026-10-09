@@ -129,6 +129,29 @@ const createMotionComponent =
         motion.create(Component as keyof JSX.IntrinsicElements)
     : null;
 
+// `motion.create` devolve um componente novo a cada chamada; criá-lo durante o render remontaria o
+// texto e reiniciaria a animação. O cache fica fora do render, então a mesma tag (ou componente
+// passado em `as`) sempre resolve para o mesmo componente animado.
+const motionComponents = new Map<ElementType, ElementType>();
+
+function getMotionComponent(Component: ElementType): ElementType {
+  if (!createMotionComponent) return Component;
+  let motionComponent = motionComponents.get(Component);
+  if (!motionComponent) {
+    motionComponent = createMotionComponent(Component) as ElementType;
+    motionComponents.set(Component, motionComponent);
+  }
+  return motionComponent;
+}
+
+type ShimmerElementProps = { Tag: ElementType } & Record<string, unknown>;
+
+// O elemento chega por prop porque o `react-hooks/static-components` não enxerga o cache acima e
+// trata como "criado no render" qualquer tag que venha do retorno de uma função.
+function ShimmerElement({ Tag, ...props }: ShimmerElementProps) {
+  return <Tag {...props} />;
+}
+
 function ShimmerComponent({
   children,
   as: Component = "p",
@@ -139,13 +162,7 @@ function ShimmerComponent({
   repeatDelayMs,
   pauseOnHover = false,
 }: TextShimmerProps) {
-  const MotionComponent = useMemo(
-    () =>
-      createMotionComponent
-        ? createMotionComponent(Component as keyof JSX.IntrinsicElements)
-        : (Component as ElementType),
-    [Component]
-  );
+  const MotionComponent = getMotionComponent(Component);
 
   const shouldReduceMotion = useShouldReduceMotion();
   const shimmerMotion = useMemo(
@@ -169,7 +186,8 @@ function ShimmerComponent({
 
   if (createMotionComponent && typeof MotionComponent !== "string" && !shouldReduceMotion) {
     return (
-      <MotionComponent
+      <ShimmerElement
+        Tag={MotionComponent}
         data-slot="shimmer"
         animate={pauseOnHover ? sweep.controls : shimmerMotion.animate}
         className={shimmerClassName}
@@ -181,7 +199,7 @@ function ShimmerComponent({
           : {})}
       >
         {children}
-      </MotionComponent>
+      </ShimmerElement>
     );
   }
 

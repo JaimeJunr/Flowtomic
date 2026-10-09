@@ -246,7 +246,7 @@ function Sidebar({
 
 Sidebar.displayName = "Sidebar";
 
-export interface SidebarTriggerProps extends React.ComponentProps<typeof Button> {}
+export type SidebarTriggerProps = React.ComponentProps<typeof Button>;
 
 function SidebarTrigger({ className, onClick, ...props }: SidebarTriggerProps) {
   const { toggleSidebar } = useSidebar();
@@ -272,7 +272,7 @@ function SidebarTrigger({ className, onClick, ...props }: SidebarTriggerProps) {
 
 SidebarTrigger.displayName = "SidebarTrigger";
 
-export interface SidebarInsetProps extends React.ComponentProps<"main"> {}
+export type SidebarInsetProps = React.ComponentProps<"main">;
 
 function SidebarInset({ className, ...props }: SidebarInsetProps) {
   return (
@@ -290,7 +290,7 @@ function SidebarInset({ className, ...props }: SidebarInsetProps) {
 
 SidebarInset.displayName = "SidebarInset";
 
-export interface SidebarInputProps extends React.ComponentProps<typeof Input> {}
+export type SidebarInputProps = React.ComponentProps<typeof Input>;
 
 function SidebarInput({ className, ...props }: SidebarInputProps) {
   return (
@@ -305,7 +305,7 @@ function SidebarInput({ className, ...props }: SidebarInputProps) {
 
 SidebarInput.displayName = "SidebarInput";
 
-export interface SidebarHeaderProps extends React.ComponentProps<"div"> {}
+export type SidebarHeaderProps = React.ComponentProps<"div">;
 
 function SidebarHeader({ className, ...props }: SidebarHeaderProps) {
   return (
@@ -320,7 +320,7 @@ function SidebarHeader({ className, ...props }: SidebarHeaderProps) {
 
 SidebarHeader.displayName = "SidebarHeader";
 
-export interface SidebarFooterProps extends React.ComponentProps<"div"> {}
+export type SidebarFooterProps = React.ComponentProps<"div">;
 
 function SidebarFooter({ className, ...props }: SidebarFooterProps) {
   return (
@@ -335,7 +335,7 @@ function SidebarFooter({ className, ...props }: SidebarFooterProps) {
 
 SidebarFooter.displayName = "SidebarFooter";
 
-export interface SidebarSeparatorProps extends React.ComponentProps<typeof Separator> {}
+export type SidebarSeparatorProps = React.ComponentProps<typeof Separator>;
 
 function SidebarSeparator({ className, ...props }: SidebarSeparatorProps) {
   return (
@@ -350,7 +350,7 @@ function SidebarSeparator({ className, ...props }: SidebarSeparatorProps) {
 
 SidebarSeparator.displayName = "SidebarSeparator";
 
-export interface SidebarContentProps extends React.ComponentProps<"div"> {}
+export type SidebarContentProps = React.ComponentProps<"div">;
 
 function SidebarContent({ className, ...props }: SidebarContentProps) {
   return (
@@ -368,7 +368,7 @@ function SidebarContent({ className, ...props }: SidebarContentProps) {
 
 SidebarContent.displayName = "SidebarContent";
 
-export interface SidebarGroupProps extends React.ComponentProps<"div"> {}
+export type SidebarGroupProps = React.ComponentProps<"div">;
 
 function SidebarGroup({ className, ...props }: SidebarGroupProps) {
   return (
@@ -406,7 +406,7 @@ function SidebarGroupLabel({ className, asChild = false, ...props }: SidebarGrou
 
 SidebarGroupLabel.displayName = "SidebarGroupLabel";
 
-export interface SidebarGroupContentProps extends React.ComponentProps<"div"> {}
+export type SidebarGroupContentProps = React.ComponentProps<"div">;
 
 function SidebarGroupContent({ className, ...props }: SidebarGroupContentProps) {
   return (
@@ -421,7 +421,7 @@ function SidebarGroupContent({ className, ...props }: SidebarGroupContentProps) 
 
 SidebarGroupContent.displayName = "SidebarGroupContent";
 
-export interface SidebarMenuProps extends React.ComponentProps<"ul"> {}
+export type SidebarMenuProps = React.ComponentProps<"ul">;
 
 function SidebarMenu({ className, ...props }: SidebarMenuProps) {
   return (
@@ -436,7 +436,7 @@ function SidebarMenu({ className, ...props }: SidebarMenuProps) {
 
 SidebarMenu.displayName = "SidebarMenu";
 
-export interface SidebarMenuItemProps extends React.ComponentProps<"li"> {}
+export type SidebarMenuItemProps = React.ComponentProps<"li">;
 
 function SidebarMenuItem({ className, ...props }: SidebarMenuItemProps) {
   return (

@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { CloudIcon, GlobeIcon, PaperclipIcon } from "lucide-react";
+import { useState } from "react";
 import {
   PromptInput,
+  PromptInputEffort,
   PromptInputFooter,
+  type PromptInputMenuItem,
   PromptInputModelSelect,
   PromptInputModelSelectContent,
   PromptInputModelSelectItem,
@@ -10,6 +14,8 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
+  PromptInputTriggerMenu,
+  usePromptInputAttachments,
 } from "./prompt-input";
 
 const meta = {
@@ -115,4 +121,140 @@ export const Respondendo: Story = {
       </>
     ),
   },
+};
+
+const FONTES: PromptInputMenuItem[] = [
+  {
+    key: "arquivos",
+    label: "Arquivos",
+    description: "anexar do computador",
+    icon: <PaperclipIcon aria-hidden="true" />,
+  },
+  {
+    key: "drive",
+    label: "Drive",
+    description: "documentos da equipe",
+    icon: <CloudIcon aria-hidden="true" />,
+  },
+  {
+    key: "web",
+    label: "Web",
+    description: "buscar na internet",
+    icon: <GlobeIcon aria-hidden="true" />,
+  },
+];
+
+const COMANDOS: PromptInputMenuItem[] = [
+  { key: "resumir", label: "/resumir", description: "resume a conversa até aqui" },
+  { key: "traduzir", label: "/traduzir", description: "traduz o último trecho" },
+  { key: "explicar", label: "/explicar", description: "explica passo a passo" },
+];
+
+const ESFORCOS = ["Baixo", "Médio", "Alto", "Máximo"];
+
+// Anexar do computador abre o seletor de arquivos em vez de inserir texto
+function MenuDeFontes() {
+  const attachments = usePromptInputAttachments();
+  return (
+    <PromptInputTriggerMenu
+      trigger="@"
+      items={FONTES}
+      onSelect={(item, api) => {
+        if (item.key === "arquivos") {
+          api.insert("");
+          attachments.openFileDialog();
+          return;
+        }
+        api.insert(`@${item.label} `);
+      }}
+    />
+  );
+}
+
+export const ComMencoes: Story = {
+  name: "Com menções (@ e /)",
+  args: {
+    onSubmit: async (message) => {
+      console.log("Enviado:", message);
+    },
+    children: (
+      <>
+        <PromptInputTextarea placeholder="Digite @ para fontes ou / para comandos" />
+        <MenuDeFontes />
+        <PromptInputTriggerMenu trigger="/" items={COMANDOS} />
+        <PromptInputFooter>
+          <PromptInputTools />
+          <PromptInputSubmit />
+        </PromptInputFooter>
+      </>
+    ),
+  },
+};
+
+export const ComEsforco: Story = {
+  name: "Com régua de esforço",
+  args: {
+    onSubmit: async (message) => {
+      console.log("Enviado:", message);
+    },
+    children: (
+      <>
+        <PromptInputTextarea placeholder="Escolha Máximo no esforço e digite" />
+        <PromptInputFooter>
+          <PromptInputTools>
+            <PromptInputEffort steps={ESFORCOS} />
+          </PromptInputTools>
+          <PromptInputSubmit />
+        </PromptInputFooter>
+      </>
+    ),
+  },
+};
+
+function EnviarPararDemo() {
+  const [ocupado, setOcupado] = useState(false);
+  return (
+    <PromptInput onSubmit={() => setOcupado(true)}>
+      <PromptInputTextarea placeholder="Escreva e envie para ver a seta virar quadrado" />
+      <PromptInputFooter>
+        <PromptInputTools />
+        <PromptInputSubmit
+          status={ocupado ? "streaming" : "ready"}
+          onStop={() => setOcupado(false)}
+        />
+      </PromptInputFooter>
+    </PromptInput>
+  );
+}
+
+export const EnviarParar: Story = {
+  name: "Enviar e Parar (transição)",
+  args: { onSubmit: async () => {} },
+  render: () => <EnviarPararDemo />,
+};
+
+function CompletoDemo() {
+  const [ocupado, setOcupado] = useState(false);
+  return (
+    <PromptInput onSubmit={() => setOcupado(true)}>
+      <PromptInputTextarea placeholder="@ para fontes, / para comandos" />
+      <MenuDeFontes />
+      <PromptInputTriggerMenu trigger="/" items={COMANDOS} />
+      <PromptInputFooter>
+        <PromptInputTools>
+          <PromptInputEffort steps={ESFORCOS} defaultValue="Alto" />
+        </PromptInputTools>
+        <PromptInputSubmit
+          status={ocupado ? "streaming" : "ready"}
+          onStop={() => setOcupado(false)}
+        />
+      </PromptInputFooter>
+    </PromptInput>
+  );
+}
+
+export const Completo: Story = {
+  name: "Completo",
+  args: { onSubmit: async () => {} },
+  render: () => <CompletoDemo />,
 };

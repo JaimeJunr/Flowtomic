@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 /**
  * Props do componente Sheet.
  */
-export interface SheetProps extends React.ComponentProps<typeof SheetPrimitive.Root> {}
+export type SheetProps = React.ComponentProps<typeof SheetPrimitive.Root>;
 
 /**
  * Sheet - Container principal do sheet.
@@ -22,7 +22,7 @@ Sheet.displayName = "Sheet";
 /**
  * Props do componente SheetTrigger.
  */
-export interface SheetTriggerProps extends React.ComponentProps<typeof SheetPrimitive.Trigger> {}
+export type SheetTriggerProps = React.ComponentProps<typeof SheetPrimitive.Trigger>;
 
 /** SheetTrigger - Trigger do sheet. */
 function SheetTrigger({ ...props }: SheetTriggerProps) {
@@ -31,7 +31,7 @@ function SheetTrigger({ ...props }: SheetTriggerProps) {
 
 SheetTrigger.displayName = "SheetTrigger";
 
-export interface SheetCloseProps extends React.ComponentProps<typeof SheetPrimitive.Close> {}
+export type SheetCloseProps = React.ComponentProps<typeof SheetPrimitive.Close>;
 
 function SheetClose({ ...props }: SheetCloseProps) {
   return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
@@ -39,7 +39,7 @@ function SheetClose({ ...props }: SheetCloseProps) {
 
 SheetClose.displayName = "SheetClose";
 
-export interface SheetPortalProps extends React.ComponentProps<typeof SheetPrimitive.Portal> {}
+export type SheetPortalProps = React.ComponentProps<typeof SheetPrimitive.Portal>;
 
 function SheetPortal({ ...props }: SheetPortalProps) {
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
@@ -47,7 +47,7 @@ function SheetPortal({ ...props }: SheetPortalProps) {
 
 SheetPortal.displayName = "SheetPortal";
 
-export interface SheetOverlayProps extends React.ComponentProps<typeof SheetPrimitive.Overlay> {}
+export type SheetOverlayProps = React.ComponentProps<typeof SheetPrimitive.Overlay>;
 
 function SheetOverlay({ className, ...props }: SheetOverlayProps) {
   return (
@@ -102,7 +102,7 @@ function SheetContent({ className, children, side = "right", ...props }: SheetCo
 
 SheetContent.displayName = "SheetContent";
 
-export interface SheetHeaderProps extends React.ComponentProps<"div"> {}
+export type SheetHeaderProps = React.ComponentProps<"div">;
 
 function SheetHeader({ className, ...props }: SheetHeaderProps) {
   return (
@@ -116,7 +116,7 @@ function SheetHeader({ className, ...props }: SheetHeaderProps) {
 
 SheetHeader.displayName = "SheetHeader";
 
-export interface SheetFooterProps extends React.ComponentProps<"div"> {}
+export type SheetFooterProps = React.ComponentProps<"div">;
 
 function SheetFooter({ className, ...props }: SheetFooterProps) {
   return (
@@ -130,7 +130,7 @@ function SheetFooter({ className, ...props }: SheetFooterProps) {
 
 SheetFooter.displayName = "SheetFooter";
 
-export interface SheetTitleProps extends React.ComponentProps<typeof SheetPrimitive.Title> {}
+export type SheetTitleProps = React.ComponentProps<typeof SheetPrimitive.Title>;
 
 function SheetTitle({ className, ...props }: SheetTitleProps) {
   return (
@@ -144,8 +144,7 @@ function SheetTitle({ className, ...props }: SheetTitleProps) {
 
 SheetTitle.displayName = "SheetTitle";
 
-export interface SheetDescriptionProps
-  extends React.ComponentProps<typeof SheetPrimitive.Description> {}
+export type SheetDescriptionProps = React.ComponentProps<typeof SheetPrimitive.Description>;
 
 function SheetDescription({ className, ...props }: SheetDescriptionProps) {
   return (

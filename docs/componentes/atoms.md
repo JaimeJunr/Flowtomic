@@ -50,6 +50,38 @@ Botão de curtir com contagem: o ícone encolhe até um ponto, troca de estado e
 
 **Localização**: `packages/ui/src/components/atoms/actions/like-button`
 
+#### `undo-fuse-button`
+
+Ação com desfazer: executa no clique e vira "Desfazer" enquanto um pavio queima na borda da pílula; pausa no hover. Clean room (`docs/clean-room/react-bits/undo-fuse-button.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/undo-fuse-button`
+
+#### `pull-send-button`
+
+Botão de enviar que também funciona como estilingue: puxar estica um elástico, soltar carregado lança o botão e solta partículas. Toque e Enter enviam. Clean room (`docs/clean-room/react-bits/pull-send-button.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/pull-send-button`
+
+#### `slide-to-confirm`
+
+Deslize para confirmar: a alça pinta o caminho, aceita promessa (spinner, sucesso ou erro) e volta com uma batida se soltar antes. Clean room (`docs/clean-room/react-bits/slide-to-confirm.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/slide-to-confirm`
+
+#### `dictation-button`
+
+Botão de ditado que abre numa cápsula com relógio e forma de onda; toque trava, segurar grava, deslizar para a esquerda cancela. Clean room (`docs/clean-room/react-bits/dictation-button.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/dictation-button`
+
 #### `badge`
 
 Badge/etiqueta para destacar informações.
@@ -236,6 +268,38 @@ Controle segmentado com thumb de borracha: estica entre o segmento antigo e o no
 
 **Localização**: `packages/ui/src/components/atoms/forms/elastic-segment`
 
+#### `wave-bar-slider`
+
+Slider em barras: as barras perto da alça sobem numa onda proporcional à velocidade, mais larga atrás do movimento. Clean room (`docs/clean-room/react-bits/wave-bar-slider.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-slider`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/wave-bar-slider`
+
+#### `trail-dial`
+
+Mostrador circular: girar rápido deixa uma cauda de cometa, e soltar segue pela inércia e assenta com balanço. Clean room (`docs/clean-room/react-bits/trail-dial.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/trail-dial`
+
+#### `scrub-number-field`
+
+Campo numérico de arrastar: arrastar no chip muda o valor (Shift acelera, Alt refina), passa do limite como borracha e clicar abre a edição. Clean room (`docs/clean-room/react-bits/scrub-number-field.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/scrub-number-field`
+
+#### `cascade-code-input`
+
+Código de verificação: cada dígito pousa numa mola, colar pousa em cascata, o erro esvazia da última casa para a primeira e o sucesso funde as casas. Clean room (`docs/clean-room/react-bits/cascade-code-input.md`).
+
+**Dependências**: `motion`, `input-otp`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/cascade-code-input`
+
 ### Data Display
 
 #### `calendar`
@@ -261,6 +325,14 @@ Componente base para gráficos usando Recharts.
 **Dependências**: `recharts`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/data-display/chart`
+
+#### `liquid-gauge`
+
+Tanque de líquido que corre até o nível com inércia, inclina a superfície e respinga nos limites; opcionalmente interativo. Clean room (`docs/clean-room/react-bits/liquid-gauge.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/data-display/liquid-gauge`
 
 ### Display
 
@@ -457,6 +529,54 @@ Sheet lateral deslizante para exibir conteúdo.
 
 **Localização**: `packages/ui/src/components/atoms/feedback/sheet`
 
+#### `glide-tooltip`
+
+Tooltip de barra de ferramentas: depois do primeiro, o rótulo desliza de botão em botão sem fechar e reabrir. Implementação própria (o Radix cria um rótulo por gatilho). Clean room (`docs/clean-room/react-bits/glide-tooltip.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/glide-tooltip`
+
+#### `fuse-toast`
+
+Aviso individual com pavio que mostra o tempo restante; pausa no hover, dispensa arrastando para o lado ou com Escape. Clean room (`docs/clean-room/react-bits/fuse-toast.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/fuse-toast`
+
+#### `task-status-mark`
+
+Marca de status de tarefa que muda de forma no lugar: tracejado, arco girando ou com progresso, ✓ com o rótulo riscado, ✕. Clean room (`docs/clean-room/react-bits/task-status-mark.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/task-status-mark`
+
+#### `grid-loader`
+
+Indicador de "pensando" com grade de pontos em onda e cronômetro; ao terminar, os pontos formam ✓ ou ✕. Clean room (`docs/clean-room/react-bits/grid-loader.md`).
+
+**Dependências**: `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/grid-loader`
+
+#### `tool-call-chip`
+
+Chip de chamada de ferramenta em andamento: preenchimento que estaciona em 90%, contador, ✓ com lavagem ou ✕ com chacoalhada e reexecutar. Clean room (`docs/clean-room/react-bits/tool-call-chip.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/tool-call-chip`
+
+#### `thinking-line`
+
+Linha "Pensando…" que respira, com trilha de passos; ao terminar vira "Pensou por 2,7 s" e dobra a trilha. Clean room (`docs/clean-room/react-bits/thinking-line.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/thinking-line`
+
 ### Animation
 
 #### `cursor-trail`
@@ -522,6 +642,14 @@ Spinner animado para indicar carregamento.
 **Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/spinner`
+
+#### `evasive-target`
+
+Pílula lúdica que foge do ponteiro e desiste depois de algumas fugas. Nunca envolver recusa, fechar ou cancelar. Clean room (`docs/clean-room/react-bits/evasive-target.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/evasive-target`
 
 ### Typography
 

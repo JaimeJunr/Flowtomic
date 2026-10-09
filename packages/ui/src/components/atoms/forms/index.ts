@@ -1,3 +1,5 @@
+export type { CascadeCodeInputProps } from "./cascade-code-input";
+export { CascadeCodeInput } from "./cascade-code-input";
 export type { CheckboxProps } from "./checkbox";
 export { Checkbox } from "./checkbox";
 export type { DateInputProps } from "./date-input";
@@ -67,6 +69,8 @@ export type { NativeSelectProps } from "./native-select";
 export { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "./native-select";
 export type { RadioGroupItemProps, RadioGroupProps } from "./radio-group";
 export { RadioGroup, RadioGroupItem } from "./radio-group";
+export type { ScrubNumberFieldProps } from "./scrub-number-field";
+export { ScrubNumberField } from "./scrub-number-field";
 export {
   Select,
   SelectContent,
@@ -99,3 +103,7 @@ export {
 } from "./time-input";
 export type { ToggleProps } from "./toggle";
 export { Toggle, toggleVariants } from "./toggle";
+export type { TrailDialProps } from "./trail-dial";
+export { TrailDial } from "./trail-dial";
+export type { WaveBarSliderProps } from "./wave-bar-slider";
+export { WaveBarSlider } from "./wave-bar-slider";
