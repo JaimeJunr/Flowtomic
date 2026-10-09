@@ -259,6 +259,8 @@ export {
   ComboboxValue,
   useComboboxAnchor,
 } from "./forms/combobox";
+export type { GlidePickerOption, GlidePickerProps } from "./forms/glide-picker";
+export { GlidePicker } from "./forms/glide-picker";
 export type { ImageDropzoneProps } from "./forms/image-dropzone";
 export { ImageDropzone } from "./forms/image-dropzone";
 export type { InlineDateTimeEditorProps } from "./forms/inline-datetime-editor";

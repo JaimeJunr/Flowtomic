@@ -34,6 +34,22 @@ Botão de ação irreversível que só executa ao segurar: líquido enche o bot�
 
 **Localização**: `packages/ui/src/components/atoms/actions/hold-button`
 
+#### `notify-toggle`
+
+Toggle de aviso: o sino balança ao ligar, o rótulo troca sem mudar a largura e um badge opcional rola a contagem. Clean room (`docs/clean-room/react-bits/notify-toggle.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-toggle`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/notify-toggle`
+
+#### `like-button`
+
+Botão de curtir com contagem: o ícone encolhe até um ponto, troca de estado e volta com rebote; só o dígito que mudou rola. Clean room (`docs/clean-room/react-bits/like-button.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-toggle`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/like-button`
+
 #### `badge`
 
 Badge/etiqueta para destacar informações.
@@ -179,6 +195,46 @@ Entrada de hora (`input type="time"`) com estilo do design system. Segue a mesma
 **Dependências**: `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/time-input`
+
+#### `stretch-switch`
+
+Interruptor cujo thumb corre numa mola e estica na direção do movimento, mantendo a área; pode ser arrastado. Clean room (`docs/clean-room/react-bits/stretch-switch.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-switch`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/stretch-switch`
+
+#### `strike-checkbox`
+
+Item de checklist: o preenchimento cresce do centro numa mola, o ✓ é desenhado e um risco atravessa o texto na largura exata dele. Clean room (`docs/clean-room/react-bits/strike-checkbox.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-checkbox`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/strike-checkbox`
+
+#### `swell-chip-group`
+
+Escolha única em chips: o escolhido incha e os vizinhos abrem espaço em cascata, como gelatina. Clean room (`docs/clean-room/react-bits/swell-chip-group.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-radio-group`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/swell-chip-group`
+
+#### `lift-rating`
+
+Avaliação por estrelas com pré-visualização: as estrelas sobem e acendem sob o ponteiro, um balão mostra o rótulo, e a confirmação dá um pop. Clean room (`docs/clean-room/react-bits/lift-rating.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-radio-group`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/lift-rating`
+
+#### `elastic-segment`
+
+Controle segmentado com thumb de borracha: estica entre o segmento antigo e o novo, achata ao chegar e pode ser arrastado e lançado. Clean room (`docs/clean-room/react-bits/elastic-segment.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-radio-group`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/elastic-segment`
 
 ### Data Display
 

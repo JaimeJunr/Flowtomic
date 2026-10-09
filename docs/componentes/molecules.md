@@ -2,7 +2,7 @@
 
 Componentes moleculares do Flowtomic. São combinações de atoms que formam componentes mais complexos.
 
-## 📦 Componentes Disponíveis (36)
+## 📦 Componentes Disponíveis (37)
 
 ### `button-group`
 
@@ -51,6 +51,12 @@ Dock de menu para navegação.
 Faixas de texto em sentidos alternados que aceleram com a velocidade do scroll e invertem ao rolar para cima. Paradas com movimento reduzido.
 
 **Dependências**: `motion`, `cn`
+
+### `glide-picker`
+
+Seletor compacto em chip: o menu cresce do canto do chip e uma pílula de destaque desliza entre as opções. Clean room (`docs/clean-room/react-bits/glide-picker.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-dropdown-menu`, `lucide-react`, `cn`
 
 ### `theme-toggle-button`
 

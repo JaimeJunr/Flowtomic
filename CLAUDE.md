@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (81 atoms, 51 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (89 atoms, 52 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,8 +37,8 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (81)
-- **Molecules**: `docs/componentes/molecules.md` (51)
+- **Atoms**: `docs/componentes/atoms.md` (89)
+- **Molecules**: `docs/componentes/molecules.md` (52)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -374,8 +374,8 @@ errado.
 
 Resumo:
 
-- **Atoms**: 81 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 51 componentes - Ver `docs/componentes/molecules.md`
+- **Atoms**: 89 componentes - Ver `docs/componentes/atoms.md`
+- **Molecules**: 52 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -676,6 +676,10 @@ Cada uma já mordeu alguém neste repo.
   `until ! pgrep -f 'codex exec…'` ficou "rodando" para sempre depois que o worker já tinha
   saído, porque o padrão estava na linha de comando do próprio shell. É a mesma raiz do
   `pkill` do `run-flowtomic`: espere pelo PID (`while kill -0 $pid`), não pelo padrão.
+- ⚠️ **Seta em `RadioGroup` do Radix não escolhe com `userEvent.keyboard` no jsdom.** O Radix só
+  confirma o item focado enquanto a seta ainda está pressionada, e o `keyup` do `userEvent` chega
+  antes do foco assentar (medido em 09/10/2026 no `swell-chip-group`, `lift-rating` e
+  `elastic-segment`). Use `fireEvent.keyDown` + `waitFor`, ou `{ArrowRight>}` … `{/ArrowRight}`.
 - ⚠️ **`verify.mjs --click "<nome>"` não acha aba do Radix** — o locator procura `button`, e
   `TabsTrigger` é `role="tab"`. Para clicar numa aba, use o browser pane (`find` + `left_click`).
 - ⚠️ **PR empilhado (base em outra branch) não roda CI, nem depois de trocar a base.** Medido em
