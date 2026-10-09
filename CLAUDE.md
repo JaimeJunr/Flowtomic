@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (69 atoms, 50 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (81 atoms, 51 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,8 +37,8 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (69)
-- **Molecules**: `docs/componentes/molecules.md` (50)
+- **Atoms**: `docs/componentes/atoms.md` (81)
+- **Molecules**: `docs/componentes/molecules.md` (51)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -374,8 +374,8 @@ errado.
 
 Resumo:
 
-- **Atoms**: 69 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 50 componentes - Ver `docs/componentes/molecules.md`
+- **Atoms**: 81 componentes - Ver `docs/componentes/atoms.md`
+- **Molecules**: 51 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -650,9 +650,14 @@ Cada uma já mordeu alguém neste repo.
   por `transform`, então o vizinho pula de uma vez (medido em 04/10/2026 no `rotating-text`: 9 px
   num quadro). Para o vizinho acompanhar, meça a largura nova e anime `width` de verdade. Para
   provar, leia a posição do vizinho a cada `requestAnimationFrame` com Playwright.
-- ⚠️ **A fonte de título (Schibsted Grotesk) só é carregada em 600/700.** `font-display` sem
-  `font-semibold` em `<p>`/`<span>` (peso 400) sai em fallback no print headless e parece outra
-  fonte. Em story de título, use `font-display font-semibold`.
+- ⚠️ **`filter` (ex.: `drop-shadow`) no mesmo elemento que tem `transform-style: preserve-3d`
+  achata o 3D**: todas as camadas caem no mesmo plano, sem erro (medido em 05/10/2026 no
+  `depth-text`, camadas com o mesmo `getBoundingClientRect`). Ponha o filtro num ancestral fora da
+  cadeia 3D. Teste unitário não pega isso; meça a posição das camadas no browser.
+- ⚠️ **As fontes do `globals.css` são pedidas como faixa variável** (`wght@100..900`,
+  `wght@400..900`), desde 05/10/2026. Antes eram pesos soltos (`wght@400;600`): o Google mandava
+  faces fixas, peso intermediário pulava de degrau e `font-display` em peso 400 caía no fallback no
+  print headless. Não volte para lista de pesos; o `theme-tokens.test.ts` trava a faixa.
 - ⚠️ **O dnd-kit anuncia em inglês por padrão** ("press the space bar"). Todo `DndContext` passa
   `accessibility={{ announcements, screenReaderInstructions }}` em português — ver
   `organisms/draggable-dashboard-grid`. E `onKeyDown` próprio depois de `{...listeners}`

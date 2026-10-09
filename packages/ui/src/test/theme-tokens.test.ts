@@ -250,6 +250,13 @@ describe("Tipografia própria", () => {
     expect(globalsCss).toMatch(/family=Schibsted\+Grotesk/);
   });
 
+  // Com pesos soltos (wght@400;600) o Google entrega faces de peso fixo: peso intermediário pula
+  // de degrau (efeitos de proximidade/pressão) e o display em 400 cai no fallback. Faixa = fonte variável.
+  it("o globals.css baixa corpo e display como fonte variável (faixa de peso)", () => {
+    expect(globalsCss).toMatch(/family=Public\+Sans:wght@\d+\.\.\d+/);
+    expect(globalsCss).toMatch(/family=Schibsted\+Grotesk:wght@\d+\.\.\d+/);
+  });
+
   it("os títulos usam a fonte display, senão a Schibsted Grotesk nunca aparece", () => {
     expect(globalsCss).toMatch(/h1,\s*h2,\s*h3,\s*h4\s*\{\s*font-family:\s*var\(--font-display\)/);
   });
