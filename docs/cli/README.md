@@ -168,7 +168,15 @@ por `src/` são respeitados literalmente.
 Os imports das categorias do repositório, como `@/components/atoms/actions/button`, viram
 `@/components/ui/button`. Imports nomeados de barrels são divididos nos componentes usados.
 Barrels com import default ou namespace precisam de imports nomeados; a CLI informa o erro
-antes de escrever. Arquivos existentes são preservados, inclusive páginas e utils; para substituir
+antes de escrever.
+
+Helpers de `packages/ui/src/lib` importados pelo componente vão para a pasta do alias de
+`utils`: com `utils: "@/lib/utils"`, o import `@/lib/use-should-reduce-motion` é mantido e o
+arquivo é gravado onde o tsconfig resolve esse import, mesmo que `@/lib/utils` tenha mapeamento
+exato para outra pasta. Tipos de `packages/ui/src/types` vão para `types/` dentro dessa pasta
+(`@/types/dashboard` vira `@/lib/types/dashboard`). Um import local que não aponta para
+componente, helper ou arquivo listado no `component-map` faz a instalação falhar antes de
+escrever qualquer arquivo. Arquivos existentes são preservados, inclusive páginas e utils; para substituir
 uma versão local, revise e remova o arquivo antes de instalar novamente.
 
 Edite o arquivo `components.json` para ajustar caminhos e aliases:

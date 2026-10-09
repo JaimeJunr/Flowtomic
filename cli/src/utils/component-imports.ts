@@ -10,7 +10,7 @@ type ExportInfo = { component: ComponentInfo; modulePath: string };
 export type SharedFile = { source: string; specifier: string; suffix: string };
 
 // Pastas de packages/ui/src sem componente, instaladas sob a pasta do alias de utils.
-const SHARED_DIRS: Record<string, string> = { lib: "" };
+const SHARED_DIRS: Record<string, string> = { lib: "", types: "types" };
 
 function isInside(root: string, path: string): boolean {
   const rel = relative(root, path);
@@ -122,6 +122,14 @@ export function createImportRewriter(repoPath: string, config: ComponentsConfig)
     return undefined;
   }
 
+  // Só os arquivos em `files` do component-map são copiados.
+  function isListed(component: ComponentInfo, modulePath: string): boolean {
+    const file = sourceFile(modulePath);
+    if (!file) return false;
+    const name = relative(join(repoPath, component.path), file).replace(/\\/g, "/");
+    return component.files.includes(name);
+  }
+
   return function rewrite(content: string, sourcePath: string) {
     const ast = ts.createSourceFile(
       sourcePath,
@@ -162,11 +170,14 @@ export function createImportRewriter(repoPath: string, config: ComponentsConfig)
         replacement = shared.specifier;
       } else {
         const component = owner(modulePath);
-        if (component) {
+        if (component && isListed(component, modulePath)) {
           dependencies.set(component.name, component);
           if (component !== current || !specifier.startsWith("."))
             replacement = aliasFor(component, modulePath);
-        } else if (modulePath.startsWith(join(repoPath, "packages/ui/src/components"))) {
+        } else if (
+          !component &&
+          isInside(join(repoPath, "packages/ui/src/components"), modulePath)
+        ) {
           const bindings = ts.isImportDeclaration(node)
             ? node.importClause?.namedBindings
             : node.exportClause;
@@ -206,6 +217,11 @@ export function createImportRewriter(repoPath: string, config: ComponentsConfig)
               )
               .join("\n"),
           });
+        } else {
+          // Sem regra, o import ficaria apontando para arquivo que não foi copiado.
+          throw new Error(
+            `Import local "${specifier}" em ${relative(repoPath, sourcePath)} não aponta para componente, helper de lib ou arquivo listado no component-map`
+          );
         }
       }
       if (replacement)

@@ -11,6 +11,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { COMPONENT_MAP, HOOK_MAP } from "./component-map";
 import { createInstaller } from "./install";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -88,5 +89,13 @@ describe("imports locais dos arquivos instalados", () => {
       readFileSync(join(project, "src/components/ui/stretch-switch/stretch-switch.tsx"), "utf-8")
     ).toContain('from "@/lib/use-should-reduce-motion"');
     expect(unresolvedImports(project, paths)).toEqual([]);
+  });
+
+  it.each([
+    ...Object.keys(COMPONENT_MAP),
+    ...Object.keys(HOOK_MAP),
+  ])("%s instala sem deixar import local sem arquivo", (name) => {
+    install(name);
+    expect(unresolvedImports(project)).toEqual([]);
   });
 });

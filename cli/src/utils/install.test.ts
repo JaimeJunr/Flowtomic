@@ -434,6 +434,21 @@ describe("instalação pela CLI compilada em um projeto consumidor", () => {
     }
   });
 
+  // components-foo cobre o prefixo de string que casava a pasta irmã de components.
+  it.each([
+    ["./extra", `${COMPONENT_MAP.button.path}/extra.tsx`],
+    ["@/foo/bar", "packages/ui/src/foo/bar.ts"],
+    ["@/components-foo/x", "packages/ui/src/components-foo/x.ts"],
+  ])("falha antes de escrever com import local %s sem regra de instalação", (specifier, file) => {
+    const source = fakeRepo();
+    write(join(source, file), "export const x = 1;\n");
+    fakeButton(source, `import { x } from "${specifier}";\nexport const Button = x;\n`);
+    const result = run(["add", "button"], source);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(`Import local "${specifier}"`);
+    expect(existsSync(join(project, "src"))).toBe(false);
+  });
+
   it("falha antes de escrever se faltar helper de lib", () => {
     const source = fakeRepo();
     fakeButton(source, 'import { x } from "@/lib/nao-existe";\nexport const Button = x;\n');
