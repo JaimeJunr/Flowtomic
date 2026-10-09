@@ -1,6 +1,4 @@
 import { basename, dirname, join } from "node:path";
-import { createInstaller } from "./install";
-import type { ComponentsConfig } from "./project-config";
 
 export interface BlockFile {
   path: string;
@@ -32,14 +30,4 @@ export function blockTargetPath(
   if (file.type === "registry:hook") return join(paths.hooks, block.name, basename(file.path));
   if (file.type === "registry:lib") return join(dirname(paths.utils), basename(file.path));
   throw new Error(`Destino não definido para o arquivo de block: ${file.path}`);
-}
-
-export async function addBlock(
-  block: Block,
-  config: ComponentsConfig,
-  repoPath: string
-): Promise<void> {
-  const installer = createInstaller(config, repoPath);
-  installer.block(block);
-  installer.apply();
 }
