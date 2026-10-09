@@ -182,7 +182,17 @@ direita). Enter envia, Shift+Enter quebra a linha, e campo vazio sem anexo não 
 no mesmo lugar, como `type="button"` que chama `onStop` (sem `onStop`, fica
 desabilitado). O contêiner tem borda fina e anel de foco, sem sombra.
 
-**Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `cn`
+Partes opcionais, vindas do Prompt Bar do React Bits em clean room
+(`docs/clean-room/react-bits/prompt-input-extras.md`):
+
+- **`PromptInputTriggerMenu`:** menu de `@` (fontes) ou `/` (comandos) ligado ao textarea.
+  Setas navegam, Enter escolhe sem enviar, Escape fecha.
+- **`PromptInputEffort`:** régua de esforço. No último passo, o campo ganha brilho da marca e
+  faíscas que aceleram com a digitação.
+- **Transição do `PromptInputSubmit`:** a seta vira quadrado quando há resposta em andamento.
+  A API do componente não muda.
+
+**Dependências**: `ai`, `nanoid`, `lucide-react`, `cmdk`, `motion`, `@radix-ui/react-popover`, `@radix-ui/react-slider`, `cn`
 
 ### `questionnaire`
 

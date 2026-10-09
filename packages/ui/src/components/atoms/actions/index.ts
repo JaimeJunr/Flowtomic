@@ -36,6 +36,8 @@ export {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "./context-menu";
+export type { DictationButtonProps, DictationStopReason } from "./dictation-button";
+export { DictationButton } from "./dictation-button";
 export type {
   DropdownMenuContentProps,
   DropdownMenuItemProps,

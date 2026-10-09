@@ -101,6 +101,8 @@ export type {
   VisibilityState,
 } from "./data-display/data-table";
 export { DataTable } from "./data-display/data-table";
+export type { GenerationFrameProps, GenerationStatus } from "./data-display/generation-frame";
+export { GenerationFrame } from "./data-display/generation-frame";
 export type {
   MessageActionProps,
   MessageActionsProps,
@@ -267,6 +269,8 @@ export {
   ComboboxValue,
   useComboboxAnchor,
 } from "./forms/combobox";
+export type { FolderPickerItem, FolderPickerProps } from "./forms/folder-picker";
+export { FolderPicker } from "./forms/folder-picker";
 export type { GlidePickerOption, GlidePickerProps } from "./forms/glide-picker";
 export { GlidePicker } from "./forms/glide-picker";
 export type { ImageDropzoneProps } from "./forms/image-dropzone";
@@ -327,6 +331,13 @@ export type {
   Notification,
 } from "./layout/dashboard-header";
 export { DashboardHeader } from "./layout/dashboard-header";
+export type {
+  BranchNavItem,
+  BranchNavLeaf,
+  BranchNavProps,
+  BranchNavSection,
+} from "./navigation/branch-nav";
+export { BranchNav } from "./navigation/branch-nav";
 export type { MenuDockItem, MenuDockProps } from "./navigation/menu-dock";
 export { MenuDock } from "./navigation/menu-dock";
 export type {
