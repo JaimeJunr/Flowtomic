@@ -64,6 +64,8 @@ export type { PullSendButtonProps } from "./pull-send-button";
 export { PullSendButton } from "./pull-send-button";
 export type { SlideToConfirmProps } from "./slide-to-confirm";
 export { SlideToConfirm } from "./slide-to-confirm";
+export type { StarBorderProps } from "./star-border";
+export { StarBorder } from "./star-border";
 export type {
   UndoFuseButtonProps,
   UndoFuseCommitReason,

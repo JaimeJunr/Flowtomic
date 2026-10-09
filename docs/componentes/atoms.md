@@ -18,6 +18,14 @@ Os atoms estão organizados em categorias lógicas para facilitar a navegação 
 
 ### Actions
 
+#### `star-border`
+
+Botão (ou link, via `as`) com uma luz que percorre a borda deixando rastro. Hover dá uma volta extra, clareia ou revela a luz; clique solta um pulso a partir do ponto pressionado. Com movimento reduzido, a luz fica parada.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/star-border`
+
 #### `button`
 
 Botão com variantes de estilo e tamanho.
@@ -586,6 +594,62 @@ Linha "Pensando…" que respira, com trilha de passos; ao terminar vira "Pensou 
 **Localização**: `packages/ui/src/components/atoms/feedback/thinking-line`
 
 ### Animation
+
+#### `pixel-reveal`
+
+Card com dois conteúdos: uma grade de pixels cobre o primeiro e some revelando o segundo, em ordem aleatória, xadrez, onda a partir do ponteiro ou varredura pela borda. Gatilho por hover/foco ou clique, controlado ou não. Com movimento reduzido, troca direta com fade.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/pixel-reveal`
+
+#### `crosshair`
+
+Duas linhas finas que cruzam no ponteiro dentro de uma área, com coordenadas nas bordas, cantoneiras que enquadram e medem o botão ou link sob o ponteiro, e um anel a cada clique. Ignora toque; com movimento reduzido, segue sem atraso e sem pulso.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/crosshair`
+
+#### `logo-marquee`
+
+Faixa de logos (ou qualquer item) que rola sem fim, sem emenda, e desacelera no hover. Só a primeira cópia é lida e focável; foco num link pausa. Com movimento reduzido, mostra os itens parados em linha.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/logo-marquee`
+
+#### `magnet-lines`
+
+Grade de tracinhos que giram para apontar para o ponteiro, como limalha em volta de um ímã. Decorativa (`aria-hidden`); com movimento reduzido, fica parada no ângulo de repouso.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/magnet-lines`
+
+#### `glare-hover`
+
+Superfície (como o `Card`) em que um reflexo diagonal atravessa no hover ou foco. `playOnce` varre só na entrada. Com movimento reduzido, o reflexo aparece parado.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/glare-hover`
+
+#### `magnetic`
+
+Puxa o conteúdo um pouco em direção ao mouse quando ele chega perto, como um ímã fraco, e solta com mola ao afastar. Ignora toque e movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/magnetic`
+
+#### `click-spark`
+
+Solta um estalo de faíscas no ponto de cada clique dentro da área, desenhado em canvas por cima do conteúdo. Decorativo; com movimento reduzido não desenha nada.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/click-spark`
 
 #### `cursor-trail`
 

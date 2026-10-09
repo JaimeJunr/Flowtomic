@@ -40,6 +40,8 @@ export type { SeparatorProps } from "./separator";
 export { Separator } from "./separator";
 export type { SkeletonProps } from "./skeleton";
 export { CardSkeleton, Skeleton, TableSkeleton } from "./skeleton";
+export type { SpotlightCardProps, SpotlightTone } from "./spotlight-card";
+export { SpotlightCard } from "./spotlight-card";
 export type {
   TableBodyProps,
   TableCaptionProps,
@@ -60,5 +62,3 @@ export {
   TableHeader,
   TableRow,
 } from "./table";
-export type { SpotlightCardProps, SpotlightTone } from "./spotlight-card";
-export { SpotlightCard } from "./spotlight-card";
