@@ -8,7 +8,11 @@ import { ArrowDownIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import * as React from "react";
 import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "react";
-import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import {
+  StickToBottom,
+  type StickToBottomState,
+  useStickToBottomContext,
+} from "use-stick-to-bottom";
 import { cn } from "@/lib/utils";
 import { Button } from "../../atoms";
 
@@ -59,6 +63,16 @@ ConversationContent.displayName = "ConversationContent";
 /** Folga entre o topo da área de rolagem e a mensagem ancorada. */
 const TURN_TOP_GAP_PX = 16;
 
+/**
+ * `state` é o store imperativo da lib, não estado do React, e ela só deixa rolar por ele
+ * (`scrollTop`): o setter marca o scroll como ignorado. Rolar o elemento direto faria a lib
+ * ler o movimento como a pessoa rolando e voltar a seguir o fim da resposta. A escrita fica
+ * numa função de módulo porque o `react-hooks/immutability` não aceita mutar o que um hook devolve.
+ */
+function scrollIgnoredByLib(state: StickToBottomState, top: number): void {
+  state.scrollTop = top;
+}
+
 export type ConversationTurnProps = ComponentProps<"div"> & {
   /**
    * Turno mais recente (a mensagem da pessoa e a resposta que vem depois). Quando ele surge
@@ -95,7 +109,7 @@ export const ConversationTurn = ({
       TURN_TOP_GAP_PX;
     // solta a trava antes de mover: a lib ignora esse scroll e não volta a seguir o fim
     stopScroll();
-    state.scrollTop = Math.max(top, 0);
+    scrollIgnoredByLib(state, Math.max(top, 0));
     return () => {
       turn.style.minHeight = "";
     };

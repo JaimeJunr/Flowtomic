@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MotionConfig } from "motion/react";
+import type { ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { buildShimmerMotion, Shimmer } from "./shimmer";
 
@@ -115,6 +116,53 @@ describe("Shimmer props novas", () => {
     const texto = screen.getByText("Pensando...");
     fireEvent.pointerEnter(texto);
     expect(texto.style.backgroundPosition).toBe("");
+  });
+});
+
+describe("Shimmer: componente animado estável entre renders", () => {
+  it("mudar o texto não remonta o elemento nem reinicia a animação", () => {
+    const { rerender } = render(<Shimmer>Pensando...</Shimmer>);
+    const antes = screen.getByText("Pensando...");
+    rerender(<Shimmer>Pensando muito...</Shimmer>);
+    expect(screen.getByText("Pensando muito...")).toBe(antes);
+  });
+
+  it("dois Shimmer com a mesma tag não se remontam um ao outro", () => {
+    const { rerender } = render(
+      <>
+        <Shimmer as="span">um</Shimmer>
+        <Shimmer as="span">dois</Shimmer>
+      </>
+    );
+    const [um, dois] = [screen.getByText("um"), screen.getByText("dois")];
+    rerender(
+      <>
+        <Shimmer as="span">um</Shimmer>
+        <Shimmer as="span">dois!</Shimmer>
+      </>
+    );
+    expect(screen.getByText("um")).toBe(um);
+    expect(screen.getByText("dois!")).toBe(dois);
+  });
+
+  it("trocar `as` entre renders troca a tag e mantém o brilho", () => {
+    const { rerender } = render(<Shimmer as="p">Título</Shimmer>);
+    expect(screen.getByText("Título").tagName).toBe("P");
+    rerender(<Shimmer as="h2">Título</Shimmer>);
+    const titulo = screen.getByText("Título");
+    expect(titulo.tagName).toBe("H2");
+    expect(titulo.style.backgroundPosition).toBe("100% center");
+  });
+
+  it("aceita um componente em `as` e o mantém animado, sem remontar ao re-renderizar", () => {
+    const Titulo = (props: ComponentProps<"h3">) => <h3 {...props} />;
+    const { rerender } = render(<Shimmer as={Titulo}>Seção</Shimmer>);
+    const antes = screen.getByText("Seção");
+    expect(antes.tagName).toBe("H3");
+    expect(antes).toHaveAttribute("data-slot", "shimmer");
+    expect(antes.style.backgroundPosition).toBe("100% center");
+    rerender(<Shimmer as={Titulo}>Seção nova</Shimmer>);
+    expect(screen.getByText("Seção nova")).toBe(antes);
   });
 });
 

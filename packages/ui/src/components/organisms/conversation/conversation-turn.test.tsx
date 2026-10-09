@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
+import { type StickToBottomState, useStickToBottomContext } from "use-stick-to-bottom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Conversation, ConversationContent, ConversationTurn } from "./conversation";
 
@@ -46,6 +47,13 @@ function Chat({ children }: { children: ReactNode }) {
 }
 
 const scroller = () => screen.getByRole("log").firstElementChild as HTMLElement;
+
+// Espia o contexto real da lib de rolagem: guarda o último valor que o contexto devolveu.
+type StickContext = ReturnType<typeof useStickToBottomContext>;
+function StickSpy({ onContext }: { onContext: (ctx: StickContext) => void }) {
+  onContext(useStickToBottomContext());
+  return null;
+}
 
 describe("ConversationTurn", () => {
   it("o turno que chega depois sobe pro topo, com espaço até o fim da tela", () => {
@@ -104,5 +112,33 @@ describe("ConversationTurn", () => {
     const turn = screen.getByText("oi");
     expect(turn).toHaveAttribute("data-slot", "conversation-turn");
     expect(turn).toHaveClass("extra", "flex", "flex-col");
+  });
+
+  it("sobe pelo setter do state da lib e solta a trava de seguir o fim", () => {
+    let ctx: StickContext | undefined;
+    const spy = <StickSpy onContext={(c) => (ctx = c)} />;
+    const { rerender } = render(
+      <Chat>
+        <ConversationTurn anchor data-testid="t1">
+          primeira
+        </ConversationTurn>
+        {spy}
+      </Chat>
+    );
+    rerender(
+      <Chat>
+        <ConversationTurn data-testid="t1">primeira</ConversationTurn>
+        <ConversationTurn anchor data-testid="t2">
+          segunda
+        </ConversationTurn>
+        {spy}
+      </Chat>
+    );
+    const state = ctx?.state as StickToBottomState;
+    // é o setter da lib que marca esse scroll como "ignorado"; sem isso ela o leria como a
+    // pessoa rolando e voltaria a seguir o fim da resposta
+    expect(state.ignoreScrollToTop).toBe(TURN_OFFSET - 16);
+    expect(ctx?.escapedFromLock).toBe(true);
+    expect(ctx?.isAtBottom).toBe(false);
   });
 });
