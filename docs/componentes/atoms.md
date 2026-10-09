@@ -50,6 +50,30 @@ Botão de curtir com contagem: o ícone encolhe até um ponto, troca de estado e
 
 **Localização**: `packages/ui/src/components/atoms/actions/like-button`
 
+#### `undo-fuse-button`
+
+Ação com desfazer: executa no clique e vira "Desfazer" enquanto um pavio queima na borda da pílula; pausa no hover. Clean room (`docs/clean-room/react-bits/undo-fuse-button.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/undo-fuse-button`
+
+#### `pull-send-button`
+
+Botão de enviar que também funciona como estilingue: puxar estica um elástico, soltar carregado lança o botão e solta partículas. Toque e Enter enviam. Clean room (`docs/clean-room/react-bits/pull-send-button.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/pull-send-button`
+
+#### `slide-to-confirm`
+
+Deslize para confirmar: a alça pinta o caminho, aceita promessa (spinner, sucesso ou erro) e volta com uma batida se soltar antes. Clean room (`docs/clean-room/react-bits/slide-to-confirm.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/slide-to-confirm`
+
 #### `badge`
 
 Badge/etiqueta para destacar informações.
@@ -235,6 +259,38 @@ Controle segmentado com thumb de borracha: estica entre o segmento antigo e o no
 **Dependências**: `motion`, `@radix-ui/react-radio-group`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/forms/elastic-segment`
+
+#### `wave-bar-slider`
+
+Slider em barras: as barras perto da alça sobem numa onda proporcional à velocidade, mais larga atrás do movimento. Clean room (`docs/clean-room/react-bits/wave-bar-slider.md`).
+
+**Dependências**: `motion`, `@radix-ui/react-slider`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/wave-bar-slider`
+
+#### `trail-dial`
+
+Mostrador circular: girar rápido deixa uma cauda de cometa, e soltar segue pela inércia e assenta com balanço. Clean room (`docs/clean-room/react-bits/trail-dial.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/trail-dial`
+
+#### `scrub-number-field`
+
+Campo numérico de arrastar: arrastar no chip muda o valor (Shift acelera, Alt refina), passa do limite como borracha e clicar abre a edição. Clean room (`docs/clean-room/react-bits/scrub-number-field.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/scrub-number-field`
+
+#### `cascade-code-input`
+
+Código de verificação: cada dígito pousa numa mola, colar pousa em cascata, o erro esvazia da última casa para a primeira e o sucesso funde as casas. Clean room (`docs/clean-room/react-bits/cascade-code-input.md`).
+
+**Dependências**: `motion`, `input-otp`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/cascade-code-input`
 
 ### Data Display
 
@@ -456,6 +512,14 @@ Sheet lateral deslizante para exibir conteúdo.
 **Dependências**: `@radix-ui/react-dialog`, `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/sheet`
+
+#### `glide-tooltip`
+
+Tooltip de barra de ferramentas: depois do primeiro, o rótulo desliza de botão em botão sem fechar e reabrir. Implementação própria (o Radix cria um rótulo por gatilho). Clean room (`docs/clean-room/react-bits/glide-tooltip.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/glide-tooltip`
 
 ### Animation
 
