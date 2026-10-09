@@ -2,6 +2,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-libra
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { useRef } from "react";
+import { renderToString } from "react-dom/server";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   PromptInput,
@@ -433,6 +434,27 @@ describe("PromptInput: colar e soltar arquivos", () => {
       dataTransfer: { files: [imagem("solta.png")], types: ["Files"] },
     });
     expect(screen.getByText("solta.png")).toBeInTheDocument();
+  });
+
+  it("com PromptInputProvider, digitar não reinscreve os ouvintes de soltar arquivo", async () => {
+    const user = userEvent.setup();
+    render(
+      <PromptInputProvider>
+        <PromptInput globalDrop onSubmit={vi.fn()}>
+          <PromptInputTextarea aria-label="Mensagem" />
+        </PromptInput>
+      </PromptInputProvider>
+    );
+    const formulario = screen.getByRole("textbox", { name: "Mensagem" }).closest("form");
+    const noFormulario = vi.spyOn(formulario as HTMLFormElement, "addEventListener");
+    const noDocumento = vi.spyOn(document, "addEventListener");
+    await user.type(screen.getByRole("textbox", { name: "Mensagem" }), "oi");
+    const inscricoesDeDrop = (...chamadas: unknown[][]) =>
+      chamadas.filter(([tipo]) => tipo === "drop");
+    expect(inscricoesDeDrop(...noFormulario.mock.calls)).toHaveLength(0);
+    expect(inscricoesDeDrop(...noDocumento.mock.calls)).toHaveLength(0);
+    noFormulario.mockRestore();
+    noDocumento.mockRestore();
   });
 
   it("anexar um segundo arquivo não revoga a URL do primeiro, e sair da tela revoga as duas", async () => {
@@ -868,6 +890,10 @@ describe("PromptInputSpeechButton: ditado", () => {
     expect(screen.getByRole("button", { name: "Ditar por voz" })).toBeDisabled();
   });
 
+  it("renderizado no servidor, o botão sai desabilitado mesmo com o navegador compatível", () => {
+    expect(renderToString(<CampoComVoz />)).toMatch(/<button[^>]*disabled/);
+  });
+
   it("usa webkitSpeechRecognition quando é a única disponível", () => {
     delete janela.SpeechRecognition;
     janela.webkitSpeechRecognition = FakeSpeechRecognitionRastreavel;
@@ -931,6 +957,20 @@ describe("PromptInputSpeechButton: ditado", () => {
     expect(botao).toHaveAttribute("aria-pressed", "false");
     expect(erro).toHaveBeenCalledWith("Speech recognition error:", "not-allowed");
     erro.mockRestore();
+  });
+
+  it("depois que o callback muda, o clique inicia o reconhecimento novo e não o antigo", async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(<PromptInputSpeechButton onTranscriptionChange={vi.fn()} />);
+    const antigo = FakeSpeechRecognitionRastreavel.ultima as FakeSpeechRecognitionRastreavel;
+    const iniciarAntigo = vi.spyOn(antigo, "start");
+    rerender(<PromptInputSpeechButton onTranscriptionChange={vi.fn()} />);
+    const novo = FakeSpeechRecognitionRastreavel.ultima as FakeSpeechRecognitionRastreavel;
+    expect(novo).not.toBe(antigo);
+    const iniciarNovo = vi.spyOn(novo, "start");
+    await user.click(screen.getByRole("button", { name: "Ditar por voz" }));
+    expect(iniciarNovo).toHaveBeenCalledTimes(1);
+    expect(iniciarAntigo).not.toHaveBeenCalled();
   });
 
   it("ao desmontar, interrompe o reconhecimento", () => {

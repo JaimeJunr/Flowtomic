@@ -112,15 +112,12 @@ TooltipContent.displayName = "TooltipContent";
  * Este componente não renderiza nada - o tooltip é renderizado via portal
  * O estado é gerenciado pelo TooltipWithMouseFollowWrapper
  */
-function TooltipContentWithMouseFollow({
-  className: _className,
-  minWidth: _minWidth,
-  children: _children,
-  ..._props
-}: Omit<TooltipContentProps, "followMouse"> & { minWidth: number }) {
+const TooltipContentWithMouseFollow: React.FC<
+  Omit<TooltipContentProps, "followMouse"> & { minWidth: number }
+> = () => {
   // Este componente não renderiza - o tooltip é gerenciado pelo wrapper
   return null;
-}
+};
 
 TooltipContentWithMouseFollow.displayName = "TooltipContentWithMouseFollow";
 
@@ -141,7 +138,6 @@ export function TooltipWithMouseFollow({
   className?: string;
   minWidth?: number;
 }) {
-  const [isVisible, setIsVisible] = React.useState(false);
   const [mouse, setMouse] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [height, setHeight] = React.useState(0);
   const [position, setPosition] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -151,11 +147,8 @@ export function TooltipWithMouseFollow({
   // Usar React Aria para acessibilidade
   const state = useTooltipTriggerState({ delay: 0 });
   const { tooltipProps } = useTooltip({}, state);
-
-  // Sincronizar estado do React Aria com estado local
-  React.useEffect(() => {
-    setIsVisible(state.isOpen);
-  }, [state.isOpen]);
+  // Derivado do React Aria: espelhar `isOpen` em um useState via efeito atrasava a dica um render
+  const isVisible = state.isOpen;
 
   React.useEffect(() => {
     if (isVisible && contentRef.current) {

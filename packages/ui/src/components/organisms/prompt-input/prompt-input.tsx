@@ -38,6 +38,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
 import {
   Button,
@@ -486,35 +487,34 @@ export const PromptInput = ({
     [matchesAccept, maxFiles, maxFileSize, onError]
   );
 
-  const add = usingProvider
-    ? (files: File[] | FileList) => controller.attachments.add(files)
-    : addLocal;
+  const removeLocal = useCallback((id: string) => {
+    setItems((prev) => {
+      const found = prev.find((file) => file.id === id);
+      if (found?.url) {
+        URL.revokeObjectURL(found.url);
+      }
+      return prev.filter((file) => file.id !== id);
+    });
+  }, []);
 
-  const remove = usingProvider
-    ? (id: string) => controller.attachments.remove(id)
-    : (id: string) =>
-        setItems((prev) => {
-          const found = prev.find((file) => file.id === id);
-          if (found?.url) {
-            URL.revokeObjectURL(found.url);
-          }
-          return prev.filter((file) => file.id !== id);
-        });
+  const clearLocal = useCallback(() => {
+    setItems((prev) => {
+      for (const file of prev) {
+        if (file.url) {
+          URL.revokeObjectURL(file.url);
+        }
+      }
+      return [];
+    });
+  }, []);
 
-  const clear = usingProvider
-    ? () => controller.attachments.clear()
-    : () =>
-        setItems((prev) => {
-          for (const file of prev) {
-            if (file.url) {
-              URL.revokeObjectURL(file.url);
-            }
-          }
-          return [];
-        });
-
+  // As funções do provider já são estáveis; reembrulhá-las a cada render reinscrevia os ouvintes de
+  // soltar arquivo (efeitos abaixo) a cada tecla digitada.
+  const add = usingProvider ? controller.attachments.add : addLocal;
+  const remove = usingProvider ? controller.attachments.remove : removeLocal;
+  const clear = usingProvider ? controller.attachments.clear : clearLocal;
   const openFileDialog = usingProvider
-    ? () => controller.attachments.openFileDialog()
+    ? controller.attachments.openFileDialog
     : openFileDialogLocal;
 
   useEffect(() => {
@@ -580,7 +580,9 @@ export const PromptInput = ({
   // Remover e limpar já revogam a URL de quem sai; aqui só o que ainda está na tela ao desmontar.
   // Rodar a cada mudança de `files` revogava a miniatura dos anexos que continuavam na tela.
   const filesRef = useRef(files);
-  filesRef.current = files;
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
   useEffect(
     () => () => {
       if (!usingProvider) {
@@ -673,7 +675,7 @@ export const PromptInput = ({
             controller.textInput.clear();
           }
         }
-      } catch (_error) {
+      } catch {
         // Don't clear on error
       }
     });
@@ -1074,6 +1076,10 @@ export type PromptInputSpeechButtonProps = ComponentProps<typeof PromptInputButt
   onTranscriptionChange?: (text: string) => void;
 };
 
+const subscribeToNothing = () => () => {};
+const hasSpeechRecognition = () =>
+  "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+
 export const PromptInputSpeechButton = ({
   className,
   textareaRef,
@@ -1081,14 +1087,12 @@ export const PromptInputSpeechButton = ({
   ...props
 }: PromptInputSpeechButtonProps) => {
   const [isListening, setIsListening] = useState(false);
-  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  // No servidor (e na hidratação) não há `window`: começa sem suporte e o cliente corrige em seguida.
+  const isSupported = useSyncExternalStore(subscribeToNothing, hasSpeechRecognition, () => false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
-    ) {
+    if (isSupported) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const speechRecognition = new SpeechRecognition();
 
@@ -1137,7 +1141,6 @@ export const PromptInputSpeechButton = ({
       };
 
       recognitionRef.current = speechRecognition;
-      setRecognition(speechRecognition);
     }
 
     return () => {
@@ -1145,9 +1148,10 @@ export const PromptInputSpeechButton = ({
         recognitionRef.current.stop();
       }
     };
-  }, [textareaRef, onTranscriptionChange]);
+  }, [isSupported, textareaRef, onTranscriptionChange]);
 
   const toggleListening = useCallback(() => {
+    const recognition = recognitionRef.current;
     if (!recognition) {
       return;
     }
@@ -1157,7 +1161,7 @@ export const PromptInputSpeechButton = ({
     } else {
       recognition.start();
     }
-  }, [recognition, isListening]);
+  }, [isListening]);
 
   return (
     <PromptInputButton
@@ -1169,7 +1173,7 @@ export const PromptInputSpeechButton = ({
       )}
       aria-label="Ditar por voz"
       aria-pressed={isListening}
-      disabled={!recognition}
+      disabled={!isSupported}
       onClick={toggleListening}
       {...props}
     >
