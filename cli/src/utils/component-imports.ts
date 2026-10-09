@@ -1,15 +1,27 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import ts from "typescript";
 import { COMPONENT_MAP, type ComponentInfo, HOOK_MAP } from "./component-map";
 import type { ComponentsConfig } from "./project-config";
 
 type ExportInfo = { component: ComponentInfo; modulePath: string };
 
+/** Arquivo fora de componente que vai junto: o destino é `specifier` resolvido no projeto + `suffix`. */
+export type SharedFile = { source: string; specifier: string; suffix: string };
+
+// Pastas de packages/ui/src sem componente, instaladas sob a pasta do alias de utils.
+const SHARED_DIRS: Record<string, string> = { lib: "" };
+
+function isInside(root: string, path: string): boolean {
+  const rel = relative(root, path);
+  return !rel.startsWith("..") && !isAbsolute(rel);
+}
+
 /** Resolve imports pela origem; barrels são divididos só nos símbolos utilizados. */
 export function createImportRewriter(repoPath: string, config: ComponentsConfig) {
   const components = [...Object.values(COMPONENT_MAP), ...Object.values(HOOK_MAP)];
   const exportsCache = new Map<string, Map<string, ExportInfo>>();
+  const libAlias = config.aliases.utils.slice(0, config.aliases.utils.lastIndexOf("/"));
 
   function owner(path: string): ComponentInfo | undefined {
     return components.find((component) => {
@@ -93,6 +105,23 @@ export function createImportRewriter(repoPath: string, config: ComponentsConfig)
     return `${base}/${component.name}${tail && tail !== "index" ? `/${tail}` : ""}`;
   }
 
+  function sharedFile(modulePath: string): SharedFile | undefined {
+    for (const [dir, prefix] of Object.entries(SHARED_DIRS)) {
+      const root = join(repoPath, "packages/ui/src", dir);
+      if (!isInside(root, modulePath)) continue;
+      const source = sourceFile(modulePath);
+      if (!source) throw new Error(`Arquivo não encontrado: ${relative(repoPath, modulePath)}`);
+      const base = modulePath.replace(/\.tsx?$/, "");
+      const tail = relative(root, base).replace(/\\/g, "/");
+      return {
+        source,
+        specifier: [libAlias, prefix, tail].filter(Boolean).join("/"),
+        suffix: source.slice(base.length),
+      };
+    }
+    return undefined;
+  }
+
   return function rewrite(content: string, sourcePath: string) {
     const ast = ts.createSourceFile(
       sourcePath,
@@ -103,6 +132,7 @@ export function createImportRewriter(repoPath: string, config: ComponentsConfig)
     );
     const dependencies = new Map<string, ComponentInfo>();
     const npmDependencies = new Set<string>();
+    const sharedFiles: SharedFile[] = [];
     const edits: { start: number; end: number; text: string }[] = [];
     const current = owner(sourcePath);
     for (const node of ast.statements) {
@@ -121,14 +151,15 @@ export function createImportRewriter(repoPath: string, config: ComponentsConfig)
         continue;
       }
       const libRoot = join(repoPath, "packages/ui/src/lib");
+      const isUtils =
+        modulePath === join(libRoot, "utils") || modulePath === join(libRoot, "utils.ts");
+      const shared = isUtils ? undefined : sharedFile(modulePath);
       let replacement: string | undefined;
-      if (modulePath === join(libRoot, "utils") || modulePath === join(libRoot, "utils.ts")) {
+      if (isUtils) {
         replacement = config.aliases.utils;
-      } else if (modulePath.startsWith(`${libRoot}/`)) {
-        const libAlias = config.aliases.utils.slice(0, config.aliases.utils.lastIndexOf("/"));
-        replacement = `${libAlias}/${relative(libRoot, modulePath)
-          .replace(/\\/g, "/")
-          .replace(/\.tsx?$/, "")}`;
+      } else if (shared) {
+        sharedFiles.push(shared);
+        replacement = shared.specifier;
       } else {
         const component = owner(modulePath);
         if (component) {
@@ -191,6 +222,7 @@ export function createImportRewriter(repoPath: string, config: ComponentsConfig)
       content,
       dependencies: [...dependencies.values()],
       npmDependencies: [...npmDependencies],
+      sharedFiles,
     };
   };
 }

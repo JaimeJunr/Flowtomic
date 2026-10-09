@@ -95,6 +95,14 @@ describe("instalação pela CLI compilada em um projeto consumidor", () => {
     return source;
   }
 
+  function fakeButton(source: string, code: string): void {
+    write(join(source, COMPONENT_MAP.button.path, "button.tsx"), code);
+    write(
+      join(source, COMPONENT_MAP.button.path, "index.ts"),
+      'export { Button } from "./button";\n'
+    );
+  }
+
   it("resolve o alias de utils em src, sem criar lib na raiz", () => {
     const result = run(["add", "button"]);
     expect(result.status).toBe(0);
@@ -402,6 +410,52 @@ describe("instalação pela CLI compilada em um projeto consumidor", () => {
     expect(existsSync(join(project, "src/helpers/nested/value.ts"))).toBe(true);
     expect(readFileSync(join(project, "src/helpers/cn.ts"), "utf-8")).toBe("// utils do dono\n");
     expect(result.stdout).toContain("preservado");
+  });
+
+  // Pasta de helper com index que reexporta irmãos, import relativo para fora dela e ciclo.
+  it("copia pasta de helper com index, segue imports relativos e termina com ciclo", () => {
+    const source = fakeRepo();
+    const lib = join(source, "packages/ui/src/lib");
+    fakeButton(source, 'import { canvas } from "@/lib/webgl";\nexport const Button = canvas;\n');
+    write(join(lib, "webgl/index.ts"), 'export { canvas } from "./canvas";\n');
+    write(
+      join(lib, "webgl/canvas.ts"),
+      'import { motion } from "../motion";\nimport { theme } from "@/lib/theme";\nexport const canvas = [motion, theme];\n'
+    );
+    write(
+      join(lib, "motion.ts"),
+      'import { canvas } from "./webgl/canvas";\nexport const motion = () => canvas;\n'
+    );
+    write(join(lib, "theme.ts"), "export const theme = 1;\n");
+    const result = run(["add", "button"], source);
+    expect(result.status, result.stderr).toBe(0);
+    for (const path of ["webgl/index.ts", "webgl/canvas.ts", "motion.ts", "theme.ts"]) {
+      expect(existsSync(join(project, "src/lib", path)), path).toBe(true);
+    }
+  });
+
+  it("falha antes de escrever se faltar helper de lib", () => {
+    const source = fakeRepo();
+    fakeButton(source, 'import { x } from "@/lib/nao-existe";\nexport const Button = x;\n');
+    const result = run(["add", "button"], source);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("nao-existe");
+    expect(existsSync(join(project, "src"))).toBe(false);
+  });
+
+  it("avisa ao preservar helper de lib com conteúdo diferente e soma as dependências dele", () => {
+    const source = fakeRepo();
+    fakeButton(source, 'import { x } from "@/lib/helper";\nexport const Button = x;\n');
+    write(
+      join(source, "packages/ui/src/lib/helper.ts"),
+      'import { animate } from "motion/react";\nexport const x = animate;\n'
+    );
+    write(join(project, "src/lib/helper.ts"), "// helper do dono\n");
+    const result = run(["add", "button"], source);
+    expect(result.status, result.stderr).toBe(0);
+    expect(readFileSync(join(project, "src/lib/helper.ts"), "utf-8")).toBe("// helper do dono\n");
+    expect(result.stdout).toContain("conteúdo diferente): src/lib/helper.ts");
+    expect(result.stdout).toMatch(/npm install .*motion/);
   });
 
   it("emite Repositório, Dependências e check em UTF-8 válido no bundle", () => {

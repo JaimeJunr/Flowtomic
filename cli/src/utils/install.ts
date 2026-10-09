@@ -4,7 +4,6 @@ import chalk from "chalk";
 import { type Block, blockSourcePath, blockTargetPath } from "./block-utils";
 import { createImportRewriter } from "./component-imports";
 import { type ComponentInfo, findComponent } from "./component-map";
-import { copyLibDependencies } from "./lib-files";
 import { type ComponentsConfig, createProjectResolver } from "./project-config";
 
 /** Planeja e valida todas as origens antes de escrever no projeto consumidor. */
@@ -38,6 +37,9 @@ export function createInstaller(
     const result = rewrite(readFileSync(source, "utf-8"), source);
     files.set(target, { source, content: result.content });
     for (const name of result.npmDependencies) npmDependencies.add(name);
+    // O destino sai do mesmo specifier que o rewriter gravou no import.
+    for (const shared of result.sharedFiles)
+      file(shared.source, resolver.alias(shared.specifier) + shared.suffix);
     for (const dependency of result.dependencies) component(dependency);
   }
 
@@ -89,16 +91,7 @@ export function createInstaller(
     },
     apply(): void {
       file(join(repoPath, "packages/ui/src/lib/utils.ts"), utils);
-      for (const [target, entry] of files) {
-        preserveOrWrite(target, entry.content);
-        const copied = copyLibDependencies(readFileSync(entry.source, "utf-8"), {
-          repoLibRoot: join(repoPath, "packages/ui/src/lib"),
-          targetLibRoot: dirname(utils),
-          transform: (content, source) => rewrite(content, source).content,
-        });
-        for (const path of copied)
-          console.log(chalk.green(`   ✅ ${relative(projectDir, join(dirname(utils), path))}`));
-      }
+      for (const [target, entry] of files) preserveOrWrite(target, entry.content);
       if (npmDependencies.size) {
         const dependencies = [...npmDependencies].sort();
         console.log(chalk.blue(`\nDependências npm necessárias: ${dependencies.join(", ")}`));
