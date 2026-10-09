@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&family=Schibsted+Grotesk:wght@400..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tw-animate-css";
 

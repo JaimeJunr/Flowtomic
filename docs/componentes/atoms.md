@@ -403,6 +403,14 @@ Sheet lateral deslizante para exibir conteúdo.
 
 ### Animation
 
+#### `cursor-trail`
+
+Deixa cópias de um conteúdo (ícone, palavra) como pegadas atrás do mouse numa área; somem uma a uma quando o mouse para. Ignora toque e respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/cursor-trail`
+
 #### `animated-3d`
 
 Componente com animação 3D.
@@ -461,6 +469,38 @@ Spinner animado para indicar carregamento.
 
 ### Typography
 
+#### `fuzzy-text`
+
+Texto que treme como sinal de vídeo ruim, em faixas de 1px; mais forte com hover, com estouro no clique e picos periódicos opcionais. Desenha em canvas, com texto puro de fallback.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/fuzzy-text`
+
+#### `particle-text`
+
+Nuvem de pontos que se junta até formar a palavra, respira em repouso e foge do ponteiro; o ciclo repete no hover ou no clique. Desenha em canvas, com texto puro de fallback.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/particle-text`
+
+#### `tech-text`
+
+Logotipo sólido que vira contorno tracejado sob o ponteiro, com moldura de seleção, letras arrastáveis e varredura automática.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/tech-text`
+
+#### `curved-loop`
+
+Faixa de texto que corre em loop ao longo de uma curva, arrastável com mouse ou setas, com pausa fora da tela.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/curved-loop`
+
 #### `blur-text`
 
 Texto que entra palavra a palavra (ou letra a letra) ao aparecer na tela, saindo de borrado e deslocado para nítido. Respeita movimento reduzido.
@@ -500,6 +540,62 @@ Texto curto disposto em círculo, girando como um selo, com conteúdo fixo opcio
 **Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/typography/circular-text`
+
+#### `glitch-text`
+
+Texto com interferência digital: duas cópias coloridas deslocadas aparecem em faixas que pulam de altura, em loop ou só no hover/foco. Só tokens de cor. Com movimento reduzido, fica só o texto.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/glitch-text`
+
+#### `true-focus`
+
+Frase com uma palavra nítida e as demais borradas, envolvida por uma moldura de quatro cantos que desliza para a próxima. Modo auto (pausa com hover, foco e fora da tela) ou hover/teclado. Respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/true-focus`
+
+#### `split-flap-text`
+
+Painel de plaquinhas estilo aeroporto: ao trocar a frase, só as plaquinhas que mudam viram, letra por letra, até a frase certa. Fundo escuro nos dois temas (`dark` na raiz). Pausa com hover, foco e fora da tela. Respeita movimento reduzido.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/split-flap-text`
+
+#### `variable-proximity`
+
+Texto cujas letras engordam perto do ponteiro, numa bolha que acompanha o mouse (eixo `wght` e eixos extras, curvas linear, exponencial ou gaussiana). Exige fonte variável. Com movimento reduzido o efeito continua, sem transição.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/variable-proximity`
+
+#### `text-pressure`
+
+Palavra que preenche a largura do bloco; cada letra engorda, alarga ou inclina conforme a proximidade do ponteiro (lerp por quadro), com opção de opacidade, contorno e esticar na altura. Exige fonte variável. Com movimento reduzido fica no meio da faixa.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/text-pressure`
+
+#### `depth-text`
+
+Palavra extrudada em 3D por até 60 cópias empilhadas em Z. Inclina na direção do ponteiro fino e orbita devagar sem ponteiro; o loop para fora da tela. Com movimento reduzido fica a extrusão estática.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/depth-text`
+
+#### `echo-text`
+
+Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se juntam na entrada e fogem do ponteiro, os mais fundos com atraso. O loop só roda com movimento e área visível. Com movimento reduzido sobra só a frente.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/typography/echo-text`
 
 ### Code
 

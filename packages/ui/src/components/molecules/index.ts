@@ -22,6 +22,8 @@ export type { AnimatedSlidingNumberProps } from "./animation/animated-sliding-nu
 export { AnimatedSlidingNumber } from "./animation/animated-sliding-number";
 export type { ButtonCounterProps } from "./animation/button-counter";
 export { ButtonCounter } from "./animation/button-counter";
+export type { ScrollVelocityProps } from "./animation/scroll-velocity";
+export { ScrollVelocity } from "./animation/scroll-velocity";
 export type {
   AuthFormErrorMessageProps,
   AuthNavigationLinkProps,
