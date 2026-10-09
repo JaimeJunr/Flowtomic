@@ -1220,7 +1220,7 @@ export const PromptInputSelectTrigger = ({
     data-slot="prompt-input-select-trigger"
     className={cn(
       "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
-      "hover:bg-accent hover:text-foreground aria-aria-expanded:bg-accent aria-aria-expanded:text-foreground",
+      "hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
       className
     )}
     {...props}

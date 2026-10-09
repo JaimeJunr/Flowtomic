@@ -1029,6 +1029,31 @@ describe("PromptInput: peças de composição", () => {
     expect(aoMudar).toHaveBeenCalledWith("preciso");
   });
 
+  it("o gatilho do seletor fica destacado enquanto a lista está aberta", async () => {
+    const user = userEvent.setup();
+    render(
+      <PromptInput onSubmit={vi.fn()}>
+        <PromptInputToolbar>
+          <PromptInputModelSelect defaultValue="rapido">
+            <PromptInputModelSelectTrigger aria-label="Modelo">
+              <PromptInputModelSelectValue />
+            </PromptInputModelSelectTrigger>
+            <PromptInputModelSelectContent>
+              <PromptInputModelSelectItem value="rapido">Rápido</PromptInputModelSelectItem>
+            </PromptInputModelSelectContent>
+          </PromptInputModelSelect>
+        </PromptInputToolbar>
+      </PromptInput>
+    );
+    const gatilho = screen.getByRole("combobox", { name: "Modelo" });
+    await user.click(gatilho);
+    await screen.findByRole("option", { name: "Rápido" });
+    expect(gatilho).toHaveAttribute("aria-expanded", "true");
+    // o prefixo dobrado (`aria-aria-expanded:`) não casa com nada e o destaque some
+    expect(gatilho).toHaveClass("aria-expanded:bg-accent", "aria-expanded:text-foreground");
+    expect(gatilho.className).not.toContain("aria-aria-");
+  });
+
   it("a lista de comandos filtra ao digitar e mostra o vazio quando nada casa", async () => {
     const user = userEvent.setup();
     render(
