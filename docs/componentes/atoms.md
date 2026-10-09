@@ -318,6 +318,14 @@ Componente base para gráficos usando Recharts.
 
 **Localização**: `packages/ui/src/components/atoms/data-display/chart`
 
+#### `liquid-gauge`
+
+Tanque de líquido que corre até o nível com inércia, inclina a superfície e respinga nos limites; opcionalmente interativo. Clean room (`docs/clean-room/react-bits/liquid-gauge.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/data-display/liquid-gauge`
+
 ### Display
 
 #### `card`
@@ -520,6 +528,30 @@ Tooltip de barra de ferramentas: depois do primeiro, o rótulo desliza de botão
 **Dependências**: `motion`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/feedback/glide-tooltip`
+
+#### `fuse-toast`
+
+Aviso individual com pavio que mostra o tempo restante; pausa no hover, dispensa arrastando para o lado ou com Escape. Clean room (`docs/clean-room/react-bits/fuse-toast.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/fuse-toast`
+
+#### `task-status-mark`
+
+Marca de status de tarefa que muda de forma no lugar: tracejado, arco girando ou com progresso, ✓ com o rótulo riscado, ✕. Clean room (`docs/clean-room/react-bits/task-status-mark.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/task-status-mark`
+
+#### `grid-loader`
+
+Indicador de "pensando" com grade de pontos em onda e cronômetro; ao terminar, os pontos formam ✓ ou ✕. Clean room (`docs/clean-room/react-bits/grid-loader.md`).
+
+**Dependências**: `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/grid-loader`
 
 ### Animation
 

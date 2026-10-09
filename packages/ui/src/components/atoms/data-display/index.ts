@@ -34,7 +34,9 @@ export {
   ChartTooltipContent,
   useChart,
 } from "./chart";
-
+// Liquid Gauge (data display atom)
+export type { LiquidGaugeProps } from "./liquid-gauge";
+export { LiquidGauge } from "./liquid-gauge";
 // QR Code (data display atom)
 export type { QRCodeProps } from "./qr-code";
 export { QRCode, qrCodeRootVariants } from "./qr-code";

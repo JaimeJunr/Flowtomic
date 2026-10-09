@@ -2,7 +2,7 @@
 
 Componentes moleculares do Flowtomic. São combinações de atoms que formam componentes mais complexos.
 
-## 📦 Componentes Disponíveis (37)
+## 📦 Componentes Disponíveis (41)
 
 ### `button-group`
 
@@ -57,6 +57,30 @@ Faixas de texto em sentidos alternados que aceleram com a velocidade do scroll e
 Seletor compacto em chip: o menu cresce do canto do chip e uma pílula de destaque desliza entre as opções. Clean room (`docs/clean-room/react-bits/glide-picker.md`).
 
 **Dependências**: `motion`, `@radix-ui/react-dropdown-menu`, `lucide-react`, `cn`
+
+### `shred-list`
+
+Lista com fragmentadora: arrastar um cartão até a fenda o corta em tiras que caem; arrastar entre itens reordena. Delete e Alt+setas pelo teclado. Clean room (`docs/clean-room/react-bits/shred-list.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `tear-off-ticket`
+
+Ingresso com canhoto picotado: inclina em 3D, e o canhoto dobra e rasga as pontes de papel até se soltar. Enter também rasga. Clean room (`docs/clean-room/react-bits/tear-off-ticket.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `turn-card`
+
+Cartão de frente e verso que vira em 3D por clique ou arrastando com a mão, com inclinação e brilho no hover. Clean room (`docs/clean-room/react-bits/turn-card.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `swipe-actions-row`
+
+Linha de lista com gaveta de ações ao arrastar; puxar além do limite executa a ação principal e a linha dobra. Clean room (`docs/clean-room/react-bits/swipe-actions-row.md`).
+
+**Dependências**: `motion`, `cn`
 
 ### `theme-toggle-button`
 

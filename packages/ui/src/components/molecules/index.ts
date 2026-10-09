@@ -137,6 +137,8 @@ export type { Project, ProjectListProps } from "./data-display/project-list";
 export { ProjectList } from "./data-display/project-list";
 export type { Reminder, ReminderCardProps } from "./data-display/reminder-card";
 export { ReminderCard } from "./data-display/reminder-card";
+export type { ShredListProps } from "./data-display/shred-list";
+export { ShredList } from "./data-display/shred-list";
 export type {
   SourceProps,
   SourcesContentProps,
@@ -155,6 +157,8 @@ export type { StatCardProps } from "./data-display/stat-card";
 export { StatCard } from "./data-display/stat-card";
 export type { SuggestionProps, SuggestionsProps } from "./data-display/suggestion";
 export { Suggestion, Suggestions } from "./data-display/suggestion";
+export type { SwipeAction, SwipeActionsRowProps } from "./data-display/swipe-actions-row";
+export { SwipeActionsRow } from "./data-display/swipe-actions-row";
 export type {
   TaskContentProps,
   TaskItemFileProps,
@@ -169,6 +173,8 @@ export type {
   TeamMemberStatus,
 } from "./data-display/team-member-list";
 export { TeamMemberList } from "./data-display/team-member-list";
+export type { TearOffTicketProps } from "./data-display/tear-off-ticket";
+export { TearOffTicket } from "./data-display/tear-off-ticket";
 export type { TimeTrackerProps } from "./data-display/time-tracker";
 export { TimeTracker } from "./data-display/time-tracker";
 export type {
@@ -184,6 +190,8 @@ export type {
   ToolStatusLineState,
 } from "./data-display/tool-status-line";
 export { ToolStatusLine } from "./data-display/tool-status-line";
+export type { TurnCardProps } from "./data-display/turn-card";
+export { TurnCard } from "./data-display/turn-card";
 export type { DraggableWidgetProps } from "./draggable-widget";
 export { DraggableWidget } from "./draggable-widget";
 export type { EditModeToggleProps } from "./edit-mode-toggle";
