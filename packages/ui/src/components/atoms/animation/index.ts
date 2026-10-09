@@ -11,6 +11,8 @@ export type { CursorTrailProps } from "./cursor-trail";
 export { CursorTrail } from "./cursor-trail";
 export type { EncryptedTextProps } from "./encrypted-text";
 export { EncryptedText } from "./encrypted-text";
+export type { EvasiveState, EvasiveTargetProps } from "./evasive-target";
+export { EvasiveTarget } from "./evasive-target";
 export type { LoaderProps } from "./loader";
 export { Loader } from "./loader";
 export type { ProgressProps } from "./progress";

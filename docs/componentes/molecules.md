@@ -2,7 +2,7 @@
 
 Componentes moleculares do Flowtomic. São combinações de atoms que formam componentes mais complexos.
 
-## 📦 Componentes Disponíveis (41)
+## 📦 Componentes Disponíveis (44)
 
 ### `button-group`
 
@@ -81,6 +81,24 @@ Cartão de frente e verso que vira em 3D por clique ou arrastando com a mão, co
 Linha de lista com gaveta de ações ao arrastar; puxar além do limite executa a ação principal e a linha dobra. Clean room (`docs/clean-room/react-bits/swipe-actions-row.md`).
 
 **Dependências**: `motion`, `cn`
+
+### `branch-nav`
+
+Menu lateral em árvore: tronco e galhos curvos ligam os filhos, e uma linha de destaque percorre o caminho até o item ativo. Clean room (`docs/clean-room/react-bits/branch-nav.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `folder-picker`
+
+Pasta que abre e solta as opções em pílulas flutuando numa nuvem acima dela; escolher uma fecha a pasta. Clean room (`docs/clean-room/react-bits/folder-picker.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `generation-frame`
+
+Quadro de imagem gerada por IA com proporção reservada: cada estágio (fila, gerando, refinando, pronta, erro) interpola desfoque e saturação, com faixa de progresso e chip de status. Clean room (`docs/clean-room/react-bits/generation-frame.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
 
 ### `theme-toggle-button`
 

@@ -74,6 +74,14 @@ Deslize para confirmar: a alça pinta o caminho, aceita promessa (spinner, suces
 
 **Localização**: `packages/ui/src/components/atoms/actions/slide-to-confirm`
 
+#### `dictation-button`
+
+Botão de ditado que abre numa cápsula com relógio e forma de onda; toque trava, segurar grava, deslizar para a esquerda cancela. Clean room (`docs/clean-room/react-bits/dictation-button.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/actions/dictation-button`
+
 #### `badge`
 
 Badge/etiqueta para destacar informações.
@@ -553,6 +561,22 @@ Indicador de "pensando" com grade de pontos em onda e cronômetro; ao terminar, 
 
 **Localização**: `packages/ui/src/components/atoms/feedback/grid-loader`
 
+#### `tool-call-chip`
+
+Chip de chamada de ferramenta em andamento: preenchimento que estaciona em 90%, contador, ✓ com lavagem ou ✕ com chacoalhada e reexecutar. Clean room (`docs/clean-room/react-bits/tool-call-chip.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/tool-call-chip`
+
+#### `thinking-line`
+
+Linha "Pensando…" que respira, com trilha de passos; ao terminar vira "Pensou por 2,7 s" e dobra a trilha. Clean room (`docs/clean-room/react-bits/thinking-line.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/feedback/thinking-line`
+
 ### Animation
 
 #### `cursor-trail`
@@ -618,6 +642,14 @@ Spinner animado para indicar carregamento.
 **Dependências**: `lucide-react`, `cn`
 
 **Localização**: `packages/ui/src/components/atoms/animation/spinner`
+
+#### `evasive-target`
+
+Pílula lúdica que foge do ponteiro e desiste depois de algumas fugas. Nunca envolver recusa, fechar ou cancelar. Clean room (`docs/clean-room/react-bits/evasive-target.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/evasive-target`
 
 ### Typography
 

@@ -115,6 +115,10 @@ export type { ToasterProps } from "./sonner";
 export { Toaster, toast } from "./sonner";
 export type { TaskStatus, TaskStatusMarkProps } from "./task-status-mark";
 export { TaskStatusMark } from "./task-status-mark";
+export type { ThinkingLineGlyph, ThinkingLineProps } from "./thinking-line";
+export { ThinkingLine } from "./thinking-line";
+export type { ToolCallChipProps, ToolCallStatus } from "./tool-call-chip";
+export { ToolCallChip } from "./tool-call-chip";
 export type {
   TooltipContentProps,
   TooltipProps,
