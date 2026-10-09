@@ -6,7 +6,7 @@
  * com import quebrado.
  */
 
-import { copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 
 const LIB_IMPORT = /from\s+["']@\/lib\/([^"']+)["']/g;
@@ -18,6 +18,8 @@ export type LibCopyRoots = {
   repoLibRoot: string;
   /** Pasta `lib` do projeto que recebe o componente. */
   targetLibRoot: string;
+  /** Ajusta os aliases dos helpers antes da cópia. */
+  transform?: (content: string, sourcePath: string) => string;
 };
 
 /** Caminhos importados via `@/lib/...`, sem o `utils` (que tem cópia própria). */
@@ -54,7 +56,15 @@ function copyIfMissing(sourceFile: string, roots: LibCopyRoots): string | null {
   const targetFile = join(roots.targetLibRoot, relativePath);
   if (existsSync(targetFile)) return null;
   mkdirSync(dirname(targetFile), { recursive: true });
-  copyFileSync(sourceFile, targetFile);
+  if (roots.transform) {
+    writeFileSync(
+      targetFile,
+      roots.transform(readFileSync(sourceFile, "utf-8"), sourceFile),
+      "utf-8"
+    );
+  } else {
+    copyFileSync(sourceFile, targetFile);
+  }
   return relativePath;
 }
 

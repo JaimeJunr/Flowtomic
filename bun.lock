@@ -111,7 +111,7 @@
     },
     "cli": {
       "name": "flowtomic-cli",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "bin": {
         "flowtomic": "dist/cli.js",
         "flowtomic-cli": "dist/cli.js",

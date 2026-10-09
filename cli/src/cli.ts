@@ -14,6 +14,7 @@
  */
 
 import { Command } from "commander";
+import { version } from "../package.json";
 import { add } from "./commands/add";
 import { addBlockCommand } from "./commands/add-block";
 import { copyStyles } from "./commands/copy-styles";
@@ -25,7 +26,7 @@ const program = new Command();
 program
   .name("flowtomic")
   .description("CLI para instalação de componentes, hooks e blocks do Flowtomic")
-  .version("0.1.0");
+  .version(version);
 
 program
   .command("init")
@@ -60,4 +61,7 @@ program
   )
   .action(copyStyles);
 
-program.parse();
+program.parseAsync().catch((error: unknown) => {
+  console.error(`Erro: ${error instanceof Error ? error.message : String(error)}`);
+  process.exitCode = 1;
+});

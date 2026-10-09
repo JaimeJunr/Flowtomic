@@ -58,9 +58,11 @@ npx flowtomic-cli@latest add
 
 **O que faz**:
 
-- Copia os arquivos do componente para `components/ui/` (ou caminho configurado)
+- Copia os arquivos para o destino de `aliases.ui`, resolvido pelo `tsconfig.json` ou `jsconfig.json`
 - Ajusta os imports para usar os aliases do seu projeto
-- Instala dependências necessárias (se configurado)
+- Copia recursivamente os componentes locais utilizados, sem duplicar arquivos
+- Preserva arquivos existentes e avisa quando o conteúdo difere da origem
+- Lista as dependências npm e o comando para instalá-las; não executa o gerenciador de pacotes
 
 ### `add-block`
 
@@ -74,8 +76,9 @@ npx flowtomic-cli@latest add-block dashboard-01
 **O que faz**:
 
 - Copia todos os arquivos do block
-- Instala dependências necessárias
+- Copia as dependências de registry e suas dependências transitivas
 - Ajusta imports e caminhos
+- Valida os arquivos de origem antes de copiar; arquivo ausente termina com código 1
 
 ### `list`
 
@@ -108,14 +111,16 @@ O CLI tenta encontrar o repositório Flowtomic de várias formas:
    npx flowtomic-cli@latest add button
    ```
 
-2. **Caminho relativo** (se executado do repositório)
+2. **Caminho relativo** ao projeto consumidor ou ao executável da CLI
 
 3. **Caminhos padrão** (desenvolvimento local)
+
+4. **GitHub**: quando não encontra um checkout local, baixa o repositório `JaimeJunr/Flowtomic`
+   (branch padrão `main`) e reutiliza o cache temporário. Esse cache não é atualizado automaticamente.
 
 ### Variáveis de Ambiente
 
 - **`FLOWTOMIC_REPO_PATH`**: Caminho local para o repositório (para desenvolvimento)
-- **`FLOWTOMIC_REPO_URL`**: URL do repositório GitHub (padrão: `JaimeJunr/Flowtomic`)
 
 **SEMPRE configure** essas variáveis quando trabalhar com desenvolvimento local.
 
@@ -149,6 +154,22 @@ O comando `init` cria um arquivo `components.json` na raiz do projeto:
 ```
 
 ### Customizar Caminhos
+
+Desde a 0.2.2, aliases são resolvidos pelos `compilerOptions.paths` do TypeScript, incluindo
+`baseUrl`, configuração herdada com `extends` e JSON com comentários. O `tsconfig.json` tem
+precedência sobre o `jsconfig.json`. Se um alias tem vários destinos, a instalação usa o primeiro.
+Um alias não mapeado gera erro; projetos antigos sem esses arquivos mantêm `@/` relativo à raiz.
+
+Com `"paths": { "@/*": ["./src/*"] }`, a configuração padrão instala componentes em
+`src/components/ui/<nome>/`, hooks em `src/hooks/<nome>/` e utils em `src/lib/utils.ts`.
+O target `app/chat/page.tsx` do chatbot vira `src/app/chat/page.tsx`; targets já iniciados
+por `src/` são respeitados literalmente.
+
+Os imports das categorias do repositório, como `@/components/atoms/actions/button`, viram
+`@/components/ui/button`. Imports nomeados de barrels são divididos nos componentes usados.
+Barrels com import default ou namespace precisam de imports nomeados; a CLI informa o erro
+antes de escrever. Arquivos existentes são preservados, inclusive páginas e utils; para substituir
+uma versão local, revise e remova o arquivo antes de instalar novamente.
 
 Edite o arquivo `components.json` para ajustar caminhos e aliases:
 
@@ -366,6 +387,14 @@ npx shadcn@latest add https://registry.flowtomic.dev/all.json
 
 ## Troubleshooting
 
+### Acentos ou símbolos corrompidos no terminal
+
+A fonte, o bundle npm 0.2.1 e a saída da CLI usam UTF-8. Os bytes de `Repositório` são
+`5265706f736974c3b372696f`: interpretá-los como Windows-1252 produz `RepositÃ³rio`.
+A mesma interpretação transforma `✅` em `âœ…`. Configure o terminal e qualquer ferramenta
+que capture stdout/stderr para UTF-8. No Windows, confira a página de código com `chcp`
+e use `chcp 65001` antes de executar. Os testes verificam os bytes da saída do bundle com Node.
+
 ### Problemas Comuns
 
 - **Erro: "components.json não encontrado"**
@@ -430,3 +459,22 @@ Para usar o repositório local em desenvolvimento:
 export FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic
 npx flowtomic-cli@latest add button
 ```
+
+Para verificar uma worktree sem publicar, rode apenas os comandos do pacote CLI, em série:
+
+```bash
+cd /caminho/para/flowtomic/cli
+bunx vitest run
+bun run type-check
+bun run lint
+bun run build
+
+cd /caminho/para/projeto-consumidor
+FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic node /caminho/para/flowtomic/cli/dist/cli.js add-block chatbot
+FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic node /caminho/para/flowtomic/cli/dist/cli.js add table
+```
+
+`FLOWTOMIC_REPO_PATH` fixa o checkout usado como origem dos componentes. O executável dentro
+de uma worktree também a encontra automaticamente; a variável evita depender dessa descoberta.
+Os testes de instalação compilam o bundle e executam Node em projetos temporários reais, sem mocks
+do sistema de arquivos, usando a mesma configuração de aliases de um projeto Next.js.
