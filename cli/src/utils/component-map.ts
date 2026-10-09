@@ -325,6 +325,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["thinking-line.tsx", "thinking-line-utils.ts", "index.ts"],
     dependencies: ["motion", "lucide-react", "cn"],
   },
+  "spotlight-card": {
+    name: "spotlight-card",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/display/spotlight-card",
+    files: ["spotlight-card.tsx", "spotlight-card-utils.ts", "index.ts"],
+    dependencies: ["motion", "cn"],
+  },
   "hold-button": {
     name: "hold-button",
     type: "atom",

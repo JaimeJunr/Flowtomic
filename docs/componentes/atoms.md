@@ -344,6 +344,14 @@ Container de card para agrupar conteúdo.
 
 **Localização**: `packages/ui/src/components/atoms/display/card`
 
+#### `spotlight-card`
+
+Card com uma luz que segue o ponteiro. Um listener só serve todos os cards da página, então numa grade a luz atravessa de um card para o vizinho. Tom `brand` (padrão) ou `neutral`; com movimento reduzido, a luz fica parada no centro.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/display/spotlight-card`
+
 #### `table`
 
 Tabela base para exibição de dados.
