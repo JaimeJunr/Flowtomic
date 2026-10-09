@@ -6,6 +6,8 @@ export {
   dateInputBaseClasses,
   dateInputDisabledClasses,
 } from "./date-input";
+export type { ElasticSegmentItem, ElasticSegmentProps } from "./elastic-segment";
+export { ElasticSegment } from "./elastic-segment";
 export type {
   FieldContentProps,
   FieldDescriptionProps,
@@ -59,6 +61,8 @@ export type {
 export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "./input-otp";
 export type { LabelProps } from "./label";
 export { Label } from "./label";
+export type { LiftRatingProps } from "./lift-rating";
+export { LiftRating } from "./lift-rating";
 export type { NativeSelectProps } from "./native-select";
 export { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "./native-select";
 export type { RadioGroupItemProps, RadioGroupProps } from "./radio-group";
@@ -77,6 +81,12 @@ export {
 } from "./select";
 export type { SliderProps } from "./slider";
 export { Slider } from "./slider";
+export type { StretchSwitchProps } from "./stretch-switch";
+export { StretchSwitch } from "./stretch-switch";
+export type { StrikeCheckboxProps } from "./strike-checkbox";
+export { StrikeCheckbox } from "./strike-checkbox";
+export type { SwellChipGroupProps, SwellChipItem } from "./swell-chip-group";
+export { SwellChipGroup } from "./swell-chip-group";
 export type { SwitchProps } from "./switch";
 export { Switch } from "./switch";
 export type { TextareaProps } from "./textarea";

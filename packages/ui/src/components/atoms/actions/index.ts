@@ -52,3 +52,9 @@ export {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+export type { HoldButtonProps } from "./hold-button";
+export { HoldButton } from "./hold-button";
+export type { LikeButtonProps } from "./like-button";
+export { LikeButton } from "./like-button";
+export type { NotifyToggleProps } from "./notify-toggle";
+export { NotifyToggle } from "./notify-toggle";
