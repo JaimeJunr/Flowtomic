@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (89 atoms, 52 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (97 atoms, 52 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (89)
+- **Atoms**: `docs/componentes/atoms.md` (97)
 - **Molecules**: `docs/componentes/molecules.md` (52)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -374,7 +374,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 89 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 97 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 52 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
@@ -676,6 +676,10 @@ Cada uma já mordeu alguém neste repo.
   `until ! pgrep -f 'codex exec…'` ficou "rodando" para sempre depois que o worker já tinha
   saído, porque o padrão estava na linha de comando do próprio shell. É a mesma raiz do
   `pkill` do `run-flowtomic`: espere pelo PID (`while kill -0 $pid`), não pelo padrão.
+- ⚠️ **Todo `<svg>` dentro de algo com `buttonVariants` sai com 16 px.** O `[&_svg]:size-4` do
+  `Button` vale para qualquer SVG descendente e ganha de classe (`size-full` não resolve). Desenho
+  que cobre o botão inteiro (o pavio do `undo-fuse-button`, medido em 09/10/2026) passa
+  `width`/`height` por `style` inline. O jsdom não acusa: o teste passa e o desenho some no browser.
 - ⚠️ **Seta em `RadioGroup` do Radix não escolhe com `userEvent.keyboard` no jsdom.** O Radix só
   confirma o item focado enquanto a seta ainda está pressionada, e o `keyup` do `userEvent` chega
   antes do foco assentar (medido em 09/10/2026 no `swell-chip-group`, `lift-rating` e
