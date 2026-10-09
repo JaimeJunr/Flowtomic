@@ -66,6 +66,7 @@ type HoldButtonProps = Omit<React.ComponentProps<"button">, "children" | "onClic
    - Mostra `doneIcon` + `doneLabel` com uma troca de rótulo suave (fade + leve blur, 200ms).
    - Dá um pulso único (escala 1 → 1.03 → 1, 300ms).
    - Ignora novas pressões até resetar.
+   - A largura não muda entre estados: os dois rótulos ocupam a mesma célula e o botão mede o maior (revisão 06/10/2026).
    - Depois de `resetAfterMs`, o líquido volta e o rótulo original reaparece. Com 0, fica feito.
 4. **Clique rápido.** Soltar em menos de 250ms mostra `tapHint` num `Tooltip` da lib (ou texto
    `aria-live` abaixo), por 1,5s. Não chama `onHoldComplete`.

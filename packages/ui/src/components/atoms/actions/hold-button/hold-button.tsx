@@ -80,27 +80,39 @@ const WAVE_PATH = "M0 0 Q10 6 0 12 T0 24 T0 36 T0 48 L10 48 L10 0 Z";
 const ANNOUNCE_STEP = 25;
 const LABEL_SWAP_MS = 0.2;
 
-function SwapLabel({
-  done,
-  children,
-  reduced,
-}: {
+type LabelStackProps = {
   done: boolean;
-  children: React.ReactNode;
   reduced: boolean;
-}) {
-  const hidden = reduced ? { opacity: 0 } : { opacity: 0, filter: "blur(4px)" };
-  const shown = reduced ? { opacity: 1 } : { opacity: 1, filter: "blur(0px)" };
-  return (
+  idle: React.ReactNode;
+  finished: React.ReactNode;
+};
+
+/** Os dois rótulos dividem a mesma célula do grid: a largura é a do maior desde o primeiro render, sem medir em JS. */
+function LabelStack({ done, reduced, idle, finished }: LabelStackProps) {
+  const cell = (active: boolean, slot: string, children: React.ReactNode) => (
     <motion.span
-      key={done ? "done" : "rest"}
-      className="inline-flex items-center gap-2"
-      initial={hidden}
-      animate={shown}
+      data-slot={slot}
+      aria-hidden={active ? undefined : true}
+      className={cn(
+        "inline-flex items-center justify-center gap-2 [grid-area:1/1]",
+        !active && "invisible"
+      )}
+      initial={false}
+      animate={
+        active
+          ? { opacity: 1, filter: "blur(0px)" }
+          : { opacity: 0, filter: reduced ? "blur(0px)" : "blur(4px)" }
+      }
       transition={{ duration: LABEL_SWAP_MS }}
     >
       {children}
     </motion.span>
+  );
+  return (
+    <span className="inline-grid">
+      {cell(!done, "hold-button-label-idle", idle)}
+      {cell(done, "hold-button-label-done", finished)}
+    </span>
   );
 }
 
@@ -198,10 +210,22 @@ function HoldButton({
   const done = phase === "done";
   const tones = TONE_CLASSES[tone];
   const content = (
-    <SwapLabel done={done} reduced={reduced}>
-      {done ? doneIcon : icon}
-      {done ? doneLabel : children}
-    </SwapLabel>
+    <LabelStack
+      done={done}
+      reduced={reduced}
+      idle={
+        <>
+          {icon}
+          {children}
+        </>
+      }
+      finished={
+        <>
+          {doneIcon}
+          {doneLabel}
+        </>
+      }
+    />
   );
   const showWave = wave && !reduced && progress > 0 && progress < 1;
 

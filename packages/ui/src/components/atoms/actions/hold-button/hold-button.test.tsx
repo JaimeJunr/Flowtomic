@@ -216,4 +216,27 @@ describe("HoldButton", () => {
     expect(root).toHaveClass("minha-classe");
     expect(root).toHaveAttribute("type", "button");
   });
+
+  it("os dois rótulos ficam no DOM no repouso: o de feito escondido, o nome acessível é o de repouso", () => {
+    const { root } = setup();
+    const idle = root.querySelector('[data-slot="hold-button-label-idle"]') as HTMLElement;
+    const doneLabel = root.querySelector('[data-slot="hold-button-label-done"]') as HTMLElement;
+    expect(idle).not.toHaveAttribute("aria-hidden");
+    expect(doneLabel).toHaveAttribute("aria-hidden", "true");
+    expect(doneLabel).toHaveClass("invisible");
+    expect(idle.parentElement).toBe(doneLabel.parentElement);
+    expect(screen.getByRole("button", { name: "Segure para excluir a conciliação" })).toBe(root);
+  });
+
+  it("em done o rótulo de repouso é que fica escondido e o nome acessível é o de feito", () => {
+    const { root } = setup({ holdMs: 500 });
+    fireEvent.pointerDown(root, { button: 0 });
+    advance(700);
+    const idle = root.querySelector('[data-slot="hold-button-label-idle"]') as HTMLElement;
+    const doneLabel = root.querySelector('[data-slot="hold-button-label-done"]') as HTMLElement;
+    expect(idle).toHaveAttribute("aria-hidden", "true");
+    expect(idle).toHaveClass("invisible");
+    expect(doneLabel).not.toHaveAttribute("aria-hidden");
+    expect(screen.getByRole("button", { name: "Conciliação excluída" })).toBe(root);
+  });
 });
