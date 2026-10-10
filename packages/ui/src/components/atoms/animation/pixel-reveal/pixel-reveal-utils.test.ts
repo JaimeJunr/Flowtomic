@@ -5,6 +5,8 @@ import {
   parseAspectRatio,
   pointerOrigin,
   revealOrder,
+  spiralIndex,
+  validatePixelOptions,
 } from "./pixel-reveal-utils";
 
 const CENTER = { x: 0.5, y: 0.5 };
@@ -121,5 +123,93 @@ describe("pointerOrigin", () => {
   it("limita a 0..1 e usa o centro quando o card não tem tamanho", () => {
     expect(pointerOrigin(rect, 0, 900)).toEqual({ x: 0, y: 1 });
     expect(pointerOrigin({ left: 0, top: 0, width: 0, height: 0 }, 5, 5)).toEqual(CENTER);
+  });
+});
+
+describe("revealOrder: ordens novas", () => {
+  const at = (order: number[], cols: number, col: number, row: number) => order[row * cols + col];
+  const run = (pattern: Parameters<typeof revealOrder>[2], cols = 5, rows = 5) =>
+    revealOrder(cols, rows, pattern, CENTER, 0, Math.random);
+
+  it("center: menor atraso no meio, maior nos cantos", () => {
+    const order = run("center");
+    expect(at(order, 5, 2, 2)).toBe(Math.min(...order));
+    expect(at(order, 5, 0, 0)).toBe(1);
+  });
+
+  it("edges: maior atraso no meio, zero nos cantos", () => {
+    const order = run("edges");
+    expect(at(order, 5, 2, 2)).toBe(Math.max(...order));
+    expect(at(order, 5, 0, 0)).toBe(0);
+  });
+
+  it("left-to-right e right-to-left seguem a coluna", () => {
+    const ltr = run("left-to-right");
+    expect(at(ltr, 5, 0, 3)).toBe(0);
+    expect(at(ltr, 5, 4, 3)).toBe(1);
+    const rtl = run("right-to-left");
+    expect(at(rtl, 5, 0, 3)).toBe(1);
+    expect(at(rtl, 5, 4, 3)).toBe(0);
+  });
+
+  it("top-to-bottom cresce e bottom-to-top decresce com a linha", () => {
+    const ttb = run("top-to-bottom");
+    expect(at(ttb, 5, 2, 0)).toBe(0);
+    expect(at(ttb, 5, 2, 4)).toBe(1);
+    const btt = run("bottom-to-top");
+    expect(at(btt, 5, 2, 0)).toBe(1);
+    expect(at(btt, 5, 2, 4)).toBe(0);
+  });
+
+  it("diagonal: 0 no canto superior esquerdo e 1 no oposto", () => {
+    const order = run("diagonal", 4, 3);
+    expect(at(order, 4, 0, 0)).toBe(0);
+    expect(at(order, 4, 3, 2)).toBe(1);
+  });
+
+  it("spiral: 0 no canto e 1 na última célula do percurso", () => {
+    const order = run("spiral", 3, 3);
+    expect(at(order, 3, 0, 0)).toBe(0);
+    expect(at(order, 3, 1, 1)).toBe(1);
+    expect(at(order, 3, 2, 0)).toBeCloseTo(2 / 8);
+  });
+
+  it("grade 1x1 não gera NaN em nenhuma ordem", () => {
+    for (const pattern of [
+      "center",
+      "edges",
+      "left-to-right",
+      "right-to-left",
+      "top-to-bottom",
+      "bottom-to-top",
+      "diagonal",
+      "spiral",
+    ] as const) {
+      const [delay] = run(pattern, 1, 1);
+      expect(Number.isFinite(delay)).toBe(true);
+    }
+  });
+});
+
+describe("spiralIndex", () => {
+  it("3x3 percorre a borda no sentido horário e termina no centro", () => {
+    expect(spiralIndex(3, 3)).toEqual([0, 1, 2, 7, 8, 3, 6, 5, 4]);
+  });
+
+  it("grade retangular 4x2 é uma permutação", () => {
+    expect(spiralIndex(4, 2)).toEqual([0, 1, 2, 3, 7, 6, 5, 4]);
+  });
+});
+
+describe("validatePixelOptions", () => {
+  const ok = { pixelScale: 0.6, gap: 0, pixelRadius: 0 };
+  it("aceita valores válidos", () => {
+    expect(() => validatePixelOptions(ok)).not.toThrow();
+  });
+
+  it("recusa com o valor recebido e o intervalo esperado", () => {
+    expect(() => validatePixelOptions({ ...ok, pixelScale: 1.5 })).toThrow(/1\.5.*0.*1/);
+    expect(() => validatePixelOptions({ ...ok, gap: -2 })).toThrow(/-2.*>= 0/);
+    expect(() => validatePixelOptions({ ...ok, pixelRadius: 60 })).toThrow(/60.*0.*50/);
   });
 });

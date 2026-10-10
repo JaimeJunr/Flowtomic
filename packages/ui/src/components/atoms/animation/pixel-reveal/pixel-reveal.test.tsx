@@ -178,4 +178,66 @@ describe("PixelReveal", () => {
     fireEvent.pointerLeave(root);
     expect(state()).toBe("first");
   });
+
+  const cell = (container: HTMLElement) =>
+    container.querySelector('[data-slot="pixel-reveal-cell"]') as HTMLElement;
+
+  it("forma: raio, escala e giro iniciais, e gap na grade", () => {
+    const { container } = setup({ pixelRadius: 50, pixelScale: 0.3, pixelSpin: 90, gap: 3 });
+    expect(cell(container).style.borderRadius).toBe("50%");
+    expect(cell(container).style.transform).toBe("scale(0.3) rotate(90deg)");
+    const grid = container.querySelector('[data-slot="pixel-reveal-grid"]') as HTMLElement;
+    expect(grid.style.gap).toBe("3px");
+  });
+
+  it("coberto termina em scale(1) rotate(0)", () => {
+    const { container, root, advance } = setup({ pixelSpin: 90 });
+    fireEvent.pointerEnter(root);
+    advance(10);
+    expect(cell(container).style.transform).toBe("scale(1) rotate(0deg)");
+  });
+
+  it("fade padrão anima opacidade; fade=false só faz o pixel crescer", () => {
+    const withFade = setup();
+    expect(cell(withFade.container).style.transition).toContain("opacity 200ms linear");
+    withFade.unmount();
+    const noFade = setup({ fade: false });
+    expect(cell(noFade.container).style.transition).not.toContain("opacity 200ms");
+    expect(cell(noFade.container).style.transition).toContain("opacity 0ms");
+  });
+
+  it("onComplete é chamado uma vez com true ao revelar e com false ao esconder", () => {
+    const onComplete = vi.fn();
+    const { root, advance } = setup({ onComplete });
+    fireEvent.pointerEnter(root);
+    expect(onComplete).not.toHaveBeenCalled();
+    advance(COVER_MS + 10);
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(onComplete).toHaveBeenLastCalledWith(true);
+    fireEvent.pointerLeave(root);
+    advance(COVER_MS + 10);
+    expect(onComplete).toHaveBeenCalledTimes(2);
+    expect(onComplete).toHaveBeenLastCalledWith(false);
+  });
+
+  it("onComplete também é chamado com movimento reduzido", () => {
+    const onComplete = vi.fn();
+    const { root } = setup({ onComplete }, "always");
+    fireEvent.pointerEnter(root);
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(onComplete).toHaveBeenCalledWith(true);
+  });
+
+  it("valores inválidos lançam erro com o valor recebido", () => {
+    const quiet = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    expect(() => setup({ pixelScale: 2 })).toThrow(/2/);
+    expect(() => setup({ gap: -1 })).toThrow(/-1/);
+    expect(() => setup({ pixelRadius: 80 })).toThrow(/80/);
+    quiet.mockRestore();
+  });
+
+  it("aceita as ordens novas", () => {
+    const { container } = setup({ pattern: "spiral", gridSize: 4 });
+    expect(container.querySelectorAll('[data-slot="pixel-reveal-cell"]')).toHaveLength(16);
+  });
 });

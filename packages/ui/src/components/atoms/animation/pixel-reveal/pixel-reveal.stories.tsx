@@ -41,10 +41,31 @@ const meta = {
   argTypes: {
     gridSize: { control: { type: "range", min: 4, max: 24, step: 1 } },
     stepDuration: { control: { type: "range", min: 0.1, max: 1.5, step: 0.05 } },
-    pattern: { control: "inline-radio", options: ["random", "dither", "ripple", "wipe"] },
+    pattern: {
+      control: "inline-radio",
+      options: [
+        "random",
+        "dither",
+        "ripple",
+        "wipe",
+        "center",
+        "edges",
+        "left-to-right",
+        "right-to-left",
+        "top-to-bottom",
+        "bottom-to-top",
+        "diagonal",
+        "spiral",
+      ],
+    },
     randomness: { control: { type: "range", min: 0, max: 1, step: 0.05 } },
     trigger: { control: "inline-radio", options: ["hover", "click"] },
     once: { control: "boolean" },
+    gap: { control: { type: "range", min: 0, max: 8, step: 1 } },
+    pixelRadius: { control: { type: "range", min: 0, max: 50, step: 1 } },
+    pixelScale: { control: { type: "range", min: 0, max: 1, step: 0.05 } },
+    pixelSpin: { control: { type: "range", min: 0, max: 360, step: 15 } },
+    fade: { control: "boolean" },
     pixelColor: { control: "text" },
     aspectRatio: { control: "text" },
   },
@@ -71,6 +92,26 @@ export const OndaDoPonteiro: Story = {
 
 export const VarreduraPelaBorda: Story = {
   args: { pattern: "wipe", randomness: 0.2, stepDuration: 0.6 },
+};
+
+export const DoCentroParaFora: Story = {
+  args: { pattern: "center", randomness: 0.1, gridSize: 12 },
+};
+
+export const DasBordasParaDentro: Story = {
+  args: { pattern: "edges", randomness: 0.1, gridSize: 12 },
+};
+
+export const Espiral: Story = {
+  args: { pattern: "spiral", randomness: 0, gridSize: 10, stepDuration: 0.8 },
+};
+
+export const DiagonalComPixelsRedondos: Story = {
+  args: { pattern: "diagonal", pixelRadius: 50, pixelSpin: 90, pixelScale: 0.3, gridSize: 12 },
+};
+
+export const EsquerdaParaDireitaSemFade: Story = {
+  args: { pattern: "left-to-right", fade: false, gap: 2, randomness: 0, gridSize: 12 },
 };
 
 export const ComCliqueEUmaVez: Story = {

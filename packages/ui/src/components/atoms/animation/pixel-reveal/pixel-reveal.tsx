@@ -9,18 +9,27 @@
 
 "use client";
 
-import { motion } from "motion/react";
 import * as React from "react";
 
 import { useShouldReduceMotion } from "@/lib/use-should-reduce-motion";
 import { cn } from "@/lib/utils";
 import {
+  CELL_MS,
+  CENTER,
+  Layer,
+  PixelGrid,
+  useActiveState,
+  useCardSize,
+  usePhase,
+} from "./pixel-reveal-parts";
+import {
   gridRows,
   type Origin,
+  type PixelRevealPattern,
   parseAspectRatio,
   pointerOrigin,
-  type RevealPattern,
   revealOrder,
+  validatePixelOptions,
 } from "./pixel-reveal-utils";
 
 export type PixelRevealProps = Omit<React.ComponentProps<"div">, "children"> & {
@@ -33,7 +42,7 @@ export type PixelRevealProps = Omit<React.ComponentProps<"div">, "children"> & {
   /** Segundos para cobrir, e de novo para descobrir. @default 0.4 */
   stepDuration?: number;
   /** @default "random" */
-  pattern?: RevealPattern;
+  pattern?: PixelRevealPattern;
   /** Quebra a frente da onda/varredura, 0..1. @default 0.3 */
   randomness?: number;
   /** @default "hover" */
@@ -45,126 +54,19 @@ export type PixelRevealProps = Omit<React.ComponentProps<"div">, "children"> & {
   once?: boolean;
   /** CSS aspect-ratio. @default "1 / 1" */
   aspectRatio?: string;
+  /** Espaço entre pixels em px. @default 0 */
+  gap?: number;
+  /** Arredondamento de cada pixel em % (0 quadrado, 50 círculo). @default 0 */
+  pixelRadius?: number;
+  /** Escala com que cada pixel nasce, 0..1. @default 0.6 */
+  pixelScale?: number;
+  /** Graus que cada pixel gira ao aparecer. @default 0 */
+  pixelSpin?: number;
+  /** Liga o fade de opacidade de cada pixel; sem fade o pixel só cresce. @default true */
+  fade?: boolean;
+  /** Chamado quando o conteúdo novo termina de aparecer. */
+  onComplete?: (active: boolean) => void;
 };
-
-type Phase = "first" | "covering" | "second" | "uncovering";
-
-const CELL_MS = 200;
-const FADE_SECONDS = 0.15;
-const CENTER: Origin = { x: 0.5, y: 0.5 };
-
-function useCardSize(ref: React.RefObject<HTMLDivElement | null>) {
-  const [size, setSize] = React.useState<{ width: number; height: number } | null>(null);
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      setSize({ width, height });
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref]);
-  return size;
-}
-
-/** Fase e conteúdo visível; a troca de conteúdo só acontece quando a grade cobre tudo. */
-const settled = (value: boolean): Phase => (value ? "second" : "first");
-
-function usePhase(active: boolean, reduced: boolean, durationMs: number) {
-  const [phase, setPhase] = React.useState<Phase>(settled(active));
-  const phaseRef = React.useRef(phase);
-  phaseRef.current = phase;
-
-  React.useEffect(() => {
-    if (phaseRef.current === settled(active)) return;
-    if (reduced) {
-      setPhase(settled(active));
-      return;
-    }
-    setPhase(active ? "covering" : "uncovering");
-    const timer = setTimeout(() => setPhase(settled(active)), durationMs);
-    return () => clearTimeout(timer);
-  }, [active, reduced, durationMs]);
-
-  return phase;
-}
-
-function useActiveState(
-  controlled: boolean | undefined,
-  onActiveChange: ((active: boolean) => void) | undefined,
-  once: boolean
-) {
-  const [inner, setInner] = React.useState(false);
-  const value = controlled ?? inner;
-  const set = (next: boolean) => {
-    if (once && !next) return;
-    if (next === value) return;
-    if (controlled === undefined) setInner(next);
-    onActiveChange?.(next);
-  };
-  return [value, set] as const;
-}
-
-function Layer({
-  visible,
-  fade,
-  children,
-}: {
-  visible: boolean;
-  fade: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <motion.div
-      key={String(visible)}
-      hidden={!visible}
-      className="absolute inset-0"
-      initial={fade && visible ? { opacity: 0 } : false}
-      animate={{ opacity: 1 }}
-      transition={{ duration: FADE_SECONDS }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-function PixelGrid(props: {
-  cols: number;
-  rows: number;
-  delays: number[];
-  covered: boolean;
-  color: string;
-  stepMs: number;
-}) {
-  const { cols, rows, delays, covered, color, stepMs } = props;
-  return (
-    <div
-      aria-hidden="true"
-      data-slot="pixel-reveal-grid"
-      className="pointer-events-none absolute inset-0 grid"
-      style={{
-        gridTemplateColumns: `repeat(${cols}, 1fr)`,
-        gridTemplateRows: `repeat(${rows}, 1fr)`,
-      }}
-    >
-      {delays.map((delay, index) => (
-        <span
-          // biome-ignore lint/suspicious/noArrayIndexKey: as células são posições fixas da grade
-          key={index}
-          data-slot="pixel-reveal-cell"
-          style={{
-            background: color,
-            opacity: covered ? 1 : 0,
-            transform: `scale(${covered ? 1 : 0.6})`,
-            transition: `opacity ${CELL_MS}ms linear, transform ${CELL_MS}ms linear`,
-            transitionDelay: `${delay * stepMs}ms`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
 
 function PixelReveal({
   ref,
@@ -182,6 +84,12 @@ function PixelReveal({
   onActiveChange,
   once = false,
   aspectRatio = "1 / 1",
+  gap = 0,
+  pixelRadius = 0,
+  pixelScale = 0.6,
+  pixelSpin = 0,
+  fade = true,
+  onComplete,
   onPointerEnter,
   onPointerLeave,
   onFocus,
@@ -190,11 +98,12 @@ function PixelReveal({
   onKeyDown,
   ...props
 }: PixelRevealProps) {
+  validatePixelOptions({ pixelScale, gap, pixelRadius });
   const rootRef = React.useRef<HTMLDivElement | null>(null);
   const reduced = useShouldReduceMotion();
   const stepMs = stepDuration * 1000;
   const [isActive, setActive] = useActiveState(active, onActiveChange, once);
-  const phase = usePhase(isActive, reduced, stepMs + CELL_MS);
+  const phase = usePhase(isActive, reduced, stepMs + CELL_MS, onComplete);
   const [shown, setShown] = React.useState<"first" | "second">(isActive ? "second" : "first");
   const [origin, setOrigin] = React.useState<Origin>(CENTER);
   const size = useCardSize(rootRef);
@@ -288,6 +197,7 @@ function PixelReveal({
           covered={phase === "covering" || phase === "uncovering"}
           color={pixelColor}
           stepMs={stepMs}
+          shape={{ gap, radius: pixelRadius, scale: pixelScale, spin: pixelSpin, fade }}
         />
       )}
     </div>

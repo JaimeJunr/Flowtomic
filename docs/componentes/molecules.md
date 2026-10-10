@@ -100,6 +100,30 @@ Quadro de imagem gerada por IA com proporção reservada: cada estágio (fila, g
 
 **Dependências**: `motion`, `lucide-react`, `cn`
 
+### `scroll-expand-media`
+
+Hero em que uma moldura pequena com mídia cresce até a tela cheia conforme a página rola, presa no lugar; o título sobe e some e um conteúdo aparece por cima no fim. Com movimento reduzido, a mídia já aparece em tela cheia, sem rolagem presa. Clean room (`docs/clean-room/react-bits/scroll-expand-media.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `animated-list`
+
+Lista rolável em que cada item cresce ao entrar na área visível, com seleção por clique e por setas (listbox), e degradês nas pontas que somem no topo e no fim. Clean room (`docs/clean-room/react-bits/animated-list.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `orbit-images`
+
+Itens (logos, avatares, ícones) giram devagar em volta de um centro, numa elipse inclinada ou em outras formas (círculo, quadrado, estrela, coração, infinito, onda). Foco num item pausa; com movimento reduzido ficam parados. Clean room (`docs/clean-room/react-bits/orbit-images.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `tilted-card`
+
+Cartão com mídia que inclina em 3D seguindo o mouse e cresce um pouco, com legenda que acompanha o ponteiro e conteúdo opcional à frente da mídia. Ignora toque; com movimento reduzido fica plano. Clean room (`docs/clean-room/react-bits/tilted-card.md`).
+
+**Dependências**: `motion`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
