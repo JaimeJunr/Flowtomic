@@ -151,19 +151,3 @@ export function resolveFlowtomicRepo(): string | null {
 
   return null;
 }
-
-/**
- * Resolve o caminho do componente no repositório
- */
-export function resolveComponentPath(
-  componentPath: string,
-  repoPath: string | null
-): string | null {
-  if (!repoPath) {
-    repoPath = resolveFlowtomicRepo();
-    if (!repoPath) return null;
-  }
-
-  const fullPath = join(repoPath, componentPath);
-  return existsSync(fullPath) ? fullPath : null;
-}

@@ -853,7 +853,7 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     name: "data-table",
     type: "molecule",
     path: "packages/ui/src/components/molecules/data-display/data-table",
-    files: ["data-table.tsx", "index.ts"],
+    files: ["data-table.tsx", "data-table-pagination.tsx", "index.ts"],
     dependencies: ["@tanstack/react-table", "lucide-react", "cn"],
   },
   "menu-dock": {

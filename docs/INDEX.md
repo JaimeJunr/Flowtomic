@@ -41,7 +41,7 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 ### CLI
 
-- [Documentação do CLI](../cli/README.md) - Documentação detalhada do CLI
+- [Documentação do CLI](cli/README.md) - Comandos, resolução de aliases e verificação local do CLI
 - [Comandos do CLI](cli/comandos.md) - Referência completa de comandos
 - [Uso do CLI](cli/uso.md) - Guias práticos de uso
 
@@ -83,7 +83,7 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 ### Para Usuários do CLI
 
-1. **Instalação**: Veja [Documentação do CLI](../cli/README.md)
+1. **Instalação**: Veja [Documentação do CLI](cli/README.md)
 2. **Uso Básico**: Consulte [Comandos do CLI](cli/comandos.md)
 3. **Exemplos**: Veja [Uso do CLI](cli/uso.md)
 
@@ -188,5 +188,5 @@ docs/
 ### Documentação Relacionada
 
 - [README Principal](../README.md) - Visão geral do projeto
-- [CLI README](../cli/README.md) - Documentação do CLI
+- [CLI README](cli/README.md) - Documentação do CLI
 - [Registry README](../registry/README.md) - Documentação do registry

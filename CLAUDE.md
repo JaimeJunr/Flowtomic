@@ -464,7 +464,7 @@ uma pasta, passe `--coverage.thresholds.lines=0` etc., ou leia o relatório e ig
 | `packages/ui` | 156 | `test`, `test:watch`, `test:coverage` | jsdom (`packages/ui/vitest.config.ts`), setup em `src/test/setup.ts` |
 | `packages/logic` | 2 | `test`, `test:run` | padrão do Vitest — **não há `vitest.config`** no pacote, então roda em `node`, sem DOM |
 | `registry` | 1 | `test` | guarda o parser do component map |
-| `cli` | 2 | `test` | guarda o component map contra o disco nos dois sentidos: todo `path` existe, e toda pasta de componente em `packages/ui/src/components` tem entrada — componente novo sem entrada no mapa quebra a CI |
+| `cli` | 4 | `test` | guarda o component map contra o disco nos dois sentidos: todo `path` existe, e toda pasta de componente em `packages/ui/src/components` tem entrada — componente novo sem entrada no mapa quebra a CI. O `install-imports.test.ts` instala cada entrada e reprova import local sem arquivo; o `install.test.ts` roda o bundle (`dist/cli.js`) em projeto temporário |
 
 ⚠️ **`bun run test` no `packages/ui` entra em modo watch e não devolve o terminal.** O pacote
 não tem `test:run` (o `logic` tem). Para rodar uma vez:
@@ -641,11 +641,15 @@ Cada uma já mordeu alguém neste repo.
   `editorProps.attributes`. Em teste, a área monta depois do primeiro render: use `findByRole`.
 - ⚠️ **`DialogContent` sem `DialogDescription` faz o Radix avisar em todo uso.** Quando não há
   descrição, passe `aria-describedby={undefined}` explícito (ver `organisms/model-selector`).
-- ⚠️ **Componente que importa helper de `@/lib/` (além do `utils`) depende do `cli/src/utils/lib-files.ts`**
-  para chegar inteiro no projeto de quem usa o `flowtomic-cli add`: ele segue os imports `@/lib/...` e
-  relativos e copia o que falta. Antes dele (até 04/10/2026), só o `utils.ts` era copiado e o
-  `sliding-number` chegaria com import quebrado. ⚠️ O `registry/build-registry.ts` **ainda não** leva
-  esses helpers no JSON do shadcn.
+- ⚠️ **Todo import local de componente precisa de uma regra no `flowtomic-cli add`, senão a
+  instalação sai com exit 1.** O rewriter (`cli/src/utils/component-imports.ts`) aceita: componente
+  do mapa (só arquivos listados em `files`), barrel de `components/`, e as pastas de
+  `SHARED_DIRS` (`lib/` e `types/`), que vão para a pasta do alias de `utils` (`types/` dentro
+  dela). Arquivo novo importado por `./x` precisa entrar em `files` do `component-map.ts`; pasta
+  nova em `packages/ui/src` fora de `components/` precisa entrar em `SHARED_DIRS`. O
+  `install-imports.test.ts` instala cada entrada do mapa e reprova import sem arquivo (até
+  09/10/2026, `data-table` e `widget-renderer` instalavam com exit 0 e import quebrado).
+  ⚠️ O `registry/build-registry.ts` **ainda não** leva esses helpers no JSON do shadcn.
 - ⚠️ **`layout` do motion num elemento inline não faz o texto vizinho deslizar**: a animação é
   por `transform`, então o vizinho pula de uma vez (medido em 04/10/2026 no `rotating-text`: 9 px
   num quadro). Para o vizinho acompanhar, meça a largura nova e anime `width` de verdade. Para
