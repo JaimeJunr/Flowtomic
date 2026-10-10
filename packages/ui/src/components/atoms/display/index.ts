@@ -34,6 +34,8 @@ export {
   EmptyMedia,
   EmptyTitle,
 } from "./empty";
+export type { GlassSurfaceProps } from "./glass-surface";
+export { GlassSurface } from "./glass-surface";
 export type { KbdGroupProps, KbdProps } from "./kbd";
 export { Kbd, KbdGroup } from "./kbd";
 export type { SeparatorProps } from "./separator";

@@ -124,6 +124,42 @@ Cartão com mídia que inclina em 3D seguindo o mouse e cresce um pouco, com leg
 
 **Dependências**: `motion`, `cn`
 
+### `ring-carousel`
+
+Anel 3D de cartões que gira sozinho, aceita arraste com inércia e para alinhado num cartão. Clean room (`docs/clean-room/react-bits/ring-carousel.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `option-wheel`
+
+Roda de opções curvada numa borda; a opção do meio acende e as outras borram e apagam. Clean room (`docs/clean-room/react-bits/option-wheel.md`).
+
+**Dependências**: `cn`
+
+### `curved-input`
+
+Campo com botão numa barra arqueada; texto, placeholder e rótulo seguem a curva. Clean room (`docs/clean-room/react-bits/curved-input.md`).
+
+**Dependências**: `lucide-react`, `cn`
+
+### `proximity-nav`
+
+Índice numerado com marcadores em régua; itens perto do ponteiro deslizam e ganham a cor de destaque. Clean room (`docs/clean-room/react-bits/proximity-nav.md`).
+
+**Dependências**: `cn`
+
+### `swipe-stack`
+
+Pilha de cartões arrastáveis com inclinação 3D; o de cima vai para o fim ao passar do limite. Clean room (`docs/clean-room/react-bits/swipe-stack.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `paper-folder`
+
+Pasta de arquivo que abre no clique; até três folhas sobem em leque e seguem o ponteiro. Clean room (`docs/clean-room/react-bits/paper-folder.md`).
+
+**Dependências**: `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
