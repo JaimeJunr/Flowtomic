@@ -143,6 +143,8 @@ export {
 } from "./data-display/message";
 export type { PaperFolderProps, PaperFolderTone } from "./data-display/paper-folder";
 export { PaperFolder } from "./data-display/paper-folder";
+export type { ProfileCardProps } from "./data-display/profile-card";
+export { ProfileCard } from "./data-display/profile-card";
 export type { Project, ProjectListProps } from "./data-display/project-list";
 export { ProjectList } from "./data-display/project-list";
 export type { Reminder, ReminderCardProps } from "./data-display/reminder-card";
@@ -356,6 +358,8 @@ export type {
   BranchNavSection,
 } from "./navigation/branch-nav";
 export { BranchNav } from "./navigation/branch-nav";
+export type { GooTabsItem, GooTabsProps } from "./navigation/goo-tabs";
+export { GooTabs } from "./navigation/goo-tabs";
 export type { MenuDockItem, MenuDockProps } from "./navigation/menu-dock";
 export { MenuDock } from "./navigation/menu-dock";
 export type { ProximityNavProps } from "./navigation/proximity-nav";
@@ -366,6 +370,8 @@ export type {
   SidebarNavigationProps,
 } from "./navigation/sidebar-navigation";
 export { SidebarNavigation } from "./navigation/sidebar-navigation";
+export type { StepperProps } from "./navigation/stepper";
+export { Stepper } from "./navigation/stepper";
 export type {
   StartPosition,
   ThemeToggleButtonProps,
