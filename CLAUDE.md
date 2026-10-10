@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (114 atoms, 59 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (118 atoms, 63 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,8 +37,8 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (114)
-- **Molecules**: `docs/componentes/molecules.md` (59)
+- **Atoms**: `docs/componentes/atoms.md` (118)
+- **Molecules**: `docs/componentes/molecules.md` (63)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -374,8 +374,8 @@ errado.
 
 Resumo:
 
-- **Atoms**: 114 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 59 componentes - Ver `docs/componentes/molecules.md`
+- **Atoms**: 118 componentes - Ver `docs/componentes/atoms.md`
+- **Molecules**: 63 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -689,6 +689,10 @@ Cada uma já mordeu alguém neste repo.
   fica no alvo do evento anterior (medido em 09/10/2026 no `magnetic`: o botão parava a 4,9 px em vez
   de 24 px). Anime o `MotionValue` com `animate(value, alvo, mola)` a cada evento. O jsdom não acusa,
   porque com `skipAnimations` a mola pula direto; meça o `transform` no browser ao longo do tempo.
+- ⚠️ **SVG com `viewBox` fixo e `preserveAspectRatio="none"` estica forma e rotação.** Num quadro
+  16:9, um círculo de raio igual nos dois eixos do viewBox sai elipse, e `transform="rotate()"` entorta
+  a forma (medido em 10/10/2026 no `orbit-images`). Meça a área (ResizeObserver), corrija os raios pela
+  proporção e gire em espaço de pixels. O jsdom não acusa; confira o `getBoundingClientRect` no browser.
 - ⚠️ **Superfície arrastável precisa de `select-none`.** Sem ele, o arraste por ponteiro seleciona o
   texto da linha (visto no `swipe-actions-row` em 09/10/2026). O jsdom não acusa; só aparece no browser.
 - ⚠️ **Seta em `RadioGroup` do Radix não escolhe com `userEvent.keyboard` no jsdom.** O Radix só

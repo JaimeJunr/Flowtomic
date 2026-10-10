@@ -22,6 +22,10 @@ export type { AnimatedSlidingNumberProps } from "./animation/animated-sliding-nu
 export { AnimatedSlidingNumber } from "./animation/animated-sliding-number";
 export type { ButtonCounterProps } from "./animation/button-counter";
 export { ButtonCounter } from "./animation/button-counter";
+export type { OrbitImagesProps } from "./animation/orbit-images";
+export { OrbitImages } from "./animation/orbit-images";
+export type { ScrollExpandMediaProps } from "./animation/scroll-expand-media";
+export { ScrollExpandMedia } from "./animation/scroll-expand-media";
 export type { ScrollVelocityProps } from "./animation/scroll-velocity";
 export { ScrollVelocity } from "./animation/scroll-velocity";
 export type {
@@ -32,6 +36,8 @@ export type {
 export { AuthFormErrorMessage, AuthNavigationLink, PasswordInput } from "./auth";
 export type { SocialLoginButtonsProps } from "./auth/social-login-buttons";
 export { SocialLoginButtons } from "./auth/social-login-buttons";
+export type { AnimatedListProps } from "./data-display/animated-list";
+export { AnimatedList } from "./data-display/animated-list";
 export type {
   ArtifactActionProps,
   ArtifactActionsProps,
@@ -177,6 +183,8 @@ export type {
 export { TeamMemberList } from "./data-display/team-member-list";
 export type { TearOffTicketProps } from "./data-display/tear-off-ticket";
 export { TearOffTicket } from "./data-display/tear-off-ticket";
+export type { TiltedCardProps } from "./data-display/tilted-card";
+export { TiltedCard } from "./data-display/tilted-card";
 export type { TimeTrackerProps } from "./data-display/time-tracker";
 export { TimeTracker } from "./data-display/time-tracker";
 export type {

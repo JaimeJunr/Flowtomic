@@ -1,4 +1,17 @@
-export type RevealPattern = "random" | "dither" | "ripple" | "wipe";
+export type PixelRevealPattern =
+  | "random"
+  | "dither"
+  | "ripple"
+  | "wipe"
+  | "center"
+  | "edges"
+  | "left-to-right"
+  | "right-to-left"
+  | "top-to-bottom"
+  | "bottom-to-top"
+  | "diagonal"
+  | "spiral";
+export type RevealPattern = PixelRevealPattern;
 export type Origin = { x: number; y: number };
 export type Edge = "left" | "right" | "top" | "bottom";
 export type Rng = () => number;
@@ -69,11 +82,89 @@ function wipeOrder(cols: number, rows: number, origin: Origin, randomness: numbe
   });
 }
 
+/** Posição de cada célula (em ordem de linha) no percurso em espiral horária, do canto superior esquerdo para dentro. */
+export function spiralIndex(cols: number, rows: number): number[] {
+  const result = new Array<number>(cols * rows).fill(0);
+  let top = 0;
+  let bottom = rows - 1;
+  let left = 0;
+  let right = cols - 1;
+  let step = 0;
+  const visit = (col: number, row: number) => {
+    result[row * cols + col] = step++;
+  };
+  while (top <= bottom && left <= right) {
+    for (let c = left; c <= right; c++) visit(c, top);
+    for (let r = top + 1; r <= bottom; r++) visit(right, r);
+    if (top < bottom) for (let c = right - 1; c >= left; c--) visit(c, bottom);
+    if (left < right) for (let r = bottom - 1; r > top; r--) visit(left, r);
+    top++;
+    bottom--;
+    left++;
+    right--;
+  }
+  return result;
+}
+
+/** Distância ao centro da grade, normalizada pela distância do centro do canto (0 no meio, 1 nos cantos). */
+function centerDistance(cols: number, rows: number, i: number): number {
+  const reach = Math.max(Math.hypot((cols - 1) / 2, (rows - 1) / 2), 1e-9);
+  const distance = Math.hypot((i % cols) + 0.5 - cols / 2, Math.floor(i / cols) + 0.5 - rows / 2);
+  return distance / reach;
+}
+
+/** Base 0..1 das ordens geométricas novas; `null` para as que não são. */
+function geometricBase(pattern: PixelRevealPattern, cols: number, rows: number): number[] | null {
+  const cells = Array.from({ length: cols * rows }, (_, i) => i);
+  const col = (i: number) => spread(i % cols, cols);
+  const row = (i: number) => spread(Math.floor(i / cols), rows);
+  switch (pattern) {
+    case "center":
+      return cells.map((i) => centerDistance(cols, rows, i));
+    case "edges":
+      return cells.map((i) => 1 - centerDistance(cols, rows, i));
+    case "left-to-right":
+      return cells.map(col);
+    case "right-to-left":
+      return cells.map((i) => 1 - col(i));
+    case "top-to-bottom":
+      return cells.map(row);
+    case "bottom-to-top":
+      return cells.map((i) => 1 - row(i));
+    case "diagonal":
+      return cells.map((i) =>
+        cols + rows > 2 ? ((i % cols) + Math.floor(i / cols)) / (cols + rows - 2) : 0
+      );
+    case "spiral":
+      return spiralIndex(cols, rows).map((position) => spread(position, cols * rows));
+    default:
+      return null;
+  }
+}
+
+/** Valida as opções de forma; a mensagem traz o valor recebido e o intervalo esperado. */
+export function validatePixelOptions(options: {
+  pixelScale: number;
+  gap: number;
+  pixelRadius: number;
+}): void {
+  const { pixelScale, gap, pixelRadius } = options;
+  if (!(pixelScale >= 0 && pixelScale <= 1)) {
+    throw new RangeError(`invalid pixelScale: received ${pixelScale}, expected 0..1`);
+  }
+  if (!(gap >= 0)) {
+    throw new RangeError(`invalid gap: received ${gap}, expected >= 0`);
+  }
+  if (!(pixelRadius >= 0 && pixelRadius <= 50)) {
+    throw new RangeError(`invalid pixelRadius: received ${pixelRadius}, expected 0..50`);
+  }
+}
+
 /** Atraso normalizado (0..1) de cada célula, em ordem de linha. */
 export function revealOrder(
   cols: number,
   rows: number,
-  pattern: RevealPattern,
+  pattern: PixelRevealPattern,
   origin: Origin,
   randomness: number,
   rng: Rng
@@ -88,6 +179,8 @@ export function revealOrder(
       (_, i) => BAYER_4[Math.floor(i / cols) % 4][(i % cols) % 4] / BAYER_MAX
     );
   }
+  const geometric = geometricBase(pattern, cols, rows);
+  if (geometric) return geometric.map((base) => jitter(base, randomness, rng));
   if (pattern === "ripple") return rippleOrder(cols, rows, origin, randomness, rng);
   return wipeOrder(cols, rows, origin, randomness, rng);
 }

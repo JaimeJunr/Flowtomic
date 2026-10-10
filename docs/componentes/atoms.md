@@ -595,9 +595,41 @@ Linha "Pensando…" que respira, com trilha de passos; ao terminar vira "Pensou 
 
 ### Animation
 
+#### `film-grain`
+
+Camada de granulado de filme por cima de uma área ou da tela, em canvas, com poeira, riscos, linhas de varredura e tremor opcionais. Decorativa; com movimento reduzido o grão fica parado.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/film-grain`
+
+#### `cursor-grid`
+
+Grade de células que acendem em volta do mouse e apagam devagar, desenhada em canvas por cima do conteúdo; o clique solta um anel de células acesas. Decorativa; com movimento reduzido não desenha.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/cursor-grid`
+
+#### `electric-border`
+
+Moldura com uma borda elétrica que treme e brilha em volta do conteúdo, desenhada em canvas. Sem canvas, fica uma borda simples. Com movimento reduzido, a borda fica parada.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/electric-border`
+
+#### `fade-in-view`
+
+Mostra o conteúdo com fade (e blur opcional) quando ele entra na tela; pode sumir sozinho depois de um tempo. Com movimento reduzido, já nasce visível.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/fade-in-view`
+
 #### `pixel-reveal`
 
-Card com dois conteúdos: uma grade de pixels cobre o primeiro e some revelando o segundo, em ordem aleatória, xadrez, onda a partir do ponteiro ou varredura pela borda. Gatilho por hover/foco ou clique, controlado ou não. Com movimento reduzido, troca direta com fade.
+Card com dois conteúdos: uma grade de pixels cobre o primeiro e some revelando o segundo, em várias ordens (aleatória, xadrez, onda a partir do ponteiro, varredura pela borda, do centro, das bordas, direcional, diagonal, espiral), com pixels de raio, escala, giro e espaçamento configuráveis e aviso de fim (`onComplete`). Gatilho por hover/foco ou clique, controlado ou não. Com movimento reduzido, troca direta com fade.
 
 **Dependências**: `motion`, `cn`
 
