@@ -344,6 +344,14 @@ Tanque de líquido que corre até o nível com inércia, inclina a superfície e
 
 ### Display
 
+#### `glass-surface`
+
+Superfície de vidro com desfoque, distorção nas bordas e arco-íris no contorno; vidro fosco simples fora do Chromium.
+
+**Dependências**: `cn`
+
+**Localização**: `packages/ui/src/components/atoms/display/glass-surface`
+
 #### `card`
 
 Container de card para agrupar conteúdo.

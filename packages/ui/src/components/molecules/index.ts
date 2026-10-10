@@ -141,10 +141,14 @@ export {
   MessageResponse,
   MessageToolbar,
 } from "./data-display/message";
+export type { PaperFolderProps, PaperFolderTone } from "./data-display/paper-folder";
+export { PaperFolder } from "./data-display/paper-folder";
 export type { Project, ProjectListProps } from "./data-display/project-list";
 export { ProjectList } from "./data-display/project-list";
 export type { Reminder, ReminderCardProps } from "./data-display/reminder-card";
 export { ReminderCard } from "./data-display/reminder-card";
+export type { RingCarouselItem, RingCarouselProps } from "./data-display/ring-carousel";
+export { RingCarousel } from "./data-display/ring-carousel";
 export type { ShredListProps } from "./data-display/shred-list";
 export { ShredList } from "./data-display/shred-list";
 export type {
@@ -167,6 +171,8 @@ export type { SuggestionProps, SuggestionsProps } from "./data-display/suggestio
 export { Suggestion, Suggestions } from "./data-display/suggestion";
 export type { SwipeAction, SwipeActionsRowProps } from "./data-display/swipe-actions-row";
 export { SwipeActionsRow } from "./data-display/swipe-actions-row";
+export type { SwipeStackProps } from "./data-display/swipe-stack";
+export { SwipeStack } from "./data-display/swipe-stack";
 export type {
   TaskContentProps,
   TaskItemFileProps,
@@ -277,6 +283,8 @@ export {
   ComboboxValue,
   useComboboxAnchor,
 } from "./forms/combobox";
+export type { CurvedInputProps } from "./forms/curved-input";
+export { CurvedInput } from "./forms/curved-input";
 export type { FolderPickerItem, FolderPickerProps } from "./forms/folder-picker";
 export { FolderPicker } from "./forms/folder-picker";
 export type { GlidePickerOption, GlidePickerProps } from "./forms/glide-picker";
@@ -331,6 +339,8 @@ export type {
   NumericFilterValue,
 } from "./forms/numeric-filter-field";
 export { NumericFilterField } from "./forms/numeric-filter-field";
+export type { OptionWheelProps } from "./forms/option-wheel";
+export { OptionWheel } from "./forms/option-wheel";
 export type { TextEditorMode, TextEditorProps, TextEditorToolbarAction } from "./forms/text-editor";
 export { TextEditor } from "./forms/text-editor";
 export type {
@@ -348,6 +358,8 @@ export type {
 export { BranchNav } from "./navigation/branch-nav";
 export type { MenuDockItem, MenuDockProps } from "./navigation/menu-dock";
 export { MenuDock } from "./navigation/menu-dock";
+export type { ProximityNavProps } from "./navigation/proximity-nav";
+export { ProximityNav } from "./navigation/proximity-nav";
 export type {
   MobileAppCard,
   NavigationItem,
