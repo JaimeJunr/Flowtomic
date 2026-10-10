@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (119 atoms, 69 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (122 atoms, 72 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,8 +37,8 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (119)
-- **Molecules**: `docs/componentes/molecules.md` (69)
+- **Atoms**: `docs/componentes/atoms.md` (122)
+- **Molecules**: `docs/componentes/molecules.md` (72)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -374,8 +374,8 @@ errado.
 
 Resumo:
 
-- **Atoms**: 119 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 69 componentes - Ver `docs/componentes/molecules.md`
+- **Atoms**: 122 componentes - Ver `docs/componentes/atoms.md`
+- **Molecules**: 72 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -697,6 +697,12 @@ Cada uma já mordeu alguém neste repo.
   `requestAnimationFrame` quando o módulo carrega, antes do fake entrar, então a mola fica parada
   sem erro (medido em 10/10/2026 no modo `step` do `ring-carousel`). Para testar animação por mola,
   use timers reais com duração curta e `waitFor`; o `useFrameLoop` próprio continua aceitando fake.
+- ⚠️ **`--accent` e `--secondary` não servem de cor de brilho.** São quase brancos no tema claro e
+  escuros no escuro: bolinha `bg-accent` sumia na barra clara do `goo-tabs` e o anel do
+  `edge-glow-card` apagava no modo escuro (medido em 10/10/2026). Para luz e partícula, use
+  `--primary` e variações com `color-mix(in oklch, var(--primary), var(--foreground) N%)`.
+- ⚠️ **Filtro de gosma (blur + corte de alfa) apaga forma pequena.** Com `stdDeviation` 8 e matriz
+  de alfa `20 -8`, bolinhas de 12 px sumiam por inteiro; com 4 e `18 -7` aparecem e ainda fundem.
 - ⚠️ **Superfície arrastável precisa de `select-none`.** Sem ele, o arraste por ponteiro seleciona o
   texto da linha (visto no `swipe-actions-row` em 09/10/2026). O jsdom não acusa; só aparece no browser.
 - ⚠️ **Seta em `RadioGroup` do Radix não escolhe com `userEvent.keyboard` no jsdom.** O Radix só
