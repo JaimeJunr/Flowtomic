@@ -314,6 +314,16 @@ describe("3ª review: proteção só onde é link", () => {
     }
   });
 
+  it.each([
+    ["sem `)` no fim", `\\(x\\) ${"[a](u (".repeat(160_000)}`],
+    ["aspas, com fechamento no fim", `\\(x\\) ${'[a](u "'.repeat(160_000)}" x`],
+    ["com `)` no fim", `\\(x\\) ${"[a](u (".repeat(160_000)} )x`],
+  ])("título `(` repetido de link inline é linear: %s", (_nome, texto) => {
+    const inicio = performance.now();
+    normalizeMathDelimiters(texto);
+    expect(performance.now() - inicio).toBeLessThan(2_000);
+  });
+
   it("rótulos, `](` e títulos sem fim terminam em tempo linear", () => {
     const casos = [
       "[x]: a (\n".repeat(60_000),

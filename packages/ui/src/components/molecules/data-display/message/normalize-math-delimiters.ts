@@ -231,21 +231,37 @@ const REFERENCE_LABEL = /[ \t]{0,3}\[[^\]\n]+\]:/y;
 const URL_START = /(?:[A-Za-z][A-Za-z0-9+.-]*:\/\/|mailto:|www\.)/y;
 const MAX_PAREN_DEPTH = 32; // limite do CommonMark para parênteses aninhados no destino
 
-/** Primeira posição de onde um título com aquela abertura já não achou fechamento. */
-type TitleFails = Record<string, number>;
+/**
+ * Memória da busca de fechamento de título, por caractere de abertura. O fechamento é sempre o
+ * primeiro `"`/`'`/`)` não escapado depois da abertura, então uma busca que começa dentro de um
+ * trecho já varrido chega ao mesmo fim (a abertura vem após espaço, nunca no meio de um par `\x`,
+ * logo o alinhamento dos escapes coincide). Sem isso, `[a](u (` repetido varria até o mesmo `)`
+ * a cada `](`: tempo quadrático.
+ */
+interface TitleMemo {
+  /** Primeira posição de onde a busca já não achou fechamento. */
+  fails: Record<string, number>;
+  /** Última busca bem-sucedida: abertura em `[0]`, fim exclusivo em `[1]`. */
+  found: Record<string, [number, number]>;
+}
+type TitleFails = TitleMemo;
 
-/** Fim (exclusivo) do título que abre em `from`, ou -1. Falha lembrada: a busca não repete. */
-function titleEnd(text: string, from: number, fails: TitleFails): number {
+/** Fim (exclusivo) do título que abre em `from`, ou -1. Resultados lembrados: a busca não repete. */
+function titleEnd(text: string, from: number, memo: TitleFails): number {
   const open = text[from];
-  if (from >= (fails[open] ?? Number.POSITIVE_INFINITY)) return -1;
+  if (from >= (memo.fails[open] ?? Number.POSITIVE_INFINITY)) return -1;
+  const hit = memo.found[open];
+  if (hit && from >= hit[0] && from < hit[1]) return hit[1];
   const close = open === "(" ? ")" : open;
   let i = from + 1;
   while (i < text.length) {
     if (text[i] === "\\") i += 2;
-    else if (text[i] === close) return i + 1;
-    else i++;
+    else if (text[i] === close) {
+      memo.found[open] = [from, i + 1];
+      return i + 1;
+    } else i++;
   }
-  fails[open] = from;
+  memo.fails[open] = from;
   return -1;
 }
 
@@ -352,7 +368,7 @@ function normalizeParagraph(text: string): string {
   let endsWithMath = false;
   let bracketDepth = 0; // `[` não escapados ainda abertos: `](` só é link com `[` antes
   let definitions = true; // linhas anteriores foram só definições: ainda pode abrir outra
-  const titleFails: TitleFails = {};
+  const titleFails: TitleFails = { fails: {}, found: {} };
 
   // Só olha o trecho consumido [from, to): cada caractere é visto uma vez.
   const trackSource = (from: number, to: number) => {
