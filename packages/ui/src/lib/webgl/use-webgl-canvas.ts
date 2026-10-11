@@ -61,6 +61,7 @@ function useRendererAttachment(
 export function useWebglCanvas(input: UseWebglCanvasOptions): {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   isSupported: boolean;
+  redraw: () => void;
 } {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [isSupported, setIsSupported] = React.useState(false);
@@ -68,5 +69,6 @@ export function useWebglCanvas(input: UseWebglCanvasOptions): {
   const onError = React.useCallback(() => setIsSupported(false), []);
   const options = useRendererOptions(input, renderer, onError);
   useRendererAttachment(canvasRef, options, renderer, setIsSupported);
-  return { canvasRef, isSupported };
+  const redraw = React.useCallback(() => renderer.current?.redraw(), []);
+  return { canvasRef, isSupported, redraw };
 }

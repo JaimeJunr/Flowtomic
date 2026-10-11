@@ -1,6 +1,7 @@
 import { act, cleanup, render, renderHook, screen } from "@testing-library/react";
 import { MotionConfig } from "motion/react";
 import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from "vitest";
+import { createWebglRenderer } from "./create-webgl-renderer";
 import { type UseWebglCanvasOptions, useWebglCanvas } from "./index";
 
 class FakeGl {
@@ -40,8 +41,15 @@ class FakeGl {
 const fragmentShader =
   "#version 300 es\nprecision highp float; out vec4 color; void main() { color = vec4(1.0); }";
 function CanvasDemo(options: UseWebglCanvasOptions) {
-  const { canvasRef, isSupported } = useWebglCanvas(options);
-  return <canvas ref={canvasRef} data-testid="canvas" data-supported={String(isSupported)} />;
+  const { canvasRef, isSupported, redraw } = useWebglCanvas(options);
+  return (
+    <>
+      <canvas ref={canvasRef} data-testid="canvas" data-supported={String(isSupported)} />
+      <button type="button" onClick={redraw}>
+        Redraw
+      </button>
+    </>
+  );
 }
 
 let frames: Map<number, FrameRequestCallback>;
@@ -120,6 +128,45 @@ function resize() {
 }
 
 describe("useWebglCanvas", () => {
+  it("redraws frozen time with the latest uniforms while paused", () => {
+    const gl = supportCanvas();
+    const first = vi.fn();
+    const latest = vi.fn();
+    const view = render(<CanvasDemo fragmentShader={fragmentShader} uniforms={first} />);
+    frame(1000);
+    frame(2500);
+    view.rerender(<CanvasDemo fragmentShader={fragmentShader} uniforms={latest} paused />);
+    act(() => screen.getByRole("button", { name: "Redraw" }).click());
+    expect(gl.drawArrays).toHaveBeenCalledTimes(3);
+    expect(latest).toHaveBeenCalledTimes(1);
+    expect(latest).toHaveBeenLastCalledWith(gl.context, gl.program, 1.5);
+    expect(gl.uniform1f).toHaveBeenLastCalledWith({ name: "uTime" }, 1.5);
+    expect(frames.size).toBe(0);
+  });
+  it("redraws reduced motion without scheduling animation", () => {
+    const gl = supportCanvas();
+    const uniforms = vi.fn();
+    render(
+      <MotionConfig reducedMotion="always">
+        <CanvasDemo fragmentShader={fragmentShader} uniforms={uniforms} />
+      </MotionConfig>
+    );
+    act(() => screen.getByRole("button", { name: "Redraw" }).click());
+    expect(gl.drawArrays).toHaveBeenCalledTimes(2);
+    expect(uniforms).toHaveBeenLastCalledWith(gl.context, gl.program, 0);
+    expect(frames.size).toBe(0);
+  });
+  it("exposes a stable redraw that is a no-op without an attached context", () => {
+    const { result, rerender, unmount } = renderHook(() => useWebglCanvas({ fragmentShader }));
+    const redraw = result.current.redraw;
+    expect(typeof redraw).toBe("function");
+    expect(() => redraw()).not.toThrow();
+    rerender();
+    expect(result.current.redraw).toBe(redraw);
+    unmount();
+    expect(() => redraw()).not.toThrow();
+  });
+
   it("reports unsupported in jsdom without throwing", () => {
     render(<CanvasDemo fragmentShader={fragmentShader} />);
     expect(screen.getByTestId("canvas")).toHaveAttribute("data-supported", "false");
@@ -407,5 +454,48 @@ describe("useWebglCanvas", () => {
     expect(() => view.unmount()).not.toThrow();
     expect(cancelSpy).not.toHaveBeenCalled();
     expect(gl.deleteProgram).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("WebglRenderer.redraw", () => {
+  it("draws once without advancing time or altering a queued animation", () => {
+    const gl = new FakeGl();
+    const uniforms = vi.fn();
+    const renderer = createWebglRenderer(
+      document.createElement("canvas"),
+      gl.context,
+      fragmentShader,
+      () => ({ fragmentShader, uniforms, paused: false, reducedMotion: false, onError: vi.fn() })
+    );
+    expect(renderer).not.toBeNull();
+    if (!renderer) throw new Error("Expected an initialized renderer");
+    try {
+      frame(1000);
+      frame(2500);
+      const requests = requestSpy.mock.calls.length;
+      renderer.redraw();
+      expect(gl.drawArrays).toHaveBeenCalledTimes(3);
+      expect(uniforms).toHaveBeenLastCalledWith(gl.context, gl.program, 1.5);
+      expect(requestSpy).toHaveBeenCalledTimes(requests);
+      expect(frames.size).toBe(1);
+    } finally {
+      renderer.dispose();
+    }
+  });
+  it("does nothing after disposal", () => {
+    const gl = new FakeGl();
+    const uniforms = vi.fn();
+    const renderer = createWebglRenderer(
+      document.createElement("canvas"),
+      gl.context,
+      fragmentShader,
+      () => ({ fragmentShader, uniforms, paused: true, reducedMotion: false, onError: vi.fn() })
+    );
+    expect(renderer).not.toBeNull();
+    if (!renderer) throw new Error("Expected an initialized renderer");
+    renderer.dispose();
+    renderer.redraw();
+    expect(gl.drawArrays).not.toHaveBeenCalled();
+    expect(uniforms).not.toHaveBeenCalled();
   });
 });
