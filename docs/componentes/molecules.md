@@ -379,9 +379,14 @@ mesmo tamanho, protege a fórmula inteira: `Se $x \in R$ 5 vezes` fica intacto,
 enquanto os dois valores de `**R$ 1.331** ... **R$ 331**` são escapados. Regiões
 existentes `$...$` e `$$...$$` ficam intactas, inclusive o conteúdo em LaTeX.
 
-Fórmulas inline adjacentes recebem U+2060 (WORD JOINER) entre os delimitadores:
-um separador sem largura que não insere espaço visível nem permite quebra de
-linha, mas impede o Markdown de fundir os dólares. Contagens
+Fórmulas inline adjacentes recebem um espaço comum entre os delimitadores.
+A pequena mudança visual impede que o Markdown funda os dólares sem inserir
+caracteres invisíveis no texto selecionável. Destinos e títulos de links inline,
+definições de referência (inclusive título na linha seguinte), autolinks e URLs
+ficam intocados; o rótulo do link continua sendo normalizado. Crases escapadas
+não abrem código inline, mas barras dentro de código não escapam o fechamento.
+Cercas em citações comparam a quantidade de `>`, permitindo prefixos equivalentes
+como `> >` e `>>`. A indexação de trechos protegidos também é linear. Contagens
 de dólares por prefixo permitem rejeitar conversões em O(1), mantendo a varredura
 linear mesmo quando muitas aberturas reutilizam o mesmo fechamento. Mudanças em
 `normalizeMath`, opções, proteções de links/imagens e props do contêiner atualizam

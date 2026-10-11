@@ -14,8 +14,9 @@
  *   Um dólar de moeda nunca abre math. Um dólar aberto fora de moeda, com conteúdo
  *   não vazio e fechamento do mesmo tamanho, protege a região inteira (inclusive
  *   `R$` em `$x \in R$ 5`). Os dois `R$` em negrito continuam sendo moeda.
- * - fórmulas adjacentes são separadas por U+2060 (WORD JOINER), sem espaço
- *   visível nem quebra de linha; juntar fechamento e abertura produziria um delimitador `$$`.
+ * - fórmulas adjacentes recebem um espaço comum: a pequena separação visual evita
+ *   fundir delimitadores em `$$`, sem acrescentar caracteres invisíveis à seleção.
+ * - destinos e títulos de links, definições de referência e URLs ficam intocados.
  *
  * O `$` simples continua ligado: `$x^2$` legítimo segue funcionando.
  *
@@ -41,7 +42,7 @@ export function normalizeMathDelimiters(text: string): string {
 
   const out: string[] = [];
   let paragraph: string[] = [];
-  let fence: { char: string; len: number; indent: number; quote: string } | null = null;
+  let fence: { char: string; len: number; indent: number; quoteDepth: number } | null = null;
   let listIndent = 0;
 
   const flush = () => {
@@ -53,6 +54,7 @@ export function normalizeMathDelimiters(text: string): string {
 
   for (const line of text.split("\n")) {
     const quote = QUOTE_PREFIX.exec(line)?.[0] ?? "";
+    const quoteDepth = [...quote].filter((ch) => ch === ">").length;
     const body = line.slice(quote.length);
     if (fence) {
       out.push(line);
@@ -60,7 +62,7 @@ export function normalizeMathDelimiters(text: string): string {
       const indent = close ? indentWidth(close[1]) : -1;
       if (
         close &&
-        quote.trim() === fence.quote &&
+        quoteDepth === fence.quoteDepth &&
         indent >= fence.indent &&
         indent <= fence.indent + 3 &&
         close[2][0] === fence.char &&
@@ -90,7 +92,7 @@ export function normalizeMathDelimiters(text: string): string {
         char: open[2][0],
         len: open[2].length,
         indent: listIndent || (indent > 3 ? indent : 0),
-        quote: quote.trim(),
+        quoteDepth,
       };
       continue;
     }
@@ -147,14 +149,18 @@ function indexDollars(text: string, spans: Array<[number, number]>) {
 
 /** Trechos de código inline `[início, fim)`, pelo pareamento de crases do CommonMark. */
 function findCodeSpans(text: string): Array<[number, number]> {
-  const runs: Array<{ pos: number; len: number }> = [];
+  const runs: Array<{ pos: number; len: number; openPos: number; openLen: number }> = [];
+  let slashes = 0;
   for (let i = 0; i < text.length; ) {
     if (text[i] === "`") {
       let j = i;
       while (j < text.length && text[j] === "`") j++;
-      runs.push({ pos: i, len: j - i });
+      const escaped = slashes % 2;
+      runs.push({ pos: i, len: j - i, openPos: i + escaped, openLen: j - i - escaped });
+      slashes = 0;
       i = j;
     } else {
+      slashes = text[i] === "\\" ? slashes + 1 : 0;
       i++;
     }
   }
@@ -173,13 +179,17 @@ function findCodeSpans(text: string): Array<[number, number]> {
   let k = 0;
   while (k < runs.length) {
     const run = runs[k];
-    const list = byLen.get(run.len) as number[];
-    let c = cursor.get(run.len) ?? 0;
+    const list = byLen.get(run.openLen);
+    if (!list || run.openLen === 0) {
+      k++;
+      continue;
+    }
+    let c = cursor.get(run.openLen) ?? 0;
     while (c < list.length && list[c] <= k) c++;
-    cursor.set(run.len, c);
+    cursor.set(run.openLen, c);
     if (c < list.length) {
       const closing = runs[list[c]];
-      spans.push([run.pos, closing.pos + closing.len]);
+      spans.push([run.openPos, closing.pos + closing.len]);
       k = list[c] + 1;
     } else {
       k++; // crase sem par é texto literal
@@ -216,8 +226,121 @@ function isCurrencyAt(text: string, i: number): number {
   return j < text.length && DIGIT.test(text[j]) ? prefixLen : 0;
 }
 
+/** Varredura monotônica: não reinterpreta Markdown dentro de destinos ou URLs. */
+function referenceEnd(text: string, from: number): number {
+  let i = from;
+  while (i < text.length && /\s/.test(text[i])) i++;
+  const angle = text[i] === "<";
+  let depth = 0;
+  if (angle) i++;
+  for (; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === "\\") {
+      i++;
+      continue;
+    }
+    if (angle) {
+      if (ch === ">") {
+        i++;
+        break;
+      }
+    } else if (/\s/.test(ch)) break;
+    else if (ch === "(") depth++;
+    else if (ch === ")") {
+      if (depth === 0) break;
+      depth--;
+    }
+  }
+  let title = i;
+  while (title < text.length && /\s/.test(text[title])) title++;
+  const open = text[title];
+  if (title > i && (open === '"' || open === "'" || open === "(")) {
+    const close = open === "(" ? ")" : open;
+    i = title + 1;
+    while (i < text.length) {
+      if (text[i] === "\\") i += 2;
+      else if (text[i++] === close) break;
+    }
+  }
+  const end = text.indexOf("\n", i);
+  return end === -1 ? text.length : end;
+}
+
+/** Une código, destinos, referências e URLs em ordem, sem ordenar ou revisitar sufixos. */
+function findProtectedSpans(text: string): Array<[number, number]> {
+  const code = findCodeSpans(text);
+  const spans: Array<[number, number]> = [];
+  const reference = /[ \t]{0,3}\[[^\]\n]+\]:[ \t]*/y;
+  const url = /(?:[A-Za-z][A-Za-z0-9+.-]*:\/\/|mailto:|www\.)/y;
+  let c = 0;
+  for (let i = 0; i < text.length; ) {
+    while (c < code.length && code[c][1] <= i) c++;
+    if (c < code.length && code[c][0] === i) {
+      spans.push(code[c]);
+      i = code[c++][1];
+      continue;
+    }
+    if (i === 0 || text[i - 1] === "\n") {
+      reference.lastIndex = i;
+      if (reference.test(text)) {
+        const end = referenceEnd(text, reference.lastIndex);
+        spans.push([i, end]);
+        i = end;
+        continue;
+      }
+    }
+    if (text[i] === "]" && text[i + 1] === "(") {
+      const start = i + 1;
+      let end = start + 1;
+      let depth = 1;
+      let quote = "";
+      let angle = false;
+      for (; end < text.length; end++) {
+        const ch = text[end];
+        if (ch === "\\") {
+          end++;
+          continue;
+        }
+        if (quote) {
+          if (ch === quote) quote = "";
+          continue;
+        }
+        if (angle) {
+          if (ch === ">") angle = false;
+          continue;
+        }
+        if (ch === "<") angle = true;
+        else if ((ch === '"' || ch === "'") && /\s/.test(text[end - 1])) quote = ch;
+        else if (ch === "(") depth++;
+        else if (ch === ")" && --depth === 0) {
+          end++;
+          break;
+        }
+      }
+      spans.push([start, Math.min(end, text.length)]);
+      i = end;
+      continue;
+    }
+    // Tentar apenas no início de palavra evita buscas repetidas em sufixos longos.
+    if ((i === 0 || !/[A-Za-z0-9+.-]/.test(text[i - 1])) && /[A-Za-z]/.test(text[i])) {
+      url.lastIndex = i;
+      if (url.test(text)) {
+        let end = url.lastIndex;
+        while (end < text.length && !/[\s<>]/.test(text[end])) end++;
+        spans.push([i, end]);
+        i = end;
+        continue;
+      }
+    }
+    // Escapes fora de código impedem que um ] literal abra destino.
+    if (text[i] === "\\" && text[i + 1] !== "`") i += 2;
+    else i++;
+  }
+  return spans;
+}
+
 function normalizeParagraph(text: string): string {
-  const spans = findCodeSpans(text);
+  const spans = findProtectedSpans(text);
   const dollars = indexDollars(text, spans);
   const closers: Record<string, CloserCache> = {
     "]": { searchedFrom: Number.POSITIVE_INFINITY, result: -1 },
@@ -264,7 +387,7 @@ function normalizeParagraph(text: string): string {
       if (run && run.close !== -1 && run.close < limit) {
         // Aberturas de moeda são consumidas no ramo R/US abaixo, antes de chegar aqui.
         if (text.slice(run.end, run.close).trim()) {
-          if (endsWithMath) out += "\u2060";
+          if (endsWithMath) out += " ";
           copy(run.close + run.end - run.start);
           endsWithMath = true;
           continue;
@@ -298,7 +421,7 @@ function normalizeParagraph(text: string): string {
             out += `$$\n${indent}${formula}\n${indent}$$`;
             endsWithMath = false;
           } else {
-            if (endsWithMath) out += "\u2060";
+            if (endsWithMath) out += " ";
             out += `$${formula}$`;
             endsWithMath = true;
           }

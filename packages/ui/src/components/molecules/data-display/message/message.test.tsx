@@ -15,6 +15,49 @@ import {
 } from "./message";
 
 const spies: MockInstance[] = [];
+describe("renderização da re-review", () => {
+  it.each([
+    ["[link](https://example.com/\\(a\\)\\(b\\))", "https://example.com/(a)(b)"],
+    ["[R$ 5](https://x.com/R$5)", "https://x.com/R$5"],
+    ['[link](<https://example.com/\\(a\\)> "R$ 5")', "https://example.com/(a)"],
+    ['[link][id]\n\n[id]: https://example.com/\\(a\\) "R$ 5"', "https://example.com/(a)"],
+  ])("preserva href real: %s", (text, href) => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>{text}</MessageResponse>
+    );
+    expect(container.querySelector("a")).toHaveAttribute("href", href);
+    expect(container.querySelectorAll(".katex")).toHaveLength(0);
+  });
+  it("seleção de fórmulas adjacentes não contém WORD JOINER", () => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>{"\\(x\\)\\(y\\)"}</MessageResponse>
+    );
+    const range = document.createRange();
+    range.selectNodeContents(container);
+    expect(range.toString()).not.toContain("\u2060");
+    expect(container.querySelectorAll(".katex")).toHaveLength(2);
+    expect(container.querySelectorAll(".katex-error")).toHaveLength(0);
+  });
+  it.each(["", "- "])("preserva code span após crase escapada: %s", (prefix) => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>
+        {`${prefix}\\\`literal e \`\\(x\\)\``}
+      </MessageResponse>
+    );
+    expect(container.querySelector("code")).toHaveTextContent("\\(x\\)");
+    expect(container.querySelectorAll(".katex")).toHaveLength(0);
+  });
+  it("fecha cerca em citação aninhada e preserva dois negritos", () => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>
+        {"> > ````\n> > \\(x\\) e R$ 10\n>> ````\n\n**R$ 1.331**. Os juros totais são **R$ 331**"}
+      </MessageResponse>
+    );
+    expect(container.querySelectorAll("strong")).toHaveLength(2);
+    expect(container.querySelectorAll(".katex")).toHaveLength(0);
+    expect(container.querySelector("code")).toHaveTextContent("\\(x\\) e R$ 10");
+  });
+});
 afterEach(() => {
   for (const spy of spies.splice(0)) spy.mockRestore();
 });
@@ -173,7 +216,7 @@ describe("Message", () => {
       "\\(a\\)$b$",
       "**\\(x\\)\\(y\\)**",
       "\\[x\\]\\(y\\)",
-    ])("renderiza duas fórmulas adjacentes sem espaço visível: %s", (texto) => {
+    ])("renderiza duas fórmulas adjacentes com espaço comum: %s", (texto) => {
       const { container } = render(
         <MessageResponse parseIncompleteMarkdown={false}>{texto}</MessageResponse>
       );
@@ -185,7 +228,7 @@ describe("Message", () => {
         Array.from(parent?.childNodes ?? [])
           .filter((node) => node.nodeType === 3)
           .map((node) => node.textContent)
-      ).toEqual(["\u2060"]);
+      ).toEqual([" "]);
     });
 
     it("preserva R$ que fecha uma fórmula antes de número", () => {

@@ -49,12 +49,12 @@ Se fossem juros simples (só sobre os R\\$ 1.000), seriam R\\$ 100 por ano, tota
 
   describe("\\( \\) vira $...$", () => {
     it.each([
-      ["\\(x\\)\\(y\\)", "$x$\u2060$y$"],
-      ["$a$\\(b\\)", "$a$\u2060$b$"],
-      ["\\(a\\)$b$", "$a$\u2060$b$"],
-      ["\\(a\\)\\(b\\)\\(c\\)", "$a$\u2060$b$\u2060$c$"],
+      ["\\(x\\)\\(y\\)", "$x$ $y$"],
+      ["$a$\\(b\\)", "$a$ $b$"],
+      ["\\(a\\)$b$", "$a$ $b$"],
+      ["\\(a\\)\\(b\\)\\(c\\)", "$a$ $b$ $c$"],
       ["\\(a\\) \\(b\\)", "$a$ $b$"],
-    ])("separa delimitadores adjacentes sem espaço visível: %s", (entrada, saida) => {
+    ])("separa delimitadores adjacentes com espaço comum: %s", (entrada, saida) => {
       expect(normalizeMathDelimiters(entrada)).toBe(saida);
       expect(normalizeMathDelimiters(saida)).toBe(saida);
     });
@@ -232,5 +232,34 @@ Se fossem juros simples (só sobre os R\\$ 1.000), seriam R\\$ 100 por ano, tota
       }
       expect(performance.now() - inicio).toBeLessThan(1_000);
     });
+  });
+});
+describe("regressões da re-review", () => {
+  it.each([
+    "[link](https://example.com/\\(a\\)\\(b\\))",
+    '[link](<https://example.com/\\(a\\)> "R$ 5 \\(t\\)")',
+    '[id]: https://example.com/\\(a\\) "R$ 5 \\(t\\)"',
+    '[id]: <https://example.com/\\(a\\)>\n  "R$ 5 \\(t\\)"',
+    "<https://example.com/\\(a\\)\\(b\\)>",
+    "https://example.com/\\(a\\)\\(b\\)/R$5",
+    '[id]:\n  <https://example.com/\\(a\\)>\n  "R$ 5\n  \\(t\\)"',
+    '[link](/\\(a\\)/R$5 "R$ 5\n\\(t\\)")',
+  ])("preserva destino, referência e URL: %s", (text) => {
+    expect(normalizeMathDelimiters(text)).toBe(text);
+  });
+  it("normaliza somente o rótulo do link", () => {
+    expect(normalizeMathDelimiters("[R$ 5](https://x.com/R$5)")).toBe(
+      "[R\\$ 5](https://x.com/R$5)"
+    );
+  });
+  it.each(["", "- "])("crase escapada não abre código: %s", (prefix) => {
+    const text = `${prefix}\\\`literal e \`\\(x\\)\``;
+    expect(normalizeMathDelimiters(text)).toBe(text);
+  });
+  it("fecha cerca pela profundidade da citação", () => {
+    const code = "> > ````\n> > \\(x\\) e R$ 10\n>> ````\n\n";
+    expect(normalizeMathDelimiters(`${code}**R$ 1.331**. Os juros totais são **R$ 331**`)).toBe(
+      `${code}**R\\$ 1.331**. Os juros totais são **R\\$ 331**`
+    );
   });
 });
