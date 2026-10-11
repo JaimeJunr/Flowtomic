@@ -26,6 +26,9 @@ const meta = {
   },
   tags: ["autodocs"],
   argTypes: {
+    direction: { control: "select", options: ["up", "down", "left", "right"] },
+    distance: { control: { type: "number", min: 0, step: 10 } },
+    scale: { control: { type: "number", min: 0.1, max: 1.5, step: 0.05 } },
     blur: { control: "boolean" },
     duration: { control: { type: "number", min: 0, step: 0.1 } },
     delay: { control: { type: "number", min: 0, step: 0.1 } },
@@ -42,6 +45,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Slide: Story = {
+  args: { direction: "up", distance: 60 },
+};
+
+export const FromLeft: Story = {
+  args: { direction: "left", distance: 60, scale: 0.95 },
+};
 
 export const ComDesfoque: Story = {
   args: { blur: true, duration: 1.2 },

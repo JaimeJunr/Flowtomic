@@ -153,4 +153,28 @@ describe("FadeInView", () => {
     advance(200);
     expect(state()).toBe("gone");
   });
+
+  it("distance e direction deslocam o estado inicial", () => {
+    // O destino zerado é coberto em fade-in-view-utils.test.ts: o rAF do motion não anda com timers falsos.
+    const { root } = setup({ distance: 60 });
+    expect(root.style.transform).toContain("translateY(60px)");
+  });
+
+  it("direction left com scale começa à direita e reduzido", () => {
+    const { root } = setup({ direction: "left", distance: 20, scale: 0.95 });
+    expect(root.style.transform).toContain("translateX(20px)");
+    expect(root.style.transform).toContain("scale(0.95)");
+  });
+
+  it("movimento reduzido ignora deslocamento e escala", () => {
+    const { root } = setup({ distance: 60, scale: 0.5 }, "always");
+    expect(root.style.transform === "none" || root.style.transform === "").toBe(true);
+  });
+
+  it("distance negativa e scale <= 0 lançam erro", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() => setup({ distance: -1 })).toThrow(/-1/);
+    expect(() => setup({ scale: 0 })).toThrow(/0/);
+    spy.mockRestore();
+  });
 });

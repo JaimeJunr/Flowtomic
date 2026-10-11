@@ -77,6 +77,8 @@ export type { CalendarPopoverProps } from "./data-display/calendar-popover";
 export { CalendarPopover, normalizeDate } from "./data-display/calendar-popover";
 export type { CalendarRangeProps } from "./data-display/calendar-range";
 export { CalendarRange } from "./data-display/calendar-range";
+export type { CardCycleHandle, CardCycleItem, CardCycleProps } from "./data-display/card-cycle";
+export { CardCycle } from "./data-display/card-cycle";
 export type {
   ChartAreaInteractiveDataPoint,
   ChartAreaInteractiveProps,
@@ -98,6 +100,11 @@ export { Checkpoint, CheckpointIcon, CheckpointTrigger } from "./data-display/ch
 export type { CircularProgressChartProps } from "./data-display/circular-progress-chart";
 export { CircularProgressChart } from "./data-display/circular-progress-chart";
 export type {
+  ColorSpotlightGridProps,
+  SpotlightGridItem,
+} from "./data-display/color-spotlight-grid";
+export { ColorSpotlightGrid } from "./data-display/color-spotlight-grid";
+export type {
   Column,
   ColumnDef,
   ColumnFiltersState,
@@ -111,12 +118,16 @@ export type { DomeGalleryProps, DomeItem } from "./data-display/dome-gallery";
 export { DomeGallery } from "./data-display/dome-gallery";
 export type { DriftWallItem, DriftWallProps } from "./data-display/drift-wall";
 export { DriftWall } from "./data-display/drift-wall";
+export type { ExpandPanelItem, ExpandPanelsProps } from "./data-display/expand-panels";
+export { ExpandPanels } from "./data-display/expand-panels";
 export type { FanCardItem, FanCardsProps } from "./data-display/fan-cards";
 export { FanCards } from "./data-display/fan-cards";
 export type { GenerationFrameProps, GenerationStatus } from "./data-display/generation-frame";
 export { GenerationFrame } from "./data-display/generation-frame";
 export type { HelixGalleryProps, HelixItem } from "./data-display/helix-gallery";
 export { HelixGallery } from "./data-display/helix-gallery";
+export type { MasonryGridProps, MasonryItem } from "./data-display/masonry-grid";
+export { MasonryGrid } from "./data-display/masonry-grid";
 export type {
   MessageActionProps,
   MessageActionsProps,
@@ -366,8 +377,12 @@ export type {
   BranchNavSection,
 } from "./navigation/branch-nav";
 export { BranchNav } from "./navigation/branch-nav";
+export type { FillPillNavProps } from "./navigation/fill-pill-nav";
+export { FillPillNav } from "./navigation/fill-pill-nav";
 export type { GooTabsItem, GooTabsProps } from "./navigation/goo-tabs";
 export { GooTabs } from "./navigation/goo-tabs";
+export type { MarqueeMenuItem, MarqueeMenuProps } from "./navigation/marquee-menu";
+export { MarqueeMenu } from "./navigation/marquee-menu";
 export type { MenuDockItem, MenuDockProps } from "./navigation/menu-dock";
 export { MenuDock } from "./navigation/menu-dock";
 export type { ProximityNavProps } from "./navigation/proximity-nav";
