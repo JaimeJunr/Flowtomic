@@ -22,7 +22,7 @@ Fundo de hero de landing, de tela de login ou de página de boas-vindas.
 ```ts
 type AuroraGlowProps = React.ComponentProps<"div"> & {
   /** Três tokens de cor (nomes de variável CSS), da esquerda para a direita. */
-  colors?: [string, string, string]; // default ["--primary", "--success", "--primary"]
+  colors?: [string, string, string]; // default ["--primary", "--warning", "--info"]
   speed?: number;      // multiplica o tempo; default 1; 0 congela
   amplitude?: number;  // altura das ondas; default 1 (0 = borda reta)
   blend?: number;      // suavidade da borda de baixo, 0–1; default 0.5
