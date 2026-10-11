@@ -397,6 +397,37 @@ com cantos de 10px; a resposta do assistente fica sem bolha. A navegação usa �
 anterior”, “Próxima versão” e contador em mono (“2 de 3”). Anexos sem nome usam
 “Imagem” ou “Anexo”; a ação “Remover anexo” aparece no hover e no foco pelo teclado.
 
+O `MessageResponse` passa o texto por `normalizeMathDelimiters` antes do Markdown:
+`\[ ... \]` vira bloco `$$`, `\( ... \)` vira `$...$` (os modelos usam muito esses
+delimitadores, que o `remark-math` não lê) e `R$`/`US$` seguidos de número viram `R\$`, para
+que `R$ 1.331 ... R$ 331` não seja lido como fórmula. Código (cercado ou inline) fica
+intocado e delimitador sem fechar fica como veio, para o streaming. Desligue com
+`normalizeMath={false}`.
+
+Cercas também são reconhecidas depois de marcadores de lista (`-`, `+`, `*`, `1.` ou
+`1)`), sob o recuo de um item e em citações. O fechamento aceita até três colunas
+de recuo além do conteúdo do item; uma cerca mais recuada continua sendo código.
+
+A heurística de moeda exige `R$`/`US$` com espaço opcional (incluindo tab e espaço
+inseparável), sinal opcional e dígito. Esse dólar nunca abre math. Um dólar aberto
+fora de moeda, seguido de conteúdo não vazio e de uma sequência de fechamento do
+mesmo tamanho, protege a fórmula inteira: `Se $x \in R$ 5 vezes` fica intacto,
+enquanto os dois valores de `**R$ 1.331** ... **R$ 331**` são escapados. Regiões
+existentes `$...$` e `$$...$$` ficam intactas, inclusive o conteúdo em LaTeX.
+
+Fórmulas inline adjacentes recebem um espaço comum entre os delimitadores.
+A pequena mudança visual impede que o Markdown funda os dólares sem inserir
+caracteres invisíveis no texto selecionável. Destinos e títulos de links inline,
+definições de referência (inclusive título na linha seguinte), autolinks e URLs
+ficam intocados; o rótulo do link continua sendo normalizado. Crases escapadas
+não abrem código inline, mas barras dentro de código não escapam o fechamento.
+Cercas em citações comparam a quantidade de `>`, permitindo prefixos equivalentes
+como `> >` e `>>`. A indexação de trechos protegidos também é linear. Contagens
+de dólares por prefixo permitem rejeitar conversões em O(1), mantendo a varredura
+linear mesmo quando muitas aberturas reutilizam o mesmo fechamento. Mudanças em
+`normalizeMath`, opções, proteções de links/imagens e props do contêiner atualizam
+a resposta mesmo quando `children` não muda (comparação padrão do `memo`).
+
 **Dependências**: `streamdown`, `lucide-react`, `cn`, `ai`
 
 ### `chat-message`

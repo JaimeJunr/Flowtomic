@@ -240,6 +240,30 @@ Se o teste executar $18$ de $24$ linhas, a cobertura será $75\\%$. Confira tamb
     </div>
   ),
 };
+export const MessageResponseWithLatexDelimitersAndCurrency: Story = {
+  name: "Fórmula com \\[ \\] e valores em R$",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Resposta no formato que os modelos costumam mandar: `\\[ \\]` e `\\( \\)` em vez de `$`, e valores em reais. A fórmula renderiza e `R$ 1.331 ... R$ 331` continua texto, com o negrito no lugar.",
+      },
+    },
+  },
+  render: () => (
+    <div className={largura}>
+      <MessageResponse>{`A fórmula dos juros compostos é:
+\\[ M = C \\times (1 + i)^t \\]
+- \\(M\\): montante final
+- Ano 1: \\(1.000 \\times 1{,}10 = 1.100\\) → R$ 1.100
+
+**Resultado:** ao final de 3 anos você tem **R$ 1.331**. Os juros totais são **R$ 331**.
+Se fossem juros simples (só sobre os R$ 1.000), seriam R$ 100 por ano, totalizando R$ 1.300.
+
+Em código, o delimitador fica como está: \`\\(x\\)\`.`}</MessageResponse>
+    </div>
+  ),
+};
 export const MessageResponseWithTable: Story = {
   name: "Componentes consultados",
   render: () => (

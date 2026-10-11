@@ -15,6 +15,49 @@ import {
 } from "./message";
 
 const spies: MockInstance[] = [];
+describe("renderização da re-review", () => {
+  it.each([
+    ["[link](https://example.com/\\(a\\)\\(b\\))", "https://example.com/(a)(b)"],
+    ["[R$ 5](https://x.com/R$5)", "https://x.com/R$5"],
+    ['[link](<https://example.com/\\(a\\)> "R$ 5")', "https://example.com/(a)"],
+    ['[link][id]\n\n[id]: https://example.com/\\(a\\) "R$ 5"', "https://example.com/(a)"],
+  ])("preserva href real: %s", (text, href) => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>{text}</MessageResponse>
+    );
+    expect(container.querySelector("a")).toHaveAttribute("href", href);
+    expect(container.querySelectorAll(".katex")).toHaveLength(0);
+  });
+  it("seleção de fórmulas adjacentes não contém WORD JOINER", () => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>{"\\(x\\)\\(y\\)"}</MessageResponse>
+    );
+    const range = document.createRange();
+    range.selectNodeContents(container);
+    expect(range.toString()).not.toContain("\u2060");
+    expect(container.querySelectorAll(".katex")).toHaveLength(2);
+    expect(container.querySelectorAll(".katex-error")).toHaveLength(0);
+  });
+  it.each(["", "- "])("preserva code span após crase escapada: %s", (prefix) => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>
+        {`${prefix}\\\`literal e \`\\(x\\)\``}
+      </MessageResponse>
+    );
+    expect(container.querySelector("code")).toHaveTextContent("\\(x\\)");
+    expect(container.querySelectorAll(".katex")).toHaveLength(0);
+  });
+  it("fecha cerca em citação aninhada e preserva dois negritos", () => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>
+        {"> > ````\n> > \\(x\\) e R$ 10\n>> ````\n\n**R$ 1.331**. Os juros totais são **R$ 331**"}
+      </MessageResponse>
+    );
+    expect(container.querySelectorAll("strong")).toHaveLength(2);
+    expect(container.querySelectorAll(".katex")).toHaveLength(0);
+    expect(container.querySelector("code")).toHaveTextContent("\\(x\\) e R$ 10");
+  });
+});
 afterEach(() => {
   for (const spy of spies.splice(0)) spy.mockRestore();
 });
@@ -166,9 +209,114 @@ describe("Message", () => {
     expect(screen.getByText("tsx")).toHaveAttribute("data-slot", "code-block-language");
   });
 
+  describe("fórmulas e moeda", () => {
+    it.each([
+      "\\(x\\)\\(y\\)",
+      "$a$\\(b\\)",
+      "\\(a\\)$b$",
+      "**\\(x\\)\\(y\\)**",
+      "\\[x\\]\\(y\\)",
+    ])("renderiza duas fórmulas adjacentes com espaço comum: %s", (texto) => {
+      const { container } = render(
+        <MessageResponse parseIncompleteMarkdown={false}>{texto}</MessageResponse>
+      );
+      expect(container.querySelectorAll(".katex")).toHaveLength(2);
+      expect(container.querySelector(".katex-error")).toBeNull();
+      const parent = container.querySelector(".katex")?.parentElement;
+      expect(parent).toBeDefined();
+      expect(
+        Array.from(parent?.childNodes ?? [])
+          .filter((node) => node.nodeType === 3)
+          .map((node) => node.textContent)
+      ).toEqual([" "]);
+    });
+
+    it("preserva R$ que fecha uma fórmula antes de número", () => {
+      const { container } = render(<MessageResponse>{"Se $x \\in R$ 5 vezes"}</MessageResponse>);
+      expect(container.querySelectorAll(".katex")).toHaveLength(1);
+      expect(container.querySelector(".katex-error")).toBeNull();
+      expect(container.textContent).toContain("5 vezes");
+    });
+
+    it("rerender reage ao normalizeMath com o mesmo children", () => {
+      const texto = "Fórmula: \\(x^2\\)";
+      const { container, rerender } = render(
+        <MessageResponse normalizeMath={false}>{texto}</MessageResponse>
+      );
+      expect(container.querySelectorAll(".katex")).toHaveLength(0);
+      rerender(<MessageResponse normalizeMath>{texto}</MessageResponse>);
+      expect(container.querySelectorAll(".katex")).toHaveLength(1);
+      rerender(<MessageResponse normalizeMath={false}>{texto}</MessageResponse>);
+      expect(container.querySelectorAll(".katex")).toHaveLength(0);
+    });
+
+    it("rerender atualiza className e opções com o mesmo children", () => {
+      const { container, rerender } = render(
+        <MessageResponse className="antes">{"$x$"}</MessageResponse>
+      );
+      rerender(
+        <MessageResponse className="depois" options={{ remarkPlugins: [] }}>
+          {"$x$"}
+        </MessageResponse>
+      );
+      expect(container.querySelector('[data-slot="message-response"]')).toHaveClass("depois");
+      expect(container.querySelectorAll(".katex")).toHaveLength(0);
+    });
+
+    // Resposta real do Grok 4.7 que saiu quebrada em produção na Constelação.
+    const respostaGrok = `A fórmula é:
+\\[ M = C \\times (1 + i)^t \\]
+- \\(M\\): montante final
+- Ano 1: \\(1.000 \\times 1{,}10 = 1.100\\) → R$ 1.100
+**Resultado:** ao final de 3 anos você tem **R$ 1.331**. Os juros totais são **R$ 331**.
+Se fossem juros simples (só sobre os R$ 1.000), seriam R$ 100 por ano, totalizando R$ 1.300.`;
+
+    it("renderiza \\[ \\] como bloco, \\( \\) inline e R$ como texto", () => {
+      const { container } = render(<MessageResponse>{respostaGrok}</MessageResponse>);
+      expect(container.querySelectorAll(".katex-display")).toHaveLength(1);
+      expect(container.querySelectorAll(".katex")).toHaveLength(3);
+      expect(container.textContent).not.toContain("[ M = C");
+      const negritos = Array.from(container.querySelectorAll("strong"), (el) => el.textContent);
+      expect(negritos).toEqual(["Resultado:", "R$ 1.331", "R$ 331"]);
+      expect(container.querySelector("strong .katex")).toBeNull();
+      expect(container.textContent).toContain("seriam R$ 100 por ano, totalizando R$ 1.300.");
+    });
+
+    it("mantém \\[ \\] literal dentro de código", () => {
+      const { container } = render(
+        <MessageResponse>{"Use `\\(x\\)` assim:\n\n```latex\n\\[ x \\]\n```"}</MessageResponse>
+      );
+      expect(container.querySelector(".katex")).toBeNull();
+      expect(screen.getByText("\\(x\\)")).toBeInTheDocument();
+      expect(container.textContent).toContain("\\[ x \\]");
+    });
+
+    it("normalizeMath={false} deixa o texto como chegou", () => {
+      const { container } = render(
+        <MessageResponse normalizeMath={false}>{"Fórmula: \\(x^2\\)"}</MessageResponse>
+      );
+      expect(container.querySelector(".katex")).toBeNull();
+    });
+  });
+
   it("linguagem desconhecida vira text e o código continua visível", () => {
     render(<MessageResponse>{"```linguagem-inventada\nfaz algo\n```"}</MessageResponse>);
     expect(screen.getByText("text")).toHaveAttribute("data-slot", "code-block-language");
     expect(screen.getByText("faz algo")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["[Passo 1]: custa **R$ 5** e **R$ 6**", 2, 0],
+    ["$f[x](y)$ custa **R$ 5** e **R$ 6**", 2, 1],
+    ["$f[x](y)$ e \\(z\\) e R$ 5", 0, 2],
+    ["texto ](solto custa **R$ 5** e **R$ 6**", 2, 0],
+    ["\\( f[x](y) \\) e \\(\\text{www.exemplo.com}\\)", 0, 2],
+  ])("renderiza sem erro de math: %s", (texto, strongs, katex) => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>{texto}</MessageResponse>
+    );
+    expect(container.querySelectorAll("strong")).toHaveLength(strongs);
+    expect(container.querySelectorAll(".katex")).toHaveLength(katex);
+    expect(container.querySelectorAll(".katex-error")).toHaveLength(0);
   });
 });
