@@ -107,8 +107,16 @@ export type {
   VisibilityState,
 } from "./data-display/data-table";
 export { DataTable } from "./data-display/data-table";
+export type { DomeGalleryProps, DomeItem } from "./data-display/dome-gallery";
+export { DomeGallery } from "./data-display/dome-gallery";
+export type { DriftWallItem, DriftWallProps } from "./data-display/drift-wall";
+export { DriftWall } from "./data-display/drift-wall";
+export type { FanCardItem, FanCardsProps } from "./data-display/fan-cards";
+export { FanCards } from "./data-display/fan-cards";
 export type { GenerationFrameProps, GenerationStatus } from "./data-display/generation-frame";
 export { GenerationFrame } from "./data-display/generation-frame";
+export type { HelixGalleryProps, HelixItem } from "./data-display/helix-gallery";
+export { HelixGallery } from "./data-display/helix-gallery";
 export type {
   MessageActionProps,
   MessageActionsProps,

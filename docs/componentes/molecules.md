@@ -178,6 +178,30 @@ Assistente em passos com indicadores que se preenchem e conteúdo que desliza co
 
 **Dependências**: `motion`, `cn`
 
+### `fan-cards`
+
+Leque de cartões sobrepostos e inclinados que surgem um a um com quique; no hover o cartão endireita e vem para a frente, e os vizinhos se afastam. Com movimento reduzido, sem entrada e sem mola. Clean room (`docs/clean-room/react-bits/fan-cards.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `drift-wall`
+
+Parede de ladrilhos em perspectiva 3D com colunas que deslizam sem fim em sentidos alternados; o ladrilho sob o mouse acende e se aproxima, e o mouse inclina a parede de leve. Com movimento reduzido, a parede fica parada. Clean room (`docs/clean-room/react-bits/drift-wall.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `helix-gallery`
+
+Galeria em hélice 3D vertical que gira e sobe sem fim, com os cartões da frente maiores e as pontas esmaecidas; pausa no hover e aceita arrasto ou rolagem. Com movimento reduzido, a hélice fica parada. Clean room (`docs/clean-room/react-bits/helix-gallery.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `dome-gallery`
+
+Galeria por dentro de uma esfera: arrastar gira a cúpula com inércia, e o clique num ladrilho abre o item ampliado num diálogo. Com movimento reduzido, sem inércia e sem mola na abertura. Clean room (`docs/clean-room/react-bits/dome-gallery.md`).
+
+**Dependências**: `motion`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
