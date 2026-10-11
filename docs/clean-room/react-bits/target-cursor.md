@@ -39,9 +39,10 @@ type TargetCursorProps = React.ComponentProps<"div"> & {
 };
 ```
 
-Cor: `var(--foreground)` com `mix-blend-mode: difference` (fica visível em fundo claro e
-escuro); rótulo `bg-foreground text-background text-xs font-mono`. Sem prop de cor livre: quem
-quiser outra cor passa `className` (`text-primary`, por exemplo; as peças usam `currentColor`).
+Cor: `text-primary` (as peças usam `currentColor`); rótulo `bg-foreground text-background text-xs
+font-mono`. Sem prop de cor livre: quem quiser outra cor passa `className`. Medido em 11/10/2026:
+a primeira versão usava `var(--foreground)` com `mix-blend-mode: difference`, e a mira sumia no
+tema claro (foreground escuro em modo diferença sobre fundo claro vira quase branco).
 
 ## Regras
 

@@ -54,7 +54,10 @@ mínima 320 px. Escurecimento por camada `bg-foreground` com opacidade (nunca `r
 5. **Hold.** Após o último cartão, um espaçador de `holdDistance` px mantém o baralho preso.
 6. **`onStackComplete`** chamado quando o último cartão atinge `pinTop`; rearma quando ele volta a
    ficar abaixo (rolar para cima).
-7. Sem `overflow: hidden` em nenhum ancestral interno (quebraria o sticky).
+7. **Cartões são filhos diretos.** O índice de cada cartão sai de `Children.toArray(children)`;
+   um componente que devolve vários cartões conta como um só (medido em 11/10/2026: todos prendiam
+   no mesmo `top` e nenhum encolhia).
+8. Sem `overflow: hidden` em nenhum ancestral interno (quebraria o sticky).
 
 ## Movimento reduzido
 

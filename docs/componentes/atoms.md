@@ -627,6 +627,30 @@ Linha "Pensando…" que respira, com trilha de passos; ao terminar vira "Pensou 
 
 ### Animation
 
+#### `photo-trail`
+
+Rastro de cartões de imagem atrás do mouse, ciclando por uma lista, com três estilos (`pop`, `drift`, `tilt`). Clean room (`docs/clean-room/react-bits/photo-trail.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/photo-trail`
+
+#### `peel-sticker`
+
+Adesivo arrastável que descola uma ponta no hover e mais ao pressionar, mostrando o verso. Move também pelas setas. Clean room (`docs/clean-room/react-bits/peel-sticker.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/peel-sticker`
+
+#### `target-cursor`
+
+Troca o cursor por uma mira que gira e encaixa as cantoneiras no elemento marcado com `data-cursor-target`, com rótulo opcional. Só mouse e caneta; respeita movimento reduzido. Clean room (`docs/clean-room/react-bits/target-cursor.md`).
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/animation/target-cursor`
+
 #### `film-grain`
 
 Camada de granulado de filme por cima de uma área ou da tela, em canvas, com poeira, riscos, linhas de varredura e tremor opcionais. Decorativa; com movimento reduzido o grão fica parado.

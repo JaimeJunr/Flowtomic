@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (122 atoms, 87 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (125 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,8 +37,8 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (122)
-- **Molecules**: `docs/componentes/molecules.md` (87)
+- **Atoms**: `docs/componentes/atoms.md` (125)
+- **Molecules**: `docs/componentes/molecules.md` (88)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -374,8 +374,8 @@ errado.
 
 Resumo:
 
-- **Atoms**: 122 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 87 componentes - Ver `docs/componentes/molecules.md`
+- **Atoms**: 125 componentes - Ver `docs/componentes/atoms.md`
+- **Molecules**: 88 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -726,6 +726,11 @@ Cada uma já mordeu alguém neste repo.
   hélice do `helix-gallery` (medido em 11/10/2026), o texto dos cartões de trás saía de trás para
   frente. Some 180° quando `cos(ângulo) < 0`: o cartão fica no mesmo plano e a frente volta para quem
   olha. O jsdom não acusa; olhe o screenshot.
+- ⚠️ **Arquivo `.tsx` novo, criado com o Storybook já rodando, pode sair sem as classes do Tailwind.**
+  O `peel-sticker` saiu com altura 0 porque `min-h-60` não existia no CSS servido (medido em
+  11/10/2026), enquanto classes já usadas em outros arquivos funcionavam. Não é bug do componente:
+  `touch packages/styles/globals.css` força o Tailwind a reler tudo. Antes de caçar bug de layout em
+  componente recém-criado, confira com `getComputedStyle` se a classe gerou regra.
 - ⚠️ **O Playwright desta máquina não tem browser baixado** (`Executable doesn't exist ...
   chrome-headless-shell`, medido em 11/10/2026). Nos scripts de medição, use o Chrome do sistema:
   `chromium.launch({ executablePath: "/usr/bin/google-chrome-stable" })`.
