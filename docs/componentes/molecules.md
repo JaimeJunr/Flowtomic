@@ -238,6 +238,36 @@ Menu de itens grandes em que, no hover, uma faixa de cor invertida entra pelo la
 
 **Dependências**: `motion`, `cn`
 
+### `layered-menu`
+
+Menu em painel lateral: camadas coloridas deslizam escalonadas antes do painel, e os itens grandes sobem de uma máscara com numeração; o botão troca o texto rolando. Com movimento reduzido, o painel aparece por opacidade. Clean room (`docs/clean-room/react-bits/layered-menu.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `pill-burst-menu`
+
+Menu de bolhas flutuantes: ao abrir, pílulas grandes e levemente giradas surgem com quique, uma de cada vez; no hover endireitam e ganham a cor de destaque. Com movimento reduzido, aparecem por opacidade. Clean room (`docs/clean-room/react-bits/pill-burst-menu.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `expanding-card-nav`
+
+Barra de navegação que cresce para baixo e revela cartões coloridos com grupos de links, subindo em sequência. Com movimento reduzido, abre sem animação. Clean room (`docs/clean-room/react-bits/expanding-card-nav.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+### `bento-glow-grid`
+
+Grade bento de recursos com holofote que segue o mouse, borda que acende perto do ponteiro, partículas, inclinação e onda no clique. Com movimento reduzido, só o holofote e a borda. Clean room (`docs/clean-room/react-bits/bento-glow-grid.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `depth-rail-carousel`
+
+Carrossel em que os próximos cartões recuam em profundidade num trilho, girados, escurecidos e desfocados; setas, pontos, teclado, arrasto e avanço automático. Com movimento reduzido, troca instantânea e sem autoplay. Clean room (`docs/clean-room/react-bits/depth-rail-carousel.md`).
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
