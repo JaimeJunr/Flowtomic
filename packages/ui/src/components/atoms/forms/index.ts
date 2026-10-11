@@ -10,6 +10,8 @@ export {
 } from "./date-input";
 export type { ElasticSegmentItem, ElasticSegmentProps } from "./elastic-segment";
 export { ElasticSegment } from "./elastic-segment";
+export type { ElasticSliderProps } from "./elastic-slider";
+export { ElasticSlider } from "./elastic-slider";
 export type {
   FieldContentProps,
   FieldDescriptionProps,

@@ -18,6 +18,8 @@ export {
   CardHeader,
   CardTitle,
 } from "./card";
+export type { EdgeGlowCardProps } from "./edge-glow-card";
+export { EdgeGlowCard } from "./edge-glow-card";
 export type {
   EmptyContentProps,
   EmptyDescriptionProps,
@@ -38,6 +40,8 @@ export type { GlassSurfaceProps } from "./glass-surface";
 export { GlassSurface } from "./glass-surface";
 export type { KbdGroupProps, KbdProps } from "./kbd";
 export { Kbd, KbdGroup } from "./kbd";
+export type { PixelCardProps, PixelCardVariant } from "./pixel-card";
+export { PixelCard } from "./pixel-card";
 export type { SeparatorProps } from "./separator";
 export { Separator } from "./separator";
 export type { SkeletonProps } from "./skeleton";

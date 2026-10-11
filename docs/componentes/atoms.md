@@ -116,6 +116,14 @@ Menu de contexto que aparece ao clicar com botão direito.
 
 ### Forms
 
+#### `elastic-slider`
+
+Slider que estica como elástico além das pontas e volta com mola.
+
+**Dependências**: `motion`, `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/forms/elastic-slider`
+
 #### `input`
 
 Campo de entrada de texto.
@@ -343,6 +351,22 @@ Tanque de líquido que corre até o nível com inércia, inclina a superfície e
 **Localização**: `packages/ui/src/components/atoms/data-display/liquid-gauge`
 
 ### Display
+
+#### `edge-glow-card`
+
+Cartão cuja borda acende num cone apontando para o ponteiro quando ele chega perto da borda.
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/display/edge-glow-card`
+
+#### `pixel-card`
+
+Cartão em que uma grade de pixels acende do centro para fora no hover e fica cintilando.
+
+**Dependências**: `cn`
+
+**Localização**: `packages/ui/src/components/atoms/display/pixel-card`
 
 #### `glass-surface`
 

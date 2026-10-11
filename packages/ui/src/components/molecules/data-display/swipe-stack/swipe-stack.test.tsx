@@ -138,7 +138,8 @@ describe("SwipeStack", () => {
     fireEvent.pointerMove(top(), at(260, 7000));
     fireEvent.pointerUp(top(), at(260, 9000));
     await waitFor(() => expect(topLabel()).toBe(LABELS[1]));
-    expect(onChange).toHaveBeenCalledWith(1);
+    // onChange sai de um efeito passivo, que sob carga roda depois do commit que o waitFor viu.
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(1));
   });
 });
 

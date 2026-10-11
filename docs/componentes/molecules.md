@@ -160,6 +160,24 @@ Pasta de arquivo que abre no clique; até três folhas sobem em leque e seguem o
 
 **Dependências**: `cn`
 
+### `profile-card`
+
+Cartão de perfil holográfico que inclina com o ponteiro, com halo atrás e barra de contato. Clean room (`docs/clean-room/react-bits/profile-card.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `goo-tabs`
+
+Navegação com pílula que pula com efeito de gosma e explosão de bolinhas no item novo. Clean room (`docs/clean-room/react-bits/goo-tabs.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `stepper`
+
+Assistente em passos com indicadores que se preenchem e conteúdo que desliza com altura animada. Clean room (`docs/clean-room/react-bits/stepper.md`).
+
+**Dependências**: `motion`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
