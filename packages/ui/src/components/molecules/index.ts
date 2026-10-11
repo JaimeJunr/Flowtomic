@@ -60,6 +60,8 @@ export {
 } from "./data-display/artifact";
 export type { BarChartDataPoint, BarChartProps } from "./data-display/bar-chart";
 export { BarChart } from "./data-display/bar-chart";
+export type { BentoGlowGridProps, BentoGlowItem } from "./data-display/bento-glow-grid";
+export { BentoGlowGrid } from "./data-display/bento-glow-grid";
 export type {
   BubbleContentProps,
   BubbleGroupProps,
@@ -114,6 +116,8 @@ export type {
   VisibilityState,
 } from "./data-display/data-table";
 export { DataTable } from "./data-display/data-table";
+export type { DepthRailCarouselProps, DepthRailItem } from "./data-display/depth-rail-carousel";
+export { DepthRailCarousel } from "./data-display/depth-rail-carousel";
 export type { DomeGalleryProps, DomeItem } from "./data-display/dome-gallery";
 export { DomeGallery } from "./data-display/dome-gallery";
 export type { DriftWallItem, DriftWallProps } from "./data-display/drift-wall";
@@ -377,14 +381,29 @@ export type {
   BranchNavSection,
 } from "./navigation/branch-nav";
 export { BranchNav } from "./navigation/branch-nav";
+export type {
+  CardNavGroup,
+  CardNavLink,
+  ExpandingCardNavProps,
+} from "./navigation/expanding-card-nav";
+export { ExpandingCardNav } from "./navigation/expanding-card-nav";
 export type { FillPillNavProps } from "./navigation/fill-pill-nav";
 export { FillPillNav } from "./navigation/fill-pill-nav";
 export type { GooTabsItem, GooTabsProps } from "./navigation/goo-tabs";
 export { GooTabs } from "./navigation/goo-tabs";
+export type {
+  LayeredMenuItem,
+  LayeredMenuLink,
+  LayeredMenuProps,
+  LayeredMenuSide,
+} from "./navigation/layered-menu";
+export { LayeredMenu } from "./navigation/layered-menu";
 export type { MarqueeMenuItem, MarqueeMenuProps } from "./navigation/marquee-menu";
 export { MarqueeMenu } from "./navigation/marquee-menu";
 export type { MenuDockItem, MenuDockProps } from "./navigation/menu-dock";
 export { MenuDock } from "./navigation/menu-dock";
+export type { PillBurstItem, PillBurstMenuProps } from "./navigation/pill-burst-menu";
+export { PillBurstMenu } from "./navigation/pill-burst-menu";
 export type { ProximityNavProps } from "./navigation/proximity-nav";
 export { ProximityNav } from "./navigation/proximity-nav";
 export type {
