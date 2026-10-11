@@ -943,6 +943,38 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 ### Background
 
+#### `satin-plasma`
+
+Fundo WebGL de plasma acetinado com linhas que se torcem. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/satin-plasma`
+
+#### `light-beams`
+
+Fundo WebGL de feixes de luz saindo de uma borda ou canto. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/light-beams`
+
+#### `iridescent-foil`
+
+Fundo WebGL de folha iridescente que reage ao ponteiro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/iridescent-foil`
+
+#### `silk-waves`
+
+Fundo WebGL de seda com dobras diagonais animadas na cor do tema. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/silk-waves`
+
 #### `aurora-glow`
 
 Faixa de luz ondulante que desce do topo, em WebGL2, com três cores do tema (padrão `--primary`, `--warning`, `--info`) que acompanham o modo escuro. Sem WebGL, gradiente em CSS; com movimento reduzido, quadro parado. Clean room (`docs/clean-room/react-bits/aurora-glow.md`).

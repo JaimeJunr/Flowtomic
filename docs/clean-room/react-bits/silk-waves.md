@@ -27,10 +27,12 @@ type SilkWavesProps = React.ComponentProps<"div"> & {
 
 1. **Coordenadas.** `p = (gl_FragCoord.xy − uResolution/2) / uResolution.y`, girado por
    `rotation`, dividido por `scale`.
-2. **Padrão.** Distorção de domínio: `p.y += 0.12·sin(p.x·3.0 + t)`; depois
-   `f = 0.5 + 0.5·sin(p.x·5.0 + 2.0·sin(p.y·2.0 + t·0.6) + t)`, com `t = uTime·uSpeed·0.15`.
-3. **Luz.** `shade = mix(0.35, 1.15, f)` multiplica a cor; uma crista estreita
-   `pow(f, 8.0)·0.25` soma brilho.
+2. **Padrão.** Distorção de domínio: `p.x += 0.12·sin(p.y·3.0 + t)`; depois
+   `f = 0.5 + 0.5·sin(p.y·5.0 + 2.0·sin(p.x·2.0 + t·0.6) + t)`, com `t = uTime·uSpeed·0.15`.
+   As dobras correm ao longo de x: com `rotation` 0 ficam deitadas, e −30 as inclina na diagonal.
+   (Revisado em 11/10/2026: a versão com as dobras ao longo de y saía quase vertical no −30.)
+3. **Luz.** `shade = mix(0.45, 0.95, f)` multiplica a cor; uma crista estreita
+   `pow(f, 8.0)·0.18` soma brilho. (Revisado em 11/10/2026: `mix(0.35, 1.15)` estourava o laranja.)
 4. **Grão.** Ruído por pixel (hash de `gl_FragCoord.xy`) estático, amplitude `grain·0.08`.
 5. **Alfa** 1 (fundo opaco; o conteúdo fica legível porque a story escolhe `text-primary-foreground`).
 6. **Fallback.** `linear-gradient(135deg, var(--c), color-mix(in oklch, var(--c), var(--foreground) 35%))`.
