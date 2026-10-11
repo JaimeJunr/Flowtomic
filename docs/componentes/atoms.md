@@ -941,6 +941,18 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 **Localização**: `packages/ui/src/components/atoms/typography/echo-text`
 
+### Background
+
+#### `aurora-glow`
+
+Faixa de luz ondulante que desce do topo, em WebGL2, com três cores do tema (padrão `--primary`, `--warning`, `--info`) que acompanham o modo escuro. Sem WebGL, gradiente em CSS; com movimento reduzido, quadro parado. Clean room (`docs/clean-room/react-bits/aurora-glow.md`).
+
+**Dependências**: `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/aurora-glow`
+
+Fundos decorativos desenhados com WebGL2 próprio (`src/lib/webgl`), com fallback em CSS quando não há WebGL.
+
 ### Code
 
 #### `code-block`
