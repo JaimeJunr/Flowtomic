@@ -6,6 +6,7 @@ import { useShouldReduceMotion } from "@/lib/use-should-reduce-motion";
 import { cn } from "@/lib/utils";
 import {
   disappearTimerSeconds,
+  type FadeDirection,
   type FadeEase,
   type FadeState,
   fadeVariants,
@@ -15,6 +16,12 @@ export type FadeInViewProps = Omit<
   React.ComponentProps<"div">,
   "onAnimationStart" | "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationEnd"
 > & {
+  /** De onde o conteúdo chega deslizando. */
+  direction?: FadeDirection;
+  /** Distância do deslize, em px. 0 = sem deslize. */
+  distance?: number;
+  /** Escala inicial (cresce até 1). */
+  scale?: number;
   /** Desfoque no início. */
   blur?: boolean;
   /** Duração da entrada, em segundos. */
@@ -40,6 +47,9 @@ function FadeInView({
   ref,
   className,
   children,
+  direction = "up",
+  distance = 0,
+  scale = 1,
   blur = false,
   duration = 0.8,
   delay = 0,
@@ -98,6 +108,9 @@ function FadeInView({
   }, [state, entrySeconds, exitSeconds]);
 
   const variants = fadeVariants({
+    direction,
+    distance: reduced ? 0 : distance,
+    scale: reduced ? 1 : scale,
     blur: blur && !reduced,
     initialOpacity: reduced ? 1 : initialOpacity,
     duration: reduced ? 0 : duration,

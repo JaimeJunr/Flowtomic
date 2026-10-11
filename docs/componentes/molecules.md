@@ -208,6 +208,36 @@ Pilha de cartões em 3D que manda o da frente para o fundo num timer ou ao ser a
 
 **Dependências**: `motion`, `cn`
 
+### `expand-panels`
+
+Fileira de painéis em que o painel em foco se abre e os outros viram faixas estreitas, apagadas e giradas em 3D, com o rótulo na vertical; a legenda do aberto entra em sequência. Com movimento reduzido, a troca é instantânea. Clean room (`docs/clean-room/react-bits/expand-panels.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `masonry-grid`
+
+Mural em colunas de alturas variadas, em que cada item vai para a coluna mais baixa; entra em sequência saindo do desfoque e reorganiza com animação ao redimensionar. Com movimento reduzido, posições diretas. Clean room (`docs/clean-room/react-bits/masonry-grid.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `color-spotlight-grid`
+
+Grade de cartões em tons de cinza em que um holofote segue o mouse e devolve a cor, com a borda acendendo perto do ponteiro; variante por cartão inteiro. Com movimento reduzido, o holofote segue sem amortecimento. Clean room (`docs/clean-room/react-bits/color-spotlight-grid.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `fill-pill-nav`
+
+Barra de navegação em pílulas: no hover um círculo cresce de baixo e inverte as cores enquanto o rótulo rola; logo redondo que gira e menu compacto em tela estreita. Com movimento reduzido, só a troca de cor. Clean room (`docs/clean-room/react-bits/fill-pill-nav.md`).
+
+**Dependências**: `motion`, `cn`
+
+### `marquee-menu`
+
+Menu de itens grandes em que, no hover, uma faixa de cor invertida entra pelo lado de onde o mouse veio, com um letreiro infinito do item. Com movimento reduzido, a faixa aparece sem deslizar e o letreiro fica parado. Clean room (`docs/clean-room/react-bits/marquee-menu.md`).
+
+**Dependências**: `motion`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.

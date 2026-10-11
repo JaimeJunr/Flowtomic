@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (122 atoms, 77 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (122 atoms, 82 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (122)
-- **Molecules**: `docs/componentes/molecules.md` (77)
+- **Molecules**: `docs/componentes/molecules.md` (82)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -375,7 +375,7 @@ errado.
 Resumo:
 
 - **Atoms**: 122 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 77 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 82 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -729,6 +729,11 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **O Playwright desta máquina não tem browser baixado** (`Executable doesn't exist ...
   chrome-headless-shell`, medido em 11/10/2026). Nos scripts de medição, use o Chrome do sistema:
   `chromium.launch({ executablePath: "/usr/bin/google-chrome-stable" })`.
+
+- ⚠️ **Círculo que "enche" um botão a partir da base precisa do diâmetro da diagonal.** Um círculo
+  tangente à base e passando pelos cantos de cima deixa duas meias-luas claras nos cantos de baixo
+  (medido em 11/10/2026 no `fill-pill-nav`). Centre o círculo no botão com `hypot(w, h)` de
+  diâmetro e ponha a origem do `scale` no ponto da base. O jsdom não acusa; amplie o screenshot.
 
 ## Checklist ao abrir PR
 

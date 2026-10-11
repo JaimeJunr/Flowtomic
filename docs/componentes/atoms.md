@@ -653,7 +653,7 @@ Moldura com uma borda elétrica que treme e brilha em volta do conteúdo, desenh
 
 #### `fade-in-view`
 
-Mostra o conteúdo com fade (e blur opcional) quando ele entra na tela; pode sumir sozinho depois de um tempo. Com movimento reduzido, já nasce visível.
+Mostra o conteúdo com fade (e blur opcional) quando ele entra na tela, podendo chegar deslizando de uma direção (`direction`: up/down/left/right, por `distance` px) e crescendo de uma `scale` inicial; pode sumir sozinho depois de um tempo, voltando pelo mesmo caminho. Com movimento reduzido, já nasce visível.
 
 **Dependências**: `motion`, `cn`
 
