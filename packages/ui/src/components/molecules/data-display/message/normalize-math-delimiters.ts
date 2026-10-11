@@ -251,7 +251,7 @@ function titleEnd(text: string, from: number, memo: TitleFails): number {
   const open = text[from];
   if (from >= (memo.fails[open] ?? Number.POSITIVE_INFINITY)) return -1;
   const hit = memo.found[open];
-  if (hit && from >= hit[0] && from < hit[1]) return hit[1];
+  if (hit && from >= hit[0] && from < hit[1] - 1) return hit[1];
   const close = open === "(" ? ")" : open;
   let i = from + 1;
   while (i < text.length) {

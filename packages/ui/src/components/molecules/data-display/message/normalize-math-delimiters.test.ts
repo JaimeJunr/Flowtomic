@@ -315,6 +315,15 @@ describe("3ª review: proteção só onde é link", () => {
   });
 
   it.each([
+    '[a](u "x [b](v " zz \\(k\\)" )',
+    "[a](u 'x [b](v ' zz \\(k\\)' )",
+    '[a](u "x [b](v " zz R$ 5" )',
+  ])("o fechamento memorizado de título pode abrir outro título: %s", (texto) => {
+    // o 2º link `[b](v "...")` é válido: o título dele protege o resto
+    expect(normalizeMathDelimiters(texto)).toBe(texto);
+  });
+
+  it.each([
     ["sem `)` no fim", `\\(x\\) ${"[a](u (".repeat(160_000)}`],
     ["aspas, com fechamento no fim", `\\(x\\) ${'[a](u "'.repeat(160_000)}" x`],
     ["com `)` no fim", `\\(x\\) ${"[a](u (".repeat(160_000)} )x`],
