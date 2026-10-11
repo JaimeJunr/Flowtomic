@@ -77,6 +77,8 @@ export type { CalendarPopoverProps } from "./data-display/calendar-popover";
 export { CalendarPopover, normalizeDate } from "./data-display/calendar-popover";
 export type { CalendarRangeProps } from "./data-display/calendar-range";
 export { CalendarRange } from "./data-display/calendar-range";
+export type { CardCycleHandle, CardCycleItem, CardCycleProps } from "./data-display/card-cycle";
+export { CardCycle } from "./data-display/card-cycle";
 export type {
   ChartAreaInteractiveDataPoint,
   ChartAreaInteractiveProps,

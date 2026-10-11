@@ -202,6 +202,12 @@ Galeria por dentro de uma esfera: arrastar gira a cúpula com inércia, e o cliq
 
 **Dependências**: `motion`, `cn`
 
+### `card-cycle`
+
+Pilha de cartões em 3D que manda o da frente para o fundo num timer ou ao ser arremessado; no hover a pilha abre e pausa, e o ponteiro dá paralaxe. Com movimento reduzido, sem autoplay e trocas instantâneas. Clean room (`docs/clean-room/react-bits/card-cycle.md`).
+
+**Dependências**: `motion`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.

@@ -587,6 +587,20 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     ],
     dependencies: ["motion", "cn"],
   },
+  "card-cycle": {
+    name: "card-cycle",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/card-cycle",
+    files: [
+      "card-cycle-drag.ts",
+      "card-cycle-motion.ts",
+      "card-cycle-parts.tsx",
+      "card-cycle-utils.ts",
+      "card-cycle.tsx",
+      "index.ts",
+    ],
+    dependencies: ["motion", "cn"],
+  },
   "hold-button": {
     name: "hold-button",
     type: "atom",
