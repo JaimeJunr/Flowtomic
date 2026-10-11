@@ -42,9 +42,9 @@ Tabela com ordenação (pelo teclado também), busca e paginação. Régua de 1p
 
 ### `menu-dock`
 
-Dock de menu para navegação.
+Dock flutuante com ampliação por proximidade do ponteiro, no estilo do macOS; o foco de teclado amplia o item como se o ponteiro estivesse sobre ele. Abaixo de `md` vira um botão que abre a lista de atalhos. Não se posiciona sozinho (sem `fixed` embutido). Itens com `href` são links; sem `href`, botões. Props: `items`, `itemSize` (40), `magnification` (80), `magnifyDistance` (150), `className`, `desktopClassName`, `mobileClassName`. O modo de abas saiu: use `goo-tabs`. Aliases deprecados: `dockItemSize`, `dockMagnification`, `dockMagnifyDistance`, `animationType="floating"` (sem efeito) e `items[].path`. Guia em [`docs/migracao/menu-dock.md`](../migracao/menu-dock.md).
 
-**Dependências**: `cn`
+**Dependências**: `motion`, `lucide-react`, `cn`
 
 ### `scroll-velocity`
 
@@ -168,7 +168,7 @@ Cartão de perfil holográfico que inclina com o ponteiro, com halo atrás e bar
 
 ### `goo-tabs`
 
-Navegação com pílula que pula com efeito de gosma e explosão de bolinhas no item novo. Clean room (`docs/clean-room/react-bits/goo-tabs.md`).
+Navegação com pílula que pula com efeito de gosma e explosão de bolinhas no item novo. Itens aceitam `icon` (antes do rótulo), `orientation="vertical"` (pílula e bolinhas seguem o item na vertical; setas Up/Down navegam) e `showLabels={false}` (rótulo só para leitor de tela, item quadrado). Substitui o `menu-dock` no modo padrão. Clean room (`docs/clean-room/react-bits/goo-tabs.md`).
 
 **Dependências**: `motion`, `cn`
 

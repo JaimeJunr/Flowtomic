@@ -389,7 +389,7 @@ export type {
 export { ExpandingCardNav } from "./navigation/expanding-card-nav";
 export type { FillPillNavProps } from "./navigation/fill-pill-nav";
 export { FillPillNav } from "./navigation/fill-pill-nav";
-export type { GooTabsItem, GooTabsProps } from "./navigation/goo-tabs";
+export type { GooTabsItem, GooTabsOrientation, GooTabsProps } from "./navigation/goo-tabs";
 export { GooTabs } from "./navigation/goo-tabs";
 export type {
   LayeredMenuItem,

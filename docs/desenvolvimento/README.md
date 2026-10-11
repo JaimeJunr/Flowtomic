@@ -249,14 +249,15 @@ import { Input } from "@/components/ui/input";
 - `dropdown-menu` - Menu dropdown
 - `sonner` - Toast notifications
 
-**Molecules (10)**
+**Molecules (12)**
 
 - `button-group` - Grupo de botões
 - `password-input` - Input de senha
 - `image-dropzone` - Upload de imagem
 - `stat-card` - Card de estatística
 - `data-table` - Tabela avançada
-- `menu-dock` - Dock de menu
+- `goo-tabs` - Abas com pílula animada (substitui o `menu-dock`)
+- `menu-dock` - Dock flutuante com ampliação por proximidade (para abas, use `goo-tabs`)
 - `theme-toggle-button` - Botão de toggle de tema
 - `auth-navigation-link` - Link de navegação de auth
 - `auth-form-error-message` - Mensagem de erro de formulário

@@ -7,7 +7,15 @@ import { cn } from "@/lib/utils";
 import { GooFilter, GooParticle, type ParticleSpec } from "./goo-tabs-parts";
 import { filterIdFrom, mulberry32, particleDuration, particlePath } from "./goo-tabs-utils";
 
-export type GooTabsItem = { value: string; label: string; href?: string };
+export type GooTabsOrientation = "horizontal" | "vertical";
+
+export type GooTabsItem = {
+  value: string;
+  label: string;
+  href?: string;
+  /** Ícone antes do rótulo; recebe só `className`. */
+  icon?: React.ComponentType<{ className?: string }>;
+};
 
 export type GooTabsProps = Omit<React.ComponentProps<"nav">, "onChange"> & {
   items: GooTabsItem[];
@@ -21,10 +29,19 @@ export type GooTabsProps = Omit<React.ComponentProps<"nav">, "onChange"> & {
   particleCount?: number;
   /** Distâncias externa e interna das bolinhas em px. */
   particleDistances?: [number, number];
+  /** Eixo da barra; na vertical a pílula e as bolinhas seguem o item para cima e para baixo. */
+  orientation?: GooTabsOrientation;
+  /** Com `false` o rótulo fica só para leitor de tela e o item vira quadrado. */
+  showLabels?: boolean;
 };
 
 const ITEM_CLASS =
-  "relative z-10 inline-flex items-center rounded-full px-4 py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
+  "relative z-10 inline-flex items-center gap-2 rounded-full text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
+
+function itemSizeClass(orientation: GooTabsOrientation, showLabels: boolean): string {
+  if (!showLabels) return "size-10 justify-center";
+  return orientation === "vertical" ? "w-full px-4 py-2" : "px-4 py-2";
+}
 
 function useActiveValue(items: GooTabsItem[], value?: string, defaultValue?: string) {
   const [internal, setInternal] = React.useState(defaultValue ?? items[0]?.value ?? "");
@@ -50,28 +67,32 @@ function usePillGeometry(
   itemRefs: React.RefObject<Map<string, HTMLElement>>,
   active: string,
   duration: number,
-  reduced: boolean
+  reduced: boolean,
+  orientation: GooTabsOrientation
 ) {
-  const x = useMotionValue(0);
-  const width = useMotionValue(0);
+  const position = useMotionValue(0);
+  const size = useMotionValue(0);
   const first = React.useRef(true);
 
   const measure = React.useCallback(
     (animated: boolean) => {
       const el = itemRefs.current.get(active);
       if (!el) return;
+      const vertical = orientation === "vertical";
+      const nextPosition = vertical ? el.offsetTop : el.offsetLeft;
+      const nextSize = vertical ? el.offsetHeight : el.offsetWidth;
       if (!animated || reduced || first.current) {
-        x.set(el.offsetLeft);
-        width.set(el.offsetWidth);
+        position.set(nextPosition);
+        size.set(nextSize);
         first.current = false;
         return;
       }
       // Mola criada por evento: trocar o config do useSpring prenderia o alvo antigo.
       const spring = { type: "spring" as const, duration: duration / 1000, bounce: 0.25 };
-      animate(x, el.offsetLeft, spring);
-      animate(width, el.offsetWidth, spring);
+      animate(position, nextPosition, spring);
+      animate(size, nextSize, spring);
     },
-    [itemRefs, active, duration, reduced, x, width]
+    [itemRefs, active, duration, reduced, orientation, position, size]
   );
 
   React.useLayoutEffect(() => {
@@ -86,7 +107,7 @@ function usePillGeometry(
     return () => observer.disconnect();
   }, [itemRefs, active, measure]);
 
-  return { x, width };
+  return { position, size };
 }
 
 type SpawnOptions = {
@@ -133,12 +154,21 @@ function useParticles({ count, distances, duration }: SpawnOptions) {
   return { particles, spawn };
 }
 
-function moveFocus(event: React.KeyboardEvent, itemRefs: Map<string, HTMLElement>) {
-  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+const FOCUS_KEYS: Record<GooTabsOrientation, Record<string, 1 | -1>> = {
+  horizontal: { ArrowRight: 1, ArrowLeft: -1 },
+  vertical: { ArrowDown: 1, ArrowUp: -1 },
+};
+
+function moveFocus(
+  event: React.KeyboardEvent,
+  itemRefs: Map<string, HTMLElement>,
+  orientation: GooTabsOrientation
+) {
+  const step = FOCUS_KEYS[orientation][event.key];
+  if (!step) return;
   const nodes = [...itemRefs.values()];
   const current = nodes.indexOf(document.activeElement as HTMLElement);
   if (current === -1) return;
-  const step = event.key === "ArrowRight" ? 1 : -1;
   event.preventDefault();
   nodes[(current + step + nodes.length) % nodes.length]?.focus();
 }
@@ -151,6 +181,8 @@ function GooTabs({
   duration = 600,
   particleCount = 15,
   particleDistances = [90, 10],
+  orientation = "horizontal",
+  showLabels = true,
   className,
   onKeyDown,
   "aria-label": ariaLabel = "Navegação principal",
@@ -165,7 +197,8 @@ function GooTabs({
   const itemRefs = React.useRef(new Map<string, HTMLElement>());
   const { active, setInternal, isControlled } = useActiveValue(items, value, defaultValue);
   const textValue = useDelayedValue(active, duration / 2, reduced);
-  const pill = usePillGeometry(itemRefs, active, duration, reduced);
+  const pill = usePillGeometry(itemRefs, active, duration, reduced, orientation);
+  const vertical = orientation === "vertical";
   const { particles, spawn } = useParticles({
     count: particleCount,
     distances: particleDistances,
@@ -191,10 +224,15 @@ function GooTabs({
       ref={ref}
       data-slot="goo-tabs"
       aria-label={ariaLabel}
-      className={cn("relative inline-flex rounded-full bg-muted p-1", className)}
+      data-orientation={orientation}
+      className={cn(
+        "relative inline-flex bg-muted p-1",
+        vertical ? "rounded-3xl" : "rounded-full",
+        className
+      )}
       onKeyDown={(event) => {
         onKeyDown?.(event);
-        moveFocus(event, itemRefs.current);
+        moveFocus(event, itemRefs.current, orientation);
       }}
       {...props}
     >
@@ -206,18 +244,30 @@ function GooTabs({
       >
         <motion.span
           data-slot="goo-tabs-pill"
-          className="absolute top-0 left-0 h-full rounded-full bg-primary"
-          style={{ x: pill.x, width: pill.width }}
+          className={cn(
+            "absolute top-0 left-0 rounded-full bg-primary",
+            vertical ? "w-full" : "h-full"
+          )}
+          style={
+            vertical
+              ? { y: pill.position, height: pill.size }
+              : { x: pill.position, width: pill.size }
+          }
         />
         {particles.map((spec) => (
           <GooParticle key={spec.id} spec={spec} />
         ))}
       </div>
-      <ul className="relative z-10 m-0 flex list-none gap-1 p-0">
+      <ul
+        data-orientation={orientation}
+        className={cn("relative z-10 m-0 flex list-none gap-1 p-0", vertical && "flex-col")}
+      >
         {items.map((item) => (
           <li key={item.value}>
             <GooTabItem
               item={item}
+              orientation={orientation}
+              showLabels={showLabels}
               isActive={item.value === active}
               isTextActive={item.value === textValue && item.value === active}
               register={register(item.value)}
@@ -233,33 +283,55 @@ GooTabs.displayName = "GooTabs";
 
 type GooTabItemProps = {
   item: GooTabsItem;
+  orientation: GooTabsOrientation;
+  showLabels: boolean;
   isActive: boolean;
   isTextActive: boolean;
   register: (node: HTMLElement | null) => void;
   onSelect: () => void;
 };
 
-function GooTabItem({ item, isActive, isTextActive, register, onSelect }: GooTabItemProps) {
+function GooTabItem({
+  item,
+  orientation,
+  showLabels,
+  isActive,
+  isTextActive,
+  register,
+  onSelect,
+}: GooTabItemProps) {
+  const Icon = item.icon;
   const shared = {
     "data-slot": "goo-tabs-item",
     "data-active": isActive,
     "aria-current": isActive ? ("page" as const) : undefined,
     className: cn(
       ITEM_CLASS,
+      itemSizeClass(orientation, showLabels),
       isTextActive ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
     ),
     onClick: onSelect,
   };
+  const content = (
+    <>
+      {Icon && (
+        <span aria-hidden="true" className="inline-flex shrink-0">
+          <Icon className="size-4" />
+        </span>
+      )}
+      <span className={cn(!showLabels && "sr-only")}>{item.label}</span>
+    </>
+  );
   if (item.href) {
     return (
       <a {...shared} href={item.href} ref={register}>
-        {item.label}
+        {content}
       </a>
     );
   }
   return (
     <button {...shared} type="button" ref={register}>
-      {item.label}
+      {content}
     </button>
   );
 }

@@ -59,6 +59,10 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 - [Testes](desenvolvimento/testes.md) - Estratégia e guia de testes
 - [Build e Deploy Local](desenvolvimento/build.md) - Como fazer build e testar localmente
 
+### Migração
+
+- [Migração do MenuDock](migracao/menu-dock.md) - O MenuDock virou só o dock flutuante; abas migram para `GooTabs`
+
 ### Deploy e Infraestrutura
 
 - [Guia de Deploy](deploy/DEPLOYMENT.md) - Como fazer deploy do CLI e registry
@@ -100,6 +104,8 @@ docs/
 ├── INDEX.md                    # Este arquivo - Guia central
 ├── desenvolvimento/            # Guias de desenvolvimento
 │   └── guia.md                 # Guia completo de uso
+├── migracao/                   # Guias de migração entre versões
+│   └── menu-dock.md            # MenuDock: só dock flutuante; abas -> GooTabs
 ├── deploy/                     # Documentação de deploy
 │   ├── DEPLOYMENT.md           # Guia de deploy
 │   └── PRODUCTION_SETUP.md     # Setup de produção

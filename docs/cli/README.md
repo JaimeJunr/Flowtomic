@@ -230,7 +230,7 @@ Componentes compostos incluindo:
 - **Flow** (2): canvas, connection
 - **Forms** (4): button-group, image-dropzone, input-group, item
 - **Layout** (1): dashboard-header
-- **Navigation** (2): menu-dock, sidebar-navigation
+- **Navigation** (3): goo-tabs, menu-dock, sidebar-navigation
 - **Theme** (1): theme-toggle-button
 - **Typography** (1): animated-shiny-text
 

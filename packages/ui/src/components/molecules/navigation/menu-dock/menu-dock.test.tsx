@@ -1,26 +1,18 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { Folder, Home } from "lucide-react";
 import { MotionConfig, MotionGlobalConfig } from "motion/react";
+import { createRef } from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { buildDockRanges, MenuDock, type MenuDockItem } from "./menu-dock";
+import { MenuDock, type MenuDockItem } from "./menu-dock";
 
 function items(onHome = vi.fn(), onProjects = vi.fn()): MenuDockItem[] {
   return [
-    {
-      id: "inicio",
-      label: "Início",
-      icon: Home,
-      href: "#inicio",
-      path: "/outra-rota",
-      onClick: onHome,
-    },
-    { id: "projetos", label: "Projetos", icon: Folder, path: "#projetos", onClick: onProjects },
+    { id: "inicio", label: "Início", icon: Home, href: "#inicio", onClick: onHome },
+    { id: "projetos", label: "Projetos", icon: Folder, href: "#projetos", onClick: onProjects },
   ];
 }
-
-const navigation = () => screen.getByRole("navigation", { name: "Menu de navegação" });
 
 function mobileDock() {
   const toggle = screen.getByRole("button", { name: "Alternar menu" });
@@ -42,170 +34,24 @@ afterAll(() => {
 });
 
 describe("MenuDock", () => {
-  it.each([2, 8])("aceita %i itens e identifica só o primeiro como página atual", (count) => {
-    const entries = Array.from({ length: count }, (_, index) => ({
-      id: String(index),
-      label: `Destino ${index + 1}`,
-      icon: Home,
-    }));
-    render(<MenuDock items={entries} />);
-    expect(within(navigation()).getAllByRole("button")).toHaveLength(count);
-    for (const [index, item] of entries.entries()) {
-      const button = screen.getByRole("button", { name: item.label });
-      if (index === 0) expect(button).toHaveAttribute("aria-current", "page");
-      else expect(button).not.toHaveAttribute("aria-current");
-    }
-  });
-
-  it.each([
-    undefined,
-    [],
-    [{ label: "Único", icon: Home }],
-    Array.from({ length: 9 }, (_, index) => ({ label: `Item ${index}`, icon: Home })),
-  ])("items=%j inválido usa os cinco destinos padrão em português", (entries) => {
-    const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
-    try {
-      render(<MenuDock items={entries} />);
-      expect(screen.getAllByRole("button")).toHaveLength(5);
-      for (const label of ["Início", "Trabalho", "Calendário", "Segurança", "Configurações"]) {
-        expect(screen.getByRole("button", { name: label })).toBeInTheDocument();
-      }
-      expect(screen.getByRole("button", { name: "Início" })).toHaveAttribute(
-        "aria-current",
-        "page"
-      );
-      expect(warning).toHaveBeenCalledTimes(1);
-    } finally {
-      warning.mockRestore();
-    }
-  });
-
-  it.each([
-    false,
-    true,
-  ])("showLabels=%s preserva nomes acessíveis e só controla o texto visível", (showLabels) => {
-    render(<MenuDock items={items()} showLabels={showLabels} />);
-    for (const label of ["Início", "Projetos"]) {
-      const button = screen.getByRole("button", { name: label });
-      if (showLabels) expect(within(button).getByText(label)).toBeInTheDocument();
-      else expect(within(button).queryByText(label)).not.toBeInTheDocument();
-    }
-  });
-
-  it.each([
-    "{Enter}",
-    " ",
-  ])("Tab e %s selecionam itens e enviam índice e callbacks sem argumentos extras", async (key) => {
-    const onHome = vi.fn();
-    const onProjects = vi.fn();
-    const onActiveIndexChange = vi.fn();
-    render(
-      <MenuDock
-        items={items(onHome, onProjects)}
-        showLabels={false}
-        onActiveIndexChange={onActiveIndexChange}
-      />
-    );
-    const user = userEvent.setup();
-    await user.tab();
-    expect(screen.getByRole("button", { name: "Início" })).toHaveFocus();
-    await user.keyboard(key);
-    await user.tab();
-    expect(screen.getByRole("button", { name: "Projetos" })).toHaveFocus();
-    await user.keyboard(key);
-    expect(onActiveIndexChange.mock.calls).toEqual([[0], [1]]);
-    expect(onHome.mock.calls).toEqual([[]]);
-    expect(onProjects.mock.calls).toEqual([[]]);
-    expect(screen.getByRole("button", { name: "Projetos" })).toHaveAttribute(
-      "aria-current",
-      "page"
-    );
-    expect(screen.getByRole("button", { name: "Início" })).not.toHaveAttribute("aria-current");
-  });
-
-  it("modo controlado solicita o índice e espera activeIndex, inclusive ao clicar no item atual", async () => {
-    const onActiveIndexChange = vi.fn();
-    const entries = items();
-    const { rerender } = render(
-      <MenuDock
-        items={entries}
-        defaultActiveIndex={1}
-        activeIndex={0}
-        onActiveIndexChange={onActiveIndexChange}
-      />
-    );
-    const user = userEvent.setup();
-    await user.click(screen.getByRole("button", { name: "Projetos" }));
-    expect(onActiveIndexChange.mock.calls).toEqual([[1]]);
-    expect(screen.getByRole("button", { name: "Início" })).toHaveAttribute("aria-current", "page");
-    expect(screen.getByRole("button", { name: "Projetos" })).not.toHaveAttribute("aria-current");
-    rerender(
-      <MenuDock items={entries} activeIndex={1} onActiveIndexChange={onActiveIndexChange} />
-    );
-    expect(screen.getByRole("button", { name: "Projetos" })).toHaveAttribute(
-      "aria-current",
-      "page"
-    );
-    await user.click(screen.getByRole("button", { name: "Projetos" }));
-    expect(onActiveIndexChange.mock.calls).toEqual([[1], [1]]);
-  });
-
-  it("índice controlado fora da lista não é reescrito e o consumidor pode selecionar o primeiro", async () => {
-    const onActiveIndexChange = vi.fn();
-    const entries = items();
-    const { rerender } = render(
-      <MenuDock items={entries} activeIndex={9} onActiveIndexChange={onActiveIndexChange} />
-    );
-    for (const button of screen.getAllByRole("button"))
-      expect(button).not.toHaveAttribute("aria-current");
-    await userEvent.click(screen.getByRole("button", { name: "Início" }));
-    expect(onActiveIndexChange.mock.calls).toEqual([[0]]);
-    expect(screen.getByRole("button", { name: "Início" })).not.toHaveAttribute("aria-current");
-    rerender(
-      <MenuDock items={entries} activeIndex={0} onActiveIndexChange={onActiveIndexChange} />
-    );
-    expect(screen.getByRole("button", { name: "Início" })).toHaveAttribute("aria-current", "page");
-  });
-
-  it.each([
-    -1, 2,
-  ])("defaultActiveIndex=%i fora da lista retorna ao primeiro sem emitir callback", (defaultActiveIndex) => {
-    const onActiveIndexChange = vi.fn();
-    render(
-      <MenuDock
-        items={items()}
-        defaultActiveIndex={defaultActiveIndex}
-        onActiveIndexChange={onActiveIndexChange}
-      />
-    );
-    expect(screen.getByRole("button", { name: "Início" })).toHaveAttribute("aria-current", "page");
-    expect(onActiveIndexChange).not.toHaveBeenCalled();
-  });
-
-  it("encurtar items elimina a seleção inexistente; uma seleção ainda válida é preservada", async () => {
-    const entries = [...items(), { id: "arquivos", label: "Arquivos", icon: Folder }];
-    const { rerender } = render(<MenuDock items={entries} defaultActiveIndex={2} />);
-    expect(screen.getByRole("button", { name: "Arquivos" })).toHaveAttribute(
-      "aria-current",
-      "page"
-    );
-    rerender(<MenuDock items={entries.slice(0, 2)} />);
-    expect(screen.getByRole("button", { name: "Início" })).toHaveAttribute("aria-current", "page");
-    await userEvent.click(screen.getByRole("button", { name: "Projetos" }));
-    rerender(<MenuDock items={entries} />);
-    expect(screen.getByRole("button", { name: "Projetos" })).toHaveAttribute(
-      "aria-current",
-      "page"
-    );
+  it("raiz é uma navegação com data-slot, className e ref, sem posicionamento embutido", () => {
+    const ref = createRef<HTMLElement>();
+    const { container } = render(<MenuDock ref={ref} items={items()} className="minha-classe" />);
+    const root = container.querySelector('[data-slot="menu-dock"]') as HTMLElement;
+    expect(root).toBe(ref.current);
+    expect(root.tagName).toBe("NAV");
+    expect(root).toHaveAttribute("aria-label", "Dock de navegação");
+    expect(root).toHaveClass("minha-classe");
+    expect(root.className).not.toMatch(/\b(fixed|absolute)\b/);
   });
 
   it.each([
     "Início",
     "Projetos",
-  ])("dock floating desktop nomeia %s antes do hover e ativa por teclado com callback sem argumentos", async (label) => {
+  ])("desktop nomeia %s antes do hover e ativa por teclado com callback sem argumentos", async (label) => {
     const onHome = vi.fn();
     const onProjects = vi.fn();
-    render(<MenuDock items={items(onHome, onProjects)} animationType="floating" />);
+    render(<MenuDock items={items(onHome, onProjects)} />);
     const link = screen.getByRole("link", { name: label });
     expect(link).toHaveAttribute("href", label === "Início" ? "#inicio" : "#projetos");
     expect(screen.queryByText(label)).not.toBeInTheDocument();
@@ -219,13 +65,21 @@ describe("MenuDock", () => {
     expect(label === "Início" ? onProjects : onHome).not.toHaveBeenCalled();
   });
 
+  it("item sem href vira botão e chama onClick", async () => {
+    const onClick = vi.fn();
+    render(<MenuDock items={[{ label: "Sair", icon: Home, onClick }]} />);
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Sair" }));
+    expect(onClick.mock.calls).toEqual([[]]);
+  });
+
   it.each([
     "{Enter}",
     " ",
-  ])("dock floating mobile expande e recolhe por %s, com links nomeados e callback exato", async (key) => {
+  ])("mobile expande e recolhe por %s, com links nomeados e callback exato", async (key) => {
     const onHome = vi.fn();
     const onProjects = vi.fn();
-    render(<MenuDock items={items(onHome, onProjects)} animationType="floating" />);
+    render(<MenuDock items={items(onHome, onProjects)} />);
     const { toggle, container } = mobileDock();
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     expect(within(container).queryAllByRole("link")).toHaveLength(0);
@@ -235,10 +89,11 @@ describe("MenuDock", () => {
     await user.keyboard(key);
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(within(container).getAllByRole("link")).toHaveLength(2);
-    const home = within(container).getByRole("link", { name: "Início" });
     const projects = within(container).getByRole("link", { name: "Projetos" });
-    expect(home).toHaveAttribute("href", "#inicio");
-    expect(projects).toHaveAttribute("href", "#projetos");
+    expect(within(container).getByRole("link", { name: "Início" })).toHaveAttribute(
+      "href",
+      "#inicio"
+    );
     preventNavigation(projects);
     await user.tab({ shift: true });
     expect(projects).toHaveFocus();
@@ -250,8 +105,26 @@ describe("MenuDock", () => {
     await user.keyboard(key);
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     await waitFor(() => expect(within(container).queryAllByRole("link")).toHaveLength(0));
-    expect(onProjects.mock.calls).toEqual([[]]);
-    expect(screen.getAllByRole("link")).toHaveLength(2);
+  });
+
+  it("usa classes responsivas: desktop some abaixo de md e mobile some a partir dele", () => {
+    const { container } = render(<MenuDock items={items()} />);
+    expect(container.querySelector('[data-slot="menu-dock-desktop"]')).toHaveClass(
+      "hidden",
+      "md:flex"
+    );
+    expect(container.querySelector('[data-slot="menu-dock-mobile"]')).toHaveClass(
+      "block",
+      "md:hidden"
+    );
+  });
+
+  it("desktopClassName e mobileClassName vão cada um para o seu lado", () => {
+    const { container } = render(
+      <MenuDock items={items()} desktopClassName="so-desktop" mobileClassName="so-mobile" />
+    );
+    expect(container.querySelector('[data-slot="menu-dock-desktop"]')).toHaveClass("so-desktop");
+    expect(container.querySelector('[data-slot="menu-dock-mobile"]')).toHaveClass("so-mobile");
   });
 
   it.each([
@@ -260,7 +133,7 @@ describe("MenuDock", () => {
   ])("hover em %s revela seu texto e sair o remove sem ativar navegação", async (label) => {
     const onHome = vi.fn();
     const onProjects = vi.fn();
-    render(<MenuDock items={items(onHome, onProjects)} animationType="floating" />);
+    render(<MenuDock items={items(onHome, onProjects)} />);
     const link = screen.getByRole("link", { name: label });
     const user = userEvent.setup();
     const icone = link.firstElementChild as HTMLElement;
@@ -272,65 +145,53 @@ describe("MenuDock", () => {
     expect(onProjects).not.toHaveBeenCalled();
   });
 
+  it("o foco por teclado também revela o rótulo e o blur o remove", async () => {
+    render(<MenuDock items={items()} />);
+    const user = userEvent.setup();
+    await user.tab();
+    expect(screen.getByText("Início")).toBeInTheDocument();
+    await user.tab();
+    await waitFor(() => expect(screen.queryByText("Início")).not.toBeInTheDocument());
+  });
+
   it.each([
     false,
     true,
-  ])("dock floating mobile aberto=%s não tem violações automáticas de acessibilidade", async (open) => {
-    const { container } = render(<MenuDock items={items()} animationType="floating" />);
+  ])("mobile aberto=%s não tem violações automáticas de acessibilidade", async (open) => {
+    const { container } = render(<MenuDock items={items()} />);
     if (open) await userEvent.click(screen.getByRole("button", { name: "Alternar menu" }));
     const result = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
     expect(result.violations).toEqual([]);
   });
-});
 
-describe("buildDockRanges", () => {
-  it("sem argumentos mantém as faixas de antes (40, 80, 150)", () => {
-    expect(buildDockRanges({})).toEqual({
-      distance: [-150, 0, 150],
-      size: [40, 80, 40],
-      icon: [20, 40, 20],
-    });
-  });
-
-  it("as props novas alteram as faixas e o ícone fica na metade do item", () => {
-    expect(buildDockRanges({ itemSize: 48, magnification: 96, magnifyDistance: 200 })).toEqual({
-      distance: [-200, 0, 200],
-      size: [48, 96, 48],
-      icon: [24, 48, 24],
-    });
-  });
-
-  it("rejeita distância não positiva informando o valor recebido", () => {
-    expect(() => buildDockRanges({ magnifyDistance: 0 })).toThrow(
-      /received 0, expected a positive number of pixels/
-    );
-  });
-
-  it("rejeita magnificação menor que o tamanho base", () => {
-    expect(() => buildDockRanges({ itemSize: 60, magnification: 40 })).toThrow(
-      /received magnification 40, expected a number >= itemSize 60/
-    );
+  it("itemSize inválido lança erro com o valor recebido", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() => render(<MenuDock items={items()} itemSize={0} />)).toThrow(/received 0/);
+    spy.mockRestore();
   });
 });
 
-describe("MenuDock floating com lupa configurável", () => {
+describe("MenuDock com lupa configurável", () => {
   const baseSize = (label: string) =>
     (screen.getByRole("link", { name: label }).firstElementChild as HTMLElement).style.width;
 
   it("sem props o item longe do ponteiro tem 40px", () => {
-    render(<MenuDock items={items()} animationType="floating" />);
+    render(<MenuDock items={items()} />);
     expect(baseSize("Início")).toBe("40px");
   });
 
-  it("dockItemSize muda o tamanho base", () => {
-    render(<MenuDock items={items()} animationType="floating" dockItemSize={56} />);
+  it("itemSize muda o tamanho base e a altura da barra acompanha", () => {
+    const { container } = render(<MenuDock items={items()} itemSize={56} />);
     expect(baseSize("Início")).toBe("56px");
+    expect(container.querySelector('[data-slot="menu-dock-desktop"]')).toHaveStyle({
+      height: "80px",
+    });
   });
 
-  it("com movimento reduzido o item fica fixo em dockItemSize, mesmo com foco", async () => {
+  it("com movimento reduzido o item fica fixo em itemSize, mesmo com foco", async () => {
     render(
       <MotionConfig reducedMotion="always">
-        <MenuDock items={items()} animationType="floating" dockItemSize={48} />
+        <MenuDock items={items()} itemSize={48} />
       </MotionConfig>
     );
     const link = screen.getByRole("link", { name: "Início" });
@@ -341,7 +202,7 @@ describe("MenuDock floating com lupa configurável", () => {
   });
 
   it("o foco por teclado amplia o item ao tamanho máximo e o blur devolve ao base", async () => {
-    render(<MenuDock items={items()} animationType="floating" dockMagnification={90} />);
+    render(<MenuDock items={items()} magnification={90} />);
     const user = userEvent.setup();
     await user.tab();
     expect(screen.getByRole("link", { name: "Início" })).toHaveFocus();
@@ -350,5 +211,59 @@ describe("MenuDock floating com lupa configurável", () => {
 
     await user.tab();
     await waitFor(() => expect(baseSize("Início")).toBe("40px"));
+  });
+
+  it("sair do dock com o mouse devolve todos ao tamanho base", () => {
+    const { container } = render(<MenuDock items={items()} />);
+    const desktop = container.querySelector('[data-slot="menu-dock-desktop"]') as HTMLElement;
+    fireEvent.mouseMove(desktop, { clientX: 10 });
+    fireEvent.mouseLeave(desktop);
+    expect(baseSize("Início")).toBe("40px");
+    expect(baseSize("Projetos")).toBe("40px");
+  });
+});
+
+describe("MenuDock: aliases deprecados", () => {
+  it("path vira href e href ganha de path", () => {
+    render(
+      <MenuDock
+        items={[
+          { label: "Antigo", icon: Home, path: "#antigo" },
+          { label: "Novo", icon: Folder, href: "#novo", path: "#ignorado" },
+        ]}
+      />
+    );
+    expect(screen.getByRole("link", { name: "Antigo" })).toHaveAttribute("href", "#antigo");
+    expect(screen.getByRole("link", { name: "Novo" })).toHaveAttribute("href", "#novo");
+  });
+
+  it("dockItemSize acompanha a altura da barra", () => {
+    const { container } = render(<MenuDock items={items()} dockItemSize={56} />);
+    expect(container.querySelector('[data-slot="menu-dock-desktop"]')).toHaveStyle({
+      height: "80px",
+    });
+  });
+
+  it("o nome novo ganha do alias quando vêm os dois", () => {
+    const { container } = render(<MenuDock items={items()} itemSize={56} dockItemSize={100} />);
+    expect(container.querySelector('[data-slot="menu-dock-desktop"]')).toHaveStyle({
+      height: "80px",
+    });
+  });
+
+  it("dockMagnification e dockMagnifyDistance inválidos chegam à validação", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() => render(<MenuDock items={items()} dockMagnification={10} />)).toThrow(
+      /invalid magnification/
+    );
+    expect(() => render(<MenuDock items={items()} dockMagnifyDistance={0} />)).toThrow(
+      /invalid magnifyDistance/
+    );
+    spy.mockRestore();
+  });
+
+  it("animationType floating não tem efeito nem vaza para o DOM", () => {
+    const { container } = render(<MenuDock items={items()} animationType="floating" />);
+    expect(container.querySelector('[data-slot="menu-dock"]')).not.toHaveAttribute("animationtype");
   });
 });

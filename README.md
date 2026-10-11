@@ -536,7 +536,8 @@ function ResponsiveComponent() {
 
 **Navigation:**
 
-- `menu-dock` - Dock de menu
+- `goo-tabs` - Abas com pílula animada (substitui o `menu-dock`)
+- `menu-dock` - Dock flutuante com ampliação por proximidade (para abas, use `goo-tabs`)
 - `sidebar-navigation` - Menu lateral completo
 
 **Theme:**

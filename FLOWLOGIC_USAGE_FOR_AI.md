@@ -228,9 +228,10 @@ Componentes que combinam atoms, organizados por categoria:
 
 - `dashboard-header` - Header com busca, notificações e perfil
 
-**Navigation** (2 componentes):
+**Navigation** (4 componentes):
 
-- `menu-dock` - Dock de menu
+- `goo-tabs` - Abas com pílula animada (substitui o `menu-dock`)
+- `menu-dock` - Dock flutuante com ampliação por proximidade (para abas, use `goo-tabs`)
 - `sidebar-navigation` - Menu lateral completo
 
 **Theme** (1 componente):
