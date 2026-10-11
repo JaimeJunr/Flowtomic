@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { Home, Wallet } from "lucide-react";
 import { MotionConfig, MotionGlobalConfig } from "motion/react";
 import { createRef } from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
@@ -138,5 +139,82 @@ describe("GooTabs", () => {
     expect(root).toBe(ref.current);
     expect(root).toHaveClass("minha-classe");
     expect(container.querySelector('[data-slot="goo-tabs-pill"]')).not.toBeNull();
+  });
+});
+
+describe("GooTabs com ícone, vertical e só ícones", () => {
+  const WITH_ICONS: GooTabsItem[] = [
+    { value: "inicio", label: "Início", icon: Home },
+    { value: "carteiras", label: "Carteiras", icon: Wallet },
+  ];
+
+  it("renderiza o ícone antes do rótulo, com size-4 e aria-hidden", () => {
+    renderTabs({ items: WITH_ICONS });
+    const button = screen.getByRole("button", { name: "Início" });
+    const svg = button.querySelector("svg") as SVGElement;
+    expect(svg).toHaveClass("size-4");
+    expect(svg.closest('[aria-hidden="true"]')).not.toBeNull();
+    const position = svg.compareDocumentPosition(screen.getByText("Início"));
+    expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("showLabels=false deixa o rótulo sr-only, mantém o nome acessível e o item quadrado", () => {
+    renderTabs({ items: WITH_ICONS, showLabels: false });
+    const button = screen.getByRole("button", { name: "Início" });
+    expect(screen.getByText("Início")).toHaveClass("sr-only");
+    expect(button).toHaveClass("size-10");
+  });
+
+  it("showLabels padrão mostra o rótulo sem sr-only", () => {
+    renderTabs({ items: WITH_ICONS });
+    expect(screen.getByText("Início")).not.toHaveClass("sr-only");
+  });
+
+  it("horizontal é o padrão e marca data-orientation na raiz e na lista", () => {
+    const { container } = renderTabs();
+    expect(container.querySelector("ul")).toHaveAttribute("data-orientation", "horizontal");
+    expect(container.querySelector('[data-slot="goo-tabs"]')).toHaveAttribute(
+      "data-orientation",
+      "horizontal"
+    );
+  });
+
+  it("vertical marca data-orientation e a pílula segue o item na vertical", () => {
+    const { container } = renderTabs({ orientation: "vertical" });
+    expect(container.querySelector("ul")).toHaveAttribute("data-orientation", "vertical");
+    const pill = container.querySelector('[data-slot="goo-tabs-pill"]') as HTMLElement;
+    expect(pill).toHaveClass("w-full");
+    expect(pill).not.toHaveClass("h-full");
+  });
+
+  it("vertical: Up e Down movem o foco com volta; Left e Right não", () => {
+    renderTabs({ orientation: "vertical" });
+    const [first, second, third] = screen.getAllByRole("button");
+    first.focus();
+    fireEvent.keyDown(first, { key: "ArrowDown" });
+    expect(second).toHaveFocus();
+    fireEvent.keyDown(second, { key: "ArrowDown" });
+    fireEvent.keyDown(third, { key: "ArrowDown" });
+    expect(first).toHaveFocus();
+    fireEvent.keyDown(first, { key: "ArrowUp" });
+    expect(third).toHaveFocus();
+  });
+
+  it("horizontal ignora Up e Down", () => {
+    renderTabs();
+    const [first] = screen.getAllByRole("button");
+    first.focus();
+    fireEvent.keyDown(first, { key: "ArrowDown" });
+    expect(first).toHaveFocus();
+  });
+
+  it("vertical: clique ainda troca o ativo e cria bolinhas", async () => {
+    const { container } = renderTabs({ orientation: "vertical", particleCount: 4 });
+    await userEvent.click(screen.getByRole("button", { name: "Carteiras" }));
+    expect(screen.getByRole("button", { name: "Carteiras" })).toHaveAttribute(
+      "aria-current",
+      "page"
+    );
+    expect(particles(container)).toHaveLength(4);
   });
 });

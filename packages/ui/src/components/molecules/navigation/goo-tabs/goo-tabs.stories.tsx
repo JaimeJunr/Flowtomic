@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { BarChart3, Home, Settings, Wallet } from "lucide-react";
 import { MotionConfig } from "motion/react";
 import * as React from "react";
 import { GooTabs, type GooTabsItem } from "./goo-tabs";
@@ -8,6 +9,13 @@ const ITEMS: GooTabsItem[] = [
   { value: "carteiras", label: "Carteiras" },
   { value: "relatorios", label: "Relatórios" },
   { value: "cotas", label: "Cotas" },
+];
+
+const ICON_ITEMS: GooTabsItem[] = [
+  { value: "inicio", label: "Início", icon: Home },
+  { value: "carteiras", label: "Carteiras", icon: Wallet },
+  { value: "relatorios", label: "Relatórios", icon: BarChart3 },
+  { value: "ajustes", label: "Ajustes", icon: Settings },
 ];
 
 const meta = {
@@ -50,6 +58,18 @@ export const ComLinks: Story = {
       { value: "extrato", label: "Extrato", href: "#extrato" },
     ],
   },
+};
+
+export const ComIcones: Story = {
+  args: { items: ICON_ITEMS },
+};
+
+export const Vertical: Story = {
+  args: { items: ICON_ITEMS, orientation: "vertical" },
+};
+
+export const SoIcones: Story = {
+  args: { items: ICON_ITEMS, showLabels: false },
 };
 
 function ControlledDemo() {
