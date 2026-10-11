@@ -7,6 +7,8 @@
 export * from "./actions";
 // Animation
 export * from "./animation";
+// Background
+export * from "./background";
 // Code
 export * from "./code";
 // Data Display

@@ -730,6 +730,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["stacking-cards-utils.ts", "stacking-cards.tsx", "index.ts"],
     dependencies: ["motion", "cn"],
   },
+  "aurora-glow": {
+    name: "aurora-glow",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/background/aurora-glow",
+    files: ["aurora-glow-shader.ts", "aurora-glow-utils.ts", "aurora-glow.tsx", "index.ts"],
+    dependencies: ["motion", "cn"],
+  },
   "hold-button": {
     name: "hold-button",
     type: "atom",
