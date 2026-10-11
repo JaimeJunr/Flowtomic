@@ -30,3 +30,4 @@ export {
   MessageResponse,
   MessageToolbar,
 } from "./message";
+export { normalizeMathDelimiters } from "./normalize-math-delimiters";

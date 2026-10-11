@@ -166,6 +166,43 @@ describe("Message", () => {
     expect(screen.getByText("tsx")).toHaveAttribute("data-slot", "code-block-language");
   });
 
+  describe("fórmulas e moeda", () => {
+    // Resposta real do Grok 4.7 que saiu quebrada em produção na Constelação.
+    const respostaGrok = `A fórmula é:
+\\[ M = C \\times (1 + i)^t \\]
+- \\(M\\): montante final
+- Ano 1: \\(1.000 \\times 1{,}10 = 1.100\\) → R$ 1.100
+**Resultado:** ao final de 3 anos você tem **R$ 1.331**. Os juros totais são **R$ 331**.
+Se fossem juros simples (só sobre os R$ 1.000), seriam R$ 100 por ano, totalizando R$ 1.300.`;
+
+    it("renderiza \\[ \\] como bloco, \\( \\) inline e R$ como texto", () => {
+      const { container } = render(<MessageResponse>{respostaGrok}</MessageResponse>);
+      expect(container.querySelectorAll(".katex-display")).toHaveLength(1);
+      expect(container.querySelectorAll(".katex")).toHaveLength(3);
+      expect(container.textContent).not.toContain("[ M = C");
+      const negritos = Array.from(container.querySelectorAll("strong"), (el) => el.textContent);
+      expect(negritos).toEqual(["Resultado:", "R$ 1.331", "R$ 331"]);
+      expect(container.querySelector("strong .katex")).toBeNull();
+      expect(container.textContent).toContain("seriam R$ 100 por ano, totalizando R$ 1.300.");
+    });
+
+    it("mantém \\[ \\] literal dentro de código", () => {
+      const { container } = render(
+        <MessageResponse>{"Use `\\(x\\)` assim:\n\n```latex\n\\[ x \\]\n```"}</MessageResponse>
+      );
+      expect(container.querySelector(".katex")).toBeNull();
+      expect(screen.getByText("\\(x\\)")).toBeInTheDocument();
+      expect(container.textContent).toContain("\\[ x \\]");
+    });
+
+    it("normalizeMath={false} deixa o texto como chegou", () => {
+      const { container } = render(
+        <MessageResponse normalizeMath={false}>{"Fórmula: \\(x^2\\)"}</MessageResponse>
+      );
+      expect(container.querySelector(".katex")).toBeNull();
+    });
+  });
+
   it("linguagem desconhecida vira text e o código continua visível", () => {
     render(<MessageResponse>{"```linguagem-inventada\nfaz algo\n```"}</MessageResponse>);
     expect(screen.getByText("text")).toHaveAttribute("data-slot", "code-block-language");

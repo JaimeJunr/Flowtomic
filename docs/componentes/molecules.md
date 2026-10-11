@@ -361,6 +361,13 @@ com cantos de 10px; a resposta do assistente fica sem bolha. A navegação usa �
 anterior”, “Próxima versão” e contador em mono (“2 de 3”). Anexos sem nome usam
 “Imagem” ou “Anexo”; a ação “Remover anexo” aparece no hover e no foco pelo teclado.
 
+O `MessageResponse` passa o texto por `normalizeMathDelimiters` antes do Markdown:
+`\[ ... \]` vira bloco `$$`, `\( ... \)` vira `$...$` (os modelos usam muito esses
+delimitadores, que o `remark-math` não lê) e `R$`/`US$` seguidos de número viram `R\$`, para
+que `R$ 1.331 ... R$ 331` não seja lido como fórmula. Código (cercado ou inline) fica
+intocado e delimitador sem fechar fica como veio, para o streaming. Desligue com
+`normalizeMath={false}`.
+
 **Dependências**: `streamdown`, `lucide-react`, `cn`, `ai`
 
 ### `chat-message`

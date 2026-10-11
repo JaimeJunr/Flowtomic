@@ -37,6 +37,7 @@ import {
 } from "@/components/atoms/code/code-block";
 import { ButtonGroup, ButtonGroupText } from "@/components/molecules/forms/button-group";
 import { cn } from "@/lib/utils";
+import { normalizeMathDelimiters } from "./normalize-math-delimiters";
 import "katex/dist/katex.min.css";
 
 // Mantenha interop para diferentes ambientes (bundlers/runtimes)
@@ -668,6 +669,8 @@ export type MessageResponseProps = ComponentProps<"div"> & {
   allowedLinkPrefixes?: string[];
   defaultOrigin?: string;
   parseIncompleteMarkdown?: boolean;
+  /** Converte `\[ \]`/`\( \)` para `$$`/`$` e impede `R$`/`US$` de abrir fórmula. */
+  normalizeMath?: boolean;
 };
 
 function MessageResponseComponent({
@@ -678,13 +681,15 @@ function MessageResponseComponent({
   allowedLinkPrefixes,
   defaultOrigin,
   parseIncompleteMarkdown: shouldParseIncompleteMarkdown = true,
+  normalizeMath = true,
   ...props
 }: MessageResponseProps) {
-  // Parse the children to remove incomplete markdown tokens if enabled
-  const parsedChildren =
-    typeof children === "string" && shouldParseIncompleteMarkdown
-      ? parseIncompleteMarkdown(children)
-      : children;
+  let parsedChildren = children;
+  if (typeof parsedChildren === "string") {
+    // Completa os tokens antes: a crase que ele fecha protege o código da normalização.
+    if (shouldParseIncompleteMarkdown) parsedChildren = parseIncompleteMarkdown(parsedChildren);
+    if (normalizeMath) parsedChildren = normalizeMathDelimiters(parsedChildren);
+  }
 
   return (
     <div

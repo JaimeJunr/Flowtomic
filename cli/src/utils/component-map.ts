@@ -1281,7 +1281,7 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     name: "message",
     type: "molecule",
     path: "packages/ui/src/components/molecules/data-display/message",
-    files: ["message.tsx", "index.ts"],
+    files: ["message.tsx", "normalize-math-delimiters.ts", "index.ts"],
     dependencies: ["streamdown", "lucide-react", "cn", "ai"],
   },
   suggestion: {
