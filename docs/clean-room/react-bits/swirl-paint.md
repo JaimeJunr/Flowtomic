@@ -29,11 +29,12 @@ type SwirlPaintProps = React.ComponentProps<"div"> & {
 1. **Pixelização.** `frag = (floor(gl_FragCoord.xy / pixelSize) + 0.5)·pixelSize`. Todo o resto
    usa `frag` no lugar de `gl_FragCoord.xy`. `pixelSize` em pixels de tela (multiplicar pelo DPR
    no JS).
-2. **Coordenadas.** `p = (frag − uResolution/2) / uResolution.y · 2.0`, menos o deslocamento do
+2. **Coordenadas.** `p = (frag − uResolution/2) / uResolution.y · 3.0`, menos o deslocamento do
    ponteiro (regra 6). `t = uTime·uSpeed`.
 3. **Giro.** `r = length(p)`; girar `p` pelo ângulo `spin·(1.5 − r)·1.2 + t·0.3·spin`.
 4. **Tinta.** Cinco passos: `p += 0.5·vec2(sin(p.y·1.3 + t·0.2 + i), cos(p.x·1.1 − t·0.15 + i·1.7))`,
-   `i = 0..4`. Depois `f = 0.5 + 0.5·sin(length(p)·2.0 + p.x)`.
+   `i = 0..4`. Depois `f = 0.5 + 0.5·sin(length(p)·5.0 + p.x·1.5)`.
+   (Revisado em 11/10/2026: com escala 2,0 e `length(p)·2.0` o quadro virava uma mancha só.)
 5. **Cor.** Com `e = 0.25 / contrast`: `cor = mix(c3, c2, smoothstep(0.35 − e, 0.35 + e, f))`,
    depois `mix(cor, c1, smoothstep(0.65 − e, 0.65 + e, f))`. Alfa 1.
 6. **Ponteiro** (contrato regra 8): o centro anda `(uPointer − 0.5)·0.6`.
