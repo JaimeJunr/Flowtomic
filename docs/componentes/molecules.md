@@ -268,6 +268,12 @@ Carrossel em que os próximos cartões recuam em profundidade num trilho, girado
 
 **Dependências**: `motion`, `lucide-react`, `cn`
 
+### `stacking-cards`
+
+Cartões que prendem no topo ao rolar e se empilham, encolhendo e escurecendo os de baixo; sticky nativo, sem rolagem simulada. Clean room (`docs/clean-room/react-bits/stacking-cards.md`).
+
+**Dependências**: `motion`, `cn`
+
 ### `theme-toggle-button`
 
 Botão para alternar entre temas claro/escuro com suporte avançado à API visual de transições "Circle Blur" suavizadas.
