@@ -226,121 +226,118 @@ function isCurrencyAt(text: string, i: number): number {
   return j < text.length && DIGIT.test(text[j]) ? prefixLen : 0;
 }
 
-/** Varredura monotônica: não reinterpreta Markdown dentro de destinos ou URLs. */
-function referenceEnd(text: string, from: number): number {
+const WS = /\s/;
+const REFERENCE_LABEL = /[ \t]{0,3}\[[^\]\n]+\]:/y;
+const URL_START = /(?:[A-Za-z][A-Za-z0-9+.-]*:\/\/|mailto:|www\.)/y;
+const MAX_PAREN_DEPTH = 32; // limite do CommonMark para parênteses aninhados no destino
+
+/** Primeira posição de onde um título com aquela abertura já não achou fechamento. */
+type TitleFails = Record<string, number>;
+
+/** Fim (exclusivo) do título que abre em `from`, ou -1. Falha lembrada: a busca não repete. */
+function titleEnd(text: string, from: number, fails: TitleFails): number {
+  const open = text[from];
+  if (from >= (fails[open] ?? Number.POSITIVE_INFINITY)) return -1;
+  const close = open === "(" ? ")" : open;
+  let i = from + 1;
+  while (i < text.length) {
+    if (text[i] === "\\") i += 2;
+    else if (text[i] === close) return i + 1;
+    else i++;
+  }
+  fails[open] = from;
+  return -1;
+}
+
+/** Fim do destino `<...>` ou sem espaço que começa em `from`, ou -1. */
+function destinationEnd(text: string, from: number, parens: boolean): number {
   let i = from;
-  while (i < text.length && /\s/.test(text[i])) i++;
-  const angle = text[i] === "<";
+  if (text[i] === "<") {
+    for (i++; i < text.length && text[i] !== ">"; i += text[i] === "\\" ? 2 : 1) {
+      if (text[i] === "\n" || text[i] === "<") return -1;
+    }
+    return i < text.length ? i + 1 : -1;
+  }
   let depth = 0;
-  if (angle) i++;
-  for (; i < text.length; i++) {
+  while (i < text.length && !WS.test(text[i])) {
     const ch = text[i];
-    if (ch === "\\") {
-      i++;
-      continue;
+    if (ch === "\\") i++;
+    else if (parens && ch === "(" && ++depth > MAX_PAREN_DEPTH) return -1;
+    else if (parens && ch === ")" && depth-- === 0) {
+      depth = 0;
+      break;
     }
-    if (angle) {
-      if (ch === ">") {
-        i++;
-        break;
-      }
-    } else if (/\s/.test(ch)) break;
-    else if (ch === "(") depth++;
-    else if (ch === ")") {
-      if (depth === 0) break;
-      depth--;
-    }
+    i++;
   }
-  let title = i;
-  while (title < text.length && /\s/.test(text[title])) title++;
-  const open = text[title];
-  if (title > i && (open === '"' || open === "'" || open === "(")) {
-    const close = open === "(" ? ")" : open;
-    i = title + 1;
-    while (i < text.length) {
-      if (text[i] === "\\") i += 2;
-      else if (text[i++] === close) break;
-    }
-  }
-  const end = text.indexOf("\n", i);
+  return depth === 0 ? Math.min(i, text.length) : -1;
+}
+
+function skipSpace(text: string, from: number, newlines: boolean): number {
+  let i = from;
+  while (i < text.length && (newlines ? WS.test(text[i]) : text[i] === " " || text[i] === "\t"))
+    i++;
+  return i;
+}
+
+function lineEnd(text: string, from: number): number {
+  const end = text.indexOf("\n", from);
   return end === -1 ? text.length : end;
 }
 
-/** Une código, destinos, referências e URLs em ordem, sem ordenar ou revisitar sufixos. */
-function findProtectedSpans(text: string): Array<[number, number]> {
-  const code = findCodeSpans(text);
-  const spans: Array<[number, number]> = [];
-  const reference = /[ \t]{0,3}\[[^\]\n]+\]:[ \t]*/y;
-  const url = /(?:[A-Za-z][A-Za-z0-9+.-]*:\/\/|mailto:|www\.)/y;
-  let c = 0;
-  for (let i = 0; i < text.length; ) {
-    while (c < code.length && code[c][1] <= i) c++;
-    if (c < code.length && code[c][0] === i) {
-      spans.push(code[c]);
-      i = code[c++][1];
-      continue;
-    }
-    if (i === 0 || text[i - 1] === "\n") {
-      reference.lastIndex = i;
-      if (reference.test(text)) {
-        const end = referenceEnd(text, reference.lastIndex);
-        spans.push([i, end]);
-        i = end;
-        continue;
-      }
-    }
-    if (text[i] === "]" && text[i + 1] === "(") {
-      const start = i + 1;
-      let end = start + 1;
-      let depth = 1;
-      let quote = "";
-      let angle = false;
-      for (; end < text.length; end++) {
-        const ch = text[end];
-        if (ch === "\\") {
-          end++;
-          continue;
-        }
-        if (quote) {
-          if (ch === quote) quote = "";
-          continue;
-        }
-        if (angle) {
-          if (ch === ">") angle = false;
-          continue;
-        }
-        if (ch === "<") angle = true;
-        else if ((ch === '"' || ch === "'") && /\s/.test(text[end - 1])) quote = ch;
-        else if (ch === "(") depth++;
-        else if (ch === ")" && --depth === 0) {
-          end++;
-          break;
-        }
-      }
-      spans.push([start, Math.min(end, text.length)]);
-      i = end;
-      continue;
-    }
-    // Tentar apenas no início de palavra evita buscas repetidas em sufixos longos.
-    if ((i === 0 || !/[A-Za-z0-9+.-]/.test(text[i - 1])) && /[A-Za-z]/.test(text[i])) {
-      url.lastIndex = i;
-      if (url.test(text)) {
-        let end = url.lastIndex;
-        while (end < text.length && !/[\s<>]/.test(text[end])) end++;
-        spans.push([i, end]);
-        i = end;
-        continue;
-      }
-    }
-    // Escapes fora de código impedem que um ] literal abra destino.
-    if (text[i] === "\\" && text[i + 1] !== "`") i += 2;
-    else i++;
+/**
+ * Fim de `[rótulo]: destino "título"` que começa em `from` (início de linha), ou -1.
+ * Só é definição se, depois do destino e do título opcional, a linha termina.
+ */
+function referenceDefinitionEnd(text: string, from: number, fails: TitleFails): number {
+  REFERENCE_LABEL.lastIndex = from;
+  if (!REFERENCE_LABEL.test(text)) return -1;
+  const start = skipSpace(text, REFERENCE_LABEL.lastIndex, true);
+  const destEnd = destinationEnd(text, start, false);
+  if (destEnd === -1 || destEnd === start) return -1;
+  const titleStart = skipSpace(text, destEnd, true);
+  const quote = text[titleStart];
+  if (titleStart > destEnd && (quote === '"' || quote === "'" || quote === "(")) {
+    const end = titleEnd(text, titleStart, fails);
+    const after = end === -1 ? -1 : skipSpace(text, end, false);
+    if (after !== -1 && (after === text.length || text[after] === "\n")) return after;
+    // título na mesma linha do destino e com resto depois: não é definição
+    if (!text.slice(destEnd, titleStart).includes("\n")) return -1;
   }
-  return spans;
+  const after = skipSpace(text, destEnd, false);
+  return after === text.length || text[after] === "\n" ? lineEnd(text, destEnd) : -1;
+}
+
+/** Fim de `(destino "título")` cujo `(` está em `open`, ou -1. Só vale com `[` antes. */
+function inlineLinkEnd(text: string, open: number, fails: TitleFails): number {
+  const start = skipSpace(text, open + 1, true);
+  const destEnd = destinationEnd(text, start, true);
+  if (destEnd === -1) return -1;
+  const next = skipSpace(text, destEnd, true);
+  if (text[next] === ")") return next + 1;
+  const quote = text[next];
+  if (next > destEnd && (quote === '"' || quote === "'" || quote === "(")) {
+    const end = titleEnd(text, next, fails);
+    if (end === -1) return -1;
+    const close = skipSpace(text, end, true);
+    return text[close] === ")" ? close + 1 : -1;
+  }
+  return -1;
+}
+
+/** Fim da URL solta ou autolink que começa em `i` (início de palavra), ou -1. */
+function bareUrlEnd(text: string, i: number): number {
+  if (i > 0 && /[A-Za-z0-9+.-]/.test(text[i - 1])) return -1;
+  URL_START.lastIndex = i;
+  if (!URL_START.test(text)) return -1;
+  let end = URL_START.lastIndex;
+  while (end < text.length && !/[\s<>]/.test(text[end])) end++;
+  return end;
 }
 
 function normalizeParagraph(text: string): string {
-  const spans = findProtectedSpans(text);
+  // Só o código tem precedência sobre tudo. Destinos, referências e URLs são reconhecidos
+  // durante a varredura, quando o texto não está dentro de uma região de math.
+  const spans = findCodeSpans(text);
   const dollars = indexDollars(text, spans);
   const closers: Record<string, CloserCache> = {
     "]": { searchedFrom: Number.POSITIVE_INFINITY, result: -1 },
@@ -353,6 +350,9 @@ function normalizeParagraph(text: string): string {
   let lineStart = 0;
   let lineBlank = true; // só espaço desde o começo da linha (no texto de origem)
   let endsWithMath = false;
+  let bracketDepth = 0; // `[` não escapados ainda abertos: `](` só é link com `[` antes
+  let definitions = true; // linhas anteriores foram só definições: ainda pode abrir outra
+  const titleFails: TitleFails = {};
 
   // Só olha o trecho consumido [from, to): cada caractere é visto uma vez.
   const trackSource = (from: number, to: number) => {
@@ -372,6 +372,12 @@ function normalizeParagraph(text: string): string {
     i = to;
   };
 
+  // Copia um trecho protegido e descarta os trechos de código que ele já cobriu.
+  const copyProtected = (to: number) => {
+    copy(to);
+    while (span < spans.length && spans[span][0] < i) span++;
+  };
+
   while (i < text.length) {
     const limit = span < spans.length ? spans[span][0] : text.length;
     if (i === limit) {
@@ -381,6 +387,16 @@ function normalizeParagraph(text: string): string {
     }
 
     const ch = text[i];
+
+    if (i === 0 || text[i - 1] === "\n") {
+      // Definição de referência não interrompe parágrafo: só na abertura ou após outras.
+      const end: number = i === 0 || definitions ? referenceDefinitionEnd(text, i, titleFails) : -1;
+      definitions = end !== -1;
+      if (end !== -1) {
+        copyProtected(end);
+        continue;
+      }
+    }
 
     if (ch === "$") {
       const run = dollars.byStart.get(i);
@@ -433,8 +449,26 @@ function normalizeParagraph(text: string): string {
         copy(start + 2); // sem fechamento válido: fica como veio
         continue;
       }
-      copy(j);
+      copy(kind === "]" && (j - i) % 2 === 1 && j < limit ? j + 1 : j);
       continue;
+    }
+
+    if (/[A-Za-z]/.test(ch)) {
+      const end = bareUrlEnd(text, i);
+      if (end !== -1) {
+        copyProtected(end);
+        continue;
+      }
+    }
+
+    if (ch === "[") bracketDepth++;
+    else if (ch === "]" && bracketDepth > 0) {
+      bracketDepth--;
+      const end = text[i + 1] === "(" ? inlineLinkEnd(text, i + 1, titleFails) : -1;
+      if (end !== -1) {
+        copyProtected(end);
+        continue;
+      }
     }
 
     if (ch === "R" || ch === "U") {

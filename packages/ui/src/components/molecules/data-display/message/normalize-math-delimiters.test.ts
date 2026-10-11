@@ -263,3 +263,69 @@ describe("regressões da re-review", () => {
     );
   });
 });
+describe("3ª review: proteção só onde é link", () => {
+  it.each([
+    ["[Passo 1]: custa **R$ 5** e **R$ 6**", "[Passo 1]: custa **R\\$ 5** e **R\\$ 6**"],
+    ["[Nota]: calcule \\(x\\) e pague R$ 5", "[Nota]: calcule $x$ e pague R\\$ 5"],
+    ['[a]: https://x.com "t" e R$ 5', '[a]: https://x.com "t" e R\\$ 5'],
+  ])("rótulo seguido de texto não é definição: %s", (entrada, saida) => {
+    expect(normalizeMathDelimiters(entrada)).toBe(saida);
+  });
+
+  it("definições consecutivas continuam protegidas", () => {
+    const texto = '[a]: https://x.com/\\(a\\) "R$ 5"\n[b]: <https://y.com/\\(b\\)>';
+    expect(normalizeMathDelimiters(texto)).toBe(texto);
+  });
+
+  it.each([
+    ["$f[x](y)$ custa **R$ 5** e **R$ 6**", "$f[x](y)$ custa **R\\$ 5** e **R\\$ 6**"],
+    ["$f[x](y)$ e \\(z\\) e R$ 5", "$f[x](y)$ e $z$ e R\\$ 5"],
+    ["$$f[x](y)$$ e \\(z\\) e R$ 5", "$$f[x](y)$$ e $z$ e R\\$ 5"],
+    ["$http://a.b$ e \\(z\\)", "$http://a.b$ e $z$"],
+  ])("link ou URL dentro de math não desfaz o pareamento: %s", (entrada, saida) => {
+    expect(normalizeMathDelimiters(entrada)).toBe(saida);
+  });
+
+  it("`](` sem `[` antes não protege o parágrafo", () => {
+    expect(normalizeMathDelimiters("texto ](solto custa **R$ 5** e **R$ 6**")).toBe(
+      "texto ](solto custa **R\\$ 5** e **R\\$ 6**"
+    );
+    expect(normalizeMathDelimiters("[a ](x y custa **R$ 5**")).toBe("[a ](x y custa **R\\$ 5**");
+  });
+
+  it.each([
+    ["\\( f[x](y) \\)", "$f[x](y)$"],
+    ["\\[ f[x](y) = 1 \\]", "$$\nf[x](y) = 1\n$$"],
+    ["\\(x \\in ]0,1](a)\\)", "$x \\in ]0,1](a)$"],
+    ["\\( \\text{www.exemplo.com} \\)", "$\\text{www.exemplo.com}$"],
+    ["\\(\\text{http://a.b}\\)", "$\\text{http://a.b}$"],
+  ])("converte fórmula com URL ou `](` dentro: %s", (entrada, saida) => {
+    expect(normalizeMathDelimiters(entrada)).toBe(saida);
+  });
+
+  it("é idempotente nos casos novos", () => {
+    for (const t of [
+      "[Passo 1]: custa **R$ 5** e **R$ 6**",
+      "$f[x](y)$ e \\(z\\) e R$ 5",
+      "\\(x \\in ]0,1](a)\\)",
+    ]) {
+      const uma = normalizeMathDelimiters(t);
+      expect(normalizeMathDelimiters(uma)).toBe(uma);
+    }
+  });
+
+  it("rótulos, `](` e títulos sem fim terminam em tempo linear", () => {
+    const casos = [
+      "[x]: a (\n".repeat(60_000),
+      "[x]: a \"\n[x]: a '\n".repeat(30_000),
+      '[x](a "b\n'.repeat(60_000),
+      "[x]: a\n".repeat(60_000),
+      "[x](".repeat(60_000),
+      "[x]( (".repeat(30_000),
+      "a ](b ".repeat(60_000),
+    ];
+    const inicio = performance.now();
+    for (const texto of casos) normalizeMathDelimiters(texto);
+    expect(performance.now() - inicio).toBeLessThan(3_000);
+  });
+});

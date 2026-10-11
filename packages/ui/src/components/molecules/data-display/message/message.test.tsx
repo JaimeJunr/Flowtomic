@@ -304,4 +304,19 @@ Se fossem juros simples (só sobre os R$ 1.000), seriam R$ 100 por ano, totaliza
     expect(screen.getByText("text")).toHaveAttribute("data-slot", "code-block-language");
     expect(screen.getByText("faz algo")).toBeInTheDocument();
   });
+
+  it.each([
+    ["[Passo 1]: custa **R$ 5** e **R$ 6**", 2, 0],
+    ["$f[x](y)$ custa **R$ 5** e **R$ 6**", 2, 1],
+    ["$f[x](y)$ e \\(z\\) e R$ 5", 0, 2],
+    ["texto ](solto custa **R$ 5** e **R$ 6**", 2, 0],
+    ["\\( f[x](y) \\) e \\(\\text{www.exemplo.com}\\)", 0, 2],
+  ])("renderiza sem erro de math: %s", (texto, strongs, katex) => {
+    const { container } = render(
+      <MessageResponse parseIncompleteMarkdown={false}>{texto}</MessageResponse>
+    );
+    expect(container.querySelectorAll("strong")).toHaveLength(strongs);
+    expect(container.querySelectorAll(".katex")).toHaveLength(katex);
+    expect(container.querySelectorAll(".katex-error")).toHaveLength(0);
+  });
 });
