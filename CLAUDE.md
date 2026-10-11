@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (126 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (130 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (126)
+- **Atoms**: `docs/componentes/atoms.md` (130)
 - **Molecules**: `docs/componentes/molecules.md` (88)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -374,7 +374,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 126 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 130 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 88 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
@@ -731,6 +731,11 @@ Cada uma já mordeu alguém neste repo.
   11/10/2026), enquanto classes já usadas em outros arquivos funcionavam. Não é bug do componente:
   `touch packages/styles/globals.css` força o Tailwind a reler tudo. Antes de caçar bug de layout em
   componente recém-criado, confira com `getComputedStyle` se a classe gerou regra.
+- ⚠️ **`readThemeColor(token)` sem elemento lê do `<html>` e ignora um `dark` local.** Os fundos
+  WebGL liam assim e, numa seção com `class="dark"` dentro da página clara, o `light-beams` pintava
+  `--foreground` escuro sobre fundo escuro: canvas "vazio", sem erro (medido em 11/10/2026). Passe o
+  próprio canvas como segundo argumento, e chame `redraw()` (do `useWebglCanvas`) depois de reler a
+  cor, senão um fundo parado (`speed` 0) mantém a cor velha.
 - ⚠️ **O Playwright desta máquina não tem browser baixado** (`Executable doesn't exist ...
   chrome-headless-shell`, medido em 11/10/2026). Nos scripts de medição, use o Chrome do sistema:
   `chromium.launch({ executablePath: "/usr/bin/google-chrome-stable" })`.

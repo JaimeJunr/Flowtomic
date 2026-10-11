@@ -12,6 +12,7 @@ export type WebglRendererOptions = {
 export type WebglRenderer = {
   sync(): void;
   resize(): void;
+  redraw(): void;
   setVisible(visible: boolean): void;
   dispose(): void;
 };
@@ -95,6 +96,11 @@ class CanvasRenderer implements WebglRenderer {
     // Mudar width/height apaga o buffer, inclusive quando a animação está parada.
     this.needsRedraw = true;
     if (this.initialized) this.sync();
+  }
+
+  redraw(): void {
+    if (this.disposed || !this.program) return;
+    this.draw(this.lastTime);
   }
 
   private draw(time: number): void {

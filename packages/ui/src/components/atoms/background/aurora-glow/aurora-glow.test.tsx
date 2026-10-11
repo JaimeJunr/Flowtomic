@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
+import * as themeColor from "@/lib/read-theme-color";
+import * as webgl from "@/lib/webgl";
 import { AuroraGlow } from "./aurora-glow";
 
 describe("AuroraGlow (sem WebGL)", () => {
@@ -47,5 +49,79 @@ describe("AuroraGlow (sem WebGL)", () => {
     const { container } = render(<AuroraGlow ref={ref} className="min-h-40" />);
     expect(ref.current).toBe(container.firstElementChild);
     expect(ref.current).toHaveClass("relative", "isolate", "overflow-hidden", "min-h-40");
+  });
+});
+
+describe("AuroraGlow (tema local)", () => {
+  it("passes a component element for every color, including fallbacks", () => {
+    const spy = vi.spyOn(themeColor, "readThemeColor").mockReturnValue(null);
+    try {
+      const { container } = render(
+        <div className="dark">
+          <AuroraGlow colors={["--primary", "--warning", "--info"]} />
+        </div>
+      );
+      const root = container.querySelector('[data-slot="aurora-glow"]') as HTMLElement;
+      expect(spy).toHaveBeenCalledWith("--primary", expect.any(HTMLElement));
+      expect(spy).toHaveBeenCalledWith("--foreground", expect.any(HTMLElement));
+      for (const [, element] of spy.mock.calls) {
+        expect(element).toBeInstanceOf(HTMLElement);
+        expect(root.contains(element ?? null)).toBe(true);
+      }
+    } finally {
+      spy.mockRestore();
+    }
+  });
+  it("redraws after rereading colors on a token change while frozen", async () => {
+    const readSpy = vi.spyOn(themeColor, "readThemeColor").mockReturnValue(null);
+    const redraw = vi.fn();
+    const originalHook = webgl.useWebglCanvas;
+    const hookSpy = vi.spyOn(webgl, "useWebglCanvas").mockImplementation((options) => ({
+      ...originalHook(options),
+      redraw,
+    }));
+    try {
+      const view = render(<AuroraGlow speed={0} colors={["--primary", "--warning", "--info"]} />);
+      readSpy.mockClear();
+      redraw.mockClear();
+      view.rerender(<AuroraGlow speed={0} colors={["--success", "--warning", "--info"]} />);
+      expect(readSpy).toHaveBeenCalledWith("--success", expect.any(HTMLElement));
+      expect(redraw).toHaveBeenCalledTimes(1);
+      expect(redraw.mock.invocationCallOrder[0]).toBeGreaterThan(
+        Math.max(...readSpy.mock.invocationCallOrder)
+      );
+      view.unmount();
+    } finally {
+      hookSpy.mockRestore();
+      readSpy.mockRestore();
+      document.documentElement.removeAttribute("data-theme");
+    }
+  });
+  it("redraws after rereading colors on a html change while frozen", async () => {
+    const readSpy = vi.spyOn(themeColor, "readThemeColor").mockReturnValue(null);
+    const redraw = vi.fn();
+    const originalHook = webgl.useWebglCanvas;
+    const hookSpy = vi.spyOn(webgl, "useWebglCanvas").mockImplementation((options) => ({
+      ...originalHook(options),
+      redraw,
+    }));
+    try {
+      const view = render(<AuroraGlow speed={0} colors={["--primary", "--warning", "--info"]} />);
+      readSpy.mockClear();
+      redraw.mockClear();
+      await act(async () => {
+        document.documentElement.setAttribute("data-theme", "test-theme");
+      });
+      expect(readSpy).toHaveBeenCalledWith("--primary", expect.any(HTMLElement));
+      expect(redraw).toHaveBeenCalledTimes(1);
+      expect(redraw.mock.invocationCallOrder[0]).toBeGreaterThan(
+        Math.max(...readSpy.mock.invocationCallOrder)
+      );
+      view.unmount();
+    } finally {
+      hookSpy.mockRestore();
+      readSpy.mockRestore();
+      document.documentElement.removeAttribute("data-theme");
+    }
   });
 });
