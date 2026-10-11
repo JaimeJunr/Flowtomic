@@ -713,10 +713,7 @@ function MessageResponseComponent({
 }
 MessageResponseComponent.displayName = "MessageResponse";
 
-export const MessageResponse = memo(
-  MessageResponseComponent,
-  (prevProps, nextProps) => prevProps.children === nextProps.children
-);
+export const MessageResponse = memo(MessageResponseComponent);
 
 export type MessageAttachmentProps = ComponentProps<"div"> & {
   data: FileUIPart;

@@ -368,6 +368,25 @@ que `R$ 1.331 ... R$ 331` não seja lido como fórmula. Código (cercado ou inli
 intocado e delimitador sem fechar fica como veio, para o streaming. Desligue com
 `normalizeMath={false}`.
 
+Cercas também são reconhecidas depois de marcadores de lista (`-`, `+`, `*`, `1.` ou
+`1)`), sob o recuo de um item e em citações. O fechamento aceita até três colunas
+de recuo além do conteúdo do item; uma cerca mais recuada continua sendo código.
+
+A heurística de moeda exige `R$`/`US$` com espaço opcional (incluindo tab e espaço
+inseparável), sinal opcional e dígito. Esse dólar nunca abre math. Um dólar aberto
+fora de moeda, seguido de conteúdo não vazio e de uma sequência de fechamento do
+mesmo tamanho, protege a fórmula inteira: `Se $x \in R$ 5 vezes` fica intacto,
+enquanto os dois valores de `**R$ 1.331** ... **R$ 331**` são escapados. Regiões
+existentes `$...$` e `$$...$$` ficam intactas, inclusive o conteúdo em LaTeX.
+
+Fórmulas inline adjacentes recebem U+2060 (WORD JOINER) entre os delimitadores:
+um separador sem largura que não insere espaço visível nem permite quebra de
+linha, mas impede o Markdown de fundir os dólares. Contagens
+de dólares por prefixo permitem rejeitar conversões em O(1), mantendo a varredura
+linear mesmo quando muitas aberturas reutilizam o mesmo fechamento. Mudanças em
+`normalizeMath`, opções, proteções de links/imagens e props do contêiner atualizam
+a resposta mesmo quando `children` não muda (comparação padrão do `memo`).
+
 **Dependências**: `streamdown`, `lucide-react`, `cn`, `ai`
 
 ### `chat-message`

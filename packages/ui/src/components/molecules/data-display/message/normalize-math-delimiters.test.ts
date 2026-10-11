@@ -48,6 +48,17 @@ Se fossem juros simples (só sobre os R\\$ 1.000), seriam R\\$ 100 por ano, tota
   });
 
   describe("\\( \\) vira $...$", () => {
+    it.each([
+      ["\\(x\\)\\(y\\)", "$x$\u2060$y$"],
+      ["$a$\\(b\\)", "$a$\u2060$b$"],
+      ["\\(a\\)$b$", "$a$\u2060$b$"],
+      ["\\(a\\)\\(b\\)\\(c\\)", "$a$\u2060$b$\u2060$c$"],
+      ["\\(a\\) \\(b\\)", "$a$ $b$"],
+    ])("separa delimitadores adjacentes sem espaço visível: %s", (entrada, saida) => {
+      expect(normalizeMathDelimiters(entrada)).toBe(saida);
+      expect(normalizeMathDelimiters(saida)).toBe(saida);
+    });
+
     it("converte e apara os espaços das pontas", () => {
       expect(normalizeMathDelimiters("Se \\( x^2 \\) cresce")).toBe("Se $x^2$ cresce");
     });
@@ -69,6 +80,21 @@ Se fossem juros simples (só sobre os R\\$ 1.000), seriam R\\$ 100 por ano, tota
   });
 
   describe("moeda não abre fórmula", () => {
+    it.each([
+      "Se $x \\in R$ 5 vezes",
+      "Se $x \\in US$ 5 vezes",
+      "$$\\text{R$ 10 e US$ 20}$$",
+      "$$\n\\text{R$ 10 e US$ 20}\n$$",
+    ])("preserva moeda e fechamento em math existente: %s", (texto) => {
+      expect(normalizeMathDelimiters(texto)).toBe(texto);
+    });
+
+    it("dois valores em negrito não formam uma região de math", () => {
+      expect(normalizeMathDelimiters("**R$ 1.331**. Os juros totais são **R$ 331**")).toBe(
+        "**R\\$ 1.331**. Os juros totais são **R\\$ 331**"
+      );
+    });
+
     it.each([
       ["R$ 1.000,00", "R\\$ 1.000,00"],
       ["R$1.000", "R\\$1.000"],
@@ -101,6 +127,38 @@ Se fossem juros simples (só sobre os R\\$ 1.000), seriam R\\$ 100 por ano, tota
   });
 
   describe("código fica intocado", () => {
+    it("uma cerca mais recuada que o conteúdo da lista não fecha o bloco", () => {
+      const codigo = "- ```latex\n  \\(x\\)\n      ```\n  R$ 10\n  ```";
+      expect(normalizeMathDelimiters(`${codigo}\n\n\\(y\\)`)).toBe(`${codigo}\n\n$y$`);
+    });
+
+    it("o fechamento da lista aceita até três colunas extras", () => {
+      const codigo = "1. ```latex\n   \\(x\\)\n      ```";
+      expect(normalizeMathDelimiters(`${codigo}\n\n\\(y\\)`)).toBe(`${codigo}\n\n$y$`);
+    });
+
+    it("uma cerca com recuo incompatível não fecha o bloco", () => {
+      const codigo = "- ```latex\n  \\(x\\)\n```\n  R$ 10\n  ```";
+      expect(normalizeMathDelimiters(`${codigo}\n\n\\(y\\)`)).toBe(`${codigo}\n\n$y$`);
+    });
+
+    it.each([
+      ["- ```latex", "  "],
+      ["+ ~~~latex", "  "],
+      ["* ```latex", "  "],
+      ["1. ```latex", "   "],
+      ["12) ```latex", "    "],
+      ["  - ```latex", "    "],
+      ["> - ```latex", ">   "],
+      ["- Código:\n\n  ```latex", "  "],
+    ])("reconhece cerca dentro de lista: %s", (abertura, recuo) => {
+      const cerca = abertura.includes("~~~") ? "~~~" : "```";
+      const codigo = `${abertura}\n${recuo}\\(x\\) e R$ 10\n${recuo}${cerca}`;
+      expect(normalizeMathDelimiters(`${codigo}\n\nFora: \\(y\\) e US$ 5`)).toBe(
+        `${codigo}\n\nFora: $y$ e US\\$ 5`
+      );
+    });
+
     it("bloco cercado com ``` e ~~~", () => {
       const texto =
         "```latex\n\\[ x \\]\nR$ 10\n```\n~~~~\n\\(y\\) custa US$ 5\n~~~~\nfora: \\(z\\)";
@@ -163,6 +221,15 @@ Se fossem juros simples (só sobre os R\\$ 1.000), seriam R\\$ 100 por ano, tota
       ];
       const inicio = performance.now();
       for (const caso of casos) normalizeMathDelimiters(caso);
+      expect(performance.now() - inicio).toBeLessThan(1_000);
+    });
+
+    it("aberturas rejeitadas pelo mesmo dólar terminam em tempo linear", () => {
+      const inicio = performance.now();
+      for (const quantidade of [64_000, 512_000]) {
+        const texto = `${"\\(".repeat(quantidade)}$\\)`;
+        expect(normalizeMathDelimiters(texto)).toBe(texto);
+      }
       expect(performance.now() - inicio).toBeLessThan(1_000);
     });
   });

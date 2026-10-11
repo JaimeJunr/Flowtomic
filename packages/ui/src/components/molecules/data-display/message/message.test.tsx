@@ -167,6 +167,59 @@ describe("Message", () => {
   });
 
   describe("fórmulas e moeda", () => {
+    it.each([
+      "\\(x\\)\\(y\\)",
+      "$a$\\(b\\)",
+      "\\(a\\)$b$",
+      "**\\(x\\)\\(y\\)**",
+      "\\[x\\]\\(y\\)",
+    ])("renderiza duas fórmulas adjacentes sem espaço visível: %s", (texto) => {
+      const { container } = render(
+        <MessageResponse parseIncompleteMarkdown={false}>{texto}</MessageResponse>
+      );
+      expect(container.querySelectorAll(".katex")).toHaveLength(2);
+      expect(container.querySelector(".katex-error")).toBeNull();
+      const parent = container.querySelector(".katex")?.parentElement;
+      expect(parent).toBeDefined();
+      expect(
+        Array.from(parent?.childNodes ?? [])
+          .filter((node) => node.nodeType === 3)
+          .map((node) => node.textContent)
+      ).toEqual(["\u2060"]);
+    });
+
+    it("preserva R$ que fecha uma fórmula antes de número", () => {
+      const { container } = render(<MessageResponse>{"Se $x \\in R$ 5 vezes"}</MessageResponse>);
+      expect(container.querySelectorAll(".katex")).toHaveLength(1);
+      expect(container.querySelector(".katex-error")).toBeNull();
+      expect(container.textContent).toContain("5 vezes");
+    });
+
+    it("rerender reage ao normalizeMath com o mesmo children", () => {
+      const texto = "Fórmula: \\(x^2\\)";
+      const { container, rerender } = render(
+        <MessageResponse normalizeMath={false}>{texto}</MessageResponse>
+      );
+      expect(container.querySelectorAll(".katex")).toHaveLength(0);
+      rerender(<MessageResponse normalizeMath>{texto}</MessageResponse>);
+      expect(container.querySelectorAll(".katex")).toHaveLength(1);
+      rerender(<MessageResponse normalizeMath={false}>{texto}</MessageResponse>);
+      expect(container.querySelectorAll(".katex")).toHaveLength(0);
+    });
+
+    it("rerender atualiza className e opções com o mesmo children", () => {
+      const { container, rerender } = render(
+        <MessageResponse className="antes">{"$x$"}</MessageResponse>
+      );
+      rerender(
+        <MessageResponse className="depois" options={{ remarkPlugins: [] }}>
+          {"$x$"}
+        </MessageResponse>
+      );
+      expect(container.querySelector('[data-slot="message-response"]')).toHaveClass("depois");
+      expect(container.querySelectorAll(".katex")).toHaveLength(0);
+    });
+
     // Resposta real do Grok 4.7 que saiu quebrada em produção na Constelação.
     const respostaGrok = `A fórmula é:
 \\[ M = C \\times (1 + i)^t \\]
