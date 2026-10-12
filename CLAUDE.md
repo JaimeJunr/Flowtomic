@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 33 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 36 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -39,7 +39,7 @@ Estrutura básica:
 
 - **Atoms**: `docs/componentes/atoms.md` (154)
 - **Molecules**: `docs/componentes/molecules.md` (91)
-- **Organisms**: `docs/componentes/organisms.md` (33)
+- **Organisms**: `docs/componentes/organisms.md` (36)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
 
@@ -377,7 +377,7 @@ Resumo:
 
 - **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 91 componentes - Ver `docs/componentes/molecules.md`
-- **Organisms**: 33 componentes - Ver `docs/componentes/organisms.md`
+- **Organisms**: 36 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
 
@@ -784,6 +784,14 @@ Cada uma já mordeu alguém neste repo.
   alheia. Quem for trabalhar em paralelo usa worktree própria (`git worktree add ../flowtomic-<x>
   <branch>`, depois `bun install --frozen-lockfile` e `cd packages/logic && bun run build`) e sobe
   o Storybook dela em outra porta.
+
+- ⚠️ **`sr-only` dentro de faixa com `overflow-x-auto` escapa da rolagem e alarga a página.** O
+  `sr-only` é `position: absolute`; sem ancestral posicionado, o recorte da faixa não vale para ele.
+  Na sub-navegação do `site-header` (12/10/2026), o "(abre em nova aba)" do último link ficava em
+  x = 437 num quadro de 390 px e a página rolava para o lado. Ponha `relative` no contêiner que rola.
+- ⚠️ **Rótulo e selo passados como texto puro grudam dentro de um flex.** Dois nós de texto vizinhos
+  viram um item só, e o `gap` não separa: o menu do `site-header` mostrava "OrganismsNovo". Embrulhe
+  cada parte (`<span>{label}</span>` e `<Badge>{badge}</Badge>`).
 
 - ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
   `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em
