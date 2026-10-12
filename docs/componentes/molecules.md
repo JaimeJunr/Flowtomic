@@ -22,6 +22,12 @@ Input de senha com toggle de visibilidade acessível por Tab, Enter e Espaço. O
 
 **Dependências**: `lucide-react`, `cn`
 
+### `code-tabs`
+
+Um mesmo exemplo de código em várias combinações (eixos de abas Radix, uma linha por eixo; eixo `placement: "end"` fica à direita da última linha) com chips de variável (`{{id}}` no código, grupo de rádio) abaixo da moldura. Opções sem exemplo somem e o eixo posterior pula para a primeira opção válida. Reaproveita `CodeBlock`; copiar leva o código já substituído (`onCopy(code)`). Seleção `{ [eixo]: valor }` controlada (`value` + `onValueChange`) ou não (`defaultValue`). Props: `axes`, `snippets`, `variables`, `footerStart`, `footerEnd`, `showLineNumbers`, `minLines`, `highlightChanges`. Spec: `docs/clean-room/sites/code-tabs.md`.
+
+**Dependências**: `motion`, `@radix-ui/react-tabs`, `@radix-ui/react-radio-group`, `cn`
+
 ### `widget-renderer`
 
 Renderiza por `renderWidget(widget, data)` ou por um registry indexado pelo tipo do widget. A render prop tem prioridade, inclusive quando retorna null. Loading explícito e Suspense anunciam “Carregando widget” sem mudar o skeleton visual. Um `fallback` fornecido é respeitado mesmo quando vale `0`, `""`, null ou false; sem fallback, aparece o tipo desconhecido.

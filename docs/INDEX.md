@@ -40,6 +40,7 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 - [Blocks](componentes/blocks.md) - Blocks pré-construídos (4 blocks: dashboard-01, flowtomic-dashboard, developer-panel, chatbot)
 - [Hooks](componentes/hooks.md) - Hooks headless disponíveis (14 hooks)
 - [Specs clean room (React Bits)](clean-room/react-bits/) - Spec de comportamento de cada efeito inspirado no React Bits, escrita só a partir da demo pública; é a fonte da implementação e a prova de proveniência
+- [Estudo de sites de referência](clean-room/sites/README.md) - Padrões de página observados em sites de produto (OpenRouter, Vercel, Cloudflare, Rerun, Perssua e outros), o que falta no Flowtomic e os candidatos a componente; specs por componente ficam na mesma pasta
 
 ### CLI
 

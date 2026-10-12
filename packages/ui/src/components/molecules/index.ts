@@ -36,6 +36,14 @@ export type {
 export { AuthFormErrorMessage, AuthNavigationLink, PasswordInput } from "./auth";
 export type { SocialLoginButtonsProps } from "./auth/social-login-buttons";
 export { SocialLoginButtons } from "./auth/social-login-buttons";
+export type {
+  CodeTabsAxis,
+  CodeTabsOption,
+  CodeTabsProps,
+  CodeTabsSnippet,
+  CodeTabsVariable,
+} from "./code";
+export { CodeTabs } from "./code";
 export type { AnimatedListProps } from "./data-display/animated-list";
 export { AnimatedList } from "./data-display/animated-list";
 export type {

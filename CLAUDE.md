@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 88 molecules, 32 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 89 molecules, 32 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (154)
-- **Molecules**: `docs/componentes/molecules.md` (88)
+- **Molecules**: `docs/componentes/molecules.md` (89)
 - **Organisms**: `docs/componentes/organisms.md` (32)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -376,7 +376,7 @@ errado.
 Resumo:
 
 - **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 88 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 89 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 32 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -764,6 +764,9 @@ Cada uma já mordeu alguém neste repo.
   No `routing-diagram` (12/10/2026) o teste aprovava enquanto o último cartão saía 30 px do quadro
   (a largura medida não descontava o padding) e, em 900 px, a árvore rolava para o lado. Meça no
   Chrome o `getBoundingClientRect().right` dos nós contra o do quadro em 700, 900, 1100 e 1440 px.
+- ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
+  `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em
+  12/10/2026). Para "link externo", use o ícone `ExternalLink` do `lucide-react`.
 
 ## Checklist ao abrir PR
 

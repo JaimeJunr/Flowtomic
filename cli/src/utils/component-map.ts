@@ -627,6 +627,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     ],
     dependencies: ["motion", "cn"],
   },
+  "code-tabs": {
+    name: "code-tabs",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/code/code-tabs",
+    files: ["code-tabs.tsx", "index.ts"],
+    dependencies: ["motion", "@radix-ui/react-tabs", "@radix-ui/react-radio-group", "cn"],
+  },
   "fill-pill-nav": {
     name: "fill-pill-nav",
     type: "molecule",
