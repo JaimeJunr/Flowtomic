@@ -1925,6 +1925,27 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["pricing-table.tsx", "index.ts"],
     dependencies: ["lucide-react", "motion", "@radix-ui/react-toggle-group", "cn"],
   },
+  "announcement-bar": {
+    name: "announcement-bar",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/announcement-bar",
+    files: ["announcement-bar.tsx", "index.ts"],
+    dependencies: ["lucide-react", "motion", "cn"],
+  },
+  "site-header": {
+    name: "site-header",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/site-header",
+    files: ["site-header.tsx", "types.ts", "index.ts"],
+    dependencies: ["lucide-react", "cn"],
+  },
+  "site-footer": {
+    name: "site-footer",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/site-footer",
+    files: ["site-footer.tsx", "index.ts"],
+    dependencies: ["lucide-react", "cn"],
+  },
   "routing-diagram": {
     name: "routing-diagram",
     type: "organism",

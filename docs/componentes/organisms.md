@@ -230,6 +230,64 @@ O destacado (`highlighted`, selo `highlightLabel`) tem borda `primary` e botão 
 **Dependências**: `@radix-ui/react-toggle-group`, `motion`, `lucide-react`, `cn`
 **Clean room**: `docs/clean-room/sites/pricing-table.md`
 
+### `announcement-bar`
+
+Faixa de aviso de largura total, logo abaixo do cabeçalho: ícone (opcional), texto e link
+sublinhado centralizados, com botão de fechar. É um `<aside aria-label="Aviso">` (rótulo na prop
+`label`), sem `role="alert"`: o aviso não é urgente.
+
+- **Fechar:** `dismissible` (padrão `true`). Chama `onDismiss` e esconde a faixa; a altura anima
+  até 0 (~200 ms) e, com movimento reduzido, ela some seca.
+- **Lembrar:** com `storageKey`, o fechamento fica em `localStorage` (tudo em try/catch, storage
+  que falha não quebra) e a faixa não volta.
+- **Controlada:** `open` + `onOpenChange`.
+- **Cor:** `primary` a 8% sobre o fundo, borda a 25% (`color-mix`), só tokens semânticos.
+
+**Dependências**: `lucide-react`, `motion`, `cn`
+**Clean room**: `docs/clean-room/sites/site-chrome.md`
+
+### `site-header`
+
+Cabeçalho de página de produto: logo (link para `logoHref`), navegação principal, slots `search`
+e `social`, ações e sub-navegação opcional. Fixo no topo (`sticky`, padrão `true`). O primeiro foco
+é o link "Pular para o conteúdo" (`skipToContent`, padrão `#conteudo`, `false` remove).
+
+- **Navegação:** `nav` aceita link simples ou grupo (`items`, `columns` 1 ou 2) que abre um painel
+  do `navigation-menu` com título, descrição e ícone. Item `active` ganha `aria-current="page"`;
+  `external` abre em nova aba com ícone e texto "(abre em nova aba)".
+- **Ações:** no máximo uma `variant: "default"` (sólida); duas disparam `console.warn`. `mobile`
+  escolhe quais ficam no cabeçalho estreito (padrão: só a sólida).
+- **Estreito:** abaixo de 1024 px de contêiner (container query, sem medir em JS) some a navegação,
+  a busca vira ícone e entra o botão de menu, que abre um `Sheet` pela direita com a navegação
+  inteira (grupos viram títulos), busca, redes e todas as ações. A prop `layout`
+  (`auto`, `desktop`, `mobile`) força o modo, para teste e para story.
+- **Sub-navegação:** `subnav` (`title` em mono, abas em pílula; no estreito rola na horizontal e a
+  aba ativa aparece).
+- `SiteNavLink`, `SiteNavItem` e `SiteHeaderAction` vivem em `site-header/types.ts` e o
+  `site-footer` reusa `SiteNavLink`.
+
+**Dependências**: `lucide-react`, `cn` (usa os atoms `button`, `sheet` e `navigation-menu`)
+**Clean room**: `docs/clean-room/sites/site-chrome.md`
+
+### `site-footer`
+
+Rodapé de página de produto: coluna de marca (`brand`: logo, frase; `social`), `columns` de links
+(cada uma é uma `<nav aria-labelledby>` com título em `h2`, `headingLevel` 2 a 4), `band` opcional
+depois de uma régua e linha final com `copyright` e `legal`. Link pode ter `badge` (Badge
+`secondary`) e `external` (ícone de saída e texto para leitor de tela).
+
+- **Grade:** container queries. Abaixo de 640 px a marca fica em cima e as colunas em 2 por linha;
+  de 640 a 1024 px, até 4 colunas; de 1024 px em diante, tudo numa linha (marca com 2 frações).
+- **`SiteFooterNewsletter`:** faixa pronta para o `band`: título, frase, campo de e-mail com
+  `<label>` oculto "E-mail", botão sólido e letra miúda. `onSubmit(email)` pode ser assíncrono;
+  estados `idle`, `loading`, `success` e `error` (promessa rejeitada) numa região
+  `aria-live="polite"` ligada ao campo por `aria-describedby`. Mensagens em `successMessage` e
+  `errorMessage`.
+- `contained` (padrão `true`) limita a largura a `max-w-6xl`.
+
+**Dependências**: `lucide-react`, `cn` (usa os atoms `badge`, `button` e `input`; importa o tipo de `site-header`)
+**Clean room**: `docs/clean-room/sites/site-chrome.md`
+
 ### `node`
 
 Componente Node para ReactFlow baseado em Card com handles.

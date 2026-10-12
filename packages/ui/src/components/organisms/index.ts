@@ -3,6 +3,8 @@
  * Atomic Design: Componentes complexos compostos por múltiplas molecules e atoms
  */
 
+export type { AnnouncementBarProps } from "./announcement-bar";
+export { AnnouncementBar } from "./announcement-bar";
 export type {
   ChainOfThoughtContentProps,
   ChainOfThoughtHeaderProps,
@@ -348,6 +350,10 @@ export {
 } from "./routing-diagram";
 export type { ScriptEditorProps } from "./script-editor";
 export { ScriptEditor } from "./script-editor";
+export type { SiteFooterColumn, SiteFooterNewsletterProps, SiteFooterProps } from "./site-footer";
+export { SiteFooter, SiteFooterNewsletter } from "./site-footer";
+export type { SiteHeaderAction, SiteHeaderProps, SiteNavItem, SiteNavLink } from "./site-header";
+export { SiteHeader } from "./site-header";
 export type { StatItem, StatsGridProps } from "./stats-grid";
 export { StatsGrid } from "./stats-grid";
 export type { ToolbarProps } from "./toolbar";
