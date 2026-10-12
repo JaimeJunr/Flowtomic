@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 90 molecules, 33 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 33 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (154)
-- **Molecules**: `docs/componentes/molecules.md` (90)
+- **Molecules**: `docs/componentes/molecules.md` (91)
 - **Organisms**: `docs/componentes/organisms.md` (33)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -376,7 +376,7 @@ errado.
 Resumo:
 
 - **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 90 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 91 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 33 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -769,6 +769,13 @@ Cada uma já mordeu alguém neste repo.
   `getComputedStyle`; `text-xl` e `text-3xl` funcionam). O preço da `pricing-table` saiu do tamanho
   do texto até trocar por `text-3xl`. Para tamanho grande, use a escala padrão (`text-2xl`…`text-5xl`)
   e meça o `fontSize` no browser.
+
+- ⚠️ **Duas sessões no mesmo checkout trocam a branch uma da outra.** Em 12/10/2026 uma tarefa
+  paralela fez `git checkout -b` no checkout principal enquanto outra sessão trabalhava nele: um
+  commit de spec caiu na branch errada e um agente implementou o componente em cima da branch
+  alheia. Quem for trabalhar em paralelo usa worktree própria (`git worktree add ../flowtomic-<x>
+  <branch>`, depois `bun install --frozen-lockfile` e `cd packages/logic && bun run build`) e sobe
+  o Storybook dela em outra porta.
 
 - ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
   `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em
