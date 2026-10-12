@@ -250,6 +250,22 @@ Canvas de genealogia para visualização de hierarquias e relacionamentos.
 
 **Localização**: `packages/ui/src/components/organisms/genealogy-canvas`
 
+### `routing-diagram`
+
+Ilustra uma regra de roteamento sem texto: um pedido sai da origem, passa por decisões ("O provedor caiu?") e chega a um destino. Cada aba é um cenário com a mesma estrutura e outro critério; o caminho escolhido (`activePath`, lista de ids) acende e se desenha da origem ao destino, com um ponto de pulso opcional. É ilustração, não editor: sem arrastar nem zoom (o editor de fluxo é `canvas`/`node`/`edge`). Não usa React Flow; o layout é uma função pura (`computeLayout`) que calcula posições a partir da árvore, na horizontal ou, abaixo de 640 px, na vertical.
+
+- Árvore de qualquer profundidade: `RoutingDecision` (`branches`) e `RoutingTarget` (com `fallback` para a cadeia horizontal de reserva, `status: "down"` para destino desviado).
+- `tone="brand"` pinta o caminho ativo com `--primary`; padrão `neutral` usa `--foreground`.
+- Props: `scenarios`, `value`/`defaultValue`/`onValueChange`, `source`, `sourceLabel`, `tone`, `pulse` (padrão `true`), `autoPlay` (padrão `false`; pausa no hover/foco e para após clique em aba), `ariaLabel`, `renderDescription`.
+- Descrição do cenário: por padrão um bloco abaixo do diagrama. Para posicioná-la em outro lugar, envolva tudo em `RoutingDiagramProvider`, ponha `RoutingDiagramDescription` onde quiser e passe `renderDescription={() => null}` ao diagrama para não duplicar. Dentro do provider, `scenarios`/`value` do diagrama são ignorados.
+- Movimento reduzido: sem desenho progressivo, sem pulso e sem `autoPlay`.
+- `activePath` com id inexistente não quebra: nada fica ativo e há um `console.warn` em dev. Os ids da árvore precisam ser únicos dentro do cenário.
+- Conteúdo dos nós é neutro: sem marcas nem logos de terceiros.
+
+**Dependências**: `@radix-ui/react-tabs`, `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/organisms/routing-diagram`
+
 ## 🚀 Instalação
 
 ```bash

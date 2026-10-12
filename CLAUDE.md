@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 89 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 90 molecules, 33 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,8 +38,8 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (154)
-- **Molecules**: `docs/componentes/molecules.md` (89)
-- **Organisms**: `docs/componentes/organisms.md` (31)
+- **Molecules**: `docs/componentes/molecules.md` (90)
+- **Organisms**: `docs/componentes/organisms.md` (33)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
 
@@ -376,8 +376,8 @@ errado.
 Resumo:
 
 - **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 89 componentes - Ver `docs/componentes/molecules.md`
-- **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
+- **Molecules**: 90 componentes - Ver `docs/componentes/molecules.md`
+- **Organisms**: 33 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
 
@@ -759,6 +759,16 @@ Cada uma já mordeu alguém neste repo.
   tangente à base e passando pelos cantos de cima deixa duas meias-luas claras nos cantos de baixo
   (medido em 11/10/2026 no `fill-pill-nav`). Centre o círculo no botão com `hypot(w, h)` de
   diâmetro e ponha a origem do `scale` no ponto da base. O jsdom não acusa; amplie o screenshot.
+
+- ⚠️ **Componente que posiciona nós em JS (diagrama, árvore) passa no jsdom e estoura no browser.**
+  No `routing-diagram` (12/10/2026) o teste aprovava enquanto o último cartão saía 30 px do quadro
+  (a largura medida não descontava o padding) e, em 900 px, a árvore rolava para o lado. Meça no
+  Chrome o `getBoundingClientRect().right` dos nós contra o do quadro em 700, 900, 1100 e 1440 px.
+- ⚠️ **`text-display-xs` … `text-display-lg` não geram CSS no Storybook.** Os tokens existem no
+  `theme.css`, mas o elemento com a classe sai com 16 px, sem erro (medido em 12/10/2026 com
+  `getComputedStyle`; `text-xl` e `text-3xl` funcionam). O preço da `pricing-table` saiu do tamanho
+  do texto até trocar por `text-3xl`. Para tamanho grande, use a escala padrão (`text-2xl`…`text-5xl`)
+  e meça o `fontSize` no browser.
 
 - ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
   `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em

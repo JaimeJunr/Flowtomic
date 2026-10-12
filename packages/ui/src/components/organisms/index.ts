@@ -332,6 +332,20 @@ export type {
   ResizableSplitProps,
 } from "./resizable-layout";
 export { ResizableLayout, ResizableSplit } from "./resizable-layout";
+export type {
+  RoutingDecision,
+  RoutingDiagramProps,
+  RoutingDiagramProviderProps,
+  RoutingNode,
+  RoutingScenario,
+  RoutingTarget,
+} from "./routing-diagram";
+export {
+  computeLayout as computeRoutingLayout,
+  RoutingDiagram,
+  RoutingDiagramDescription,
+  RoutingDiagramProvider,
+} from "./routing-diagram";
 export type { ScriptEditorProps } from "./script-editor";
 export { ScriptEditor } from "./script-editor";
 export type { StatItem, StatsGridProps } from "./stats-grid";
