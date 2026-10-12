@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (150 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (150)
+- **Atoms**: `docs/componentes/atoms.md` (154)
 - **Molecules**: `docs/componentes/molecules.md` (88)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -375,7 +375,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 150 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 88 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
@@ -746,9 +746,11 @@ Cada uma já mordeu alguém neste repo.
   `normalize-math-delimiters` tinham limite fixo (1000 e 2000 ms) e falhavam na suíte inteira com
   cobertura (1023, 3466 e 3600 ms em 11/10/2026), passando isolados. Desde 12/10/2026 eles usam
   `esperaLinear` (no próprio arquivo de teste): calibram `n` até a entrada levar ~10 ms, medem `n` e
-  `4n` alternados, ficam com o melhor de 5 rodadas e exigem razão < 9 (linear dá ~4x, quadrático
-  ~16x). Desligando os caches de `findCloser` e `titleEnd`, 5 casos reprovam com 14x a 16x. Para
-  guardar outra função contra regressão quadrática, reuse o medidor em vez de pôr limite em ms.
+  `8n` alternados, ficam com o melhor de 5 rodadas e exigem razão < 24 (linear dá ~8x, quadrático
+  ~64x). ⚠️ A primeira versão usava `4n` e teto 9, e o linear deu 9,1 a 9,9 na CI com cobertura
+  (12/10/2026): com fator 4 a folga era pequena demais para o GC da entrada grande. Desligando o
+  cache do `findCloser`, 3 casos reprovam com 61x a 64x. Para guardar outra função contra regressão
+  quadrática, reuse o medidor em vez de pôr limite em ms.
 - ⚠️ **O Playwright desta máquina não tem browser baixado** (`Executable doesn't exist ...
   chrome-headless-shell`, medido em 11/10/2026). Nos scripts de medição, use o Chrome do sistema:
   `chromium.launch({ executablePath: "/usr/bin/google-chrome-stable" })`.

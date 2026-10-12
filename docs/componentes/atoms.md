@@ -943,6 +943,38 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 ### Background
 
+#### `radar-sweep`
+
+Tela de radar com feixe giratório, rastro, contatos e modo sonar. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/radar-sweep`
+
+#### `elevation-map`
+
+Mapa topográfico vivo com curvas de nível que se transformam e um morro no ponteiro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/elevation-map`
+
+#### `fiber-tunnel`
+
+Túnel de fibras ópticas com pulsos de luz correndo do centro para as bordas. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/fiber-tunnel`
+
+#### `neon-bends`
+
+Faixas grossas de luz neon que se dobram devagar, com paleta de até quatro tokens. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/neon-bends`
+
 #### `spectral-burst`
 
 Explosão de raios de luz saindo de um centro escuro, girando devagar. Clean room (spec)
