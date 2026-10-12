@@ -771,7 +771,12 @@ Cada uma já mordeu alguém neste repo.
   16 px, sem erro (medido em 12/10/2026). Desde então o `globals.css` faz `@import "./theme.css"`
   (48 px no `text-display-lg`, medido no Chrome), e o `flowtomic-cli` copia o `theme.css` junto
   quando pedem só `globals`. Não tire esse import; o `theme-tokens.test.ts` compila o `globals.css`
-  com o `@tailwindcss/node` e reprova se `text-display-*` não gerar regra.
+  com o `compile` do `tailwindcss` e reprova se `text-display-*` não gerar regra.
+- ⚠️ **Import de dependência transitiva passa aqui e quebra na CI.** O `node_modules` desta máquina
+  é hoisted; a CI instala com o linker isolado do bun (`node_modules/.bun/...`) e só expõe ao
+  pacote o que está no `package.json` dele ou da raiz. Um teste do `ui` com `import("@tailwindcss/node")`
+  (transitivo do `@tailwindcss/postcss`) passou local e deu `Failed to resolve import` na CI
+  (12/10/2026). Antes de importar pacote em teste, confira se ele é dependência direta.
 
 - ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
   `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em
