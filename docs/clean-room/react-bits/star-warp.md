@@ -40,7 +40,8 @@ type StarWarpProps = React.ComponentProps<"div"> & {
 3. **Estrela por célula.** `q = p·s + i·17.3`; `cell = floor(q)`; `local = fract(q) − 0.5`;
    `h = hash2(cell)`; posição `offset = (h − 0.5)·0.7`; `d = length(local − offset)`; só se
    `hash(cell + 3.1) < 0.35·density` existe estrela. Tamanho `0.03·starSize·mix(0.5, 1.5, hash)`;
-   luz `0.02·starSize/ d` limitada.
+   luz `0.02·starSize/ d` limitada, cortada por `1 − smoothstep(2·tamanho, 6·tamanho, d)`
+   (revisado em 11/10/2026: a cauda longa chegava à borda da célula e desenhava quadrados).
 4. **Cruz.** Nas estrelas com `hash > 0.85`: `max(0, 1 − abs(local.x·local.y)·800)·flare·0.3`.
 5. **Cintilar.** `·(1 − twinkle + twinkle·(0.5 + 0.5·sin(t·3 + hash·50)))`.
 6. **Cor.** Uma das cores da lista por `floor(hash·n)`.

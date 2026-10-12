@@ -36,7 +36,9 @@ type GlowOrbProps = React.ComponentProps<"div"> & {
 2. **Respiração.** Raio do anel `R = 1.0 + wobble·(0.04·sin(t·1.3) + 0.03·sin(a·3.0 + t·0.9))`.
    Com ponteiro dentro, `R += 0.15·max(0, cos(a − aPonteiro))²·forçaPonteiro`.
 3. **Anel.** `d = abs(r − R)`; núcleo `exp(−d·40.0)`; brilho `exp(−d·(6.0/max(glow, 0.05)))·0.6`;
-   brilho interno `exp(−max(R − r, 0)·3.0)·0.25·glow`.
+   brilho interno `step(r, R)·exp(−(R − r)·3.0)·0.25·glow`
+   (só dentro do anel; revisado em 11/10/2026: sem o `step`, fora do anel ele valia 0,25 e
+   pintava a área inteira).
 4. **Cor do anel.** `mix(c1, c2, 0.5 + 0.5·sin(a + t·0.7))`; o brilho interno usa `c3`.
 5. **Luz que orbita.** Ângulo `ao = t·1.1` (com ponteiro, puxado para `aPonteiro`); diferença
    angular `da = mod(a − ao + π, 2π) − π`; cabeça `exp(−da²·60.0)`; cauda
