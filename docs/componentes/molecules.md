@@ -34,6 +34,12 @@ Recursos (linhas) por opções (colunas), com uma coluna em destaque (faixa cont
 
 **Dependências**: `lucide-react`, `@radix-ui/react-tooltip`, `@radix-ui/react-tabs`, `cn`
 
+### `status-list`
+
+Estado atual de vários itens (integrações, serviços, regiões) numa lista que se lê de longe. Cada linha-cartão mostra número em mono (`numbered`), ícone opcional, nome, ponto de estado, "Atualizado há 16 horas" (`Intl.RelativeTimeFormat`, some abaixo de 640 px de contêiner) e selo com texto (`operational`, `degraded`, `outage`, `maintenance`; `statusLabel` sobrescreve). Linhas com `history` ou `content` abrem pelo Accordion: barras de histórico (uma por ponto, tooltip só de ponteiro, entrada em cascata que respeita movimento reduzido), disponibilidade calculada sobre pontos com dado ("98,9% disponível") e conteúdo livre. Linha sem detalhe não é botão. Props: `items`, `numbered`, `multiple` (padrão `true`), `value`/`defaultValue`/`onValueChange` (lista de ids), `locale` (padrão `pt-BR`), `now` (para teste determinístico). Spec: `docs/clean-room/sites/status-list.md`.
+
+**Dependências**: `lucide-react`, `motion`, `@radix-ui/react-accordion`, `@radix-ui/react-tooltip`, `cn`
+
 ### `widget-renderer`
 
 Renderiza por `renderWidget(widget, data)` ou por um registry indexado pelo tipo do widget. A render prop tem prioridade, inclusive quando retorna null. Loading explícito e Suspense anunciam “Carregando widget” sem mudar o skeleton visual. Um `fallback` fornecido é respeitado mesmo quando vale `0`, `""`, null ou false; sem fallback, aparece o tipo desconhecido.
