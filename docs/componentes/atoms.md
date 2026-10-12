@@ -943,6 +943,38 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 ### Background
 
+#### `liquid-metal`
+
+Fundo WebGL de metal líquido com reflexos e ondas que saem do ponteiro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/liquid-metal`
+
+#### `swirl-paint`
+
+Fundo WebGL de tinta de três cores girando em redemoinho, com leve pixelização. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/swirl-paint`
+
+#### `grain-gradient`
+
+Fundo WebGL de degradê de três cores com manchas que escorrem e grão de filme. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/grain-gradient`
+
+#### `velvet-veil`
+
+Fundo WebGL de véu de luz macia que flutua no escuro e se enrola perto do ponteiro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/velvet-veil`
+
 #### `satin-plasma`
 
 Fundo WebGL de plasma acetinado com linhas que se torcem. Clean room (spec)

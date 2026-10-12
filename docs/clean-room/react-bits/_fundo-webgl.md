@@ -10,8 +10,11 @@ aprovado em 11/10/2026): copie a estrutura dele, não a matemática.
    `<canvas>` `absolute inset-0 size-full` `aria-hidden` (via `useWebglCanvas` de `@/lib/webgl`);
    fallback CSS `absolute inset-0` `aria-hidden` visível só sem WebGL; `children` em `relative z-10`.
 3. **Cores só por token.** Props de cor recebem nomes de variável CSS (`"--primary"`), lidos com
-   `readThemeColor(token, raiz)` ao montar e quando o tema muda (`MutationObserver` em
-   `document.documentElement`: `class`, `style`, `data-theme`). Token sem valor cai em
+   `readThemeColor(token, canvas)` ao montar e quando o tema muda (`MutationObserver` em
+   `document.documentElement`: `class`, `style`, `data-theme`). Ler do próprio canvas faz um
+   `dark` local valer; sem o elemento, a leitura vem do `<html>` (revisado em 11/10/2026, depois do
+   `light-beams` sair vazio numa seção escura). Depois de reler, chame `redraw()` do
+   `useWebglCanvas`, senão um fundo parado mantém a cor velha. Token sem valor cai em
    `--foreground`. Token que não começa com `--` lança erro com o valor recebido.
 4. **Uniforms.** `uTime` e `uResolution` vêm do renderer. O resto vai pela função `uniforms`, que
    lê as props de um ref (o objeto de opções do `useWebglCanvas` é memorizado; mudar prop não
