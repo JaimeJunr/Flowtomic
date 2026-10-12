@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 import { normalizeMathDelimiters } from "./normalize-math-delimiters";
 
 // Guarda de complexidade que não depende da carga da máquina: mede quanto o tempo
-// cresce quando a entrada fica 4x maior. Linear dá ~4x; quadrático, ~16x. Limite de
+// cresce quando a entrada fica 8x maior. Linear dá ~8x; quadrático, ~64x. Limite de
 // 1 s de relógio de parede falhava na suíte inteira com cobertura (1023 ms, 3600 ms).
-const FATOR = 4;
-const RAZAO_MAXIMA = 9;
+// Com fator 4 e teto 9, o linear chegou a 9,1–9,9 na CI com cobertura (12/10/2026):
+// o GC da entrada grande pesa mais que o dobro. Fator 8 deixa ~3x de folga dos dois lados.
+const FATOR = 8;
+const RAZAO_MAXIMA = 24;
 
 function menorTempo(executar: () => void): number {
   const inicio = performance.now();

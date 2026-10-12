@@ -746,9 +746,11 @@ Cada uma já mordeu alguém neste repo.
   `normalize-math-delimiters` tinham limite fixo (1000 e 2000 ms) e falhavam na suíte inteira com
   cobertura (1023, 3466 e 3600 ms em 11/10/2026), passando isolados. Desde 12/10/2026 eles usam
   `esperaLinear` (no próprio arquivo de teste): calibram `n` até a entrada levar ~10 ms, medem `n` e
-  `4n` alternados, ficam com o melhor de 5 rodadas e exigem razão < 9 (linear dá ~4x, quadrático
-  ~16x). Desligando os caches de `findCloser` e `titleEnd`, 5 casos reprovam com 14x a 16x. Para
-  guardar outra função contra regressão quadrática, reuse o medidor em vez de pôr limite em ms.
+  `8n` alternados, ficam com o melhor de 5 rodadas e exigem razão < 24 (linear dá ~8x, quadrático
+  ~64x). ⚠️ A primeira versão usava `4n` e teto 9, e o linear deu 9,1 a 9,9 na CI com cobertura
+  (12/10/2026): com fator 4 a folga era pequena demais para o GC da entrada grande. Desligando o
+  cache do `findCloser`, 3 casos reprovam com 61x a 64x. Para guardar outra função contra regressão
+  quadrática, reuse o medidor em vez de pôr limite em ms.
 - ⚠️ **O Playwright desta máquina não tem browser baixado** (`Executable doesn't exist ...
   chrome-headless-shell`, medido em 11/10/2026). Nos scripts de medição, use o Chrome do sistema:
   `chromium.launch({ executablePath: "/usr/bin/google-chrome-stable" })`.
