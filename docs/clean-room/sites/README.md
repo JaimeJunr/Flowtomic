@@ -9,7 +9,7 @@ padrão de interação e de composição, reescrito do zero a partir de uma spec
 ## O que falta no Flowtomic
 
 O Flowtomic tem efeito de sobra (213 do React Bits em andamento) e quase nenhuma **seção de
-página**. Os 10 sites (9 da primeira leva e o Cluely) são, todos, páginas de produto. As peças que eles repetem e o Flowtomic não
+página**. Os 11 sites (9 da primeira leva, o Cluely e o Final Round AI) são, todos, páginas de produto. As peças que eles repetem e o Flowtomic não
 tem:
 
 | peça | onde aparece | o Flowtomic tem? |
@@ -198,6 +198,38 @@ vidro. Pergunta da tela: "uma IA que ajuda durante a reunião, não depois?".
 O que não copiar: o rótulo em caixa alta espaçada acima da linha de ferramentas, o glifo `⌘` e
 o argumento de ser "indetectável" (é posicionamento deles, não padrão de interface).
 
+### Final Round AI (finalroundai.com)
+
+Vista em 12/10/2026, em 1440 e 390 px, com o modal promocional fechado em "Maybe later" (ele volta
+a cada rolagem). Claro, um laranja só como cor de marca, títulos grandes em sans.
+
+- **Recursos em abas verticais**: à esquerda uma lista de 5 nomes com régua vertical, o ativo com
+  barra de cor na borda esquerda e texto escuro; à direita, título de duas linhas, parágrafo, 3
+  itens com seta pequena na cor da marca e um link "Saiba mais sobre <recurso>". Troca o conteúdo
+  sem trocar a altura da seção. Cabe em qualquer página de produto.
+- **Como funciona em 3 passos com mini-mock**: cada passo tem um quadro com um pedaço de UI
+  (checklist com 2 itens marcados e 1 pendente; resposta sugerida com cursor; relatório com nota
+  "82" e um gráfico de radar), depois `01`, título e frase. Uma régua fina embaixo liga os 3, com
+  a legenda "cada rodada alimenta a próxima, clique num passo".
+- **"O que eles veem / o que você vê"**: dois quadros lado a lado, o primeiro vazio, o segundo com
+  o cartão de resposta. Compara perspectivas sem texto.
+- **Grade de casos de uso**: 12 ladrilhos em 4 colunas, cada um com ícone num quadrado tingido,
+  nome e seta à direita. Navegação densa, sem descrição.
+- **Depoimentos em 3 colunas masonry misturando texto e vídeo**: cartão de texto (avatar, nome,
+  estrelas, data, título, corpo) e cartão de vídeo (foto, nome e cargo sobrepostos, botão de play
+  redondo no canto). No pé da seção, uma **pílula flutuante escura** com pilha de avatares, "+10
+  milhões de pessoas usam" e "Ver mais".
+- **Números do hero em linha** abaixo dos botões, com o número na cor da marca e o rótulo em
+  `muted`, separados por espaço, sem card. Mais abaixo, a mesma ideia em 3 colunas com régua.
+- **Preços com o plano pago em cartão escuro** ao lado do grátis claro, e o desconto ("economize
+  até 40%") como selo **dentro** do botão.
+- **Seção escura de destaque** no meio da página clara, com um brilho radial da cor da marca
+  atrás do título.
+
+O que não copiar: o rótulo laranja em caixa alta acima de todo título ("FEATURES", "USE CASES"),
+o modal de oferta que interrompe a leitura a cada tela, "#1" e "™" como argumento, e os selos de
+certificação de terceiros.
+
 ## Padrões transversais
 
 1. **Mostrar, não descrever.** Os melhores (Vercel, Perssua, Cloudflare) explicam o produto com
@@ -263,3 +295,11 @@ Por valor para quem usa a lib, do maior ao menor:
     (Cluely).
 17. **`floating-cta`** (molecule, Cluely): botão fixo que aparece quando o hero sai da tela.
 18. **`glass-keycap`** (efeito, Cluely): tecla 3D de vidro flutuando, decorativa, sem glifo `⌘`.
+19. **`feature-tabs`** (organism, Final Round): abas verticais com régua, conteúdo de título,
+    parágrafo, itens com seta e link; altura estável na troca.
+20. **`process-steps`** (molecule, Final Round, OpenRouter): 3 a 4 passos numerados com mini-mock
+    em cima e régua de ligação clicável embaixo.
+21. **`link-tile-grid`** (molecule, Final Round): ladrilhos de ícone tingido + nome + seta, em
+    grade densa.
+22. **`testimonial-wall`** ganha o cartão de vídeo (foto, nome sobreposto, play) e a pílula de
+    prova social com pilha de avatares (Final Round).
