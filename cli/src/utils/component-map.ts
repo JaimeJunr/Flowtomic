@@ -1172,6 +1172,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["code-block.tsx", "index.ts"],
     dependencies: ["shiki", "lucide-react", "cn"],
   },
+  "env-diff": {
+    name: "env-diff",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/code/env-diff",
+    files: ["env-diff.tsx", "index.ts"],
+    dependencies: ["lucide-react", "motion", "cn"],
+  },
   snippet: {
     name: "snippet",
     type: "atom",
