@@ -116,7 +116,7 @@ function FaqContactBox({
             {contact.copy.label && (
               <p className="text-xs text-muted-foreground">{contact.copy.label}</p>
             )}
-            <p className="truncate font-mono text-sm text-foreground">{contact.copy.value}</p>
+            <p className="break-all font-mono text-sm text-foreground">{contact.copy.value}</p>
           </div>
           <Button
             type="button"
@@ -427,7 +427,7 @@ function FaqSection({
     >
       <div className="mx-auto max-w-6xl">
         {isSplit ? (
-          <div className="grid gap-12 @min-[768px]:grid-cols-12">
+          <div className="grid grid-cols-1 gap-12 @min-[768px]:grid-cols-12">
             <div className="@min-[768px]:col-span-5">{header}</div>
             <div className="@min-[768px]:col-span-7" data-slot="faq-section-list">
               {search}
@@ -443,7 +443,7 @@ function FaqSection({
           </div>
         ) : (
           <div className="flex flex-col gap-10">
-            <div className="grid items-start gap-8 @min-[768px]:grid-cols-2">
+            <div className="grid grid-cols-1 items-start gap-8 @min-[768px]:grid-cols-2">
               {header}
               {contactBox}
             </div>
@@ -451,7 +451,7 @@ function FaqSection({
               {search}
               {empty}
               {visible.length > 0 && (
-                <div className="grid items-start gap-4 @min-[768px]:grid-cols-2">
+                <div className="grid grid-cols-1 items-start gap-4 @min-[768px]:grid-cols-2">
                   {[left, right].map((column, i) =>
                     column.length > 0 ? (
                       <FaqList
