@@ -9,7 +9,7 @@ padrão de interação e de composição, reescrito do zero a partir de uma spec
 ## O que falta no Flowtomic
 
 O Flowtomic tem efeito de sobra (213 do React Bits em andamento) e quase nenhuma **seção de
-página**. Os 9 sites são, todos, páginas de produto. As peças que eles repetem e o Flowtomic não
+página**. Os 10 sites (9 da primeira leva e o Cluely) são, todos, páginas de produto. As peças que eles repetem e o Flowtomic não
 tem:
 
 | peça | onde aparece | o Flowtomic tem? |
@@ -168,6 +168,36 @@ O oposto das outras: **zero componente, só foto e tipografia**.
 - Lição: quando a imagem é boa, a interface some. Serve de referência para um block "seção
   editorial em tela cheia".
 
+### Cluely (cluely.com)
+
+Vista em 12/10/2026, em 1440 e 390 px. Claro, céu e luz em gradiente atrás de uma UI escura de
+vidro. Pergunta da tela: "uma IA que ajuda durante a reunião, não depois?".
+
+- **Painel flutuante de assistente** sobre a janela da reunião: vidro escuro translúcido,
+  `rounded-2xl`, e acima dele uma **pílula de controle** separada (marca, "Ocultar", parar). Dentro:
+  a pergunta da pessoa como balão à direita, a resposta como citação, uma **fileira de ações
+  rápidas** em texto com ícone separadas por ponto ("Ajudar · O que eu digo? · Perguntas de
+  seguimento · Resumo") e um campo "Pergunte sobre a tela ou a conversa" com atalho em `kbd` e
+  botão de enviar redondo. É o `live-transcript` visto do lado de quem pede ajuda.
+- **Título em dois tons**: a primeira parte em `foreground`, o fim em `muted-foreground`
+  ("Notas de reunião **instantâneas**", "Indetectável **de todo jeito**"). Hierarquia sem peso nem
+  cor de marca.
+- **Pílula dentro da frase**: um verbo do título vira chip com ícone ("Cluely [ouve] a conversa").
+  Mesmo recurso da Vercel, aqui em texto corrido.
+- **Cartões de recurso com demo viva** dentro: onda de áudio + cronômetro "00:01 Gravando" no
+  cartão azul; o painel do assistente reduzido no cartão claro. O cartão mostra o estado.
+- **Números ao lado de uma imagem**, em lista com régua: número grande com a **unidade menor e
+  alinhada à base** ("300ms", "12+", "95%"), título e uma frase. É o `metric-strip` em coluna.
+- **Documento de notas encenado**: título da reunião, abas Resumo/Transcrição/Uso, itens de ação
+  em lista, e no pé uma barra "Retomar sessão" + "Pergunte sobre esta reunião".
+- **Botão de download flutuante** fixo no canto superior direito depois que o hero sai da tela.
+- **Linha de compatibilidade** com ícone + nome de cada ferramenta, sem logo gigante.
+- **CTA final** com teclas 3D de vidro (Enter, Command) flutuando, decorativas, e o título em dois
+  tons. No rodapé, um selo "Todos os sistemas operacionais" com ponto verde.
+
+O que não copiar: o rótulo em caixa alta espaçada acima da linha de ferramentas, o glifo `⌘` e
+o argumento de ser "indetectável" (é posicionamento deles, não padrão de interface).
+
 ## Padrões transversais
 
 1. **Mostrar, não descrever.** Os melhores (Vercel, Perssua, Cloudflare) explicam o produto com
@@ -225,3 +255,11 @@ Por valor para quem usa a lib, do maior ao menor:
 11. **`metric-strip`** (molecule): 3–4 números grandes com rótulo, sem card.
 12. **`day-timeline`** (molecule): linha do tempo arrastável com momentos.
 13. Block **`product-landing`**: a página inteira montada com as peças acima, como prova.
+14. **`assistant-overlay`** (organism, Cluely): painel de vidro com pílula de controle, balão de
+    pergunta, resposta, ações rápidas separadas por ponto e campo com atalho.
+15. **`two-tone-heading`** (atom, Cluely): título com a parte final em `muted-foreground` e chip
+    inline opcional dentro da frase.
+16. **`metric-strip`** ganha a variante em coluna ao lado de mídia, com unidade menor na base
+    (Cluely).
+17. **`floating-cta`** (molecule, Cluely): botão fixo que aparece quando o hero sai da tela.
+18. **`glass-keycap`** (efeito, Cluely): tecla 3D de vidro flutuando, decorativa, sem glifo `⌘`.
