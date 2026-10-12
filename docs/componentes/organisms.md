@@ -293,6 +293,32 @@ esquerda). Corte em 768 px de contêiner (container queries); abaixo disso, uma 
 **Dependências**: `@radix-ui/react-accordion`, `lucide-react`, `cn` (usa os atoms `accordion`, `button` e `input`)
 **Clean room**: `docs/clean-room/sites/faq-section.md`
 
+### `live-transcript`
+
+Painel de transcrição ao vivo em três faixas separadas por `border-t`: conversa (`role="log"`),
+medidores de áudio e controles, mais um cabeçalho com `title`, estado (`status`: `live`,
+`paused`, `stopped`, `connecting`; sempre em texto) e `elapsed` em `mm:ss` ou `h:mm:ss`.
+
+- **Falas:** `entries` (`id`, `speaker`, `side` `them`/`me`, `text`, `time`, `partial`,
+  `annotation`). Fala de terceiros em itálico, `muted-foreground`, com aspas tipográficas
+  inseridas por CSS. `annotation` é o bloco tingido com a cor da marca (tradução, sugestão de
+  resposta), com `action` opcional. `partial` mostra cursor piscando, `aria-busy` e esconde o
+  texto parcial do leitor de tela até virar final. Texto `text-lg` a partir de 640 px de contêiner.
+- **Rolagem:** a menos de 48 px do fim, fala nova rola sozinha (`autoScroll`); se a pessoa
+  subiu, aparece o botão "N falas novas". Sem `smooth` com movimento reduzido. `maxHeight`
+  (padrão `28rem`) e `emptyState` para lista vazia.
+- **Medidores:** `meters` (`label`, `level` de 0 a 1, preso nos limites, `language`), cada barra
+  com `role="meter"`; "Ocultar"/"Mostrar" com `metersCollapsible` e `defaultMetersOpen`.
+- **Controles:** `onPause`/`onResume`/`onStop` (ocultos sem o callback, desabilitados em
+  `stopped`), seletor `languages`/`language`/`onLanguageChange` e um `primaryAction` sólido com
+  `shortcut` em `Kbd` e `aria-keyshortcuts`. O componente não registra atalho global. Abaixo de
+  480 px de contêiner o botão principal ocupa a linha inteira.
+- **Acessibilidade:** `<section aria-labelledby>` (ou `aria-label` "Transcrição ao vivo" sem
+  título); `aria-live="polite"` com `aria-relevant="additions"`.
+
+**Dependências**: `lucide-react`, `@radix-ui/react-select`, `cn` (usa os atoms `button`, `badge`, `kbd` e `select`)
+**Clean room**: `docs/clean-room/sites/live-transcript.md`
+
 ### `site-footer`
 
 Rodapé de página de produto: coluna de marca (`brand`: logo, frase; `social`), `columns` de links

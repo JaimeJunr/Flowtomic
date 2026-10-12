@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 37 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 38 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -39,7 +39,7 @@ Estrutura básica:
 
 - **Atoms**: `docs/componentes/atoms.md` (154)
 - **Molecules**: `docs/componentes/molecules.md` (91)
-- **Organisms**: `docs/componentes/organisms.md` (37)
+- **Organisms**: `docs/componentes/organisms.md` (38)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
 
@@ -377,7 +377,7 @@ Resumo:
 
 - **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 91 componentes - Ver `docs/componentes/molecules.md`
-- **Organisms**: 37 componentes - Ver `docs/componentes/organisms.md`
+- **Organisms**: 38 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
 
