@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (142 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (146 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (142)
+- **Atoms**: `docs/componentes/atoms.md` (146)
 - **Molecules**: `docs/componentes/molecules.md` (88)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -375,7 +375,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 142 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 146 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 88 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
@@ -737,9 +737,10 @@ Cada uma já mordeu alguém neste repo.
   `--foreground` escuro sobre fundo escuro: canvas "vazio", sem erro (medido em 11/10/2026). Passe o
   próprio canvas como segundo argumento, e chame `redraw()` (do `useWebglCanvas`) depois de reler a
   cor, senão um fundo parado (`speed` 0) mantém a cor velha.
-- ⚠️ **O teste "terminam em tempo linear" do `normalize-math-delimiters` mede relógio de parede**
-  (limite de 1000 ms) e pode falhar na suíte inteira com a máquina carregada: 1027 ms em
-  11/10/2026, e passou 3 de 3 rodado sozinho. Antes de investigar, rode o arquivo isolado.
+- ⚠️ **Os testes "tempo linear" do `normalize-math-delimiters` medem relógio de parede** (limites
+  de 1000 e 2000 ms) e falham na suíte inteira com a máquina carregada: em 11/10/2026, 3 falharam
+  (1023 ms, 3466 ms e 3600 ms), e o arquivo isolado passou 93 de 93. Antes de investigar, rode o
+  arquivo sozinho.
 - ⚠️ **O Playwright desta máquina não tem browser baixado** (`Executable doesn't exist ...
   chrome-headless-shell`, medido em 11/10/2026). Nos scripts de medição, use o Chrome do sistema:
   `chromium.launch({ executablePath: "/usr/bin/google-chrome-stable" })`.

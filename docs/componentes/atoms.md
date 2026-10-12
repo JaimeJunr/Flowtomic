@@ -943,6 +943,38 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 ### Background
 
+#### `plasma-ribbons`
+
+Fundo WebGL de duas fitas de plasma que ondulam e se enroscam. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/plasma-ribbons`
+
+#### `star-warp`
+
+Fundo WebGL de voo por um campo de estrelas em camadas; o clique dá um salto de dobra. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/star-warp`
+
+#### `lightning-bolts`
+
+Fundo WebGL de raios que rastejam e piscam; o clique chama um raio no ponto. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/lightning-bolts`
+
+#### `glow-orb`
+
+Fundo WebGL de anel de luz que respira, com uma luz que orbita e se estica para o ponteiro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/glow-orb`
+
 #### `light-column`
 
 Fundo WebGL de coluna de luz feita de filamentos torcidos; o clique manda um pulso para cima. Clean room (spec)
