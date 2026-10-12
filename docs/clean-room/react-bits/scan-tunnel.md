@@ -42,9 +42,10 @@ type ScanTunnelProps = React.ComponentProps<"div"> & {
 4. **Varredura.** Ciclo `T = scanDuration·2 + scanDelay·2`; tempo `c = mod(uTime·uSpeed, T)`;
    ida em `[0, scanDuration]`, pausa, volta em `[scanDuration + scanDelay, 2·scanDuration +
    scanDelay]`, pausa. Profundidade da faixa `zs = mix(1, 12, fase)`, fase 0→1 na ida e 1→0 na
-   volta (`smoothstep` nas pontas). Faixa `band = exp(−(z − zs)²·1.5)`; fora das passadas
+   volta (`smoothstep` nas pontas). Faixa `band = exp(−(z − zs)²·0.25)`; fora das passadas
    `band = 0`. Função pura `scanPhase(t, duration, delay)` no utils, espelhada no GLSL.
-5. **Cor.** `lineColor·line·fog·0.6 + scanColor·(line·band·1.5 + band·0.12)·scanOpacity`;
+5. **Cor.** `lineColor·line·fog·0.6 + scanColor·(line·band·2.5 + band·0.35)·scanOpacity` (revisado em
+   12/10/2026: com `·1.5` na largura e `0.12` de brilho a faixa quase não aparecia);
    alfa = `max3(cor)` `clamp`, saída pré-multiplicada, dither. Story com raiz `dark bg-background`.
 6. **Movimento reduzido.** Sem ponteiro; o quadro estático do renderer mostra a grade sem faixa
    (`band = 0` com `uTime = 0`).

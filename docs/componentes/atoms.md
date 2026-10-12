@@ -943,6 +943,38 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 ### Background
 
+#### `spectral-burst`
+
+Explosão de raios de luz saindo de um centro escuro, girando devagar. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/spectral-burst`
+
+#### `scan-tunnel`
+
+Túnel de grade em perspectiva com uma faixa de luz que varre em profundidade. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/scan-tunnel`
+
+#### `drift-lines`
+
+Feixes de fios de luz ondulando em curvas, que se curvam perto do ponteiro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/drift-lines`
+
+#### `corner-rays`
+
+Leque de raios de luz entrando por um canto, em duas camadas que tremulam. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/corner-rays`
+
 #### `plasma-ribbons`
 
 Fundo WebGL de duas fitas de plasma que ondulam e se enroscam. Clean room (spec)

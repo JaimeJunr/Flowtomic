@@ -30,11 +30,11 @@ type SpectralBurstProps = React.ComponentProps<"div"> & {
 
 1. **Coordenadas.** `p = (gl_FragCoord.xy − res·(0.5 + center))/res.y`; `r = length(p)`,
    `a = atan(p.y, p.x)`; `t = uTime·uSpeed`.
-2. **Giro.** `spin`: `a += t·0.3`. `sway`: `a += sin(t·0.8)·0.6`. Dobra: `a += distort·0.4·
-   sin(r·6.0 − t·1.5)`.
-3. **Raios.** Ruído angular em camadas: `s = fbm1(a·(3.0/π)·4.0 + t·0.2, r·0.5)` (fbm de valor 2D
-   com 4 oitavas, envolvendo o ângulo para não ter costura em ±π — use `vec2(cos a, sin a)·k`
-   como entrada); `rays = pow(s, 2.5)`. Com `rayCount > 0`, multiplica por
+2. **Giro.** `spin`: `a += t·0.3`. `sway`: `a += sin(t·0.8)·0.6`. Dobra: `a += distort·0.05·
+   sin(r·3.0 − t·1.5)`. (Revisado em 12/10/2026: com `0.4` e `r·6` os raios viravam redemoinho.)
+3. **Raios.** Ruído angular em camadas: `s = fbm(vec2(cos a, sin a)·(24/π) + vec2(0, t·0.2))` (fbm de valor 2D
+   com 4 oitavas; o círculo evita costura em ±π). Só o ângulo entra no ruído (revisado em
+   12/10/2026: somar o raio à entrada curvava os raios); `rays = pow(s, 2.5)`. Com `rayCount > 0`, multiplica por
    `pow(0.5 + 0.5·cos(a·rayCount), 4.0)`.
 4. **Profundidade.** `rays *= smoothstep(0.02, 0.35, r)·(0.6 + 0.4·sin(r·4.0 − t·2.0))`; o miolo
    fica escuro.
