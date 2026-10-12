@@ -1507,6 +1507,19 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["comparison-table.tsx", "index.ts"],
     dependencies: ["lucide-react", "@radix-ui/react-tooltip", "@radix-ui/react-tabs", "cn"],
   },
+  "status-list": {
+    name: "status-list",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/status-list",
+    files: ["status-list.tsx", "index.ts"],
+    dependencies: [
+      "lucide-react",
+      "motion",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-tooltip",
+      "cn",
+    ],
+  },
   "data-table": {
     name: "data-table",
     type: "molecule",

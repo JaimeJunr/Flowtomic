@@ -57,6 +57,12 @@ export async function copyStyles(styles: string[]) {
     return;
   }
 
+  // O globals.css faz @import "./theme.css": sem ele ao lado, o build do projeto quebra
+  if (styles.includes("globals") && !styles.includes("theme")) {
+    styles = [...styles, "theme"];
+    console.log(chalk.blue("📝 globals.css importa theme.css, copiando os dois..."));
+  }
+
   // Determinar diretório de destino baseado no arquivo CSS configurado
   const cssPath = config.tailwind.css;
   const targetDir = dirname(cssPath);

@@ -1,4 +1,5 @@
 import { readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { contrast, parseOklch, parseRgb, type Rgb, readBlock, readToken } from "./brand-contrast";
@@ -209,6 +210,38 @@ describe("Tipografia própria", () => {
   it("o body herda a fonte do token, sem Inter fixo", () => {
     const body = readBlock(globalsCss, "body");
     expect(body).toMatch(/font-family:\s*var\(--font-body\)/);
+  });
+
+  it("o globals.css sozinho gera os utilitários dos tokens do theme.css (text-display-*)", async () => {
+    // Importado à parte (por JS, como no Storybook e no README do pacote), o theme.css vira uma
+    // compilação separada que só emite as variáveis: text-display-lg saía com 16 px, sem erro
+    // (medido em 12/10/2026). Compila o globals.css com o `tailwindcss`, dependência direta da raiz:
+    // o @tailwindcss/node é transitivo e o linker isolado do bun na CI não o expõe ao pacote.
+    const { compile } = await import("tailwindcss");
+    const require = createRequire(import.meta.url);
+    const compiler = await compile(globalsCss, {
+      base: STYLES_DIR,
+      loadStylesheet: async (id: string, base: string) => {
+        // tw-animate-css só traz keyframes; não pesa no que o teste mede.
+        if (id === "tw-animate-css") return { path: id, base, content: "" };
+        const file =
+          id === "tailwindcss" ? require.resolve("tailwindcss/index.css") : path.resolve(base, id);
+        return { path: file, base: path.dirname(file), content: readFileSync(file, "utf8") };
+      },
+    });
+    const css = compiler.build([
+      "text-display-xs",
+      "text-display-sm",
+      "text-display-md",
+      "text-display-lg",
+    ]);
+    for (const size of ["xs", "sm", "md", "lg"]) {
+      expect(css, `text-display-${size}`).toMatch(
+        new RegExp(
+          `\\.text-display-${size}\\s*\\{[^}]*font-size:\\s*var\\(--text-display-${size}\\)`
+        )
+      );
+    }
   });
 });
 
