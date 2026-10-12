@@ -760,6 +760,10 @@ Cada uma já mordeu alguém neste repo.
   (medido em 11/10/2026 no `fill-pill-nav`). Centre o círculo no botão com `hypot(w, h)` de
   diâmetro e ponha a origem do `scale` no ponto da base. O jsdom não acusa; amplie o screenshot.
 
+- ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
+  `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em
+  12/10/2026). Para "link externo", use o ícone `ExternalLink` do `lucide-react`.
+
 ## Checklist ao abrir PR
 
 Antes de fechar: *"o que aprendi que o próximo vai querer saber?"*
