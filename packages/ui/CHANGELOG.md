@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1] - 2026-10-12
+
+### Fixed
+
+- **Import por componente sem o alias `@/`.** Os arquivos de `dist/components/**` (export
+  `@flowtomic/ui/components/*`) e os `.d.ts` importavam `cn` de `"@/lib/utils"`, atalho que só
+  existe dentro deste repositório. Quem instalava o pacote precisava criar o mesmo alias no
+  bundler. O build agora troca o `@/` por caminho relativo e falha se sobrar algum.
+
 ## [1.0.0] - 2026-10-04
 
 Alinhamento com o shadcn/ui ([changelog](https://ui.shadcn.com/docs/changelog)).
