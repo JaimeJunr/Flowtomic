@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0] - 2026-10-12
+
+### Added
+
+- **CodeTabs** (molecule): exemplos de código em abas (#124).
+- **RoutingDiagram** (organism): diagrama de rotas com layout responsivo (#125).
+- **ComparisonTable** (molecule) e **PricingTable** (organism): comparação de recursos e planos (#126).
+- **StatusList** (molecule): lista de serviços com estado operacional (#128).
+- **SiteHeader**, **AnnouncementBar** e **SiteFooter** (organisms): navegação, aviso e rodapé de sites (#130).
+- **FaqSection** (organism): perguntas frequentes em accordion, com busca, contato e ajuste para telas estreitas (#131).
+
+### Fixed
+
+- **`text-display-*`**: `globals.css` importa `theme.css` na mesma compilação para gerar os utilitários de tipografia (#127).
+- **Cores semânticas**: `globals.css` limpa os cinco namespaces legados do `theme.css` para `bg-primary`, `text-primary`, `border-primary` e `ring-primary` usarem `--primary` (#129).
+
 ## [1.1.1] - 2026-10-12
 
 ### Fixed
