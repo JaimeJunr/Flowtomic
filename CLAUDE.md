@@ -764,11 +764,19 @@ Cada uma já mordeu alguém neste repo.
   No `routing-diagram` (12/10/2026) o teste aprovava enquanto o último cartão saía 30 px do quadro
   (a largura medida não descontava o padding) e, em 900 px, a árvore rolava para o lado. Meça no
   Chrome o `getBoundingClientRect().right` dos nós contra o do quadro em 700, 900, 1100 e 1440 px.
-- ⚠️ **`text-display-xs` … `text-display-lg` não geram CSS no Storybook.** Os tokens existem no
-  `theme.css`, mas o elemento com a classe sai com 16 px, sem erro (medido em 12/10/2026 com
-  `getComputedStyle`; `text-xl` e `text-3xl` funcionam). O preço da `pricing-table` saiu do tamanho
-  do texto até trocar por `text-3xl`. Para tamanho grande, use a escala padrão (`text-2xl`…`text-5xl`)
-  e meça o `fontSize` no browser.
+- ⚠️ **Token do `theme.css` só vira utilitário se o `@theme` estiver na mesma compilação.** O
+  Storybook (e o README do `ui`) importa os três CSS por JS, um por vez: cada arquivo é compilado
+  à parte, o `theme.css` sozinho emite só as variáveis, e o `globals.css` gera utilitários sem
+  conhecer esses tokens. `text-xl` funcionava porque é do tema padrão; `text-display-*` saía com
+  16 px, sem erro (medido em 12/10/2026). Desde então o `globals.css` faz `@import "./theme.css"`
+  (48 px no `text-display-lg`, medido no Chrome), e o `flowtomic-cli` copia o `theme.css` junto
+  quando pedem só `globals`. Não tire esse import; o `theme-tokens.test.ts` compila o `globals.css`
+  com o `compile` do `tailwindcss` e reprova se `text-display-*` não gerar regra.
+- ⚠️ **Import de dependência transitiva passa aqui e quebra na CI.** O `node_modules` desta máquina
+  é hoisted; a CI instala com o linker isolado do bun (`node_modules/.bun/...`) e só expõe ao
+  pacote o que está no `package.json` dele ou da raiz. Um teste do `ui` com `import("@tailwindcss/node")`
+  (transitivo do `@tailwindcss/postcss`) passou local e deu `Failed to resolve import` na CI
+  (12/10/2026). Antes de importar pacote em teste, confira se ele é dependência direta.
 
 - ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
   `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em
