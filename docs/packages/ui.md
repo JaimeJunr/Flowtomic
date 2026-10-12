@@ -44,7 +44,7 @@ bunx flowtomic add button
 
 ## Estilos
 
-O Flowtomic fornece um **estilo padrão** que funciona imediatamente, mas permite **customização total** dos componentes conforme sua preferência.
+O Flowtomic fornece um **estilo padrão** que funciona imediatamente, com uma [camada de marca do produto](../../DESIGN.md#camada-de-marca-do-produto) para personalização consistente nos dois modos.
 
 ### Estilo Padrão
 
@@ -127,7 +127,7 @@ function App() {
   return (
     <Button
       variant="default"
-      className="bg-blue-600 hover:bg-blue-700 rounded-full px-8"
+      className="rounded-full px-8"
     >
       Botão Customizado
     </Button>
@@ -137,58 +137,67 @@ function App() {
 
 #### 2. Customização via Variáveis CSS (Recomendado para temas globais)
 
-Você pode sobrescrever as variáveis CSS do tema para personalizar todos os componentes de uma vez.
-Cada variável guarda a cor inteira em `oklch(L C H)`, como no shadcn. ⚠️ Até a versão 0.x o
-formato era o valor solto do HSL (`--primary: 16 80% 39%`); esse formato não funciona mais.
+O contrato de [camada de marca do produto](../../DESIGN.md#camada-de-marca-do-produto) lista os
+39 tokens permitidos, seus valores claros/escuros e as regras de contraste. Personalize cor da
+marca e tint neutro, raio/régua/sombras, famílias de display/corpo/mono e altura de Button/Input.
+As cores de status e a visibilidade do foco continuam sendo responsabilidade do Flowtomic.
+
+Importe `globals.css` → `theme.css` → `typography.css` → CSS do produto. Use cores completas
+(opacas, em hex/rgb/oklch), nunca canais soltos de HSL. Declare a variante `.dark` da marca:
+texto do botão ≥ 4,5:1 e botão primário contra o fundo ≥ 3:1.
 
 ```css
-/* No seu arquivo CSS (após importar os estilos do Flowtomic) */
+/* src/styles/index.css */
+@import "@flowtomic/ui/styles/globals.css";
+@import "@flowtomic/ui/styles/theme.css";
+@import "@flowtomic/ui/styles/typography.css";
+@import "./marca.css";
+```
+
+```css
+/* marca.css — anil claro e sua variante de noite */
+@theme {
+  --background-color-*: initial;
+  --text-color-*: initial;
+  --border-color-*: initial;
+  --ring-color-*: initial;
+  --outline-color-*: initial;
+}
+
 :root {
-  /* Customizar cores primárias */
-  --primary: oklch(0.5742 0.2135 262.12);
-  --primary-foreground: oklch(0.9838 0.0035 247.86);
-  --primary-hover: oklch(0.5298 0.2389 262.38);
-
-  /* Customizar raio de borda */
-  --radius: 1rem;
-
-  /* Customizar cores de sucesso */
-  --success: oklch(0.623 0.1688 149.18);
-  --success-foreground: oklch(0.9838 0.0035 247.86);
-  --success-hover: oklch(0.5457 0.1464 149.38);
+  --primary: #2b3aa0;
+  --primary-hover: #1f2a7a;
+  --primary-foreground: #ffffff;
+  --accent: #e6e9fb;
+  --accent-hover: #d5dbf7;
+  --accent-foreground: #1f2a7a;
+  --ring: #2b3aa0;
+  --link: #2b3aa0;
+  --radius: 0.75rem;
+  --border-width: 1px;
+  --control-height: 2.75rem;
 }
 
 .dark {
-  /* Customizar tema escuro */
-  --primary: oklch(0.6612 0.1647 262.71);
-  --primary-foreground: oklch(0.1371 0.036 258.53);
-  --background: oklch(0.1371 0.036 258.53);
-  --foreground: oklch(0.9838 0.0035 247.86);
+  --background: #0b1026;
+  --primary: #8f9cff;
+  --primary-hover: #aab4ff;
+  --primary-foreground: #0b1026;
+  --accent: #1d2660;
+  --accent-hover: #26307a;
+  --accent-foreground: #c9cfff;
+  --ring: #8f9cff;
+  --link: #9aa6ff;
+  --radius: 0.75rem;
+  --border-width: 1px;
+  --control-height: 2.75rem;
 }
 ```
 
-**Exemplo completo de customização**:
-
-```css
-/* src/index.css */
-@import "tailwindcss";
-
-/* Importar estilos padrão do Flowtomic */
-@import "flowtomic/ui/styles/globals.css";
-@import "flowtomic/ui/styles/theme.css";
-@import "flowtomic/ui/styles/typography.css";
-
-/* Suas customizações */
-:root {
-  /* Tema personalizado */
-  --primary: oklch(0.5424 0.2454 293.02); /* Roxo */
-  --radius: 0.5rem; /* Bordas mais arredondadas */
-}
-
-.dark {
-  --primary: oklch(0.6382 0.196 297.47);
-}
-```
+O exemplo é um recorte de marca. Para tingir a família de neutros completa, trocar fontes e
+sombras e tratar os namespaces de cor legados do Tailwind 4, siga o exemplo em `DESIGN.md`.
+O helper de contraste e a fixture real da Constelação estão em
+`packages/ui/src/test/product-brand-layer.test.ts`; ele exige os valores efetivos dos dois modos.
 
 #### 3. Combinando Ambos
 
@@ -214,15 +223,16 @@ function App() {
 
 ### Variáveis CSS Disponíveis
 
-As principais variáveis CSS que você pode customizar:
+O [contrato de marca](../../DESIGN.md#tokens-que-o-produto-pode-sobrescrever) é a referência:
 
-- **Cores**: `--primary`, `--secondary`, `--accent`, `--success`, `--warning`, `--error`, `--destructive`
-- **Background**: `--background`, `--foreground`, `--card`, `--muted`
-- **Bordas**: `--border`, `--input`, `--ring`
-- **Raio**: `--radius` (afeta todos os componentes)
-- **Design System**: `--ds-button-radius`, `--ds-input-radius`, `--ds-card-radius`
+- **Marca e neutros**: sólidos/hover/foreground, accent, ring, link e a família de superfícies/texto/bordas.
+- **Forma**: `--radius`, `--border-width` e `--shadow-xs` até `--shadow-3xl`.
+- **Tipo**: `--font-display` (slot da marca), `--font-body`, `--font-mono`.
+- **Densidade de Button/Input**: `--control-height`; não altera a densidade de tabelas/organisms.
 
-Para ver todas as variáveis disponíveis, consulte `packages/styles/globals.css`.
+O raio alimenta a escala de `rounded-*`; `rounded-none` e `rounded-full` permanecem próprios.
+Tokens internos `--ds-*` não ampliam o contrato. Não personalize cores de status nem esconda o foco.
+Os padrões estão em `packages/styles/globals.css` e `theme.css`, com teste de preservação dos valores.
 
 ## Uso
 

@@ -11,9 +11,9 @@ const inputVariants = cva(
   {
     variants: {
       size: {
-        default: "h-10",
-        sm: "h-9",
-        lg: "h-11",
+        default: "h-[calc(var(--control-height)+0.25rem)]",
+        sm: "h-[var(--control-height)]",
+        lg: "h-[calc(var(--control-height)+0.5rem)]",
       },
       variant: {
         default: "border-input",
