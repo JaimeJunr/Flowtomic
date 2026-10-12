@@ -1905,6 +1905,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["plan.tsx", "index.ts"],
     dependencies: ["lucide-react", "cn"],
   },
+  "pricing-table": {
+    name: "pricing-table",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/pricing-table",
+    files: ["pricing-table.tsx", "index.ts"],
+    dependencies: ["lucide-react", "motion", "@radix-ui/react-toggle-group", "cn"],
+  },
   "web-preview": {
     name: "web-preview",
     type: "organism",
