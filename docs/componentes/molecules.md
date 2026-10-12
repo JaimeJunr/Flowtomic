@@ -28,6 +28,12 @@ Um mesmo exemplo de código em várias combinações (eixos de abas Radix, uma l
 
 **Dependências**: `motion`, `@radix-ui/react-tabs`, `@radix-ui/react-radio-group`, `cn`
 
+### `comparison-table`
+
+Recursos (linhas) por opções (colunas), com uma coluna em destaque (faixa contínua com fundo `primary` suave, selo `highlightLabel`). `<table>` de verdade com `<caption>`, `scope` em colunas e linhas; valores `true`/`false`/`"partial"` viram ícone com texto acessível (Sim, Não, Parcial), valor ausente conta como Não, texto e ReactNode saem como estão. Cada recurso aceita `icon`, `description` (botão `?` com tooltip), `href` ou `onSelect`; `features` aceita grupos (`{ id, label, features }`). Em contêiner abaixo de 640 px (medido com ResizeObserver) vira abas de opção (começa na destacada) e uma lista de recursos. Props: `options`, `features`, `highlight`, `highlightLabel`, `title`, `titleHint`, `caption`, `layout` (`"auto" | "table" | "stacked"`, padrão `auto`; força um modo, útil em testes). No modo tabela, o rótulo de um grupo ocupa a primeira coluna (as faixas das opções seguem contínuas). Spec: `docs/clean-room/sites/comparison-table.md`.
+
+**Dependências**: `lucide-react`, `@radix-ui/react-tooltip`, `@radix-ui/react-tabs`, `cn`
+
 ### `widget-renderer`
 
 Renderiza por `renderWidget(widget, data)` ou por um registry indexado pelo tipo do widget. A render prop tem prioridade, inclusive quando retorna null. Loading explícito e Suspense anunciam “Carregando widget” sem mudar o skeleton visual. Um `fallback` fornecido é respeitado mesmo quando vale `0`, `""`, null ou false; sem fallback, aparece o tipo desconhecido.

@@ -1500,6 +1500,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["stat-card.tsx", "index.ts"],
     dependencies: ["flowtomic/logic", "lucide-react", "cn"],
   },
+  "comparison-table": {
+    name: "comparison-table",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/comparison-table",
+    files: ["comparison-table.tsx", "index.ts"],
+    dependencies: ["lucide-react", "@radix-ui/react-tooltip", "@radix-ui/react-tabs", "cn"],
+  },
   "data-table": {
     name: "data-table",
     type: "molecule",
@@ -1897,6 +1904,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     path: "packages/ui/src/components/organisms/plan",
     files: ["plan.tsx", "index.ts"],
     dependencies: ["lucide-react", "cn"],
+  },
+  "pricing-table": {
+    name: "pricing-table",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/pricing-table",
+    files: ["pricing-table.tsx", "index.ts"],
+    dependencies: ["lucide-react", "motion", "@radix-ui/react-toggle-group", "cn"],
   },
   "routing-diagram": {
     name: "routing-diagram",

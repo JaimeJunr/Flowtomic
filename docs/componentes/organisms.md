@@ -210,6 +210,26 @@ destaque. Usa os atoms `button` e `shimmer`. Inspirado no chatbot-template do sh
 
 **Dependências**: `@radix-ui/react-radio-group`, `lucide-react`, `motion`, `cn`
 
+### `pricing-table`
+
+Dois a quatro planos lado a lado, um deles recomendado, com alternância opcional de período
+(Mensal/Anual, `ToggleGroup` como `radiogroup` rotulado "Período de cobrança"). Cada plano é uma
+`<section>` com nome, preço, preço original riscado ("Antes: R$ 499" para leitor de tela), frase,
+botão de largura total, nota e lista de itens (`included: false` aparece riscado, com "Não incluso:").
+O destacado (`highlighted`, selo `highlightLabel`) tem borda `primary` e botão sólido; os outros usam `outline`.
+
+- **Preço:** `price` é um `PricingPrice` único ou um `Record` por id de período; sem o período
+  escolhido, usa o primeiro disponível. Número é formatado com `Intl` (`currency` padrão `BRL`,
+  `locale` padrão `pt-BR`); texto fica como está. O número desliza com o `sliding-number` e
+  troca seco com movimento reduzido.
+- **Período:** controlado (`period` + `onPeriodChange`) ou não (`defaultPeriod`).
+- **Ação:** `action.href` vira link; `action.onClick` é chamado.
+- **Grade:** container queries do Tailwind (sem medir em JS). Abaixo de 640 px empilha, o
+  destacado primeiro; 4 planos entre 640 e 1024 px formam 2x2.
+
+**Dependências**: `@radix-ui/react-toggle-group`, `motion`, `lucide-react`, `cn`
+**Clean room**: `docs/clean-room/sites/pricing-table.md`
+
 ### `node`
 
 Componente Node para ReactFlow baseado em Card com handles.
