@@ -5,6 +5,8 @@ import "../packages/styles/globals.css";
 import "../packages/styles/theme.css";
 // 3. typography.css - Estilos de tipografia que dependem das variáveis
 import "../packages/styles/typography.css";
+// A vitrine escolhe carregar as fontes da marca; o pacote não faz isso por padrão.
+import "../packages/styles/fonts.css";
 
 import type { Preview } from "@storybook/react-vite";
 

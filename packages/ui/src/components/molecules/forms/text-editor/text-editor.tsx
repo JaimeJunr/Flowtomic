@@ -13,7 +13,7 @@ import Color from "@tiptap/extension-color";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
-import TextStyle from "@tiptap/extension-text-style";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { type Editor, EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { Streamdown } from "streamdown";
-import { Markdown } from "tiptap-markdown";
+import { Markdown, type MarkdownStorage } from "tiptap-markdown";
 import { cn } from "@/lib/utils";
 import {
   Button,
@@ -243,12 +243,9 @@ export function TextEditor({
     content: internalMarkdown ? undefined : "",
     onUpdate: ({ editor }) => {
       try {
-        // Acesso ao storage markdown da extensão tiptap-markdown
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const md: string =
-          (
-            editor?.storage as Record<string, { getMarkdown?: () => string }>
-          )?.markdown?.getMarkdown?.() ?? "";
+        // tiptap-markdown fornece MarkdownStorage, mas não estende Storage do TipTap.
+        const storage = editor.storage as typeof editor.storage & { markdown?: MarkdownStorage };
+        const md = storage.markdown?.getMarkdown() ?? "";
         if (typeof md === "string") {
           if (!isControlled) setInternalMarkdown(md);
           if (outputFormat === "text") {

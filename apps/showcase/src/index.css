@@ -4,6 +4,8 @@
 @import "../../../packages/styles/theme.css";
 /* 3. typography.css - Tipografia */
 @import "../../../packages/styles/typography.css";
+/* A apresentação opta pelas fontes da marca hospedadas no Google. */
+@import "../../../packages/styles/fonts.css";
 
 /* Tema escuro para a apresentação */
 :root {

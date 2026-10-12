@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&family=Schibsted+Grotesk:wght@400..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tw-animate-css";
 /* O @theme do theme.css precisa estar NESTA compilação: o Tailwind só gera utilitário de token
    que conhece. Importado à parte (por JS, como no Storybook e no README do pacote), ele vira uma
