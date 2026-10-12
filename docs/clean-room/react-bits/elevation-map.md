@@ -34,7 +34,8 @@ type ElevationMapProps = React.ComponentProps<"div"> & {
 1. **Campo.** `p` centrado, corrigido pela proporção, `·1.5/scale`; `t = uTime·uSpeed`. Altura
    `h = soma de 6 gaussianas` com centros que orbitam (`c_i = base_i + 0.35·morph·vec2(sin(t·k_i
    + i), cos(t·k_i·0.8 + i·1.7))`, `k_i` entre 0,3 e 0,9 por hash), alturas alternando ±, raio
-   0,5–0,9; mais `0.15·fbm(p·1.2 + t·0.1)`. Normalize para ~0…1 (`h·0.5 + 0.5`, `clamp`).
+   0,5–0,9; mais `0.35·fbm(p·1.2 + t·0.1)` (revisado em 12/10/2026: com `0.15` as
+   curvas cobriam só a área das gaussianas). Normalize para ~0…1 (`h·0.5 + 0.5`, `clamp`).
 2. **Ponteiro.** `h += 0.4·exp(−dist²/0.09)` (raio ~0,3), suavizado no JS, só mouse ou caneta.
 3. **Curvas.** `v = h·bands·6`; `f = abs(fract(v) − 0.5)`; `w = fwidth(v)`;
    `line = 1 − smoothstep(thickness·60·w, thickness·60·w + w, f)` (espessura em px estável);

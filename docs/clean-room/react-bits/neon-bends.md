@@ -34,7 +34,8 @@ type NeonBendsProps = React.ComponentProps<"div"> & {
 1. **Coordenadas.** `p` centrado, corrigido pela proporção, girado por `rotation + spin·uTime`
    (graus → rad), `/scale`; `t = uTime·uSpeed`. Com ponteiro, paralaxe `p += (uPointer − 0.5)·0.15`.
 2. **Dobra.** `q = p; q.x += warp·0.5·sin(q.y·1.3·frequency + t); q.y += warp·0.4·sin(q.x·1.1·
-   frequency − t·0.8)`. Ponteiro: `q += warp·0.25·normalize(q − ptr)·exp(−dist²/0.1)`.
+   frequency − t·0.8)`. Ponteiro: `q += warp·0.8·(q − ptr)·exp(−dist²/0.1)` (revisado em 12/10/2026: com
+   `normalize` as faixas faziam um bico no ponto do ponteiro).
 3. **Faixas.** Para cada cor i (laço de 4 com `break` em `uCount`): curva
    `c_i = q.y − (0.6·(i − (n−1)/2)) − 0.35·sin(q.x·frequency·0.9 + i·1.7 + t·0.6)`;
    intensidade `b_i = exp(−abs(c_i)·bandWidth·2.0)` (núcleo) `+ exp(−abs(c_i)·bandWidth·0.4)·0.15`

@@ -49,7 +49,8 @@ type RadarSweepProps = React.ComponentProps<"div"> & {
 5. **Chuvisco.** Células polares (`floor(r·40)`, `floor(a·60/2π)`), acesas onde
    `hash > 1 − clutter·0.25`, com o mesmo `exp(−d·3)`.
 6. **Modo pulse.** No lugar do feixe, `pulso = fract(uTime·speed·0.5)` e anel
-   `exp(−(r − pulso)²·400)·(1 − pulso)`; contatos e chuvisco acendem quando o anel passa
+   `exp(−(r − pulso)²·150)·(1 − pulso)` (revisado em 12/10/2026: com `·400` o anel era
+   fino demais); contatos e chuvisco acendem quando o anel passa
    (`exp(−abs(r_alvo − pulso)·12)`).
 7. **Ponteiro.** Grade `+0.6·exp(−dist²/0.02)`; o ponteiro entra como contato extra.
 8. **Saída.** `color·(grade + feixe + contatos + chuvisco)`; alfa = `max3`, `clamp`,
