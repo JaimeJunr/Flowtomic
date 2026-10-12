@@ -760,6 +760,11 @@ Cada uma já mordeu alguém neste repo.
   (medido em 11/10/2026 no `fill-pill-nav`). Centre o círculo no botão com `hypot(w, h)` de
   diâmetro e ponha a origem do `scale` no ponto da base. O jsdom não acusa; amplie o screenshot.
 
+- ⚠️ **Componente que posiciona nós em JS (diagrama, árvore) passa no jsdom e estoura no browser.**
+  No `routing-diagram` (12/10/2026) o teste aprovava enquanto o último cartão saía 30 px do quadro
+  (a largura medida não descontava o padding) e, em 900 px, a árvore rolava para o lado. Meça no
+  Chrome o `getBoundingClientRect().right` dos nós contra o do quadro em 700, 900, 1100 e 1440 px.
+
 ## Checklist ao abrir PR
 
 Antes de fechar: *"o que aprendi que o próximo vai querer saber?"*
