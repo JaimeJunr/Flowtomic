@@ -737,10 +737,13 @@ Cada uma já mordeu alguém neste repo.
   `--foreground` escuro sobre fundo escuro: canvas "vazio", sem erro (medido em 11/10/2026). Passe o
   próprio canvas como segundo argumento, e chame `redraw()` (do `useWebglCanvas`) depois de reler a
   cor, senão um fundo parado (`speed` 0) mantém a cor velha.
-- ⚠️ **Os testes "tempo linear" do `normalize-math-delimiters` medem relógio de parede** (limites
-  de 1000 e 2000 ms) e falham na suíte inteira com a máquina carregada: em 11/10/2026, 3 falharam
-  (1023 ms, 3466 ms e 3600 ms), e o arquivo isolado passou 93 de 93. Antes de investigar, rode o
-  arquivo sozinho.
+- ⚠️ **Teste de complexidade não mede relógio de parede.** Os testes "tempo linear" do
+  `normalize-math-delimiters` tinham limite fixo (1000 e 2000 ms) e falhavam na suíte inteira com
+  cobertura (1023, 3466 e 3600 ms em 11/10/2026), passando isolados. Desde 12/10/2026 eles usam
+  `esperaLinear` (no próprio arquivo de teste): calibram `n` até a entrada levar ~10 ms, medem `n` e
+  `4n` alternados, ficam com o melhor de 5 rodadas e exigem razão < 9 (linear dá ~4x, quadrático
+  ~16x). Desligando os caches de `findCloser` e `titleEnd`, 5 casos reprovam com 14x a 16x. Para
+  guardar outra função contra regressão quadrática, reuse o medidor em vez de pôr limite em ms.
 - ⚠️ **O Playwright desta máquina não tem browser baixado** (`Executable doesn't exist ...
   chrome-headless-shell`, medido em 11/10/2026). Nos scripts de medição, use o Chrome do sistema:
   `chromium.launch({ executablePath: "/usr/bin/google-chrome-stable" })`.
