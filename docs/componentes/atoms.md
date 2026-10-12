@@ -943,6 +943,38 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 ### Background
 
+#### `pulse-grid`
+
+Fundo WebGL de grade fina que ondas entortam e acendem; o clique solta uma onda forte. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/pulse-grid`
+
+#### `prism-glow`
+
+Fundo WebGL de prisma de luz com faixas de espectro e linha de luz na base. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/prism-glow`
+
+#### `contour-lines`
+
+Fundo WebGL de linhas finas paralelas que ondulam como curvas de nível. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/contour-lines`
+
+#### `light-blinds`
+
+Fundo WebGL de persiana com degradê do tema e holofote que segue o ponteiro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/light-blinds`
+
 #### `liquid-metal`
 
 Fundo WebGL de metal líquido com reflexos e ondas que saem do ponteiro. Clean room (spec)
