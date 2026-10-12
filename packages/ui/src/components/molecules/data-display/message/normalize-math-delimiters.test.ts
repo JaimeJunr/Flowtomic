@@ -1,6 +1,69 @@
 import { describe, expect, it } from "vitest";
 import { normalizeMathDelimiters } from "./normalize-math-delimiters";
 
+// Guarda de complexidade que não depende da carga da máquina: mede quanto o tempo
+// cresce quando a entrada fica 4x maior. Linear dá ~4x; quadrático, ~16x. Limite de
+// 1 s de relógio de parede falhava na suíte inteira com cobertura (1023 ms, 3600 ms).
+const FATOR = 4;
+const RAZAO_MAXIMA = 9;
+
+function menorTempo(executar: () => void): number {
+  const inicio = performance.now();
+  executar();
+  return performance.now() - inicio;
+}
+
+// Dobra `n` até a entrada pequena levar ~10 ms (ruído de timer some) e mede pequena e
+// grande alternadas, ficando com o melhor tempo de cada: um pico de carga atinge uma
+// rodada, não todas, e carga sustentada pesa nos dois lados da razão.
+function razaoDeCrescimento(
+  montar: (n: number) => string,
+  processar: (texto: string) => unknown
+): number {
+  let n = 64;
+  let pequeno = montar(n);
+  processar(pequeno); // aquecimento do JIT
+  while (menorTempo(() => processar(pequeno)) < 10 && n < 1 << 20) {
+    n *= 2;
+    pequeno = montar(n);
+  }
+  const grande = montar(n * FATOR);
+  let melhorPequeno = Number.POSITIVE_INFINITY;
+  let melhorGrande = Number.POSITIVE_INFINITY;
+  for (let rodada = 0; rodada < 5; rodada++) {
+    melhorPequeno = Math.min(
+      melhorPequeno,
+      menorTempo(() => processar(pequeno))
+    );
+    melhorGrande = Math.min(
+      melhorGrande,
+      menorTempo(() => processar(grande))
+    );
+  }
+  return melhorGrande / melhorPequeno;
+}
+
+function esperaLinear(montar: (n: number) => string) {
+  expect(razaoDeCrescimento(montar, normalizeMathDelimiters)).toBeLessThan(RAZAO_MAXIMA);
+}
+
+describe("medidor de crescimento", () => {
+  it("aceita processamento linear", () => {
+    const linear = (texto: string) => texto.split("").reverse().join("");
+    expect(razaoDeCrescimento((n) => "ab".repeat(n), linear)).toBeLessThan(RAZAO_MAXIMA);
+  });
+
+  it("reprova processamento quadrático", () => {
+    // cada posição procura de novo até o fim, como uma regex com backtracking
+    const quadratico = (texto: string) => {
+      let achados = 0;
+      for (let i = 0; i < texto.length; i++) if (texto.indexOf("\u0000", i) >= 0) achados++;
+      return achados;
+    };
+    expect(razaoDeCrescimento((n) => "ab".repeat(n), quadratico)).toBeGreaterThan(RAZAO_MAXIMA);
+  });
+});
+
 // Resposta real do Grok 4.7 que saiu quebrada em produção na Constelação.
 const respostaGrok = `A fórmula é:
 \\[ M = C \\times (1 + i)^t \\]
@@ -211,26 +274,20 @@ Se fossem juros simples (só sobre os R\\$ 1.000), seriam R\\$ 100 por ano, tota
       expect(normalizeMathDelimiters(uma)).toBe(uma);
     });
 
-    it("entrada patológica grande termina rápido (sem backtracking)", () => {
-      const casos = [
-        "\\(".repeat(20_000),
-        "\\[ a ".repeat(20_000),
-        "` `` ``` ".repeat(5_000),
-        `R$${" ".repeat(50_000)}x`,
-        `${"\\".repeat(50_000)}[`,
-      ];
-      const inicio = performance.now();
-      for (const caso of casos) normalizeMathDelimiters(caso);
-      expect(performance.now() - inicio).toBeLessThan(1_000);
+    it.each<[string, (n: number) => string]>([
+      ["\\( repetido", (n) => "\\(".repeat(n)],
+      ["\\[ a repetido", (n) => "\\[ a ".repeat(n)],
+      ["crases misturadas", (n) => "` `` ``` ".repeat(n)],
+      ["R$ seguido de espaços", (n) => `R$${" ".repeat(n)}x`],
+      ["barras antes de [", (n) => `${"\\".repeat(n)}[`],
+    ])("entrada patológica cresce linear (sem backtracking): %s", (_nome, montar) => {
+      esperaLinear(montar);
     });
 
     it("aberturas rejeitadas pelo mesmo dólar terminam em tempo linear", () => {
-      const inicio = performance.now();
-      for (const quantidade of [64_000, 512_000]) {
-        const texto = `${"\\(".repeat(quantidade)}$\\)`;
-        expect(normalizeMathDelimiters(texto)).toBe(texto);
-      }
-      expect(performance.now() - inicio).toBeLessThan(1_000);
+      const montar = (n: number) => `${"\\(".repeat(n)}$\\)`;
+      expect(normalizeMathDelimiters(montar(64_000))).toBe(montar(64_000));
+      esperaLinear(montar);
     });
   });
 });
@@ -323,28 +380,23 @@ describe("3ª review: proteção só onde é link", () => {
     expect(normalizeMathDelimiters(texto)).toBe(texto);
   });
 
-  it.each([
-    ["sem `)` no fim", `\\(x\\) ${"[a](u (".repeat(160_000)}`],
-    ["aspas, com fechamento no fim", `\\(x\\) ${'[a](u "'.repeat(160_000)}" x`],
-    ["com `)` no fim", `\\(x\\) ${"[a](u (".repeat(160_000)} )x`],
-  ])("título `(` repetido de link inline é linear: %s", (_nome, texto) => {
-    const inicio = performance.now();
-    normalizeMathDelimiters(texto);
-    expect(performance.now() - inicio).toBeLessThan(2_000);
+  it.each<[string, (n: number) => string]>([
+    ["sem `)` no fim", (n) => `\\(x\\) ${"[a](u (".repeat(n)}`],
+    ["aspas, com fechamento no fim", (n) => `\\(x\\) ${'[a](u "'.repeat(n)}" x`],
+    ["com `)` no fim", (n) => `\\(x\\) ${"[a](u (".repeat(n)} )x`],
+  ])("título `(` repetido de link inline é linear: %s", (_nome, montar) => {
+    esperaLinear(montar);
   });
 
-  it("rótulos, `](` e títulos sem fim terminam em tempo linear", () => {
-    const casos = [
-      "[x]: a (\n".repeat(60_000),
-      "[x]: a \"\n[x]: a '\n".repeat(30_000),
-      '[x](a "b\n'.repeat(60_000),
-      "[x]: a\n".repeat(60_000),
-      "[x](".repeat(60_000),
-      "[x]( (".repeat(30_000),
-      "a ](b ".repeat(60_000),
-    ];
-    const inicio = performance.now();
-    for (const texto of casos) normalizeMathDelimiters(texto);
-    expect(performance.now() - inicio).toBeLessThan(3_000);
+  it.each<[string, (n: number) => string]>([
+    ["definição com `(` sem fim", (n) => "[x]: a (\n".repeat(n)],
+    ["definições com aspas sem fim", (n) => "[x]: a \"\n[x]: a '\n".repeat(n)],
+    ["link inline com título sem fim", (n) => '[x](a "b\n'.repeat(n)],
+    ["definições simples", (n) => "[x]: a\n".repeat(n)],
+    ["`[x](` repetido", (n) => "[x](".repeat(n)],
+    ["`[x]( (` repetido", (n) => "[x]( (".repeat(n)],
+    ["`](` sem `[`", (n) => "a ](b ".repeat(n)],
+  ])("rótulos, `](` e títulos sem fim terminam em tempo linear: %s", (_nome, montar) => {
+    esperaLinear(montar);
   });
 });
