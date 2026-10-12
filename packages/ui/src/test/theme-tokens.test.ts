@@ -210,6 +210,27 @@ describe("Tipografia própria", () => {
     const body = readBlock(globalsCss, "body");
     expect(body).toMatch(/font-family:\s*var\(--font-body\)/);
   });
+
+  it("o globals.css sozinho gera os utilitários dos tokens do theme.css (text-display-*)", async () => {
+    // Importado à parte (por JS, como no Storybook e no README do pacote), o theme.css vira uma
+    // compilação separada que só emite as variáveis: text-display-lg saía com 16 px, sem erro
+    // (medido em 12/10/2026). Compila o globals.css como o @tailwindcss/postcss faria.
+    const { compile } = await import("@tailwindcss/node");
+    const compiler = await compile(globalsCss, { base: STYLES_DIR, onDependency: () => {} });
+    const css = compiler.build([
+      "text-display-xs",
+      "text-display-sm",
+      "text-display-md",
+      "text-display-lg",
+    ]);
+    for (const size of ["xs", "sm", "md", "lg"]) {
+      expect(css, `text-display-${size}`).toMatch(
+        new RegExp(
+          `\\.text-display-${size}\\s*\\{[^}]*font-size:\\s*var\\(--text-display-${size}\\)`
+        )
+      );
+    }
+  });
 });
 
 describe("Componentes seguem o tema", () => {
