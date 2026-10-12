@@ -1946,6 +1946,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["faq-section.tsx", "index.ts"],
     dependencies: ["@radix-ui/react-accordion", "lucide-react", "cn"],
   },
+  "live-transcript": {
+    name: "live-transcript",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/live-transcript",
+    files: ["live-transcript.tsx", "index.ts"],
+    dependencies: ["lucide-react", "@radix-ui/react-select", "cn"],
+  },
   "site-footer": {
     name: "site-footer",
     type: "organism",

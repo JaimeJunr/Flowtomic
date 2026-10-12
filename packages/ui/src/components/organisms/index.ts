@@ -91,6 +91,13 @@ export { GenealogyCanvas } from "./genealogy-canvas";
 export type { ImageProps } from "./image";
 export { Image } from "./image";
 export type {
+  LiveTranscriptEntry,
+  LiveTranscriptMeter,
+  LiveTranscriptProps,
+  LiveTranscriptStatus,
+} from "./live-transcript";
+export { LiveTranscript } from "./live-transcript";
+export type {
   ModelSelectorContentProps,
   ModelSelectorDialogProps,
   ModelSelectorEmptyProps,
