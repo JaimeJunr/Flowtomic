@@ -785,7 +785,9 @@ describe("PromptInput: menu de anexos e botões", () => {
       </PromptInput>
     );
     // o tamanho é o comportamento aqui: icon-sm desenha um quadrado size-8
-    expect(screen.getByRole("button", { name: "Pesquisar na web" })).toHaveClass("size-8");
+    expect(screen.getByRole("button", { name: "Pesquisar na web" })).toHaveClass(
+      "size-[calc(var(--control-height)-0.25rem)]"
+    );
   });
 
   it("clicar em Enviar desabilitado não envia", async () => {

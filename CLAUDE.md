@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (142 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (146 atoms, 88 molecules, 31 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (142)
+- **Atoms**: `docs/componentes/atoms.md` (146)
 - **Molecules**: `docs/componentes/molecules.md` (88)
 - **Organisms**: `docs/componentes/organisms.md` (31)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -263,6 +263,7 @@ Regras críticas:
 - **Ordem de importação obrigatória**: `globals.css` → `theme.css` → `typography.css`
 - **Requisitos**: Tailwind CSS v4.1.14 com `@tailwindcss/postcss`
 - **Customização**: Via `className` (ajustes pontuais) ou variáveis CSS (temas globais)
+- **Marca do produto**: seguir o [contrato em DESIGN.md](DESIGN.md#camada-de-marca-do-produto) para cor/neutros, forma, fontes e densidade nos dois modos; preservar status e foco. Efeitos decorativos seguem [Efeitos de marketing](DESIGN.md#efeitos-de-marketing).
 
 ### Documentação
 
@@ -374,7 +375,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 142 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 146 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 88 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 31 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`

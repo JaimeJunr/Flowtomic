@@ -12,7 +12,12 @@ describe("Suggestion", () => {
       </Suggestions>
     );
     const button = screen.getByRole("button", { name: "Mostrar o código do cabeçalho" });
-    expect(button).toHaveClass("border", "bg-background", "rounded-md", "h-9");
+    expect(button).toHaveClass(
+      "border",
+      "bg-background",
+      "rounded-md",
+      "h-[var(--control-height)]"
+    );
     expect(button).not.toHaveClass("rounded-full");
     await userEvent.click(button);
     expect(onClick).toHaveBeenCalledTimes(1);

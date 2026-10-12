@@ -26,12 +26,12 @@ const buttonVariants = cva(
           "bg-foreground/10 rounded-sm overflow-hidden whitespace-nowrap hover:bg-foreground/20",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9",
-        "icon-sm": "size-8",
-        "icon-lg": "size-10",
+        default: "h-[var(--control-height)] px-4 py-2",
+        sm: "h-[calc(var(--control-height)-0.25rem)] rounded-md px-3 text-xs",
+        lg: "h-[calc(var(--control-height)+0.25rem)] rounded-md px-8",
+        icon: "size-[var(--control-height)]",
+        "icon-sm": "size-[calc(var(--control-height)-0.25rem)]",
+        "icon-lg": "size-[calc(var(--control-height)+0.25rem)]",
       },
     },
     defaultVariants: {

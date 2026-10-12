@@ -70,19 +70,19 @@ describe("Input", () => {
     it("deve aplicar tamanho default", () => {
       const { container } = render(<Input size="default" />);
       const input = container.querySelector("input");
-      expect(input).toHaveClass("h-10");
+      expect(input).toHaveClass("h-[calc(var(--control-height)+0.25rem)]");
     });
 
     it("deve aplicar tamanho sm", () => {
       const { container } = render(<Input size="sm" />);
       const input = container.querySelector("input");
-      expect(input).toHaveClass("h-9");
+      expect(input).toHaveClass("h-[var(--control-height)]");
     });
 
     it("deve aplicar tamanho lg", () => {
       const { container } = render(<Input size="lg" />);
       const input = container.querySelector("input");
-      expect(input).toHaveClass("h-11");
+      expect(input).toHaveClass("h-[calc(var(--control-height)+0.5rem)]");
     });
   });
 
