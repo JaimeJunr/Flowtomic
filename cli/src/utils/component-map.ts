@@ -1939,6 +1939,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["site-header.tsx", "types.ts", "index.ts"],
     dependencies: ["lucide-react", "cn"],
   },
+  "faq-section": {
+    name: "faq-section",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/faq-section",
+    files: ["faq-section.tsx", "index.ts"],
+    dependencies: ["@radix-ui/react-accordion", "lucide-react", "cn"],
+  },
   "site-footer": {
     name: "site-footer",
     type: "organism",

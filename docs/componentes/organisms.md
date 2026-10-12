@@ -269,6 +269,30 @@ e `social`, ações e sub-navegação opcional. Fixo no topo (`sticky`, padrão 
 **Dependências**: `lucide-react`, `cn` (usa os atoms `button`, `sheet` e `navigation-menu`)
 **Clean room**: `docs/clean-room/sites/site-chrome.md`
 
+### `faq-section`
+
+Seção de perguntas frequentes em Accordion (o do repo, com cabeçalho e ícone próprios). Duas
+variantes em `layout`: `split` (padrão; cabeçalho a 5/12, fixo com `stickyHeader`, lista a 7/12,
+perguntas numeradas `01`, `02`, linhas com `border-b` e hover em `muted`) e `grid` (cabeçalho e
+caixa de contato na linha de cima; perguntas em 2 colunas de cartões, alternadas: 1ª e 3ª à
+esquerda). Corte em 768 px de contêiner (container queries); abaixo disso, uma coluna.
+
+- **Itens:** `items` (`id?`, `question`, `answer` como ReactNode); sem `id`, o índice vira o id.
+  `numbered` e `icon` (`chevron` ou `plus`) sobrescrevem o padrão da variante.
+- **Estado:** `multiple` (padrão `false`), `value`/`onValueChange` (ids abertos, controlado) ou
+  `defaultValue`. Movimento reduzido desliga a animação de altura.
+- **`contact`:** cartão com linha de cópia (`copy`: rótulo + valor em mono + botão "Copiar", que
+  vira "Copiado" por 2 s ou "Não deu para copiar") ou `action` (link em botão `outline`);
+  `onCopy(value)` opcional. Em `split` fica abaixo do texto do cabeçalho.
+- **`searchable`:** campo "Buscar nas perguntas" que filtra por pergunta e resposta (texto de
+  ReactNode incluído), contagem em `aria-live` e mensagem de vazio com atalho para o contato.
+- **`hashLink`:** `id="faq-<id>"` em cada item; ao montar, `location.hash` abre e rola até o item.
+- **Acessibilidade:** `<section aria-labelledby>`; título em `h2` (`headingLevel` 2 a 4) e
+  perguntas no nível seguinte; número `aria-hidden`.
+
+**Dependências**: `@radix-ui/react-accordion`, `lucide-react`, `cn` (usa os atoms `accordion`, `button` e `input`)
+**Clean room**: `docs/clean-room/sites/faq-section.md`
+
 ### `site-footer`
 
 Rodapé de página de produto: coluna de marca (`brand`: logo, frase; `social`), `columns` de links

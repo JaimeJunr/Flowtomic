@@ -76,6 +76,8 @@ export { DocumentEditor } from "./document-editor";
 export type { DraggableDashboardGridProps } from "./draggable-dashboard-grid";
 export { DraggableDashboardGrid } from "./draggable-dashboard-grid";
 export { Edge } from "./edge";
+export type { FaqContact, FaqItem, FaqSectionProps } from "./faq-section";
+export { FaqSection } from "./faq-section";
 export type {
   BaseFormFieldProps,
   FormFieldConfig,

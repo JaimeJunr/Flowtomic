@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 36 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 37 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -39,7 +39,7 @@ Estrutura básica:
 
 - **Atoms**: `docs/componentes/atoms.md` (154)
 - **Molecules**: `docs/componentes/molecules.md` (91)
-- **Organisms**: `docs/componentes/organisms.md` (36)
+- **Organisms**: `docs/componentes/organisms.md` (37)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
 
@@ -377,7 +377,7 @@ Resumo:
 
 - **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 91 componentes - Ver `docs/componentes/molecules.md`
-- **Organisms**: 36 componentes - Ver `docs/componentes/organisms.md`
+- **Organisms**: 37 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
 
@@ -803,6 +803,12 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **Seta ou símbolo unicode em copy de story ou componente (`↗`, `→`) reprova o
   `no-template-slop.test.ts`**, que trata esses glifos como emoji (visto no `code-tabs` em
   12/10/2026). Para "link externo", use o ícone `ExternalLink` do `lucide-react`.
+
+- ⚠️ **`grid` sem `grid-cols-*` não deixa a coluna encolher.** A trilha implícita é `auto` e
+  cresce até o min-content do filho; um `truncate` ou uma palavra longa (URL em `font-mono`) dentro
+  dela estourou 150 px em 390 px no `faq-section` (12/10/2026), com rolagem lateral. Grade que só
+  ganha colunas num breakpoint (`@min-[768px]:grid-cols-2`) começa com `grid-cols-1`, que é
+  `minmax(0, 1fr)`. O jsdom não acusa; meça `scrollWidth` no browser em 390 px.
 
 ## Checklist ao abrir PR
 
