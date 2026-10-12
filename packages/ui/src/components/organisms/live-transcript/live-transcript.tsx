@@ -171,18 +171,24 @@ function Entry({ entry }: { entry: LiveTranscriptEntry }) {
           data-slot="live-transcript-annotation"
           className={cn("flex flex-col gap-2 rounded-xl border p-3", ANNOTATION_STYLE)}
         >
-          <div className="text-primary flex items-center gap-1.5 text-xs font-medium">
-            <span aria-hidden="true" className="bg-primary size-1.5 rounded-full" />
-            <span>{annotation.label}</span>
-          </div>
-          <div className="text-foreground text-base leading-snug">{annotation.content}</div>
-          {annotation.action ? (
-            <div className="flex justify-end">
-              <Button type="button" variant="ghost" size="sm" onClick={annotation.action.onClick}>
+          <div className="flex min-h-7 items-center justify-between gap-3">
+            <div className="text-primary flex items-center gap-1.5 text-xs font-medium">
+              <span aria-hidden="true" className="bg-primary size-1.5 rounded-full" />
+              <span>{annotation.label}</span>
+            </div>
+            {annotation.action ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="-my-1 -mr-1.5 h-7 px-2"
+                onClick={annotation.action.onClick}
+              >
                 {annotation.action.label}
               </Button>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
+          <div className="text-foreground text-base leading-snug">{annotation.content}</div>
         </div>
       ) : null}
     </div>
