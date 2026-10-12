@@ -943,6 +943,38 @@ Texto nítido com ecos fantasmas (mais transparentes e borrados) atrás: se junt
 
 ### Background
 
+#### `light-column`
+
+Fundo WebGL de coluna de luz feita de filamentos torcidos; o clique manda um pulso para cima. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/light-column`
+
+#### `glyph-terminal`
+
+Fundo WebGL de terminal antigo com dígitos miúdos, varredura, piscadas e falhas. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/glyph-terminal`
+
+#### `dither-waves`
+
+Fundo WebGL de ondas desenhadas com pontilhado ordenado em blocos de pixel; o ponteiro apaga um rastro. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/dither-waves`
+
+#### `thread-bundle`
+
+Fundo WebGL de feixe de fios finos que ondulam juntos e se abrem em leque. Clean room (spec)
+
+**Dependências**: `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/background/thread-bundle`
+
 #### `pulse-grid`
 
 Fundo WebGL de grade fina que ondas entortam e acendem; o clique solta uma onda forte. Clean room (spec)

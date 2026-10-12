@@ -17,7 +17,7 @@ o lado, e as bordas são **curvas** como vidro de tubo. O mouse acende a região
 type GlyphTerminalProps = React.ComponentProps<"div"> & {
   tint?: string;          // token; default "--success"
   speed?: number;         // default 0.3
-  glyphSize?: number;     // px de um glifo; 6–32, default 12
+  glyphSize?: number;     // px de um glifo; 6–32, default 16
   scanlines?: number;     // 0–1, default 0.3
   glitch?: number;        // 0–2, default 1
   flicker?: number;       // 0–2, default 1
@@ -36,7 +36,9 @@ type GlyphTerminalProps = React.ComponentProps<"div"> & {
 3. **Grade.** `cell = floor(px / glyphSize)`, `local = fract(px / glyphSize)` (px a partir do `uv`
    corrigido). Glifo = matriz 3×5 de bits escolhida por `floor(hash(cell + floor(t·2))·10)`
    (dez padrões de dígito, constantes `int[10]` no shader); acende o bit da sub-célula de `local`
-   com 1 px de folga.
+   desenhando o dígito no miolo da célula
+   (`(local − (0.18, 0.12)) / (0.64, 0.76)`). (Revisado em 11/10/2026: a folga de 1 px por
+   sub-célula apagava as linhas e os glifos viravam tracinhos; o default de `glyphSize` subiu de 12 para 16.)
 4. **Brilho.** `v = smoothstep(0.35, 0.75, fbm(cell·0.08 + t·0.2))` com `t = uTime·uSpeed`;
    ponteiro soma `0.5·exp(−dist²/0.02)`.
 5. **Varredura e piscar.** `·(1 − scanlines·0.5·(0.5 + 0.5·sin(px.y·3.1416)))`;
