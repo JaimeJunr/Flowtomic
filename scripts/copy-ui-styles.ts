@@ -8,7 +8,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-const STYLE_FILES = ["globals.css", "theme.css", "typography.css"] as const;
+const STYLE_FILES = ["globals.css", "theme.css", "typography.css", "fonts.css"] as const;
 
 const rootDir = join(import.meta.dir, "..");
 const stylesSourceDir = join(rootDir, "packages", "styles");
@@ -19,6 +19,14 @@ if (!existsSync(stylesTargetDir)) {
   mkdirSync(stylesTargetDir, { recursive: true });
   console.log(`📁 Diretório criado: ${stylesTargetDir}`);
 }
+
+// O bundle externaliza KaTeX. Preserve o export CSS legado para quem usa matemática,
+// deixando o bundler do app resolver os assets do peer opcional.
+writeFileSync(
+  join(rootDir, "packages", "ui", "dist", "index.css"),
+  '@import "katex/dist/katex.min.css";\n',
+  "utf-8"
+);
 
 // Copiar cada arquivo CSS
 let copiedCount = 0;

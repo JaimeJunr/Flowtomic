@@ -9,6 +9,7 @@ import { contrast, parseOklch, parseRgb, type Rgb, readBlock, readToken } from "
 const STYLES_DIR = path.resolve(__dirname, "../../../styles");
 const themeCss = readFileSync(path.join(STYLES_DIR, "theme.css"), "utf8");
 const globalsCss = readFileSync(path.join(STYLES_DIR, "globals.css"), "utf8");
+const fontsCss = readFileSync(path.join(STYLES_DIR, "fonts.css"), "utf8");
 
 function hue([r, g, b]: Rgb): number {
   const max = Math.max(r, g, b);
@@ -202,21 +203,29 @@ describe("Tipografia própria", () => {
     expect(themeCss.trimStart()).toMatch(/^@theme static \{/);
   });
 
-  it("font-mono começa pela JetBrains Mono que o globals.css já baixa", () => {
+  it("font-mono começa pela JetBrains Mono disponível no fonts.css opcional", () => {
     expect(readToken(themeCss, "--font-mono")).toMatch(/^"JetBrains Mono"/);
   });
 
-  it("o globals.css baixa as fontes novas e não baixa mais a Inter", () => {
-    expect(globalsCss).not.toMatch(/family=Inter/);
-    expect(globalsCss).toMatch(/family=Public\+Sans/);
-    expect(globalsCss).toMatch(/family=Schibsted\+Grotesk/);
+  it("globals.css e theme.css não importam fontes remotas", () => {
+    for (const css of [globalsCss, themeCss]) {
+      expect(css).not.toMatch(/@import\s+(?:url\()?\s*["']?https?:\/\//);
+      expect(css).not.toMatch(/fonts\.css/);
+    }
+  });
+
+  it("fonts.css oferece as três fontes da marca sem Inter", () => {
+    expect(fontsCss).not.toMatch(/family=Inter/);
+    expect(fontsCss).toMatch(/family=Public\+Sans/);
+    expect(fontsCss).toMatch(/family=Schibsted\+Grotesk/);
+    expect(fontsCss).toMatch(/family=JetBrains\+Mono/);
   });
 
   // Com pesos soltos (wght@400;600) o Google entrega faces de peso fixo: peso intermediário pula
   // de degrau (efeitos de proximidade/pressão) e o display em 400 cai no fallback. Faixa = fonte variável.
-  it("o globals.css baixa corpo e display como fonte variável (faixa de peso)", () => {
-    expect(globalsCss).toMatch(/family=Public\+Sans:wght@\d+\.\.\d+/);
-    expect(globalsCss).toMatch(/family=Schibsted\+Grotesk:wght@\d+\.\.\d+/);
+  it("fonts.css oferece corpo e display como fonte variável (faixa de peso)", () => {
+    expect(fontsCss).toMatch(/family=Public\+Sans:wght@\d+\.\.\d+/);
+    expect(fontsCss).toMatch(/family=Schibsted\+Grotesk:wght@\d+\.\.\d+/);
   });
 
   it("os títulos usam a fonte display, senão a Schibsted Grotesk nunca aparece", () => {

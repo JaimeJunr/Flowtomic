@@ -54,7 +54,7 @@ function mockClipboard() {
 describe("CodeTabs", () => {
   it("renderiza o snippet do primeiro valor de cada eixo", async () => {
     render(<CodeTabs axes={axes} snippets={snippets} />);
-    expect(await within(panel()).findByText("bunx add-ts")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("bunx add-ts")).toBeInTheDocument());
     expect(screen.getByRole("tab", { name: "bun" })).toHaveAttribute("aria-selected", "true");
     expect(screen.getByRole("tab", { name: "TypeScript" })).toHaveAttribute(
       "aria-selected",
@@ -66,7 +66,7 @@ describe("CodeTabs", () => {
     const user = userEvent.setup({ skipHover: true });
     render(<CodeTabs axes={axes} snippets={snippets} />);
     await user.click(screen.getByRole("tab", { name: "npm" }));
-    expect(await within(panel()).findByText("npx add-ts")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("npx add-ts")).toBeInTheDocument());
   });
 
   it("move entre abas com as setas", async () => {
@@ -74,13 +74,13 @@ describe("CodeTabs", () => {
     render(<CodeTabs axes={axes} snippets={snippets} />);
     screen.getByRole("tab", { name: "bun" }).focus();
     await user.keyboard("{ArrowRight}");
-    expect(await within(panel()).findByText("npx add-ts")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("npx add-ts")).toBeInTheDocument());
   });
 
   it("esconde opção sem exemplo e faz o eixo posterior pular ao trocar o anterior", async () => {
     const user = userEvent.setup({ skipHover: true });
     render(<CodeTabs axes={axes} snippets={snippets} defaultValue={{ pm: "bun", lang: "js" }} />);
-    expect(await within(panel()).findByText("bunx add-js")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("bunx add-js")).toBeInTheDocument());
     await user.click(screen.getByRole("tab", { name: "npm" }));
     // npm só tem exemplo em TypeScript
     expect(screen.queryByRole("tab", { name: "JavaScript" })).not.toBeInTheDocument();
@@ -88,7 +88,7 @@ describe("CodeTabs", () => {
       "aria-selected",
       "true"
     );
-    expect(await within(panel()).findByText("npx add-ts")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("npx add-ts")).toBeInTheDocument());
   });
 
   it("eixo placement end fica na última linha, depois do eixo primário", () => {
@@ -118,10 +118,10 @@ describe("CodeTabs", () => {
         ]}
       />
     );
-    expect(await within(panel()).findByText(/model: "rapido"/)).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText(/model: "rapido"/)).toBeInTheDocument());
     const group = screen.getByRole("radiogroup", { name: "Modelo" });
     await user.click(within(group).getByRole("radio", { name: "Grande" }));
-    expect(await within(panel()).findByText(/model: "grande"/)).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText(/model: "grande"/)).toBeInTheDocument());
   });
 
   it("chips de variável respondem às setas", async () => {
@@ -178,7 +178,7 @@ describe("CodeTabs", () => {
     await user.click(screen.getByRole("tab", { name: "npm" }));
     expect(onValueChange).toHaveBeenCalledWith({ pm: "npm", lang: "ts" });
     expect(screen.getByRole("tab", { name: "bun" })).toHaveAttribute("aria-selected", "true");
-    expect(await within(panel()).findByText("bunx add-ts")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("bunx add-ts")).toBeInTheDocument());
     rerender(
       <CodeTabs
         axes={axes}
@@ -187,7 +187,7 @@ describe("CodeTabs", () => {
         onValueChange={onValueChange}
       />
     );
-    expect(await within(panel()).findByText("npx add-ts")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("npx add-ts")).toBeInTheDocument());
   });
 
   it("não controlado mantém a seleção interna", async () => {
@@ -207,7 +207,7 @@ describe("CodeTabs", () => {
     }
     render(<Harness />);
     await user.click(screen.getByRole("tab", { name: "pnpm" }));
-    expect(await within(panel()).findByText("pnpm dlx add")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("pnpm dlx add")).toBeInTheDocument());
     expect(screen.getByRole("status")).toHaveTextContent('"pm":"pnpm"');
   });
 
@@ -271,7 +271,7 @@ describe("CodeTabs", () => {
     }));
     render(<CodeTabs axes={many} snippets={list} />);
     await user.selectOptions(screen.getByRole("combobox", { name: "Linguagem" }), "c");
-    expect(await within(panel()).findByText("codigo-c")).toBeInTheDocument();
+    await waitFor(() => expect(within(panel()).getByText("codigo-c")).toBeInTheDocument());
   });
 
   it("marca o valor trocado por variável quando a API de highlight existe", async () => {

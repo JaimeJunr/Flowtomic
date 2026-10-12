@@ -1,5 +1,46 @@
 # Changelog
 
+## [2.0.0] - 2026-10-12
+
+### ⚠️ Breaking
+
+- **Dependências por componente viram peers.** O app instala `react`/`react-dom` 19,
+  `motion` (`>=12.23.24 <15`) e `lucide-react` (`>=0.553.0 <2`). Os demais peers são
+  opcionais para o pacote e obrigatórios para as famílias que os importam; também
+  ficam em `devDependencies` para build/teste. O bundle externaliza dependências e
+  peers para compartilhar as bibliotecas do app.
+- **Migração por família:** FAQ/accordion/status-list usam `@radix-ui/react-accordion`;
+  Button usa `@radix-ui/react-slot`; cada primitive Radix usa seu `@radix-ui/react-*`;
+  tooltip usa também `@react-aria/tooltip` e `@react-stately/tooltip`. Chat/IA usa
+  `ai@^6.0.304`; message usa Markdown, KaTeX e Shiki; code-block/code-tabs usam Shiki;
+  editor usa os nove `@tiptap/*@^3.31.4`, `tiptap-markdown@^0.9.0` e `streamdown`.
+  Tabelas/layouts usam `@flowtomic/logic` e seus peers; gráficos usam `recharts`;
+  calendários usam `react-day-picker`/`date-fns`; formulários usam `react-hook-form`;
+  canvas usa `@xyflow/react`; arrasto usa `@dnd-kit/*`. A [lista completa por
+  componente](README.md#peers-por-família) inclui as outras famílias e o comando do FAQ.
+- **Fontes do Google agora são opt-in.** Para manter as fontes remotas da marca,
+  importe `@flowtomic/ui/styles/fonts.css`. `globals.css` preserva tokens e fallbacks,
+  mas não baixa fontes. Apps com `next/font` ou fontes locais omitem o novo arquivo.
+- **Prefira subpaths** (`@flowtomic/ui/components/organisms/faq-section`). O export
+  raiz e os barrels de categoria reexportam famílias opcionais; a resolução desses
+  módulos pode exigir seus peers. Imports relativos sem extensão no `dist` ainda
+  exigem resolução por bundler (Refs #137, item ESM pendente).
+
+### Fixed
+
+- `@radix-ui/react-accordion` e os demais pacotes usados em runtime que só estavam
+  em devDependencies/na raiz agora têm peers explícitos no UI (#137).
+- TipTap migra de 2.x para 3.31.4; o editor usa o export nomeado `TextStyle` e o
+  storage tipado de Markdown. SDK de IA migra de 5.x para 6.0.304, resolvendo
+  `@ai-sdk/gateway` 3.0.212, `@ai-sdk/provider-utils` 4.0.57 e `undici` 6.29.0 no lock,
+  sem `@fastify/busboy`. KaTeX tem mínimo 0.16.22. O lock também unifica as versões
+  transitivas de ProseMirror para evitar instâncias incompatíveis no editor.
+- Dependências automáticas caem de 64 para 3: `cn`, `class-variance-authority` e
+  `tw-animate-css`. Pacotes sem imports diretos ficam apenas no desenvolvimento;
+  transitivos `@ai-sdk/*`, `undici` e `commander` não viram peers artificiais.
+- As 11 asserções de conteúdo do CodeTabs consultam e verificam o DOM na mesma
+  tentativa, evitando pegar um nó removido pelo realce assíncrono do Shiki.
+
 ## [1.3.0] - 2026-10-12
 
 ### Added
