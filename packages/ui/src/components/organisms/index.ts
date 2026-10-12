@@ -365,6 +365,14 @@ export type { SiteHeaderAction, SiteHeaderProps, SiteNavItem, SiteNavLink } from
 export { SiteHeader } from "./site-header";
 export type { StatItem, StatsGridProps } from "./stats-grid";
 export { StatsGrid } from "./stats-grid";
+export type {
+  TestimonialAuthor,
+  TestimonialItem,
+  TestimonialTextItem,
+  TestimonialVideoItem,
+  TestimonialWallProps,
+} from "./testimonial-wall";
+export { TestimonialWall } from "./testimonial-wall";
 export type { ToolbarProps } from "./toolbar";
 export { Toolbar } from "./toolbar";
 export type {

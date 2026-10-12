@@ -319,6 +319,31 @@ medidores de áudio e controles, mais um cabeçalho com `title`, estado (`status
 **Dependências**: `lucide-react`, `@radix-ui/react-select`, `cn` (usa os atoms `button`, `badge`, `kbd` e `select`)
 **Clean room**: `docs/clean-room/sites/live-transcript.md`
 
+### `testimonial-wall`
+
+Mural de depoimentos em colunas de alturas desiguais, feitas com CSS columns (não por JS) e
+container queries: 1 coluna, 2 a partir de 640 px de contêiner e 3 a partir de 1024 px (`columns`
+limita o máximo, 2 ou 3). A lista é um `<ul role="list">` e a ordem de leitura é a dos dados.
+
+- **Cartão de texto** (`kind: "text"`): `author` (`name`, `role`, `avatarSrc`; sem imagem usa as
+  iniciais no `Avatar`), `rating` de 0 a 5 em estrelas (`role="img"`, nota fracionária arredonda nas
+  estrelas e o rótulo mostra "Nota 4,6 de 5"), `date` em `<time dateTime>` formatada por
+  `dateFormatter` (padrão pt-BR), `title`, `body` em `blockquote`, `media` e `source` ("Ver no ...").
+- **Cartão de vídeo** (`kind: "video"`): `poster` decorativo com nome e cargo sobre degradê escuro
+  (classe `dark` local), `aspect` (`portrait`, `square`, `landscape`). O play aparece com `onPlay`
+  ou `videoSrc`: `onPlay` tem prioridade; senão o pôster vira `<video controls>` e o foco vai para
+  ele. Com movimento reduzido, não usa `autoPlay`.
+- **Recolhido:** `collapsedHeight` corta o mural com degradê e mostra o botão `expandLabel`
+  (`aria-expanded`, `aria-controls`); ao expandir, o foco vai para o primeiro cartão que estava
+  escondido.
+- **Prova social:** `proof` (até 4 avatares decorativos, texto e link opcional) em pílula escura;
+  sobre o degradê quando recolhido, abaixo do mural quando não.
+- **Acessibilidade:** `<section aria-labelledby>` (ou `aria-label` "Depoimentos"); título em `h2`
+  (`headingLevel` 2 a 4); cada cartão é um `<figure>`.
+
+**Dependências**: `lucide-react`, `cn` (usa os atoms `button` e `avatar`)
+**Clean room**: `docs/clean-room/sites/testimonial-wall.md`
+
 ### `site-footer`
 
 Rodapé de página de produto: coluna de marca (`brand`: logo, frase; `social`), `columns` de links

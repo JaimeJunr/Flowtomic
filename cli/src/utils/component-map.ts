@@ -1953,6 +1953,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["live-transcript.tsx", "index.ts"],
     dependencies: ["lucide-react", "@radix-ui/react-select", "cn"],
   },
+  "testimonial-wall": {
+    name: "testimonial-wall",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/testimonial-wall",
+    files: ["testimonial-wall.tsx", "index.ts"],
+    dependencies: ["lucide-react", "cn"],
+  },
   "site-footer": {
     name: "site-footer",
     type: "organism",
