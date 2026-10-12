@@ -263,6 +263,7 @@ Regras críticas:
 - **Ordem de importação obrigatória**: `globals.css` → `theme.css` → `typography.css`
 - **Requisitos**: Tailwind CSS v4.1.14 com `@tailwindcss/postcss`
 - **Customização**: Via `className` (ajustes pontuais) ou variáveis CSS (temas globais)
+- **Marca do produto**: seguir o [contrato em DESIGN.md](DESIGN.md#camada-de-marca-do-produto) para cor/neutros, forma, fontes e densidade nos dois modos; preservar status e foco. Efeitos decorativos seguem [Efeitos de marketing](DESIGN.md#efeitos-de-marketing).
 
 ### Documentação
 

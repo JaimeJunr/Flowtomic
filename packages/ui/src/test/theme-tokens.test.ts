@@ -1,55 +1,13 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { contrast, parseOklch, parseRgb, type Rgb, readBlock, readToken } from "./brand-contrast";
 
 // Guarda a identidade "Urucum" (aprovada em 26/09/2026) contra a volta do tema Untitled UI:
 // roxo rgb(105 56 239) e Inter. Lê os CSS do packages/styles, que é o que o CLI e o build copiam.
 const STYLES_DIR = path.resolve(__dirname, "../../../styles");
 const themeCss = readFileSync(path.join(STYLES_DIR, "theme.css"), "utf8");
 const globalsCss = readFileSync(path.join(STYLES_DIR, "globals.css"), "utf8");
-
-type Rgb = [number, number, number];
-
-function readToken(css: string, name: string): string {
-  const match = css.match(new RegExp(`${name}:\\s*([^;]+);`));
-  if (!match)
-    throw new Error(`token ausente: received none for ${name}, expected "${name}: <valor>;"`);
-  return match[1].trim();
-}
-
-function readBlock(css: string, selector: string): string {
-  const start = css.indexOf(`${selector} {`);
-  if (start < 0) throw new Error(`bloco ausente: received none for "${selector} {"`);
-  return css.slice(start, css.indexOf("\n  }", start));
-}
-
-function parseRgb(value: string): Rgb {
-  const match = value.match(/^rgb\((\d+) (\d+) (\d+)\)$/);
-  if (!match)
-    throw new Error(`cor inválida: received ${JSON.stringify(value)}, expected "rgb(r g b)"`);
-  return [Number(match[1]), Number(match[2]), Number(match[3])];
-}
-
-// OKLCH → OKLab → LMS → sRGB linear → sRGB, pelas matrizes de Björn Ottosson (CSS Color 4).
-function parseOklch(value: string): Rgb {
-  const match = value.match(/^oklch\(([\d.]+) ([\d.]+) ([\d.]+)\)$/);
-  if (!match)
-    throw new Error(`cor inválida: received ${JSON.stringify(value)}, expected "oklch(L C H)"`);
-  const [l, c, h] = [Number(match[1]), Number(match[2]), (Number(match[3]) * Math.PI) / 180];
-  const [a, b] = [c * Math.cos(h), c * Math.sin(h)];
-  const lms = [
-    (l + 0.3963377774 * a + 0.2158037573 * b) ** 3,
-    (l - 0.1055613458 * a - 0.0638541728 * b) ** 3,
-    (l - 0.0894841775 * a - 1.291485548 * b) ** 3,
-  ];
-  const linear = [
-    4.0767416621 * lms[0] - 3.3077115913 * lms[1] + 0.2309699292 * lms[2],
-    -1.2684380046 * lms[0] + 2.6097574011 * lms[1] - 0.3413193965 * lms[2],
-    -0.0041960863 * lms[0] - 0.7034186147 * lms[1] + 1.707614701 * lms[2],
-  ];
-  const gamma = (x: number) => (x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055);
-  return linear.map((x) => Math.min(1, Math.max(0, gamma(x))) * 255) as Rgb;
-}
 
 function hue([r, g, b]: Rgb): number {
   const max = Math.max(r, g, b);
@@ -65,19 +23,6 @@ function contrastWithWhite(rgb: Rgb): number {
     return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
   });
   return 1.05 / (0.2126 * r + 0.7152 * g + 0.0722 * b + 0.05);
-}
-
-function luminance(rgb: Rgb): number {
-  const [r, g, b] = rgb.map((c) => {
-    const s = c / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-function contrast(a: Rgb, b: Rgb): number {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
 }
 
 const isPurple = (rgb: Rgb) => hue(rgb) >= 240 && hue(rgb) <= 300;
