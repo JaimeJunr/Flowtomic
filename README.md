@@ -14,7 +14,7 @@ O **Flowtomic** é um sistema de design que oferece componentes UI prontos para 
 
 - **63 atoms** - componentes básicos reutilizáveis
 - **49 molecules** - componentes compostos
-- **31 organisms** - componentes complexos
+- **32 organisms** - componentes complexos
 - **14 hooks headless** - lógica reutilizável sem UI
 - **4 blocks** - templates pré-construídos (`dashboard-01`, `flowtomic-dashboard`, `developer-panel`, `chatbot`)
 - **Arquitetura separada**: UI e lógica em packages distintos
@@ -548,7 +548,7 @@ function ResponsiveComponent() {
 
 - `animated-shiny-text` - Texto com efeito shimmer animado
 
-### Organisms (31)
+### Organisms (32)
 
 - `chain-of-thought` - Cadeia de raciocínio
 - `context` - Uso de contexto/tokens do modelo
@@ -571,6 +571,7 @@ function ResponsiveComponent() {
 - `queue` - Fila de mensagens e tarefas
 - `reasoning` - Exibição de raciocínio do modelo
 - `resizable-layout` - Componente redimensionável com sidebar
+- `routing-diagram` - Diagrama de roteamento com cenários em abas
 - `script-editor` - Editor de scripts com terminal interativo
 - `stats-grid` - Grid de estatísticas
 - `toolbar` - Toolbar do @xyflow/react
@@ -812,7 +813,7 @@ function CustomStatCard() {
 - [Componentes Disponíveis](./docs/componentes/README.md) - Lista completa de componentes
 - [Atoms](./docs/componentes/atoms.md) - Componentes básicos (63 componentes)
 - [Molecules](./docs/componentes/molecules.md) - Componentes compostos (49 componentes)
-- [Organisms](./docs/componentes/organisms.md) - Componentes complexos (31 componentes)
+- [Organisms](./docs/componentes/organisms.md) - Componentes complexos (32 componentes)
 - [Hooks](./docs/componentes/hooks.md) - Hooks headless (14 hooks)
 - [Blocks](./docs/componentes/blocks.md) - Blocks pré-construídos (4 blocks)
 

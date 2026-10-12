@@ -33,10 +33,10 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 
 ### Componentes
 
-- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (81 atoms, 51 molecules, 31 organisms, 14 hooks, 4 blocks)
+- [Componentes Disponíveis](componentes/README.md) - Lista completa de componentes (81 atoms, 51 molecules, 32 organisms, 14 hooks, 4 blocks)
 - [Atoms](componentes/atoms.md) - Componentes básicos (81 componentes: button, input, card, etc.)
 - [Molecules](componentes/molecules.md) - Componentes compostos (51 componentes: button-group, data-table, etc.)
-- [Organisms](componentes/organisms.md) - Componentes complexos (31 componentes: dashboard-layout, stats-grid, script-editor, etc.)
+- [Organisms](componentes/organisms.md) - Componentes complexos (32 componentes: dashboard-layout, stats-grid, script-editor, etc.)
 - [Blocks](componentes/blocks.md) - Blocks pré-construídos (4 blocks: dashboard-01, flowtomic-dashboard, developer-panel, chatbot)
 - [Hooks](componentes/hooks.md) - Hooks headless disponíveis (14 hooks)
 - [Specs clean room (React Bits)](clean-room/react-bits/) - Spec de comportamento de cada efeito inspirado no React Bits, escrita só a partir da demo pública; é a fonte da implementação e a prova de proveniência
