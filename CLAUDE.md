@@ -527,6 +527,11 @@ Cada uma já mordeu alguém neste repo.
   ⚠️ **E o `bun install` do bun 1.3.14 local não reescreve essa linha** (medido em 26/09/2026):
   o lock fica com a versão velha e o `--frozen-lockfile` local passa, mas o bun 1.3.0 da CI
   acusa. Depois do bump, confira `grep -A2 '"packages/ui": {' bun.lock` e acerte a versão na mão.
+- ⚠️ **O `tsc` não resolve o alias `@/` no que emite.** Só o `dist/index.js` passa pelo Bun; os
+  arquivos de `dist/components/**` (export `./components/*`) e os `.d.ts` saíam com
+  `from "@/lib/utils"`, e quem instalava o `@flowtomic/ui` precisava criar o mesmo alias (visto num
+  app Tauri em 12/10/2026). O `scripts/rewrite-ui-aliases.ts` troca por caminho relativo no fim do
+  `build` e falha se sobrar algum. Alias novo no `tsconfig` do `ui` precisa entrar nesse script.
 - ⚠️ **`registry.flowtomic.dev` não resolve no DNS** (medido em 20/09/2026), mas continua
   citado no `README.md` e nos `docs/`.
 - ⚠️ **O `.npmrc` do repo pina só o escopo `@flowtomic`.** O `flowtomic-cli` não tem escopo e
