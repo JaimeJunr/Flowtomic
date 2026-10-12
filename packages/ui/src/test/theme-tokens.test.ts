@@ -28,6 +28,22 @@ function contrastWithWhite(rgb: Rgb): number {
 
 const isPurple = (rgb: Rgb) => hue(rgb) >= 240 && hue(rgb) <= 300;
 
+/** Compila o globals.css como o Tailwind faz no app, com o theme.css importado. */
+async function compileGlobals() {
+  const { compile } = await import("tailwindcss");
+  const require = createRequire(import.meta.url);
+  return compile(globalsCss, {
+    base: STYLES_DIR,
+    loadStylesheet: async (id: string, base: string) => {
+      // tw-animate-css só traz keyframes; não pesa no que o teste mede.
+      if (id === "tw-animate-css") return { path: id, base, content: "" };
+      const file =
+        id === "tailwindcss" ? require.resolve("tailwindcss/index.css") : path.resolve(base, id);
+      return { path: file, base: path.dirname(file), content: readFileSync(file, "utf8") };
+    },
+  });
+}
+
 describe("Identidade Urucum no tema", () => {
   it("a escala brand saiu do roxo do Untitled UI", () => {
     const brand600 = parseRgb(readToken(themeCss, "--color-brand-600"));
@@ -217,18 +233,7 @@ describe("Tipografia própria", () => {
     // compilação separada que só emite as variáveis: text-display-lg saía com 16 px, sem erro
     // (medido em 12/10/2026). Compila o globals.css com o `tailwindcss`, dependência direta da raiz:
     // o @tailwindcss/node é transitivo e o linker isolado do bun na CI não o expõe ao pacote.
-    const { compile } = await import("tailwindcss");
-    const require = createRequire(import.meta.url);
-    const compiler = await compile(globalsCss, {
-      base: STYLES_DIR,
-      loadStylesheet: async (id: string, base: string) => {
-        // tw-animate-css só traz keyframes; não pesa no que o teste mede.
-        if (id === "tw-animate-css") return { path: id, base, content: "" };
-        const file =
-          id === "tailwindcss" ? require.resolve("tailwindcss/index.css") : path.resolve(base, id);
-        return { path: file, base: path.dirname(file), content: readFileSync(file, "utf8") };
-      },
-    });
+    const compiler = await compileGlobals();
     const css = compiler.build([
       "text-display-xs",
       "text-display-sm",
@@ -242,6 +247,19 @@ describe("Tipografia própria", () => {
         )
       );
     }
+  });
+
+  it("o theme.css não sequestra bg-primary, text-primary e border-primary", async () => {
+    // O theme.css traz tokens nos espaços --background-color-*, --text-color-*, --border-color-*,
+    // --ring-color-* e --outline-color-*, que o Tailwind usa antes do --color-*. Com o theme.css
+    // na mesma compilação (12/10/2026), bg-primary virou var(--background-color-primary), branco,
+    // e todo botão sólido sumiu, sem erro.
+    const compiler = await compileGlobals();
+    const css = compiler.build(["bg-primary", "text-primary", "border-primary", "ring-primary"]);
+    expect(css).toMatch(/\.bg-primary\s*\{[^}]*background-color:\s*var\(--primary\)/);
+    expect(css).toMatch(/\.text-primary\s*\{[^}]*color:\s*var\(--primary\)/);
+    expect(css).toMatch(/\.border-primary\s*\{[^}]*border-color:\s*var\(--primary\)/);
+    expect(css).not.toMatch(/var\(--(background|text|border|ring|outline)-color-/);
   });
 });
 

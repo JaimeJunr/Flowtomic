@@ -772,6 +772,13 @@ Cada uma já mordeu alguém neste repo.
   (48 px no `text-display-lg`, medido no Chrome), e o `flowtomic-cli` copia o `theme.css` junto
   quando pedem só `globals`. Não tire esse import; o `theme-tokens.test.ts` compila o `globals.css`
   com o `compile` do `tailwindcss` e reprova se `text-display-*` não gerar regra.
+- ⚠️ **O `theme.css` na mesma compilação sequestra `bg-primary`.** Ele traz tokens do Untitled UI
+  em `--background-color-*`, `--text-color-*`, `--border-color-*`, `--ring-color-*` e
+  `--outline-color-*`, e o Tailwind consulta esses espaços antes do `--color-*`. Logo depois do
+  `@import "./theme.css"` (#127), `bg-primary` virou `var(--background-color-primary)`, branco, e
+  todo botão sólido sumiu sem erro (medido em 12/10/2026). O `globals.css` zera esses espaços num
+  `@theme` logo após o import; não tire. O `theme-tokens.test.ts` compila e confere `bg-primary`.
+  Ao mexer no import de CSS, meça a cor de um `Button` no browser, não só o tamanho do texto.
 - ⚠️ **Import de dependência transitiva passa aqui e quebra na CI.** O `node_modules` desta máquina
   é hoisted; a CI instala com o linker isolado do bun (`node_modules/.bun/...`) e só expõe ao
   pacote o que está no `package.json` dele ou da raiz. Um teste do `ui` com `import("@tailwindcss/node")`

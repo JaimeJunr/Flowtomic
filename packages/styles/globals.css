@@ -8,6 +8,18 @@
    compilação separada que emite só as variáveis, e text-display-* saía sem CSS nenhum. */
 @import "./theme.css";
 
+/* O theme.css (herdado do Untitled UI) também traz tokens em --background-color-*, --text-color-*,
+   --border-color-*, --ring-color-* e --outline-color-*. O Tailwind consulta esses espaços antes do
+   --color-*, então bg-primary virava var(--background-color-primary), branco, e todo botão sólido
+   sumia. Os componentes usam os tokens semânticos do bloco @theme inline abaixo; zere os espaços. */
+@theme {
+  --background-color-*: initial;
+  --text-color-*: initial;
+  --border-color-*: initial;
+  --ring-color-*: initial;
+  --outline-color-*: initial;
+}
+
 /* Input glow effect - renderizado dentro do próprio input (Email e Password) */
 .email-glow-focused input {
   animation: emailGlowPulse 2s ease-in-out infinite;
