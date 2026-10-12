@@ -810,6 +810,12 @@ Cada uma já mordeu alguém neste repo.
   ganha colunas num breakpoint (`@min-[768px]:grid-cols-2`) começa com `grid-cols-1`, que é
   `minmax(0, 1fr)`. O jsdom não acusa; meça `scrollWidth` no browser em 390 px.
 
+- ⚠️ **Story em `layout: "centered"` dá rolagem lateral falsa em 390 px para componente `w-fit`.**
+  A moldura do Storybook dimensiona pelo conteúdo, então o `max-w-full` do componente não tem
+  largura definida para limitar (o `#storybook-root` saiu com 417 px numa tela de 390 no
+  `env-diff`, em 12/10/2026). Antes de caçar bug, confira a cadeia de larguras dos ancestrais; o
+  mesmo componente numa grade de verdade não transbordou. Story de bloco que encolhe usa `padded`.
+
 ## Checklist ao abrir PR
 
 Antes de fechar: *"o que aprendi que o próximo vai querer saber?"*
