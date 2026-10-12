@@ -111,16 +111,22 @@ function initials(name: string): string {
 function PersonAvatar({
   name,
   src,
+  compact = false,
   className,
   ...props
-}: { name: string; src?: string } & React.ComponentProps<typeof Avatar>) {
+}: { name: string; src?: string; compact?: boolean } & React.ComponentProps<typeof Avatar>) {
   return (
     <Avatar className={className} {...props}>
       {src ? (
         <AvatarImage src={src} alt="" />
       ) : (
-        <AvatarFallback className="text-xs font-medium text-muted-foreground">
-          {initials(name)}
+        <AvatarFallback
+          className={cn(
+            "font-medium text-muted-foreground",
+            compact ? "text-[0.625rem]" : "text-xs"
+          )}
+        >
+          {compact ? initials(name).slice(0, 1) : initials(name)}
         </AvatarFallback>
       )}
     </Avatar>
@@ -310,6 +316,7 @@ function ProofPill({
             key={`${avatar.name}-${index}`}
             name={avatar.name}
             src={avatar.src}
+            compact
             className={cn("h-7 w-7 ring-2 ring-background", index > 0 && "-ml-2")}
           />
         ))}
@@ -383,7 +390,7 @@ function TestimonialWall({
           {title && (
             <Heading
               id={titleId}
-              className="text-display-xs @min-[768px]:text-display-sm text-balance"
+              className="text-display-xs @min-[768px]:text-display-sm text-balance font-semibold"
             >
               {title}
             </Heading>
