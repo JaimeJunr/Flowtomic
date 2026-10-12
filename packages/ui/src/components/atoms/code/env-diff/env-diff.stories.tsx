@@ -5,7 +5,7 @@ const meta = {
   title: "Flowtomic UI/Atoms/Code/EnvDiff",
   component: EnvDiff,
   parameters: {
-    layout: "centered",
+    layout: "padded",
   },
   tags: ["autodocs"],
   argTypes: {

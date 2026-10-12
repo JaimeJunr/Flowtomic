@@ -192,7 +192,7 @@ export function EnvDiff({
       aria-label={label}
       ref={setRoot}
       className={cn(
-        "group relative w-fit max-w-full font-mono text-[0.8125rem] leading-5",
+        "group relative w-fit min-w-0 max-w-full font-mono text-[0.8125rem] leading-5",
         className
       )}
       {...props}
