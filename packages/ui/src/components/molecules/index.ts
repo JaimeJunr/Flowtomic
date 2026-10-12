@@ -115,6 +115,14 @@ export type {
 } from "./data-display/color-spotlight-grid";
 export { ColorSpotlightGrid } from "./data-display/color-spotlight-grid";
 export type {
+  ComparisonFeature,
+  ComparisonGroup,
+  ComparisonOption,
+  ComparisonTableProps,
+  ComparisonValue,
+} from "./data-display/comparison-table";
+export { ComparisonTable } from "./data-display/comparison-table";
+export type {
   Column,
   ColumnDef,
   ColumnFiltersState,
