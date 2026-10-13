@@ -9,7 +9,7 @@ padrão de interação e de composição, reescrito do zero a partir de uma spec
 ## O que falta no Flowtomic
 
 O Flowtomic tem efeito de sobra (213 do React Bits em andamento) e quase nenhuma **seção de
-página**. Os 11 sites (9 da primeira leva, o Cluely e o Final Round AI) são, todos, páginas de produto. As peças que eles repetem e o Flowtomic não
+página**. Os 12 sites (9 da primeira leva, o Cluely, o Final Round AI e o Next.js) são, todos, páginas de produto. As peças que eles repetem e o Flowtomic não
 tem:
 
 | peça | onde aparece | o Flowtomic tem? |
@@ -230,6 +230,49 @@ O que não copiar: o rótulo laranja em caixa alta acima de todo título ("FEATU
 o modal de oferta que interrompe a leitura a cada tela, "#1" e "™" como argumento, e os selos de
 certificação de terceiros.
 
+### Next.js (nextjs.org, redesenho de 10/2026)
+
+Vista em 13/10/2026, em 1440 e 390 px: página inicial, `/docs` e `/blog`. O próprio time anunciou o
+redesenho como "um design consistente que mantém o foco no conteúdo". Fundo quase branco, uma cor
+de destaque (azul) usada pouco, sans + mono, linhas finas.
+
+- **Hero com um comando, não dois botões**: título de duas linhas, uma frase com duas palavras em
+  negrito, e abaixo só uma pílula com `$ npx create-...` e o ícone de copiar. A ação principal é
+  colar um comando. Acima do título, o nome do produto em letras gigantes **só de contorno**, na cor
+  de destaque, como ilustração.
+- **Grade de recursos com ilustração de arame**: 3 colunas; na primeira linha, cada recurso tem um
+  quadro com um desenho de linhas finas cinza (quadros sobrepostos com rótulos `375PX`, `1440PX`
+  em mono azul; uma janela de app esquemática sobre papel quadriculado; uma árvore de nós com
+  algumas arestas tracejadas em azul). Nas linhas de baixo, os recursos são **só texto** (título
+  com seta + 2 linhas), nas mesmas colunas. Ilustração só onde ajuda.
+- **Um cartão de cor chapada** ocupando uma célula da grade ("versão 16" com seta, fundo azul,
+  texto branco): o único bloco de cor da página, para a novidade.
+- **Mosaico de vitrine**: prints de sites em tamanhos diferentes, encaixados, com borda fina.
+- **Duas citações lado a lado**, grandes e centradas, com a marca da empresa em cima e nome +
+  cargo embaixo em duas cores.
+- **Cartões de template com canto dobrado** (orelha no canto superior direito): título, duas
+  linhas, e no pé o caminho do repositório com ícone. À esquerda, "Comece em segundos" com um
+  botão sólido e um contornado.
+- **CTA final numa linha**: título grande à esquerda, dois botões à direita. Rodapé em colunas +
+  newsletter, e um **seletor de tema de 3 ícones** (sistema, claro, escuro) no canto inferior.
+- **Docs**: barra lateral com dois seletores no topo (o roteador e a versão, "Latest v16.4.0",
+  cada um com ícone num quadrado e chevron duplo), árvore de navegação; no conteúdo, um botão
+  dividido **"Copiar página"** (copiar como Markdown, com menu para outras opções); à direita,
+  **"Nesta página"** com régua vertical, item ativo marcado e subitens recuados, e embaixo "Dar
+  feedback" e "Editar no GitHub". No cabeçalho, busca com atalho e um botão "Perguntar à IA".
+  **No celular** (390 px): a barra lateral vira uma linha "Menu" logo abaixo do cabeçalho; o
+  "Nesta página" some e vira um botão de ícone de documento ao lado do título; o botão dividido
+  vira uma fileira de duas ações de texto, "Copiar para LLM" e "Perguntar à IA sobre esta página",
+  separadas por um traço vertical, com uma régua embaixo antes do conteúdo.
+- **Blog**: título grande, filtro em pílula ("Segurança") à direita; primeira fileira de 3
+  cartões com borda e título grande, as seguintes sem borda e com título menor; cada post com
+  data, categoria, título, resumo, **pilha de avatares + nomes** dos autores.
+  **No celular**: uma coluna, o filtro desce para baixo do título, o resumo corta em 3 linhas com
+  reticências e os nomes dos autores quebram ("e mais 1") ao lado da pilha de avatares.
+
+O que não copiar: o logotipo e as letras do nome deles no hero, o glifo `⌘` do atalho, e os prints
+de sites de terceiros na vitrine.
+
 ## Padrões transversais
 
 1. **Mostrar, não descrever.** Os melhores (Vercel, Perssua, Cloudflare) explicam o produto com
@@ -303,3 +346,18 @@ Por valor para quem usa a lib, do maior ao menor:
     grade densa.
 22. **`testimonial-wall`** ganha o cartão de vídeo (foto, nome sobreposto, play) e a pílula de
     prova social com pilha de avatares (Final Round).
+23. **`install-command`** (atom, Next.js): pílula com prompt `$`, comando em mono e copiar, como
+    ação principal do hero (conferir se o `snippet` já cobre).
+24. **`wireframe-art`** (atoms, Next.js): desenhos de arame em SVG só com tokens (quadros
+    sobrepostos com medidas, janela esquemática, árvore de nós com arestas tracejadas), sobre
+    papel quadriculado opcional, para cartões de recurso.
+25. **`docs-toc`** (molecule, Next.js): "Nesta página" com scroll-spy, régua, subitens e links de
+    feedback/edição; no estreito, vira botão que abre a lista.
+30. **`docs-layout`** (block, Next.js): barra lateral com seletores de contexto e versão + árvore,
+    conteúdo com ações da página, `docs-toc` à direita; no celular, "Menu" abaixo do cabeçalho.
+26. **`copy-page-button`** (molecule, Next.js): botão dividido que copia a página como Markdown, com
+    menu de opções.
+27. **`post-grid`** (organism, Next.js): índice de blog com fileira de destaque e o resto compacto,
+    data, categoria e pilha de autores.
+28. **`template-card`** (molecule, Next.js): cartão de canto dobrado com caminho do repositório.
+29. **`theme-switcher`** (atom, Next.js): sistema/claro/escuro em 3 ícones (conferir se já existe).
