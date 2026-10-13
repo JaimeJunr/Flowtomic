@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (154 atoms, 91 molecules, 39 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 91 molecules, 39 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -37,7 +37,7 @@ Estrutura básica:
 
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
-- **Atoms**: `docs/componentes/atoms.md` (154)
+- **Atoms**: `docs/componentes/atoms.md` (155)
 - **Molecules**: `docs/componentes/molecules.md` (91)
 - **Organisms**: `docs/componentes/organisms.md` (39)
 - **Blocks**: `docs/componentes/blocks.md` (4)
@@ -375,7 +375,7 @@ errado.
 
 Resumo:
 
-- **Atoms**: 154 componentes - Ver `docs/componentes/atoms.md`
+- **Atoms**: 155 componentes - Ver `docs/componentes/atoms.md`
 - **Molecules**: 91 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 39 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
@@ -809,6 +809,12 @@ Cada uma já mordeu alguém neste repo.
   dela estourou 150 px em 390 px no `faq-section` (12/10/2026), com rolagem lateral. Grade que só
   ganha colunas num breakpoint (`@min-[768px]:grid-cols-2`) começa com `grid-cols-1`, que é
   `minmax(0, 1fr)`. O jsdom não acusa; meça `scrollWidth` no browser em 390 px.
+
+- ⚠️ **Story em `layout: "centered"` dá rolagem lateral falsa em 390 px para componente `w-fit`.**
+  A moldura do Storybook dimensiona pelo conteúdo, então o `max-w-full` do componente não tem
+  largura definida para limitar (o `#storybook-root` saiu com 417 px numa tela de 390 no
+  `env-diff`, em 12/10/2026). Antes de caçar bug, confira a cadeia de larguras dos ancestrais; o
+  mesmo componente numa grade de verdade não transbordou. Story de bloco que encolhe usa `padded`.
 
 ## Checklist ao abrir PR
 
