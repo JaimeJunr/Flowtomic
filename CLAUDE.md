@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 91 molecules, 39 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 92 molecules, 39 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (155)
-- **Molecules**: `docs/componentes/molecules.md` (91)
+- **Molecules**: `docs/componentes/molecules.md` (92)
 - **Organisms**: `docs/componentes/organisms.md` (39)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -376,7 +376,7 @@ errado.
 Resumo:
 
 - **Atoms**: 155 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 91 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 92 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 39 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
@@ -815,6 +815,11 @@ Cada uma já mordeu alguém neste repo.
   largura definida para limitar (o `#storybook-root` saiu com 417 px numa tela de 390 no
   `env-diff`, em 12/10/2026). Antes de caçar bug, confira a cadeia de larguras dos ancestrais; o
   mesmo componente numa grade de verdade não transbordou. Story de bloco que encolhe usa `padded`.
+
+- ⚠️ **`text-display-xs` (24 px) é menor que `text-3xl` (30 px).** A escala `display` do tema não
+  começa acima da do Tailwind: xs 24, sm 30, md 36, lg 48, xl 60, 2xl 72. Misturar as duas numa
+  prop `size` inverteu a escala do `metric-strip` (o padrão saía menor que o `md`, medido em
+  13/10/2026). Escala de tamanho de um componente usa uma família só.
 
 ## Checklist ao abrir PR
 

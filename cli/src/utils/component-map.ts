@@ -1527,6 +1527,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
       "cn",
     ],
   },
+  "metric-strip": {
+    name: "metric-strip",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/metric-strip",
+    files: ["metric-strip.tsx", "index.ts"],
+    dependencies: ["cn"],
+  },
   "data-table": {
     name: "data-table",
     type: "molecule",
