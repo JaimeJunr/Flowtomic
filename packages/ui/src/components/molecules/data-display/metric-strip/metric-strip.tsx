@@ -53,9 +53,9 @@ export type MetricStripProps = Omit<React.ComponentProps<"dl">, "children"> & {
 
 // Classes literais: o Tailwind não gera classe montada por interpolação.
 const SIZE_CLASS = {
-  md: "text-3xl",
-  lg: "text-display-xs",
-  xl: "text-display-md",
+  md: "text-display-xs",
+  lg: "text-display-md",
+  xl: "text-display-lg",
 } as const;
 
 const WIDE_COLUMNS: Record<number, string> = {
@@ -66,13 +66,13 @@ const WIDE_COLUMNS: Record<number, string> = {
 
 const VARIANT_CLASS = {
   columns: "grid grid-cols-1 gap-x-0 gap-y-6 @min-[420px]:grid-cols-2",
-  rows: "flex flex-col",
+  rows: "grid grid-cols-1 @min-[480px]:grid-cols-[auto_1fr]",
   inline: "flex flex-wrap items-baseline gap-x-6 gap-y-2",
 } as const;
 
 const ITEM_CLASS = {
   columns: "relative flex flex-col gap-1",
-  rows: "relative grid grid-cols-1 gap-x-6 gap-y-1 border-t border-border py-4 first:border-t-0 first:pt-0 @min-[480px]:grid-cols-[auto_1fr]",
+  rows: "relative grid grid-cols-1 gap-x-6 gap-y-1 border-t border-border py-4 first:border-t-0 first:pt-0 @min-[480px]:col-span-2 @min-[480px]:grid-cols-subgrid",
   inline: "relative flex items-baseline gap-2",
 } as const;
 

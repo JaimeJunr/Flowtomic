@@ -46,8 +46,8 @@ contêiner do item, para o leitor de tela ler "rótulo: número").
   "compact"` para "10 mi").
 - `display` opcional (ReactNode) substitui o número formatado. Nota com estrela usa o ícone `Star`
   do lucide no `suffix`, nunca o glifo de estrela no texto.
-- Tamanho por prop `size`: `md` (`text-3xl`), `lg` (`text-display-xs`, padrão), `xl`
-  (`text-display-md`). Peso 600, `tabular-nums`, `tracking-tight`. Prop `mono` (padrão `false`):
+- Tamanho por prop `size`: `md` (`text-display-xs`, 24 px), `lg` (`text-display-md`, 36 px,
+  padrão), `xl` (`text-display-lg`, 48 px). Peso 600, `tabular-nums`, `tracking-tight`. Prop `mono` (padrão `false`):
   `font-mono` no número.
 - **Atenção à armadilha do `CLAUDE.md`**: `text-display-*` e cor de texto não podem ir no mesmo
   `cn()`. Ponha a cor num elemento e o tamanho noutro, ou a cor no contêiner.
