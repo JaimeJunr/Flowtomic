@@ -73,6 +73,12 @@ O **Flowtomic** é um monorepo que fornece uma biblioteca de componentes UI, hoo
 - [Publicação no NPM](deploy/npm.md) - Script automatizado de publicação dos packages no NPM
 - [Configuração do Registry](deploy/registry.md) - Como configurar o registry em produção
 
+### Aprendizados
+
+- [Button e Input do @flowtomic/ui 1.1+ colapsam a altura sem --control-height definida no consumidor](aprendizados/control-height-sem-variavel-colapsa-altura.md) - A partir do 1.1 o tamanho de Button e Input vem da variável CSS --control-height, declarada no CSS próprio do flowtomic que o Pandora não importa; sem ela a altura some, e o Pandora a define em app/globals.css com 2.25rem, o equivalente ao h-9 do 1.0.
+- [@flowtomic/ui é publicado com build de desenvolvimento e mata toda tela em produção](aprendizados/build-de-desenvolvimento-publicado-quebra-producao.md) - O dist no npm chama jsxDEV, que só existe em react/jsx-dev-runtime e some de qualquer bundle de produção; a causa é bun build sem --production, e NODE_ENV=production não resolve — está em todas as versões publicadas, então atualizar não adianta.
+- [O Sonner embutido no @flowtomic/ui não reproduz avisos disparados antes do Toaster montar — aviso de efeito de montagem some](aprendizados/sonner-embutido-perde-avisos-antes-do-toaster.md) - O dist do @flowtomic/ui 1.2.0 carrega a própria cópia do sonner, que descarta toasts criados antes do <Toaster/> existir (o pacote sonner raiz os reaproveita); como o Pandora monta o Toaster com next/dynamic e ssr:false, o erro de conexão da home sumia calado, e a correção é um portão de promessa liberado pelo efeito do Toaster.
+
 ## Como Usar Esta Documentação
 
 ### Para Desenvolvedores
