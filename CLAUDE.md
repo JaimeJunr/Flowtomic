@@ -816,6 +816,11 @@ Cada uma já mordeu alguém neste repo.
   `env-diff`, em 12/10/2026). Antes de caçar bug, confira a cadeia de larguras dos ancestrais; o
   mesmo componente numa grade de verdade não transbordou. Story de bloco que encolhe usa `padded`.
 
+- ⚠️ **`text-display-xs` (24 px) é menor que `text-3xl` (30 px).** A escala `display` do tema não
+  começa acima da do Tailwind: xs 24, sm 30, md 36, lg 48, xl 60, 2xl 72. Misturar as duas numa
+  prop `size` inverteu a escala do `metric-strip` (o padrão saía menor que o `md`, medido em
+  13/10/2026). Escala de tamanho de um componente usa uma família só.
+
 ## Checklist ao abrir PR
 
 Antes de fechar: *"o que aprendi que o próximo vai querer saber?"*
