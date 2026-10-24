@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Sparkles } from "lucide-react";
+import { Check, Sparkles, ThumbsUp } from "lucide-react";
 import * as React from "react";
 import { Button } from "../../../atoms";
 import type { DayMoment } from "./day-timeline";
@@ -32,7 +32,7 @@ const moments: DayMoment[] = [
     title: "Comece com a fila arrumada",
     description: "Os PRs chegam separados por risco, e o que bloqueia o resto aparece primeiro.",
     message: "Separei os PRs abertos por risco. Dois dependem de você hoje.",
-    reaction: "1",
+    reaction: <ThumbsUp aria-hidden="true" className="size-3.5" />,
   },
   {
     id: "revisao",
@@ -65,7 +65,7 @@ const moments: DayMoment[] = [
     title: "Feche o dia com o changelog",
     description: "O rascunho já está pronto para revisar, com os PRs do dia em ordem.",
     message: "O rascunho do changelog está pronto. Falta só a sua leitura.",
-    reaction: "2",
+    reaction: <Check aria-hidden="true" className="size-3.5" />,
   },
 ];
 

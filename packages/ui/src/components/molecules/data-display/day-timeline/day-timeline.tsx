@@ -264,7 +264,7 @@ function DayTimeline({
             aria-valuenow={index}
             aria-valuetext={`${moment.time}, ${textOf(moment.title)}`}
             onKeyDown={onKeyDown}
-            className="absolute inset-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="absolute inset-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
           />
           {ticks.map((tick) => (
             <span
@@ -343,7 +343,7 @@ function DayTimeline({
           {moment.eyebrow ? (
             <p className="text-sm text-muted-foreground">{moment.eyebrow}</p>
           ) : null}
-          <p className="mt-1 text-balance text-display-xs @min-[768px]:text-display-sm">
+          <p className="mt-1 text-balance font-semibold tracking-tight text-display-xs @min-[768px]:text-display-sm">
             {moment.title}
           </p>
           {moment.description ? (
