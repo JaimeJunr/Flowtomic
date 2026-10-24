@@ -46,6 +46,12 @@ Estado atual de vários itens (integrações, serviços, regiões) numa lista qu
 
 **Dependências**: `lucide-react`, `motion`, `@radix-ui/react-accordion`, `@radix-ui/react-tooltip`, `cn`
 
+### `day-timeline`
+
+Um dia em momentos (`moments`: `id`, `time` "HH:MM", `eyebrow`, `title`, `description`, `message`, `reaction`) sobre uma régua posicionada pelo horário, não pelo índice (`start`/`end`, padrão o primeiro e o último; traços menores a cada `tickMinutes`, padrão 30). O cursor (`--primary`) tem pílula com a hora e setas "Momento anterior"/"Próximo momento"; troca por seta, clique no ponto, teclado (`role="slider"`: setas, `Home`, `End`) ou arrastando (encaixa no momento mais próximo). Acima, slot `avatar` e balão com a `message` do momento (vai para a esquerda do cursor nos 35% finais); abaixo, `eyebrow`, `title` e `description` numa região `aria-live`. Abaixo de 640 px de contêiner o cursor fica no centro e a régua desliza. `autoPlay` (ms por momento) avança sozinho, pausa com ponteiro, foco de teclado e movimento reduzido, e mostra botão de pausar. Controlado (`value` + `onValueChange` com o id) ou não (`defaultValue`). Os cálculos puros ficam em `day-timeline-utils.ts`. Spec: `docs/clean-room/sites/day-timeline.md`.
+
+**Dependências**: `lucide-react`, `motion`, `cn`
+
 ### `widget-renderer`
 
 Renderiza por `renderWidget(widget, data)` ou por um registry indexado pelo tipo do widget. A render prop tem prioridade, inclusive quando retorna null. Loading explícito e Suspense anunciam “Carregando widget” sem mudar o skeleton visual. Um `fallback` fornecido é respeitado mesmo quando vale `0`, `""`, null ou false; sem fallback, aparece o tipo desconhecido.
