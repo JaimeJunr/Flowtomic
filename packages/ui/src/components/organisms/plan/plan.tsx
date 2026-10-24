@@ -8,8 +8,9 @@ import { ChevronsUpDownIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../atoms/actions/button";
+import { Shimmer } from "../../atoms/animation/shimmer";
 import {
-  Button,
   Card,
   CardAction,
   CardContent,
@@ -17,11 +18,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+} from "../../atoms/display/card";
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-  Shimmer,
-} from "../../atoms";
+} from "../../atoms/layout/collapsible";
 
 type PlanContextValue = {
   isStreaming: boolean;

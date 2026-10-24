@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 import { TextEditor } from "./text-editor";
 
 const meta = {

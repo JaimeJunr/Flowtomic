@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { WidgetLayout } from "@/types/dashboard";
-import { Card, CardContent, CardHeader, CardTitle } from "../../atoms";
+import { Card, CardContent, CardHeader, CardTitle } from "../../atoms/display/card";
 import { WidgetRenderer } from "./widget-renderer";
 
 const meta = {

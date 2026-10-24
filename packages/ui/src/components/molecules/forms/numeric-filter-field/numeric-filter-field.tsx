@@ -5,14 +5,14 @@
 
 import { NumericFormat } from "react-number-format";
 import { cn } from "@/lib/utils";
+import { Input } from "../../../atoms/forms/input";
 import {
-  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../atoms";
+} from "../../../atoms/forms/select";
 
 export type NumericFilterOperator = "eq" | "gt" | "lt" | "gte" | "lte";
 

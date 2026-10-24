@@ -9,7 +9,9 @@ import { Loader2 } from "lucide-react";
 import type * as React from "react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../atoms/feedback/dialog";
+import { Textarea } from "../../../atoms/forms/textarea";
 import type { ChatMessageData } from "../../data-display/chat-message";
 
 export interface EditChatMessageModalProps {

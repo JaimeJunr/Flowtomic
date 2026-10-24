@@ -8,17 +8,19 @@ import { ChevronDownIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../atoms/actions/button";
 import {
-  Button,
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-  Input,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../atoms";
+} from "../../atoms/feedback/tooltip";
+import { Input } from "../../atoms/forms/input";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../../atoms/layout/collapsible";
 
 export type WebPreviewContextValue = {
   url: string;

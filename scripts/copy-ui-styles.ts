@@ -20,11 +20,11 @@ if (!existsSync(stylesTargetDir)) {
   console.log(`📁 Diretório criado: ${stylesTargetDir}`);
 }
 
-// O bundle externaliza KaTeX. Preserve o export CSS legado para quem usa matemática,
-// deixando o bundler do app resolver os assets do peer opcional.
+// O bundle externaliza KaTeX e React Flow. Preserve os dois estilos do export legado;
+// o bundler do app resolve os assets dos peers opcionais.
 writeFileSync(
   join(rootDir, "packages", "ui", "dist", "index.css"),
-  '@import "katex/dist/katex.min.css";\n',
+  '@import "katex/dist/katex.min.css";\n@import "@xyflow/react/dist/style.css";\n',
   "utf-8"
 );
 

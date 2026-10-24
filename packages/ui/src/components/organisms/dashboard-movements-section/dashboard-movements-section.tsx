@@ -7,7 +7,7 @@
 
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../atoms";
+import { Button } from "../../atoms/actions/button";
 
 export interface Movement {
   id: string;

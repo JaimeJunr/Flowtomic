@@ -41,22 +41,17 @@ import * as React from "react";
 import { Streamdown } from "streamdown";
 import { Markdown, type MarkdownStorage } from "tiptap-markdown";
 import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms/actions/button";
+import { Separator } from "../../../atoms/display/separator";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../atoms/feedback/popover";
 import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Separator,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Textarea,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../../atoms";
+} from "../../../atoms/feedback/tooltip";
+import { Textarea } from "../../../atoms/forms/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../atoms/navigation/tabs";
 
 export type TextEditorMode = "rich" | "markdown" | "preview";
 
@@ -233,7 +228,7 @@ export function TextEditor({
     },
     extensions: [
       Markdown.configure({ html: false, transformPastedText: true, transformCopiedText: true }),
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3] }, underline: false, link: false }),
       TextStyle,
       Color,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -269,7 +264,7 @@ export function TextEditor({
       // @ts-expect-error
       editor.commands.setMarkdown(nextMarkdown);
     } else {
-      editor.commands.setContent(nextMarkdown);
+      editor.commands.setContent(nextMarkdown, { emitUpdate: false });
     }
   }, [editor, controlledValue]);
 

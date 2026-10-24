@@ -8,7 +8,7 @@
 import { Plus } from "lucide-react";
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 
 export type ProjectStatus = "active" | "pending" | "completed" | "on-hold";
 

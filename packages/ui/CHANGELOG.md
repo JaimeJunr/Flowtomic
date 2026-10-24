@@ -9,7 +9,8 @@
   opcionais para o pacote e obrigatórios para as famílias que os importam; também
   ficam em `devDependencies` para build/teste. O bundle externaliza dependências e
   peers para compartilhar as bibliotecas do app.
-- **Migração por família:** FAQ/accordion/status-list usam `@radix-ui/react-accordion`;
+- **Migração por família:** FAQ/accordion usam `@radix-ui/react-accordion`; StatusList
+  usa também `@radix-ui/react-tooltip`, `@react-aria/tooltip` e `@react-stately/tooltip`;
   Button usa `@radix-ui/react-slot`; cada primitive Radix usa seu `@radix-ui/react-*`;
   tooltip usa também `@react-aria/tooltip` e `@react-stately/tooltip`. Chat/IA usa
   `ai@^6.0.304`; message usa Markdown, KaTeX e Shiki; code-block/code-tabs usam Shiki;
@@ -27,6 +28,14 @@
   exigem resolução por bundler (Refs #137, item ESM pendente).
 
 ### Fixed
+
+- O TextEditor sincroniza `value` sem emitir `onChange`; mudanças do usuário continuam
+  emitindo. Underline e Link do StarterKit 3 ficam desativados para preservar a API 1.x.
+- Imports internos de atoms apontam diretamente para seus componentes, sem carregar
+  peers de famílias alheias. A tabela inclui EnvDiff, MetricStrip e TestimonialWall.
+- O CLI aceita `styles fonts` e inclui `@tiptap/core` e `@tiptap/pm` no TextEditor.
+- O CSS legado `dist/index.css` mantém os estilos de KaTeX e React Flow por imports
+  dos peers `katex` e `@xyflow/react`.
 
 - `@radix-ui/react-accordion` e os demais pacotes usados em runtime que só estavam
   em devDependencies/na raiz agora têm peers explícitos no UI (#137).

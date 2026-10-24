@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "./button-group";
 
 function renderGroup(props: Partial<React.ComponentProps<typeof ButtonGroup>> = {}) {

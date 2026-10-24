@@ -12,14 +12,14 @@ import { type StatCardData, useStatCard } from "@flowtomic/logic";
 import { MoreHorizontal, Pin, Settings, Share2, Trash, TriangleAlert } from "lucide-react";
 import type React from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms/actions/button";
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../../atoms";
+} from "../../../atoms/actions/dropdown-menu";
 
 export interface StatCardProps extends StatCardData {
   /**

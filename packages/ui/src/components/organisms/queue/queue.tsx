@@ -7,13 +7,13 @@
 import { ChevronDownIcon, PaperclipIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../atoms/actions/button";
 import {
-  Button,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-  ScrollArea,
-} from "../../atoms";
+} from "../../atoms/layout/collapsible";
+import { ScrollArea } from "../../atoms/layout/scroll-area";
 
 export type QueueMessagePart = {
   type: string;

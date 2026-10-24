@@ -7,7 +7,11 @@
 import { ChevronDownIcon, ExternalLink } from "lucide-react";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../atoms";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../../../atoms/layout/collapsible";
 
 export type SourcesProps = ComponentProps<"div">;
 

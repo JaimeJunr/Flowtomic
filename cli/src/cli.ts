@@ -57,7 +57,7 @@ program
   .description("Copiar arquivos de estilo do Flowtomic para o projeto")
   .argument(
     "[styles...]",
-    "Arquivos de estilo para copiar (globals, theme, typography). Se não especificado, copia todos."
+    "Arquivos de estilo para copiar (globals, theme, typography, fonts). Se não especificado, copia todos."
   )
   .action(copyStyles);
 

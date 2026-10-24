@@ -6,7 +6,7 @@
  */
 
 import { memo, Suspense } from "react";
-import { CardSkeleton } from "@/components/atoms";
+import { CardSkeleton } from "@/components/atoms/display/skeleton";
 import type { WidgetLayout } from "@/types/dashboard";
 
 export interface WidgetRendererProps {

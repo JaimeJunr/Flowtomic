@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "../../atoms";
+import { Button } from "../../atoms/actions/button";
 import {
   ModelSelector,
   ModelSelectorContent,

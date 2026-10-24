@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "../../atoms";
+import { Button } from "../../atoms/actions/button";
 import {
   BaseFormField,
   FormLayout,

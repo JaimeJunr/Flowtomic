@@ -27,9 +27,8 @@ import { FaqSection } from "@flowtomic/ui/components/organisms/faq-section";
 
 Prefira o subpath do componente. O export raiz `@flowtomic/ui` e os barrels de
 categoria reexportam todas as famílias; podem exigir os peers das outras famílias
-quando o bundler resolve os módulos, mesmo antes do tree-shaking. Alguns componentes
-ainda importam esses barrels internamente (por exemplo, a toolbar do editor):
-nesses casos, o bundler pode pedir peers adicionais de outros atoms. Estes arquivos
+quando o bundler resolve os módulos, mesmo antes do tree-shaking. Os componentes usam imports diretos dos atoms
+para restringir a resolução às famílias utilizadas. Estes arquivos
 ESM ainda têm imports relativos sem extensão: em Node puro, o import por componente
 pode falhar; use um bundler com resolução de diretórios/extensões.
 
@@ -40,7 +39,10 @@ que compõem. `Button`, por exemplo, exige `@radix-ui/react-slot` e `motion`.
 
 | Família / componente | Peers opcionais adicionais |
 | --- | --- |
-| `faq-section`, `accordion`, `status-list` | `@radix-ui/react-accordion`; FAQ também usa `@radix-ui/react-slot` |
+| `faq-section`, `accordion` | `@radix-ui/react-accordion`; FAQ também usa `@radix-ui/react-slot` |
+| `status-list` | `@radix-ui/react-accordion`, `@radix-ui/react-tooltip`, `@react-aria/tooltip`, `@react-stately/tooltip` |
+| `env-diff`, `testimonial-wall` | `@radix-ui/react-slot` via Button |
+| `metric-strip` | Nenhum além dos peers comuns (`motion` via CountUp) |
 | `button`, `breadcrumb`, `item`, `bubble`, `sidebar` | `@radix-ui/react-slot`; `sidebar` também usa `@flowtomic/logic` e os peers de `sheet`/`tooltip` |
 | `alert-dialog`, `checkbox`, `collapsible`, `dialog`/`sheet`, `dropdown-menu`, `hover-card`, `label`, `popover`, `scroll-area`, `separator`, `tabs`, `toggle`, `toggle-group`, `aspect-ratio`, `context-menu`, `menubar`, `navigation-menu`, `radio-group`, `select`, `slider`, `switch` | O pacote `@radix-ui/react-<nome>` correspondente (`sheet` usa `react-dialog`, `label` usa `react-label`) |
 | `tooltip` | `@radix-ui/react-tooltip`, `@react-aria/tooltip`, `@react-stately/tooltip` |
@@ -107,7 +109,7 @@ Quem hospeda fontes localmente ou usa `next/font` pode omitir esse arquivo.
 Os tokens e fallbacks de tipografia continuam nos estilos padrão.
 
 O export legado `@flowtomic/ui/dist/index.css` continua disponível para os estilos
-matemáticos do KaTeX e exige o peer `katex`. Os estilos gerais estão em `styles/globals.css`.
+do KaTeX e React Flow e exige os peers `katex` e `@xyflow/react`. Os estilos gerais estão em `styles/globals.css`.
 
 ## Uso
 

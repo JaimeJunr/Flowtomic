@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type * as React from "react";
 import { useState } from "react";
 import type { WidgetLayout } from "@/types/dashboard";
-import { Card, CardContent, CardHeader, CardTitle } from "../../atoms";
+import { Card, CardContent, CardHeader, CardTitle } from "../../atoms/display/card";
 import { StatsGrid } from "../stats-grid/stats-grid";
 import { DraggableDashboardGrid } from "./draggable-dashboard-grid";
 

@@ -10,15 +10,12 @@ import { Check, HelpCircle, X } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../../atoms";
+} from "../../../atoms/feedback/tooltip";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../atoms/navigation/tabs";
 
 export type ComparisonValue = boolean | "partial" | React.ReactNode;
 

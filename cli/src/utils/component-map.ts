@@ -1777,6 +1777,8 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     path: "packages/ui/src/components/molecules/forms/text-editor",
     files: ["text-editor.tsx", "index.ts"],
     dependencies: [
+      "@tiptap/core",
+      "@tiptap/pm",
       "@tiptap/react",
       "@tiptap/starter-kit",
       "@tiptap/extension-color",

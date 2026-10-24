@@ -14,7 +14,7 @@ import {
   useStickToBottomContext,
 } from "use-stick-to-bottom";
 import { cn } from "@/lib/utils";
-import { Button } from "../../atoms";
+import { Button } from "../../atoms/actions/button";
 
 export type ConversationProps = ComponentProps<typeof StickToBottom> & {
   ref?: React.Ref<HTMLDivElement>;

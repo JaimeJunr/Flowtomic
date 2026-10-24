@@ -9,7 +9,8 @@ import { Send } from "lucide-react";
 import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { Button, Textarea } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
+import { Textarea } from "../../../atoms/forms/textarea";
 
 export interface MessageTypeOption {
   value: string;

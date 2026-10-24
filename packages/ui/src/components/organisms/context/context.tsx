@@ -8,7 +8,9 @@ import type { LanguageModelUsage } from "ai";
 import { type ComponentProps, createContext, useContext } from "react";
 import { getUsage } from "tokenlens";
 import { cn } from "@/lib/utils";
-import { Button, HoverCard, HoverCardContent, HoverCardTrigger, Progress } from "../../atoms";
+import { Button } from "../../atoms/actions/button";
+import { Progress } from "../../atoms/animation/progress";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "../../atoms/feedback/hover-card";
 
 const PERCENT_MAX = 100;
 const ICON_RADIUS = 10;

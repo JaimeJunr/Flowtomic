@@ -6,7 +6,8 @@
 
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
-import { Button, ScrollArea, ScrollBar } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
+import { ScrollArea, ScrollBar } from "../../../atoms/layout/scroll-area";
 
 export type SuggestionsProps = ComponentProps<typeof ScrollArea> & {
   /**

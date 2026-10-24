@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../atoms";
+import { Button } from "../../atoms/actions/button";
 import { TextEditor } from "../../molecules/forms/text-editor";
 
 export interface DocumentPage {

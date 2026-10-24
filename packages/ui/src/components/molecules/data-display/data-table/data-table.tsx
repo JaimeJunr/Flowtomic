@@ -21,7 +21,9 @@ import { ArrowDown, ChevronsUpDown, HelpCircle } from "lucide-react";
 import type { ComponentPropsWithRef, HTMLAttributes, ReactNode } from "react";
 import React, { createContext, useContext, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { Badge, Checkbox, Input } from "../../../atoms";
+import { Badge } from "../../../atoms/actions/badge";
+import { Checkbox } from "../../../atoms/forms/checkbox";
+import { Input } from "../../../atoms/forms/input";
 import { DataTablePagination } from "./data-table-pagination";
 
 // ============================================================================

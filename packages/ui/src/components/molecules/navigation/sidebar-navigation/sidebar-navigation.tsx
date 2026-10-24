@@ -8,7 +8,9 @@
 import { Download, LogOut, Settings } from "lucide-react";
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { Button, Card, CardContent, Separator } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
+import { Card, CardContent } from "../../../atoms/display/card";
+import { Separator } from "../../../atoms/display/separator";
 import {
   Sidebar,
   SidebarContent,

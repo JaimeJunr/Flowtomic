@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { Checkbox, Input } from "../../atoms";
+import { Checkbox } from "../../atoms/forms/checkbox";
+import { Input } from "../../atoms/forms/input";
 import { WidgetConfigModal } from "./widget-config-modal";
 
 const meta = {

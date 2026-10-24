@@ -17,7 +17,7 @@
 import { Image as ImageIcon, Upload, X } from "lucide-react";
 import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 
 export interface ImageDropzoneProps {
   /**

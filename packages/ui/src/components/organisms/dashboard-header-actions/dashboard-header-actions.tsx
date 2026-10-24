@@ -7,7 +7,7 @@
 
 import { RefreshCw, Save, Settings } from "lucide-react";
 import type React from "react";
-import { Button } from "@/components/atoms";
+import { Button } from "@/components/atoms/actions/button";
 import { ButtonGroup } from "@/components/molecules/forms/button-group/button-group";
 import { cn } from "@/lib/utils";
 

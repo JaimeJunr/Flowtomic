@@ -10,14 +10,14 @@ import type { ComponentProps, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import { MessageResponse } from "@/components/molecules/data-display/message";
 import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms/actions/button";
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../../atoms";
+} from "../../../atoms/actions/dropdown-menu";
 
 export interface ChatMessageData {
   id: string | number;
