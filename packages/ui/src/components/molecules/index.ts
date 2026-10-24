@@ -180,6 +180,8 @@ export {
   MessageResponse,
   MessageToolbar,
 } from "./data-display/message";
+export type { Metric, MetricStripProps } from "./data-display/metric-strip";
+export { MetricStrip } from "./data-display/metric-strip";
 export type { PaperFolderProps, PaperFolderTone } from "./data-display/paper-folder";
 export { PaperFolder } from "./data-display/paper-folder";
 export type { ProfileCardProps } from "./data-display/profile-card";

@@ -34,6 +34,12 @@ Recursos (linhas) por opções (colunas), com uma coluna em destaque (faixa cont
 
 **Dependências**: `lucide-react`, `@radix-ui/react-tooltip`, `@radix-ui/react-tabs`, `cn`
 
+### `metric-strip`
+
+Faixa de números de produto num `<dl>` (`<dt>` rótulo, `<dd>` número, número em cima e rótulo embaixo, lido "rótulo: número"). `variant`: `columns` (padrão; 2 a 4 colunas por container query, `dividers` para réguas), `rows` (número à esquerda, rótulo e `description` à direita, empilha abaixo de 480 px de contêiner) e `inline` (texto corrido, número em `--primary`, `separator="dot"`). Cada item: `value`, `label`, `description`, `prefix`, `suffix`, `unit` (menor, alinhada à base), `display` (substitui o número), `formatOptions` e `href` (item inteiro vira link). Formata com `Intl.NumberFormat` (`locale`, padrão `pt-BR`). Props: `items`, `variant`, `size` (`md`/`lg`/`xl`), `mono`, `accent`, `dividers`, `separator`, `animate` (usa o `CountUp`, uma vez ao entrar na tela, valor final direto com movimento reduzido), `durationMs`, `locale`. O `@container` fica num wrapper em volta do `<dl>`. Spec: `docs/clean-room/sites/metric-strip.md`.
+
+**Dependências**: `cn`, `count-up` (atom)
+
 ### `status-list`
 
 Estado atual de vários itens (integrações, serviços, regiões) numa lista que se lê de longe. Cada linha-cartão mostra número em mono (`numbered`), ícone opcional, nome, ponto de estado, "Atualizado há 16 horas" (`Intl.RelativeTimeFormat`, some abaixo de 640 px de contêiner) e selo com texto (`operational`, `degraded`, `outage`, `maintenance`; `statusLabel` sobrescreve). Linhas com `history` ou `content` abrem pelo Accordion: barras de histórico (uma por ponto, tooltip só de ponteiro, entrada em cascata que respeita movimento reduzido), disponibilidade calculada sobre pontos com dado ("98,9% disponível") e conteúdo livre. Linha sem detalhe não é botão. Props: `items`, `numbered`, `multiple` (padrão `true`), `value`/`defaultValue`/`onValueChange` (lista de ids), `locale` (padrão `pt-BR`), `now` (para teste determinístico). Spec: `docs/clean-room/sites/status-list.md`.

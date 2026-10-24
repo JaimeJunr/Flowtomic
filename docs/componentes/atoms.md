@@ -1193,6 +1193,20 @@ código” e vira “Copiado” depois de copiar.
 
 **Localização**: `packages/ui/src/components/atoms/code/code-block`
 
+#### `env-diff`
+
+Diff curto de variáveis de ambiente: linhas removidas, adicionadas e de contexto, cada uma com
+borda de 2 px na cor do tipo e fundo que esmaece da esquerda para a direita (`fade={false}` deixa
+chapado). `value` mostra `NOME=valor` e `masked` troca o valor por máscara. `animate` revela as
+linhas em sequência quando o bloco entra na tela (removidas, pausa, adicionadas) e mostra tudo de
+uma vez com movimento reduzido. `copyable` copia só o estado final (adicionadas e contexto, sem
+sinal). `parseEnvDiff(texto)` converte `- X=1`, `+ Y=2` e `  Z=3` em linhas. As linhas são uma
+lista, o sinal visual é `aria-hidden` e o tipo é dito por texto só para leitor de tela.
+
+**Dependências**: `lucide-react`, `motion`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/code/env-diff`
+
 #### `snippet`
 
 Snippet de código inline com botão de copiar.
