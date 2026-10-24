@@ -132,6 +132,8 @@ export type {
   VisibilityState,
 } from "./data-display/data-table";
 export { DataTable } from "./data-display/data-table";
+export type { DayMoment, DayTimelineProps } from "./data-display/day-timeline";
+export { DayTimeline } from "./data-display/day-timeline";
 export type { DepthRailCarouselProps, DepthRailItem } from "./data-display/depth-rail-carousel";
 export { DepthRailCarousel } from "./data-display/depth-rail-carousel";
 export type { DomeGalleryProps, DomeItem } from "./data-display/dome-gallery";

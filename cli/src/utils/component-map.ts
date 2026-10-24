@@ -1527,6 +1527,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
       "cn",
     ],
   },
+  "day-timeline": {
+    name: "day-timeline",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/day-timeline",
+    files: ["day-timeline.tsx", "day-timeline-utils.ts", "index.ts"],
+    dependencies: ["lucide-react", "motion", "cn"],
+  },
   "metric-strip": {
     name: "metric-strip",
     type: "molecule",
