@@ -293,6 +293,20 @@ esquerda). Corte em 768 px de contêiner (container queries); abaixo disso, uma 
 **Dependências**: `@radix-ui/react-accordion`, `lucide-react`, `cn` (usa os atoms `accordion`, `button` e `input`)
 **Clean room**: `docs/clean-room/sites/faq-section.md`
 
+### `feature-tabs`
+
+Seção de recursos em abas do Radix (primitivo `@radix-ui/react-tabs`, ativação automática). Largo (contêiner >= 768 px): lista vertical à esquerda com régua fina e trecho de 2 px em `primary` na aba ativa, painel à direita. Estreito: a lista vira faixa horizontal rolável (sem barra) com o trecho embaixo da aba, e a aba ativa rola para dentro da faixa. A orientação do Radix acompanha a largura medida do contêiner, então as setas seguem o layout.
+
+- **Abas:** `tabs` (`id`, `label`, `icon?`, `heading`, `description?`, `points?`, `link?`, `media?`). O trecho ativo desliza (motion `layoutId`) e salta com movimento reduzido.
+- **Altura estável:** todos os painéis ficam montados (`forceMount`) e empilhados na mesma célula de grade; os inativos ficam `invisible` e `aria-hidden`, então a seção mede o maior painel. Troca com fade de 150 ms.
+- **Painel:** título (`h3` por padrão, um nível abaixo de `headingLevel`), descrição, `points` com `ArrowRight` no lugar do marcador e `link` (sem `label`: "Saiba mais sobre <aba>"). `media` fica abaixo do texto e vai para a direita a partir de 1024 px de contêiner.
+- **Estado:** `value`/`defaultValue` (padrão: a primeira aba) e `onValueChange(id)`. `syncHash` grava `#<id>` com `history.replaceState` (sem empilhar histórico) e abre a aba do hash ao montar; hash desconhecido abre a padrão.
+- **Props:** `title`, `description`, `headingLevel` (2 a 4), `label` (aria-label da lista, padrão "Recursos").
+- **Acessibilidade:** `<section aria-labelledby>`; `tablist`/`tab`/`tabpanel` do Radix com setas conforme a orientação, Home e End; painéis inativos fora da árvore de acessibilidade.
+
+**Dependências**: `@radix-ui/react-tabs`, `lucide-react`, `motion`, `cn`
+**Clean room**: `docs/clean-room/sites/feature-tabs.md`
+
 ### `live-transcript`
 
 Painel de transcrição ao vivo em três faixas separadas por `border-t`: conversa (`role="log"`),
