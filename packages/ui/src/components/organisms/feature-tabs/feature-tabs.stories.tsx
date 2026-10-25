@@ -34,7 +34,7 @@ const tabs: FeatureTabsProps["tabs"] = [
       "O flowtomic-cli copia os arquivos do componente para o seu projeto e ajusta os imports para os seus aliases.",
     points: [
       "Comandos: init, add, add-block e list.",
-      "Compatível com o shadcn CLI por meio do registry.",
+      "Copia o arquivo direto para o projeto, no estilo do shadcn/ui.",
       "Roda com bunx, sem instalar nada global.",
     ],
     link: { href: `${repo}/cli` },

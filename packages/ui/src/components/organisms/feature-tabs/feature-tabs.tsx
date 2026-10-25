@@ -86,7 +86,7 @@ function FeatureTabTrigger({
       data-slot="feature-tabs-trigger"
       className={cn(
         "relative flex shrink-0 items-center gap-2 whitespace-nowrap px-4 py-2.5 text-left text-sm text-muted-foreground outline-none transition-colors",
-        "hover:font-medium hover:text-foreground data-[state=active]:font-medium data-[state=active]:text-foreground",
+        "hover:text-foreground data-[state=active]:font-medium data-[state=active]:text-foreground",
         "focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
       )}
     >
@@ -102,7 +102,7 @@ function FeatureTabTrigger({
           aria-hidden="true"
           data-slot="feature-tabs-indicator"
           transition={instant ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 32 }}
-          className="pointer-events-none absolute inset-x-0 -bottom-px h-0.5 bg-primary @min-[768px]:inset-x-auto @min-[768px]:inset-y-0 @min-[768px]:-left-px @min-[768px]:bottom-auto @min-[768px]:h-auto @min-[768px]:w-0.5"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-primary @min-[768px]:inset-x-auto @min-[768px]:-left-px @min-[768px]:top-0 @min-[768px]:bottom-0 @min-[768px]:h-auto @min-[768px]:w-0.5"
         />
       )}
     </TabsPrimitive.Trigger>
@@ -263,7 +263,7 @@ function FeatureTabs({
             ref={listRef}
             aria-label={label}
             data-slot="feature-tabs-list"
-            className="flex overflow-x-auto border-b border-border [scrollbar-width:none] [&::-webkit-scrollbar]:hidden @min-[768px]:flex-col @min-[768px]:self-start @min-[768px]:overflow-visible @min-[768px]:border-b-0 @min-[768px]:border-l"
+            className="flex overflow-x-auto overflow-y-hidden border-b border-border [scrollbar-width:none] [&::-webkit-scrollbar]:hidden @min-[768px]:flex-col @min-[768px]:self-start @min-[768px]:overflow-visible @min-[768px]:border-b-0 @min-[768px]:border-l"
           >
             {tabs.map((tab) => (
               <FeatureTabTrigger
