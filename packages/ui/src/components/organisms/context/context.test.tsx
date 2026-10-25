@@ -162,8 +162,8 @@ describe("Context: uso detalhado", () => {
           {
             inputTokens: 1_000_000,
             outputTokens: 2_000,
-            reasoningTokens: 3_000,
-            cachedInputTokens: 4_000,
+            outputTokenDetails: { reasoningTokens: 3_000 },
+            inputTokenDetails: { cacheReadTokens: 4_000 },
           } as never
         }
         usedTokens={1_009_000}
@@ -186,7 +186,13 @@ describe("Context: uso detalhado", () => {
     render(
       <Context
         maxTokens={200_000}
-        usage={{ outputTokens: 2_000, reasoningTokens: 3_000, cachedInputTokens: 4_000 } as never}
+        usage={
+          {
+            outputTokens: 2_000,
+            outputTokenDetails: { reasoningTokens: 3_000 },
+            inputTokenDetails: { cacheReadTokens: 4_000 },
+          } as never
+        }
         usedTokens={9_000}
       >
         <ContextOutputUsage />
@@ -195,6 +201,50 @@ describe("Context: uso detalhado", () => {
       </Context>
     );
     expect(screen.getAllByText(/•\sUS\$\s0,00/)).toHaveLength(3);
+  });
+
+  it("raciocínio e cache leem os campos de topo do formato antigo do ai quando o detalhe falta", () => {
+    render(
+      <Context
+        maxTokens={200_000}
+        usage={
+          {
+            outputTokens: 2_000,
+            reasoningTokens: 3_000,
+            cachedInputTokens: 4_000,
+          } as never
+        }
+        usedTokens={9_000}
+      >
+        <ContextReasoningUsage />
+        <ContextCacheUsage />
+      </Context>
+    );
+    expect(screen.getByText("Raciocínio")).toBeInTheDocument();
+    expect(screen.getByText("Cache")).toBeInTheDocument();
+  });
+
+  it("o campo de detalhe do ai tem precedência sobre o campo de topo antigo", () => {
+    render(
+      <Context
+        maxTokens={200_000}
+        usage={
+          {
+            reasoningTokens: 9_999,
+            cachedInputTokens: 9_999,
+            outputTokenDetails: { reasoningTokens: 3_000 },
+            inputTokenDetails: { cacheReadTokens: 4_000 },
+          } as never
+        }
+        usedTokens={9_000}
+      >
+        <ContextReasoningUsage />
+        <ContextCacheUsage />
+      </Context>
+    );
+    expect(screen.getByText("3 mil")).toBeInTheDocument();
+    expect(screen.getByText("4 mil")).toBeInTheDocument();
+    expect(screen.queryByText("9,99 mil")).not.toBeInTheDocument();
   });
 
   it("sem tokens naquela categoria, a linha não aparece", () => {

@@ -298,6 +298,12 @@ export const ContextOutputUsage = ({ className, children, ...props }: ContextOut
   );
 };
 
+// Usage montado fora do SDK pode vir no formato antigo do ai 6, com os tokens no topo.
+type LegacyTopLevelUsage = { reasoningTokens?: number; cachedInputTokens?: number };
+
+const legacyTopLevel = (usage: LanguageModelUsage | undefined): LegacyTopLevelUsage | undefined =>
+  usage as (LanguageModelUsage & LegacyTopLevelUsage) | undefined;
+
 export type ContextReasoningUsageProps = ComponentProps<"div">;
 
 export const ContextReasoningUsage = ({
@@ -306,7 +312,8 @@ export const ContextReasoningUsage = ({
   ...props
 }: ContextReasoningUsageProps) => {
   const { usage, modelId } = useContextValue();
-  const reasoningTokens = usage?.reasoningTokens ?? 0;
+  const reasoningTokens =
+    usage?.outputTokenDetails?.reasoningTokens ?? legacyTopLevel(usage)?.reasoningTokens ?? 0;
 
   if (children) {
     return children;
@@ -343,7 +350,8 @@ export type ContextCacheUsageProps = ComponentProps<"div">;
 
 export const ContextCacheUsage = ({ className, children, ...props }: ContextCacheUsageProps) => {
   const { usage, modelId } = useContextValue();
-  const cacheTokens = usage?.cachedInputTokens ?? 0;
+  const cacheTokens =
+    usage?.inputTokenDetails?.cacheReadTokens ?? legacyTopLevel(usage)?.cachedInputTokens ?? 0;
 
   if (children) {
     return children;

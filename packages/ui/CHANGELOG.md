@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.1.0] - 2026-10-25
+
+### Changed
+
+- **Peers de IA e highlight alargados.** `ai` passa de `^6.0.304` para `>=6 <8`,
+  `nanoid` de `^5.1.6` para `>=5 <7` e `shiki` de `^3.15.0` para `>=3 <5`. Quem já
+  usa `ai@6`, `nanoid@5` ou `shiki@3` continua instalando sem mudança; `ai@7`,
+  `nanoid@6` e `shiki@4` passam a instalar sem `--legacy-peer-deps`.
+- **Contexto lê os detalhes de uso do ai.** `ContextReasoningUsage` usa
+  `outputTokenDetails.reasoningTokens` e `ContextCacheUsage` usa
+  `inputTokenDetails.cacheReadTokens`, no lugar dos campos de topo removidos no ai 7.
+  Os dois campos existem nas duas majors.
+- **Code-block sem importar `ShikiTransformer`.** O shiki 4 não reexporta o tipo pela
+  raiz; o componente o deriva das opções de `codeToHtml`.
+
+### Fixed
+
+- **Script de cobertura:** `@vitest/coverage-v8` tinha a versão corrompida
+  (`"2.1.9\n24.9.0"`), o que impedia `bun install`.
+
 ## [2.0.0] - 2026-10-12
 
 ### ⚠️ Breaking

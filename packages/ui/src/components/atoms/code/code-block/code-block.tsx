@@ -7,12 +7,17 @@
 import type { Element } from "hast";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { type ComponentProps, createContext, useContext, useEffect, useRef, useState } from "react";
-import { type BundledLanguage, codeToHtml, type ShikiTransformer } from "shiki";
+import { type BundledLanguage, codeToHtml } from "shiki";
 import { cn } from "@/lib/utils";
 import { Button } from "../../actions/button";
 
 /** `text` é o texto puro do shiki, para linguagem que ele não conhece. */
 export type CodeBlockLanguage = BundledLanguage | "text";
+
+/** shiki 4 não reexporta `ShikiTransformer` pela raiz; o tipo vem das opções do codeToHtml (igual em 3 e 4). */
+type ShikiTransformer = NonNullable<
+  NonNullable<Parameters<typeof codeToHtml>[1]>["transformers"]
+>[number];
 
 export type CodeBlockProps = ComponentProps<"div"> & {
   code: string;
