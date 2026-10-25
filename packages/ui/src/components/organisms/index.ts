@@ -78,6 +78,8 @@ export { DraggableDashboardGrid } from "./draggable-dashboard-grid";
 export { Edge } from "./edge";
 export type { FaqContact, FaqItem, FaqSectionProps } from "./faq-section";
 export { FaqSection } from "./faq-section";
+export type { FeatureTab, FeatureTabsProps } from "./feature-tabs";
+export { FeatureTabs } from "./feature-tabs";
 export type {
   BaseFormFieldProps,
   FormFieldConfig,
