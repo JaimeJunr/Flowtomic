@@ -58,7 +58,7 @@ const TILE_CLASS =
   "group flex h-full min-h-20 items-center gap-4 rounded-xl border border-border bg-card px-4 py-3 text-foreground transition-[border-color,box-shadow]";
 
 const TILE_INTERACTIVE_CLASS =
-  "hover:border-[color-mix(in_oklch,var(--primary)_40%,var(--border))] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  "hover:border-[color-mix(in_oklab,var(--primary)_40%,var(--border))] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const ARROW_CLASS =
   "size-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0";

@@ -706,6 +706,10 @@ Cada uma já mordeu alguém neste repo.
   `requestAnimationFrame` quando o módulo carrega, antes do fake entrar, então a mola fica parada
   sem erro (medido em 10/10/2026 no modo `step` do `ring-carousel`). Para testar animação por mola,
   use timers reais com duração curta e `waitFor`; o `useFrameLoop` próprio continua aceitando fake.
+- ⚠️ **`color-mix(in oklch, var(--primary) N%, var(--border))` sai roxo.** Em oklch a mistura interpola o
+  matiz pelo caminho curto: entre o laranja do `--primary` (38°) e o cinza-azulado do `--border` (255°) ele
+  passa por 312°, e a borda de hover do `link-tile-grid` saiu lilás (medido em 25/10/2026). Misturando duas
+  cores com matiz, use `in oklab`; `in oklch` só com `transparent`, que não tem matiz.
 - ⚠️ **`--accent` e `--secondary` não servem de cor de brilho.** São quase brancos no tema claro e
   escuros no escuro: bolinha `bg-accent` sumia na barra clara do `goo-tabs` e o anel do
   `edge-glow-card` apagava no modo escuro (medido em 10/10/2026). Para luz e partícula, use

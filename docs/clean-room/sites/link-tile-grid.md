@@ -46,7 +46,7 @@ Molecule `LinkTileGrid`, em `molecules/navigation/link-tile-grid/`. `<nav>` com 
 - Seta: ícone `ArrowRight` do lucide, 16 px, `text-primary`, `aria-hidden`, `shrink-0`. Com
   `external`, troca por `ArrowUpRight`, o link ganha `target="_blank"` e `rel="noreferrer"`, e um
   `sr-only` "(abre em nova aba)".
-- Hover e foco: `hover:border-[color-mix(in_oklch,var(--primary)_40%,var(--border))]
+- Hover e foco: `hover:border-[color-mix(in_oklab,var(--primary)_40%,var(--border))]
   hover:shadow-sm`; foco `focus-visible:ring-2 ring-ring ring-offset-2 ring-offset-background
   outline-none`. A seta desliza 2 px para a direita no hover (`group-hover:translate-x-0.5`), sem
   movimento com `motion-reduce:`.
