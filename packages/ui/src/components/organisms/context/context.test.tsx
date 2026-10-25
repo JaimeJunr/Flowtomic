@@ -162,8 +162,8 @@ describe("Context: uso detalhado", () => {
           {
             inputTokens: 1_000_000,
             outputTokens: 2_000,
-            reasoningTokens: 3_000,
-            cachedInputTokens: 4_000,
+            outputTokenDetails: { reasoningTokens: 3_000 },
+            inputTokenDetails: { cacheReadTokens: 4_000 },
           } as never
         }
         usedTokens={1_009_000}
@@ -186,7 +186,13 @@ describe("Context: uso detalhado", () => {
     render(
       <Context
         maxTokens={200_000}
-        usage={{ outputTokens: 2_000, reasoningTokens: 3_000, cachedInputTokens: 4_000 } as never}
+        usage={
+          {
+            outputTokens: 2_000,
+            outputTokenDetails: { reasoningTokens: 3_000 },
+            inputTokenDetails: { cacheReadTokens: 4_000 },
+          } as never
+        }
         usedTokens={9_000}
       >
         <ContextOutputUsage />
