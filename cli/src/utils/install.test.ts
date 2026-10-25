@@ -182,6 +182,46 @@ describe("instalação pela CLI compilada em um projeto consumidor", () => {
     expect(css).toContain("@import './brand-fonts';");
   });
 
+  it.each([
+    '@import "tailwindcss/theme.css" layer(theme);',
+    "@import './theme.css' layer(base);",
+    '@import "@acme/ds/globals.css";',
+    '@import url("https://cdn.example.com/theme.css") supports(display: grid) screen;',
+    '@import "./brand-fonts.css";',
+    '@import "../other/theme.css";',
+  ])("styles preserva integralmente o import do projeto %s", (foreignImport) => {
+    write(
+      join(project, "components.json"),
+      JSON.stringify({ ...config, tailwind: { css: "src/app/index.css" } })
+    );
+    const original = `/* antes */\n@import "tailwindcss";\n\n/* import do projeto */\n${foreignImport}\n\n/* depois */\nbody { color: red; }\n`;
+    write(join(project, "src/app/index.css"), original);
+    const args = ["styles", "globals", "theme", "typography", "fonts"];
+    const result = run(args);
+    expect(result.status, result.stderr).toBe(0);
+    const managed =
+      "\n@import './globals.css';\n@import './theme.css';\n@import './typography.css';\n@import './fonts.css';";
+    const first = readFileSync(join(project, "src/app/index.css"), "utf-8");
+    expect(first).toBe(
+      original.replace('@import "tailwindcss";', `@import "tailwindcss";${managed}`)
+    );
+    expect(run(args).status).toBe(0);
+    expect(readFileSync(join(project, "src/app/index.css"), "utf-8")).toBe(first);
+  });
+
+  it("styles ignora imports em comentários e strings e deduplica apenas o caminho gerenciado", () => {
+    write(
+      join(project, "components.json"),
+      JSON.stringify({ ...config, tailwind: { css: "src/app/index.css" } })
+    );
+    const original = `/* @import './theme.css'; */\n@import "tailwindcss";\n\n@import './theme.css'; /* preservar */\n\n@import "./theme.css";\nbody::after { content: "@import './theme.css';"; }\n`;
+    write(join(project, "src/app/index.css"), original);
+    expect(run(["styles", "theme"]).status).toBe(0);
+    expect(readFileSync(join(project, "src/app/index.css"), "utf-8")).toBe(
+      `/* @import './theme.css'; */\n@import "tailwindcss";\n@import './theme.css';\n\n /* preservar */\n\n\nbody::after { content: "@import './theme.css';"; }\n`
+    );
+  });
+
   it("resolve o alias de utils em src, sem criar lib na raiz", () => {
     const result = run(["add", "button"]);
     expect(result.status).toBe(0);

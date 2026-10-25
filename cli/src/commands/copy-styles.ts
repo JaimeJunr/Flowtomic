@@ -146,46 +146,51 @@ export async function copyStyles(styles: string[], options: CopyStylesOptions = 
 /**
  * Atualiza o arquivo CSS principal com imports dos arquivos copiados
  */
+// Comentários e strings são casados só para serem pulados: um @import dentro deles não é import.
+const CSS_TOKEN =
+  /\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|@import\s+(["'])([^"'\n]+)\1\s*;/g;
+
 function updateMainCssFile(mainCssPath: string, copiedFiles: string[], targetDir: string) {
   let content = readFileSync(mainCssPath, "utf-8");
-
-  // Remover imports antigos dos arquivos de estilo
-  copiedFiles.forEach((file) => {
-    // Casa `./fonts.css` e `../x/fonts`, mas não `./brand-fonts`, que é do projeto
-    const importPattern = new RegExp(
-      `@import\\s+['"](?:[^'"]*/)?${file.replace(".css", "")}(?:\\.css)?['"];?\\s*`,
-      "g"
-    );
-    content = content.replace(importPattern, "");
-  });
 
   // Determinar caminho relativo para imports
   const mainCssDir = dirname(mainCssPath);
   const stylesDir = join(process.cwd(), targetDir);
   const relativePath = getRelativePath(mainCssDir, stylesDir);
 
-  // Adicionar imports no início do arquivo (após @import 'tailwindcss' se existir)
-  const imports: string[] = [];
-
   // Ordem específica: globals, theme, typography e fontes opcionais
   const orderedFiles = ["globals.css", "theme.css", "typography.css", "fonts.css"].filter((f) =>
     copiedFiles.includes(f)
   );
+  // Só os caminhos exatos que esta CLI escreve são gerenciados. Imports com layer(), supports()
+  // ou de pacotes e outros arquivos do projeto ficam intactos.
+  const paths = orderedFiles.map((file) =>
+    relativePath === "." ? `./${file}` : `${relativePath}/${file}`.replace(/\\/g, "/")
+  );
+  const imports = paths.map((path) => `@import '${path}';`).join("\n");
 
-  orderedFiles.forEach((file) => {
-    const importPath =
-      relativePath === "." ? `./${file}` : `${relativePath}/${file}`.replace(/\\/g, "/");
-    imports.push(`@import '${importPath}';`);
-  });
+  const managedCount = [...content.matchAll(CSS_TOKEN)].filter(
+    (match) => match[2] !== undefined && paths.includes(match[2])
+  ).length;
+  // O bloco canônico já está presente: não consumir espaços nem acumular linhas ao repetir.
+  if (managedCount === paths.length && content.includes(imports)) return;
 
-  // Inserir imports após @import 'tailwindcss' se existir
-  const tailwindImportPattern = /(@import\s+['"]tailwindcss['"];?)/;
-  if (tailwindImportPattern.test(content)) {
-    content = content.replace(tailwindImportPattern, `$1\n${imports.join("\n")}`);
-  } else {
-    // Se não houver @import 'tailwindcss', adicionar no início
-    content = `${imports.join("\n")}\n\n${content}`;
-  }
+  // Remove as duplicatas gerenciadas e insere o bloco logo após @import 'tailwindcss', se existir.
+  let insertedAfterTailwind = false;
+  content = content.replace(
+    CSS_TOKEN,
+    (match: string, _quote: string | undefined, path: string | undefined) => {
+      if (path === undefined) return match;
+      if (paths.includes(path)) return "";
+      if (path === "tailwindcss" && !insertedAfterTailwind) {
+        insertedAfterTailwind = true;
+        return `${match}\n${imports}`;
+      }
+      return match;
+    }
+  );
+  // Sem @import 'tailwindcss', o bloco vai para o início
+  if (!insertedAfterTailwind) content = `${imports}\n\n${content}`;
 
   writeFileSync(mainCssPath, content, "utf-8");
   console.log(chalk.green(`   ✅ Arquivo CSS principal atualizado: ${mainCssPath}`));
