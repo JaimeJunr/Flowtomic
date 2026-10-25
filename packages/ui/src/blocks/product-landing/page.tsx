@@ -384,7 +384,7 @@ export default function ProductLanding({ content = productLandingContent }: Prod
       <SiteHeader
         logo={<span className="text-lg font-semibold tracking-tight">{header.brand}</span>}
         nav={header.nav}
-        actions={[{ label: header.action.label, href: header.action.href, variant: "default" }]}
+        actions={[{ label: header.action.label, href: header.action.href, variant: "outline" }]}
         skipToContent="#conteudo"
       />
       <main id="conteudo">
@@ -504,7 +504,12 @@ export default function ProductLanding({ content = productLandingContent }: Prod
         </Section>
 
         <div className={`${SECTION} ${CONTAINER}`}>
-          <FaqSection title={faq.title} items={faq.items} contact={faq.contact} />
+          <FaqSection
+            title={faq.title}
+            items={faq.items}
+            contact={faq.contact}
+            className="px-0 py-0"
+          />
         </div>
       </main>
       <SiteFooter
