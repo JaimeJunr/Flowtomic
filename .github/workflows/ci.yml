@@ -44,6 +44,13 @@ jobs:
         run: bun run type-check
         working-directory: packages/ui
 
+      - name: ui — build dos subpaths e declarações
+        run: bun run build
+        working-directory: packages/ui
+
+      - name: Tabela de peers — parser e declarações publicadas
+        run: bun test scripts/peer-table.test.ts
+
       # `bun run test` no ui é o vitest em modo watch; o run explícito é obrigatório
       - name: ui — testes com cobertura
         run: bunx vitest run --coverage
