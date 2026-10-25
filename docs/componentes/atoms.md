@@ -1207,6 +1207,18 @@ lista, o sinal visual é `aria-hidden` e o tipo é dito por texto só para leito
 
 **Localização**: `packages/ui/src/components/atoms/code/env-diff`
 
+#### `install-command`
+
+Pílula com o comando de instalação: prompt `$` (`aria-hidden`, fora da seleção), comando em mono
+(truncado, `title` com o texto inteiro) e botão de copiar que troca para check por 2 s. Copia só o
+comando. `size` (`sm`, `md`, `lg`). Com `managers`, mostra um seletor de gerenciador e traduz o
+comando escrito em npm/npx (`toPackageManager`, helper exportado); `manager`/`defaultManager`/
+`onManagerChange` e `persistManager` (localStorage, chave `flowtomic:package-manager`).
+
+**Dependências**: `lucide-react`, `cn`
+
+**Localização**: `packages/ui/src/components/atoms/code/install-command`
+
 #### `snippet`
 
 Snippet de código inline com botão de copiar.

@@ -1179,6 +1179,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["env-diff.tsx", "index.ts"],
     dependencies: ["lucide-react", "motion", "cn"],
   },
+  "install-command": {
+    name: "install-command",
+    type: "atom",
+    path: "packages/ui/src/components/atoms/code/install-command",
+    files: ["install-command.tsx", "package-manager.ts", "index.ts"],
+    dependencies: ["lucide-react", "cn"],
+  },
   snippet: {
     name: "snippet",
     type: "atom",
