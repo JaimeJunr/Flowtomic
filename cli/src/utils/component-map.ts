@@ -1568,6 +1568,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["menu-dock-parts.tsx", "menu-dock-utils.ts", "menu-dock.tsx", "index.ts"],
     dependencies: ["motion", "lucide-react", "cn"],
   },
+  "link-tile-grid": {
+    name: "link-tile-grid",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/navigation/link-tile-grid",
+    files: ["link-tile-grid.tsx", "index.ts"],
+    dependencies: ["lucide-react", "cn"],
+  },
   "theme-toggle-button": {
     name: "theme-toggle-button",
     type: "molecule",
