@@ -11,7 +11,10 @@ import { describe, expect, it } from "vitest";
 
 const SRC = resolve(__dirname, "..");
 const COMPONENTS = join(SRC, "components");
-const SPECIFIER = /(?:\bfrom\s*|\bimport\s*\(?\s*|\bimport\s+)["']([^"']+)["']/g;
+// Só casa imports/exports em início de linha e import() dinâmico: `from "..."` dentro de um
+// template string (snippet de código exibido na doc) não é import.
+const SPECIFIER =
+  /(?:^[ \t]*(?:import|export)\b[^"'`;]*?\bfrom\s*|^[ \t]*import\s*|\bimport\s*\(\s*)["']([^"']+)["']/gm;
 
 function isDirectory(path: string): boolean {
   return existsSync(path) && statSync(path).isDirectory();
@@ -34,13 +37,17 @@ function isCategoryBarrel(indexPath: string, source: string): boolean {
 
 function resolveLocal(fromFile: string, specifier: string): string | undefined {
   let base: string | undefined;
-  if (specifier.startsWith("@/")) base = join(SRC, specifier.slice(2));
+  if (specifier === "@flowtomic/ui") base = SRC;
+  else if (specifier.startsWith("@/")) base = join(SRC, specifier.slice(2));
   else if (specifier.startsWith("@flowtomic/ui/"))
     base = join(SRC, specifier.slice("@flowtomic/ui/".length));
   else if (specifier.startsWith("./") || specifier.startsWith("../"))
     base = resolve(dirname(fromFile), specifier);
   if (!base) return undefined;
+  // components/ é reservado como barrel raiz, mesmo antes de existir no disco.
+  if (base === SRC || base === COMPONENTS) return join(base, "index.ts");
   for (const candidate of [
+    base,
     `${base}.ts`,
     `${base}.tsx`,
     join(base, "index.ts"),
@@ -68,7 +75,7 @@ function findCategoryBarrelImports(files: Map<string, string>, barrels: Set<stri
 
 function loadComponentTree(): { files: Map<string, string>; barrels: Set<string> } {
   const files = new Map<string, string>();
-  const barrels = new Set<string>();
+  const barrels = new Set([join(SRC, "index.ts"), join(COMPONENTS, "index.ts")]);
   for (const file of listSources(COMPONENTS)) {
     const source = readFileSync(file, "utf8");
     files.set(file, source);
@@ -81,7 +88,13 @@ describe("imports de barrel de categoria em components", () => {
   it("nenhum arquivo de components importa barrel de categoria (exceto os próprios barrels)", () => {
     const { files, barrels } = loadComponentTree();
 
-    expect(barrels.size).toBeGreaterThan(0);
+    const candidates = [...files].filter(([file]) => !barrels.has(file));
+    const imports = candidates.reduce(
+      (count, [, source]) => count + [...source.matchAll(SPECIFIER)].length,
+      0
+    );
+    expect(imports).toBeGreaterThan(0);
+    expect(barrels.size).toBeGreaterThan(2);
     expect(findCategoryBarrelImports(files, barrels)).toEqual([]);
   });
 
@@ -98,5 +111,32 @@ describe("imports de barrel de categoria em components", () => {
       [consumer, 'import { Button } from "@/components/atoms/actions/button";'],
     ]);
     expect(findCategoryBarrelImports(direct, barrels)).toEqual([]);
+  });
+});
+
+describe("barrels raiz", () => {
+  it.each([
+    "@flowtomic/ui",
+    "@/index",
+    "../../../../index",
+    "../../../..",
+  ])("acusa import raiz plantado via %s no conjunto real de barrels", (specifier) => {
+    const { barrels } = loadComponentTree();
+    const consumer = join(COMPONENTS, "atoms", "actions", "button", "probe.tsx");
+    const files = new Map([[consumer, `import { Button } from "${specifier}";`]]);
+    expect(findCategoryBarrelImports(files, barrels)).toEqual([
+      `components/atoms/actions/button/probe.tsx -> ${specifier}`,
+    ]);
+  });
+
+  it("considera @/components mesmo quando o barrel ainda não existe no disco", () => {
+    const { barrels } = loadComponentTree();
+    const consumer = join(COMPONENTS, "atoms", "actions", "button", "probe.tsx");
+    expect(
+      findCategoryBarrelImports(
+        new Map([[consumer, 'export { Button } from "@/components";']]),
+        barrels
+      )
+    ).toEqual(["components/atoms/actions/button/probe.tsx -> @/components"]);
   });
 });
