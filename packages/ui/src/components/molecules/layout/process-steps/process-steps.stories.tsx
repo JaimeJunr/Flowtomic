@@ -106,15 +106,44 @@ function WidthsPreview({ active }: { active: boolean }) {
   );
 }
 
-function TokenSlide({ tokens }: { tokens: string[] }) {
+const SLIDE_WIDTHS = [
+  { label: "390", className: "w-[27%]" },
+  { label: "700", className: "w-[49%]" },
+  { label: "900", className: "w-[62%]" },
+  { label: "1100", className: "w-[76%]" },
+  { label: "1440", className: "w-full" },
+];
+
+function WidthsSlide() {
   return (
-    <div className="grid grid-cols-3 gap-2 bg-card p-6">
-      {tokens.map((token) => (
-        <div key={token} className="rounded-md border border-border p-3">
-          <span className="block h-6 rounded-sm bg-primary" />
-          <span className="mt-2 block font-mono text-xs text-muted-foreground">{token}</span>
+    <div className="flex flex-col gap-2 bg-card p-6">
+      {SLIDE_WIDTHS.map((width) => (
+        <div key={width.label} className="flex items-center gap-3">
+          <span className="w-10 shrink-0 text-right font-mono text-xs text-muted-foreground tabular-nums">
+            {width.label}
+          </span>
+          <span className={`block h-4 rounded-sm bg-primary ${width.className}`} />
         </div>
       ))}
+    </div>
+  );
+}
+
+function ModeCard({ dark }: { dark?: boolean }) {
+  return (
+    <div className={`${dark ? "dark " : ""}rounded-md border border-border bg-background p-3`}>
+      <span className="block h-2 w-1/2 rounded-sm bg-foreground" />
+      <span className="mt-2 block h-2 w-3/4 rounded-sm bg-muted-foreground" />
+      <span className="mt-3 block h-5 w-1/3 rounded-sm bg-primary" />
+    </div>
+  );
+}
+
+function ModesSlide() {
+  return (
+    <div className="grid grid-cols-2 gap-3 bg-card p-6">
+      <ModeCard />
+      <ModeCard dark />
     </div>
   );
 }
@@ -141,12 +170,12 @@ const STEPS: ProcessStep[] = [
       title: "Prova no navegador",
       slides: [
         {
-          media: <TokenSlide tokens={["--primary", "--card", "--border"]} />,
+          media: <WidthsSlide />,
           title: "Cinco larguras",
           description: "390, 700, 900, 1100 e 1440 px, lidos com getBoundingClientRect.",
         },
         {
-          media: <TokenSlide tokens={["--background", "--foreground", "--muted-foreground"]} />,
+          media: <ModesSlide />,
           title: "Dois modos",
           description: "O mesmo quadro no tema claro e no escuro, sem cor fixa.",
         },
@@ -158,7 +187,7 @@ const STEPS: ProcessStep[] = [
 const BASE = {
   title: "Estude. Escreva. Prove.",
   description: "Cada peça nova passa pelos mesmos três passos, do site observado ao PR mergeado.",
-  caption: "Cada estudo alimenta o próximo. Clique num passo para ver os detalhes.",
+  caption: "Cada estudo alimenta o próximo. Clique em Prove no navegador para ver as medidas.",
   steps: STEPS,
 };
 
