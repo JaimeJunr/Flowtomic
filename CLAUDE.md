@@ -709,7 +709,9 @@ Cada uma já mordeu alguém neste repo.
 - ⚠️ **`--accent` e `--secondary` não servem de cor de brilho.** São quase brancos no tema claro e
   escuros no escuro: bolinha `bg-accent` sumia na barra clara do `goo-tabs` e o anel do
   `edge-glow-card` apagava no modo escuro (medido em 10/10/2026). Para luz e partícula, use
-  `--primary` e variações com `color-mix(in oklch, var(--primary), var(--foreground) N%)`.
+  `--primary` e variações com `color-mix(in oklab, var(--primary), var(--foreground) N%)`. Em
+  `oklch` essa mistura sai rosa/roxa (matiz 335° a 45% no tema claro, medido em 25/10/2026), e até
+  contra o branco ela desvia: `oklch(1 0 0)` tem matiz 0, não "nenhum".
 - ⚠️ **Filtro de gosma (blur + corte de alfa) apaga forma pequena.** Com `stdDeviation` 8 e matriz
   de alfa `20 -8`, bolinhas de 12 px sumiam por inteiro; com 4 e `18 -7` aparecem e ainda fundem.
 - ⚠️ **Superfície arrastável precisa de `select-none`.** Sem ele, o arraste por ponteiro seleciona o

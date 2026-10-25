@@ -122,10 +122,10 @@ function stepPointer(p: PointerState): void {
 const FALLBACK_STYLE: React.CSSProperties = {
   background: [
     "conic-gradient(from 0deg at 50% 50%,",
-    "color-mix(in oklch, var(--info) 70%, var(--background)),",
-    "color-mix(in oklch, var(--primary) 70%, var(--background)),",
-    "color-mix(in oklch, var(--success) 70%, var(--background)),",
-    "color-mix(in oklch, var(--info) 70%, var(--background)))",
+    "color-mix(in oklab, var(--info) 70%, var(--background)),",
+    "color-mix(in oklab, var(--primary) 70%, var(--background)),",
+    "color-mix(in oklab, var(--success) 70%, var(--background)),",
+    "color-mix(in oklab, var(--info) 70%, var(--background)))",
   ].join(" "),
   filter: "blur(40px)",
 };
