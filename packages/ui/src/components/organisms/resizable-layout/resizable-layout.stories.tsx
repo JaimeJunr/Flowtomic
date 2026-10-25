@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type React from "react";
 import { useId, useState } from "react";
-import { Button } from "../../atoms";
+import { Button } from "../../atoms/actions/button";
 import { ResizableLayout } from "./resizable-layout";
 
 const meta = {

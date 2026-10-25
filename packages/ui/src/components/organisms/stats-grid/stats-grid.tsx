@@ -20,7 +20,7 @@
 import { type StatCardData, useStatCard } from "@flowtomic/logic";
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { Skeleton } from "../../atoms";
+import { Skeleton } from "../../atoms/display/skeleton";
 
 export interface StatItem {
   id: string;

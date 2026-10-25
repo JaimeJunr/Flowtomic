@@ -486,3 +486,15 @@ FLOWTOMIC_REPO_PATH=/caminho/para/flowtomic node /caminho/para/flowtomic/cli/dis
 de uma worktree também a encontra automaticamente; a variável evita depender dessa descoberta.
 Os testes de instalação compilam o bundle e executam Node em projetos temporários reais, sem mocks
 do sistema de arquivos, usando a mesma configuração de aliases de um projeto Next.js.
+
+### `styles fonts`
+
+Copia `fonts.css` e adiciona seu `@import` ao CSS configurado em `components.json`.
+Use apenas para carregar as fontes pelo Google; fontes locais não precisam dele.
+
+```bash
+bunx flowtomic-cli styles fonts
+```
+
+O comando `styles` sem argumentos copia os quatro arquivos. A ordem de importação é
+`globals.css` → `theme.css` → `typography.css` → `fonts.css`.

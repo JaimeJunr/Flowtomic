@@ -7,14 +7,14 @@
 import { BookmarkIcon, type LucideProps } from "lucide-react";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms/actions/button";
+import { Separator } from "../../../atoms/display/separator";
 import {
-  Button,
-  Separator,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../../atoms";
+} from "../../../atoms/feedback/tooltip";
 
 export type CheckpointProps = ComponentProps<"div">;
 

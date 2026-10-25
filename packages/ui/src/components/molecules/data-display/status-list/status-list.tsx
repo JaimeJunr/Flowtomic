@@ -4,14 +4,12 @@ import { MotionConfigContext, motion, useReducedMotion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../../atoms";
+} from "../../../atoms/feedback/tooltip";
+import { Accordion, AccordionContent, AccordionItem } from "../../../atoms/layout/accordion";
 
 export type StatusState = "operational" | "degraded" | "outage" | "maintenance";
 

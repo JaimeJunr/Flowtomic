@@ -7,7 +7,13 @@
 import { type LucideIcon, XIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
-import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../../atoms/feedback/tooltip";
 
 export type ArtifactProps = ComponentProps<"div">;
 

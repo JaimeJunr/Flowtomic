@@ -6,15 +6,15 @@
  */
 
 import * as React from "react";
+import { Button } from "@/components/atoms/actions/button";
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/atoms";
+} from "@/components/atoms/feedback/dialog";
 import { cn } from "@/lib/utils";
 
 export interface WidgetConfigModalWidget {

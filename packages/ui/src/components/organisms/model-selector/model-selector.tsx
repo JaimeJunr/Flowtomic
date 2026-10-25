@@ -7,6 +7,7 @@
 import type * as React from "react";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../../atoms/feedback/dialog";
 import {
   Command,
   CommandDialog,
@@ -17,11 +18,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "../../atoms";
+} from "../../atoms/navigation/command";
 
 export type ModelSelectorProps = ComponentProps<typeof Dialog>;
 

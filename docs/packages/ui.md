@@ -39,12 +39,34 @@ Componentes UI reutilizáveis baseados em Radix UI e Tailwind CSS.
 ## Instalação
 
 ```bash
-bunx flowtomic add button
+bun add @flowtomic/ui react@^19 react-dom@^19 motion lucide-react
 ```
+
+A partir da versão **2.0.0**, React 19 é obrigatório. Instale somente os peers das
+famílias utilizadas e prefira imports por subpath de componente.
+
+### Peers por família
+
+A tabela de peers, as faixas suportadas e os comandos de instalação estão no
+[README do pacote UI](../../packages/ui/README.md#peers-por-família), fonte única
+para a migração e para os componentes novos.
 
 ## Estilos
 
 O Flowtomic fornece um **estilo padrão** que funciona imediatamente, com uma [camada de marca do produto](../../DESIGN.md#camada-de-marca-do-produto) para personalização consistente nos dois modos.
+
+### Fontes opcionais
+
+`globals.css` não importa fontes remotas. Para usar as fontes da marca pelo Google,
+importe `@flowtomic/ui/styles/fonts.css` explicitamente. Se você usa `next/font` ou
+`@font-face` local, omita esse arquivo; os tokens e fallbacks continuam disponíveis.
+
+```ts
+import "@flowtomic/ui/styles/fonts.css";
+```
+
+O export legado `@flowtomic/ui/dist/index.css` continua disponível para os estilos
+do KaTeX e React Flow e exige os peers `katex` e `@xyflow/react`. Os estilos gerais estão em `styles/globals.css`.
 
 ### Estilo Padrão
 
@@ -52,13 +74,13 @@ Para usar os componentes com o estilo padrão, importe os arquivos CSS na ordem 
 
 ```css
 /* 1. globals.css - DEVE vir primeiro para inicializar Tailwind v4 */
-@import "flowtomic/ui/styles/globals.css";
+@import "@flowtomic/ui/styles/globals.css";
 
 /* 2. theme.css - Define variáveis do tema usando @theme (Tailwind v4) */
-@import "flowtomic/ui/styles/theme.css";
+@import "@flowtomic/ui/styles/theme.css";
 
 /* 3. typography.css - Estilos de tipografia que dependem das variáveis */
-@import "flowtomic/ui/styles/typography.css";
+@import "@flowtomic/ui/styles/typography.css";
 ```
 
 **Requisitos**: Este projeto usa Tailwind CSS v4.1.14 com `@tailwindcss/postcss`. Certifique-se de ter essas dependências instaladas:

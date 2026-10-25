@@ -7,7 +7,7 @@
 
 import { Edit2, Eye } from "lucide-react";
 import type * as React from "react";
-import { Button } from "@/components/atoms";
+import { Button } from "@/components/atoms/actions/button";
 import { cn } from "@/lib/utils";
 
 export interface EditModeToggleProps

@@ -3,7 +3,7 @@
 import type { ExecuteScriptResponse, TerminalLine } from "@flowtomic/logic";
 import { Check, Copy, ExternalLink } from "lucide-react";
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms/navigation/tabs";
 import { ScriptEditor } from "@/components/organisms/script-editor";
 import { cn } from "@/lib/utils";
 

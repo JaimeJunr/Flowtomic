@@ -10,8 +10,9 @@ import {
   PasswordInput,
 } from "@/components/molecules";
 import { cn } from "@/lib/utils";
+import { Separator } from "../../atoms/display/separator";
+import { Checkbox } from "../../atoms/forms/checkbox";
 import {
-  Checkbox,
   Form,
   FormControl,
   FormDescription,
@@ -19,23 +20,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-  Label,
-  RadioGroup,
-  RadioGroupItem,
+} from "../../atoms/forms/form";
+import { Input } from "../../atoms/forms/input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../../atoms/forms/input-otp";
+import { Label } from "../../atoms/forms/label";
+import { RadioGroup, RadioGroupItem } from "../../atoms/forms/radio-group";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Separator,
-  Slider,
-  Switch,
-  Toggle,
-} from "../../atoms";
+} from "../../atoms/forms/select";
+import { Slider } from "../../atoms/forms/slider";
+import { Switch } from "../../atoms/forms/switch";
+import { Toggle } from "../../atoms/forms/toggle";
 
 const inputErrorClassName = "border-destructive focus-visible:ring-destructive";
 

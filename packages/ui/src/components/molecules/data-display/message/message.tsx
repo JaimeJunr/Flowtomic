@@ -23,18 +23,18 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { type BundledLanguage, bundledLanguages } from "shiki";
-import {
-  Button,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/atoms";
+import { Button } from "@/components/atoms/actions/button";
 import {
   CodeBlock,
   CodeBlockCopyButton,
   type CodeBlockLanguage,
 } from "@/components/atoms/code/code-block";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/atoms/feedback/tooltip";
 import { ButtonGroup, ButtonGroupText } from "@/components/molecules/forms/button-group";
 import { cn } from "@/lib/utils";
 import { normalizeMathDelimiters } from "./normalize-math-delimiters";

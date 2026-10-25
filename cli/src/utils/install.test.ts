@@ -103,6 +103,37 @@ describe("instalação pela CLI compilada em um projeto consumidor", () => {
     );
   }
 
+  it("styles fonts copia e importa somente as fontes opcionais", () => {
+    write(
+      join(project, "components.json"),
+      JSON.stringify({ ...config, tailwind: { css: "src/app/index.css" } })
+    );
+    write(join(project, "src/app/index.css"), "@import 'tailwindcss';\n");
+    const result = run(["styles", "fonts"]);
+    expect(result.status).toBe(0);
+    expect(readFileSync(join(project, "src/app/fonts.css"), "utf-8")).toBe(
+      readFileSync(join(repo, "packages/styles/fonts.css"), "utf-8")
+    );
+    expect(readFileSync(join(project, "src/app/index.css"), "utf-8")).toBe(
+      "@import 'tailwindcss';\n@import './fonts.css';\n"
+    );
+    expect(existsSync(join(project, "src/app/globals.css"))).toBe(false);
+    expect(existsSync(join(project, "src/app/theme.css"))).toBe(false);
+  });
+
+  it("styles explícitos mantêm a ordem globals, theme, typography, fonts", () => {
+    write(
+      join(project, "components.json"),
+      JSON.stringify({ ...config, tailwind: { css: "src/app/index.css" } })
+    );
+    write(join(project, "src/app/index.css"), "@import 'tailwindcss';\n");
+    const result = run(["styles", "fonts", "typography", "theme", "globals"]);
+    expect(result.status).toBe(0);
+    expect(readFileSync(join(project, "src/app/index.css"), "utf-8")).toBe(
+      "@import 'tailwindcss';\n@import './globals.css';\n@import './theme.css';\n@import './typography.css';\n@import './fonts.css';\n"
+    );
+  });
+
   it("resolve o alias de utils em src, sem criar lib na raiz", () => {
     const result = run(["add", "button"]);
     expect(result.status).toBe(0);

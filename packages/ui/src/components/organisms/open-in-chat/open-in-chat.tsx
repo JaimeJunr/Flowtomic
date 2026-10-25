@@ -7,15 +7,15 @@
 import { ChevronDownIcon, ExternalLinkIcon, MessageCircleIcon } from "lucide-react";
 import { type ComponentProps, createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../atoms/actions/button";
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../atoms";
+} from "../../atoms/actions/dropdown-menu";
 
 const providers = {
   github: {

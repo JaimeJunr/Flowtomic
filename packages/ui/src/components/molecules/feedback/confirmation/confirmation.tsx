@@ -7,7 +7,8 @@
 import type { ToolUIPart } from "ai";
 import { type ComponentProps, createContext, type ReactNode, useContext } from "react";
 import { cn } from "@/lib/utils";
-import { Alert, AlertDescription, Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
+import { Alert, AlertDescription } from "../../../atoms/feedback/alert";
 
 type ToolUIPartApproval =
   | {

@@ -32,8 +32,26 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import { Button } from "@/components/atoms/actions/button";
 import {
-  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/atoms/actions/dropdown-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/atoms/feedback/hover-card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/atoms/forms/select";
+import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -41,19 +59,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/atoms";
+} from "@/components/atoms/navigation/command";
 import {
   InputGroup,
   InputGroupAddon,

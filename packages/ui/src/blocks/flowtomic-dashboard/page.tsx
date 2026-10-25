@@ -9,7 +9,7 @@
 
 import { Search } from "lucide-react";
 import { type ReactNode, useState } from "react";
-import { Button } from "@/components/atoms";
+import { Button } from "@/components/atoms/actions/button";
 import { cn } from "@/lib/utils";
 
 export type DeliveryState = "em-andamento" | "em-revisao" | "concluida";

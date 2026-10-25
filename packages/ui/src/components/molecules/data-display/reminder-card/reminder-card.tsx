@@ -7,7 +7,7 @@
 
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 
 export interface Reminder {
   id: string;

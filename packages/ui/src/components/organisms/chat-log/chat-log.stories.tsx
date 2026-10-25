@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BookOpen, Search } from "lucide-react";
-import { Button } from "@/components/atoms";
+import { Button } from "@/components/atoms/actions/button";
 import { ChatLog } from "./chat-log";
 
 const meta = {

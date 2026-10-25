@@ -7,7 +7,7 @@
 
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 
 export type TeamMemberStatus = "completed" | "in-progress" | "pending";
 

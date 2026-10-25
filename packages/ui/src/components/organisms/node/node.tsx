@@ -15,7 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../atoms";
+} from "../../atoms/display/card";
 
 /**
  * Configuração de handles do Node

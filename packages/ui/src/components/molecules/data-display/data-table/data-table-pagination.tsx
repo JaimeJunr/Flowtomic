@@ -10,14 +10,14 @@ import type { Table } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 import React from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms/actions/button";
 import {
-  Button,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../atoms";
+} from "../../../atoms/forms/select";
 
 // ============================================================================
 // Types

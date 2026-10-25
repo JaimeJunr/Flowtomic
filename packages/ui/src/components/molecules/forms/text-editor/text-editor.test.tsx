@@ -169,6 +169,66 @@ describe("TextEditor: modo markdown e prévia", () => {
 });
 
 describe("TextEditor: editor visual", () => {
+  it.each([
+    ["markdown", "* item", "* outro"],
+    ["text", "# Título", "# Outro"],
+  ] as const)("sincroniza value sem emitir onChange (%s)", async (outputFormat, value, next) => {
+    const onChange = vi.fn();
+    const { rerender } = render(
+      <TextEditor
+        availableModes={["rich"]}
+        value={value}
+        outputFormat={outputFormat}
+        onChange={onChange}
+        aria-label="Texto"
+      />
+    );
+    const area = await screen.findByRole("textbox", { name: "Texto" });
+    await waitFor(() =>
+      expect(area).toHaveTextContent(outputFormat === "text" ? "Título" : "item")
+    );
+    expect(onChange).not.toHaveBeenCalled();
+
+    rerender(
+      <TextEditor
+        availableModes={["rich"]}
+        value={next}
+        outputFormat={outputFormat}
+        onChange={onChange}
+        aria-label="Texto"
+      />
+    );
+    await waitFor(() =>
+      expect(area).toHaveTextContent(outputFormat === "text" ? "Outro" : "outro")
+    );
+    expect(onChange).not.toHaveBeenCalled();
+
+    await userEvent.type(area, " editado");
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
+  });
+
+  it("não ativa sublinhado pelo atalho do StarterKit 3", async () => {
+    render(<TextEditor availableModes={["rich"]} aria-label="Texto" />);
+    const area = await screen.findByRole("textbox", { name: "Texto" });
+    await userEvent.click(area);
+    await userEvent.keyboard("{Control>}u{/Control}texto");
+    expect(area).toHaveTextContent("texto");
+    expect(area.querySelector("u")).toBeNull();
+  });
+
+  it("não registra links de markdown como extensão do StarterKit 3", async () => {
+    render(
+      <TextEditor
+        availableModes={["rich"]}
+        value="[site](https://example.com)"
+        aria-label="Texto"
+      />
+    );
+    const area = await screen.findByRole("textbox", { name: "Texto" });
+    await waitFor(() => expect(area).toHaveTextContent("site"));
+    expect(area.querySelector("a")).toBeNull();
+  });
+
   it("a área de digitação é um textbox com o nome passado em aria-label", async () => {
     render(<TextEditor availableModes={["rich"]} aria-label="Descrição" />);
     const area = await screen.findByRole("textbox", { name: "Descrição" });

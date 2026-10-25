@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Keyboard, MousePointerClick, Palette, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalTrigger } from "./animated-modal";
 
 const meta = {

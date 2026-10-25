@@ -667,7 +667,7 @@ Cada uma já mordeu alguém neste repo.
   achata o 3D**: todas as camadas caem no mesmo plano, sem erro (medido em 05/10/2026 no
   `depth-text`, camadas com o mesmo `getBoundingClientRect`). Ponha o filtro num ancestral fora da
   cadeia 3D. Teste unitário não pega isso; meça a posição das camadas no browser.
-- ⚠️ **As fontes do `globals.css` são pedidas como faixa variável** (`wght@100..900`,
+- ⚠️ **As fontes do `fonts.css` opcional são pedidas como faixa variável** (`wght@100..900`,
   `wght@400..900`), desde 05/10/2026. Antes eram pesos soltos (`wght@400;600`): o Google mandava
   faces fixas, peso intermediário pulava de degrau e `font-display` em peso 400 caía no fallback no
   print headless. Não volte para lista de pesos; o `theme-tokens.test.ts` trava a faixa.
@@ -821,6 +821,17 @@ Cada uma já mordeu alguém neste repo.
   dela estourou 150 px em 390 px no `faq-section` (12/10/2026), com rolagem lateral. Grade que só
   ganha colunas num breakpoint (`@min-[768px]:grid-cols-2`) começa com `grid-cols-1`, que é
   `minmax(0, 1fr)`. O jsdom não acusa; meça `scrollWidth` no browser em 390 px.
+
+- ⚠️ **Atualizar TipTap sem unificar ProseMirror no lock mistura instâncias.** Ao migrar de
+  TipTap 2 para 3 (12/10/2026), o Bun preservou 15 entradas aninhadas de
+  `prosemirror-model@1.25.4` / `prosemirror-transform@1.10.5`, junto das versões exigidas pelo
+  TipTap 3. Listas e citações falharam com `Can not convert <> to a Fragment (looks like
+  multiple versions of prosemirror-model were loaded)`. As faixas transitivas aceitavam as
+  novas versões: remover os aliases antigos do lock e rodar `bun install --frozen-lockfile`
+  deixou uma instância por pacote numa instalação limpa. Reinstale os `node_modules` da
+  worktree para descartar symlinks da versão antiga; `bun install` pode preservá-los.
+  Confira o lock e os testes reais de lista/citação antes de
+  tratar isso como um problema de Vitest ou mockar o editor.
 
 - ⚠️ **Story em `layout: "centered"` dá rolagem lateral falsa em 390 px para componente `w-fit`.**
   A moldura do Storybook dimensiona pelo conteúdo, então o `max-w-full` do componente não tem

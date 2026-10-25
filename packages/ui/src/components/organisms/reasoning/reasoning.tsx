@@ -10,7 +10,12 @@ import type { ComponentProps } from "react";
 import { createContext, memo, useContext, useEffect, useState } from "react";
 import { Streamdown } from "streamdown";
 import { cn } from "@/lib/utils";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger, Shimmer } from "../../atoms";
+import { Shimmer } from "../../atoms/animation/shimmer";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../../atoms/layout/collapsible";
 
 type ReasoningContextValue = {
   isStreaming: boolean;

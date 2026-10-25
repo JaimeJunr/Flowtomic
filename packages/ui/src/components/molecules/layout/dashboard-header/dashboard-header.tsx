@@ -8,7 +8,7 @@
 import { Bell, MessageSquare, Search } from "lucide-react";
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { Button, Input } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +16,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../../../atoms/actions/dropdown-menu";
+import { Input } from "../../../atoms/forms/input";
 
 export interface DashboardUser {
   name: string;

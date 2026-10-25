@@ -17,6 +17,7 @@ const STYLE_FILES = {
   globals: "globals.css",
   theme: "theme.css",
   typography: "typography.css",
+  fonts: "fonts.css",
 } as const;
 
 type StyleFileKey = keyof typeof STYLE_FILES;
@@ -140,8 +141,8 @@ function updateMainCssFile(mainCssPath: string, copiedFiles: string[], targetDir
   // Adicionar imports no início do arquivo (após @import 'tailwindcss' se existir)
   const imports: string[] = [];
 
-  // Ordem específica: globals primeiro, depois theme, depois typography
-  const orderedFiles = ["globals.css", "theme.css", "typography.css"].filter((f) =>
+  // Ordem específica: globals, theme, typography e fontes opcionais
+  const orderedFiles = ["globals.css", "theme.css", "typography.css", "fonts.css"].filter((f) =>
     copiedFiles.includes(f)
   );
 

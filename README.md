@@ -57,12 +57,14 @@ function MyComponent() {
 
 ```bash
 # Instalar packages npm
-npm install @flowtomic/ui @flowtomic/logic
+npm install @flowtomic/ui react@^19 react-dom@^19 motion lucide-react @radix-ui/react-slot
 
 # Usar diretamente
-import { Button, Card } from "@flowtomic/ui";
-import { useStatCard } from "@flowtomic/logic";
+import { Button } from "@flowtomic/ui/components/atoms/actions/button";
+import { Card } from "@flowtomic/ui/components/atoms/display/card";
 ```
+
+A versão 2.0.0 usa peers opcionais por família. Consulte a [instalação do UI](packages/ui/README.md#peers-por-família) antes de usar chat, editor, gráficos ou outros componentes. Fontes do Google são opcionais via `@flowtomic/ui/styles/fonts.css`.
 
 > **Dica**: para poder editar o código do componente, use o CLI. Para uso rápido sem editar, use os packages npm.
 

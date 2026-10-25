@@ -13,7 +13,7 @@ import Color from "@tiptap/extension-color";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
-import TextStyle from "@tiptap/extension-text-style";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { type Editor, EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
@@ -39,24 +39,19 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { Streamdown } from "streamdown";
-import { Markdown } from "tiptap-markdown";
+import { Markdown, type MarkdownStorage } from "tiptap-markdown";
 import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms/actions/button";
+import { Separator } from "../../../atoms/display/separator";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../atoms/feedback/popover";
 import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Separator,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Textarea,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../../atoms";
+} from "../../../atoms/feedback/tooltip";
+import { Textarea } from "../../../atoms/forms/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../atoms/navigation/tabs";
 
 export type TextEditorMode = "rich" | "markdown" | "preview";
 
@@ -233,7 +228,7 @@ export function TextEditor({
     },
     extensions: [
       Markdown.configure({ html: false, transformPastedText: true, transformCopiedText: true }),
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3] }, underline: false, link: false }),
       TextStyle,
       Color,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -243,12 +238,9 @@ export function TextEditor({
     content: internalMarkdown ? undefined : "",
     onUpdate: ({ editor }) => {
       try {
-        // Acesso ao storage markdown da extensão tiptap-markdown
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const md: string =
-          (
-            editor?.storage as Record<string, { getMarkdown?: () => string }>
-          )?.markdown?.getMarkdown?.() ?? "";
+        // tiptap-markdown fornece MarkdownStorage, mas não estende Storage do TipTap.
+        const storage = editor.storage as typeof editor.storage & { markdown?: MarkdownStorage };
+        const md = storage.markdown?.getMarkdown() ?? "";
         if (typeof md === "string") {
           if (!isControlled) setInternalMarkdown(md);
           if (outputFormat === "text") {
@@ -272,7 +264,7 @@ export function TextEditor({
       // @ts-expect-error
       editor.commands.setMarkdown(nextMarkdown);
     } else {
-      editor.commands.setContent(nextMarkdown);
+      editor.commands.setContent(nextMarkdown, { emitUpdate: false });
     }
   }, [editor, controlledValue]);
 
