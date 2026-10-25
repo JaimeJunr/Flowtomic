@@ -31,7 +31,7 @@ export const Hero: Story = {
   args: { size: "lg" },
   render: (args) => (
     <div className="flex flex-col items-center gap-6 py-16 text-center">
-      <h2 className="font-display text-display-md text-foreground">Comece em um comando</h2>
+      <h2 className="font-display text-display-md font-semibold tracking-tight text-foreground">Comece em um comando</h2>
       <InstallCommand {...args} />
     </div>
   ),
