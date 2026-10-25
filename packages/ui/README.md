@@ -155,8 +155,8 @@ bun add @tiptap/core@^3.31.4 @tiptap/pm@^3.31.4 @tiptap/react@^3.31.4 @tiptap/st
 ```
 
 `@ai-sdk/*`, `undici` e `commander` não são imports diretos do UI: são transitivos de
-terceiros, portanto não precisam ser declarados como peers do UI. O SDK mínimo
-suportado é `ai@6.0.304`; o lock de desenvolvimento resolve `@ai-sdk/gateway@3.0.212`,
+terceiros, portanto não precisam ser declarados como peers do UI. O peer `ai` aceita
+`>=6 <8`, a mesma faixa do `package.json`; o lock de desenvolvimento resolve `@ai-sdk/gateway@3.0.212`,
 `@ai-sdk/provider-utils@4.0.57` e `undici@6.29.0`, sem `@fastify/busboy`.
 
 Somente `cn`, `class-variance-authority` e `tw-animate-css` continuam em
