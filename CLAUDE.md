@@ -745,6 +745,9 @@ Cada uma já mordeu alguém neste repo.
   `--foreground` escuro sobre fundo escuro: canvas "vazio", sem erro (medido em 11/10/2026). Passe o
   próprio canvas como segundo argumento, e chame `redraw()` (do `useWebglCanvas`) depois de reler a
   cor, senão um fundo parado (`speed` 0) mantém a cor velha.
+- ⚠️ **O `setup.ts` do `ui` mocka um `IntersectionObserver` que nunca dispara** (posto para o embla do
+  carousel). Componente que espera "entrou na tela" fica parado no teste sem erro. Para testar o caminho
+  "sem IntersectionObserver", apague o global só naquele caso e devolva no fim (ver `process-steps.test.tsx`).
 - ⚠️ **Teste de complexidade não mede relógio de parede.** Os testes "tempo linear" do
   `normalize-math-delimiters` tinham limite fixo (1000 e 2000 ms) e falhavam na suíte inteira com
   cobertura (1023, 3466 e 3600 ms em 11/10/2026), passando isolados. Desde 12/10/2026 eles usam
