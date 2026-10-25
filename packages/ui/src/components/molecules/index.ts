@@ -132,6 +132,8 @@ export type {
   VisibilityState,
 } from "./data-display/data-table";
 export { DataTable } from "./data-display/data-table";
+export type { DayMoment, DayTimelineProps } from "./data-display/day-timeline";
+export { DayTimeline } from "./data-display/day-timeline";
 export type { DepthRailCarouselProps, DepthRailItem } from "./data-display/depth-rail-carousel";
 export { DepthRailCarousel } from "./data-display/depth-rail-carousel";
 export type { DomeGalleryProps, DomeItem } from "./data-display/dome-gallery";
@@ -399,6 +401,15 @@ export type {
   Notification,
 } from "./layout/dashboard-header";
 export { DashboardHeader } from "./layout/dashboard-header";
+export type {
+  ProcessStep,
+  ProcessStepDetail,
+  ProcessStepFrameProps,
+  ProcessStepPreviewState,
+  ProcessStepSlide,
+  ProcessStepsProps,
+} from "./layout/process-steps";
+export { ProcessStepFrame, ProcessSteps } from "./layout/process-steps";
 export type { StackingCardProps, StackingCardsProps } from "./layout/stacking-cards";
 export { StackingCard, StackingCards } from "./layout/stacking-cards";
 export type {
@@ -425,6 +436,8 @@ export type {
   LayeredMenuSide,
 } from "./navigation/layered-menu";
 export { LayeredMenu } from "./navigation/layered-menu";
+export type { LinkTile, LinkTileGridProps, LinkTileLinkProps } from "./navigation/link-tile-grid";
+export { LinkTileGrid } from "./navigation/link-tile-grid";
 export type { MarqueeMenuItem, MarqueeMenuProps } from "./navigation/marquee-menu";
 export { MarqueeMenu } from "./navigation/marquee-menu";
 export type { MenuDockItem, MenuDockProps } from "./navigation/menu-dock";

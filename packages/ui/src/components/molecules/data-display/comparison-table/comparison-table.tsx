@@ -178,7 +178,7 @@ function FeatureName({ feature }: { feature: ComparisonFeature }) {
   );
 }
 
-const HIGHLIGHT_BG = "bg-[color-mix(in_oklch,var(--primary)_10%,var(--card))]";
+const HIGHLIGHT_BG = "bg-[color-mix(in_oklab,var(--primary)_10%,var(--card))]";
 const HIGHLIGHT_DIVIDER = "border-b-[color-mix(in_oklch,var(--primary)_25%,transparent)]";
 
 function stripClasses(highlighted: boolean, first: boolean, last: boolean) {

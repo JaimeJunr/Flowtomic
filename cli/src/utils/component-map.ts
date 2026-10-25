@@ -1527,6 +1527,26 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
       "cn",
     ],
   },
+  "process-steps": {
+    name: "process-steps",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/layout/process-steps",
+    files: [
+      "process-steps.tsx",
+      "process-step-frame.tsx",
+      "process-step-detail.tsx",
+      "process-steps-types.ts",
+      "index.ts",
+    ],
+    dependencies: ["lucide-react", "@radix-ui/react-dialog", "@radix-ui/react-checkbox", "cn"],
+  },
+  "day-timeline": {
+    name: "day-timeline",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/day-timeline",
+    files: ["day-timeline.tsx", "day-timeline-utils.ts", "index.ts"],
+    dependencies: ["lucide-react", "motion", "cn"],
+  },
   "metric-strip": {
     name: "metric-strip",
     type: "molecule",
@@ -1547,6 +1567,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     path: "packages/ui/src/components/molecules/navigation/menu-dock",
     files: ["menu-dock-parts.tsx", "menu-dock-utils.ts", "menu-dock.tsx", "index.ts"],
     dependencies: ["motion", "lucide-react", "cn"],
+  },
+  "link-tile-grid": {
+    name: "link-tile-grid",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/navigation/link-tile-grid",
+    files: ["link-tile-grid.tsx", "index.ts"],
+    dependencies: ["lucide-react", "cn"],
   },
   "theme-toggle-button": {
     name: "theme-toggle-button",
@@ -1961,6 +1988,13 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     path: "packages/ui/src/components/organisms/faq-section",
     files: ["faq-section.tsx", "index.ts"],
     dependencies: ["@radix-ui/react-accordion", "lucide-react", "cn"],
+  },
+  "feature-tabs": {
+    name: "feature-tabs",
+    type: "organism",
+    path: "packages/ui/src/components/organisms/feature-tabs",
+    files: ["feature-tabs.tsx", "index.ts"],
+    dependencies: ["@radix-ui/react-tabs", "lucide-react", "motion", "cn"],
   },
   "live-transcript": {
     name: "live-transcript",

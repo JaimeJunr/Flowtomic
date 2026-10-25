@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 92 molecules, 39 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 95 molecules, 40 organisms, 14 hooks, 5 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,8 +38,8 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (155)
-- **Molecules**: `docs/componentes/molecules.md` (92)
-- **Organisms**: `docs/componentes/organisms.md` (39)
+- **Molecules**: `docs/componentes/molecules.md` (95)
+- **Organisms**: `docs/componentes/organisms.md` (40)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
 
@@ -376,10 +376,10 @@ errado.
 Resumo:
 
 - **Atoms**: 155 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 92 componentes - Ver `docs/componentes/molecules.md`
-- **Organisms**: 39 componentes - Ver `docs/componentes/organisms.md`
+- **Molecules**: 95 componentes - Ver `docs/componentes/molecules.md`
+- **Organisms**: 40 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
-- **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
+- **Blocks**: 5 blocks - Ver `docs/componentes/blocks.md`
 
 ## Registry
 
@@ -656,6 +656,9 @@ Cada uma já mordeu alguém neste repo.
   `install-imports.test.ts` instala cada entrada do mapa e reprova import sem arquivo (até
   09/10/2026, `data-table` e `widget-renderer` instalavam com exit 0 e import quebrado).
   ⚠️ O `registry/build-registry.ts` **ainda não** leva esses helpers no JSON do shadcn.
+  ⚠️ **Block (`add-block`) é copiado como um arquivo só.** Separar o texto do `product-landing` num
+  `./content.ts` fez o `add-block` recusar o import local (medido em 24/10/2026); os blocks não entram no
+  `component-map`, então não há `files` para listar. Conteúdo de block fica no próprio `page.tsx`.
 - ⚠️ **`layout` do motion num elemento inline não faz o texto vizinho deslizar**: a animação é
   por `transform`, então o vizinho pula de uma vez (medido em 04/10/2026 no `rotating-text`: 9 px
   num quadro). Para o vizinho acompanhar, meça a largura nova e anime `width` de verdade. Para
@@ -703,10 +706,16 @@ Cada uma já mordeu alguém neste repo.
   `requestAnimationFrame` quando o módulo carrega, antes do fake entrar, então a mola fica parada
   sem erro (medido em 10/10/2026 no modo `step` do `ring-carousel`). Para testar animação por mola,
   use timers reais com duração curta e `waitFor`; o `useFrameLoop` próprio continua aceitando fake.
+- ⚠️ **`color-mix(in oklch, var(--primary) N%, var(--border))` sai roxo.** Em oklch a mistura interpola o
+  matiz pelo caminho curto: entre o laranja do `--primary` (38°) e o cinza-azulado do `--border` (255°) ele
+  passa por 312°, e a borda de hover do `link-tile-grid` saiu lilás (medido em 25/10/2026). Misturando duas
+  cores com matiz, use `in oklab`; `in oklch` só com `transparent`, que não tem matiz.
 - ⚠️ **`--accent` e `--secondary` não servem de cor de brilho.** São quase brancos no tema claro e
   escuros no escuro: bolinha `bg-accent` sumia na barra clara do `goo-tabs` e o anel do
   `edge-glow-card` apagava no modo escuro (medido em 10/10/2026). Para luz e partícula, use
-  `--primary` e variações com `color-mix(in oklch, var(--primary), var(--foreground) N%)`.
+  `--primary` e variações com `color-mix(in oklab, var(--primary), var(--foreground) N%)`. Em
+  `oklch` essa mistura sai rosa/roxa (matiz 335° a 45% no tema claro, medido em 25/10/2026), e até
+  contra o branco ela desvia: `oklch(1 0 0)` tem matiz 0, não "nenhum".
 - ⚠️ **Filtro de gosma (blur + corte de alfa) apaga forma pequena.** Com `stdDeviation` 8 e matriz
   de alfa `20 -8`, bolinhas de 12 px sumiam por inteiro; com 4 e `18 -7` aparecem e ainda fundem.
 - ⚠️ **Superfície arrastável precisa de `select-none`.** Sem ele, o arraste por ponteiro seleciona o
@@ -742,6 +751,9 @@ Cada uma já mordeu alguém neste repo.
   `--foreground` escuro sobre fundo escuro: canvas "vazio", sem erro (medido em 11/10/2026). Passe o
   próprio canvas como segundo argumento, e chame `redraw()` (do `useWebglCanvas`) depois de reler a
   cor, senão um fundo parado (`speed` 0) mantém a cor velha.
+- ⚠️ **O `setup.ts` do `ui` mocka um `IntersectionObserver` que nunca dispara** (posto para o embla do
+  carousel). Componente que espera "entrou na tela" fica parado no teste sem erro. Para testar o caminho
+  "sem IntersectionObserver", apague o global só naquele caso e devolva no fim (ver `process-steps.test.tsx`).
 - ⚠️ **Teste de complexidade não mede relógio de parede.** Os testes "tempo linear" do
   `normalize-math-delimiters` tinham limite fixo (1000 e 2000 ms) e falhavam na suíte inteira com
   cobertura (1023, 3466 e 3600 ms em 11/10/2026), passando isolados. Desde 12/10/2026 eles usam

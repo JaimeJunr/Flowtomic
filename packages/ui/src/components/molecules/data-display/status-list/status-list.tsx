@@ -65,28 +65,28 @@ const STATE_CLASSES: Record<
     badge: "bg-[color-mix(in_oklch,var(--success)_15%,transparent)] text-success",
     text: "text-success",
     bar: "bg-success",
-    open: "data-[state=open]:border-[color-mix(in_oklch,var(--success)_60%,var(--border))]",
+    open: "data-[state=open]:border-[color-mix(in_oklab,var(--success)_60%,var(--border))]",
   },
   degraded: {
     dot: "bg-warning shadow-[0_0_0_3px_color-mix(in_oklch,var(--warning)_25%,transparent)]",
     badge: "bg-[color-mix(in_oklch,var(--warning)_15%,transparent)] text-warning",
     text: "text-warning",
     bar: "bg-warning",
-    open: "data-[state=open]:border-[color-mix(in_oklch,var(--warning)_60%,var(--border))]",
+    open: "data-[state=open]:border-[color-mix(in_oklab,var(--warning)_60%,var(--border))]",
   },
   outage: {
     dot: "bg-destructive shadow-[0_0_0_3px_color-mix(in_oklch,var(--destructive)_25%,transparent)]",
     badge: "bg-[color-mix(in_oklch,var(--destructive)_15%,transparent)] text-destructive",
     text: "text-destructive",
     bar: "bg-destructive",
-    open: "data-[state=open]:border-[color-mix(in_oklch,var(--destructive)_60%,var(--border))]",
+    open: "data-[state=open]:border-[color-mix(in_oklab,var(--destructive)_60%,var(--border))]",
   },
   maintenance: {
     dot: "bg-muted-foreground shadow-[0_0_0_3px_color-mix(in_oklch,var(--muted-foreground)_25%,transparent)]",
     badge: "bg-[color-mix(in_oklch,var(--muted-foreground)_15%,transparent)] text-muted-foreground",
     text: "text-muted-foreground",
     bar: "bg-muted-foreground",
-    open: "data-[state=open]:border-[color-mix(in_oklch,var(--muted-foreground)_60%,var(--border))]",
+    open: "data-[state=open]:border-[color-mix(in_oklab,var(--muted-foreground)_60%,var(--border))]",
   },
 };
 

@@ -2,7 +2,7 @@
 
 Blocks são componentes completos e prontos para uso, combinando múltiplos organisms, molecules e atoms.
 
-## 📦 Blocks Disponíveis (4)
+## 📦 Blocks Disponíveis (5)
 
 ### `dashboard-01`
 
@@ -137,3 +137,21 @@ O block não fala com nenhuma API: o app liga `messages`, `status` (os mesmos es
 
 Inspirado no [chatbot-template do shadcn](https://github.com/shadcn-ui/chatbot-template) (MIT).
 
+### `product-landing`
+
+Página de produto inteira, montada só com peças que já existem: `announcement-bar`, `site-header`,
+hero com `metric-strip`, `code-tabs` (instalação), `env-diff` (troca de dependências),
+`comparison-table`, `day-timeline`, `metric-strip` em seção escura, `status-list`, `faq-section` e
+`site-footer`. O texto é sobre o próprio Flowtomic.
+
+**Props**: `content` (padrão `productLandingContent`, exportado em `page.tsx`). Para trocar o texto,
+edite esse objeto.
+
+**Dependências**: `button`, `env-diff`, `code-tabs`, `comparison-table`, `day-timeline`,
+`metric-strip`, `status-list`, `announcement-bar`, `faq-section`, `site-header`, `site-footer`
+
+**Arquivos**:
+
+- `blocks/product-landing/page.tsx` → `app/page.tsx`
+
+**Categoria**: `marketing`

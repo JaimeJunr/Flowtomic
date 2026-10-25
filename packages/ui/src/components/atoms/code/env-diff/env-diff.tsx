@@ -70,7 +70,7 @@ function lineText(line: EnvDiffLine) {
 const typeClasses = {
   removed: {
     border: "border-destructive",
-    text: "text-[color-mix(in_oklch,var(--destructive)_75%,var(--foreground))]",
+    text: "text-[color-mix(in_oklab,var(--destructive)_75%,var(--foreground))]",
     fade: "bg-[linear-gradient(to_right,color-mix(in_oklch,var(--destructive)_14%,transparent),transparent)]",
     flat: "bg-[color-mix(in_oklch,var(--destructive)_14%,transparent)]",
     sign: "-",
@@ -78,7 +78,7 @@ const typeClasses = {
   },
   added: {
     border: "border-success",
-    text: "text-[color-mix(in_oklch,var(--success)_75%,var(--foreground))]",
+    text: "text-[color-mix(in_oklab,var(--success)_75%,var(--foreground))]",
     fade: "bg-[linear-gradient(to_right,color-mix(in_oklch,var(--success)_14%,transparent),transparent)]",
     flat: "bg-[color-mix(in_oklch,var(--success)_14%,transparent)]",
     sign: "+",

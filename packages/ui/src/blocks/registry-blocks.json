@@ -78,6 +78,35 @@
         }
       ],
       "categories": ["application", "ai"]
+    },
+    {
+      "name": "product-landing",
+      "author": "flowtomic (https://flowtomic.dev)",
+      "title": "Página de produto",
+      "description": "Página de produto inteira: aviso, cabeçalho, hero com contagens, instalação em abas, troca de dependências, comparação, linha do tempo, números, fila de peças, FAQ e rodapé. Todo o texto fica num objeto de conteúdo.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "button",
+        "env-diff",
+        "code-tabs",
+        "comparison-table",
+        "day-timeline",
+        "metric-strip",
+        "status-list",
+        "announcement-bar",
+        "faq-section",
+        "site-header",
+        "site-footer"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "blocks/product-landing/page.tsx",
+          "type": "registry:page",
+          "target": "app/page.tsx"
+        }
+      ],
+      "categories": ["marketing"]
     }
   ]
 }

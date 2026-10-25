@@ -40,11 +40,29 @@ Faixa de números de produto num `<dl>` (`<dt>` rótulo, `<dd>` número, número
 
 **Dependências**: `cn`, `count-up` (atom)
 
+### `link-tile-grid`
+
+Grade de ladrilhos-link para navegação densa (casos de uso, categorias, atalhos). `<nav>` com `@container` e `<ul role="list">` que cresce de 1 para 2, 3 e 4 colunas por container query (`columns` limita o máximo; `auto-rows-fr` iguala a altura quando um nome quebra). Cada item (`items`: `id`, `label`, `href`, `icon`, `description`, `badge`, `external`, `disabled`) é um `<a>` com ícone tingido de `--primary`, nome, seta que desliza 2 px no hover (parada com movimento reduzido) e `Badge` opcional. `external` abre em nova aba (`rel="noreferrer"`, seta `ArrowUpRight`, "(abre em nova aba)" só para leitor de tela); `disabled` vira `<span aria-disabled>` fora do Tab. `label` (padrão "Atalhos") ou `labelledBy` (id do título visível, vence o `label`) nomeiam o `<nav>`. `renderLink` troca o `<a>` pelo `Link` do router, recebendo `href`, `className`, `children`, `target`, `rel` e `item`. Spec: `docs/clean-room/sites/link-tile-grid.md`.
+
+**Dependências**: `lucide-react`, `cn`, `badge` (atom)
+
 ### `status-list`
 
 Estado atual de vários itens (integrações, serviços, regiões) numa lista que se lê de longe. Cada linha-cartão mostra número em mono (`numbered`), ícone opcional, nome, ponto de estado, "Atualizado há 16 horas" (`Intl.RelativeTimeFormat`, some abaixo de 640 px de contêiner) e selo com texto (`operational`, `degraded`, `outage`, `maintenance`; `statusLabel` sobrescreve). Linhas com `history` ou `content` abrem pelo Accordion: barras de histórico (uma por ponto, tooltip só de ponteiro, entrada em cascata que respeita movimento reduzido), disponibilidade calculada sobre pontos com dado ("98,9% disponível") e conteúdo livre. Linha sem detalhe não é botão. Props: `items`, `numbered`, `multiple` (padrão `true`), `value`/`defaultValue`/`onValueChange` (lista de ids), `locale` (padrão `pt-BR`), `now` (para teste determinístico). Spec: `docs/clean-room/sites/status-list.md`.
 
 **Dependências**: `lucide-react`, `motion`, `@radix-ui/react-accordion`, `@radix-ui/react-tooltip`, `cn`
+
+### `day-timeline`
+
+Um dia em momentos (`moments`: `id`, `time` "HH:MM", `eyebrow`, `title`, `description`, `message`, `reaction`) sobre uma régua posicionada pelo horário, não pelo índice (`start`/`end`, padrão o primeiro e o último; traços menores a cada `tickMinutes`, padrão 30). O cursor (`--primary`) tem pílula com a hora e setas "Momento anterior"/"Próximo momento"; troca por seta, clique no ponto, teclado (`role="slider"`: setas, `Home`, `End`) ou arrastando (encaixa no momento mais próximo). Acima, slot `avatar` e balão com a `message` do momento (vai para a esquerda do cursor nos 35% finais); abaixo, `eyebrow`, `title` e `description` numa região `aria-live`. Abaixo de 640 px de contêiner o cursor fica no centro e a régua desliza. `autoPlay` (ms por momento) avança sozinho, pausa com ponteiro, foco de teclado e movimento reduzido, e mostra botão de pausar. Controlado (`value` + `onValueChange` com o id) ou não (`defaultValue`). Os cálculos puros ficam em `day-timeline-utils.ts`. Spec: `docs/clean-room/sites/day-timeline.md`.
+
+**Dependências**: `lucide-react`, `motion`, `cn`
+
+### `process-steps`
+
+Dois a quatro passos em colunas (`steps`: `id`, `title`, `description`, `preview`, `detail`), com mini-mock, número `01`/`02` (`numbering`), título (`h3`, um nível abaixo do `headingLevel` do `title`, padrão `h2`) e frase, numa `<ol>` que cresce de 1 para 2, 3 e 4 colunas por container query. `preview` aceita um nó ou uma função `({ active }) => nó`, com `active` vindo de um IntersectionObserver (≥ 40% visível; `true` sem ele; sempre `false` com movimento reduzido), para o mini-mock animar só na tela. `ProcessStepFrame` (exportado) é o quadro do mini-mock: barra de janela, `title`, `tone="dark"` (classe `dark` no próprio quadro) e `decorative` (padrão `true`: `aria-hidden` e `inert`). `caption` vai centrada sobre uma régua fina abaixo da lista. Passo com `detail` (`title?`, `slides`: `media`, `title`, `description?`) vira clicável ("Ver detalhes de …") e abre o `Dialog` com carrossel: pontos, "Anterior"/"Próximo" e setas do teclado; Esc fecha e o foco volta ao passo. Spec: `docs/clean-room/sites/process-steps.md`.
+
+**Dependências**: `lucide-react`, `@radix-ui/react-dialog`, `@radix-ui/react-checkbox`, `cn`
 
 ### `widget-renderer`
 
