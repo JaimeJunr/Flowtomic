@@ -59,7 +59,7 @@ function useThemeColor(
 function fallbackStyle(token: string): React.CSSProperties {
   const base = `var(${token})`;
   return {
-    background: `linear-gradient(135deg, ${base}, color-mix(in oklch, ${base}, var(--foreground) 35%))`,
+    background: `linear-gradient(135deg, ${base}, color-mix(in oklab, ${base}, var(--foreground) 35%))`,
   };
 }
 

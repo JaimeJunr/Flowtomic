@@ -177,7 +177,7 @@ function PlanCard({
       className={cn(
         "row-span-3 grid grid-rows-subgrid gap-5 rounded-lg border p-6 text-card-foreground",
         highlighted
-          ? "order-first border-primary bg-[color-mix(in_oklch,var(--primary)_6%,var(--card))] @min-[640px]:order-none"
+          ? "order-first border-primary bg-[color-mix(in_oklab,var(--primary)_6%,var(--card))] @min-[640px]:order-none"
           : "border-border bg-card"
       )}
     >

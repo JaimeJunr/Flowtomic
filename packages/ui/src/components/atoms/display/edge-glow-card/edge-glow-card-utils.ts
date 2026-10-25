@@ -79,7 +79,7 @@ export function coneMask(spread: number): string {
 // accent e secondary ficam escuros no modo escuro e apagavam o anel; o primary clareado com o
 // foreground acende nos dois temas.
 export const RING_GRADIENT =
-  "conic-gradient(var(--primary), color-mix(in oklch, var(--primary), var(--foreground) 45%), var(--primary), color-mix(in oklch, var(--primary), var(--foreground) 25%), var(--primary))";
+  "conic-gradient(var(--primary), color-mix(in oklab, var(--primary), var(--foreground) 45%), var(--primary), color-mix(in oklab, var(--primary), var(--foreground) 25%), var(--primary))";
 
 export const ringOpacity = (intensity: number): string =>
   `min(1, calc(var(--proximity) * ${intensity}))`;

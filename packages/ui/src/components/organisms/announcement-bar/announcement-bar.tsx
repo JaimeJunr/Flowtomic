@@ -77,7 +77,7 @@ function AnnouncementBar({
       data-slot="announcement-bar"
       aria-label={label}
       className={cn(
-        "relative border-b border-[color-mix(in_oklch,var(--primary)_25%,var(--border))] bg-[color-mix(in_oklch,var(--primary)_8%,var(--background))] px-4 py-2.5 text-sm text-foreground",
+        "relative border-b border-[color-mix(in_oklab,var(--primary)_25%,var(--border))] bg-[color-mix(in_oklab,var(--primary)_8%,var(--background))] px-4 py-2.5 text-sm text-foreground",
         className
       )}
       {...props}
