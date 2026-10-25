@@ -38,17 +38,18 @@ A tabela foi gerada por `bun run scripts/peer-table.ts` a partir do `dist` (depo
 
 | Componentes | Peers externos alcançados (além de `react`/`react-dom`) |
 | --- | --- |
-| `animated-3d`, `animated-list`, `aurora-glow`, `backdrop-blur`, `bento-glow-grid`, `branch-nav`, `card-cycle`, `circular-text`, `click-spark`, `color-spotlight-grid`, `contour-lines`, `corner-rays`, `count-up`, `crosshair`, `cursor-grid`, `cursor-trail`, `curved-loop`, `depth-text`, `dither-waves`, `drift-lines`, `drift-wall`, `echo-text`, `edge-glow-card`, `electric-border`, `elevation-map`, `encrypted-text`, `evasive-target`, `expand-panels`, `fade-in-view`, `fan-cards`, `fiber-tunnel`, `fill-pill-nav`, `film-grain`, `folder-picker`, `fuzzy-text`, `glare-hover`, `glide-tooltip`, `glitch-text`, `glow-orb`, `glyph-terminal`, `goo-tabs`, `gradient-text`, `grain-gradient`, `grid-loader`, `helix-gallery`, `iridescent-foil`, `layered-menu`, `light-beams`, `light-blinds`, `light-column`, `lightning-bolts`, `liquid-gauge`, `liquid-metal`, `logo-marquee`, `magnet-lines`, `magnetic`, `marquee-menu`, `masonry-grid`, `metric-strip`, `neon-bends`, `option-wheel`, `orbit-images`, `paper-folder`, `particle-text`, `peel-sticker`, `photo-trail`, `pill-burst-menu`, `pixel-card`, `pixel-reveal`, `plasma-ribbons`, `prism-glow`, `proximity-nav`, `pulse-grid`, `radar-sweep`, `ring-carousel`, `rotating-text`, `satin-plasma`, `scan-tunnel`, `scroll-expand-media`, `scroll-velocity`, `scrub-number-field`, `shimmer`, `shred-list`, `silk-waves`, `spectral-burst`, `split-flap-text`, `spotlight-card`, `stacking-cards`, `star-border`, `star-warp`, `swipe-actions-row`, `swipe-stack`, `swirl-paint`, `target-cursor`, `task-status-mark`, `tear-off-ticket`, `tech-text`, `text-pressure`, `thread-bundle`, `tilted-card`, `trail-dial`, `true-focus`, `turn-card`, `variable-proximity`, `velvet-veil` | motion |
-| `alert`, `auth-form-error-message`, `auth-navigation-link`, `avatar`, `badge`, `bar-chart`, `button-group`, `card`, `circular-progress-chart`, `connection`, `dashboard-layout`, `date-input`, `empty`, `glass-surface`, `image`, `input`, `kbd`, `loader`, `progress`, `skeleton`, `table`, `textarea`, `time-input`, `typography`, `widget-renderer` | nenhum |
+| `animated-3d`, `animated-list`, `aurora-glow`, `backdrop-blur`, `bento-glow-grid`, `blur-text`, `branch-nav`, `card-cycle`, `circular-text`, `click-spark`, `color-spotlight-grid`, `contour-lines`, `corner-rays`, `count-up`, `crosshair`, `cursor-grid`, `cursor-trail`, `curved-loop`, `depth-text`, `dither-waves`, `drift-lines`, `drift-wall`, `echo-text`, `edge-glow-card`, `electric-border`, `elevation-map`, `encrypted-text`, `evasive-target`, `expand-panels`, `fade-in-view`, `fan-cards`, `fiber-tunnel`, `fill-pill-nav`, `film-grain`, `folder-picker`, `fuzzy-text`, `glare-hover`, `glide-tooltip`, `glitch-text`, `glow-orb`, `glyph-terminal`, `goo-tabs`, `gradient-text`, `grain-gradient`, `grid-loader`, `helix-gallery`, `iridescent-foil`, `layered-menu`, `light-beams`, `light-blinds`, `light-column`, `lightning-bolts`, `liquid-gauge`, `liquid-metal`, `logo-marquee`, `magnet-lines`, `magnetic`, `marquee-menu`, `masonry-grid`, `metric-strip`, `neon-bends`, `option-wheel`, `orbit-images`, `paper-folder`, `particle-text`, `peel-sticker`, `photo-trail`, `pill-burst-menu`, `pixel-card`, `pixel-reveal`, `plasma-ribbons`, `prism-glow`, `proximity-nav`, `pulse-grid`, `radar-sweep`, `ring-carousel`, `rotating-text`, `satin-plasma`, `scan-tunnel`, `scroll-expand-media`, `scroll-velocity`, `scrub-number-field`, `shimmer`, `shred-list`, `silk-waves`, `spectral-burst`, `split-flap-text`, `spotlight-card`, `stacking-cards`, `star-border`, `star-warp`, `swipe-actions-row`, `swipe-stack`, `swirl-paint`, `target-cursor`, `task-status-mark`, `tear-off-ticket`, `tech-text`, `text-pressure`, `thread-bundle`, `tilted-card`, `trail-dial`, `true-focus`, `turn-card`, `variable-proximity`, `velvet-veil` | motion |
+| `alert`, `auth-form-error-message`, `auth-navigation-link`, `avatar`, `badge`, `bar-chart`, `button-group`, `card`, `circular-progress-chart`, `dashboard-layout`, `date-input`, `empty`, `glass-surface`, `input`, `kbd`, `loader`, `progress`, `skeleton`, `table`, `textarea`, `time-input`, `typography`, `widget-renderer` | nenhum |
 | `announcement-bar`, `curved-input`, `depth-rail-carousel`, `dictation-button`, `dome-gallery`, `elastic-slider`, `expanding-card-nav`, `fuse-toast`, `generation-frame`, `menu-dock`, `pull-send-button`, `slide-to-confirm`, `thinking-line`, `tool-call-chip`, `tool-status-line` | lucide-react, motion |
 | `chat-input`, `dashboard-header-actions`, `day-timeline`, `edit-mode-toggle`, `env-diff`, `image-dropzone`, `pagination`, `project-list`, `reminder-card`, `site-footer`, `snippet`, `team-member-list`, `testimonial-wall`, `theme-toggle-button`, `undo-fuse-button` | @radix-ui/react-slot, lucide-react, motion |
-| `button`, `confirmation`, `dashboard-movements-section`, `hold-button`, `inline-datetime-editor`, `input-group`, `profile-card`, `social-login-buttons`, `stepper` | @radix-ui/react-slot, motion |
+| `button`, `dashboard-movements-section`, `hold-button`, `inline-datetime-editor`, `input-group`, `profile-card`, `social-login-buttons`, `stepper` | @radix-ui/react-slot, motion |
 | `link-tile-grid`, `monthly-summary`, `native-select`, `password-input`, `spinner`, `widget-resize-handle` | lucide-react |
 | `canvas`, `controls`, `edge`, `node`, `panel`, `toolbar` | @xyflow/react |
 | `chart`, `chart-area-interactive`, `chart-bar-interactive` | recharts |
 | `edit-chat-message-modal`, `process-steps`, `widget-config-modal` | @radix-ui/react-dialog, @radix-ui/react-slot, lucide-react, motion |
 | `like-button`, `notify-toggle` | @radix-ui/react-toggle, lucide-react, motion |
 | `animated-sliding-number`, `sliding-number` | motion, react-use-measure |
+| `install-command`, `live-transcript` | @radix-ui/react-select, @radix-ui/react-slot, lucide-react, motion |
 | `dialog`, `sheet` | @radix-ui/react-dialog, lucide-react |
 | `hover-card`, `inline-citation` | @radix-ui/react-hover-card |
 | `elastic-segment`, `swell-chip-group` | @radix-ui/react-radio-group, motion |
@@ -94,12 +95,6 @@ A tabela foi gerada por `bun run scripts/peer-table.ts` a partir do `dist` (depo
 | `menubar` | @radix-ui/react-menubar, lucide-react |
 | `navigation-menu` | @radix-ui/react-navigation-menu, lucide-react |
 | `tabs` | @flowtomic/logic, @radix-ui/react-tabs, motion |
-| `blur-text` | : from,
-        className: cn(className),
-        ...props,
-    };
-    if (reduceMotion)
-        return _jsx(Root, { ...rootProps, children: words.join(, motion |
 | `animated-modal` | @radix-ui/react-dialog, lucide-react, motion |
 | `button-counter` | @radix-ui/react-slot, motion, react-use-measure |
 | `code-tabs` | @radix-ui/react-radio-group, @radix-ui/react-slot, @radix-ui/react-tabs, lucide-react, motion, shiki |
@@ -111,13 +106,15 @@ A tabela foi gerada por `bun run scripts/peer-table.ts` a partir do `dist` (depo
 | `checkpoint` | @radix-ui/react-separator, @radix-ui/react-slot, @radix-ui/react-tooltip, @react-aria/tooltip, @react-stately/tooltip, lucide-react, motion |
 | `comparison-table` | @flowtomic/logic, @radix-ui/react-tabs, @radix-ui/react-tooltip, @react-aria/tooltip, @react-stately/tooltip, lucide-react, motion |
 | `data-table` | @flowtomic/logic, @radix-ui/react-checkbox, @radix-ui/react-select, @radix-ui/react-slot, @tanstack/react-table, lucide-react, motion |
-| `message` | @radix-ui/react-slot, @radix-ui/react-tooltip, @react-aria/tooltip, @react-stately/tooltip, harden-react-markdown, katex, lucide-react, motion, react-markdown, rehype-katex, remark-gfm, remark-math, shiki |
+| `message` | @radix-ui/react-slot, @radix-ui/react-tooltip, @react-aria/tooltip, @react-stately/tooltip, ai (só tipos), harden-react-markdown, katex, lucide-react, motion, react-markdown, rehype-katex, remark-gfm, remark-math, shiki |
 | `stat-card` | @flowtomic/logic, @radix-ui/react-dropdown-menu, @radix-ui/react-slot, lucide-react, motion |
 | `status-list` | @radix-ui/react-accordion, @radix-ui/react-tooltip, @react-aria/tooltip, @react-stately/tooltip, lucide-react, motion |
 | `suggestion` | @radix-ui/react-scroll-area, @radix-ui/react-slot, motion |
 | `time-tracker` | @flowtomic/logic, @radix-ui/react-slot, lucide-react, motion |
-| `tool` | @radix-ui/react-collapsible, @radix-ui/react-slot, lucide-react, motion, shiki |
+| `tool` | @radix-ui/react-collapsible, @radix-ui/react-slot, ai (só tipos), lucide-react, motion, shiki |
 | `draggable-widget` | @dnd-kit/core, @dnd-kit/utilities, lucide-react |
+| `confirmation` | @radix-ui/react-slot, ai (só tipos), motion |
+| `connection` | @xyflow/react (só tipos) |
 | `autocomplete` | @flowtomic/logic, @radix-ui/react-popover, lucide-react |
 | `combobox` | @base-ui/react, @radix-ui/react-slot, lucide-react, motion |
 | `glide-picker` | @radix-ui/react-dropdown-menu, lucide-react, motion |
@@ -125,18 +122,18 @@ A tabela foi gerada por `bun run scripts/peer-table.ts` a partir do `dist` (depo
 | `numeric-filter-field` | @radix-ui/react-select, lucide-react, react-number-format |
 | `chain-of-thought` | @radix-ui/react-collapsible, @radix-ui/react-use-controllable-state, lucide-react |
 | `chat-log` | @radix-ui/react-dropdown-menu, @radix-ui/react-slot, @radix-ui/react-tooltip, @react-aria/tooltip, @react-stately/tooltip, harden-react-markdown, katex, lucide-react, motion, react-markdown, rehype-katex, remark-gfm, remark-math, shiki, use-stick-to-bottom |
-| `context` | @radix-ui/react-hover-card, @radix-ui/react-slot, motion, tokenlens |
+| `context` | @radix-ui/react-hover-card, @radix-ui/react-slot, ai (só tipos), motion, tokenlens |
 | `conversation` | @radix-ui/react-slot, lucide-react, motion, use-stick-to-bottom |
 | `draggable-dashboard-grid` | @dnd-kit/core, @dnd-kit/utilities, @flowtomic/logic, lucide-react |
 | `faq-section` | @radix-ui/react-accordion, @radix-ui/react-slot, lucide-react, motion |
 | `feature-tabs` | @radix-ui/react-tabs, lucide-react, motion |
 | `form-layout` | @radix-ui/react-checkbox, @radix-ui/react-label, @radix-ui/react-popover, @radix-ui/react-radio-group, @radix-ui/react-select, @radix-ui/react-separator, @radix-ui/react-slider, @radix-ui/react-slot, @radix-ui/react-switch, @radix-ui/react-toggle, @radix-ui/react-tooltip, @react-aria/tooltip, @react-stately/tooltip, date-fns, input-otp, lucide-react, motion, react-day-picker, react-hook-form, react-number-format |
 | `genealogy-canvas` | @flowtomic/logic, @xyflow/react, lucide-react |
-| `live-transcript` | @radix-ui/react-select, @radix-ui/react-slot, lucide-react, motion |
+| `image` | ai (só tipos) |
 | `model-selector` | @radix-ui/react-dialog, cmdk, lucide-react |
 | `plan` | @radix-ui/react-collapsible, @radix-ui/react-slot, lucide-react, motion |
 | `pricing-table` | @radix-ui/react-slot, @radix-ui/react-toggle, @radix-ui/react-toggle-group, lucide-react, motion, react-use-measure |
-| `prompt-input` | @radix-ui/react-dropdown-menu, @radix-ui/react-hover-card, @radix-ui/react-popover, @radix-ui/react-select, @radix-ui/react-slider, @radix-ui/react-slot, cmdk, lucide-react, motion, nanoid |
+| `prompt-input` | @radix-ui/react-dropdown-menu, @radix-ui/react-hover-card, @radix-ui/react-popover, @radix-ui/react-select, @radix-ui/react-slider, @radix-ui/react-slot, ai (só tipos), cmdk, lucide-react, motion, nanoid |
 | `questionnaire` | @radix-ui/react-radio-group, @radix-ui/react-slot, lucide-react, motion |
 | `queue` | @radix-ui/react-collapsible, @radix-ui/react-scroll-area, @radix-ui/react-slot, lucide-react, motion |
 | `reasoning` | @radix-ui/react-collapsible, @radix-ui/react-use-controllable-state, lucide-react, motion, streamdown |
