@@ -2,13 +2,13 @@ import type * as React from "react";
 import { useId } from "react";
 import type { Control, FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
+import { PasswordInput } from "@/components/molecules/auth/password-input";
+import { CalendarPopover } from "@/components/molecules/data-display/calendar-popover";
+import { CalendarRange } from "@/components/molecules/data-display/calendar-range";
 import {
-  CalendarPopover,
-  CalendarRange,
   NumericFilterField,
   type NumericFilterValue,
-  PasswordInput,
-} from "@/components/molecules";
+} from "@/components/molecules/forms/numeric-filter-field";
 import { cn } from "@/lib/utils";
 import { Separator } from "../../atoms/display/separator";
 import { Checkbox } from "../../atoms/forms/checkbox";
@@ -63,7 +63,7 @@ export type FormFieldType =
   | "numericFilter";
 
 /** Valor do campo tipo numericFilter (operador + valor numérico) */
-export type { NumericFilterValue } from "@/components/molecules";
+export type { NumericFilterValue } from "@/components/molecules/forms/numeric-filter-field";
 
 /**
  * Configuração de um campo de formulário

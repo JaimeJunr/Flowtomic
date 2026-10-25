@@ -491,10 +491,13 @@ do sistema de arquivos, usando a mesma configuração de aliases de um projeto N
 
 Copia `fonts.css` e adiciona seu `@import` ao CSS configurado em `components.json`.
 Use apenas para carregar as fontes pelo Google; fontes locais não precisam dele.
+Se o projeto já tiver um `fonts.css` diferente do padrão, o comando não sobrescreve
+e avisa; use `--force` para substituí-lo.
 
 ```bash
 bunx flowtomic-cli styles fonts
 ```
 
-O comando `styles` sem argumentos copia os quatro arquivos. A ordem de importação é
-`globals.css` → `theme.css` → `typography.css` → `fonts.css`.
+O comando `styles` sem argumentos copia `globals.css`, `theme.css` e `typography.css`;
+`fonts.css` fica de fora (opt-in, como no CHANGELOG). Quando `fonts` é pedido, a ordem de
+importação é `globals.css` → `theme.css` → `typography.css` → `fonts.css`.

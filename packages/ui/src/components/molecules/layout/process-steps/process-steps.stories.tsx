@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Checkbox } from "../../../atoms";
+import { Checkbox } from "../../../atoms/forms/checkbox";
 import { ProcessStepFrame } from "./process-step-frame";
 import { ProcessSteps } from "./process-steps";
 import type { ProcessStep } from "./process-steps-types";

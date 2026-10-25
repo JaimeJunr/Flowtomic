@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { MotionConfigContext, motion, useReducedMotion } from "motion/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../../atoms";
+import { Button } from "../../../atoms/actions/button";
 import {
   formatTime,
   nearestIndex,
