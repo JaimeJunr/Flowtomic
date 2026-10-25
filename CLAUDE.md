@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 93 molecules, 39 organisms, 14 hooks, 4 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 93 molecules, 39 organisms, 14 hooks, 5 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -379,7 +379,7 @@ Resumo:
 - **Molecules**: 93 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 39 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
-- **Blocks**: 4 blocks - Ver `docs/componentes/blocks.md`
+- **Blocks**: 5 blocks - Ver `docs/componentes/blocks.md`
 
 ## Registry
 
@@ -656,6 +656,9 @@ Cada uma já mordeu alguém neste repo.
   `install-imports.test.ts` instala cada entrada do mapa e reprova import sem arquivo (até
   09/10/2026, `data-table` e `widget-renderer` instalavam com exit 0 e import quebrado).
   ⚠️ O `registry/build-registry.ts` **ainda não** leva esses helpers no JSON do shadcn.
+  ⚠️ **Block (`add-block`) é copiado como um arquivo só.** Separar o texto do `product-landing` num
+  `./content.ts` fez o `add-block` recusar o import local (medido em 24/10/2026); os blocks não entram no
+  `component-map`, então não há `files` para listar. Conteúdo de block fica no próprio `page.tsx`.
 - ⚠️ **`layout` do motion num elemento inline não faz o texto vizinho deslizar**: a animação é
   por `transform`, então o vizinho pula de uma vez (medido em 04/10/2026 no `rotating-text`: 9 px
   num quadro). Para o vizinho acompanhar, meça a largura nova e anime `width` de verdade. Para
