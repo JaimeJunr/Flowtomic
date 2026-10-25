@@ -57,8 +57,9 @@ program
   .description("Copiar arquivos de estilo do Flowtomic para o projeto")
   .argument(
     "[styles...]",
-    "Arquivos de estilo para copiar (globals, theme, typography, fonts). Se não especificado, copia todos."
+    "Arquivos de estilo para copiar (globals, theme, typography, fonts). Sem argumento copia globals, theme e typography; fonts só com pedido explícito."
   )
+  .option("--force", "Sobrescreve fonts.css existente quando ele difere do padrão")
   .action(copyStyles);
 
 program.parseAsync().catch((error: unknown) => {

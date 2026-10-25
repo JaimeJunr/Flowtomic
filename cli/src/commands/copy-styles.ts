@@ -22,7 +22,14 @@ const STYLE_FILES = {
 
 type StyleFileKey = keyof typeof STYLE_FILES;
 
-export async function copyStyles(styles: string[]) {
+// Fontes do Google ficam fora do padrão (opt-in): só entram com `styles fonts` explícito.
+const DEFAULT_STYLES: StyleFileKey[] = ["globals", "theme", "typography"];
+
+export interface CopyStylesOptions {
+  force?: boolean;
+}
+
+export async function copyStyles(styles: string[], options: CopyStylesOptions = {}) {
   const configPath = join(process.cwd(), "components.json");
 
   if (!existsSync(configPath)) {
@@ -46,8 +53,12 @@ export async function copyStyles(styles: string[]) {
 
   // Se nenhum estilo especificado, copiar todos
   if (styles.length === 0) {
-    styles = Object.keys(STYLE_FILES);
-    console.log(chalk.blue("📝 Nenhum estilo especificado, copiando todos os arquivos..."));
+    styles = DEFAULT_STYLES;
+    console.log(
+      chalk.blue(
+        "📝 Nenhum estilo especificado, copiando os padrões (fonts fica de fora: use `styles fonts`)..."
+      )
+    );
   }
 
   // Validar estilos fornecidos
@@ -89,6 +100,20 @@ export async function copyStyles(styles: string[]) {
 
     try {
       const content = readFileSync(sourcePath, "utf-8");
+      // fonts.css costuma ser customizado pelo projeto: não sobrescreve sem --force
+      if (
+        styleKey === "fonts" &&
+        !options.force &&
+        existsSync(targetPath) &&
+        readFileSync(targetPath, "utf-8") !== content
+      ) {
+        console.log(
+          chalk.yellow(
+            `   ⚠️  ${targetDir}/${fileName} já existe e é diferente; use --force para sobrescrever, pulando...`
+          )
+        );
+        continue;
+      }
       writeFileSync(targetPath, content, "utf-8");
       copiedFiles.push(fileName);
       console.log(chalk.green(`   ✅ ${fileName} copiado para ${targetDir}/${fileName}`));
@@ -126,8 +151,9 @@ function updateMainCssFile(mainCssPath: string, copiedFiles: string[], targetDir
 
   // Remover imports antigos dos arquivos de estilo
   copiedFiles.forEach((file) => {
+    // Casa `./fonts.css` e `../x/fonts`, mas não `./brand-fonts`, que é do projeto
     const importPattern = new RegExp(
-      `@import\\s+['"]\\.?/?.*${file.replace(".css", "")}['"];?\\s*`,
+      `@import\\s+['"](?:[^'"]*/)?${file.replace(".css", "")}(?:\\.css)?['"];?\\s*`,
       "g"
     );
     content = content.replace(importPattern, "");

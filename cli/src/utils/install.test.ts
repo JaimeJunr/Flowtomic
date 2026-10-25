@@ -134,6 +134,54 @@ describe("instalação pela CLI compilada em um projeto consumidor", () => {
     );
   });
 
+  it("styles sem argumentos copia o padrão e nunca fonts.css", () => {
+    write(
+      join(project, "components.json"),
+      JSON.stringify({ ...config, tailwind: { css: "src/app/index.css" } })
+    );
+    write(join(project, "src/app/index.css"), "@import 'tailwindcss';\n");
+    const result = run(["styles"]);
+    expect(result.status).toBe(0);
+    expect(existsSync(join(project, "src/app/globals.css"))).toBe(true);
+    expect(existsSync(join(project, "src/app/fonts.css"))).toBe(false);
+    expect(readFileSync(join(project, "src/app/index.css"), "utf-8")).not.toContain("fonts.css");
+  });
+
+  it("styles fonts não sobrescreve fonts.css customizado sem --force, e com --force sobrescreve", () => {
+    write(
+      join(project, "components.json"),
+      JSON.stringify({ ...config, tailwind: { css: "src/app/index.css" } })
+    );
+    write(join(project, "src/app/index.css"), "@import 'tailwindcss';\n");
+    const custom = "@font-face { font-family: Marca; src: url('./marca.woff2'); }\n";
+    write(join(project, "src/app/fonts.css"), custom);
+
+    const kept = run(["styles", "fonts"]);
+    expect(kept.status).toBe(0);
+    expect(kept.stdout).toContain("--force");
+    expect(readFileSync(join(project, "src/app/fonts.css"), "utf-8")).toBe(custom);
+
+    const forced = run(["styles", "fonts", "--force"]);
+    expect(forced.status).toBe(0);
+    expect(readFileSync(join(project, "src/app/fonts.css"), "utf-8")).toBe(
+      readFileSync(join(repo, "packages/styles/fonts.css"), "utf-8")
+    );
+  });
+
+  it("rodar styles de novo não duplica o import de fonts e preserva imports parecidos do projeto", () => {
+    write(
+      join(project, "components.json"),
+      JSON.stringify({ ...config, tailwind: { css: "src/app/index.css" } })
+    );
+    write(join(project, "src/app/index.css"), "@import 'tailwindcss';\n@import './brand-fonts';\n");
+    run(["styles", "fonts"]);
+    const second = run(["styles", "fonts"]);
+    expect(second.status).toBe(0);
+    const css = readFileSync(join(project, "src/app/index.css"), "utf-8");
+    expect(css.match(/fonts\.css/g)).toHaveLength(1);
+    expect(css).toContain("@import './brand-fonts';");
+  });
+
   it("resolve o alias de utils em src, sem criar lib na raiz", () => {
     const result = run(["add", "button"]);
     expect(result.status).toBe(0);
