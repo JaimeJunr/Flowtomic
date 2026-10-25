@@ -9,7 +9,7 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { SidebarProvider } from "../../../atoms/layout";
+import { SidebarProvider } from "../../../atoms/layout/sidebar";
 import { type NavigationItem, SidebarNavigation } from "./sidebar-navigation";
 
 const meta = {

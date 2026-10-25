@@ -1,15 +1,15 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "../../../atoms/actions/button";
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../atoms";
+} from "../../../atoms/feedback/dialog";
 import type { ProcessStepDetail as ProcessStepDetailData } from "./process-steps-types";
 
 /** Texto simples de um ReactNode, para o aria-label do botão. */

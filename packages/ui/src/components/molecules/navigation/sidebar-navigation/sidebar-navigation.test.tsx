@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
-import { SidebarProvider } from "../../../atoms/layout";
+import { SidebarProvider } from "../../../atoms/layout/sidebar";
 import { SidebarNavigation } from "./sidebar-navigation";
 
 function renderSidebar(props: Parameters<typeof SidebarNavigation>[0] = {}) {

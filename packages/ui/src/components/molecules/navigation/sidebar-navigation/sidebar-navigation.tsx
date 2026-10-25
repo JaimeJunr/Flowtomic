@@ -19,7 +19,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "../../../atoms/layout";
+} from "../../../atoms/layout/sidebar";
 
 export interface NavigationItem {
   id: string;
