@@ -1527,6 +1527,19 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
       "cn",
     ],
   },
+  "process-steps": {
+    name: "process-steps",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/layout/process-steps",
+    files: [
+      "process-steps.tsx",
+      "process-step-frame.tsx",
+      "process-step-detail.tsx",
+      "process-steps-types.ts",
+      "index.ts",
+    ],
+    dependencies: ["lucide-react", "@radix-ui/react-dialog", "@radix-ui/react-checkbox", "cn"],
+  },
   "day-timeline": {
     name: "day-timeline",
     type: "molecule",

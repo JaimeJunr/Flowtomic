@@ -52,6 +52,12 @@ Um dia em momentos (`moments`: `id`, `time` "HH:MM", `eyebrow`, `title`, `descri
 
 **Dependências**: `lucide-react`, `motion`, `cn`
 
+### `process-steps`
+
+Dois a quatro passos em colunas (`steps`: `id`, `title`, `description`, `preview`, `detail`), com mini-mock, número `01`/`02` (`numbering`), título (`h3`, um nível abaixo do `headingLevel` do `title`, padrão `h2`) e frase, numa `<ol>` que cresce de 1 para 2, 3 e 4 colunas por container query. `preview` aceita um nó ou uma função `({ active }) => nó`, com `active` vindo de um IntersectionObserver (≥ 40% visível; `true` sem ele; sempre `false` com movimento reduzido), para o mini-mock animar só na tela. `ProcessStepFrame` (exportado) é o quadro do mini-mock: barra de janela, `title`, `tone="dark"` (classe `dark` no próprio quadro) e `decorative` (padrão `true`: `aria-hidden` e `inert`). `caption` vai centrada sobre uma régua fina abaixo da lista. Passo com `detail` (`title?`, `slides`: `media`, `title`, `description?`) vira clicável ("Ver detalhes de …") e abre o `Dialog` com carrossel: pontos, "Anterior"/"Próximo" e setas do teclado; Esc fecha e o foco volta ao passo. Spec: `docs/clean-room/sites/process-steps.md`.
+
+**Dependências**: `lucide-react`, `@radix-ui/react-dialog`, `@radix-ui/react-checkbox`, `cn`
+
 ### `widget-renderer`
 
 Renderiza por `renderWidget(widget, data)` ou por um registry indexado pelo tipo do widget. A render prop tem prioridade, inclusive quando retorna null. Loading explícito e Suspense anunciam “Carregando widget” sem mudar o skeleton visual. Um `fallback` fornecido é respeitado mesmo quando vale `0`, `""`, null ou false; sem fallback, aparece o tipo desconhecido.

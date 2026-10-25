@@ -401,6 +401,15 @@ export type {
   Notification,
 } from "./layout/dashboard-header";
 export { DashboardHeader } from "./layout/dashboard-header";
+export type {
+  ProcessStep,
+  ProcessStepDetail,
+  ProcessStepFrameProps,
+  ProcessStepPreviewState,
+  ProcessStepSlide,
+  ProcessStepsProps,
+} from "./layout/process-steps";
+export { ProcessStepFrame, ProcessSteps } from "./layout/process-steps";
 export type { StackingCardProps, StackingCardsProps } from "./layout/stacking-cards";
 export { StackingCard, StackingCards } from "./layout/stacking-cards";
 export type {

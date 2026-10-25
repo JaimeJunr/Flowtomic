@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 93 molecules, 40 organisms, 14 hooks, 5 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 94 molecules, 40 organisms, 14 hooks, 5 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (155)
-- **Molecules**: `docs/componentes/molecules.md` (93)
+- **Molecules**: `docs/componentes/molecules.md` (94)
 - **Organisms**: `docs/componentes/organisms.md` (40)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -376,7 +376,7 @@ errado.
 Resumo:
 
 - **Atoms**: 155 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 93 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 94 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 40 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 5 blocks - Ver `docs/componentes/blocks.md`
@@ -745,6 +745,9 @@ Cada uma já mordeu alguém neste repo.
   `--foreground` escuro sobre fundo escuro: canvas "vazio", sem erro (medido em 11/10/2026). Passe o
   próprio canvas como segundo argumento, e chame `redraw()` (do `useWebglCanvas`) depois de reler a
   cor, senão um fundo parado (`speed` 0) mantém a cor velha.
+- ⚠️ **O `setup.ts` do `ui` mocka um `IntersectionObserver` que nunca dispara** (posto para o embla do
+  carousel). Componente que espera "entrou na tela" fica parado no teste sem erro. Para testar o caminho
+  "sem IntersectionObserver", apague o global só naquele caso e devolva no fim (ver `process-steps.test.tsx`).
 - ⚠️ **Teste de complexidade não mede relógio de parede.** Os testes "tempo linear" do
   `normalize-math-delimiters` tinham limite fixo (1000 e 2000 ms) e falhavam na suíte inteira com
   cobertura (1023, 3466 e 3600 ms em 11/10/2026), passando isolados. Desde 12/10/2026 eles usam
