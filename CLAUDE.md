@@ -656,6 +656,9 @@ Cada uma já mordeu alguém neste repo.
   `install-imports.test.ts` instala cada entrada do mapa e reprova import sem arquivo (até
   09/10/2026, `data-table` e `widget-renderer` instalavam com exit 0 e import quebrado).
   ⚠️ O `registry/build-registry.ts` **ainda não** leva esses helpers no JSON do shadcn.
+  ⚠️ **Block (`add-block`) é copiado como um arquivo só.** Separar o texto do `product-landing` num
+  `./content.ts` fez o `add-block` recusar o import local (medido em 24/10/2026); os blocks não entram no
+  `component-map`, então não há `files` para listar. Conteúdo de block fica no próprio `page.tsx`.
 - ⚠️ **`layout` do motion num elemento inline não faz o texto vizinho deslizar**: a animação é
   por `transform`, então o vizinho pula de uma vez (medido em 04/10/2026 no `rotating-text`: 9 px
   num quadro). Para o vizinho acompanhar, meça a largura nova e anime `width` de verdade. Para
