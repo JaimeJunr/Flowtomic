@@ -436,6 +436,8 @@ export type {
   LayeredMenuSide,
 } from "./navigation/layered-menu";
 export { LayeredMenu } from "./navigation/layered-menu";
+export type { LinkTile, LinkTileGridProps, LinkTileLinkProps } from "./navigation/link-tile-grid";
+export { LinkTileGrid } from "./navigation/link-tile-grid";
 export type { MarqueeMenuItem, MarqueeMenuProps } from "./navigation/marquee-menu";
 export { MarqueeMenu } from "./navigation/marquee-menu";
 export type { MenuDockItem, MenuDockProps } from "./navigation/menu-dock";

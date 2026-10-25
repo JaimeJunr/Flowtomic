@@ -8,7 +8,7 @@
 
 - **`DESIGN.md`** - Design system: tokens, tipografia, componentes e regras visuais
 - **`docs/INDEX.md`** - Índice central de toda a documentação
-- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 94 molecules, 40 organisms, 14 hooks, 5 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
+- **`docs/componentes/README.md`** - Lista completa de componentes (155 atoms, 95 molecules, 40 organisms, 14 hooks, 5 blocks — contados em `packages/ui/src/components` e `packages/logic/src/hooks`)
 - **`docs/desenvolvimento/README.md`** - Guia completo de desenvolvimento
 - **`docs/packages/ui.md`** - Detalhes do package UI
 - **`docs/packages/logic.md`** - Detalhes do package Logic
@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (155)
-- **Molecules**: `docs/componentes/molecules.md` (94)
+- **Molecules**: `docs/componentes/molecules.md` (95)
 - **Organisms**: `docs/componentes/organisms.md` (40)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -376,7 +376,7 @@ errado.
 Resumo:
 
 - **Atoms**: 155 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 94 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 95 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 40 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 5 blocks - Ver `docs/componentes/blocks.md`
@@ -706,6 +706,10 @@ Cada uma já mordeu alguém neste repo.
   `requestAnimationFrame` quando o módulo carrega, antes do fake entrar, então a mola fica parada
   sem erro (medido em 10/10/2026 no modo `step` do `ring-carousel`). Para testar animação por mola,
   use timers reais com duração curta e `waitFor`; o `useFrameLoop` próprio continua aceitando fake.
+- ⚠️ **`color-mix(in oklch, var(--primary) N%, var(--border))` sai roxo.** Em oklch a mistura interpola o
+  matiz pelo caminho curto: entre o laranja do `--primary` (38°) e o cinza-azulado do `--border` (255°) ele
+  passa por 312°, e a borda de hover do `link-tile-grid` saiu lilás (medido em 25/10/2026). Misturando duas
+  cores com matiz, use `in oklab`; `in oklch` só com `transparent`, que não tem matiz.
 - ⚠️ **`--accent` e `--secondary` não servem de cor de brilho.** São quase brancos no tema claro e
   escuros no escuro: bolinha `bg-accent` sumia na barra clara do `goo-tabs` e o anel do
   `edge-glow-card` apagava no modo escuro (medido em 10/10/2026). Para luz e partícula, use
