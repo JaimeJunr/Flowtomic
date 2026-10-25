@@ -80,6 +80,19 @@ describe("Command", () => {
     expect(onSelect).not.toHaveBeenCalled();
   });
 
+  it("só aplica os estilos de desabilitado quando data-disabled é true", () => {
+    render(<Paleta />);
+    const habilitado = screen.getByRole("option", { name: "Salvar" });
+    const desabilitado = screen.getByRole("option", { name: "Desfazer" });
+
+    expect(habilitado).toHaveAttribute("data-disabled", "false");
+    expect(habilitado).not.toHaveAttribute("aria-disabled", "true");
+    expect(desabilitado).toHaveAttribute("data-disabled", "true");
+    expect(desabilitado).toHaveAttribute("aria-disabled", "true");
+    expect(habilitado.className).toContain("data-[disabled=true]:pointer-events-none");
+    expect(habilitado.className).toContain("data-[disabled=true]:opacity-50");
+  });
+
   it("Enter confirma o item destacado pelo teclado", async () => {
     const onSelect = vi.fn();
     render(<Paleta onSelect={onSelect} />);
