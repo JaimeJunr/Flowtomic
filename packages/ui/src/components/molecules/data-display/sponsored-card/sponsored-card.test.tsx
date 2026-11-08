@@ -18,7 +18,7 @@ const ad: SponsoredCardProps = {
 describe("SponsoredCard", () => {
   it("identifica o anúncio na hora, com o rótulo antes do conteúdo e quem paga primeiro", () => {
     render(<SponsoredCard {...ad} />);
-    const card = screen.getByRole("complementary", { name: "Anúncio patrocinado" });
+    const card = screen.getByRole("complementary", { name: /^Anúncio patrocinado/ });
     const text = card.textContent ?? "";
     expect(text.indexOf("Patrocinado")).toBeLessThan(text.indexOf("Constelação"));
     expect(text.indexOf("Constelação")).toBeLessThan(text.indexOf("API compatível com OpenAI"));
@@ -76,6 +76,43 @@ describe("SponsoredCard", () => {
     expect(screen.queryByText(ad.body as string)).not.toBeInTheDocument();
   });
 
+  it("recolhido também esconde o que o app pôs dentro do card", async () => {
+    render(
+      <SponsoredCard {...ad} collapsible>
+        <p>O anúncio não altera a resposta do modelo.</p>
+      </SponsoredCard>
+    );
+    expect(screen.queryByText(/não altera a resposta/)).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /API compatível/ }));
+    expect(screen.getByText(/não altera a resposta/)).toBeVisible();
+  });
+
+  it.each([
+    ["Quer economizar?", "Quer economizar? Crie"],
+    ["Use já.", "Use já. Crie"],
+    ["API compatível com OpenAI", "API compatível com OpenAI. Crie"],
+  ])("o rodapé não dobra a pontuação do título %s", (title, expected) => {
+    render(<SponsoredCard {...ad} title={title} variant="footnote" />);
+    const text = screen.getByRole("complementary").textContent ?? "";
+    expect(text).toContain(expected);
+    expect(text).not.toMatch(/[.?!]\./);
+  });
+
+  it("o nome da região diz de quem é o anúncio, para vários cards na mesma tela", () => {
+    render(
+      <>
+        <SponsoredCard {...ad} />
+        <SponsoredCard {...ad} advertiser="Pix Fácil" />
+      </>
+    );
+    expect(
+      screen.getByRole("complementary", { name: "Anúncio patrocinado de Constelação" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("complementary", { name: "Anúncio patrocinado de Pix Fácil" })
+    ).toBeInTheDocument();
+  });
+
   it("sem collapsible, o cabeçalho não é botão e o conteúdo fica sempre à vista", () => {
     render(<SponsoredCard {...ad} />);
     expect(screen.queryByRole("button", { name: /API compatível/ })).not.toBeInTheDocument();
@@ -122,7 +159,7 @@ describe("SponsoredCard", () => {
     ["footnote", ["Patrocinado", "Constelação", "API compatível"]],
   ] as const)("o formato %s também identifica o anúncio e leva ao anunciante", (variant, order) => {
     render(<SponsoredCard {...ad} variant={variant} />);
-    const card = screen.getByRole("complementary", { name: "Anúncio patrocinado" });
+    const card = screen.getByRole("complementary", { name: /^Anúncio patrocinado/ });
     expect(card).toHaveAttribute("data-variant", variant);
     const positions = order.map((text) => (card.textContent ?? "").indexOf(text));
     expect(positions.every((p) => p >= 0)).toBe(true);

@@ -6,7 +6,7 @@ const ad: SponsoredCardProps = {
   advertiser: "Constelação",
   title: "API compatível com OpenAI",
   body: "Crie uma chave e use vários modelos com seu saldo da Constelação.",
-  href: "https://github.com/JaimeJunr/Flowtomic",
+  href: "https://constelacaoai.com.br",
   displayHost: "constelacaoai.com.br",
 };
 
@@ -41,7 +41,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Tab: Story = { name: "Aba, aberto" };
+export const Default: Story = { name: "Aba, aberto" };
 
 export const TabCollapsible: Story = {
   name: "Aba, recolhível",

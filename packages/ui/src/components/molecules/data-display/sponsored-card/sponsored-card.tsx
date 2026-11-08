@@ -56,6 +56,7 @@ export type SponsoredCardProps = Omit<ComponentProps<"aside">, "title" | "childr
   onOpenChange?: (open: boolean) => void;
   actions?: SponsoredCardAction[];
   label?: string;
+  /** Nome da região para leitor de tela. Padrão: "Anúncio patrocinado de <anunciante>". */
   regionLabel?: string;
   actionsLabel?: string;
   newTabLabel?: string;
@@ -184,6 +185,11 @@ type IdentityProps = {
   label: string;
 };
 
+/** O rodapé junta título e texto numa frase: só põe ponto se o título já não termina pontuado. */
+function withFinalPeriod(title: string): string {
+  return /[.?!…:]$/.test(title.trim()) ? title : `${title}.`;
+}
+
 function FootnoteAd(
   props: Required<Pick<SponsoredCardProps, "label" | "newTabLabel">> & SponsoredCardProps
 ) {
@@ -209,7 +215,7 @@ function FootnoteAd(
         <ActionsMenu actions={actions} label={actionsLabel ?? "Opções do anúncio"} />
       </div>
       <p className="mt-1 text-sm [overflow-wrap:anywhere]">
-        <span className="font-semibold">{title}.</span>{" "}
+        <span className="font-semibold">{withFinalPeriod(title)}</span>{" "}
         <span className="text-muted-foreground">{body}</span>
       </p>
       <AdLink
@@ -237,7 +243,7 @@ export function SponsoredCard({
   onOpenChange,
   actions,
   label = "Patrocinado",
-  regionLabel = "Anúncio patrocinado",
+  regionLabel,
   actionsLabel = "Opções do anúncio",
   newTabLabel = "abre em nova aba",
   children,
@@ -283,6 +289,9 @@ export function SponsoredCard({
         newTabLabel={newTabLabel}
         className="flex min-h-11 items-center justify-between gap-3 border-sponsored-border border-t px-4 font-medium text-sm hover:bg-sponsored-foreground/5"
       />
+      {children ? (
+        <div className="border-sponsored-border border-t px-4 py-3 text-[13px]">{children}</div>
+      ) : null}
     </>
   );
 
@@ -297,9 +306,6 @@ export function SponsoredCard({
     >
       {header}
       {canCollapse ? <CollapsibleContent>{content}</CollapsibleContent> : content}
-      {children ? (
-        <div className="border-sponsored-border border-t px-4 py-3 text-[13px]">{children}</div>
-      ) : null}
     </div>
   );
 
@@ -307,7 +313,7 @@ export function SponsoredCard({
     <aside
       data-slot="sponsored-card"
       data-variant={variant}
-      aria-label={regionLabel}
+      aria-label={regionLabel ?? `Anúncio patrocinado de ${advertiser}`}
       className={cn("relative min-w-0", variant === "tab" && "pt-[26px]", className)}
       {...props}
     >

@@ -577,6 +577,8 @@ link quando o endereço é http(s) ou relativo (`isSafeSourceUrl`).
 resposta mais recente fique aberto. `actions` vira um menu "Opções do anúncio" (ocultar,
 denunciar, "Por que estou vendo isto?"); o que o app passar como filho aparece dentro do card.
 Rótulos (`label`, `regionLabel`, `actionsLabel`, `newTabLabel`) vêm em pt-BR e aceitam tradução.
+O nome da região é "Anúncio patrocinado de <anunciante>", para vários cards na mesma tela
+não repetirem o mesmo nome. Com `collapsible`, o conteúdo do app recolhe junto com o card.
 
 Cores só pelos tokens `--sponsored-*` do `globals.css` (fundo, texto, texto secundário, borda,
 selo e texto do selo), separados da marca. O teste do componente cobra 4,5:1 nos três pares e
