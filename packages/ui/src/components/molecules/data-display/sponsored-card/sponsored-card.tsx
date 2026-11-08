@@ -7,7 +7,7 @@
  */
 
 import { ChevronDown, Ellipsis, ExternalLink } from "lucide-react";
-import type { ComponentProps, ReactNode } from "react";
+import { type ComponentProps, type ReactNode, useId, useRef } from "react";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -36,6 +36,11 @@ export interface SponsoredCardAction {
   onSelect: () => void;
   /** Põe um separador antes do item (ex.: "Denunciar anúncio"). */
   separated?: boolean;
+  /**
+   * `false` quando o item leva o foco para outro lugar (ex.: um painel que abre no card): o
+   * `onSelect` roda depois que o menu fecha, e o foco não volta ao botão de opções.
+   */
+  returnFocus?: boolean;
 }
 
 export type SponsoredCardProps = Omit<ComponentProps<"aside">, "title" | "children"> & {
@@ -120,6 +125,8 @@ type AdLinkProps = Pick<SponsoredCardProps, "href" | "displayHost"> & {
 };
 
 function ActionsMenu({ actions, label }: { actions?: SponsoredCardAction[]; label: string }) {
+  // Item que move o foco roda só depois que o menu fecha: aberto, o menu prende o foco dentro dele.
+  const afterClose = useRef<(() => void) | null>(null);
   if (!actions?.length) return null;
   return (
     <DropdownMenu>
@@ -135,6 +142,13 @@ function ActionsMenu({ actions, label }: { actions?: SponsoredCardAction[]; labe
       <DropdownMenuContent
         align="end"
         className="min-w-60 border-sponsored-border bg-sponsored text-sponsored-foreground"
+        onCloseAutoFocus={(event) => {
+          const run = afterClose.current;
+          if (!run) return;
+          afterClose.current = null;
+          event.preventDefault();
+          run();
+        }}
       >
         {actions.map((action) => [
           action.separated ? (
@@ -142,7 +156,10 @@ function ActionsMenu({ actions, label }: { actions?: SponsoredCardAction[]; labe
           ) : null,
           <DropdownMenuItem
             key={action.label}
-            onSelect={action.onSelect}
+            onSelect={() => {
+              if (action.returnFocus === false) afterClose.current = action.onSelect;
+              else action.onSelect();
+            }}
             className="min-h-10 focus:bg-sponsored-foreground/10 focus:text-sponsored-foreground"
           >
             {action.label}
@@ -256,6 +273,8 @@ export function SponsoredCard({
 }: SponsoredCardProps) {
   const ad = { advertiser, title, logoSrc };
   const canCollapse = collapsible && variant !== "footnote";
+  // Na aba, o selo fica fora do botão de recolher: vira a descrição dele para o leitor de tela.
+  const tabLabelId = useId();
   const rowClass =
     "flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-lg py-1 pr-1.5 pl-3 text-left";
 
@@ -263,6 +282,7 @@ export function SponsoredCard({
     <div className="flex items-center gap-1 py-1.5 pr-1">
       {canCollapse ? (
         <CollapsibleTrigger
+          aria-describedby={variant === "tab" ? tabLabelId : undefined}
           className={cn(rowClass, "group hover:bg-sponsored-foreground/5", FOCUS)}
         >
           <Identity ad={ad} variant={variant} label={label} />
@@ -322,7 +342,10 @@ export function SponsoredCard({
       {...props}
     >
       {variant === "tab" ? (
-        <span className="absolute top-0 left-4 flex h-[27px] items-center rounded-t-md bg-sponsored-badge px-2.5 font-semibold text-sponsored-badge-foreground text-xs">
+        <span
+          id={tabLabelId}
+          className="absolute top-0 left-4 flex h-[27px] items-center rounded-t-md bg-sponsored-badge px-2.5 font-semibold text-sponsored-badge-foreground text-xs"
+        >
           {label}
         </span>
       ) : null}
