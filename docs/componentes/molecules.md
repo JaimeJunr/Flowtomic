@@ -558,6 +558,32 @@ O trigger usa texto neutro de 13px; os caminhos das fontes aparecem em mono com
 
 **Dependências**: `lucide-react`, `cn`
 
+### `sponsored-card`
+
+Card "Patrocinado" para anúncio fora do conteúdo, como abaixo da resposta de um chat. O rótulo
+vem antes de tudo e quem paga vem primeiro (logo ou a inicial do nome). O link do anúncio
+ocupa a base inteira, abre em nova aba com `rel="sponsored noopener noreferrer"` e só vira
+link quando o endereço é http(s) ou relativo (`isSafeSourceUrl`).
+
+| `variant` | Forma |
+|---|---|
+| `tab` (padrão) | rótulo como aba em cima do papel; logo, anunciante e título |
+| `advertiser` | logo e anunciante com o selo ao lado |
+| `bar` | uma linha com selo, título e anunciante |
+| `footnote` | sem caixa, a forma mais curta; não recolhe |
+
+`collapsible` recolhe o card numa linha com quem paga e o título; o cabeçalho inteiro abre.
+`open`/`defaultOpen`/`onOpenChange` deixam o app decidir, por exemplo, que só o anúncio da
+resposta mais recente fique aberto. `actions` vira um menu "Opções do anúncio" (ocultar,
+denunciar, "Por que estou vendo isto?"); o que o app passar como filho aparece dentro do card.
+Rótulos (`label`, `regionLabel`, `actionsLabel`, `newTabLabel`) vêm em pt-BR e aceitam tradução.
+
+Cores só pelos tokens `--sponsored-*` do `globals.css` (fundo, texto, texto secundário, borda,
+selo e texto do selo), separados da marca. O teste do componente cobra 4,5:1 nos três pares e
+que nenhum deles seja o `--primary`, nos dois modos. O produto pode sobrescrever os tokens.
+
+**Dependências**: `lucide-react`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-collapsible`, `cn`
+
 ### `tool`
 
 Ferramenta colapsável com nome em mono e seções “Parâmetros”, “Resultado” e “Erro”.

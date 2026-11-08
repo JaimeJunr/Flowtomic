@@ -1693,6 +1693,18 @@ export const COMPONENT_MAP: Record<string, ComponentInfo> = {
     files: ["sources.tsx", "index.ts"],
     dependencies: ["lucide-react", "cn"],
   },
+  "sponsored-card": {
+    name: "sponsored-card",
+    type: "molecule",
+    path: "packages/ui/src/components/molecules/data-display/sponsored-card",
+    files: ["sponsored-card.tsx", "index.ts"],
+    dependencies: [
+      "lucide-react",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-collapsible",
+      "cn",
+    ],
+  },
   tool: {
     name: "tool",
     type: "molecule",

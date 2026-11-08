@@ -38,7 +38,7 @@ Estrutura básica:
 **SEMPRE consulte** `docs/componentes/` para lista completa e detalhes:
 
 - **Atoms**: `docs/componentes/atoms.md` (156)
-- **Molecules**: `docs/componentes/molecules.md` (95)
+- **Molecules**: `docs/componentes/molecules.md` (96)
 - **Organisms**: `docs/componentes/organisms.md` (40)
 - **Blocks**: `docs/componentes/blocks.md` (4)
 - **Hooks**: `docs/componentes/hooks.md` (14)
@@ -376,7 +376,7 @@ errado.
 Resumo:
 
 - **Atoms**: 156 componentes - Ver `docs/componentes/atoms.md`
-- **Molecules**: 95 componentes - Ver `docs/componentes/molecules.md`
+- **Molecules**: 96 componentes - Ver `docs/componentes/molecules.md`
 - **Organisms**: 40 componentes - Ver `docs/componentes/organisms.md`
 - **Hooks**: 14 hooks - Ver `docs/componentes/hooks.md`
 - **Blocks**: 5 blocks - Ver `docs/componentes/blocks.md`
