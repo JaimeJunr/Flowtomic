@@ -210,6 +210,12 @@ export {
   SourcesTrigger,
   uniqueSources,
 } from "./data-display/sources";
+export type {
+  SponsoredCardAction,
+  SponsoredCardProps,
+  SponsoredCardVariant,
+} from "./data-display/sponsored-card";
+export { SponsoredCard } from "./data-display/sponsored-card";
 export type { StatCardProps } from "./data-display/stat-card";
 export { StatCard } from "./data-display/stat-card";
 export type {

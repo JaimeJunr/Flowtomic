@@ -145,6 +145,15 @@
     --warning-foreground: oklch(1 0 0);
     --warning-hover: oklch(0.4383 0.114 46.76);
 
+    /* Anúncio (card "Patrocinado"): areia própria, fora da marca e dos status, para não parecer
+       resposta nem produto. O produto pode sobrescrever; o par texto/fundo fica em 4,5:1. */
+    --sponsored: oklch(0.9738 0.0167 88);
+    --sponsored-foreground: oklch(0.3158 0.0536 88.26);
+    --sponsored-muted: oklch(0.4551 0.0752 91.55);
+    --sponsored-border: oklch(0.8247 0.0767 89.85);
+    --sponsored-badge: oklch(0.4475 0.0916 86.05);
+    --sponsored-badge-foreground: oklch(1 0 0);
+
     /* Info Colors - Azul com melhor contraste */
     --info: oklch(0.4896 0.2153 264.27);
     --info-foreground: oklch(1 0 0);
@@ -280,6 +289,14 @@
     --warning-foreground: oklch(0.284 0.0633 53.89);
     --warning-hover: oklch(0.8304 0.1378 78.39);
 
+    /* Anúncio no escuro: areia queimada, separada do fundo e da marca. */
+    --sponsored: oklch(0.2007 0.0259 94.04);
+    --sponsored-foreground: oklch(0.9225 0.0477 91.33);
+    --sponsored-muted: oklch(0.7955 0.0669 89.89);
+    --sponsored-border: oklch(0.4155 0.0669 89.95);
+    --sponsored-badge: oklch(0.8111 0.1289 89.61);
+    --sponsored-badge-foreground: oklch(0.2007 0.0259 94.04);
+
     /* Info Colors - Azul com melhor contraste para dark mode */
     --info: oklch(0.7157 0.1425 254.45);
     --info-foreground: oklch(0.2064 0.0388 265.55);
@@ -368,6 +385,12 @@
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-sponsored: var(--sponsored);
+  --color-sponsored-foreground: var(--sponsored-foreground);
+  --color-sponsored-muted: var(--sponsored-muted);
+  --color-sponsored-border: var(--sponsored-border);
+  --color-sponsored-badge: var(--sponsored-badge);
+  --color-sponsored-badge-foreground: var(--sponsored-badge-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
   --color-error: var(--error);
