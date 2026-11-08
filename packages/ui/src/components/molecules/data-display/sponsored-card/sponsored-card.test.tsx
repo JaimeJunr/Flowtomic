@@ -43,6 +43,17 @@ describe("SponsoredCard", () => {
     expect(screen.getByText("constelacaoai.com.br")).toBeInTheDocument();
   });
 
+  it.each([
+    "tab",
+    "advertiser",
+  ] as const)("no formato %s, anunciante e título longos quebram a palavra em vez de estourar a largura", (variant) => {
+    const advertiser = "L".repeat(120);
+    const title = "T".repeat(200);
+    render(<SponsoredCard {...ad} variant={variant} advertiser={advertiser} title={title} />);
+    expect(screen.getByText(advertiser)).toHaveClass("[overflow-wrap:anywhere]");
+    expect(screen.getByText(title)).toHaveClass("[overflow-wrap:anywhere]");
+  });
+
   it("mostra o logo do anunciante, ou a inicial enquanto não houver logo", () => {
     const { rerender, container } = render(<SponsoredCard {...ad} />);
     expect(container.querySelector('[data-slot="sponsored-card-logo"]')).toHaveTextContent("C");
