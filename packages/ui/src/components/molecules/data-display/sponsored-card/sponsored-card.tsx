@@ -171,10 +171,14 @@ function Identity({ ad, variant, label }: IdentityProps) {
       <AdvertiserLogo advertiser={ad.advertiser} logoSrc={ad.logoSrc} />
       <span className="grid min-w-0 flex-1 gap-0.5">
         <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="font-semibold text-[13px]">{ad.advertiser}</span>
+          <span className="min-w-0 font-semibold text-[13px] [overflow-wrap:anywhere]">
+            {ad.advertiser}
+          </span>
           {variant === "advertiser" ? <SponsoredLabel>{label}</SponsoredLabel> : null}
         </span>
-        <span className="line-clamp-2 font-semibold text-sm sm:line-clamp-1">{ad.title}</span>
+        <span className="line-clamp-2 font-semibold text-sm [overflow-wrap:anywhere] sm:line-clamp-1">
+          {ad.title}
+        </span>
       </span>
     </span>
   );

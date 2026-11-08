@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.2.1] - 2026-11-08
+
+### Fixed
+
+- **`SponsoredCard`: anunciante e título longos quebram a palavra.** Nos formatos `tab` e
+  `advertiser`, um nome ou título sem espaço (ex.: 120 caracteres seguidos) estourava a
+  largura do card e criava rolagem lateral no celular. Agora os dois usam
+  `[overflow-wrap:anywhere]`.
+
 ## [2.2.0] - 2026-11-08
 
 ### Added
