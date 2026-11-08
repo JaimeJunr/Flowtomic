@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0] - 2026-11-08
+
+### Added
+
+- **`SponsoredCard`** (molecule, `data-display`): card "Patrocinado" para anúncio fora do
+  conteúdo, como abaixo da resposta de um chat. Quatro formatos (`tab`, `advertiser`,
+  `bar`, `footnote`), recolhível pelo cabeçalho com aberto controlado pelo app, logo ou
+  inicial do anunciante, link na base com `rel="sponsored noopener noreferrer"` e menu de
+  opções para os controles do app (ocultar, denunciar, "Por que estou vendo isto?").
+- **Tokens `--sponsored-*`** no `globals.css` (fundo, texto, texto secundário, borda, selo
+  e texto do selo), nos dois modos, separados da marca. O produto pode sobrescrever.
+
 ## [2.1.0] - 2026-10-25
 
 ### Changed
