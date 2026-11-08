@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.2.2] - 2026-11-08
+
+### Added
+
+- **`SponsoredCard`: `returnFocus: false` nas ações.** Para o item que abre um painel no card
+  (explicação, denúncia): o `onSelect` roda depois que o menu fecha e o foco não volta ao
+  botão de opções, então o app consegue levar o foco ao painel. Sem isso, o menu prendia o
+  foco enquanto aberto e o devolvia ao botão ao fechar.
+
+### Fixed
+
+- **`SponsoredCard`: botão de recolher descrito pelo selo.** No formato `tab`, o selo
+  "Patrocinado" fica fora do botão; agora ele é a descrição acessível do botão
+  (`aria-describedby`).
+
 ## [2.2.1] - 2026-11-08
 
 ### Fixed

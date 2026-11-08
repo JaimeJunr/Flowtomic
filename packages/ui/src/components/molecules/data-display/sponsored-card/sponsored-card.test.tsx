@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
@@ -146,6 +146,46 @@ describe("SponsoredCard", () => {
     await userEvent.click(await screen.findByRole("menuitem", { name: "Denunciar anúncio" }));
     expect(onReport).toHaveBeenCalledOnce();
     expect(onHide).not.toHaveBeenCalled();
+  });
+
+  it("item com returnFocus false deixa o foco onde o app pôs (ex.: painel que abriu)", async () => {
+    render(
+      <>
+        <SponsoredCard
+          {...ad}
+          actions={[
+            {
+              label: "Por que estou vendo isto?",
+              onSelect: () => document.getElementById("painel")?.focus(),
+              returnFocus: false,
+            },
+          ]}
+        />
+        <button type="button" id="painel">
+          painel
+        </button>
+      </>
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Opções do anúncio" }));
+    await userEvent.click(
+      await screen.findByRole("menuitem", { name: "Por que estou vendo isto?" })
+    );
+    await waitFor(() => expect(screen.getByRole("button", { name: "painel" })).toHaveFocus());
+  });
+
+  it("por padrão, fechar o menu devolve o foco ao botão de opções", async () => {
+    render(<SponsoredCard {...ad} actions={[{ label: "Ocultar anúncio", onSelect: () => {} }]} />);
+    const trigger = screen.getByRole("button", { name: "Opções do anúncio" });
+    await userEvent.click(trigger);
+    await userEvent.click(await screen.findByRole("menuitem", { name: "Ocultar anúncio" }));
+    await waitFor(() => expect(trigger).toHaveFocus());
+  });
+
+  it("o botão de recolher é descrito pelo selo Patrocinado", () => {
+    render(<SponsoredCard {...ad} collapsible />);
+    expect(screen.getByRole("button", { name: /API compatível/ })).toHaveAccessibleDescription(
+      "Patrocinado"
+    );
   });
 
   it("sem ações, não mostra o botão de opções", () => {
